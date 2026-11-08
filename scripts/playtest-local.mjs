@@ -103,6 +103,9 @@ const clone = (from, to) => {
   }
 };
 for (const p of ["node_modules", "game/node_modules", "game/.wrangler", ".env.local", "game/.dev.vars", "game/.env.local"]) clone(p, p);
+// With --dirty, new files not yet added to git come too: git stash create leaves them out.
+if (args.includes("--dirty"))
+  for (const f of git("ls-files", "--others", "--exclude-standard").split("\n").filter(Boolean)) if (!f.startsWith("playtests/")) clone(f, f);
 say(`Copied build ${build}${args.includes("--dirty") ? " with your uncommitted changes" : ""} to ${copy}.`);
 
 // Free ports, so nothing of yours is in the way.
@@ -150,7 +153,12 @@ for (let i = 0; ; i++) {
   try {
     if ((await fetch(url, { signal: AbortSignal.timeout(2000) })).ok) break;
   } catch {}
-  if (i > 90) throw new Error(`The copy's dev server never answered on ${url}. See ${join(copy, "vite.log")}.`);
+  if (i > 90 || vite.exitCode !== null) {
+    // Show why before cleanup takes the copy and its log away.
+    const log = existsSync(join(copy, "vite.log")) ? readFileSync(join(copy, "vite.log"), "utf8").replace(/\x1b\[[0-9;]*m/g, "").split("\n").filter(Boolean).slice(0, 12).join("\n") : "";
+    console.error(`The copy's dev server never answered on ${url}:\n${log}`);
+    process.exit(1);
+  }
   await new Promise((r) => setTimeout(r, 1000));
 }
 say(`The copy's game runs at ${url}.`);

@@ -49,7 +49,7 @@ const seen = (log) =>
 
 const grading = `Go by the gist, not the words. The full marks line sets what earns a 10. Take points off only for what full marks asks for and the answer gets wrong or leaves out, never for style or length. Check every lead, find or event the player names against the play log. One the log never shows is made up, and an answer built on it gets at most 2.`;
 
-const oncePrompt = (quiz, log) => `You grade a quiz a first-time player of the game Holos wrote after playing. You did not play. Grade each answer 0 to 10 against its full marks. ${grading} If the player says they never used a tab, grade that answer null.
+const oncePrompt = (quiz, log) => `You grade a quiz a first-time player of the game Holos wrote after playing. You did not play. Grade each answer 0.0 to 10.0 against its full marks, to one decimal, like 7.5. ${grading} If the player says they never used a tab, grade that answer null.
 
 <questions>
 ${QUIZ.once.map((x) => `${x.id}: ${x.q}\nFull marks: ${x.full}`).join("\n\n")}
@@ -64,9 +64,9 @@ ${quiz}
 </quiz>
 
 Reply with JSON only, no other text, one entry per question id:
-{${ONCE.map((id) => `"${id}":{"grade":<0-10 or null>,"why":"<one short line>","wrong":"<a short quote of what is wrong or missing, or empty>"}`).join(",")}}`;
+{${ONCE.map((id) => `"${id}":{"grade":<0.0-10.0 or null>,"why":"<one short line>","wrong":"<a short quote of what is wrong or missing, or empty>"}`).join(",")}}`;
 
-const checkinPrompt = (checkins, log) => `A first-time player of the game Holos answered check-in questions while playing. You did not play. Grade each check-in 0 to 10 against the full marks, using only the play log up to that check-in's step, #n. ${grading}
+const checkinPrompt = (checkins, log) => `A first-time player of the game Holos answered check-in questions while playing. You did not play. Grade each check-in 0.0 to 10.0 against the full marks, to one decimal, like 7.5, using only the play log up to that check-in's step, #n. ${grading}
 
 <questions>
 ${QUIZ.checkin.questions.map((x) => `${x.id}: ${x.q}`).join("\n")}
@@ -82,7 +82,7 @@ ${checkins.map((c) => JSON.stringify(c)).join("\n")}
 </check-ins>
 
 Reply with JSON only, no other text, in check-in order:
-[{"n":<its step>,"grade":<0-10>,"why":"<one short line>"}]`;
+[{"n":<its step>,"grade":<0.0-10.0>,"why":"<one short line>"}]`;
 
 // A run graded into its folder adds the judge's tokens to its cost.jsonl. Validation adds none.
 let costTo;

@@ -44,7 +44,7 @@ const results = JSON.parse(readFileSync(join(dir, "results.json"), "utf8"));
 
 const anchorsOf = (ratings) => ratings.map((r) => `${r.id}: ${r.q}\n${r.anchors.map((a, i) => `  ${R.anchorBands[i]}: ${a}`).join("\n")}`).join("\n");
 const rulesOf = (rules) => rules.map((r) => `- ${r}`).join("\n");
-const scoresOf = (ratings) => ratings.map((r) => `"${r.id}":{"score":<0-10>,"why":"<one short line>"}`).join(",");
+const scoresOf = (ratings) => ratings.map((r) => `"${r.id}":{"score":<0.0-10.0>,"why":"<one short line>"}`).join(",");
 const okShots = (id) => results.shots.filter((x) => x.state === id && x.status === "ok");
 const states = R.states.filter((s) => okShots(s.id).length);
 const words = (s) => s.split(/\s+/).filter(Boolean).length;
@@ -65,7 +65,7 @@ async function read(via) {
 
   The screen is "${state.title}". What it should show: ${state.description}
 
-  Score each width 0 to 10 on each rating, from its anchors:
+  Score each width 0.0 to 10.0 on each rating, from its anchors. Use one decimal, like 6.5: the band sets the whole number's range, and the decimal says where in it, so 6.0 only just reached the band and 8.9 nearly reached the next.
   ${anchorsOf(S.ratings)}
 
   Rules:
@@ -97,7 +97,7 @@ async function read(via) {
     const prompt = `You are a product designer reviewing every screen of a space game, Holos, at once. You never saw its code. The screenshots above are named <state>-<width>.png. The screens:
   ${states.map((s) => `- ${s.id}: ${s.title}. ${s.description}`).join("\n")}
 
-  Score the screens together, 0 to 10 on each rating, from its anchors:
+  Score the screens together, 0.0 to 10.0 on each rating, from its anchors. Use one decimal, like 6.5: the band sets the whole number's range, and the decimal says where in it, so 6.0 only just reached the band and 8.9 nearly reached the next.
   ${anchorsOf(D.ratings)}
 
   Rules:
@@ -124,7 +124,7 @@ async function read(via) {
   Its words, one piece of text a line, as [kind] text. Lines marked (scrolled) are on the screen but scrolled out of sight:
   ${lines.map((t) => `[${t.kind}]${t.view ? "" : " (scrolled)"} ${t.text}`).join("\n")}
 
-  Score the screen's words 0 to 10 on each rating, from its anchors:
+  Score the screen's words 0.0 to 10.0 on each rating, from its anchors. Use one decimal, like 6.5: the band sets the whole number's range, and the decimal says where in it, so 6.0 only just reached the band and 8.9 nearly reached the next.
   ${anchorsOf(E.ratings)}
 
   Rules:

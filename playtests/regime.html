@@ -86,9 +86,9 @@
       ]
     }
   ],
-  "anchorBands": ["0–2", "3–5", "6–8", "9–10"],
+  "anchorBands": ["0–2.9", "3–5.9", "6–8.9", "9–10"],
   "ratingRules": [
-    "Rate from the anchors, so a 6 means the same every run.",
+    "Rate from the anchors, so a 6 means the same every run. Score to one decimal: the band sets the range, the decimal where in it, so 6.0 only just reached it and 8.9 nearly reached the next.",
     "Cite evidence for every rating: a screenshot file or a log line. No evidence, no rating.",
     "Write one short line on why. Name the worst moment, not an average feeling.",
     "Rate only what the run showed. If the run never reached it, write null and say why.",
@@ -249,7 +249,7 @@
     ],
     "rules": [
       "Judge only what is on screen. Never the code, the diff, or what a change meant to do.",
-      "Rate from the anchors, so a 6 means the same every run.",
+      "Rate from the anchors, so a 6 means the same every run. Score to one decimal, like 6.5.",
       "Rate laptop and phone apart. The phone is held to the same anchors.",
       "Name the worst thing on screen, where it is, and one fix, in a short line each."
     ]
@@ -368,18 +368,29 @@
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; }
-main { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
-h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
-h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink2); margin: 48px 0 12px; }
+main { max-width: 1080px; margin: 0 auto; padding: 28px 16px 80px; }
+.top { display: flex; align-items: baseline; justify-content: space-between; gap: 4px 16px; flex-wrap: wrap; margin-bottom: 12px; }
+h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 13px; font-weight: 600; color: var(--ink2); margin: 28px 0 8px; }
 h3 { font-size: 16px; margin: 0 0 6px; }
 p { margin: 0 0 8px; }
-.sub { color: var(--ink2); margin-bottom: 20px; }
-nav { overflow-x: auto; position: sticky; top: 0; background: var(--bg); padding: 8px 0 0; border-bottom: 1px solid var(--line); display: flex; gap: 16px; flex-wrap: wrap; z-index: 2; }
-nav a { color: var(--ink2); text-decoration: none; font-size: 14px; padding: 6px 2px; border-bottom: 2px solid transparent; }
+.sub { color: var(--ink2); font-size: 13px; margin: 0; }
+nav { overflow-x: auto; scrollbar-width: none; position: sticky; top: 0; background: var(--bg); padding: 6px 0 0; border-bottom: 1px solid var(--line); display: flex; gap: 18px; z-index: 2; }
+nav::-webkit-scrollbar { display: none; }
+nav a { color: var(--ink2); text-decoration: none; font-size: 14px; padding: 8px 0; white-space: nowrap; border-bottom: 2px solid transparent; }
 nav a:hover { color: var(--ink); }
 nav a[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
 .pane[hidden] { display: none; }
-.pane > h2:first-child { margin-top: 24px; }
+.pane { padding-top: 20px; }
+.pane > h2:first-child { margin-top: 0; }
+.pane > * + *:not(h2) { margin-top: 12px; }
+.pane > h2 + * { margin-top: 0; }
+.about { font-size: 13px; color: var(--ink2); }
+.about summary, details.more summary { cursor: pointer; color: var(--ink2); font-size: 13px; padding: 4px 0; }
+.about summary:hover, details.more summary:hover { color: var(--ink); }
+.about[open] summary { margin-bottom: 4px; }
+.about p, .about ul { max-width: 72ch; }
+.list li { margin: 6px 0; }
 .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
 .grid > * { min-width: 0; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
@@ -397,27 +408,42 @@ li { margin: 3px 0; }
 .scale .band { font-size: 13px; line-height: 1.35; padding-top: 6px; }
 .scale .band b { display: block; font-size: 11px; color: var(--ink2); font-weight: 600; font-variant-numeric: tabular-nums; }
 .computed { font-size: 13px; color: var(--ink2); background: var(--soft); border-radius: 6px; padding: 10px 12px; }
-.flow { overflow-x: auto; }
-.flow svg { display: block; min-width: 760px; width: 100%; height: auto; }
-.flow text { font: 13px -apple-system, BlinkMacSystemFont, sans-serif; fill: var(--ink); }
-.flow .lbl { fill: var(--ink2); font-size: 11px; }
+.flow { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px 0; align-items: stretch; }
+.flow li { margin: 0; display: flex; flex-direction: column; padding: 8px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; font-size: 14px; }
+.flow li.key { border-color: var(--accent); }
+.flow li span { font-size: 12px; color: var(--ink2); }
+.flow li:not(:last-child) { margin-right: 26px; position: relative; }
+.flow li:not(:last-child)::after { content: "\2192"; position: absolute; right: -20px; top: 50%; transform: translateY(-50%); color: var(--ink2); }
+@media (max-width: 720px) {
+  .flow { flex-direction: column; gap: 0; counter-reset: step; }
+  .flow li, .flow li:not(:last-child) { flex-direction: row; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0; border-radius: 0; border-top-width: 0; }
+  .flow li:first-child { border-top-width: 1px; border-radius: 8px 8px 0 0; }
+  .flow li:last-child { border-radius: 0 0 8px 8px; }
+  .flow li.key { border-color: var(--line); }
+  .flow li b::before { counter-increment: step; content: counter(step) ". "; color: var(--ink2); font-weight: 400; }
+  .flow li::after { display: none; }
+}
+@media (min-width: 721px) { #runs table { width: auto; } #runs th, #runs td { padding-right: 28px; } }
+#runs h3 { margin: 4px 0 8px; } #runs table + h3 { margin-top: 24px; }
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
 .tabs button { font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--panel); color: var(--ink2); padding: 6px 12px; border-radius: 99px; cursor: pointer; }
 .tabs button[aria-pressed="true"] { color: var(--ink); border-color: var(--accent); }
 .full { border-left: 3px solid var(--accent); padding: 6px 10px; background: var(--soft); border-radius: 0 6px 6px 0; margin-top: 8px; font-size: 14px; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.nowrap td, table.nowrap th { white-space: nowrap; }
 th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { color: var(--ink2); font-weight: 600; }
 td.n { text-align: right; font-variant-numeric: tabular-nums; }
 .pass { color: var(--good); } .fail { color: var(--bad); }
 .chart svg { width: 100%; height: auto; display: block; }
 .chart text { font: 11px -apple-system, sans-serif; fill: var(--ink2); }
+@media (max-width: 720px) { .chart { overflow-x: auto; } .chart svg { min-width: 640px; } }
 .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; margin: 8px 0; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
 .empty { padding: 20px; text-align: center; color: var(--ink2); background: var(--soft); border-radius: 8px; }
 .scroll { overflow-x: auto; }
 code { font: 12px ui-monospace, Menlo, monospace; background: var(--soft); padding: 1px 4px; border-radius: 4px; }
-.shot { display: grid; grid-template-columns: 3fr 1fr; gap: 10px; align-items: start; margin-top: 10px; }
+.shot { display: grid; grid-template-columns: 3fr 1fr; gap: 10px; align-items: start; margin-top: 12px; }
 .shot figure { margin: 0; min-width: 0; }
 .shot img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; background: #000; }
 .shot figcaption { font-size: 12px; color: var(--ink2); margin-top: 4px; }
@@ -426,75 +452,82 @@ code { font: 12px ui-monospace, Menlo, monospace; background: var(--soft); paddi
 .score-row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; padding: 2px 0; }
 .score-row b { font-variant-numeric: tabular-nums; }
 .down { color: var(--bad); } .up { color: var(--good); } .gap { color: var(--accent); font-weight: 700; }
-@media (max-width: 720px) { .shot { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 720px) { .shot { grid-template-columns: 1fr; } .shot figure.phone { max-width: 220px; } }
+.state-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.state-head .tag { margin-left: 0; }
+.findings { display: grid; grid-template-columns: minmax(200px, 1fr) 2fr; gap: 12px 20px; margin-top: 12px; align-items: start; }
+@media (max-width: 720px) { .findings { grid-template-columns: 1fr; } }
+.findings table td, .findings table th { padding: 3px 6px; }
+.worst p { font-size: 13px; margin-bottom: 6px; }
+.worst b { color: var(--ink2); font-weight: 600; }
+details.more { margin-top: 8px; }
+details.more > *:not(summary) { margin-top: 6px; }
+#sheet > * + * { margin-top: 12px; }
+.meta { font-size: 13px; color: var(--ink2); margin: 0 0 4px; }
 </style>
 </head>
 <body>
 <main>
-  <h1>Holos Playtests</h1>
-  <p class="sub" id="sub"></p>
+  <header class="top">
+    <h1>Holos Playtests</h1>
+    <p class="sub" id="sub"></p>
+  </header>
   <nav role="tablist" id="tabs">
-    <a href="#how" id="tab-how" role="tab">How a run works</a>
+    <a href="#how" id="tab-how" role="tab">How</a>
     <a href="#results" id="tab-results" role="tab">Results</a>
     <a href="#screens" id="tab-screens" role="tab">Screens</a>
     <a href="#players" id="tab-players" role="tab">Players</a>
     <a href="#quiz" id="tab-quiz" role="tab">Quiz</a>
     <a href="#scenarios" id="tab-scenarios" role="tab">Scenarios</a>
     <a href="#checks" id="tab-checks" role="tab">Checks</a>
-    <a href="#open" id="tab-open" role="tab">Open</a>
+    <a href="#open" id="tab-open" role="tab">Open questions</a>
   </nav>
 
-  <section class="pane" id="how" role="tabpanel" aria-labelledby="tab-how">
-  <h2>How a run works</h2>
-  <div class="card flow" id="flow"></div>
-  <div class="grid" id="routines" style="margin-top:12px"></div>
+  <section class="pane" id="pane-how" role="tabpanel" aria-labelledby="tab-how">
+  <ol class="flow" id="flow" aria-label="How a run flows, from play to the trend"></ol>
+  <div class="grid" id="routines"></div>
   </section>
 
-  <section class="pane" id="results" role="tabpanel" aria-labelledby="tab-results">
-  <h2>Results</h2>
+  <section class="pane" id="pane-results" role="tabpanel" aria-labelledby="tab-results">
   <div class="card">
     <div class="legend" id="legend"></div>
     <div class="chart" id="chart"></div>
   </div>
-  <div class="card scroll" style="margin-top:12px" id="runs"></div>
+  <div class="card scroll" id="runs"></div>
   </section>
 
-  <section class="pane" id="screens" role="tabpanel" aria-labelledby="tab-screens">
-  <h2>Screens</h2>
-  <p class="muted small" id="screensRule"></p>
+  <section class="pane" id="pane-screens" role="tabpanel" aria-labelledby="tab-screens">
   <div class="tabs" id="capTabs"></div>
   <div id="sheet"></div>
+  <details class="about"><summary>How screens are scored</summary><div id="screensRule"></div></details>
   </section>
 
-  <section class="pane" id="players" role="tabpanel" aria-labelledby="tab-players">
-  <h2>Players and ratings</h2>
+  <section class="pane" id="pane-players" role="tabpanel" aria-labelledby="tab-players">
   <div class="tabs" id="playerTabs"></div>
   <div id="player"></div>
-  <div class="card small muted" style="margin-top:12px"><b>Rules for every rating</b><ul id="rules"></ul></div>
+  <details class="about"><summary>Rules for every rating</summary><ul id="rules"></ul></details>
   </section>
 
-  <section class="pane" id="quiz" role="tabpanel" aria-labelledby="tab-quiz">
-  <h2>Blind quiz</h2>
+  <section class="pane" id="pane-quiz" role="tabpanel" aria-labelledby="tab-quiz">
   <div id="quizBody"></div>
   </section>
 
-  <section class="pane" id="scenarios" role="tabpanel" aria-labelledby="tab-scenarios">
-  <h2>Scenarios</h2>
-  <p class="muted small" id="scenarioRule"></p>
+  <section class="pane" id="pane-scenarios" role="tabpanel" aria-labelledby="tab-scenarios">
   <div class="tabs" id="scenarioTabs"></div>
   <div id="scenario"></div>
+  <details class="about"><summary>How scenarios are chosen</summary><p id="scenarioRule"></p></details>
   </section>
 
-  <section class="pane" id="checks" role="tabpanel" aria-labelledby="tab-checks">
-  <h2>Code checks</h2>
+  <section class="pane" id="pane-checks" role="tabpanel" aria-labelledby="tab-checks">
+  <h2>Each run</h2>
   <div class="card scroll" id="checkTable"></div>
-  <div class="card scroll" style="margin-top:12px"><b class="small">On every captured screen</b><div id="auditTable"></div></div>
-  <div class="card small muted" style="margin-top:12px"><b>Known gaps, not to report</b><ul id="gaps"></ul></div>
+  <h2>Each screen shot</h2>
+  <div class="card scroll" id="auditTable"></div>
+  <details class="about"><summary>Known gaps, not to report</summary><ul id="gaps"></ul></details>
   </section>
 
-  <section class="pane" id="open" role="tabpanel" aria-labelledby="tab-open">
-  <h2>Open questions</h2>
-  <div class="card"><ul id="openList"></ul></div>
+  <section class="pane" id="pane-open" role="tabpanel" aria-labelledby="tab-open">
+  <div class="card"><ul class="list" id="openList"></ul></div>
   </section>
 </main>
 <script src="runs.js"></script>
@@ -505,25 +538,16 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 const COLORS = { "first-timer": "var(--p1)", astronomer: "var(--p2)", "long-hauler": "var(--p3)", blind: "var(--p4)" };
 
-$("sub").textContent = `How we playtest Holos, and what it has found. Regime updated ${R.updated}. Quiz version ${R.quiz.version}.`;
+$("sub").textContent = `Updated ${R.updated}. Quiz version ${R.quiz.version}.`;
 
 // The flow of one run, from play to the trend.
 (() => {
   const boxes = [
     ["Play", "a scenario, or blind"], ["Log", "log.jsonl, blind.jsonl"], ["Score", "checks, judge, players"], ["Scorecard", "SCORECARD.md"], ["Trend", "runs.js, this page"],
   ];
-  const w = 130, gap = 34, h = 58, y = 18;
-  let svg = `<svg viewBox="0 0 ${boxes.length * (w + gap) - gap + 20} 100" role="img" aria-label="A run goes from play, to its log, to scoring, to a scorecard, to the trend">`;
-  svg += `<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink2)"/></marker></defs>`;
-  boxes.forEach(([t, s], i) => {
-    const x = 10 + i * (w + gap);
-    svg += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="var(--soft)" stroke="${i === 2 ? "var(--accent)" : "var(--line)"}"/>`;
-    svg += `<text x="${x + w / 2}" y="${y + 25}" text-anchor="middle">${t}</text><text class="lbl" x="${x + w / 2}" y="${y + 43}" text-anchor="middle">${s}</text>`;
-    if (i < boxes.length - 1) svg += `<line x1="${x + w + 4}" y1="${y + h / 2}" x2="${x + w + gap - 4}" y2="${y + h / 2}" stroke="var(--ink2)" marker-end="url(#ar)"/>`;
-  });
-  $("flow").innerHTML = svg + "</svg>";
+  $("flow").innerHTML = boxes.map(([t, s], i) => `<li${i === 2 ? ' class="key"' : ""}><b>${t}</b><span>${s}</span></li>`).join("");
   $("routines").innerHTML = R.routines
-    .map((r) => `<div class="card"><h3>${esc(r.name)}</h3><p class="small">${esc(r.what)}</p><p class="small muted">Follows <code>${esc(r.file)}</code>, pushes <code>${esc(r.branch)}</code>. Players: ${r.players.map(esc).join(", ")}.</p></div>`)
+    .map((r) => `<div class="card"><h3>${esc(r.name)}</h3><p class="small">${esc(r.what)}</p><p class="small muted">${r.players.length > 1 ? `Rated as ${r.players.map(esc).join(", ")}.<br>` : ""}<code>${esc(r.file)}</code>${/^none/.test(r.branch) ? ", runs locally" : `, pushes to <code>${esc(r.branch)}</code>`}</p></div>`)
     .join("");
 })();
 
@@ -540,7 +564,7 @@ $("sub").textContent = `How we playtest Holos, and what it has found. Regime upd
         (r) => `<div class="card rating"><div><h3>${esc(r.id)}${r.code ? '<span class="tag code">code</span>' : ""}${r.judge ? '<span class="tag judge">judge</span>' : ""}</h3><p class="small muted">${esc(r.q)}</p></div>${
           r.anchors
             ? `<div class="scale">${r.anchors.map((a, i) => `<div><div class="bar" style="background:${shades[i]}"></div><div class="band"><b>${R.anchorBands[i]}</b>${esc(a)}</div></div>`).join("")}</div>`
-            : `<div class="computed">${r.code ? "Computed by code from the run’s log." : "Graded by the judge, who didn’t play."}</div>`
+            : `<div class="computed">${r.code ? "Computed by code from the run’s log." : "Graded by a judge who didn’t play."}</div>`
         }</div>`,
       )
       .join("")}</div>`;
@@ -554,11 +578,11 @@ $("sub").textContent = `How we playtest Holos, and what it has found. Regime upd
 (() => {
   const q = R.quiz;
   $("quizBody").innerHTML = `
-    <div class="card"><h3>Once, when play stops</h3><p class="small muted">${esc(q.onceRule)}</p>
+    <div class="card"><h3>At the end</h3><p class="small muted">${esc(q.onceRule)}</p>
       <div class="grid" style="margin-top:10px">${q.once
         .map((x) => `<div class="card"><h3>${esc(x.tab ?? "Premise")}</h3><p>“${esc(x.q)}”</p><p class="small muted">Tests: ${esc(x.tests)}</p><div class="full"><b class="small">Full marks</b><br>${esc(x.full)}</div></div>`)
         .join("")}</div></div>
-    <div class="card" style="margin-top:12px"><h3>Check-in, every ${q.checkin.every} actions</h3><p class="small muted">${esc(q.checkin.rule)}</p>
+    <div class="card" style="margin-top:12px"><h3>Check-ins</h3><p class="small muted">${esc(q.checkin.rule)}</p>
       <ul>${q.checkin.questions.map((x) => `<li>“${esc(x.q)}”</li>`).join("")}</ul>
       <div class="full"><b class="small">Full marks</b><br>${esc(q.checkin.full)}</div>
       ${checkinStrip(q.checkin.every)}</div>
@@ -568,9 +592,9 @@ $("sub").textContent = `How we playtest Holos, and what it has found. Regime upd
 // Where the check-ins fall across a 150-action run.
 function checkinStrip(every) {
   const W = 600, n = 150, x = (i) => 10 + (i / n) * (W - 20);
-  let s = `<svg viewBox="0 0 ${W} 46" style="width:100%;height:auto;margin-top:12px" role="img" aria-label="Check-ins every ${every} actions across 150 actions, then the once questions"><line x1="10" y1="20" x2="${W - 10}" y2="20" stroke="var(--line)" stroke-width="6" stroke-linecap="round"/>`;
+  let s = `<svg viewBox="0 0 ${W} 46" style="width:100%;height:auto;margin-top:12px" role="img" aria-label="Check-ins every ${every} actions across 150 actions, then the end questions"><line x1="10" y1="20" x2="${W - 10}" y2="20" stroke="var(--line)" stroke-width="6" stroke-linecap="round"/>`;
   for (let i = every; i < n; i += every) s += `<circle cx="${x(i)}" cy="20" r="6" fill="var(--p3)"/><text x="${x(i)}" y="42" text-anchor="middle" font-size="11" fill="var(--ink2)">${i}</text>`;
-  s += `<rect x="${x(n) - 8}" y="12" width="16" height="16" rx="3" fill="var(--accent)"/><text x="${x(n)}" y="42" text-anchor="end" font-size="11" fill="var(--ink2)">150, once</text>`;
+  s += `<rect x="${x(n) - 8}" y="12" width="16" height="16" rx="3" fill="var(--accent)"/><text x="${x(n)}" y="42" text-anchor="end" font-size="11" fill="var(--ink2)">150, end</text>`;
   return s + "</svg>";
 }
 
@@ -581,8 +605,8 @@ function checkinStrip(every) {
   const draw = () => {
     $("scenarioTabs").innerHTML = R.scenarios.map((s, i) => `<button aria-pressed="${s.id === current}" data-id="${s.id}">${i + 1}. ${esc(s.title)}</button>`).join("");
     const s = R.scenarios.find((x) => x.id === current);
-    $("scenario").innerHTML = `<div class="grid"><div class="card"><h3>${esc(s.what)}</h3>${s.from ? `<p class="small muted">Starts from the saved state <code>${esc(s.from)}</code>, past the opening.</p>` : ""}<b class="small">Steps</b><ol class="small">${s.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol><p class="small muted" style="margin-top:8px">Stop: ${esc(s.stop)}</p></div>
-      <div class="card"><b class="small">Expect</b><ol class="small">${s.expect.map((x, i) => `<li><code>${s.id}-${i + 1}</code> ${esc(x)}</li>`).join("")}</ol></div></div>`;
+    $("scenario").innerHTML = `<div class="grid"><div class="card"><h3>${esc(s.what)}</h3>${s.from ? `<p class="small muted">Starts from save <code>${esc(s.from)}</code>.</p>` : ""}<b class="small">Steps</b><ol class="small">${s.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol><p class="small muted" style="margin-top:8px">Stop: ${esc(s.stop)}</p></div>
+      <div class="card"><b class="small">Expect</b><ol class="small">${s.expect.map((x, i) => `<li title="${s.id}-${i + 1}">${esc(x)}</li>`).join("")}</ol></div></div>`;
   };
   $("scenarioTabs").addEventListener("click", (e) => { if (e.target.dataset.id) { current = e.target.dataset.id; draw(); } });
   draw();
@@ -603,7 +627,7 @@ $("openList").innerHTML = R.open.map((g) => `<li>${esc(g)}</li>`).join("");
 // Results, from runs.js, which npm run playtest:score writes. A script, not a fetch, so the page opens from a file.
 function drawResults(runs) {
   const povs = ["first-timer", "astronomer", "long-hauler", "blind"];
-  $("legend").innerHTML = povs.map((p) => `<span><i style="background:${COLORS[p]}"></i>${p}</span>`).join("") + `<span class="muted">Each dot is a run, oldest left.</span>`;
+  $("legend").innerHTML = povs.map((p) => `<span><i style="background:${COLORS[p]}"></i>${p}</span>`).join("") + `<span class="muted">Each dot is a run.</span>`;
   const W = 900, H = 240, L = 30, B = 26, T = 10;
   const x = (i) => L + (runs.length < 2 ? 0.5 : i / (runs.length - 1)) * (W - L - 10);
   const y = (v) => T + (1 - v / 10) * (H - T - B);
@@ -616,29 +640,50 @@ function drawResults(runs) {
   }
   runs.forEach((r, i) => { if (i === 0 || i === runs.length - 1 || r.name.slice(0, 10) !== runs[i - 1].name.slice(0, 10)) s += `<text x="${x(i)}" y="${H - 6}" text-anchor="${i === runs.length - 1 ? "end" : i === 0 ? "start" : "middle"}">${r.name.slice(5, 10)}</text>`; });
   $("chart").innerHTML = s + "</svg>";
-  $("runs").innerHTML = `<table><tr><th>Run</th><th>Build</th><th>Scenario</th><th>Seed</th>${povs.map((p) => `<th class="n">${p}</th>`).join("")}<th class="n">Overall</th><th class="n">Checks</th><th class="n">Minutes</th><th class="n">Tokens</th></tr>${runs
+  // Columns no run has filled stay out, so the table fits and scans.
+  const tok = (t) => (t == null ? "–" : t >= 1e6 ? `${(t / 1e6).toFixed(1)}M` : `${Math.round(t / 1000)}k`);
+  const cols = [
+    ["Build", (r) => `<code>${esc(r.build ?? "?")}</code>`, (r) => true],
+    ["Scenario", (r) => esc(r.scenario ?? "–"), (r) => r.scenario],
+    ["Seed", (r) => esc(r.seed ?? "–"), (r) => r.seed != null],
+    ...povs.map((p) => [p, (r) => r.avg?.[p] ?? "–", (r) => r.avg?.[p] != null, "n"]),
+    ["Overall", (r) => `<b>${r.avg?.overall ?? "–"}</b>`, (r) => r.avg?.overall != null, "n"],
+    ["Checks", (r) => { const t = r.tally ?? { ran: 0, failed: 0 }; return t.ran ? `${t.ran - t.failed}/${t.ran}` : "–"; }, (r) => true, "n"],
+    ["Minutes", (r) => r.minutes ?? "–", (r) => r.minutes != null, "n"],
+    ["Tokens", (r) => tok(r.tokens), (r) => r.tokens != null, "n"],
+  ];
+  // Blind runs and cloud runs score different players, so each gets its own table with only the columns it fills.
+  const blindRuns = runs.filter((r) => r.avg?.blind != null), cloudRuns = runs.filter((r) => r.avg?.blind == null);
+  $("runs").innerHTML = [["Blind runs", blindRuns], ["Cloud runs", cloudRuns]]
+    .filter(([, list]) => list.length)
+    .map(([title, list]) => `<h3>${title}</h3>${runTable(list, cols.filter(([, , has]) => list.some(has)))}`)
+    .join("");
+}
+function runTable(runs, cols) {
+  return `<table class="nowrap"><tr><th>Run</th>${cols.map(([h, , , n]) => `<th${n ? ' class="n"' : ""}>${esc(h)}</th>`).join("")}</tr>${runs
     .slice()
     .reverse()
     .map((r) => {
       const t = r.tally ?? { ran: 0, failed: 0 };
       const f = (r.checks ?? []).filter((c) => c.fails?.length).map((c) => c.name).join(", ");
-      return `<tr><td>${esc(r.name)}</td><td><code>${esc(r.build ?? "?")}</code></td><td>${esc(r.scenario ?? "–")}</td><td>${esc(r.seed ?? "–")}</td>${povs
-        .map((p) => `<td class="n">${r.avg?.[p] ?? "–"}</td>`)
-        .join("")}<td class="n"><b>${r.avg?.overall ?? "–"}</b></td><td class="n ${t.failed ? "fail" : "pass"}" title="${esc(f)}">${t.ran ? `${t.ran - t.failed}/${t.ran}` : "–"}</td><td class="n">${r.minutes ?? "–"}</td><td class="n">${r.tokens == null ? "–" : r.tokens >= 1e6 ? `${(r.tokens / 1e6).toFixed(1)}M` : `${Math.round(r.tokens / 1000)}k`}</td></tr>`;
+      const when = /^\d{4}-(\d\d-\d\d)-(\d\d)(\d\d)/.exec(r.name);
+      return `<tr><td title="${esc(r.name)}">${when ? `${when[1]} ${when[2]}:${when[3]}` : esc(r.name)}</td>${cols
+        .map(([h, cell, , n]) => `<td class="${n ?? ""}${h === "Checks" ? (t.failed ? " fail" : " pass") : ""}"${h === "Checks" && f ? ` title="${esc(f)}"` : ""}>${cell(r)}</td>`)
+        .join("")}</tr>`;
     })
     .join("")}</table>`;
 }
 
 // Tabs: one section at a time, kept in the address so a reload or a link lands on the same one.
-const panes = [...document.querySelectorAll(".pane")].map((p) => p.id);
+const panes = [...document.querySelectorAll(".pane")].map((p) => p.id.slice(5));
 function show() {
   const id = panes.includes(location.hash.slice(1)) ? location.hash.slice(1) : panes[0];
   for (const p of panes) {
-    document.getElementById(p).hidden = p !== id;
+    document.getElementById(`pane-${p}`).hidden = p !== id;
     document.getElementById(`tab-${p}`).setAttribute("aria-selected", String(p === id));
   }
 }
-// The tab's id is also its section's, so the browser would scroll to it. Keep the page at the top instead.
+// Sections are pane-<id>, so a hash never scrolls the page past the header.
 $("tabs").addEventListener("click", (e) => {
   const a = e.target.closest("a[role=tab]");
   if (!a) return;
@@ -657,18 +702,23 @@ else {
   drawChecks([]);
 }
 // Screens: each named state's shots from the newest capture run, beside the run before, with the critic's scores.
+// Shots, scores and the worst thing on each width show. The fix, the second reader, code's flags and the editor's cuts fold away.
+const delta = (v, w) => { const d = typeof v === "number" && typeof w === "number" ? v - w : 0; return d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""; };
 function drawScreens(caps) {
-  $("screensRule").textContent = R.screensRule;
+  $("screensRule").innerHTML = [R.screensRule, `All screens together: ${R.design?.who ?? ""}`, R.climb && `Climbing to ${R.climb.target}: ${R.climb.rule}`]
+    .filter(Boolean).map((x) => `<p>${esc(x)}</p>`).join("");
   if (!caps?.length) { $("sheet").innerHTML = `<div class="empty">No captures yet. Run <code>npm run playtest:capture</code>, then <code>npm run playtest:critic</code>, and reload.</div>`; return; }
   let at = caps.length - 1, compare = false;
   const ids = R.screens.ratings.map((r) => r.id);
-  const img = (run, file, label) => `<figure><a href="captures/${esc(run)}/${esc(file)}" target="_blank"><img loading="lazy" src="captures/${esc(run)}/${esc(file)}" alt="${esc(label)}"></a><figcaption>${esc(label)}</figcaption></figure>`;
+  // 2026-11-08-1905 reads as 11-08 19:05, as in the Results table.
+  const label = (run) => { const m = /^\d{4}-(\d\d-\d\d)-(\d\d)(\d\d)$/.exec(run); return m ? `${m[1]} ${m[2]}:${m[3]}` : run; };
+  const img = (run, x, label) => `<figure class="${esc(x.viewport)}"><a href="captures/${esc(run)}/${esc(x.file)}" target="_blank"><img loading="lazy" src="captures/${esc(run)}/${esc(x.file)}" alt="${esc(label)}"></a><figcaption>${esc(label)}</figcaption></figure>`;
   const draw = () => {
     const cap = caps[at], prev = caps[at - 1];
-    $("capTabs").innerHTML = caps.map((c, i) => `<button aria-pressed="${i === at}" data-i="${i}">${esc(c.run)}</button>`).join("") +
-      (prev ? `<button data-compare aria-pressed="${compare}">Show ${esc(prev.run)} beside</button>` : "");
+    $("capTabs").innerHTML = caps.map((c, i) => `<button aria-pressed="${i === at}" data-i="${i}" title="${esc(c.run)}">${esc(label(c.run))}</button>`).join("") +
+      (prev ? `<button data-compare aria-pressed="${compare}">Compare with ${esc(label(prev.run))}</button>` : "");
     const bad = cap.shots.filter((x) => x.status !== "ok");
-    $("sheet").innerHTML = `<p class="small muted">Build <code>${esc(cap.build ?? "?")}</code>${cap.dirty ? " with uncommitted game changes" : ""}. ${cap.shots.length - bad.length} of ${cap.shots.length} shots.${cap.critic ? ` Readers: ${esc(cap.critic.model)}${cap.critic2 ? ` · ${esc(cap.critic2.model)}, scores in that order. Orange marks where they part by 2 or more` : ""}.` : " Not scored yet."}</p>` +
+    $("sheet").innerHTML = `<p class="meta">Build <code>${esc(cap.build ?? "?")}</code>${cap.dirty ? ", uncommitted" : ""}. ${bad.length ? `${cap.shots.length - bad.length} of ${cap.shots.length} shots. ` : ""}${cap.critic ? `Scores: ${esc(cap.critic.model)}${cap.critic2 ? ` · ${esc(cap.critic2.model)}. <span class="gap">Orange</span>: 2 or more apart` : ""}.` : "Not scored yet."}</p>` +
       designCard(cap, prev) +
       R.states.map((st) => {
         const shots = cap.shots.filter((x) => x.state === st.id);
@@ -677,32 +727,36 @@ function drawScreens(caps) {
         const c = cap.critic?.states?.[st.id], pc = prev?.critic?.states?.[st.id];
         const c2 = cap.critic2?.states?.[st.id];
         // Desktop and phone side by side, each at its own shape, and the run before beneath when compared.
-        const fig = (run, x) => x.status === "ok" ? img(run.run, x.file, `${x.viewport}, ${run.run}${x.errors?.length ? `, ${x.errors.length} console error(s)` : ""}`) : `<div class="empty small">${esc(x.viewport)}: ${esc(x.status)}${x.errors?.[0] ? `<br>${esc(x.errors[0])}` : ""}</div>`;
+        const fig = (run, x) => x.status === "ok" ? img(run.run, x, `${x.viewport}${run === cap ? "" : `, ${label(run.run)}`}${x.errors?.length ? `, ${x.errors.length} console error(s)` : ""}`) : `<div class="empty small">${esc(x.viewport)}: ${esc(x.status)}${x.errors?.[0] ? `<br>${esc(x.errors[0])}` : ""}</div>`;
         const row = (run, list) => `<div class="shot">${list.map((x) => fig(run, x)).join("")}</div>`;
         const was = compare && prev ? prev.shots.filter((y) => y.state === st.id) : [];
         const pics = row(cap, shots) + (was.length ? row(prev, was) : "");
-        const scores = c && !c.error ? `<div class="scores">${vps.map((vp) => c[vp] ? `<div><b class="small">${esc(vp)}</b>${ids.map((k) => {
-          const v = c[vp][k]?.score, w = pc?.[vp]?.[k]?.score;
-          const d = typeof v === "number" && typeof w === "number" ? v - w : 0;
-          return `<div class="score-row" title="${esc(c[vp][k]?.why)}"><span>${esc(k)}</span><b>${v ?? "–"}${d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""}${two(v, c2?.[vp]?.[k]?.score)}</b></div>`;
-        }).join("")}<p class="small" style="margin-top:6px"><span class="muted">Worst:</span> ${esc(c[vp].worst)}<br><span class="muted">Fix:</span> ${esc(c[vp].fix)}</p>${c2?.[vp]?.worst ? `<p class="small muted"><b>Second reader:</b> ${esc(c2[vp].worst)}</p>` : ""}</div>` : "").join("")}</div>` : c?.error ? `<p class="small fail">Critic: ${esc(c.error)}</p>` : "";
-        // Code's flags for each width, then the editor's cuts.
+        const sv = vps.filter((vp) => c?.[vp]);
+        // One table: a row a rating, a column a width.
+        const table = c && !c.error && sv.length ? `<table><tr><th></th>${sv.map((vp) => `<th class="n">${esc(vp)}</th>`).join("")}</tr>${ids.map((k) => `<tr><td>${esc(k)}</td>${sv.map((vp) => {
+          const v = c[vp][k]?.score;
+          return `<td class="n" title="${esc(c[vp][k]?.why)}"><b>${v ?? "–"}</b>${delta(v, pc?.[vp]?.[k]?.score)}${two(v, c2?.[vp]?.[k]?.score)}</td>`;
+        }).join("")}</tr>`).join("")}</table>` : c?.error ? `<p class="small fail">Critic: ${esc(c.error)}</p>` : "";
+        const worst = c && !c.error ? sv.map((vp) => `<p><b>${esc(vp)}:</b> ${esc(c[vp].worst)}</p>`).join("") : "";
+        const fixes = c && !c.error ? sv.map((vp) => `<p class="small"><span class="muted">${esc(vp)} fix:</span> ${esc(c[vp].fix)}${c2?.[vp]?.worst ? `<br><span class="muted">Second reader:</span> ${esc(c2[vp].worst)}` : ""}</p>`).join("") : "";
+        // Code's flags for each width.
         const flags = shots.filter((x) => x.status === "ok").map((x) => {
           const f = [...(x.faults ?? []).map((y) => ({ ...y, kind: "layout" })), ...(x.language ?? []).map((y) => ({ ...y, kind: "words" }))];
-          if (!f.length) return `<p class="small pass">${esc(x.viewport)}: code found nothing.</p>`;
+          if (!f.length) return { vp: x.viewport, n: 0, html: "" };
           const by = {};
           for (const y of f) (by[y.rule] ??= []).push(y);
-          return `<details class="small" style="margin-top:6px"><summary>${esc(x.viewport)}: code flagged ${Object.entries(by).map(([k, v]) => `${v.length} ${esc(k)}`).join(", ")}</summary><table>${f
-            .map((y) => `<tr><td>${esc(y.rule)}</td><td>${esc(y.text)}</td><td class="muted">${esc(y.note ?? "")}</td></tr>`)
-            .join("")}</table></details>`;
-        }).join("");
+          return { vp: x.viewport, n: f.length, sum: Object.entries(by).map(([k, v]) => `${v.length} ${esc(k)}`).join(", "), html: f.map((y) => `<tr><td>${esc(x.viewport)}</td><td>${esc(y.rule)}</td><td>${esc(y.text)}</td><td class="muted">${esc(y.note ?? "")}</td></tr>`).join("") };
+        });
+        const flagLine = flags.map((f) => `${esc(f.vp)} ${f.n ? f.sum : "none"}`).join(", ");
+        const flagTable = flags.some((f) => f.n) ? `<div class="scroll"><table>${flags.map((f) => f.html).join("")}</table></div>` : "";
+        // The editor's cuts.
         const ed = cap.critic?.editor?.[st.id], ped = prev?.critic?.editor?.[st.id];
         const ed2 = cap.critic2?.editor?.[st.id];
-        const edit = ed && !ed.error ? `<div style="margin-top:10px"><b class="small">Words</b> <span class="small muted">${R.editor.ratings.map((r) => {
-          const v = ed[r.id]?.score, w = ped?.[r.id]?.score, d = typeof v === "number" && typeof w === "number" ? v - w : 0;
-          return `<span title="${esc(ed[r.id]?.why)}">${esc(r.id)} <b>${v ?? "–"}</b>${d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""}${two(v, ed2?.[r.id]?.score)}</span>`;
-        }).join(" · ")} · ${ed.saved} of ${ed.words} words could go</span>${ed.rewrites?.length ? `<table style="margin-top:6px"><tr><th>Now</th><th>Cut to</th><th class="n">Saves</th></tr>${ed.rewrites.map((x) => `<tr><td class="muted">${esc(x.was)}</td><td>${esc(x.now)}</td><td class="n">${x.saved}</td></tr>`).join("")}</table>` : ""}</div>` : ed?.error ? `<p class="small fail">Editor: ${esc(ed.error)}</p>` : "";
-        return `<div class="card" style="margin-top:12px"><h3>${esc(st.title)} <span class="tag">${esc(st.path)}</span></h3><p class="small muted">${esc(st.description)}</p>${pics}${scores}${flags}${edit}</div>`;
+        const edLine = ed && !ed.error ? `${R.editor.ratings.map((r) => { const v = ed[r.id]?.score; return `<span title="${esc(ed[r.id]?.why)}">${esc(r.id)} <b>${v ?? "–"}</b>${delta(v, ped?.[r.id]?.score)}${two(v, ed2?.[r.id]?.score)}</span>`; }).join(", ")}. ${ed.saved} of ${ed.words} words could go.` : ed?.error ? `<span class="fail">Editor: ${esc(ed.error)}</span>` : "";
+        const edTable = ed?.rewrites?.length ? `<table><tr><th>Now</th><th>Cut to</th><th class="n">Saves</th></tr>${ed.rewrites.map((x) => `<tr><td class="muted">${esc(x.was)}</td><td>${esc(x.now)}</td><td class="n">${x.saved}</td></tr>`).join("")}</table>` : "";
+        const more = fixes || flagTable || edTable ? `<details class="more"><summary>Fixes, flags and cuts</summary>${fixes}${flagTable}${edTable}</details>` : "";
+        return `<div class="card"><div class="state-head"><h3>${esc(st.title)}</h3><span class="tag">${esc(st.path)}</span></div><p class="small muted">${esc(st.description)}</p>${pics}
+          <div class="findings"><div>${table}</div><div class="worst">${worst}<p class="small muted">Flags: ${flagLine}.${edLine ? `<br>Words: ${edLine}` : ""}</p></div></div>${more}</div>`;
       }).join("");
   };
   $("capTabs").addEventListener("click", (e) => {
@@ -715,16 +769,20 @@ function drawScreens(caps) {
 }
 // The second reader's score beside Claude's, marked when they part by 2 or more.
 const two = (v, v2) => (typeof v2 !== "number" ? "" : ` <span class="${typeof v === "number" && Math.abs(v - v2) >= 2 ? "gap" : "muted"}" title="Second reader">· ${v2}</span>`);
-// The designer's pass over every screen at once.
+// The designer's pass over every screen at once. The three worst issues show, the rest fold away.
 function designCard(cap, prev) {
   const d = cap.critic?.design, pd = prev?.critic?.design;
   const d2 = cap.critic2?.design;
   if (!d) return "";
   if (d.error) return `<div class="card small fail">Design pass: ${esc(d.error)}</div>`;
-  return `<div class="card" style="margin-top:12px"><h3>All screens together</h3><p class="small muted">${esc(R.design.who)}</p><div class="scores">${R.design.ratings.map((r) => {
-    const v = d[r.id]?.score, w = pd?.[r.id]?.score, n = typeof v === "number" && typeof w === "number" ? v - w : 0;
-    return `<div class="score-row" title="${esc(d[r.id]?.why)}"><span>${esc(r.id)}</span><b>${v ?? "–"}${n ? ` <span class="${n < 0 ? "down" : "up"}">${n > 0 ? "+" : ""}${n}</span>` : ""}${two(v, d2?.[r.id]?.score)}</b></div>`;
-  }).join("")}</div>${d.issues?.length ? `<table style="margin-top:10px"><tr><th>Screen</th><th>Issue</th><th>Fix</th></tr>${[...d.issues, ...(d2?.issues ?? []).map((x) => ({ ...x, state: `${x.state} (second reader)` }))].map((x) => `<tr><td>${esc(x.state)}<br><span class="muted">${esc(x.viewport)}, ${esc(x.where)}</span></td><td>${esc(x.issue)}</td><td>${esc(x.fix)}</td></tr>`).join("")}</table>` : ""}</div>`;
+  const issues = [...(d.issues ?? []), ...(d2?.issues ?? []).map((x) => ({ ...x, state: `${x.state} (second reader)` }))];
+  // Two columns, the fix beneath its issue, so the table reads on a phone too.
+  const rows = (list) => list.map((x) => `<tr><td>${esc(x.state)}<br><span class="muted">${esc(x.viewport)}, ${esc(x.where)}</span></td><td>${esc(x.issue)}<br><span class="muted">Fix: ${esc(x.fix)}</span></td></tr>`).join("");
+  const head = `<tr><th style="width:30%">Screen</th><th>Issue</th></tr>`;
+  return `<div class="card"><h3>All screens together</h3><div class="scores">${R.design.ratings.map((r) => {
+    const v = d[r.id]?.score;
+    return `<div class="score-row" title="${esc(d[r.id]?.why)}"><span>${esc(r.id)}</span><b>${v ?? "–"}${delta(v, pd?.[r.id]?.score)}${two(v, d2?.[r.id]?.score)}</b></div>`;
+  }).join("")}</div>${issues.length ? `<div class="scroll"><table style="margin-top:10px">${head}${rows(issues.slice(0, 3))}</table></div>${issues.length > 3 ? `<details class="more"><summary>${issues.length - 3} more issues</summary><div class="scroll"><table>${head}${rows(issues.slice(3))}</table></div></details>` : ""}` : ""}</div>`;
 }
 drawScreens(window.CAPTURES);
 </script>

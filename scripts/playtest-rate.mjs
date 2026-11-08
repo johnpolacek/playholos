@@ -48,7 +48,7 @@ const rules = R.ratingRules.filter((r) => !/computed|playtest:rate/.test(r));
 
 const prompt = `You rate a playtest of the space game Holos. You did not play it. Someone else played${scenario ? ` the scenario "${scenario.title}": ${scenario.what}` : ""}, and left the screenshots above, in the order taken, and the log below, one JSON line per event: Next stops, questions to the Mind with its answers, console errors, checks. Notes in a "note" field are the player's own.
 
-Rate the run as each player below, 0 to 10 a rating, from its anchors. Judge what the screenshots and the log show, not what the player says it meant.
+Rate the run as each player below, 0.0 to 10.0 a rating, from its anchors. Use one decimal, like 6.5: the band sets the whole number's range, and the decimal says where in it, so 6.0 only just reached the band and 8.9 nearly reached the next. Judge what the screenshots and the log show, not what the player says it meant.
 
 ${PLAYERS.map((p) => `## ${p.id}\n${p.who}\n${ratings(p).map((r) => `- ${r.id}: ${r.q}\n${r.anchors.map((a, i) => `    ${R.anchorBands[i]}: ${a}`).join("\n")}`).join("\n")}`).join("\n\n")}
 
@@ -66,7 +66,7 @@ ${log
 </log>
 
 Reply with JSON only, no other text:
-{${PLAYERS.map((p) => `"${p.id}":{${ratings(p).map((r) => `"${r.id}":{"score":<0-10 or null>,"why":"<one short line>","evidence":["<file or log line>"]}`).join(",")}}`).join(",")}}`;
+{${PLAYERS.map((p) => `"${p.id}":{${ratings(p).map((r) => `"${r.id}":{"score":<0.0-10.0 or null>,"why":"<one short line>","evidence":["<file or log line>"]}`).join(",")}}`).join(",")}}`;
 
 // Claude rates, and the second reader the regime names rates the same run at once, kept apart and never averaged in.
 const second = (process.env.SECOND_READER ?? R.secondReader) === "codex" && !process.argv.includes("--claude-only");
