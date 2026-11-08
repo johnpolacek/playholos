@@ -1,0 +1,32 @@
+{
+  "year": 3000,
+  "save": {
+    "seed": 7,
+    "woke": true,
+    "charter": {
+      "line": "",
+      "dials": [
+        35,
+        50,
+        62
+      ]
+    },
+    "reviewed": true,
+    "reached": true,
+    "asked": true,
+    "plan": {
+      "builds": [
+        "All-Sky Watch",
+        "Thought Fields",
+        "Warm Sky Watch",
+        "Infrared Telescope",
+        "Halo Survey",
+        "Star Mapper",
+        "Ground Solar",
+        "Deep Flash Watch"
+      ],
+      "observe": []
+    },
+    "told": 3000
+  }
+}

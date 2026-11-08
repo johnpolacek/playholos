@@ -9,7 +9,8 @@
   and how it scores. The JSON block below is the regime. scripts/regime.mjs reads it for the scorer, the judge and the
   routines, and this page draws it with the results. Edit the JSON, not the drawing. Set 2026-11-08.
 
-  npm run playtest:page     scores every run, writes playtests/runs.json, and serves this page
+  Open this file in a browser. Its results come from runs.js beside it, which npm run playtest:score rewrites after
+  every run.
 -->
 <script type="application/json" id="regime">
 {
@@ -20,7 +21,7 @@
       "name": "Cloud Playtest",
       "file": "playtests/PROMPT.md",
       "branch": "playtest/cloud-<date>",
-      "what": "An engineer who can read the page plays one scenario, logs every stop and answer, then rates the run as three players.",
+      "what": "An engineer who can read the page plays one scenario and logs every stop and answer. A rater who didn't play rates the run as three players, from the log and the screenshots.",
       "players": ["first-timer", "astronomer", "long-hauler"]
     },
     {
@@ -30,6 +31,14 @@
       "branch": "playtest/blind-<date>",
       "what": "A first-timer who sees only screenshots plays about 150 actions, thinks aloud, answers check-ins as it goes, and takes the quiz at the end. A judge who didn't play grades it.",
       "players": ["blind"]
+    },
+    {
+      "id": "screens",
+      "name": "Screen check",
+      "file": "scripts/capture.mjs",
+      "branch": "none, local",
+      "what": "Every named state, opened from its saved game and shot at desktop and phone width. A critic who sees only the shots scores each one. Run it after any change to a screen.",
+      "players": ["screens"]
     }
   ],
   "players": [
@@ -81,7 +90,8 @@
     "Cite evidence for every rating: a screenshot file or a log line. No evidence, no rating.",
     "Write one short line on why. Name the worst moment, not an average feeling.",
     "Rate only what the run showed. If the run never reached it, write null and say why.",
-    "Ratings marked code or judge are computed. Leave them out of scores.json."
+    "Ratings marked code or judge are computed. Leave them out of scores.json.",
+    "The cloud run's three players are rated by npm run playtest:rate, a reader who didn't play. The player who played rates nothing."
   ],
   "quiz": {
     "version": 2,
@@ -209,6 +219,37 @@
       "stop": "The strike has landed and the Mind has been asked, or 60 real minutes."
     }
   ],
+  "viewports": {
+    "desktop": { "width": 1280, "height": 800 },
+    "phone": { "width": 390, "height": 844, "scale": 2, "touch": true }
+  },
+  "capture": { "settleMs": 2500, "timeoutMs": 30000 },
+  "states": [
+    { "id": "title", "title": "Title", "path": "/", "description": "The first screen a new player sees. It should say what Holos is in a glance and offer one clear way in." },
+    { "id": "build-y0", "title": "Build before Begin", "path": "/play/build", "description": "Planning before Year 0. We should see what we can build, what each gives us, what limits us, and how to Begin." },
+    { "id": "scan-y1", "title": "Scan, Year 1", "path": "/play", "description": "The first Year of play. The map and the leads should show where we are, what we know, and which lead needs us." },
+    { "id": "build-y1", "title": "Build, Year 1", "path": "/play/build", "description": "Builds in play. We should see what is building, how long each takes, and what our compute and electricity allow." },
+    { "id": "reach-y1", "title": "Reach, Year 1", "path": "/play/reach", "description": "Ways to reach other stars. We should see which craft or message we can send, to where, and how long an answer takes." },
+    { "id": "proxima-y1", "title": "Proxima lead, Year 1", "path": "/play/lead/proxima-centauri", "description": "Our nearest lead. Its page should show what we know of Proxima b, how sure we are, and what we can do next." },
+    { "id": "mind-y1", "title": "Mind, Year 1", "path": "/play/mind", "description": "The Mind's tab with no talk yet. It should invite a question and show what the Mind can help with." },
+    { "id": "scan-deep", "title": "Scan, deep time", "path": "/play", "description": "Thousands of Years in, with every watch built and hundreds of glows. The few leads worth acting on should still stand out." }
+  ],
+  "screens": {
+    "who": "A reader who never played and never saw the code. It sees only the screenshots, desktop and phone, and what each state should show.",
+    "ratings": [
+      { "id": "purpose", "q": "Can a new player tell what this screen is for, and what to do on it?", "anchors": ["no idea", "guessing", "clear after a look", "plain at a glance"] },
+      { "id": "hierarchy", "q": "Does what matters most here read first?", "anchors": ["the key thing is buried", "hard to find", "found after a look", "reads first"] },
+      { "id": "legibility", "q": "Is everything readable at this width: nothing clipped, overlapping, cut off or too small?", "anchors": ["key parts unreadable", "several clipped or overlapping", "one small slip", "all clean"] },
+      { "id": "wonder", "q": "Drawn graphics, real data and a sense of scale, not plain text lists.", "anchors": ["a wall of text", "mostly text", "drawn but plain", "evokes wonder"] }
+    ],
+    "rules": [
+      "Judge only what is on screen. Never the code, the diff, or what a change meant to do.",
+      "Rate from the anchors, so a 6 means the same every run.",
+      "Rate desktop and phone apart. The phone is held to the same anchors.",
+      "Name the worst thing on screen, where it is, and one fix, in a short line each."
+    ]
+  },
+  "screensRule": "Each named state opens from its saved game in playtests/states/, with the clock stopped at its Year. npm run playtest:capture shots every state at every width, and npm run playtest:critic scores them blind. A state without a save is skipped. Save one from a run with node scripts/capture.mjs snap <id>.",
   "scenarioRule": "Each cloud run plays the next scenario in turn, from a fresh game. The seed is drawn at random as for any player, so runs cover every world and no fix is tuned to one. A seed is replayed only to check a fix on the world a finding came from.",
   "checks": [
     { "name": "build named", "why": "scores.json names the build it played, so the trend can tie a score to code." },
@@ -258,7 +299,9 @@
   ],
   "open": [
     "Does the Mind's en dash rule cover a compound like Sun–Earth, or only dashes between clauses?",
-    "The judge needs new reference grades once the first runs on quiz version 2 are in."
+    "The judge needs new reference grades once the first runs on quiz version 2 are in.",
+    "The screen critic and the run rater have no reference grades yet. Label a few states and runs by hand, then check them as the judge is checked.",
+    "The saved states are made by hand on seed 7. The watcher, the strike and a peer's answer need saves taken from real runs."
   ]
 }
 </script>
@@ -288,9 +331,12 @@ h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: 
 h3 { font-size: 16px; margin: 0 0 6px; }
 p { margin: 0 0 8px; }
 .sub { color: var(--ink2); margin-bottom: 20px; }
-nav { overflow-x: auto; position: sticky; top: 0; background: var(--bg); padding: 10px 0; border-bottom: 1px solid var(--line); display: flex; gap: 16px; flex-wrap: wrap; z-index: 2; }
-nav a { color: var(--ink2); text-decoration: none; font-size: 14px; }
+nav { overflow-x: auto; position: sticky; top: 0; background: var(--bg); padding: 8px 0 0; border-bottom: 1px solid var(--line); display: flex; gap: 16px; flex-wrap: wrap; z-index: 2; }
+nav a { color: var(--ink2); text-decoration: none; font-size: 14px; padding: 6px 2px; border-bottom: 2px solid transparent; }
 nav a:hover { color: var(--ink); }
+nav a[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.pane[hidden] { display: none; }
+.pane > h2:first-child { margin-top: 24px; }
 .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
 .grid > * { min-width: 0; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
@@ -300,9 +346,14 @@ nav a:hover { color: var(--ink); }
 .tag.code { color: var(--p1); } .tag.judge { color: var(--p3); }
 ol, ul { margin: 6px 0 0; padding-left: 20px; }
 li { margin: 3px 0; }
-.anchors { display: grid; grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: 4px; margin-top: 8px; }
-.anchors div { background: var(--soft); border-radius: 6px; padding: 6px; font-size: 12px; }
-.anchors b { display: block; font-size: 11px; color: var(--ink2); font-weight: 600; }
+.ratings { display: flex; flex-direction: column; gap: 10px; }
+.rating { display: grid; grid-template-columns: minmax(180px, 1fr) 2fr; gap: 20px; align-items: center; }
+@media (max-width: 720px) { .rating { grid-template-columns: 1fr; gap: 10px; } }
+.scale { display: grid; grid-template-columns: 3fr 3fr 3fr 2fr; gap: 3px; }
+.scale .bar { height: 6px; border-radius: 3px; }
+.scale .band { font-size: 13px; line-height: 1.35; padding-top: 6px; }
+.scale .band b { display: block; font-size: 11px; color: var(--ink2); font-weight: 600; font-variant-numeric: tabular-nums; }
+.computed { font-size: 13px; color: var(--ink2); background: var(--soft); border-radius: 6px; padding: 10px 12px; }
 .flow { overflow-x: auto; }
 .flow svg { display: block; min-width: 760px; width: 100%; height: auto; }
 .flow text { font: 13px -apple-system, BlinkMacSystemFont, sans-serif; fill: var(--ink); }
@@ -323,47 +374,87 @@ td.n { text-align: right; font-variant-numeric: tabular-nums; }
 .empty { padding: 20px; text-align: center; color: var(--ink2); background: var(--soft); border-radius: 8px; }
 .scroll { overflow-x: auto; }
 code { font: 12px ui-monospace, Menlo, monospace; background: var(--soft); padding: 1px 4px; border-radius: 4px; }
+.shot { display: grid; grid-template-columns: 3fr 1fr; gap: 10px; align-items: start; margin-top: 10px; }
+.shot figure { margin: 0; min-width: 0; }
+.shot img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; background: #000; }
+.shot figcaption { font-size: 12px; color: var(--ink2); margin-top: 4px; }
+.was img { opacity: 0.9; }
+.scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 10px; margin-top: 10px; }
+.score-row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; padding: 2px 0; }
+.score-row b { font-variant-numeric: tabular-nums; }
+.down { color: var(--bad); } .up { color: var(--good); }
+@media (max-width: 720px) { .shot { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
 <main>
   <h1>Holos Playtests</h1>
   <p class="sub" id="sub"></p>
-  <nav>
-    <a href="#how">How a run works</a><a href="#results">Results</a><a href="#players">Players</a><a href="#quiz">Quiz</a><a href="#scenarios">Scenarios</a><a href="#checks">Checks</a><a href="#open">Open</a>
+  <nav role="tablist" id="tabs">
+    <a href="#how" id="tab-how" role="tab">How a run works</a>
+    <a href="#results" id="tab-results" role="tab">Results</a>
+    <a href="#screens" id="tab-screens" role="tab">Screens</a>
+    <a href="#players" id="tab-players" role="tab">Players</a>
+    <a href="#quiz" id="tab-quiz" role="tab">Quiz</a>
+    <a href="#scenarios" id="tab-scenarios" role="tab">Scenarios</a>
+    <a href="#checks" id="tab-checks" role="tab">Checks</a>
+    <a href="#open" id="tab-open" role="tab">Open</a>
   </nav>
 
-  <h2 id="how">How a run works</h2>
+  <section class="pane" id="how" role="tabpanel" aria-labelledby="tab-how">
+  <h2>How a run works</h2>
   <div class="card flow" id="flow"></div>
   <div class="grid" id="routines" style="margin-top:12px"></div>
+  </section>
 
-  <h2 id="results">Results</h2>
+  <section class="pane" id="results" role="tabpanel" aria-labelledby="tab-results">
+  <h2>Results</h2>
   <div class="card">
     <div class="legend" id="legend"></div>
     <div class="chart" id="chart"></div>
   </div>
   <div class="card scroll" style="margin-top:12px" id="runs"></div>
+  </section>
 
-  <h2 id="players">Players and ratings</h2>
+  <section class="pane" id="screens" role="tabpanel" aria-labelledby="tab-screens">
+  <h2>Screens</h2>
+  <p class="muted small" id="screensRule"></p>
+  <div class="tabs" id="capTabs"></div>
+  <div id="sheet"></div>
+  </section>
+
+  <section class="pane" id="players" role="tabpanel" aria-labelledby="tab-players">
+  <h2>Players and ratings</h2>
   <div class="tabs" id="playerTabs"></div>
   <div id="player"></div>
   <div class="card small muted" style="margin-top:12px"><b>Rules for every rating</b><ul id="rules"></ul></div>
+  </section>
 
-  <h2 id="quiz">Blind quiz</h2>
+  <section class="pane" id="quiz" role="tabpanel" aria-labelledby="tab-quiz">
+  <h2>Blind quiz</h2>
   <div id="quizBody"></div>
+  </section>
 
-  <h2 id="scenarios">Scenarios</h2>
+  <section class="pane" id="scenarios" role="tabpanel" aria-labelledby="tab-scenarios">
+  <h2>Scenarios</h2>
   <p class="muted small" id="scenarioRule"></p>
   <div class="tabs" id="scenarioTabs"></div>
   <div id="scenario"></div>
+  </section>
 
-  <h2 id="checks">Code checks</h2>
+  <section class="pane" id="checks" role="tabpanel" aria-labelledby="tab-checks">
+  <h2>Code checks</h2>
   <div class="card scroll" id="checkTable"></div>
   <div class="card small muted" style="margin-top:12px"><b>Known gaps, not to report</b><ul id="gaps"></ul></div>
+  </section>
 
-  <h2 id="open">Open questions</h2>
+  <section class="pane" id="open" role="tabpanel" aria-labelledby="tab-open">
+  <h2>Open questions</h2>
   <div class="card"><ul id="openList"></ul></div>
+  </section>
 </main>
+<script src="runs.js"></script>
+<script src="captures.js"></script>
 <script>
 const R = JSON.parse(document.getElementById("regime").textContent);
 const $ = (id) => document.getElementById(id);
@@ -375,7 +466,7 @@ $("sub").textContent = `How we playtest Holos, and what it has found. Regime upd
 // The flow of one run, from play to the trend.
 (() => {
   const boxes = [
-    ["Play", "a scenario, or blind"], ["Log", "log.jsonl, blind.jsonl"], ["Score", "checks, judge, players"], ["Scorecard", "SCORECARD.md"], ["Trend", "runs.json, this page"],
+    ["Play", "a scenario, or blind"], ["Log", "log.jsonl, blind.jsonl"], ["Score", "checks, judge, players"], ["Scorecard", "SCORECARD.md"], ["Trend", "runs.js, this page"],
   ];
   const w = 130, gap = 34, h = 58, y = 18;
   let svg = `<svg viewBox="0 0 ${boxes.length * (w + gap) - gap + 20} 100" role="img" aria-label="A run goes from play, to its log, to scoring, to a scorecard, to the trend">`;
@@ -398,10 +489,14 @@ $("sub").textContent = `How we playtest Holos, and what it has found. Regime upd
   const draw = () => {
     $("playerTabs").innerHTML = R.players.map((p) => `<button aria-pressed="${p.id === current}" data-id="${p.id}">${esc(p.id)}</button>`).join("");
     const p = R.players.find((x) => x.id === current);
-    $("player").innerHTML = `<p class="muted">${esc(p.who)}</p><div class="grid">${p.ratings
+    // One row a rating: what it asks, then its anchors along a 0 to 10 scale, from worst to best.
+    const shades = ["var(--bad)", "color-mix(in srgb, var(--bad) 45%, var(--accent))", "color-mix(in srgb, var(--good) 55%, var(--accent))", "var(--good)"];
+    $("player").innerHTML = `<p class="muted">${esc(p.who)}</p><div class="ratings">${p.ratings
       .map(
-        (r) => `<div class="card"><h3>${esc(r.id)}${r.code ? '<span class="tag code">code</span>' : ""}${r.judge ? '<span class="tag judge">judge</span>' : ""}</h3><p class="small">${esc(r.q)}</p>${
-          r.anchors ? `<div class="anchors">${r.anchors.map((a, i) => `<div><b>${R.anchorBands[i]}</b>${esc(a)}</div>`).join("")}</div>` : ""
+        (r) => `<div class="card rating"><div><h3>${esc(r.id)}${r.code ? '<span class="tag code">code</span>' : ""}${r.judge ? '<span class="tag judge">judge</span>' : ""}</h3><p class="small muted">${esc(r.q)}</p></div>${
+          r.anchors
+            ? `<div class="scale">${r.anchors.map((a, i) => `<div><div class="bar" style="background:${shades[i]}"></div><div class="band"><b>${R.anchorBands[i]}</b>${esc(a)}</div></div>`).join("")}</div>`
+            : `<div class="computed">${r.code ? "Computed by code from the run’s log." : "Graded by the judge, who didn’t play."}</div>`
         }</div>`,
       )
       .join("")}</div>`;
@@ -449,7 +544,7 @@ function checkinStrip(every) {
   draw();
 })();
 
-// Checks, with how often each failed across runs once runs.json is in.
+// Checks, with how often each failed across runs once runs.js is in.
 function drawChecks(runs) {
   const fails = Object.fromEntries(R.checks.map((c) => [c.name, { ran: 0, failed: 0 }]));
   for (const r of runs ?? []) for (const c of r.checks ?? []) if (fails[c.name] && c.fails) { fails[c.name].ran++; if (c.fails.length) fails[c.name].failed++; }
@@ -460,7 +555,7 @@ function drawChecks(runs) {
 $("gaps").innerHTML = R.knownGaps.map((g) => `<li>${esc(g)}</li>`).join("");
 $("openList").innerHTML = R.open.map((g) => `<li>${esc(g)}</li>`).join("");
 
-// Results, from runs.json, which npm run playtest:page writes.
+// Results, from runs.js, which npm run playtest:score writes. A script, not a fetch, so the page opens from a file.
 function drawResults(runs) {
   const povs = ["first-timer", "astronomer", "long-hauler", "blind"];
   $("legend").innerHTML = povs.map((p) => `<span><i style="background:${COLORS[p]}"></i>${p}</span>`).join("") + `<span class="muted">Each dot is a run, oldest left.</span>`;
@@ -489,13 +584,73 @@ function drawResults(runs) {
     .join("")}</table>`;
 }
 
-fetch("runs.json", { cache: "no-store" })
-  .then((r) => (r.ok ? r.json() : Promise.reject()))
-  .then((runs) => { drawResults(runs); drawChecks(runs); })
-  .catch(() => {
-    $("chart").innerHTML = `<div class="empty">No results yet. Run <code>npm run playtest:page</code> to score every run and serve this page.</div>`;
-    drawChecks([]);
+// Tabs: one section at a time, kept in the address so a reload or a link lands on the same one.
+const panes = [...document.querySelectorAll(".pane")].map((p) => p.id);
+function show() {
+  const id = panes.includes(location.hash.slice(1)) ? location.hash.slice(1) : panes[0];
+  for (const p of panes) {
+    document.getElementById(p).hidden = p !== id;
+    document.getElementById(`tab-${p}`).setAttribute("aria-selected", String(p === id));
+  }
+}
+// The tab's id is also its section's, so the browser would scroll to it. Keep the page at the top instead.
+$("tabs").addEventListener("click", (e) => {
+  const a = e.target.closest("a[role=tab]");
+  if (!a) return;
+  e.preventDefault();
+  history.replaceState(null, "", a.getAttribute("href"));
+  show();
+});
+addEventListener("hashchange", show);
+show();
+requestAnimationFrame(() => scrollTo(0, 0));
+
+const runs = window.RUNS;
+if (runs?.length) { drawResults(runs); drawChecks(runs); }
+else {
+  $("chart").innerHTML = `<div class="empty">No results yet. Run <code>npm run playtest:score</code> to score every run, then reload.</div>`;
+  drawChecks([]);
+}
+// Screens: each named state's shots from the newest capture run, beside the run before, with the critic's scores.
+function drawScreens(caps) {
+  $("screensRule").textContent = R.screensRule;
+  if (!caps?.length) { $("sheet").innerHTML = `<div class="empty">No captures yet. Run <code>npm run playtest:capture</code>, then <code>npm run playtest:critic</code>, and reload.</div>`; return; }
+  let at = caps.length - 1, compare = false;
+  const ids = R.screens.ratings.map((r) => r.id);
+  const img = (run, file, label) => `<figure><a href="captures/${esc(run)}/${esc(file)}" target="_blank"><img loading="lazy" src="captures/${esc(run)}/${esc(file)}" alt="${esc(label)}"></a><figcaption>${esc(label)}</figcaption></figure>`;
+  const draw = () => {
+    const cap = caps[at], prev = caps[at - 1];
+    $("capTabs").innerHTML = caps.map((c, i) => `<button aria-pressed="${i === at}" data-i="${i}">${esc(c.run)}</button>`).join("") +
+      (prev ? `<button data-compare aria-pressed="${compare}">Show ${esc(prev.run)} beside</button>` : "");
+    const bad = cap.shots.filter((x) => x.status !== "ok");
+    $("sheet").innerHTML = `<p class="small muted">Build <code>${esc(cap.build ?? "?")}</code>${cap.dirty ? " with uncommitted game changes" : ""}. ${cap.shots.length - bad.length} of ${cap.shots.length} shots.${cap.critic ? ` Critic: ${esc(cap.critic.model)}.` : " Not scored yet."}</p>` +
+      R.states.map((st) => {
+        const shots = cap.shots.filter((x) => x.state === st.id);
+        if (!shots.length) return "";
+        const vps = shots.map((x) => x.viewport);
+        const c = cap.critic?.states?.[st.id], pc = prev?.critic?.states?.[st.id];
+        // Desktop and phone side by side, each at its own shape, and the run before beneath when compared.
+        const fig = (run, x) => x.status === "ok" ? img(run.run, x.file, `${x.viewport}, ${run.run}${x.errors?.length ? `, ${x.errors.length} console error(s)` : ""}`) : `<div class="empty small">${esc(x.viewport)}: ${esc(x.status)}${x.errors?.[0] ? `<br>${esc(x.errors[0])}` : ""}</div>`;
+        const row = (run, list) => `<div class="shot">${list.map((x) => fig(run, x)).join("")}</div>`;
+        const was = compare && prev ? prev.shots.filter((y) => y.state === st.id) : [];
+        const pics = row(cap, shots) + (was.length ? row(prev, was) : "");
+        const scores = c && !c.error ? `<div class="scores">${vps.map((vp) => c[vp] ? `<div><b class="small">${esc(vp)}</b>${ids.map((k) => {
+          const v = c[vp][k]?.score, w = pc?.[vp]?.[k]?.score;
+          const d = typeof v === "number" && typeof w === "number" ? v - w : 0;
+          return `<div class="score-row" title="${esc(c[vp][k]?.why)}"><span>${esc(k)}</span><b>${v ?? "–"}${d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""}</b></div>`;
+        }).join("")}<p class="small" style="margin-top:6px"><span class="muted">Worst:</span> ${esc(c[vp].worst)}<br><span class="muted">Fix:</span> ${esc(c[vp].fix)}</p></div>` : "").join("")}</div>` : c?.error ? `<p class="small fail">Critic: ${esc(c.error)}</p>` : "";
+        return `<div class="card" style="margin-top:12px"><h3>${esc(st.title)} <span class="tag">${esc(st.path)}</span></h3><p class="small muted">${esc(st.description)}</p>${pics}${scores}</div>`;
+      }).join("");
+  };
+  $("capTabs").addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    if (b.dataset.compare !== undefined) compare = !compare; else { at = Number(b.dataset.i); }
+    draw();
   });
+  draw();
+}
+drawScreens(window.CAPTURES);
 </script>
 </body>
 </html>

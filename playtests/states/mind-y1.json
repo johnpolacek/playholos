@@ -1,0 +1,28 @@
+{
+  "year": 1.2,
+  "save": {
+    "seed": 7,
+    "woke": true,
+    "charter": {
+      "line": "",
+      "dials": [
+        35,
+        50,
+        62
+      ]
+    },
+    "reviewed": true,
+    "reached": true,
+    "asked": true,
+    "plan": {
+      "builds": [
+        "All-Sky Watch",
+        "Thought Fields",
+        "Warm Sky Watch",
+        "Infrared Telescope"
+      ],
+      "observe": []
+    },
+    "told": 1.2
+  }
+}

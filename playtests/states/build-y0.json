@@ -1,0 +1,22 @@
+{
+  "year": null,
+  "save": {
+    "seed": 7,
+    "woke": true,
+    "charter": {
+      "line": "",
+      "dials": [
+        35,
+        50,
+        62
+      ]
+    },
+    "reviewed": false,
+    "reached": false,
+    "asked": false,
+    "plan": {
+      "builds": [],
+      "observe": []
+    }
+  }
+}

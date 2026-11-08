@@ -166,9 +166,10 @@ for (const { name, run } of runs)
     [name.padEnd(18), String(run.scores.build ?? "?").padEnd(8), String(run.scores.scenario ?? "–").padEnd(14), ...cols.map((c) => fmt(run.avg[c]).padStart(12)), checked(run.tally).padStart(8)].join(" "),
   );
 if (!runs.length) console.log("No scored runs yet.");
-// For the regime page, playtests/regime.html. 2026-11-08.
+// For the regime page, playtests/regime.html, as a script it loads, so the page opens straight from the file. 2026-11-08.
 writeFileSync(
-  join(root, "runs.json"),
+  join(root, "runs.js"),
+  "window.RUNS = " +
   JSON.stringify(
     runs.map(({ name, run }) => ({
       name,
@@ -180,7 +181,8 @@ writeFileSync(
       tally: run.tally,
       checks: run.checks.map((c) => ({ name: c.name, fails: c.fails && c.fails.slice(0, 5) })),
     })),
-  ),
+  ) +
+    ";\n",
 );
 // --strict: exit 1 when the run named fails a check, so a routine can stop on it.
 if (arg && process.argv.includes("--strict")) {

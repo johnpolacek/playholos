@@ -1,7 +1,7 @@
-import { execSync, spawn } from "node:child_process";
+import { spawn } from "node:child_process";
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { createRequire } from "node:module";
 import { join, resolve } from "node:path";
+import { playwright } from "./pw.mjs";
 
 // The blind first-timer's hands and eyes: it sees the game only as screenshots, and acts only by clicking where it
 // looks, typing and pressing keys, as a person would. No page text, no element lists, no addresses. playtests/BLIND.md
@@ -25,20 +25,6 @@ mkdirSync(dir, { recursive: true });
 const stateFile = join(dir, "state.json");
 const state = existsSync(stateFile) ? JSON.parse(readFileSync(stateFile, "utf8")) : { n: 0 };
 const save = () => writeFileSync(stateFile, JSON.stringify(state));
-
-function playwright() {
-  const req = createRequire(join(process.cwd(), "x.js"));
-  const tries = [process.env.PLAYWRIGHT_PATH, "playwright", "/opt/node-tools/node_modules/playwright"];
-  try {
-    tries.push(join(execSync("npm root -g", { encoding: "utf8" }).trim(), "playwright"));
-  } catch {}
-  for (const t of tries.filter(Boolean))
-    try {
-      return req(t);
-    } catch {}
-  console.error("Playwright isn't installed. Run: npm i -g playwright && npx playwright install chromium");
-  process.exit(1);
-}
 
 const [cmd, ...args] = process.argv.slice(2);
 const pw = playwright();

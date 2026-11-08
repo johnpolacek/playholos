@@ -19,3 +19,4 @@ __pycache__/
 !/playtests/BLIND.md
 !/playtests/regime.html
 !/playtests/judge/
+!/playtests/states/

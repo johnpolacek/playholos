@@ -1,9 +1,8 @@
-import { execFileSync, spawn } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { CLI_BARE } from "../game/scripts/ask-mind.mjs";
+import { askJson } from "./claude-ask.mjs";
 import { regime } from "./regime.mjs";
 
 // The blind player's quiz and check-ins, graded by a reader who didn't play, against the full marks in the regime,
@@ -85,29 +84,7 @@ ${checkins.map((c) => JSON.stringify(c)).join("\n")}
 Reply with JSON only, no other text, in check-in order:
 [{"n":<its step>,"grade":<0-10>,"why":"<one short line>"}]`;
 
-function ask(text) {
-  const dir = mkdtempSync(join(tmpdir(), "holos-judge-"));
-  return new Promise((resolve, reject) => {
-    const child = spawn("claude", [...CLI_BARE, "--model", MODEL, "--output-format", "json"], { cwd: dir });
-    let out = "";
-    let err = "";
-    child.stdout.on("data", (d) => (out += d));
-    child.stderr.on("data", (d) => (err += d));
-    child.on("error", () => reject(new Error("No claude CLI on this machine.")));
-    child.on("close", (code) => {
-      if (code) return reject(new Error(err.trim().slice(0, 300) || `claude exited ${code}`));
-      try {
-        const result = String(JSON.parse(out).result);
-        const open = result.search(/[[{]/);
-        const close = Math.max(result.lastIndexOf("}"), result.lastIndexOf("]"));
-        resolve(JSON.parse(result.slice(open, close + 1)));
-      } catch {
-        reject(new Error(`The judge's reply wasn't JSON: ${out.slice(0, 300)}`));
-      }
-    });
-    child.stdin.end(text);
-  });
-}
+const ask = (text) => askJson(text, { model: MODEL });
 
 const mean = (xs) => {
   const ok = xs.filter((x) => typeof x === "number");
