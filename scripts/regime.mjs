@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 //   node scripts/regime.mjs players           the players and their ratings, with anchors, for rating a run
 //   node scripts/regime.mjs formats           the files a run writes
 //   node scripts/regime.mjs gaps              known gaps, not to report
+//   node scripts/regime.mjs settled           design calls made, not to call problems again
 
 const file = fileURLToPath(new URL("../playtests/regime.html", import.meta.url));
 
@@ -19,6 +20,11 @@ export function regime() {
   if (!m) throw new Error("No regime block in playtests/regime.html.");
   return JSON.parse(m[1]);
 }
+
+/** Design calls we made after a playtest: what a reader or player may raise that is meant, not a fault. Each has a
+ *  match, so playtest:climb sets aside a call that raises it again. 2026-11-08. */
+export const settledLines = (r = regime()) => (r.settled ?? []).map((s) => `- ${s.id}: ${s.call}`);
+export const settledHit = (text, r = regime()) => (r.settled ?? []).find((s) => new RegExp(s.match, "i").test(String(text ?? "")));
 
 /** Each player's rating ids, in order. */
 export const povs = (r = regime()) => Object.fromEntries(r.players.map((p) => [p.id, p.ratings.map((x) => x.id)]));
@@ -67,10 +73,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       ]).concat(["## Rules", "", ...r.ratingRules.map((x) => `- ${x}`)]),
     );
   else if (what === "gaps") print(r.knownGaps.map((x) => `- ${x}`));
+  else if (what === "settled") print(settledLines(r));
   else if (what === "formats")
     print(Object.entries(r.formats).flatMap(([k, v]) => [`## ${k}`, "", ...(Array.isArray(v) ? v.map((x) => (x.startsWith("{") ? x : `- ${x}`)) : [v]), ""]));
   else {
-    console.error("Usage: node scripts/regime.mjs scenarios | scenario <id> | quiz | players | formats | gaps");
+    console.error("Usage: node scripts/regime.mjs scenarios | scenario <id> | quiz | players | formats | gaps | settled");
     process.exit(1);
   }
 }

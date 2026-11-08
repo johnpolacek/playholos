@@ -43,6 +43,8 @@ A replay goes in `scores.json` with `"replay": true`, so the trend can tell it f
 
 `node scripts/regime.mjs gaps` lists them.
 
+`node scripts/regime.mjs settled` lists design calls already made. Note one if you hit it, but don't rate it down or report it as a fault.
+
 ## Deliver
 
 - Make a branch named `playtest/cloud-` plus the UTC date and time, like `playtest/cloud-2026-10-28-2350`.

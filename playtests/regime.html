@@ -347,6 +347,14 @@
     "quiz.md": "One section per once question and ungraded question, headed by its id, like ## premise, ## scan, ## confused. In our own words, a few sentences each. Say so plainly if we never used a tab.",
     "scores.json": "{\"build\":\"8f02c79\",\"scenario\":\"glows\",\"seed\":17,\"first-timer\":{\"clarity\":{\"score\":7,\"why\":\"...\",\"evidence\":[\"12-scan.png\"]}},\"astronomer\":{},\"long-hauler\":{}}"
   },
+  "settled": [
+    {
+      "id": "overcommit",
+      "since": "2026-11-08",
+      "call": "Queuing builds past 100% of our compute is a fair choice. Every build slows, the screen shows it at once, and the Mind helps us adjust or pause one. Being over is not a problem to fix.",
+      "match": "\\d{3,}% (needed|of our compute)|past 100%|over(-| )?commit|more (compute )?than (we have|our compute)|compute (overload|short)|swamp"
+    }
+  ],
   "knownGaps": [
     "Strikes on a Mind sent to a black hole. Seed probes spread only within 50 ly, and Scan's map draws only to 50 ly.",
     "Interceptor and X-Ray Watch have nothing to act on yet. The Picket Yard was retired 2026-10-31.",
@@ -537,6 +545,7 @@ details.more > *:not(summary) { margin-top: 6px; }
   <h2>Each screen shot</h2>
   <div class="card scroll" id="auditTable"></div>
   <details class="about"><summary>Known gaps, not to report</summary><ul id="gaps"></ul></details>
+  <details class="about"><summary>Settled by design, not to call</summary><ul id="settled"></ul></details>
   </section>
 
   <section class="pane" id="pane-open" role="tabpanel" aria-labelledby="tab-open">
@@ -639,6 +648,7 @@ function drawChecks(runs) {
 }
 $("auditTable").innerHTML = `<table>${R.audit.rules.map((c) => `<tr><td>${esc(c.name)}</td><td class="muted">${esc(c.why)}</td></tr>`).join("")}</table>`;
 $("gaps").innerHTML = R.knownGaps.map((g) => `<li>${esc(g)}</li>`).join("");
+$("settled").innerHTML = (R.settled ?? []).map((s) => `<li><b>${esc(s.id)}</b>, ${esc(s.since)}: ${esc(s.call)}</li>`).join("");
 $("openList").innerHTML = R.open.map((g) => `<li>${esc(g)}</li>`).join("");
 
 // Results, from runs.js, which npm run playtest:score writes. A script, not a fetch, so the page opens from a file.

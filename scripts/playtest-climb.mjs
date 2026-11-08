@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { regime } from "./regime.mjs";
+import { regime, settledHit } from "./regime.mjs";
 
 // The hill climb's next calls: what the newest capture run says most needs fixing, worst first, lettered so one
 // letter picks it. Both readers agreeing outranks one, and code's flags are facts. With --since, how each rating and
@@ -118,9 +118,27 @@ for (const r of R.design.ratings) {
 for (const [id, v] of Object.entries(cur.a?.editor ?? {}))
   for (const w of (v.rewrites ?? []).filter((w) => w.saved >= 3)) calls.push({ rank: 3.5, what: `Words on ${title(id)}: “${w.was}”`, where: `Cut to: “${w.now}”, ${w.saved} fewer words`, by: "editor" });
 
+// A call that raises a settled design call is set aside, not lettered, and said so below. So is a line in the blind
+// player's report from this run. 2026-11-08.
+const aside = [];
+for (const c of [...calls]) {
+  const hit = settledHit(`${c.what} ${c.where}`, R);
+  if (hit) {
+    aside.push(`${hit.id}: ${c.what.slice(0, 90)}`);
+    calls.splice(calls.indexOf(c), 1);
+  }
+}
+const report = join(capDir, "..", now, "REPORT.md");
+if (existsSync(report))
+  for (const line of readFileSync(report, "utf8").split("\n")) {
+    const hit = /^\s*(\d+\.|-)\s/.test(line) && settledHit(line, R);
+    if (hit) aside.push(`${hit.id}, in the player's report: ${line.replace(/[*]/g, "").trim().slice(0, 90)}`);
+  }
+
 const letter = (i) => (i < 26 ? String.fromCharCode(97 + i) : String.fromCharCode(97 + Math.floor(i / 26) - 1) + String.fromCharCode(97 + (i % 26)));
 const max = Number(opt("max") ?? 12);
 const top = calls.sort((p, q) => p.rank - q.rank).slice(0, max);
 console.log(`# Climb calls from ${now}, target ${TARGET}\n`);
 top.forEach((c, i) => console.log(`(${letter(i)}) ${c.what}\n    ${c.where}\n    by ${c.by}\n`));
+if (aside.length) console.log(`Settled, not called (${aside.length}):\n${aside.map((x) => `  ${x}`).join("\n")}\n`);
 console.log(`${calls.length - top.length} more. Pick letters, fix them, rerun the screens they touch, then: npm run playtest:climb -- --since ${now}`);
