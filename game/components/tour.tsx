@@ -83,7 +83,11 @@ function Choose({ scale, done }: { scale: number; done: Record<string, number | 
               <button
                 disabled={!open || locked}
                 aria-pressed={n >= 0}
-                onClick={() => change(toggleBuild(b.name))}
+                // A tap flies the map there too: a phone has no pointing. 2026-11-07.
+                onClick={() => {
+                  change(toggleBuild(b.name));
+                  if (SITES[b.name]) pick(b.name);
+                }}
                 // Pointed at, the map flies to where it would stand.
                 onPointerEnter={(e) => void (e.pointerType === "mouse" && pick(SITES[b.name] ? b.name : null))}
                 onPointerLeave={(e) => void (e.pointerType === "mouse" && pick(null))}
@@ -271,6 +275,10 @@ export function Tour({ onClose }: { onClose(): void }) {
     return placedOf(shown, schedule(shown, scale), scale);
   }, [strategy, plan, done, scale]);
   useEffect(() => place(placed), [place, placed]);
+  // A strategy's stop flies to its first build where it would stand: placed but none picked, the map sat on Earth.
+  // 2026-11-07.
+  const first = strategy ? (packed(strategy, scale).find((b) => SITES[b]) ?? null) : null;
+  useEffect(() => pick(first), [pick, first]);
   useEffect(() => () => pick(null), [pick]);
   // The map's gold button walks through the strategy in view, one build page at a time.
   useEffect(() => showWalk(strategy ? { name: strategy.name, builds: packed(strategy, scale), at } : null), [strategy, scale, at]);
