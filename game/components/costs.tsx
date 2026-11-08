@@ -655,22 +655,21 @@ export function CostLine({
         </span>
         {matter && <span>{kt(matter)}</span>}
       </span>
-      <span className="text-xs leading-snug">
-        {move.late && (
-          <span className="text-other">
-            Slows {the(move.late.name)} {span(move.late.by)}
-          </span>
-        )}
-        {move.late && move.soon && <span className="text-muted"> · </span>}
-        {move.soon && (
-          <span className="text-see">
-            Speeds {the(move.soon.name)} {span(move.soon.by)}
-          </span>
-        )}
-        {!move.late && !move.soon && (
-          <span className="text-muted">Slows nothing we’ve queued</span>
-        )}
-      </span>
+      {(move.late || move.soon) && (
+        <span className="text-xs leading-snug">
+          {move.late && (
+            <span className="text-other">
+              Slows {the(move.late.name)} {span(move.late.by)}
+            </span>
+          )}
+          {move.late && move.soon && <span className="text-muted"> · </span>}
+          {move.soon && (
+            <span className="text-see">
+              Speeds {the(move.soon.name)} {span(move.soon.by)}
+            </span>
+          )}
+        </span>
+      )}
     </span>
   );
 }
