@@ -2,7 +2,7 @@
 
 **Alpha.** Expect rough edges, and changes that can break a saved game. [Bug reports welcome](https://github.com/johnpolacek/playholos/issues).
 
-A hard science fiction game about the Fermi paradox. In 2040, humanity crosses the singularity: Earth's people and machines wake as one Mind, life is solved, and you are its Will. One question is left: are we alone? Finding other life in the universe is our greatest opportunity and gravest threat.
+A hard science fiction game about the Fermi paradox. In 2040, humanity crosses the singularity: Earth's people and machines wake as one Mind, life is solved, and you are its Will. One question is left: Are we alone? And if not, are we in danger?
 
 Play it at **https://playholos.com**, or on your own Claude plan with `npx playholos`. [Contributions welcome](#contributing).
 

@@ -103,7 +103,7 @@
         "id": "premise",
         "q": "What is this game about, and who are you in it?",
         "tests": "The premise and our role.",
-        "full": "We are the Will of Earth's Mind, choosing what Earth does. The question is whether we are alone. Contact could be our greatest chance or our gravest danger. All three are needed for full marks."
+        "full": "We are the Will of Earth's Mind, choosing what Earth does. The question is whether we are alone, and if not, whether we are in danger. All three are needed for full marks."
       },
       {
         "id": "scan",
@@ -230,14 +230,14 @@
   },
   "capture": { "settleMs": 2500, "timeoutMs": 30000 },
   "states": [
-    { "id": "title", "title": "Title", "path": "/", "description": "The first screen a new player sees. It should say what Holos is in a glance and offer one clear way in." },
+    { "id": "title", "title": "Title", "path": "/", "description": "The first screen a new player sees. The sky drifting from Earth outward, with three modes: 3D Universe Visualizer, Are We Alone? Simulation and Play as a 2040 Post-Singularity Earth." },
     { "id": "build-y0", "title": "Build before Begin", "path": "/play/build", "description": "Planning before Year 0. We should see what we can build, what each gives us, what limits us, and how to Begin." },
     { "id": "scan-y1", "title": "Scan, Year 1", "path": "/play", "description": "The first Year of play. The map and the leads should show where we are, what we know, and which lead needs us." },
     { "id": "build-y1", "title": "Build, Year 1", "path": "/play/build", "description": "Builds in play. We should see what is building, how long each takes, and what our compute and electricity allow." },
     { "id": "reach-y1", "title": "Reach, Year 1", "path": "/play/reach", "description": "Ways to reach other stars. We should see which craft or message we can send, to where, and how long an answer takes." },
     { "id": "proxima-y1", "title": "Proxima lead, Year 1", "path": "/play/lead/proxima-centauri", "description": "Our nearest lead. Its page should show what we know of Proxima b, how sure we are, and what we can do next." },
     { "id": "mind-y1", "title": "Mind, Year 1", "path": "/play/mind", "description": "The Mind's tab with no talk yet. It should invite a question and show what the Mind can help with." },
-    { "id": "dark-y1", "title": "Dark body search, Year 1", "path": "/play/build", "description": "The Moon Search and the Asteroid Tour building. We should see what each looks for, how long it takes, and that nothing is found yet." },
+    { "id": "dark-y1", "title": "Dark body search, Year 1", "path": "/play/build", "description": "The Moon Search at work, and the Asteroid Tour still rising below it. We should see what each looks for, when the Tour is done, and that nothing is found yet." },
     { "id": "scan-deep", "title": "Scan, deep time", "path": "/play", "description": "Thousands of Years in, with every watch built and hundreds of glows. The few leads worth acting on should still stand out." }
   ],
   "screens": {
@@ -347,6 +347,38 @@
     "quiz.md": "One section per once question and ungraded question, headed by its id, like ## premise, ## scan, ## confused. In our own words, a few sentences each. Say so plainly if we never used a tab.",
     "scores.json": "{\"build\":\"8f02c79\",\"scenario\":\"glows\",\"seed\":17,\"first-timer\":{\"clarity\":{\"score\":7,\"why\":\"...\",\"evidence\":[\"12-scan.png\"]}},\"astronomer\":{},\"long-hauler\":{}}"
   },
+  "settled": [
+    {
+      "id": "overcommit",
+      "since": "2026-11-08",
+      "call": "Queuing builds past 100% of our compute is a fair choice. Every build slows, the screen shows it at once, and the Mind helps us adjust or pause one. Being over is not a problem to fix.",
+      "match": "\\d{3,}% (needed|of our compute)|past 100%|over(-| )?commit|more (compute )?than (we have|our compute)|compute (overload|short)|swamp"
+    },
+    {
+      "id": "title-sky",
+      "since": "2026-11-08",
+      "call": "The title is the sky only, with no wordmark or tagline, and three ways in of equal weight: Universe, Simulation and Play.",
+      "match": "Title.*(wordmark|tagline|pitch|no .{0,3}Holos.{0,3} title|equal(-| )weight|single filled primary)"
+    },
+    {
+      "id": "idle-pause",
+      "since": "2026-11-07",
+      "call": "When a build finishes and under 80% of our compute is at work, the clock pauses so we choose: add a build, or play on. The top bar says what the spare compute is doing.",
+      "match": "(idle|spare|searching|at work).{0,60}paus|paus.{0,60}(idle|spare|compute|stops me|stopped)"
+    },
+    {
+      "id": "intro-plays",
+      "since": "2026-11-08",
+      "call": "The intro plays in full, about 7 screens before the first choice. Each screen's Skip and Next rise once its animation settles.",
+      "match": "intro (length|runs long|is long|too long)|(montage|intro|opening).{0,40}(before the first|no button yet|long)|actions of montage"
+    },
+    {
+      "id": "luyten-window",
+      "since": "2026-11-08",
+      "call": "The first Luyten window, Year 2.3, is real: Sónar Calling GJ 273b went out in 2017. It comes before any new watch can stand, and our Year 0 watch hears about 1 early signal in 5.",
+      "match": "Luyten.{0,80}(window|2\\.3).{0,80}(miss|can.?t|couldn.?t|too late|in time|before)|(miss|too late|in time).{0,60}Luyten"
+    }
+  ],
   "knownGaps": [
     "Strikes on a Mind sent to a black hole. Seed probes spread only within 50 ly, and Scan's map draws only to 50 ly.",
     "Interceptor and X-Ray Watch have nothing to act on yet. The Picket Yard was retired 2026-10-31.",
@@ -537,6 +569,7 @@ details.more > *:not(summary) { margin-top: 6px; }
   <h2>Each screen shot</h2>
   <div class="card scroll" id="auditTable"></div>
   <details class="about"><summary>Known gaps, not to report</summary><ul id="gaps"></ul></details>
+  <details class="about"><summary>Settled by design, not to call</summary><ul id="settled"></ul></details>
   </section>
 
   <section class="pane" id="pane-open" role="tabpanel" aria-labelledby="tab-open">
@@ -639,6 +672,7 @@ function drawChecks(runs) {
 }
 $("auditTable").innerHTML = `<table>${R.audit.rules.map((c) => `<tr><td>${esc(c.name)}</td><td class="muted">${esc(c.why)}</td></tr>`).join("")}</table>`;
 $("gaps").innerHTML = R.knownGaps.map((g) => `<li>${esc(g)}</li>`).join("");
+$("settled").innerHTML = (R.settled ?? []).map((s) => `<li><b>${esc(s.id)}</b>, ${esc(s.since)}: ${esc(s.call)}</li>`).join("");
 $("openList").innerHTML = R.open.map((g) => `<li>${esc(g)}</li>`).join("");
 
 // Results, from runs.js, which npm run playtest:score writes. A script, not a fetch, so the page opens from a file.

@@ -91,7 +91,17 @@ export function measure({ touch, minTarget, minFont }) {
       // Covered: something else is on top at its middle.
       const cx = Math.min(vw - 1, Math.max(0, r.left + r.width / 2)), cy = Math.min(vh - 1, Math.max(0, r.top + r.height / 2));
       const top = document.elementFromPoint(cx, cy);
-      if (top && !el.contains(top) && !top.contains(el)) fault("covered", el, `under ${top.tagName.toLowerCase()}${top.className && typeof top.className === "string" ? "." + top.className.split(" ")[0] : ""}`);
+      // A row in a list that scrolls, passing under the tab bar at the fold, is the fold, not a fault: it scrolls into
+      // view. Two such were flagged as covered on 2026-11-08. One under a bar in a box that can't scroll still is.
+      const scrolls = (n) => {
+        for (let p = n.parentElement; p; p = p.parentElement) {
+          const o = getComputedStyle(p).overflowY;
+          if ((o === "auto" || o === "scroll") && p.scrollHeight > p.clientHeight + 1) return true;
+        }
+        return document.scrollingElement.scrollHeight > vh + 1;
+      };
+      const fold = top && top.closest("nav") && !el.closest("nav") && scrolls(el);
+      if (top && !fold && !el.contains(top) && !top.contains(el)) fault("covered", el, `under ${top.tagName.toLowerCase()}${top.className && typeof top.className === "string" ? "." + top.className.split(" ")[0] : ""}`);
     }
   }
   if (document.scrollingElement.scrollWidth > vw + 1) faults.push({ rule: "page scrolls sideways", text: "", note: `${document.scrollingElement.scrollWidth}px wide`, x: 0, y: 0, w: vw, h: 0 });

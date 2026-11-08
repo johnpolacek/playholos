@@ -171,6 +171,10 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
   );
 }
 
+/** Builds whose craft we send later, each to the star we pick on Reach. A blind first-timer queued the Solar Lens,
+ *  waited for it to ask which star, and had to ask the Mind. Playtest 2026-11-08. */
+const SENT_FROM_REACH = new Set(["Solar Lens", "Laser Sail Array", "Probe Yard", "Seed Ship", "Strike Yard", "Mind Link"]);
+
 /** A build's place in our order, and before Begin, the button that adds it or takes it out. When it is added or taken
  *  out, its new place rises in. */
 export function Queueing({
@@ -236,6 +240,15 @@ export function Queueing({
           ) : (
             status(open, at, by, year ?? 0)
           )}
+        </p>
+      )}
+      {SENT_FROM_REACH.has(name) && !(done[name] != null && done[name]! <= (year ?? -1)) && (
+        <p data-s className="mt-1 text-[13px] leading-snug text-page-ink2">
+          Once it’s built, we send from{" "}
+          <Link to="/play/reach" className="text-you hover:underline">
+            Reach
+          </Link>
+          .
         </p>
       )}
       {open && (queued || !lacking.length) && (

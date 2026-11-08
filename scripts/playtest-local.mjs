@@ -1,6 +1,6 @@
 import { execFileSync, execSync, spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { appendFileSync, cpSync, existsSync, mkdirSync, openSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { appendFileSync, cpSync, existsSync, mkdirSync, openSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createServer } from "node:net";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -34,7 +34,7 @@ const opt = (name) => {
   return i < 0 ? undefined : args[i + 1];
 };
 // Flags that take a value, so the kind is the one word left over.
-const VALUED = ["--scenario", "--model", "--player", "--only"];
+const VALUED = ["--scenario", "--model", "--player", "--only", "--stamp"];
 const kind = args.find((a, i) => !a.startsWith("--") && !VALUED.includes(args[i - 1])) ?? "screens";
 if (!["screens", "cloud", "blind"].includes(kind)) {
   console.error("Usage: npm run playtest:local -- screens | cloud [--scenario id] | blind  [--dirty] [--model sonnet] [--keep]");
@@ -45,6 +45,9 @@ const R = regime();
 // Both players at once: this script twice, one a player, each with its own copy, ports and run folder.
 if (args.includes("--both")) {
   const rest = args.filter((a) => a !== "--both");
+  // One stamp for both, so their folders pair up: <run> and <run>-codex.
+  const now = new Date().toISOString();
+  const stamp = `${now.slice(0, 10)}-${now.slice(11, 13)}${now.slice(14, 16)}`;
   const lines = (tag, stream) => {
     let buf = "";
     stream.on("data", (d) => {
@@ -56,13 +59,18 @@ if (args.includes("--both")) {
   };
   const kids = ["claude", "codex"].map((who) => {
     // Only the Claude run shoots the named screens: the copies are the same build.
-    const k = spawn("node", [fileURLToPath(import.meta.url), ...rest, "--player", who, ...(who === "codex" ? ["--no-screens"] : [])], { stdio: ["ignore", "pipe", "pipe"] });
+    const k = spawn("node", [fileURLToPath(import.meta.url), ...rest, "--stamp", stamp, "--player", who, ...(who === "codex" ? ["--no-screens"] : [])], { stdio: ["ignore", "pipe", "pipe"] });
     lines(who, k.stdout);
     lines(who, k.stderr);
     return new Promise((ok) => k.on("close", ok));
   });
   process.on("SIGINT", () => {});
   await Promise.all(kids);
+  // The two runs checked side by side: same build, both blind, and whether the judge reads them alike.
+  const dirs = [stamp, `${stamp}-codex`].map((r) => join(repo, "playtests", r));
+  if (dirs.every((d) => existsSync(join(d, "runner.json"))))
+    await new Promise((ok) => spawn("node", [join(repo, "scripts/playtest-selfcheck.mjs"), "--pair", ...dirs], { stdio: "inherit" }).on("close", ok));
+  else console.log("Pair self-check skipped: a run has no runner.json.");
   process.exit(0);
 }
 const who = opt("player") ?? "claude";
@@ -71,7 +79,7 @@ if (!["claude", "codex"].includes(who)) {
   process.exit(1);
 }
 const iso = new Date().toISOString();
-const run = `${iso.slice(0, 10)}-${iso.slice(11, 13)}${iso.slice(14, 16)}${who === "codex" ? "-codex" : ""}`;
+const run = `${opt("stamp") ?? `${iso.slice(0, 10)}-${iso.slice(11, 13)}${iso.slice(14, 16)}`}${who === "codex" ? "-codex" : ""}`;
 const base = resolve(repo, "..", ".holos-playtests");
 const copy = join(base, run);
 const started = Date.now();
@@ -92,6 +100,13 @@ const sha = args.includes("--dirty") ? git("stash", "create") || git("rev-parse"
 const build = git("rev-parse", "--short", sha);
 mkdirSync(copy, { recursive: true });
 execSync(`git archive ${sha} | tar -x -C "${copy}"`, { cwd: repo });
+// .gitattributes keeps playtests/ out of git archive, so the npx download stays small. The player still needs its
+// prompts, the quiz in regime.html and the saved states, as this build has them. 2026-11-08.
+for (const f of git("ls-tree", "-r", "--name-only", sha, "playtests/BLIND.md", "playtests/PROMPT.md", "playtests/regime.html", "playtests/states").split("\n").filter(Boolean)) {
+  mkdirSync(dirname(join(copy, f)), { recursive: true });
+  writeFileSync(join(copy, f), execFileSync("git", ["show", `${sha}:${f}`], { cwd: repo }));
+}
+mkdirSync(join(copy, "playtests/states"), { recursive: true });
 const clone = (from, to) => {
   if (!existsSync(join(repo, from))) return;
   mkdirSync(dirname(join(copy, to)), { recursive: true });
@@ -163,10 +178,16 @@ for (let i = 0; ; i++) {
 }
 say(`The copy's game runs at ${url}.`);
 
+// What the runner did, step by step, for the self-check at the end: scripts/playtest-selfcheck.mjs.
+const steps = [];
 const node = (script, a = [], env = {}) =>
   new Promise((ok, fail) => {
+    const t = Date.now();
     const p = spawn("node", [join(repo, script), ...a], { cwd: repo, env: { ...process.env, HOLOS_URL: url, ...env }, stdio: "inherit" });
-    p.on("close", (code) => (code ? fail(new Error(`${script} exited ${code}`)) : ok()));
+    p.on("close", (code) => {
+      steps.push({ step: script.replace(/^scripts\//, ""), code, secs: Math.round((Date.now() - t) / 1000) });
+      code ? fail(new Error(`${script} exited ${code}`)) : ok();
+    });
   });
 
 if (kind === "screens") {
@@ -185,8 +206,7 @@ const local = `LOCAL RUN. This overrides the file below wherever they differ.
 - The game already runs at ${url}, from build ${build}, in this folder. Skip Setup entirely: don't install anything, don't start, stop or restart a dev server, don't run worlds, and revert nothing.
 - The run's folder is playtests/${run}/. Write everything there.
 - Don't make a branch, commit or push.
-- Playwright: require it from ${join(repo, "node_modules/playwright")}. Launch Chrome headless with executablePath ${JSON.stringify(chromePath(playwright()))}.
-${kind === "blind" ? `- BLIND_URL, BLIND_PORT and BLIND_DIR are set for scripts/blind.mjs. Use them as they are.\n` : ""}- Don't run playtest:rate, playtest:judge, playtest:capture, playtest:critic, run-cost or playtest:score. The runner does them once you stop.
+${kind === "blind" ? `- BLIND_URL, BLIND_PORT and BLIND_DIR are set for scripts/blind.mjs. Use them as they are. See only through it.\n` : `- Playwright: require it from ${join(repo, "node_modules/playwright")}. Launch Chrome headless with executablePath ${JSON.stringify(chromePath(playwright()))}.\n`}- Don't run playtest:rate, playtest:judge, playtest:capture, playtest:critic, run-cost or playtest:score. The runner does them once you stop.
 ${scenario ? `- Play the scenario ${scenario}.\n` : ""}${args.includes("--smoke") ? "- SMOKE TEST: open the game once, take one screenshot into the run's folder, write a one-line REPORT.md, and stop. Nothing else.\n" : ""}- When you have delivered the report, stop.
 
 ---
@@ -226,7 +246,8 @@ const beat = setInterval(() => {
   const lines = (f) => (existsSync(join(runDir, f)) ? readFileSync(join(runDir, f), "utf8").split("\n").filter(Boolean).length : 0);
   say(`playing: ${shots} screenshots, ${lines(kind === "cloud" ? "log.jsonl" : "blind.jsonl")} log lines.`);
 }, 60000);
-await new Promise((ok) => player.on("close", ok));
+const playerStarted = Date.now();
+const playerCode = await new Promise((ok) => player.on("close", ok));
 clearInterval(beat);
 say("The player stopped.");
 
@@ -238,14 +259,39 @@ for (const f of readdirSync(join(copy, "playtests/states")))
     cpSync(join(copy, "playtests/states", f), join(repo, "playtests/states", f));
     say(`New saved state: playtests/states/${f}`);
   }
-const steps = kind === "cloud" ? [["scripts/playtest-rate.mjs", [out]]] : [["scripts/playtest-judge.mjs", [out]]];
-for (const [s, a] of steps) await node(s, a).catch((e) => say(e.message));
-if (!args.includes("--no-screens")) {
+// The build, so the scorer can tie each score to code, and the player's last message as REPORT.md if it wrote none.
+{
+  const sp = join(out, "scores.json");
+  const sc = existsSync(sp) ? JSON.parse(readFileSync(sp, "utf8")) : {};
+  if (!sc.build) writeFileSync(sp, JSON.stringify({ build, ...sc }, null, 2) + "\n");
+  const rp = join(out, "REPORT.md");
+  if (!existsSync(rp) && existsSync(join(out, "player.jsonl"))) {
+    const ev = readFileSync(join(out, "player.jsonl"), "utf8").split("\n").flatMap((l) => {
+      try {
+        return [JSON.parse(l)];
+      } catch {
+        return [];
+      }
+    });
+    const last = ev.filter((e) => e.type === "result").at(-1)?.result ?? ev.filter((e) => e.type === "item.completed" && e.item?.type === "agent_message").at(-1)?.item?.text;
+    if (last) writeFileSync(rp, `# Report, ${run}\n\n${last}\n`);
+  }
+}
+const readers = kind === "cloud" ? [["scripts/playtest-rate.mjs", [out]]] : [["scripts/playtest-judge.mjs", [out]]];
+// A smoke run checks the wiring only: no quiz to judge, no screens to shoot.
+const smoke = args.includes("--smoke");
+if (!smoke) for (const [s, a] of readers) await node(s, a).catch((e) => say(e.message));
+if (!smoke && !args.includes("--no-screens")) {
   await node("scripts/capture.mjs", ["--url", url, "--run", run]).catch((e) => say(e.message));
   await node("scripts/playtest-critic.mjs", [run]).catch((e) => say(e.message));
 }
 const costArgs = who === "codex" ? [out, "--codex", join(out, "player.jsonl"), "--started", new Date(started).toISOString()] : [out];
 await node("scripts/run-cost.mjs", costArgs, { CLAUDE_CODE_SESSION_ID: session }).catch((e) => say(e.message));
 await node("scripts/playtest-score.mjs", [out]).catch((e) => say(e.message));
+writeFileSync(
+  join(out, "runner.json"),
+  JSON.stringify({ run, kind, who, build, model: model ?? null, smoke: args.includes("--smoke"), player: { code: playerCode, minutes: Math.round((Date.now() - playerStarted) / 60000) }, steps, minutes: Math.round((Date.now() - started) / 60000) }, null, 2) + "\n",
+);
+await node("scripts/playtest-selfcheck.mjs", [out]).catch((e) => say(e.message));
 say(`Done in ${Math.round((Date.now() - started) / 60000)} min. Report: ${join(out, "REPORT.md")}. Scorecard: ${join(out, "SCORECARD.md")}.`);
 process.exit(0);

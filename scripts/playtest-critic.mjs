@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import { askJson, codexLabel, pool } from "./claude-ask.mjs";
-import { regime } from "./regime.mjs";
+import { regime, settledLines } from "./regime.mjs";
 import { writeIndex } from "./states.mjs";
 
 // Readers who never played and never saw the code judge a capture run from its screenshots alone, against the anchors
@@ -43,7 +43,12 @@ const dir = join(capDir, name);
 const results = JSON.parse(readFileSync(join(dir, "results.json"), "utf8"));
 
 const anchorsOf = (ratings) => ratings.map((r) => `${r.id}: ${r.q}\n${r.anchors.map((a, i) => `  ${R.anchorBands[i]}: ${a}`).join("\n")}`).join("\n");
-const rulesOf = (rules) => rules.map((r) => `- ${r}`).join("\n");
+// Design calls already made, so a reader doesn't call them faults again. 2026-11-08.
+const SETTLED = settledLines(R);
+const rulesOf = (rules) =>
+  [...rules, ...(SETTLED.length ? ["These are settled by design. Don't score them down or name them as the worst thing or the fix:", ...SETTLED.map((x) => `  ${x.slice(2)}`)] : [])]
+    .map((r) => (r.startsWith("  ") ? r : `- ${r}`))
+    .join("\n");
 const scoresOf = (ratings) => ratings.map((r) => `"${r.id}":{"score":<0.0-10.0>,"why":"<one short line>"}`).join(",");
 const okShots = (id) => results.shots.filter((x) => x.state === id && x.status === "ok");
 const states = R.states.filter((s) => okShots(s.id).length);

@@ -378,7 +378,7 @@ export function Begin() {
           {next ? (
             <>
               <Count done={done} />
-              {`${n} of ${STEPS.length} steps done`}
+              {`${n} of ${STEPS.length} steps to Begin`}
               <span className="text-muted">·</span>
               <b className="font-medium text-you">{next.short}</b>
             </>
