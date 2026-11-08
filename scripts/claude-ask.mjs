@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { appendFileSync, mkdtempSync, readFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { CLI_BARE } from "../game/scripts/ask-mind.mjs";
@@ -9,8 +9,10 @@ import { CLI_BARE } from "../game/scripts/ask-mind.mjs";
 // critic and the run rater share it. 2026-11-08. With `costTo`, it adds the ask's time and tokens to cost.jsonl in that
 // folder, for scripts/run-cost.mjs.
 
-/** Asks `text`, with the PNG files in `images` before it, and resolves to the JSON in the reply. */
-export function askJson(text, { images = [], model = "opus", costTo, step = "ask" } = {}) {
+/** Asks `text`, with the PNG files in `images` before it, and resolves to the JSON in the reply. `via: "codex"` asks
+ *  OpenAI's model through the codex CLI on your ChatGPT login instead, read-only, for a second reader's view. */
+export function askJson(text, { images = [], model = "opus", costTo, step = "ask", via = "claude" } = {}) {
+  if (via === "codex") return askCodex(text, { images, costTo, step });
   const started = Date.now();
   const dir = mkdtempSync(join(tmpdir(), "holos-ask-"));
   const content = [
@@ -50,6 +52,59 @@ export function askJson(text, { images = [], model = "opus", costTo, step = "ask
     });
     child.stdin.end(JSON.stringify({ type: "user", message: { role: "user", content } }) + "\n");
   });
+}
+
+/** The JSON in a reply's text: from its first brace or bracket to its last. */
+const jsonIn = (text) => {
+  const open = text.search(/[[{]/);
+  const close = Math.max(text.lastIndexOf("}"), text.lastIndexOf("]"));
+  return JSON.parse(text.slice(open, close + 1));
+};
+
+// The second reader: Codex, in a read-only sandbox in an empty folder, so it too sees only what we hand it. Its model
+// is CODEX_MODEL, else whatever ~/.codex/config.toml sets. 2026-11-08.
+export const CODEX_MODEL = process.env.CODEX_MODEL;
+export const codexLabel = () => `codex${CODEX_MODEL ? ` ${CODEX_MODEL}` : ""}`;
+function askCodex(text, { images, costTo, step }) {
+  const started = Date.now();
+  const dir = mkdtempSync(join(tmpdir(), "holos-codex-"));
+  const last = join(dir, "last.txt");
+  const a = ["exec", "--skip-git-repo-check", "--ephemeral", "-s", "read-only", "--json", "-o", last, ...(CODEX_MODEL ? ["-m", CODEX_MODEL] : []), ...images.flatMap((f) => ["-i", f]), "-"];
+  return new Promise((resolve, reject) => {
+    const child = spawn("codex", a, { cwd: dir });
+    let out = "";
+    let err = "";
+    child.stdout.on("data", (d) => (out += d));
+    child.stderr.on("data", (d) => (err += d));
+    child.on("error", () => reject(new Error("No codex CLI on this machine.")));
+    child.on("close", (code) => {
+      if (code) return reject(new Error(err.trim().split("\n").at(-1)?.slice(0, 300) || `codex exited ${code}`));
+      try {
+        const usage = codexUsage(out);
+        if (costTo) appendFileSync(join(costTo, "cost.jsonl"), JSON.stringify({ step: `${step} (codex)`, model: codexLabel(), secs: Math.round((Date.now() - started) / 1000), usage, usd: null }) + "\n");
+        resolve(jsonIn(readFileSync(last, "utf8")));
+      } catch {
+        reject(new Error(`Codex's reply wasn't JSON: ${(existsSync(last) ? readFileSync(last, "utf8") : out).slice(0, 300)}`));
+      }
+    });
+    child.stdin.end(text);
+  });
+}
+
+/** Codex's tokens from its --json events, in the same kinds as ours. */
+export function codexUsage(jsonl) {
+  const t = { input: 0, cacheWrite: 0, cacheRead: 0, output: 0 };
+  for (const line of jsonl.split("\n")) {
+    if (!line.includes('"turn.completed"')) continue;
+    try {
+      const u = JSON.parse(line).usage ?? {};
+      t.cacheRead += u.cached_input_tokens ?? 0;
+      t.input += (u.input_tokens ?? 0) - (u.cached_input_tokens ?? 0);
+      t.cacheWrite += u.cache_write_input_tokens ?? 0;
+      t.output += (u.output_tokens ?? 0) + (u.reasoning_output_tokens ?? 0);
+    } catch {}
+  }
+  return t;
 }
 
 /** Runs `f` over `xs`, at most `n` at once, in order. */

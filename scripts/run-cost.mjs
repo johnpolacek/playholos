@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename, join } from "node:path";
-import { tokens } from "./claude-ask.mjs";
+import { codexUsage, tokens } from "./claude-ask.mjs";
 
 // How long a playtest run took and how many tokens it spent, into its scores.json as "cost". The player's own tokens
 // and time come from this Claude Code session's transcript, from its first message to now, with any subagents it
@@ -10,7 +10,8 @@ import { tokens } from "./claude-ask.mjs";
 //
 //   node scripts/run-cost.mjs playtests/<run>          run last, from the session that played, before playtest:score
 //
-// CLAUDE_CODE_SESSION_ID names the session. Without it, the newest transcript for this folder is taken.
+// CLAUDE_CODE_SESSION_ID names the session. Without it, the newest transcript for this folder is taken. A Codex
+// player's tokens come from its --json events instead: --codex <player.jsonl> --started <ISO time>.
 
 const arg = process.argv[2];
 const dir = arg && (existsSync(arg) ? arg : join("playtests", arg));
@@ -38,9 +39,19 @@ const add = (a, b) => Object.fromEntries(Object.keys(a).map((k) => [k, a[k] + (b
 const zero = () => tokens({});
 const sum = (t) => t.input + t.cacheWrite + t.cacheRead + t.output;
 
+const flag = (n) => {
+  const i = process.argv.indexOf(`--${n}`);
+  return i < 0 ? undefined : process.argv[i + 1];
+};
 // The player: every reply once, by message id, as a reply split into parts repeats its usage on each.
-const main = transcript();
+const codexLog = flag("codex");
+const main = codexLog ? null : transcript();
 let player = null;
+if (codexLog && existsSync(codexLog)) {
+  const text = readFileSync(codexLog, "utf8");
+  const t = codexUsage(text);
+  player = { via: "codex", started: flag("started") ?? null, replies: (text.match(/"turn\.completed"/g) ?? []).length, models: [], tokens: t, total: sum(t) };
+}
 if (main) {
   const files = [main, ...jsonls(join(main.replace(/\.jsonl$/, ""), "subagents"))];
   const seen = new Set();
@@ -96,6 +107,6 @@ writeFileSync(path, JSON.stringify(scores, null, 2) + "\n");
 
 const k = (n) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : `${Math.round(n / 1000)}k`);
 console.log(`Run took ${minutes ?? "?"} min and ${k(total)} tokens, ${k(output)} of them output.`);
-if (player) console.log(`  player: ${k(player.total)} over ${player.replies} replies, ${k(player.tokens.cacheRead)} read from cache. Transcript ${player.session}.`);
+if (player) console.log(`  player${player.via ? ` (${player.via})` : ""}: ${k(player.total)} over ${player.replies} ${player.via ? "turns" : "replies"}, ${k(player.tokens.cacheRead)} read from cache.${player.session ? ` Transcript ${player.session}.` : ""}`);
 else console.log("  player: no transcript found, so no time or player tokens.");
 for (const [step, r] of Object.entries(readers)) console.log(`  ${step}: ${k(r.total)} over ${r.asks} ask(s), ${r.secs}s.`);

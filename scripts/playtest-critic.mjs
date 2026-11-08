@@ -1,7 +1,8 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { askJson, pool } from "./claude-ask.mjs";
+import { execFileSync } from "node:child_process";
+import { askJson, codexLabel, pool } from "./claude-ask.mjs";
 import { regime } from "./regime.mjs";
 import { writeIndex } from "./states.mjs";
 
@@ -40,7 +41,6 @@ if (!name || !runs.includes(name)) {
 }
 const dir = join(capDir, name);
 const results = JSON.parse(readFileSync(join(dir, "results.json"), "utf8"));
-const ask = (text, images, step) => askJson(text, { images: images.map((f) => join(dir, f)), model: MODEL, costTo: dir, step });
 
 const anchorsOf = (ratings) => ratings.map((r) => `${r.id}: ${r.q}\n${r.anchors.map((a, i) => `  ${R.anchorBands[i]}: ${a}`).join("\n")}`).join("\n");
 const rulesOf = (rules) => rules.map((r) => `- ${r}`).join("\n");
@@ -48,115 +48,136 @@ const scoresOf = (ratings) => ratings.map((r) => `"${r.id}":{"score":<0-10>,"why
 const okShots = (id) => results.shots.filter((x) => x.state === id && x.status === "ok");
 const states = R.states.filter((s) => okShots(s.id).length);
 const words = (s) => s.split(/\s+/).filter(Boolean).length;
-const path = join(dir, "critic.json");
-const critic = existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : {};
-Object.assign(critic, { model: MODEL, at: new Date().toISOString() });
+// One reader's three passes, into its own file: critic.json for Claude, critic.<via>.json for a second reader.
+const critic_path = (via) => join(dir, via === "claude" ? "critic.json" : `critic.${via}.json`);
+async function read(via) {
+  const path = critic_path(via);
+  const critic = existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : {};
+  Object.assign(critic, { model: via === "codex" ? codexLabel() : MODEL, via, at: new Date().toISOString() });
+  const ask = (text, images, step) => askJson(text, { images: images.map((f) => join(dir, f)), model: MODEL, costTo: dir, step, via });
+  const tag = via === "claude" ? "" : `${via} `;
 
-// Each screen on its own.
-const screensPass = async () => {
-  const S = R.screens;
-  const ids = S.ratings.map((r) => r.id);
-  const prompt = (state, vps) => `You review screens of a space game, Holos, as a careful player who has never played it. You never saw its code. You see only the screenshots above${vps.length > 1 ? `, one for each width: ${vps.join(", ")}` : ""}.
+  // Each screen on its own.
+  const screensPass = async () => {
+    const S = R.screens;
+    const ids = S.ratings.map((r) => r.id);
+    const prompt = (state, vps) => `You review screens of a space game, Holos, as a careful player who has never played it. You never saw its code. You see only the screenshots above${vps.length > 1 ? `, one for each width: ${vps.join(", ")}` : ""}.
 
-The screen is "${state.title}". What it should show: ${state.description}
+  The screen is "${state.title}". What it should show: ${state.description}
 
-Score each width 0 to 10 on each rating, from its anchors:
-${anchorsOf(S.ratings)}
+  Score each width 0 to 10 on each rating, from its anchors:
+  ${anchorsOf(S.ratings)}
 
-Rules:
-${rulesOf(S.rules)}
+  Rules:
+  ${rulesOf(S.rules)}
 
-Reply with JSON only, no other text:
-{${vps.map((vp) => `"${vp}":{${scoresOf(S.ratings)},"worst":"<the worst thing on screen, and where>","fix":"<one fix>"}`).join(",")}}`;
-  critic.states = Object.fromEntries(
-    await pool(states, 4, async (state) => {
-      const shots = okShots(state.id);
-      const vps = shots.map((x) => x.viewport);
-      try {
-        const got = await ask(prompt(state, vps), shots.map((x) => x.file), "critic");
-        for (const vp of vps) for (const id of ids) if (typeof got[vp]?.[id]?.score !== "number") throw new Error(`no ${vp} ${id} score`);
-        console.log(`screens ${state.id}: ${vps.map((vp) => `${vp} ${ids.map((id) => got[vp][id].score).join("/")}`).join(", ")}`);
-        return [state.id, got];
-      } catch (e) {
-        console.warn(`screens ${state.id}: ${e.message}`);
-        return [state.id, { error: e.message }];
-      }
-    }),
-  );
-};
+  Reply with JSON only, no other text:
+  {${vps.map((vp) => `"${vp}":{${scoresOf(S.ratings)},"worst":"<the worst thing on screen, and where>","fix":"<one fix>"}`).join(",")}}`;
+    critic.states = Object.fromEntries(
+      await pool(states, 4, async (state) => {
+        const shots = okShots(state.id);
+        const vps = shots.map((x) => x.viewport);
+        try {
+          const got = await ask(prompt(state, vps), shots.map((x) => x.file), "critic");
+          for (const vp of vps) for (const id of ids) if (typeof got[vp]?.[id]?.score !== "number") throw new Error(`no ${vp} ${id} score`);
+          console.log(`${tag}screens ${state.id}: ${vps.map((vp) => `${vp} ${ids.map((id) => got[vp][id].score).join("/")}`).join(", ")}`);
+          return [state.id, got];
+        } catch (e) {
+          console.warn(`${tag}screens ${state.id}: ${e.message}`);
+          return [state.id, { error: e.message }];
+        }
+      }),
+    );
+  };
 
-// Every screen at once, for how they hold together.
-const designPass = async () => {
-  const D = R.design;
-  const shots = states.flatMap((s) => okShots(s.id));
-  const prompt = `You are a product designer reviewing every screen of a space game, Holos, at once. You never saw its code. The screenshots above are named <state>-<width>.png. The screens:
-${states.map((s) => `- ${s.id}: ${s.title}. ${s.description}`).join("\n")}
+  // Every screen at once, for how they hold together.
+  const designPass = async () => {
+    const D = R.design;
+    const shots = states.flatMap((s) => okShots(s.id));
+    const prompt = `You are a product designer reviewing every screen of a space game, Holos, at once. You never saw its code. The screenshots above are named <state>-<width>.png. The screens:
+  ${states.map((s) => `- ${s.id}: ${s.title}. ${s.description}`).join("\n")}
 
-Score the screens together, 0 to 10 on each rating, from its anchors:
-${anchorsOf(D.ratings)}
+  Score the screens together, 0 to 10 on each rating, from its anchors:
+  ${anchorsOf(D.ratings)}
 
-Rules:
-${rulesOf(D.rules)}
+  Rules:
+  ${rulesOf(D.rules)}
 
-Reply with JSON only, no other text:
-{${scoresOf(D.ratings)},"issues":[{"state":"<state id>","viewport":"<width>","where":"<where on screen>","issue":"<what is wrong>","fix":"<one fix>"}]}`;
+  Reply with JSON only, no other text:
+  {${scoresOf(D.ratings)},"issues":[{"state":"<state id>","viewport":"<width>","where":"<where on screen>","issue":"<what is wrong>","fix":"<one fix>"}]}`;
+    try {
+      const got = await ask(prompt, shots.map((x) => x.file), "design");
+      for (const r of D.ratings) if (typeof got[r.id]?.score !== "number") throw new Error(`no ${r.id} score`);
+      critic.design = got;
+      console.log(`${tag}design: ${D.ratings.map((r) => `${r.id} ${got[r.id].score}`).join(", ")}, ${got.issues?.length ?? 0} issues`);
+    } catch (e) {
+      critic.design = { error: e.message };
+      console.warn(`${tag}design: ${e.message}`);
+    }
+  };
+
+  // Each screen's words, cut.
+  const editorPass = async () => {
+    const E = R.editor;
+    const prompt = (state, lines) => `You edit the words of a space game, Holos. The screenshot above is the screen "${state.title}". What it should show: ${state.description}
+
+  Its words, one piece of text a line, as [kind] text. Lines marked (scrolled) are on the screen but scrolled out of sight:
+  ${lines.map((t) => `[${t.kind}]${t.view ? "" : " (scrolled)"} ${t.text}`).join("\n")}
+
+  Score the screen's words 0 to 10 on each rating, from its anchors:
+  ${anchorsOf(E.ratings)}
+
+  Rules:
+  ${rulesOf(E.rules)}
+
+  Reply with JSON only, no other text:
+  {${scoresOf(E.ratings)},"rewrites":[{"was":"<the line exactly as it is>","now":"<the line as it should be>"}]}`;
+    critic.editor = Object.fromEntries(
+      await pool(states, 4, async (state) => {
+        // The widest shot holds the most words in view. Its words, and the phone's, are the same text.
+        const shot = okShots(state.id)[0];
+        const lines = shot.text && existsSync(join(dir, shot.text)) ? JSON.parse(readFileSync(join(dir, shot.text), "utf8")) : [];
+        if (!lines.length) return [state.id, { error: "no words captured" }];
+        try {
+          const got = await ask(prompt(state, lines), [shot.file], "editor");
+          for (const r of E.ratings) if (typeof got[r.id]?.score !== "number") throw new Error(`no ${r.id} score`);
+          const rewrites = (got.rewrites ?? []).map((x) => ({ ...x, saved: words(x.was ?? "") - words(x.now ?? "") }));
+          const total = lines.reduce((a, t) => a + words(t.text), 0);
+          const out = { ...got, rewrites, words: total, saved: rewrites.reduce((a, x) => a + Math.max(0, x.saved), 0) };
+          console.log(`${tag}editor ${state.id}: ${E.ratings.map((r) => `${r.id} ${got[r.id].score}`).join(", ")}, ${out.saved} of ${total} words cut in ${rewrites.length} lines`);
+          return [state.id, out];
+        } catch (e) {
+          console.warn(`${tag}editor ${state.id}: ${e.message}`);
+          return [state.id, { error: e.message }];
+        }
+      }),
+    );
+  };
+
+  // The three passes ask at once: none reads another's answer.
+  await Promise.all([
+    PASSES.includes("screens") && screensPass(),
+    PASSES.includes("design") && designPass(),
+    PASSES.includes("editor") && editorPass(),
+  ]);
+  writeFileSync(path, JSON.stringify(critic, null, 2) + "\n");
+  return critic;
+}
+
+// Claude, and the second reader the regime names, at once. A second reader that isn't installed is skipped.
+const second = process.env.SECOND_READER ?? R.secondReader;
+const hasCodex = (() => {
   try {
-    const got = await ask(prompt, shots.map((x) => x.file), "design");
-    for (const r of D.ratings) if (typeof got[r.id]?.score !== "number") throw new Error(`no ${r.id} score`);
-    critic.design = got;
-    console.log(`design: ${D.ratings.map((r) => `${r.id} ${got[r.id].score}`).join(", ")}, ${got.issues?.length ?? 0} issues`);
-  } catch (e) {
-    critic.design = { error: e.message };
-    console.warn(`design: ${e.message}`);
+    execFileSync("codex", ["--version"], { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
   }
-};
+})();
+const vias = ["claude", ...(second === "codex" && hasCodex && !args.includes("--claude-only") ? ["codex"] : [])];
+if (second === "codex" && !hasCodex) console.warn("No codex CLI, so no second reader this run.");
+const [critic, other] = await Promise.all(vias.map(read));
 
-// Each screen's words, cut.
-const editorPass = async () => {
-  const E = R.editor;
-  const prompt = (state, lines) => `You edit the words of a space game, Holos. The screenshot above is the screen "${state.title}". What it should show: ${state.description}
-
-Its words, one piece of text a line, as [kind] text. Lines marked (scrolled) are on the screen but scrolled out of sight:
-${lines.map((t) => `[${t.kind}]${t.view ? "" : " (scrolled)"} ${t.text}`).join("\n")}
-
-Score the screen's words 0 to 10 on each rating, from its anchors:
-${anchorsOf(E.ratings)}
-
-Rules:
-${rulesOf(E.rules)}
-
-Reply with JSON only, no other text:
-{${scoresOf(E.ratings)},"rewrites":[{"was":"<the line exactly as it is>","now":"<the line as it should be>"}]}`;
-  critic.editor = Object.fromEntries(
-    await pool(states, 4, async (state) => {
-      // The widest shot holds the most words in view. Its words, and the phone's, are the same text.
-      const shot = okShots(state.id)[0];
-      const lines = shot.text && existsSync(join(dir, shot.text)) ? JSON.parse(readFileSync(join(dir, shot.text), "utf8")) : [];
-      if (!lines.length) return [state.id, { error: "no words captured" }];
-      try {
-        const got = await ask(prompt(state, lines), [shot.file], "editor");
-        for (const r of E.ratings) if (typeof got[r.id]?.score !== "number") throw new Error(`no ${r.id} score`);
-        const rewrites = (got.rewrites ?? []).map((x) => ({ ...x, saved: words(x.was ?? "") - words(x.now ?? "") }));
-        const total = lines.reduce((a, t) => a + words(t.text), 0);
-        const out = { ...got, rewrites, words: total, saved: rewrites.reduce((a, x) => a + Math.max(0, x.saved), 0) };
-        console.log(`editor ${state.id}: ${E.ratings.map((r) => `${r.id} ${got[r.id].score}`).join(", ")}, ${out.saved} of ${total} words cut in ${rewrites.length} lines`);
-        return [state.id, out];
-      } catch (e) {
-        console.warn(`editor ${state.id}: ${e.message}`);
-        return [state.id, { error: e.message }];
-      }
-    }),
-  );
-};
-
-// The three passes ask at once: none reads another's answer.
-await Promise.all([
-  PASSES.includes("screens") && screensPass(),
-  PASSES.includes("design") && designPass(),
-  PASSES.includes("editor") && editorPass(),
-]);
-
-writeFileSync(path, JSON.stringify(critic, null, 2) + "\n");
 writeIndex();
 
 // What fell since the last run the critic scored.
@@ -175,3 +196,13 @@ const faults = results.shots.reduce((a, x) => a + (x.faults?.length ?? 0), 0);
 const lang = results.shots.reduce((a, x) => a + (x.language?.length ?? 0), 0);
 console.log(`\nScored ${name} by ${MODEL}. Code flagged ${faults} layout faults and ${lang} language lines.`);
 if (before) console.log(drops.length ? `Fell 2 or more since ${before.r}:\n${drops.map((d) => `  ${d}`).join("\n")}` : `Nothing fell 2 or more since ${before.r}.`);
+
+// Where the two readers part by 2 or more: the screens worth a human look.
+if (other) {
+  const gaps = [];
+  const gap = (label, a, b) => typeof a === "number" && typeof b === "number" && Math.abs(a - b) >= 2 && gaps.push(`${label}: Claude ${a}, ${other.model} ${b}`);
+  for (const [id, st] of Object.entries(critic.states ?? {})) for (const [vp, v] of Object.entries(st)) if (v && typeof v === "object") for (const k of R.screens.ratings.map((r) => r.id)) gap(`${id} ${vp} ${k}`, v[k]?.score, other.states?.[id]?.[vp]?.[k]?.score);
+  for (const r of R.design.ratings) gap(`design ${r.id}`, critic.design?.[r.id]?.score, other.design?.[r.id]?.score);
+  for (const [id, v] of Object.entries(critic.editor ?? {})) for (const r of R.editor.ratings) gap(`editor ${id} ${r.id}`, v[r.id]?.score, other.editor?.[id]?.[r.id]?.score);
+  console.log(gaps.length ? `The readers part by 2 or more on ${gaps.length}:\n${gaps.map((g) => `  ${g}`).join("\n")}` : "The readers agree within 1 point everywhere.");
+}

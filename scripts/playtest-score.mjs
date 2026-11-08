@@ -120,7 +120,9 @@ const card = (name, { scores, avg, checks, tally: t }) => {
   lines.push("");
   for (const [pov, keys] of Object.entries(POVS)) {
     if (!scores[pov]) continue;
-    lines.push(`## ${pov}: ${fmt(avg[pov])}`, "", "| Rating | Score | Why | Evidence |", "|---|---|---|---|");
+    // A second reader's score, when one rated the run, beside Claude's, marked ! where they part by 2 or more.
+    const sec = scores.second?.ratings?.[pov];
+    lines.push(`## ${pov}: ${fmt(avg[pov])}`, "", `| Rating | Score |${sec ? ` ${scores.second.model} |` : ""} Why | Evidence |`, `|---|---|${sec ? "---|" : ""}---|---|`);
     for (const k of keys) {
       const r = scores[pov]?.[k];
       if (!r) {
@@ -128,7 +130,9 @@ const card = (name, { scores, avg, checks, tally: t }) => {
         continue;
       }
       const ev = (r.evidence ?? []).map((e) => (/\.(png|jpe?g)$/i.test(e) ? `[${e}](${e})` : e)).join(", ");
-      lines.push(`| ${k} | ${fmt(r.score)} | ${(r.why ?? "").replace(/\|/g, "/")} | ${ev} |`);
+      const o = sec?.[k]?.score;
+      const col = sec ? ` ${fmt(o)}${typeof o === "number" && typeof r.score === "number" && Math.abs(o - r.score) >= 2 ? " !" : ""} |` : "";
+      lines.push(`| ${k} | ${fmt(r.score)} |${col} ${(r.why ?? "").replace(/\|/g, "/")} | ${ev} |`);
     }
     lines.push("");
   }

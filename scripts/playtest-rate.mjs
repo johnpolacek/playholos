@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { askJson } from "./claude-ask.mjs";
+import { askJson, codexLabel } from "./claude-ask.mjs";
 import { regime } from "./regime.mjs";
 
 // Rates a cloud playtest as its three players, by a reader who didn't play. The player who played knows what each step
@@ -68,7 +68,13 @@ ${log
 Reply with JSON only, no other text:
 {${PLAYERS.map((p) => `"${p.id}":{${ratings(p).map((r) => `"${r.id}":{"score":<0-10 or null>,"why":"<one short line>","evidence":["<file or log line>"]}`).join(",")}}`).join(",")}}`;
 
-const got = await askJson(prompt, { images: shots.map((f) => join(dir, f)), model: MODEL, costTo: dir, step: "rater" });
+// Claude rates, and the second reader the regime names rates the same run at once, kept apart and never averaged in.
+const second = (process.env.SECOND_READER ?? R.secondReader) === "codex" && !process.argv.includes("--claude-only");
+const images = shots.map((f) => join(dir, f));
+const [got, other] = await Promise.all([
+  askJson(prompt, { images, model: MODEL, costTo: dir, step: "rater" }),
+  second ? askJson(prompt, { images, costTo: dir, step: "rater", via: "codex" }).catch((e) => (console.warn(`Second reader: ${e.message}`), null)) : null,
+]);
 
 for (const p of PLAYERS) {
   const mine = scores[p.id] ?? {};
@@ -82,7 +88,8 @@ for (const p of PLAYERS) {
     scores[p.id][r.id] = { score: g.score, why: g.why, evidence: g.evidence ?? [], by: "rater", model: MODEL };
   }
 }
+if (other) scores.second = { via: "codex", model: codexLabel(), ratings: other };
 scores.rated = { by: "rater", model: MODEL, shots: shots.length, of: pngs.length };
 writeFileSync(join(dir, "scores.json"), JSON.stringify(scores, null, 2) + "\n");
-for (const p of PLAYERS) console.log(`${p.id}: ${ratings(p).map((r) => `${r.id} ${scores[p.id][r.id].score ?? "–"}`).join(", ")}`);
+for (const p of PLAYERS) console.log(`${p.id}: ${ratings(p).map((r) => `${r.id} ${scores[p.id][r.id].score ?? "–"}${other ? `/${other[p.id]?.[r.id]?.score ?? "–"}` : ""}`).join(", ")}${other ? "  (Claude/second reader)" : ""}`);
 console.log(`\nWrote ${join(dir, "scores.json")}. Next: npm run playtest:score ${dir}`);

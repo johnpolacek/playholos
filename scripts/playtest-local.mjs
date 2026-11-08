@@ -20,6 +20,9 @@ import { regime } from "./regime.mjs";
 //   --model sonnet   the player's model, for cloud and blind. Sonnet plays faster, Opus sees more
 //   --keep           leave the copy in ../.holos-playtests/ when done
 //   --smoke          the player only opens the game and takes one shot, to check the wiring in a minute
+//   --player codex   play with OpenAI's model through the codex CLI, on your ChatGPT login, in its sandbox
+//   --codex-open     let the codex player out of its sandbox, if Chrome won't start inside it
+//   --both           a Claude player and a Codex player at once, each on its own copy and port, for two views
 //
 // The copy shares node_modules, the local worlds and your env files by APFS clone, so it takes seconds and no disk.
 
@@ -30,15 +33,44 @@ const opt = (name) => {
   return i < 0 ? undefined : args[i + 1];
 };
 // Flags that take a value, so the kind is the one word left over.
-const VALUED = ["--scenario", "--model"];
+const VALUED = ["--scenario", "--model", "--player"];
 const kind = args.find((a, i) => !a.startsWith("--") && !VALUED.includes(args[i - 1])) ?? "screens";
 if (!["screens", "cloud", "blind"].includes(kind)) {
   console.error("Usage: npm run playtest:local -- screens | cloud [--scenario id] | blind  [--dirty] [--model sonnet] [--keep]");
   process.exit(1);
 }
 const R = regime();
+
+// Both players at once: this script twice, one a player, each with its own copy, ports and run folder.
+if (args.includes("--both")) {
+  const rest = args.filter((a) => a !== "--both");
+  const lines = (tag, stream) => {
+    let buf = "";
+    stream.on("data", (d) => {
+      buf += d;
+      const parts = buf.split("\n");
+      buf = parts.pop();
+      for (const l of parts) console.log(`[${tag}] ${l}`);
+    });
+  };
+  const kids = ["claude", "codex"].map((who) => {
+    // Only the Claude run shoots the named screens: the copies are the same build.
+    const k = spawn("node", [fileURLToPath(import.meta.url), ...rest, "--player", who, ...(who === "codex" ? ["--no-screens"] : [])], { stdio: ["ignore", "pipe", "pipe"] });
+    lines(who, k.stdout);
+    lines(who, k.stderr);
+    return new Promise((ok) => k.on("close", ok));
+  });
+  process.on("SIGINT", () => {});
+  await Promise.all(kids);
+  process.exit(0);
+}
+const who = opt("player") ?? "claude";
+if (!["claude", "codex"].includes(who)) {
+  console.error("--player is claude or codex.");
+  process.exit(1);
+}
 const iso = new Date().toISOString();
-const run = `${iso.slice(0, 10)}-${iso.slice(11, 13)}${iso.slice(14, 16)}`;
+const run = `${iso.slice(0, 10)}-${iso.slice(11, 13)}${iso.slice(14, 16)}${who === "codex" ? "-codex" : ""}`;
 const base = resolve(repo, "..", ".holos-playtests");
 const copy = join(base, run);
 const started = Date.now();
@@ -79,8 +111,9 @@ const freePort = (from) =>
     s.once("error", () => ok(freePort(from + 1)));
     s.listen(from, "127.0.0.1", () => s.close(() => ok(from)));
   });
-const port = await freePort(5300);
-const cdp = await freePort(9400);
+// Codex looks from higher up, so two runners starting at once don't reach for the same port.
+const port = await freePort(who === "codex" ? 5350 : 5300);
+const cdp = await freePort(who === "codex" ? 9450 : 9400);
 const url = `http://localhost:${port}`;
 
 const procs = [];
@@ -154,17 +187,26 @@ const session = randomUUID();
 const runDir = join(copy, "playtests", run);
 mkdirSync(runDir, { recursive: true });
 const model = opt("model");
-say(`The ${kind} player starts${model ? ` on ${model}` : ""}. Its log: ${join(runDir, "player.jsonl")}`);
-const player = spawn(
-  "claude",
-  ["-p", "--session-id", session, "--permission-mode", "acceptEdits", "--allowedTools", "Bash", "Read", "Write", "Edit", "Glob", "Grep", "--output-format", "stream-json", "--verbose", ...(model ? ["--model", model] : [])],
-  {
-    cwd: copy,
-    env: { ...process.env, HOLOS_URL: url, BLIND_URL: `${url}/`, BLIND_PORT: String(cdp), BLIND_DIR: join(runDir, "blind") },
-    detached: true,
-    stdio: ["pipe", "pipe", "inherit"],
-  },
-);
+say(`The ${kind} player starts on ${who}${model ? ` ${model}` : ""}. Its log: ${join(runDir, "player.jsonl")}`);
+const playerEnv = { ...process.env, HOLOS_URL: url, BLIND_URL: `${url}/`, BLIND_PORT: String(cdp), BLIND_DIR: join(runDir, "blind") };
+const player =
+  who === "claude"
+    ? spawn(
+        "claude",
+        ["-p", "--session-id", session, "--permission-mode", "acceptEdits", "--allowedTools", "Bash", "Read", "Write", "Edit", "Glob", "Grep", "--output-format", "stream-json", "--verbose", ...(model ? ["--model", model] : [])],
+        { cwd: copy, env: playerEnv, detached: true, stdio: ["pipe", "pipe", "inherit"] },
+      )
+    : spawn(
+        "codex",
+        [
+          "exec", "--skip-git-repo-check", "--json", "-C", copy,
+          // Its sandbox lets it write only in the copy, with the network open for the game and Chrome on localhost.
+          ...(args.includes("--codex-open") ? ["--dangerously-bypass-approvals-and-sandbox"] : ["-s", "workspace-write", "-c", "sandbox_workspace_write.network_access=true"]),
+          ...(model ? ["-m", model] : []),
+          "-",
+        ],
+        { cwd: copy, env: playerEnv, detached: true, stdio: ["pipe", "pipe", "inherit"] },
+      );
 procs.push(player);
 player.stdin.end(local);
 player.stdout.on("data", (d) => appendFileSync(join(runDir, "player.jsonl"), d));
@@ -189,9 +231,12 @@ for (const f of readdirSync(join(copy, "playtests/states")))
   }
 const steps = kind === "cloud" ? [["scripts/playtest-rate.mjs", [out]]] : [["scripts/playtest-judge.mjs", [out]]];
 for (const [s, a] of steps) await node(s, a).catch((e) => say(e.message));
-await node("scripts/capture.mjs", ["--url", url, "--run", run]).catch((e) => say(e.message));
-await node("scripts/playtest-critic.mjs", [run]).catch((e) => say(e.message));
-await node("scripts/run-cost.mjs", [out], { CLAUDE_CODE_SESSION_ID: session }).catch((e) => say(e.message));
+if (!args.includes("--no-screens")) {
+  await node("scripts/capture.mjs", ["--url", url, "--run", run]).catch((e) => say(e.message));
+  await node("scripts/playtest-critic.mjs", [run]).catch((e) => say(e.message));
+}
+const costArgs = who === "codex" ? [out, "--codex", join(out, "player.jsonl"), "--started", new Date(started).toISOString()] : [out];
+await node("scripts/run-cost.mjs", costArgs, { CLAUDE_CODE_SESSION_ID: session }).catch((e) => say(e.message));
 await node("scripts/playtest-score.mjs", [out]).catch((e) => say(e.message));
 say(`Done in ${Math.round((Date.now() - started) / 60000)} min. Report: ${join(out, "REPORT.md")}. Scorecard: ${join(out, "SCORECARD.md")}.`);
 process.exit(0);

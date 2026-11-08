@@ -55,7 +55,7 @@ export function writeIndex() {
     .sort()
     .map((name) => {
       const read = (f) => (existsSync(join(capDir, name, f)) ? JSON.parse(readFileSync(join(capDir, name, f), "utf8")) : null);
-      return { ...read("results.json"), critic: read("critic.json") };
+      return { ...read("results.json"), critic: read("critic.json"), critic2: read("critic.codex.json") };
     });
   writeFileSync(fileURLToPath(new URL("../playtests/captures.js", import.meta.url)), `window.CAPTURES = ${JSON.stringify(runs)};\n`);
 }

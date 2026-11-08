@@ -15,6 +15,7 @@
 <script type="application/json" id="regime">
 {
   "updated": "2026-11-08",
+  "secondReader": "codex",
   "routines": [
     {
       "id": "cloud",
@@ -301,7 +302,7 @@
       { "name": "long sentence", "why": "A sentence over 25 words." }
     ]
   },
-  "screensRule": "Each named state opens from its saved game in playtests/states/, with the clock stopped at its Year. npm run playtest:capture shots every state at every width, measures its layout and reads its words against the audit rules, by code. npm run playtest:critic then scores each screen blind, has a designer judge all of them together, and has an editor cut their words. A state without a save is skipped. Save one from a run with node scripts/capture.mjs snap <id>.",
+  "screensRule": "Each named state opens from its saved game in playtests/states/, with the clock stopped at its Year. npm run playtest:capture shots every state at every width, measures its layout and reads its words against the audit rules, by code. npm run playtest:critic then scores each screen blind, has a designer judge all of them together, and has an editor cut their words. A second reader from another maker, the regime's secondReader, does the same at once, and its score shows after the dot. A state without a save is skipped. Save one from a run with node scripts/capture.mjs snap <id>.",
   "scenarioRule": "Each cloud run plays the next scenario in turn. The opening starts from a fresh game, with its seed drawn at random as for any player. A scenario with a saved state starts from it, past the opening, so the run spends its time on what it tests. A seed is replayed only to check a fix on the world a finding came from.",
   "checks": [
     { "name": "build named", "why": "scores.json names the build it played, so the trend can tie a score to code." },
@@ -434,7 +435,7 @@ code { font: 12px ui-monospace, Menlo, monospace; background: var(--soft); paddi
 .scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 10px; margin-top: 10px; }
 .score-row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; padding: 2px 0; }
 .score-row b { font-variant-numeric: tabular-nums; }
-.down { color: var(--bad); } .up { color: var(--good); }
+.down { color: var(--bad); } .up { color: var(--good); } .gap { color: var(--accent); font-weight: 700; }
 @media (max-width: 720px) { .shot { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
@@ -677,13 +678,14 @@ function drawScreens(caps) {
     $("capTabs").innerHTML = caps.map((c, i) => `<button aria-pressed="${i === at}" data-i="${i}">${esc(c.run)}</button>`).join("") +
       (prev ? `<button data-compare aria-pressed="${compare}">Show ${esc(prev.run)} beside</button>` : "");
     const bad = cap.shots.filter((x) => x.status !== "ok");
-    $("sheet").innerHTML = `<p class="small muted">Build <code>${esc(cap.build ?? "?")}</code>${cap.dirty ? " with uncommitted game changes" : ""}. ${cap.shots.length - bad.length} of ${cap.shots.length} shots.${cap.critic ? ` Critic: ${esc(cap.critic.model)}.` : " Not scored yet."}</p>` +
+    $("sheet").innerHTML = `<p class="small muted">Build <code>${esc(cap.build ?? "?")}</code>${cap.dirty ? " with uncommitted game changes" : ""}. ${cap.shots.length - bad.length} of ${cap.shots.length} shots.${cap.critic ? ` Readers: ${esc(cap.critic.model)}${cap.critic2 ? ` · ${esc(cap.critic2.model)}, scores in that order. Orange marks where they part by 2 or more` : ""}.` : " Not scored yet."}</p>` +
       designCard(cap, prev) +
       R.states.map((st) => {
         const shots = cap.shots.filter((x) => x.state === st.id);
         if (!shots.length) return "";
         const vps = shots.map((x) => x.viewport);
         const c = cap.critic?.states?.[st.id], pc = prev?.critic?.states?.[st.id];
+        const c2 = cap.critic2?.states?.[st.id];
         // Desktop and phone side by side, each at its own shape, and the run before beneath when compared.
         const fig = (run, x) => x.status === "ok" ? img(run.run, x.file, `${x.viewport}, ${run.run}${x.errors?.length ? `, ${x.errors.length} console error(s)` : ""}`) : `<div class="empty small">${esc(x.viewport)}: ${esc(x.status)}${x.errors?.[0] ? `<br>${esc(x.errors[0])}` : ""}</div>`;
         const row = (run, list) => `<div class="shot">${list.map((x) => fig(run, x)).join("")}</div>`;
@@ -692,8 +694,8 @@ function drawScreens(caps) {
         const scores = c && !c.error ? `<div class="scores">${vps.map((vp) => c[vp] ? `<div><b class="small">${esc(vp)}</b>${ids.map((k) => {
           const v = c[vp][k]?.score, w = pc?.[vp]?.[k]?.score;
           const d = typeof v === "number" && typeof w === "number" ? v - w : 0;
-          return `<div class="score-row" title="${esc(c[vp][k]?.why)}"><span>${esc(k)}</span><b>${v ?? "–"}${d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""}</b></div>`;
-        }).join("")}<p class="small" style="margin-top:6px"><span class="muted">Worst:</span> ${esc(c[vp].worst)}<br><span class="muted">Fix:</span> ${esc(c[vp].fix)}</p></div>` : "").join("")}</div>` : c?.error ? `<p class="small fail">Critic: ${esc(c.error)}</p>` : "";
+          return `<div class="score-row" title="${esc(c[vp][k]?.why)}"><span>${esc(k)}</span><b>${v ?? "–"}${d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""}${two(v, c2?.[vp]?.[k]?.score)}</b></div>`;
+        }).join("")}<p class="small" style="margin-top:6px"><span class="muted">Worst:</span> ${esc(c[vp].worst)}<br><span class="muted">Fix:</span> ${esc(c[vp].fix)}</p>${c2?.[vp]?.worst ? `<p class="small muted"><b>Second reader:</b> ${esc(c2[vp].worst)}</p>` : ""}</div>` : "").join("")}</div>` : c?.error ? `<p class="small fail">Critic: ${esc(c.error)}</p>` : "";
         // Code's flags for each width, then the editor's cuts.
         const flags = shots.filter((x) => x.status === "ok").map((x) => {
           const f = [...(x.faults ?? []).map((y) => ({ ...y, kind: "layout" })), ...(x.language ?? []).map((y) => ({ ...y, kind: "words" }))];
@@ -705,9 +707,10 @@ function drawScreens(caps) {
             .join("")}</table></details>`;
         }).join("");
         const ed = cap.critic?.editor?.[st.id], ped = prev?.critic?.editor?.[st.id];
+        const ed2 = cap.critic2?.editor?.[st.id];
         const edit = ed && !ed.error ? `<div style="margin-top:10px"><b class="small">Words</b> <span class="small muted">${R.editor.ratings.map((r) => {
           const v = ed[r.id]?.score, w = ped?.[r.id]?.score, d = typeof v === "number" && typeof w === "number" ? v - w : 0;
-          return `<span title="${esc(ed[r.id]?.why)}">${esc(r.id)} <b>${v ?? "–"}</b>${d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""}</span>`;
+          return `<span title="${esc(ed[r.id]?.why)}">${esc(r.id)} <b>${v ?? "–"}</b>${d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""}${two(v, ed2?.[r.id]?.score)}</span>`;
         }).join(" · ")} · ${ed.saved} of ${ed.words} words could go</span>${ed.rewrites?.length ? `<table style="margin-top:6px"><tr><th>Now</th><th>Cut to</th><th class="n">Saves</th></tr>${ed.rewrites.map((x) => `<tr><td class="muted">${esc(x.was)}</td><td>${esc(x.now)}</td><td class="n">${x.saved}</td></tr>`).join("")}</table>` : ""}</div>` : ed?.error ? `<p class="small fail">Editor: ${esc(ed.error)}</p>` : "";
         return `<div class="card" style="margin-top:12px"><h3>${esc(st.title)} <span class="tag">${esc(st.path)}</span></h3><p class="small muted">${esc(st.description)}</p>${pics}${scores}${flags}${edit}</div>`;
       }).join("");
@@ -720,15 +723,18 @@ function drawScreens(caps) {
   });
   draw();
 }
+// The second reader's score beside Claude's, marked when they part by 2 or more.
+const two = (v, v2) => (typeof v2 !== "number" ? "" : ` <span class="${typeof v === "number" && Math.abs(v - v2) >= 2 ? "gap" : "muted"}" title="Second reader">· ${v2}</span>`);
 // The designer's pass over every screen at once.
 function designCard(cap, prev) {
   const d = cap.critic?.design, pd = prev?.critic?.design;
+  const d2 = cap.critic2?.design;
   if (!d) return "";
   if (d.error) return `<div class="card small fail">Design pass: ${esc(d.error)}</div>`;
   return `<div class="card" style="margin-top:12px"><h3>All screens together</h3><p class="small muted">${esc(R.design.who)}</p><div class="scores">${R.design.ratings.map((r) => {
     const v = d[r.id]?.score, w = pd?.[r.id]?.score, n = typeof v === "number" && typeof w === "number" ? v - w : 0;
-    return `<div class="score-row" title="${esc(d[r.id]?.why)}"><span>${esc(r.id)}</span><b>${v ?? "–"}${n ? ` <span class="${n < 0 ? "down" : "up"}">${n > 0 ? "+" : ""}${n}</span>` : ""}</b></div>`;
-  }).join("")}</div>${d.issues?.length ? `<table style="margin-top:10px"><tr><th>Screen</th><th>Issue</th><th>Fix</th></tr>${d.issues.map((x) => `<tr><td>${esc(x.state)}<br><span class="muted">${esc(x.viewport)}, ${esc(x.where)}</span></td><td>${esc(x.issue)}</td><td>${esc(x.fix)}</td></tr>`).join("")}</table>` : ""}</div>`;
+    return `<div class="score-row" title="${esc(d[r.id]?.why)}"><span>${esc(r.id)}</span><b>${v ?? "–"}${n ? ` <span class="${n < 0 ? "down" : "up"}">${n > 0 ? "+" : ""}${n}</span>` : ""}${two(v, d2?.[r.id]?.score)}</b></div>`;
+  }).join("")}</div>${d.issues?.length ? `<table style="margin-top:10px"><tr><th>Screen</th><th>Issue</th><th>Fix</th></tr>${[...d.issues, ...(d2?.issues ?? []).map((x) => ({ ...x, state: `${x.state} (second reader)` }))].map((x) => `<tr><td>${esc(x.state)}<br><span class="muted">${esc(x.viewport)}, ${esc(x.where)}</span></td><td>${esc(x.issue)}</td><td>${esc(x.fix)}</td></tr>`).join("")}</table>` : ""}</div>`;
 }
 drawScreens(window.CAPTURES);
 </script>
