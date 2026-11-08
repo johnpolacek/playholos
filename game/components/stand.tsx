@@ -3,6 +3,7 @@ import { KNOCKS, RADARS_SINCE } from "@/lib/game/knocks";
 import { YEAR_0 } from "@/lib/game/clock";
 import { ReplayButton } from "@/components/screen-bar";
 import { SkyArt } from "@/components/sky";
+import { steadySide } from "@/lib/steady-side";
 import { FILL, Spread } from "@/components/spread";
 import type { Dials, Mark } from "@/lib/drift";
 import { STAND_SOURCES } from "@/lib/game/sources";
@@ -37,7 +38,8 @@ function Map({ dials, onReady }: { dials: Dials; onReady(flight: number): void }
         const n = names.current[id];
         if (!n) continue;
         const shown = id === "Sol" ? a : a * (dials.labels ?? 0) * (id === NEXT || replyBy(id) < year ? 1 : 0);
-        const right = x > (n.parentElement?.clientWidth ?? 0) / 2;
+        // Held past the middle, where Sol sits, so its name doesn't flip sides each frame. Playtest 2026-11-08.
+        const right = steadySide(n, x, (n.parentElement?.clientWidth ?? 0) / 2);
         n.style.transform = `translate(${x + (right ? 8 : -8)}px, ${y}px) translate(${right ? "0" : "-100%"}, -50%)`;
         n.style.opacity = String(shown);
       }
