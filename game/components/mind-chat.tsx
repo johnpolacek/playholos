@@ -163,6 +163,12 @@ export function useTalkSubject() {
   const { messages, busy } = useMind();
   const { leads } = useLeads();
   for (let i = messages.length - 1; i >= 0; i--) {
+    // A question naming a lead flies there as it is asked: the map sat on Earth until the answer came. 2026-11-07.
+    if (messages[i].role === "user") {
+      const lead = i === messages.length - 1 || messages[i + 1]?.role !== "assistant" ? leadsNamed(textOf(messages[i]), leads, true).find(onMap) : undefined;
+      if (lead) return { lead, from: messages[i].id };
+      continue;
+    }
     if (messages[i].role !== "assistant") continue;
     const lead = leadsNamed(spoken(messages[i - 1], messages[i]), leads, !busy || i < messages.length - 1).find(onMap);
     if (lead) return { lead, from: messages[i].id };
