@@ -24,36 +24,36 @@ export interface Build {
 }
 
 export const BUILDS: Build[] = [
-  { name: "All-Sky Watch", what: "Hears a knock or a broadcast from anywhere, at any hour.", does: "listen" },
+  { name: "All-Sky Watch", what: "Hears the whole sky all day, so no knock slips past.", does: "listen" },
   { name: "Deep Flash Watch", what: "Sees knocks sent as laser flashes, which no radio watch hears.", does: "listen" },
-  { name: "Thought Fields", what: "Half again as much compute each Year, until the grid is full.", does: "think" },
+  { name: "Thought Fields", what: "Half again as much compute each Year, speeding every build and study.", does: "think" },
   // A fleet of ARC-class plants, 2026-10-28: the first stand near Year 0, and the fleet grows on the tritium it breeds.
-  { name: "Fusion Plants", what: "About 12 TW of electricity, from a fleet of fusion plants.", does: "think" },
-  { name: "Infrared Telescope", what: "Reads the air of the nearest worlds.", does: "see" },
+  { name: "Fusion Plants", what: "More than doubles our electricity, for more compute. Grows slowly.", does: "think" },
+  { name: "Infrared Telescope", what: "Reads the air of the nearest worlds, for signs of life.", does: "see" },
   // An observing program on a telescope we have, ALMA, so it is quick and takes little. Added 2026-10-26.
   { name: "Halo Survey", what: "Looks for the cold glow of minds computing far from their stars.", does: "see" },
   // A near-infrared Gaia, of the GaiaNIR class, 2026-10-26: it finds black holes by the stars they shift.
-  { name: "Star Mapper", what: "Maps a billion stars’ places, and finds black holes by the stars they shift.", does: "see" },
+  { name: "Star Mapper", what: "Finds black holes near us, places we could send our Mind.", does: "see" },
   // A cooled all-sky mid-infrared telescope, ten times deeper than WISE, 2026-10-29: it catches a young mind’s warm flash.
-  { name: "Warm Sky Watch", what: "Maps the whole sky in warm infrared every 2 Years, for new warm glows.", does: "see" },
+  { name: "Warm Sky Watch", what: "Watches the galaxy for the warm glow of a young mind.", does: "see" },
   // A shift-and-stack search of the Earth–Moon L4 and L5 points, on telescopes we have, 2026-10-29.
   // One probe mapping each Earth co-orbital asteroid in turn, as Tianwen-2 maps Kamoʻoalewa, 2026-10-29.
-  { name: "Asteroid Tour", what: "A probe that maps each asteroid sharing Earth’s orbit, one by one, down to centimeters.", does: "see" },
-  { name: "Moon Search", what: "Stacks years of deep images of the Moon’s L4 and L5 points, for anything small and dark.", does: "see" },
-  { name: "Launch Complex", what: "Doubles what we lift to orbit.", does: "lift" },
+  { name: "Asteroid Tour", what: "Searches the asteroids sharing Earth’s orbit for a watcher.", does: "see" },
+  { name: "Moon Search", what: "Searches the points beside the Moon for a small, dark watcher.", does: "see" },
+  { name: "Launch Complex", what: "Doubles our lift to orbit, and opens the Mass Driver.", does: "lift" },
   // What a neighbor can do to us, we can build, 2026-10-28: see a probe braking in, and fall quiet.
   { name: "X-Ray Watch", what: "Sees a probe’s fusion flame as it brakes into our system, weeks out.", does: "see" },
-  { name: "Quiet Radars", what: "Cuts the radars that tell every listener we are here.", does: "keep" },
+  { name: "Quiet Radars", what: "Ends our radars, so listeners our sweeps haven’t reached never hear us.", does: "keep" },
   // StarTram's Gen-1, 2026-10-27: a ground build, so it spends no matter, and lifts three times what the complex does.
-  { name: "Launch Tunnel", what: "Builds our craft a fifth faster, with cheap lift from a tunnel in the Andes.", does: "lift" },
-  { name: "Orbital Yard", what: "Cuts build time in orbit by a quarter.", kt: 1, does: "lift" },
-  { name: "Moon Vault", what: "A second home for our Mind, in the Moon’s rock.", kt: 10, does: "keep" },
+  { name: "Launch Tunnel", what: "Builds our craft a fifth faster, with cheap lift from an Andes tunnel.", does: "lift" },
+  { name: "Orbital Yard", what: "Builds telescopes, probes and drives in orbit a quarter faster.", kt: 1, does: "lift" },
+  { name: "Moon Vault", what: "A copy of our Mind in the Moon, safe if Earth is struck.", kt: 10, does: "keep" },
   // The two roads to the nearest star, open at Year 0 since 2026-10-18. Even last in line, the probe yard's large want
   // takes the compute that would have pushed the builds before it, and slows them by Years.
-  { name: "Laser Sail Array", what: "A beam from Earth that pushes sails to a fifth of light speed.", does: "reach" },
+  { name: "Laser Sail Array", what: "Our soonest way to the nearest stars, sails at a fifth of light speed.", does: "reach" },
   {
     name: "Probe Yard",
-    what: "Builds and fuels probes in orbit. The first flies 12 Years after the yard, once a Fusion Drive and the Deuterium Works are done.",
+    what: "Builds and fuels our probes in orbit, for the long roads.",
     kt: 10,
     does: "reach",
   },
@@ -61,7 +61,7 @@ export const BUILDS: Build[] = [
   // Reach's locked ways now name them, so they can be queued at Year 0 too, last in line, 2026-10-19. Paces settled
   // 2026-10-15 in HOLOS_GAME_CONCEPT.md: a drive 30 Years at standard pace, a seed ship 18, about 1,500 t. Both are
   // joined in orbit, a quarter faster once the yard is done, the drive since 2026-10-22.
-  { name: "Deuterium Works", what: "Draws heavy hydrogen from water, to fuel fusion.", does: "reach" },
+  { name: "Deuterium Works", what: "Fuel for the Fusion Drive and the Probe Yard’s probes.", does: "reach" },
   { name: "Fusion Drive", what: "An engine big enough to carry a craft that can slow at a star, and stay.", does: "reach" },
   { name: "Seed Ship", what: "Carries a copy of our Mind to a star, to stay.", kt: 1.5, does: "reach" },
 ];
@@ -77,22 +77,22 @@ export interface Later extends Build {
  *  megatonnes of rock on the driver that throws it, as the model has it. Ground solar follows Thought Fields, whose
  *  data centers fill the grid. Lists show only what we can start, each with what it opens. Chosen 2026-10-20. */
 export const LATER: Later[] = [
-  { name: "Ground Solar", what: "About as much electricity again, from sunlight on the ground.", does: "think", after: "Thought Fields" },
+  { name: "Ground Solar", what: "As much electricity again, room for two more data centers.", does: "think", after: "Thought Fields" },
   // Our own ALMA-class array for the halo search, ten times as fast, 2026-10-29: the reach to old minds hundreds of ly out.
   { name: "Halo Array", what: "An array of our own that searches for cold glows ten times as fast.", does: "see", after: "Halo Survey" },
   {
     name: "15 m Mirror",
-    what: "A telescope more than twice as wide, to read the air the Infrared Telescope can’t.",
+    what: "Reads oxygen on 1 in 5 nearby worlds, not 1 in 50.",
     does: "see",
     after: "Infrared Telescope",
   },
-  { name: "Mass Driver", what: "Throws Moon rock to orbit, 600 kt a Year.", kt: 1, does: "lift", after: "Launch Complex" },
-  { name: "Orbital Foundry", what: "Makes parts from rock, in orbit.", kt: 1, does: "lift", after: "Orbital Yard" },
+  { name: "Mass Driver", what: "Moon rock for our biggest builds, 600 kt a Year.", kt: 1, does: "lift", after: "Launch Complex" },
+  { name: "Orbital Foundry", what: "Makes parts from rock in orbit, so we lift less.", kt: 1, does: "lift", after: "Orbital Yard" },
   // A third home for our Mind, 2026-10-28: inside the asteroid that leads Earth round the Sun, out of reach of anything
   // that strikes Earth and the Moon together.
   {
     name: "Trojan Vault",
-    what: "A third home for our Mind, inside an asteroid that leads Earth round the Sun.",
+    what: "A third copy, safe even if Earth and Moon are struck together.",
     kt: 10,
     does: "keep",
     after: "Moon Vault",
@@ -100,7 +100,7 @@ export const LATER: Later[] = [
   // Birch's bootstrapped ring, 2026-10-28: a seed of Moon metal, and ladders that lift from the ground at its pace.
   {
     name: "Orbital Ring",
-    what: "A ring round the world in low orbit, with cables down to the ground. 190 Mt a Year.",
+    what: "Lifts 190 Mt a Year, 300 times the Mass Driver.",
     kt: 180,
     does: "lift",
     after: "Mass Driver",
@@ -108,7 +108,7 @@ export const LATER: Later[] = [
   // Reach's locked lens, made a build 2026-10-26: the yard's line of small sailcraft. Each lens is sent from a
   // destination's page, to one star.
   { name: "Solar Lens", what: "Small sails that fly to the Sun’s focus and picture one world’s face.", does: "see", after: "Orbital Yard" },
-  { name: "Belt Mining", what: "Brings asteroid rock home, 120 kt a Year.", does: "lift", after: "Probe Yard" },
+  { name: "Belt Mining", what: "Asteroid rock for our biggest builds, 120 kt a Year.", does: "lift", after: "Probe Yard" },
   {
     name: "Far-Side Array",
     what: "Hears the faint hum of a world’s everyday radio, from the Moon’s far side.",
@@ -117,7 +117,7 @@ export const LATER: Later[] = [
   },
   {
     name: "Power from Orbit",
-    what: "A fifth more energy, from sunlight caught in orbit.",
+    what: "A fifth more electricity, from sunlight caught in orbit.",
     does: "think",
     after: "Mass Driver",
   },
@@ -125,7 +125,7 @@ export const LATER: Later[] = [
   { name: "Interceptor", what: "Kill vehicles that catch a probe in our system once the watch sees it.", does: "keep", after: "X-Ray Watch" },
   { name: "Strike Yard", what: "Readies bullets of 1,000 t to fire at a star, at a tenth of light speed.", does: "reach", after: "Fusion Drive" },
   // The audit's helium-3 harvest, 2026-10-29: every bullet's fuel, ours and every neighbor's, comes from one.
-  { name: "Helium-3 Harvest", what: "Craft dip into Uranus’s air for helium-3, a bullet’s fuel, doubling every 5 Years.", does: "reach", after: "Probe Yard" },
+  { name: "Helium-3 Harvest", what: "Helium-3 from Uranus’s air, a bullet’s fuel, doubling every 5 Years.", does: "reach", after: "Probe Yard" },
   // A rock coming, 2026-10-28: the deflector opens only once a survey finds one, in games whose seed sends one.
   {
     name: "Rock Deflector",
@@ -141,20 +141,20 @@ export const LATER: Later[] = [
   { name: "Mind Link", what: "A laser 100 m wide, to send the Will to our Mind far away.", does: "reach", after: "Seed Ship" },
   // The cold compute annex at scale, 2026-10-26: chips run cold behind a shade, on sunlight caught beside them.
   // The annex grown into a swarm, 2026-10-28: more thought each decade, until it grows bright enough to be seen.
-  { name: "Cold Halo", what: "The annex copied from asteroid rock, doubling every 10 Years.", does: "think", after: "Cold Annex" },
+  { name: "Cold Halo", what: "Compute built from asteroid rock, doubling every 10 Years.", does: "think", after: "Cold Annex" },
   {
     name: "Cold Annex",
-    what: "Chips run cold in space, four times the thought a watt.",
+    what: "Chips run cold in space, four times the compute a watt.",
     does: "think",
     after: "Mass Driver",
   },
   // A player's plan, 2026-10-29: take Mercury apart for a swarm round the Sun, beam its light, and see far.
   // calcs/mercury.py. A seed of panels landed there, made from the foundry's parts.
-  { name: "Mercury Works", what: "A seed factory on Mercury that copies itself from its rock.", kt: 0.1, does: "lift", after: "Orbital Foundry" },
-  { name: "Solar Swarm", what: "Mercury made into collectors round the Sun, doubling every 2 Years.", does: "think", after: "Mercury Works" },
-  { name: "Star Beam", what: "The swarm phased as one laser, to push craft across the solar system.", does: "reach", after: "Solar Swarm" },
+  { name: "Mercury Works", what: "A factory on Mercury that copies itself, to build the Solar Swarm.", kt: 0.1, does: "lift", after: "Orbital Foundry" },
+  { name: "Solar Swarm", what: "Compute from the Sun’s light, doubling every 2 Years.", does: "think", after: "Mercury Works" },
+  { name: "Star Beam", what: "Gets a Solar Lens to its focus in two months, not 17 Years.", does: "reach", after: "Solar Swarm" },
   // Labeyrie's exo-Earth imager, 2026-10-29: the next step past the 15 m Mirror, mirrors flying apart, not one wider.
-  { name: "Hypertelescope", what: "150 mirrors over 150 km, picturing the face of any world we have felt.", does: "see", after: "15 m Mirror" },
+  { name: "Hypertelescope", what: "Pictures any world we’ve found: seas, cloud, green land.", does: "see", after: "15 m Mirror" },
 ];
 
 /** Any build by the name the Mind gave, in any case, with or without "the". */

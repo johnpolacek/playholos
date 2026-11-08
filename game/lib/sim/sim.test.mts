@@ -632,3 +632,15 @@ test("a jump to home telescope pictures is not word from our craft", async () =>
   assert.deepEqual(nextKnownWhy(ahead, 0), { at: 100.5, why: "our next finding" });
   assert.deepEqual(nextKnownWhy(ahead, 101), { at: 137.5, why: "word from our craft" });
 });
+
+// Each build's line says what it gives us in one sentence of 45 to 75 characters, agreed 2026-11-08 when the lines
+// were rewritten to name the benefit. Its page carries the rest.
+// Read as text, since plan.ts imports through the app's paths, which node alone can't follow.
+test("each build's line fits 45 to 75 characters", () => {
+  const plan = readFileSync(new URL("../game/plan.ts", import.meta.url), "utf8");
+  const builds = plan.slice(plan.indexOf("export const BUILDS"), plan.indexOf("export const buildNamed"));
+  const lines = [...builds.matchAll(/name: "([^"]+)",\s*what: "([^"]+)"/g)].map(([, name, what]) => ({ name, what }));
+  assert.ok(lines.length >= 45, `read ${lines.length} lines`);
+  const out = lines.filter((b) => b.what.length < 45 || b.what.length > 75);
+  assert.deepEqual(out.map((b) => `${b.name}: ${b.what.length}`), []);
+});
