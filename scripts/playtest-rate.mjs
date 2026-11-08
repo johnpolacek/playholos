@@ -68,7 +68,7 @@ ${log
 Reply with JSON only, no other text:
 {${PLAYERS.map((p) => `"${p.id}":{${ratings(p).map((r) => `"${r.id}":{"score":<0-10 or null>,"why":"<one short line>","evidence":["<file or log line>"]}`).join(",")}}`).join(",")}}`;
 
-const got = await askJson(prompt, { images: shots.map((f) => join(dir, f)), model: MODEL });
+const got = await askJson(prompt, { images: shots.map((f) => join(dir, f)), model: MODEL, costTo: dir, step: "rater" });
 
 for (const p of PLAYERS) {
   const mine = scores[p.id] ?? {};

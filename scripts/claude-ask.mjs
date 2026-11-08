@@ -1,15 +1,17 @@
 import { spawn } from "node:child_process";
-import { mkdtempSync, readFileSync } from "node:fs";
+import { appendFileSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { CLI_BARE } from "../game/scripts/ask-mind.mjs";
 
 // One question to a reader on your own Claude login through the claude CLI, never an API key, with no tools, so it
 // sees only what we hand it: text, and screenshots as images. The reply is parsed as JSON. The judge, the screen
-// critic and the run rater share it. 2026-11-08.
+// critic and the run rater share it. 2026-11-08. With `costTo`, it adds the ask's time and tokens to cost.jsonl in that
+// folder, for scripts/run-cost.mjs.
 
 /** Asks `text`, with the PNG files in `images` before it, and resolves to the JSON in the reply. */
-export function askJson(text, { images = [], model = "opus" } = {}) {
+export function askJson(text, { images = [], model = "opus", costTo, step = "ask" } = {}) {
+  const started = Date.now();
   const dir = mkdtempSync(join(tmpdir(), "holos-ask-"));
   const content = [
     ...images.flatMap((file) => [
@@ -32,7 +34,13 @@ export function askJson(text, { images = [], model = "opus" } = {}) {
         .at(-1);
       if (code || !last) return reject(new Error(err.trim().slice(0, 300) || `claude exited ${code}`));
       try {
-        const result = String(JSON.parse(last).result);
+        const done = JSON.parse(last);
+        if (costTo)
+          appendFileSync(
+            join(costTo, "cost.jsonl"),
+            JSON.stringify({ step, model, secs: Math.round((Date.now() - started) / 1000), usage: tokens(done.usage), usd: done.total_cost_usd ?? null }) + "\n",
+          );
+        const result = String(done.result);
         const open = result.search(/[[{]/);
         const close = Math.max(result.lastIndexOf("}"), result.lastIndexOf("]"));
         resolve(JSON.parse(result.slice(open, close + 1)));
@@ -58,3 +66,11 @@ export async function pool(xs, n, f) {
   );
   return out;
 }
+
+/** A reply's tokens, by kind: new input, input written to the cache, input read from it, and output. */
+export const tokens = (u = {}) => ({
+  input: u.input_tokens ?? 0,
+  cacheWrite: u.cache_creation_input_tokens ?? 0,
+  cacheRead: u.cache_read_input_tokens ?? 0,
+  output: u.output_tokens ?? 0,
+});

@@ -84,7 +84,9 @@ ${checkins.map((c) => JSON.stringify(c)).join("\n")}
 Reply with JSON only, no other text, in check-in order:
 [{"n":<its step>,"grade":<0-10>,"why":"<one short line>"}]`;
 
-const ask = (text) => askJson(text, { model: MODEL });
+// A run graded into its folder adds the judge's tokens to its cost.jsonl. Validation adds none.
+let costTo;
+const ask = (text) => askJson(text, { model: MODEL, costTo, step: "judge" });
 
 const mean = (xs) => {
   const ok = xs.filter((x) => typeof x === "number");
@@ -176,6 +178,7 @@ if (args.includes("--validate")) {
     console.error(`No quiz.md in ${name}.`);
     process.exit(1);
   }
+  costTo = run.dir;
   const j = await judge(run.quiz, run.log);
   const path = join(run.dir, "scores.json");
   const scores = existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : {};

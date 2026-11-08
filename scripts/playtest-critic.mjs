@@ -55,7 +55,7 @@ const scored = await pool(states, 4, async (state) => {
   const shots = results.shots.filter((x) => x.state === state.id && x.status === "ok");
   const vps = shots.map((x) => x.viewport);
   try {
-    const got = await askJson(prompt(state, vps), { images: shots.map((x) => join(dir, x.file)), model: MODEL });
+    const got = await askJson(prompt(state, vps), { images: shots.map((x) => join(dir, x.file)), model: MODEL, costTo: dir, step: "critic" });
     for (const vp of vps) for (const id of IDS) if (typeof got[vp]?.[id]?.score !== "number") throw new Error(`no ${vp} ${id} score`);
     console.log(`${state.id}: ${vps.map((vp) => `${vp} ${IDS.map((id) => got[vp][id].score).join("/")}`).join(", ")}`);
     return [state.id, got];

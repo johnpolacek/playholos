@@ -571,7 +571,7 @@ function drawResults(runs) {
   }
   runs.forEach((r, i) => { if (i === 0 || i === runs.length - 1 || r.name.slice(0, 10) !== runs[i - 1].name.slice(0, 10)) s += `<text x="${x(i)}" y="${H - 6}" text-anchor="${i === runs.length - 1 ? "end" : i === 0 ? "start" : "middle"}">${r.name.slice(5, 10)}</text>`; });
   $("chart").innerHTML = s + "</svg>";
-  $("runs").innerHTML = `<table><tr><th>Run</th><th>Build</th><th>Scenario</th><th>Seed</th>${povs.map((p) => `<th class="n">${p}</th>`).join("")}<th class="n">Overall</th><th class="n">Checks</th></tr>${runs
+  $("runs").innerHTML = `<table><tr><th>Run</th><th>Build</th><th>Scenario</th><th>Seed</th>${povs.map((p) => `<th class="n">${p}</th>`).join("")}<th class="n">Overall</th><th class="n">Checks</th><th class="n">Minutes</th><th class="n">Tokens</th></tr>${runs
     .slice()
     .reverse()
     .map((r) => {
@@ -579,7 +579,7 @@ function drawResults(runs) {
       const f = (r.checks ?? []).filter((c) => c.fails?.length).map((c) => c.name).join(", ");
       return `<tr><td>${esc(r.name)}</td><td><code>${esc(r.build ?? "?")}</code></td><td>${esc(r.scenario ?? "–")}</td><td>${esc(r.seed ?? "–")}</td>${povs
         .map((p) => `<td class="n">${r.avg?.[p] ?? "–"}</td>`)
-        .join("")}<td class="n"><b>${r.avg?.overall ?? "–"}</b></td><td class="n ${t.failed ? "fail" : "pass"}" title="${esc(f)}">${t.ran ? `${t.ran - t.failed}/${t.ran}` : "–"}</td></tr>`;
+        .join("")}<td class="n"><b>${r.avg?.overall ?? "–"}</b></td><td class="n ${t.failed ? "fail" : "pass"}" title="${esc(f)}">${t.ran ? `${t.ran - t.failed}/${t.ran}` : "–"}</td><td class="n">${r.minutes ?? "–"}</td><td class="n">${r.tokens == null ? "–" : r.tokens >= 1e6 ? `${(r.tokens / 1e6).toFixed(1)}M` : `${Math.round(r.tokens / 1000)}k`}</td></tr>`;
     })
     .join("")}</table>`;
 }

@@ -48,6 +48,6 @@ Don't grade your own answers. A reader who didn't play grades them.
 ## Deliver
 
 - Run `node scripts/blind.mjs stop`, delete `blind/profile`, and stop the dev server.
-- Run `npm run playtest:judge playtests/<run>`, which grades the quiz into `scores.json` on the CLI login. Then run `npm run playtest:score playtests/<run>`.
+- Run `npm run playtest:judge playtests/<run>`, which grades the quiz into `scores.json` on the CLI login. Then `node scripts/run-cost.mjs playtests/<run>`, from this same session, which records how long the run took and how many tokens it spent. Then run `npm run playtest:score playtests/<run>`.
 - Commit the folder with `git add -f`, and push the branch.
-- Report what confused you, ranked by how long it held you up, with screenshot numbers. End with the blind scores.
+- Report what confused you, ranked by how long it held you up, with screenshot numbers. End with the blind scores, the minutes and the tokens.

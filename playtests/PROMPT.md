@@ -51,6 +51,7 @@ A replay goes in `scores.json` with `"replay": true`, so the trend can tell it f
 - Write `scores.json` with only `"build"`, `"scenario"` and `"seed"`, and `"replay": true` for a replay. Don't rate the run.
 - Run `npm run playtest:rate playtests/<that date and time>`. A reader who didn't play rates the three players from your log and screenshots, on the CLI login. Then run `npm run playtest:score playtests/<that date and time>` and commit `log.jsonl`, `scores.json` and `SCORECARD.md` with the rest. Fix nothing the checks flag. Report them.
 - Shoot the named screens: `npm run playtest:capture -- --run <that date and time>`, then `npm run playtest:critic <that date and time>`. Commit `playtests/captures/<that date and time>/` with `git add -f`. Report any shot that failed and any rating the critic says fell.
+- Last, from this same session, run `node scripts/run-cost.mjs playtests/<that date and time>`. It records how long the run took and how many tokens it spent, yours and the readers'. Then run `npm run playtest:score` on the run again, so the scorecard shows it, and commit.
 - Don't change game code, except a minimal fix to get the CLI Mind running, in its own commit.
 - Revert lockfile changes from installs. Stop the dev server and browser when done.
-- End with the branch name, the scenario and seed, the CLI Mind outcome, the rater's three scores and the overall, the checks that failed, the expectations met, the trend it printed, what the screen critic said fell, and the top findings.
+- End with the branch name, the scenario and seed, the CLI Mind outcome, the rater's three scores and the overall, the checks that failed, the expectations met, the trend it printed, what the screen critic said fell, the minutes and tokens, and the top findings.

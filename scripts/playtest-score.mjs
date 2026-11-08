@@ -104,6 +104,13 @@ const fmt = (x) => (x == null ? "–" : String(x));
 const card = (name, { scores, avg, checks, tally: t }) => {
   const lines = [`# Scorecard, ${name}`, "", `Build \`${scores.build ?? "?"}\`. Overall **${fmt(avg.overall)}** of 10.`, ""];
   if (scores.scenario || scores.seed) lines.push(`Scenario ${scores.scenario ?? "?"}, seed ${scores.seed ?? "?"}.`, "");
+  // Time and tokens, from scripts/run-cost.mjs. 2026-11-08.
+  const c = scores.cost;
+  if (c) {
+    const k = (n) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : `${Math.round(n / 1000)}k`);
+    const who = [c.player && `player ${k(c.player.total)}`, ...Object.entries(c.readers ?? {}).map(([s, r]) => `${s} ${k(r.total)}`)].filter(Boolean).join(", ");
+    lines.push(`Took ${c.minutes ?? "?"} min and ${k(c.total)} tokens, ${k(c.output)} output: ${who}. The Mind's own answers aren't counted.`, "");
+  }
   lines.push(`## Checks: ${t.ran - t.failed} of ${t.ran} pass`, "", "| Check | Result | Lines |", "|---|---|---|");
   for (const c of checks) {
     const result = !c.fails ? "not run" : c.fails.length ? `**fail** ×${c.fails.length}` : "pass";
@@ -177,6 +184,8 @@ writeFileSync(
       scenario: run.scores.scenario ?? null,
       seed: run.scores.seed ?? null,
       replay: !!run.scores.replay,
+      minutes: run.scores.cost?.minutes ?? null,
+      tokens: run.scores.cost?.total ?? null,
       avg: run.avg,
       tally: run.tally,
       checks: run.checks.map((c) => ({ name: c.name, fails: c.fails && c.fails.slice(0, 5) })),

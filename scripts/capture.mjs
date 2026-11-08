@@ -123,7 +123,7 @@ for (const s of list) {
 }
 await browser.close();
 
-const results = { run, build: git("rev-parse", "--short", "HEAD"), dirty: !!git("status", "--porcelain", "game"), at: new Date(now).toISOString(), url: URL_, shots };
+const results = { run, build: git("rev-parse", "--short", "HEAD"), dirty: !!git("status", "--porcelain", "game"), at: new Date(now).toISOString(), secs: Math.round((Date.now() - now) / 1000), url: URL_, shots };
 writeFileSync(join(out, "results.json"), JSON.stringify(results, null, 2) + "\n");
 writeIndex();
 const bad = shots.filter((s) => s.status === "failed");
