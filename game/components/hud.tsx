@@ -319,12 +319,21 @@ function useIdle() {
 
 /** The clock held, as nothing is building or a build left compute to spare: what to do, under the Year. */
 function Held({ idle }: { idle: boolean }) {
-  const { playOn } = useGame();
+  const { playOn, year } = useGame();
+  const { plan } = usePlan();
+  const { scale } = useSchedule();
+  // What the compute not at work is doing, said plainly. "Paused, so idle compute isn’t wasted" read as idle being bad,
+  // while the bar said it was searching, and a blind first-timer never knew which. Playtest 2026-11-08.
+  const now = tenths(year ?? 0);
+  const spare = useMemo(() => 1 - drawAt(plan, scale, now).compute, [plan, scale, now]);
+  const searching = useMemo(() => combedAt(searchOf(plan, scale), now) < now - 0.05, [plan, scale, now]);
   return (
     // A blind first-timer read "Paused, compute to spare. Build › Play on" as a status line, not two choices, and
     // looked for the jump button it replaced. Both are buttons now, Play on in the jump button's place. 2026-11-08.
     <span className="ml-2 inline-flex items-center gap-2 text-[12.5px]">
-      <span className="text-ink">{idle ? "Paused: nothing is building." : "Paused, so idle compute isn’t wasted."}</span>
+      <span className="text-ink">{idle
+          ? "Paused: nothing is building."
+          : `Paused: ${Math.round(spare * 100)}% of our compute ${searching ? "only searches old recordings" : "sits idle"}.`}</span>
       <Link
         to="/play/build"
         className="-my-1 inline-flex h-7 items-center rounded-full border border-you px-3 font-medium text-you hover:bg-you/10"

@@ -359,6 +359,12 @@
       "since": "2026-11-08",
       "call": "The title is the sky only, with no wordmark or tagline, and three ways in of equal weight: Universe, Simulation and Play.",
       "match": "Title.*(wordmark|tagline|pitch|no .{0,3}Holos.{0,3} title|equal(-| )weight|single filled primary)"
+    },
+    {
+      "id": "idle-pause",
+      "since": "2026-11-07",
+      "call": "When a build finishes and under 80% of our compute is at work, the clock pauses so we choose: add a build, or play on. The top bar says what the spare compute is doing.",
+      "match": "(idle|spare|searching|at work).{0,60}paus|paus.{0,60}(idle|spare|compute|stops me|stopped)"
     }
   ],
   "knownGaps": [
