@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useBeams } from "@/components/beams";
 import { starName } from "@/lib/game/leads";
 import { useGame } from "@/components/game-provider";
 import { useLeads } from "@/components/scan";
-import { tenths, yearText } from "@/lib/game/clock";
+import { tenths, yearText, YEAR_0 } from "@/lib/game/clock";
 import { dates, type Draft, farText, sendTime, target, WATCHER, watcherAway } from "@/lib/game/sends";
 import sky from "@/lib/game/sky.json";
 import { GRID_2040, noticeReach, powerFor, readReach, SIZES } from "@/lib/sim/messages";
@@ -59,6 +60,16 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
   const star = target(draft.to);
   const sent = save?.sent?.find((s) => s.id === id);
   const y = sent?.y ?? year ?? 0;
+  // Sent, the map shows it going: our light on its way to the star. It stayed on Earth or the lead we talked of.
+  // Leaving the Mind puts it away. 2026-11-07.
+  const { pick } = useBeams();
+  const shown = useRef(false);
+  useEffect(() => () => void (shown.current && pick([], null)), [pick]);
+  const show = () => {
+    if (!star || star === WATCHER) return;
+    shown.current = true;
+    pick([{ key: `sent:${id}`, star: star.name, sent: YEAR_0 + (year ?? 0), ly: star.d, reply: false }], 0);
+  };
   if (!star) return <p className="pl-3 font-mono text-[11px] text-muted">We know no star named {draft.to} on our leads or within 50 light-years.</p>;
   const { sendYears, lands, back } = dates(y, star.d, draft.size);
   // Only a range for a far warm glow: it lands, and an answer could come, somewhere across it. Playtest 2026-11-01.
@@ -100,7 +111,10 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
       {sent ? (
         <p className="font-mono text-[11px] text-ok">Sent at Year {yearText(sent.y)} · on its way, lands {r ? span2((d) => d.lands, false) : `Year ${yearText(lands)}`}</p>
       ) : (
-        <Buttons label="Send" onSend={() => send({ ...draft, to: star.name, d: star.d, ...(star.range ? { range: star.range } : {}), ...(star.d > 50 ? { ra: star.ra, dec: star.dec } : {}), id, y: year ?? 0, asked })} />
+        <Buttons label="Send" onSend={() => {
+          send({ ...draft, to: star.name, d: star.d, ...(star.range ? { range: star.range } : {}), ...(star.d > 50 ? { ra: star.ra, dec: star.dec } : {}), id, y: year ?? 0, asked });
+          show();
+        }} />
       )}
     </div>
   );

@@ -53,7 +53,8 @@ export function MapStrip() {
   // Reach's map stays on a destination's page, and flies out to its star.
   const reaching = path === "/play/reach" || path.startsWith("/play/reach/");
   const beams = useBeams();
-  const aimed = path === "/play" && beams.picked !== null;
+  // A message just sent from the Mind shows there too. 2026-11-07.
+  const aimed = (path === "/play" || path === "/play/mind") && beams.picked !== null;
   const works = useWorks();
   const built = (path === "/play/build" || path.startsWith("/play/build/")) && works.picked !== null;
   const reach = useReach();
