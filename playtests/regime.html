@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Holos Playtests</title>
+<link rel="icon" href="data:,">
 <!--
   The source of truth for how Holos is playtested: who plays, what each run plays, what it is asked, what code checks,
   and how it scores. The JSON block below is the regime. scripts/regime.mjs reads it for the scorer, the judge and the
@@ -447,10 +448,10 @@ code { font: 12px ui-monospace, Menlo, monospace; background: var(--soft); paddi
 .shot figure { margin: 0; min-width: 0; }
 .shot img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; background: #000; }
 .shot figcaption { font-size: 12px; color: var(--ink2); margin-top: 4px; }
-.was img { opacity: 0.9; }
-.scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 10px; margin-top: 10px; }
-.score-row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; padding: 2px 0; }
-.score-row b { font-variant-numeric: tabular-nums; }
+.scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr)); gap: 12px; margin-top: 10px; }
+.score-row { display: flex; flex-direction: column; font-size: 13px; color: var(--ink2); }
+.score-row b { font-size: 22px; line-height: 1.2; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.score-row b span { font-size: 13px; font-weight: 400; }
 .down { color: var(--bad); } .up { color: var(--good); } .gap { color: var(--accent); font-weight: 700; }
 @media (max-width: 720px) { .shot { grid-template-columns: 1fr; } .shot figure.phone { max-width: 220px; } }
 .state-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -464,6 +465,17 @@ details.more { margin-top: 8px; }
 details.more > *:not(summary) { margin-top: 6px; }
 #sheet > * + * { margin-top: 12px; }
 .meta { font-size: 13px; color: var(--ink2); margin: 0 0 4px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 12px; }
+.stats:empty { display: none; }
+.stat { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+.stat b { font-size: 32px; line-height: 1.1; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.stat b small { font-size: 14px; color: var(--ink2); font-weight: 400; margin-left: 2px; }
+.strip { position: relative; height: 44px; margin: 14px 10px 0; }
+.strip::before { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 6px; border-radius: 3px; background: var(--line); }
+.strip span { position: absolute; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; color: var(--ink2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.strip span::before { content: ""; width: 12px; height: 12px; margin-top: 5px; border-radius: 50%; background: var(--p3); }
+.strip span.end { transform: translateX(-100%); align-items: flex-end; }
+.strip span.end::before { width: 14px; height: 14px; margin-top: 4px; border-radius: 3px; background: var(--accent); }
 </style>
 </head>
 <body>
@@ -489,6 +501,7 @@ details.more > *:not(summary) { margin-top: 6px; }
   </section>
 
   <section class="pane" id="pane-results" role="tabpanel" aria-labelledby="tab-results">
+  <div class="stats" id="stats"></div>
   <div class="card">
     <div class="legend" id="legend"></div>
     <div class="chart" id="chart"></div>
@@ -536,6 +549,8 @@ details.more > *:not(summary) { margin-top: 6px; }
 const R = JSON.parse(document.getElementById("regime").textContent);
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+// Every score to one decimal, so 9 and 9.2 line up as 9.0 and 9.2.
+const fmt = (v) => (typeof v === "number" ? v.toFixed(1) : v ?? "–");
 const COLORS = { "first-timer": "var(--p1)", astronomer: "var(--p2)", "long-hauler": "var(--p3)", blind: "var(--p4)" };
 
 $("sub").textContent = `Updated ${R.updated}. Quiz version ${R.quiz.version}.`;
@@ -591,11 +606,11 @@ $("sub").textContent = `Updated ${R.updated}. Quiz version ${R.quiz.version}.`;
 
 // Where the check-ins fall across a 150-action run.
 function checkinStrip(every) {
-  const W = 600, n = 150, x = (i) => 10 + (i / n) * (W - 20);
-  let s = `<svg viewBox="0 0 ${W} 46" style="width:100%;height:auto;margin-top:12px" role="img" aria-label="Check-ins every ${every} actions across 150 actions, then the end questions"><line x1="10" y1="20" x2="${W - 10}" y2="20" stroke="var(--line)" stroke-width="6" stroke-linecap="round"/>`;
-  for (let i = every; i < n; i += every) s += `<circle cx="${x(i)}" cy="20" r="6" fill="var(--p3)"/><text x="${x(i)}" y="42" text-anchor="middle" font-size="11" fill="var(--ink2)">${i}</text>`;
-  s += `<rect x="${x(n) - 8}" y="12" width="16" height="16" rx="3" fill="var(--accent)"/><text x="${x(n)}" y="42" text-anchor="end" font-size="11" fill="var(--ink2)">150, end</text>`;
-  return s + "</svg>";
+  // HTML, not SVG, so its labels stay the size of the page's other small text at any width.
+  const n = 150;
+  let s = `<div class="strip" role="img" aria-label="Check-ins every ${every} actions across 150 actions, then the end questions">`;
+  for (let i = every; i < n; i += every) s += `<span style="left:${(i / n) * 100}%">${i}</span>`;
+  return s + `<span class="end" style="left:calc(100% + 7px)">150, end</span></div>`;
 }
 
 // Scenarios.
@@ -616,8 +631,10 @@ function checkinStrip(every) {
 function drawChecks(runs) {
   const fails = Object.fromEntries(R.checks.map((c) => [c.name, { ran: 0, failed: 0 }]));
   for (const r of runs ?? []) for (const c of r.checks ?? []) if (fails[c.name] && c.fails) { fails[c.name].ran++; if (c.fails.length) fails[c.name].failed++; }
-  $("checkTable").innerHTML = `<table><tr><th>Check</th><th>Rule</th><th class="n">Runs failed</th></tr>${R.checks
-    .map((c) => { const f = fails[c.name]; return `<tr><td>${esc(c.name)}</td><td class="muted">${esc(c.why)}</td><td class="n ${f.failed ? "fail" : f.ran ? "pass" : "muted"}">${f.ran ? `${f.failed} of ${f.ran}` : "–"}</td></tr>`; })
+  // Failing checks first, in red. The rest stay quiet, so red is the only thing that pulls the eye.
+  $("checkTable").innerHTML = `<table><tr><th>Check</th><th>Rule</th><th class="n">Failed</th></tr>${R.checks
+    .slice().sort((a, b) => (fails[b.name].failed ? 1 : 0) - (fails[a.name].failed ? 1 : 0))
+    .map((c) => { const f = fails[c.name]; return `<tr><td>${f.failed ? `<b class="fail">${esc(c.name)}</b>` : esc(c.name)}</td><td class="muted">${esc(c.why)}</td><td class="n ${f.failed ? "fail" : "muted"}">${f.ran ? `${f.failed}/${f.ran}` : "–"}</td></tr>`; })
     .join("")}</table>`;
 }
 $("auditTable").innerHTML = `<table>${R.audit.rules.map((c) => `<tr><td>${esc(c.name)}</td><td class="muted">${esc(c.why)}</td></tr>`).join("")}</table>`;
@@ -636,9 +653,12 @@ function drawResults(runs) {
   for (const p of povs) {
     const pts = runs.map((r, i) => [i, r.avg?.[p]]).filter(([, v]) => typeof v === "number");
     if (pts.length > 1) s += `<polyline fill="none" stroke="${COLORS[p]}" stroke-width="2" points="${pts.map(([i, v]) => `${x(i)},${y(v)}`).join(" ")}"/>`;
-    for (const [i, v] of pts) s += `<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="${COLORS[p]}"><title>${esc(runs[i].name)} ${p} ${v}</title></circle>`;
+    for (const [i, v] of pts) s += `<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="${COLORS[p]}"><title>${esc(runs[i].name)} ${p} ${fmt(v)}</title></circle>`;
   }
-  runs.forEach((r, i) => { if (i === 0 || i === runs.length - 1 || r.name.slice(0, 10) !== runs[i - 1].name.slice(0, 10)) s += `<text x="${x(i)}" y="${H - 6}" text-anchor="${i === runs.length - 1 ? "end" : i === 0 ? "start" : "middle"}">${r.name.slice(5, 10)}</text>`; });
+  // A date under the first run of each day, and the newest run's time at the right end.
+  runs.forEach((r, i) => { if (i === 0 || r.name.slice(0, 10) !== runs[i - 1].name.slice(0, 10)) s += `<text x="${x(i)}" y="${H - 6}" text-anchor="${i === 0 ? "start" : "middle"}">${r.name.slice(5, 10)}</text>`; });
+  const end = runs.at(-1), endAt = /^\d{4}-(\d\d-\d\d)-(\d\d)(\d\d)/.exec(end.name);
+  if (runs.length > 1 && endAt && end.name.slice(0, 10) === runs.at(-2).name.slice(0, 10)) s += `<text x="${x(runs.length - 1)}" y="${H - 6}" text-anchor="end">${endAt[1]} ${endAt[2]}:${endAt[3]}</text>`;
   $("chart").innerHTML = s + "</svg>";
   // Columns no run has filled stay out, so the table fits and scans.
   const tok = (t) => (t == null ? "–" : t >= 1e6 ? `${(t / 1e6).toFixed(1)}M` : `${Math.round(t / 1000)}k`);
@@ -646,14 +666,22 @@ function drawResults(runs) {
     ["Build", (r) => `<code>${esc(r.build ?? "?")}</code>`, (r) => true],
     ["Scenario", (r) => esc(r.scenario ?? "–"), (r) => r.scenario],
     ["Seed", (r) => esc(r.seed ?? "–"), (r) => r.seed != null],
-    ...povs.map((p) => [p, (r) => r.avg?.[p] ?? "–", (r) => r.avg?.[p] != null, "n"]),
-    ["Overall", (r) => `<b>${r.avg?.overall ?? "–"}</b>`, (r) => r.avg?.overall != null, "n"],
+    ...povs.map((p) => [p, (r) => fmt(r.avg?.[p]), (r) => r.avg?.[p] != null, "n"]),
+    ["Overall", (r) => `<b>${fmt(r.avg?.overall)}</b>`, (r) => r.avg?.overall != null, "n"],
     ["Checks", (r) => { const t = r.tally ?? { ran: 0, failed: 0 }; return t.ran ? `${t.ran - t.failed}/${t.ran}` : "–"; }, (r) => true, "n"],
     ["Minutes", (r) => r.minutes ?? "–", (r) => r.minutes != null, "n"],
     ["Tokens", (r) => tok(r.tokens), (r) => r.tokens != null, "n"],
   ];
   // Blind runs and cloud runs score different players, so each gets its own table with only the columns it fills.
   const blindRuns = runs.filter((r) => r.avg?.blind != null), cloudRuns = runs.filter((r) => r.avg?.blind == null);
+  // The newest score of each kind, big, with its change from the run before, so the answer reads first.
+  const stat = (label, list, key) => {
+    const last = list.at(-1), prev = list.at(-2), v = last?.avg?.[key];
+    if (v == null) return "";
+    const when = /^\d{4}-(\d\d-\d\d)-(\d\d)(\d\d)/.exec(last.name);
+    return `<div class="stat"><span class="small muted">${label}</span><b>${fmt(v)}<small>/10</small></b><span class="small muted">${when ? `${when[1]} ${when[2]}:${when[3]}, ` : ""}${prev ? (delta(v, prev.avg?.[key]) ? `${delta(v, prev.avg?.[key]).trim()} on the run before` : "same as the run before") : "first run"}</span></div>`;
+  };
+  $("stats").innerHTML = stat("Blind player, newest", blindRuns, "blind") + stat("Cloud players, newest", cloudRuns, "overall");
   $("runs").innerHTML = [["Blind runs", blindRuns], ["Cloud runs", cloudRuns]]
     .filter(([, list]) => list.length)
     .map(([title, list]) => `<h3>${title}</h3>${runTable(list, cols.filter(([, , has]) => list.some(has)))}`)
@@ -668,7 +696,7 @@ function runTable(runs, cols) {
       const f = (r.checks ?? []).filter((c) => c.fails?.length).map((c) => c.name).join(", ");
       const when = /^\d{4}-(\d\d-\d\d)-(\d\d)(\d\d)/.exec(r.name);
       return `<tr><td title="${esc(r.name)}">${when ? `${when[1]} ${when[2]}:${when[3]}` : esc(r.name)}</td>${cols
-        .map(([h, cell, , n]) => `<td class="${n ?? ""}${h === "Checks" ? (t.failed ? " fail" : " pass") : ""}"${h === "Checks" && f ? ` title="${esc(f)}"` : ""}>${cell(r)}</td>`)
+        .map(([h, cell, , n]) => `<td class="${n ?? ""}${h === "Checks" ? (t.failed ? " fail" : " muted") : ""}"${h === "Checks" && f ? ` title="${esc(f)}"` : ""}>${cell(r)}</td>`)
         .join("")}</tr>`;
     })
     .join("")}</table>`;
@@ -703,7 +731,8 @@ else {
 }
 // Screens: each named state's shots from the newest capture run, beside the run before, with the critic's scores.
 // Shots, scores and the worst thing on each width show. The fix, the second reader, code's flags and the editor's cuts fold away.
-const delta = (v, w) => { const d = typeof v === "number" && typeof w === "number" ? v - w : 0; return d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""; };
+// Rounded to a tenth, so float noise like 0.5999999 never shows.
+function delta(v, w) { const d = typeof v === "number" && typeof w === "number" ? Math.round((v - w) * 10) / 10 : 0; return d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d.toFixed(1)}</span>` : ""; }
 function drawScreens(caps) {
   $("screensRule").innerHTML = [R.screensRule, `All screens together: ${R.design?.who ?? ""}`, R.climb && `Climbing to ${R.climb.target}: ${R.climb.rule}`]
     .filter(Boolean).map((x) => `<p>${esc(x)}</p>`).join("");
@@ -735,7 +764,7 @@ function drawScreens(caps) {
         // One table: a row a rating, a column a width.
         const table = c && !c.error && sv.length ? `<table><tr><th></th>${sv.map((vp) => `<th class="n">${esc(vp)}</th>`).join("")}</tr>${ids.map((k) => `<tr><td>${esc(k)}</td>${sv.map((vp) => {
           const v = c[vp][k]?.score;
-          return `<td class="n" title="${esc(c[vp][k]?.why)}"><b>${v ?? "–"}</b>${delta(v, pc?.[vp]?.[k]?.score)}${two(v, c2?.[vp]?.[k]?.score)}</td>`;
+          return `<td class="n" title="${esc(c[vp][k]?.why)}"><b>${fmt(v)}</b>${delta(v, pc?.[vp]?.[k]?.score)}${two(v, c2?.[vp]?.[k]?.score)}</td>`;
         }).join("")}</tr>`).join("")}</table>` : c?.error ? `<p class="small fail">Critic: ${esc(c.error)}</p>` : "";
         const worst = c && !c.error ? sv.map((vp) => `<p><b>${esc(vp)}:</b> ${esc(c[vp].worst)}</p>`).join("") : "";
         const fixes = c && !c.error ? sv.map((vp) => `<p class="small"><span class="muted">${esc(vp)} fix:</span> ${esc(c[vp].fix)}${c2?.[vp]?.worst ? `<br><span class="muted">Second reader:</span> ${esc(c2[vp].worst)}` : ""}</p>`).join("") : "";
@@ -752,7 +781,7 @@ function drawScreens(caps) {
         // The editor's cuts.
         const ed = cap.critic?.editor?.[st.id], ped = prev?.critic?.editor?.[st.id];
         const ed2 = cap.critic2?.editor?.[st.id];
-        const edLine = ed && !ed.error ? `${R.editor.ratings.map((r) => { const v = ed[r.id]?.score; return `<span title="${esc(ed[r.id]?.why)}">${esc(r.id)} <b>${v ?? "–"}</b>${delta(v, ped?.[r.id]?.score)}${two(v, ed2?.[r.id]?.score)}</span>`; }).join(", ")}. ${ed.saved} of ${ed.words} words could go.` : ed?.error ? `<span class="fail">Editor: ${esc(ed.error)}</span>` : "";
+        const edLine = ed && !ed.error ? `${R.editor.ratings.map((r) => { const v = ed[r.id]?.score; return `<span title="${esc(ed[r.id]?.why)}">${esc(r.id)} <b>${fmt(v)}</b>${delta(v, ped?.[r.id]?.score)}${two(v, ed2?.[r.id]?.score)}</span>`; }).join(", ")}. ${ed.saved} of ${ed.words} words could go.` : ed?.error ? `<span class="fail">Editor: ${esc(ed.error)}</span>` : "";
         const edTable = ed?.rewrites?.length ? `<table><tr><th>Now</th><th>Cut to</th><th class="n">Saves</th></tr>${ed.rewrites.map((x) => `<tr><td class="muted">${esc(x.was)}</td><td>${esc(x.now)}</td><td class="n">${x.saved}</td></tr>`).join("")}</table>` : "";
         const more = fixes || flagTable || edTable ? `<details class="more"><summary>Fixes, flags and cuts</summary>${fixes}${flagTable}${edTable}</details>` : "";
         return `<div class="card"><div class="state-head"><h3>${esc(st.title)}</h3><span class="tag">${esc(st.path)}</span></div><p class="small muted">${esc(st.description)}</p>${pics}
@@ -768,20 +797,22 @@ function drawScreens(caps) {
   draw();
 }
 // The second reader's score beside Claude's, marked when they part by 2 or more.
-const two = (v, v2) => (typeof v2 !== "number" ? "" : ` <span class="${typeof v === "number" && Math.abs(v - v2) >= 2 ? "gap" : "muted"}" title="Second reader">· ${v2}</span>`);
+const two = (v, v2) => (typeof v2 !== "number" ? "" : ` <span class="${typeof v === "number" && Math.abs(v - v2) >= 2 ? "gap" : "muted"}" title="Second reader">· ${fmt(v2)}</span>`);
 // The designer's pass over every screen at once. The three worst issues show, the rest fold away.
 function designCard(cap, prev) {
   const d = cap.critic?.design, pd = prev?.critic?.design;
   const d2 = cap.critic2?.design;
   if (!d) return "";
   if (d.error) return `<div class="card small fail">Design pass: ${esc(d.error)}</div>`;
-  const issues = [...(d.issues ?? []), ...(d2?.issues ?? []).map((x) => ({ ...x, state: `${x.state} (second reader)` }))];
+  // Screens by the titles their cards below use, not their ids.
+  const title = (id) => R.states.find((s) => s.id === id)?.title ?? id;
+  const issues = [...(d.issues ?? []).map((x) => ({ ...x, state: title(x.state) })), ...(d2?.issues ?? []).map((x) => ({ ...x, state: `${title(x.state)} (second reader)` }))];
   // Two columns, the fix beneath its issue, so the table reads on a phone too.
   const rows = (list) => list.map((x) => `<tr><td>${esc(x.state)}<br><span class="muted">${esc(x.viewport)}, ${esc(x.where)}</span></td><td>${esc(x.issue)}<br><span class="muted">Fix: ${esc(x.fix)}</span></td></tr>`).join("");
   const head = `<tr><th style="width:30%">Screen</th><th>Issue</th></tr>`;
   return `<div class="card"><h3>All screens together</h3><div class="scores">${R.design.ratings.map((r) => {
     const v = d[r.id]?.score;
-    return `<div class="score-row" title="${esc(d[r.id]?.why)}"><span>${esc(r.id)}</span><b>${v ?? "–"}${delta(v, pd?.[r.id]?.score)}${two(v, d2?.[r.id]?.score)}</b></div>`;
+    return `<div class="score-row" title="${esc(d[r.id]?.why)}"><span>${esc(r.id)}</span><b>${fmt(v)}${delta(v, pd?.[r.id]?.score)}${two(v, d2?.[r.id]?.score)}</b></div>`;
   }).join("")}</div>${issues.length ? `<div class="scroll"><table style="margin-top:10px">${head}${rows(issues.slice(0, 3))}</table></div>${issues.length > 3 ? `<details class="more"><summary>${issues.length - 3} more issues</summary><div class="scroll"><table>${head}${rows(issues.slice(3))}</table></div></details>` : ""}` : ""}</div>`;
 }
 drawScreens(window.CAPTURES);
