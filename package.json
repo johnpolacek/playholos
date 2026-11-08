@@ -18,7 +18,8 @@
     "playtest:rate": "node scripts/playtest-rate.mjs",
     "playtest:capture": "node scripts/capture.mjs",
     "playtest:critic": "node scripts/playtest-critic.mjs",
-    "playtests": "node -e \"require('child_process').spawn(process.platform==='win32'?'explorer':process.platform==='darwin'?'open':'xdg-open',['playtests/regime.html'],{stdio:'ignore',detached:true}).unref()\""
+    "playtests": "node -e \"require('child_process').spawn(process.platform==='win32'?'explorer':process.platform==='darwin'?'open':'xdg-open',['playtests/regime.html'],{stdio:'ignore',detached:true}).unref()\"",
+    "playtests:serve": "node scripts/playtests-serve.mjs"
   },
   "dependencies": {
     "astronomy-engine": "2.1.19",
