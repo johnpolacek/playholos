@@ -16,6 +16,7 @@
 {
   "updated": "2026-11-08",
   "secondReader": "codex",
+  "climb": { "target": 8, "rule": "A climb fixes the calls npm run playtest:climb letters, a few at a time, and keeps a change only when its ratings rise by 2 or a code flag clears, and nothing else falls by 2. The Will picks the calls and approves each look." },
   "routines": [
     {
       "id": "cloud",
@@ -360,18 +361,7 @@
 </script>
 <style>
 :root {
-  --bg: #f6f5f1; --panel: #ffffff; --ink: #1b1d22; --ink2: #5b606b; --line: #e3e1da;
-  --accent: #b5651d; --good: #2f7d4f; --bad: #b3362c; --soft: #f0eee8;
-  --p1: #3b6fb6; --p2: #b5651d; --p3: #6b4fa3; --p4: #2f7d4f;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0f1115; --panel: #171a20; --ink: #e8e6e1; --ink2: #9aa0ab; --line: #2a2e37;
-    --accent: #e0954f; --good: #5fbf85; --bad: #e0705f; --soft: #1e2129;
-    --p1: #7aa7e6; --p2: #e0954f; --p3: #a98ae0; --p4: #5fbf85;
-  }
-}
-:root[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #0f1115; --panel: #171a20; --ink: #e8e6e1; --ink2: #9aa0ab; --line: #2a2e37;
   --accent: #e0954f; --good: #5fbf85; --bad: #e0705f; --soft: #1e2129;
   --p1: #7aa7e6; --p2: #e0954f; --p3: #a98ae0; --p4: #5fbf85;

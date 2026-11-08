@@ -19,6 +19,8 @@
     "playtest:capture": "node scripts/capture.mjs",
     "playtest:critic": "node scripts/playtest-critic.mjs",
     "playtest:local": "node scripts/playtest-local.mjs",
+    "playtest:round": "node scripts/playtest-local.mjs blind --both",
+    "playtest:climb": "node scripts/playtest-climb.mjs",
     "playtests": "node -e \"require('child_process').spawn(process.platform==='win32'?'explorer':process.platform==='darwin'?'open':'xdg-open',['playtests/regime.html'],{stdio:'ignore',detached:true}).unref()\"",
     "playtests:serve": "node scripts/playtests-serve.mjs"
   },

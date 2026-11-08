@@ -18,6 +18,7 @@ import { regime } from "./regime.mjs";
 //
 //   --dirty          play your uncommitted changes too, not only what is committed
 //   --model sonnet   the player's model, for cloud and blind. Sonnet plays faster, Opus sees more
+//   --only a,b       for screens, shoot only these states, to recheck a fix fast
 //   --keep           leave the copy in ../.holos-playtests/ when done
 //   --smoke          the player only opens the game and takes one shot, to check the wiring in a minute
 //   --player codex   play with OpenAI's model through the codex CLI, on your ChatGPT login, in its sandbox
@@ -33,7 +34,7 @@ const opt = (name) => {
   return i < 0 ? undefined : args[i + 1];
 };
 // Flags that take a value, so the kind is the one word left over.
-const VALUED = ["--scenario", "--model", "--player"];
+const VALUED = ["--scenario", "--model", "--player", "--only"];
 const kind = args.find((a, i) => !a.startsWith("--") && !VALUED.includes(args[i - 1])) ?? "screens";
 if (!["screens", "cloud", "blind"].includes(kind)) {
   console.error("Usage: npm run playtest:local -- screens | cloud [--scenario id] | blind  [--dirty] [--model sonnet] [--keep]");
@@ -162,7 +163,7 @@ const node = (script, a = [], env = {}) =>
 
 if (kind === "screens") {
   // The tools run from your checkout, against the copy's game. Results land in playtests/captures/<run>.
-  await node("scripts/capture.mjs", ["--url", url, "--run", run]).catch((e) => say(e.message));
+  await node("scripts/capture.mjs", ["--url", url, "--run", run, ...(opt("only") ? ["--only", opt("only")] : [])]).catch((e) => say(e.message));
   await node("scripts/playtest-critic.mjs", [run]);
   say(`Done in ${Math.round((Date.now() - started) / 60000)} min. See npm run playtests:serve, Screens.`);
   process.exit(0);
