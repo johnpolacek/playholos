@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
-import { tenths, yearText } from "@/lib/game/clock";
+import { span, tenths, yearText } from "@/lib/game/clock";
 import { glowNamed } from "@/lib/game/glow-names";
 import { starName, type Lead } from "@/lib/game/leads";
 import { inViewAt, READ_HOURS } from "@/lib/sim/minds";
@@ -107,6 +107,11 @@ export function CloseReading({ lead }: { lead: Lead }) {
   if (!flash || (!shining && !mine && !read && !asked)) return null;
   const saw = read?.saw;
   const reading = mine && !saw;
+  // What we know lands each tenth of a Year, every thirty seconds, so a reading's answer reaches us at the first tenth
+  // after its two hours. The bar and the wait run on the live clock to then, in real time as builds count it: "about
+  // two hours" with a bar that sat still read as real hours. Blind playtest 2026-11-08.
+  const live = year ?? 0;
+  const land = mine ? Math.ceil(mine.done * 10 - 1e-9) / 10 : 0;
   // Out of the Sun's glare now, or when next.
   const view = inViewAt(flash.ra, flash.dec, now);
   const named = glowNamed(lead.star);
@@ -120,7 +125,7 @@ export function CloseReading({ lead }: { lead: Lead }) {
         ) : (
           <path d={curve(false)} fill="none" stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 4" />
         )}
-        {reading && <Gathering done={now < mine.view ? 0 : (now - mine.view) / (mine.done - mine.view)} />}
+        {reading && <Gathering done={live < mine.view ? 0 : Math.min(1, (live - mine.view) / Math.max(1e-6, land - mine.view))} />}
         <line x1={W * 0.25} x2={W * 0.25} y1="6" y2={H - 12} className="stroke-muted" strokeOpacity=".45" strokeDasharray="1 3" />
         <text x={W * 0.25} y={H - 2} textAnchor="middle" className="fill-muted font-mono" fontSize="8">
           dust shows here
@@ -167,14 +172,14 @@ export function CloseReading({ lead }: { lead: Lead }) {
           <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
             {now < mine.view
               ? `It sits too near the Sun for our Infrared Telescope to look. It comes into view by Year ${yearText(mine.view)}, and ${READ_HOURS} hours of looking will tell, if it still shines.`
-              : "Our Infrared Telescope is splitting its light. It takes about two hours."}
+              : `Our Infrared Telescope is splitting its light. The answer reaches us in ${span(Math.max(0, land - live))}.`}
           </p>
           <div className="mt-2 h-1 overflow-hidden rounded-full bg-faint/40">
-            <div className="h-full rounded-full bg-other transition-[width] duration-700" style={{ width: `${Math.max(3, Math.min(100, ((now - mine.from) / Math.max(1e-6, mine.done - mine.from)) * 100))}%` }} />
+            <div className="h-full rounded-full bg-other transition-[width] duration-700" style={{ width: `${Math.max(3, Math.min(100, ((live - mine.from) / Math.max(1e-6, land - mine.from)) * 100))}%` }} />
           </div>
           <div className="mt-1 flex justify-between font-mono text-[10px] text-muted">
             <span>Year {yearText(mine.from)}</span>
-            <span>In view, Year {yearText(mine.view)}</span>
+            <span>{now < mine.view ? `In view, Year ${yearText(mine.view)}` : `Answer in ${span(Math.max(0, land - live))}`}</span>
           </div>
         </>
       ) : asked ? null : (
