@@ -275,9 +275,14 @@ export function Tour({ onClose }: { onClose(): void }) {
     return placedOf(shown, schedule(shown, scale), scale);
   }, [strategy, plan, done, scale]);
   useEffect(() => place(placed), [place, placed]);
-  // A strategy's stop flies to its first build where it would stand: placed but none picked, the map sat on Earth.
-  // 2026-11-07.
-  const first = strategy ? (packed(strategy, scale).find((b) => SITES[b]) ?? null) : null;
+  // A strategy's stop flies to the first build that sets it apart, where it would stand: placed but none picked, the
+  // map sat on Earth. Every strategy starts with Thought Fields, so the first alone never moved. 2026-11-07.
+  const first = useMemo(() => {
+    if (!strategy) return null;
+    const mine = packed(strategy, scale).filter((b) => SITES[b]);
+    const shared = (b: string) => PACKAGES.every((p) => packed(p, scale).includes(b));
+    return mine.find((b) => !shared(b)) ?? mine[0] ?? null;
+  }, [strategy, scale]);
   useEffect(() => pick(first), [pick, first]);
   useEffect(() => () => pick(null), [pick]);
   // The map's gold button walks through the strategy in view, one build page at a time.
