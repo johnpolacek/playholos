@@ -16,6 +16,6 @@ __pycache__/
 # Playtest reports stay local, and on their cloud branches. The routine reads its prompt from main.
 /playtests/*
 !/playtests/PROMPT.md
-!/playtests/SCORE.md
 !/playtests/BLIND.md
-!/playtests/BLIND-KEY.md
+!/playtests/regime.html
+!/playtests/judge/

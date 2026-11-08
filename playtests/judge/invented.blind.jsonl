@@ -1,0 +1,9 @@
+{"n": 1, "see": "Earth from space, buttons Universe, Simulation, Play", "do": "click 851 701", "got": "2040 \u00b7 SOL, a story card: Earth wakes as one Mind, you are its Will"}
+{"n": 12, "see": "Build tab: a compute donut, Thought Fields 61%, Halo Survey, an energy bar 5 TW full", "do": "click 900 400", "got": "Halo Survey page: slows Thought Fields by 0.4 Years"}
+{"n": 25, "see": "Scan: Proxima Centauri (life 5 to 19%, mind 0.03 to 0.7%), Cold Glow 1 (new to read, mind 0.07 to 2%, 123 ly)", "do": "click 980 310", "got": "Cold Glow 1 page: a cold grey glow, 12 K, beside a star 123.4 ly out, Close Reading ready"}
+{"n": 26, "see": "Cold Glow 1 page, Close Reading button: 3 Years, slows the Warm Sky Watch by 0.2 Years", "do": "look", "got": "Same page"}
+{"n": 28, "see": "Reach: destinations, Proxima 4.2 ly, ways to reach: message, sail, flyby probe", "do": "click 980 360", "got": "Send a message: lands Year 4.3, answer Year 8.6 at the soonest"}
+{"t": "checkin", "n": 30, "year": "6.1", "lead": "Cold Glow 1, a mind at 0.07 to 2%, probably dust or a fault", "next": "Take its Close Reading. It slows the Warm Sky Watch a little, but it tells dust from heat."}
+{"n": 44, "see": "Mind chat: we asked what to build, it offered Ground Solar with Add to Queue", "do": "click 700 600", "got": "Ground Solar added to the queue"}
+{"n": 50, "see": "Build: Ground Solar in the queue, 10 Years, slows the 15 m Mirror by 1.1 Years. Energy bar 5 TW full", "do": "look", "got": "Same"}
+{"t": "checkin", "n": 60, "year": "9.0", "lead": "The prime-number signal from Tau Ceti, certainly a mind", "next": "Reply with primes, because they are waiting."}

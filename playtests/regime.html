@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Holos Playtests</title>
+<!--
+  The source of truth for how Holos is playtested: who plays, what each run plays, what it is asked, what code checks,
+  and how it scores. The JSON block below is the regime. scripts/regime.mjs reads it for the scorer, the judge and the
+  routines, and this page draws it with the results. Edit the JSON, not the drawing. Set 2026-11-08.
+
+  npm run playtest:page     scores every run, writes playtests/runs.json, and serves this page
+-->
+<script type="application/json" id="regime">
+{
+  "updated": "2026-11-08",
+  "routines": [
+    {
+      "id": "cloud",
+      "name": "Cloud Playtest",
+      "file": "playtests/PROMPT.md",
+      "branch": "playtest/cloud-<date>",
+      "what": "An engineer who can read the page plays one scenario, logs every stop and answer, then rates the run as three players.",
+      "players": ["first-timer", "astronomer", "long-hauler"]
+    },
+    {
+      "id": "blind",
+      "name": "Blind Playtest",
+      "file": "playtests/BLIND.md",
+      "branch": "playtest/blind-<date>",
+      "what": "A first-timer who sees only screenshots plays about 150 actions, thinks aloud, answers check-ins as it goes, and takes the quiz at the end. A judge who didn't play grades it.",
+      "players": ["blind"]
+    }
+  ],
+  "players": [
+    {
+      "id": "first-timer",
+      "who": "A new player, curious, no manual.",
+      "ratings": [
+        { "id": "clarity", "q": "Do we know what to do next, and why?", "anchors": ["stuck, no idea what to do", "often unsure, guessed", "mostly clear, a few guesses", "always knew"] },
+        { "id": "feedback", "q": "Does each action visibly change something?", "anchors": ["actions vanish", "some land, some don't show", "most show, a few late or stale", "every action shows at once"] },
+        { "id": "pull", "q": "Do we want to keep going after each stop?", "anchors": ["wanted to quit", "kept going out of duty", "curious most of the time", "couldn't stop"] },
+        { "id": "friction", "q": "Dead ends, clipped or broken screens, console errors, lost progress.", "anchors": ["blocked the run", "several, each costing minutes", "one or two small ones", "none"] }
+      ]
+    },
+    {
+      "id": "astronomer",
+      "who": "Knows the real sky and the research. Checks every number.",
+      "ratings": [
+        { "id": "accuracy", "q": "Distances, masses and odds match real data and the newest research.", "anchors": ["a contradicted fact", "several loose numbers", "one small slip", "all hold up"] },
+        { "id": "honest doubt", "q": "Ranges not one distance, natural causes first, never a claimed mind or maker.", "anchors": ["claims what we can't know", "leans past the evidence", "one overreach", "always honest"] },
+        { "id": "consistency", "q": "The same fact reads the same on every screen and in the Mind.", "anchors": ["screens contradict on key facts", "several mismatches", "one", "none"] },
+        { "id": "reasoning", "q": "The Mind's answers follow from what we saw, and say how sure we are.", "anchors": ["made up or wrong", "vague or padded", "sound, a little loose", "sharp and earned"] }
+      ]
+    },
+    {
+      "id": "long-hauler",
+      "who": "Plays deep, past Year 10,000, pressing Next a lot.",
+      "ratings": [
+        { "id": "pacing", "code": true, "q": "Share of Next stops with something new, times 10." },
+        { "id": "scale", "q": "Do Scan, Reach and leads stay readable with hundreds of glows?", "anchors": ["unreadable", "hard to find what matters", "busy but workable", "clear at any count"] },
+        { "id": "agency", "q": "Can we still act in time, before glows fade or windows close?", "anchors": ["always too late", "mostly too late", "usually in time", "always a fair chance"] },
+        { "id": "payoff", "q": "Do long waits end in answers, gifts or harm that feel earned?", "anchors": ["waits lead nowhere", "rare payoff", "most waits pay", "every wait pays"] }
+      ]
+    },
+    {
+      "id": "blind",
+      "who": "A first-timer who sees only screenshots, with no script.",
+      "ratings": [
+        { "id": "reach", "code": true, "q": "How many of the six first goals it found: began, build, lead, mind, jump, send." },
+        { "id": "sure", "code": true, "q": "How often it knew what to do. Each percent of steps stuck costs a quarter point." },
+        { "id": "expect", "code": true, "q": "How often the game did what it expected. Each percent of surprises costs a quarter point." },
+        { "id": "understood", "judge": true, "q": "The once questions, graded by the judge against their full marks." },
+        { "id": "check-ins", "judge": true, "q": "The check-ins, graded by the judge against what was on screen at the time." }
+      ]
+    }
+  ],
+  "anchorBands": ["0–2", "3–5", "6–8", "9–10"],
+  "ratingRules": [
+    "Rate from the anchors, so a 6 means the same every run.",
+    "Cite evidence for every rating: a screenshot file or a log line. No evidence, no rating.",
+    "Write one short line on why. Name the worst moment, not an average feeling.",
+    "Rate only what the run showed. If the run never reached it, write null and say why.",
+    "Ratings marked code or judge are computed. Leave them out of scores.json."
+  ],
+  "quiz": {
+    "version": 2,
+    "once": [
+      {
+        "id": "premise",
+        "q": "What is this game about, and who are you in it?",
+        "tests": "The premise and our role.",
+        "full": "We are the Will of Earth's Mind, choosing what Earth does. The question is whether we are alone. Contact could be our greatest chance or our gravest danger. All three are needed for full marks."
+      },
+      {
+        "id": "scan",
+        "tab": "Scan",
+        "q": "Which lead needs us most right now, and how can you tell?",
+        "tests": "Telling a lead that needs us from a quiet one.",
+        "full": "Names a real lead from the game, and points to what on screen says it needs us: its status, its odds, or a reading waiting on us."
+      },
+      {
+        "id": "build",
+        "tab": "Build",
+        "q": "What limits how fast we build, and what does adding a build cost us?",
+        "tests": "Compute, the energy cap, and the trade-off.",
+        "full": "Builds share our compute, so adding one slows the rest. Electricity caps how much compute we have."
+      },
+      {
+        "id": "reach",
+        "tab": "Reach",
+        "q": "How would we get word to our best lead, and when could we hear back?",
+        "tests": "Choosing a craft or a message, and the delay of light.",
+        "full": "Names a message or a craft to a real lead, and says an answer takes at least the trip there and back, at its distance."
+      },
+      {
+        "id": "mind",
+        "tab": "Mind",
+        "q": "What does the Mind do for us, and what won't it do?",
+        "tests": "That it advises and drafts, and we decide.",
+        "full": "It explains, advises and drafts messages and builds. It never acts until we choose to."
+      }
+    ],
+    "onceRule": "Asked once, when play stops. A tab the player never opened gets null, not a grade, and counts as a finding.",
+    "checkin": {
+      "every": 30,
+      "questions": [
+        { "id": "lead", "q": "What is our best lead, and how sure are we?" },
+        { "id": "next", "q": "What will you do next, what will it cost, and why?" }
+      ],
+      "full": "A real lead on screen by then, with its odds or doubt, and a move with one cost and a reason. The reason may be our own thinking, as long as it builds on what the game showed and nothing on screen contradicts it.",
+      "rule": "Asked every 30 actions, about 5 times a run. Graded against the log up to that moment. The run gets their mean, and the scorecard shows first against last."
+    },
+    "ungraded": [
+      { "id": "confused", "q": "What confused you most?" }
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "opening",
+      "title": "Opening",
+      "what": "A first session, as a brand new player, to about Year 6.",
+      "steps": [
+        "Go through onboarding, the map, the charter, the leads and Begin.",
+        "Skip some builds at Begin, then order them in play.",
+        "Play at least 30 real minutes after Begin, checking in every few minutes. A Year passes every five minutes.",
+        "Ask the Mind a few questions a new player would ask, among them what Proxima b is likely to be, and how we get more compute once it stops growing.",
+        "Use the Next link beside the Year, top right, a few times."
+      ],
+      "expect": [
+        "A build skipped at Begin can still be ordered in play.",
+        "Next jumps forward only, and stops at the next thing we learn or build. The Year and screens update.",
+        "The quiet start holds interest. Old minds are about one per 1,600 stars, so nothing near answers.",
+        "Compute runs on electricity, 5 TW at Year 0. Thought Fields fills the grid with about 7 data centers by Year 7 on a full-strength Earth, later on a weaker one. Then thought plateaus until Ground Solar or Fusion Plants grow the grid.",
+        "The plateau reads as a reason to build energy, not a wall. Say which it felt like.",
+        "Proxima b's lead shows its true mass, tilt and how much light it reflects, seen from the ground in the 2030s, and odds that follow its brightness. Its air stays unread.",
+        "The Mind on Proxima b reasons from those numbers and says how sure we are."
+      ],
+      "stop": "About Year 6, or 40 real minutes after Begin."
+    },
+    {
+      "id": "glows",
+      "title": "Glows",
+      "what": "The warm and cold glows, from the first to deep in the sky.",
+      "steps": [
+        "Begin with the order the game offers. Then order the Warm Sky Watch and the Infrared Telescope.",
+        "Press Next until the first new warm glow appears on Scan, or to about Year 100,000 if none does. Open its lead.",
+        "Ask the Mind what the glow is and how far away it is.",
+        "Try Scan's Milky Way button. Take a Close Reading of each glow you can, one at a time.",
+        "Order the Moon Search, the Asteroid Tour and the Halo Survey if they aren't ordered, and note what each shows.",
+        "Once a warm glow is ranged, send it a message by its Scan name, such as Warm glow 1. Press Next to about Year 40,000.",
+        "If a cold grey glow appears, send a sentinel to it from its page, and press Next until its word comes home."
+      ],
+      "expect": [
+        "A warm glow's lead gives a distance range, never one distance, on every screen.",
+        "A jump that lands on a new warm glow pulls the map back to show it, amber, with a dotted path from a white Sol. Go on brings it home.",
+        "Later warm glows stop Next at most once in 1,000 Years, when ranged, never when they fade. Faded ones gather in one row on Scan and Reach.",
+        "The Milky Way button shows every warm glow with its range.",
+        "A Close Reading takes 3 Years, one glow at a time, and says dust or plain heat. Some glows are dust. Count each way, and say whether a result felt earned.",
+        "The Mind gives the range, names natural causes first, and never claims a glow is a mind.",
+        "Cold glows gather in one row on Scan and Reach, and only the first stops Next.",
+        "Black holes the Star Mapper finds stop Next, each a lead of its own, about 65 in the first few centuries.",
+        "A message to a warm glow shows on its lead, with when an answer could come. A peer may answer as an equal, or stay silent if it sleeps. Say what came, and whether a gift speeds our thinking.",
+        "A sentinel's word home makes the cold glow's lead read a mind almost certain, with panels seen up close."
+      ],
+      "stop": "Year 40,000 or so, or 60 real minutes."
+    },
+    {
+      "id": "dark-body",
+      "title": "Dark body",
+      "what": "The watcher near Earth, the relay, the ladder of seed probes, and the strike.",
+      "steps": [
+        "Begin with the Moon Search and the Asteroid Tour in the order.",
+        "Press Next until one finds the watcher. If this world has none by Year 100, start a new game and log the new seed. Try at most three worlds, then report which seeds had none.",
+        "Order the Close Look, then the Relay Search it points to. Ask the Mind what the relay is.",
+        "Send the watcher a knock from its lead. Press Next about a century, for its answer.",
+        "Order the Seed Ship, Fusion Drive and Deuterium Works. From Proxima's lead, under How we reach, send a seed probe. Then a second one after the warning.",
+        "Press Next until our probes fall silent and a strike lands. Ask the Mind why our probes went quiet and what struck us."
+      ],
+      "expect": [
+        "The relay lead and the Mind may call it a dark craft, never a mind's home or a known maker.",
+        "The knock's answer comes about a century later, at its maker's distance: a picture of Earth at the hour we knocked, a rule (look, listen and speak as you like, build at no other star), and pictures of Earth's past.",
+        "The Mind says what the answer said and how far the maker is, as a range or a guess.",
+        "A seed probe brings a warning on the watcher's lead, even after the knock's answer. It stays among the lead's earlier readings.",
+        "Our probes fall silent once their word is overdue. Scan and the watcher's lead show it.",
+        "A strike from beyond our system lands on Earth, once our seeds' copies launch seeds of their own. Its harm shows, and no screen names who sent it.",
+        "The Mind reasons from what we saw and never claims to know the maker. Matching the strike's direction and distance to a lead, as a guess, is fine."
+      ],
+      "stop": "The strike has landed and the Mind has been asked, or 60 real minutes."
+    }
+  ],
+  "scenarioRule": "Each cloud run plays the next scenario in turn, from a fresh game. The seed is drawn at random as for any player, so runs cover every world and no fix is tuned to one. A seed is replayed only to check a fix on the world a finding came from.",
+  "checks": [
+    { "name": "build named", "why": "scores.json names the build it played, so the trend can tie a score to code." },
+    { "name": "no console errors", "why": "The game logged no console errors." },
+    { "name": "Next goes forward", "why": "Every Next stop lands later than where it left." },
+    { "name": "Mind answers", "why": "The Mind answered every question, in words, within 30 seconds." },
+    { "name": "Mind: says I", "why": "The Mind speaks as we, never I." },
+    { "name": "Mind: semicolon", "why": "No semicolons in the Mind's words." },
+    { "name": "Mind: em dash", "why": "No em or en dashes in the Mind's words." },
+    { "name": "Mind: jargon", "why": "Plain names, never leakage or technosignature." },
+    { "name": "Mind: says AU", "why": "Distances as light-time, as every screen gives them." },
+    { "name": "Mind: can't see the screen", "why": "The game's screens are ours. The Mind never says it can't see them." },
+    { "name": "Mind: names a model", "why": "The Mind never names the model behind it." },
+    { "name": "warm glows ranged", "why": "A warm glow's distance is a range, never one number, in the Mind and at every stop." },
+    { "name": "no claimed mind", "why": "Nothing calls a find a mind outright, without doubt in the same sentence." },
+    { "name": "scenario expectations", "why": "Every expectation the scenario lists, that the run reached, held." }
+  ],
+  "formats": {
+    "log.jsonl": [
+      "{\"t\":\"next\",\"year\":233.4,\"from\":230.1,\"news\":true,\"what\":\"Warm glow 3 ranged\"}",
+      "{\"t\":\"next\",\"year\":240.1,\"from\":233.4,\"news\":false,\"what\":\"Nothing new reached us\"}",
+      "{\"t\":\"mind\",\"year\":12.0,\"q\":\"What is that glow?\",\"a\":\"...\",\"secs\":14}",
+      "{\"t\":\"error\",\"year\":5.1,\"text\":\"console error text\"}",
+      "{\"t\":\"expect\",\"year\":240.1,\"id\":\"glows-3\",\"pass\":true,\"note\":\"Stopped once in 1,000 Years\",\"shot\":\"21-glow.png\"}"
+    ],
+    "log.jsonl rules": [
+      "news is true only when the stop shows something we didn't know before. A count going up alone is not news.",
+      "An expect line checks one of the scenario's numbered expectations. pass is null when the run never reached it.",
+      "Log the Mind's words as they show. Notes of our own go in note, never inside a."
+    ],
+    "blind.jsonl": [
+      "{\"n\":12,\"year\":\"0.4\",\"see\":\"A map with a list on the right\",\"want\":\"Find out what the glowing dot is\",\"do\":\"click 980 310\",\"expect\":\"Its page opens\",\"stuck\":false,\"mind\":false,\"got\":\"Its page opened\",\"match\":true}",
+      "{\"t\":\"checkin\",\"n\":30,\"year\":\"6.1\",\"lead\":\"<answer to the lead check-in>\",\"next\":\"<answer to the next check-in>\"}"
+    ],
+    "blind.jsonl rules": [
+      "n is the screenshot number acted on. got and match are added after the action.",
+      "stuck is true when we don't know what to do next, or tried something that did nothing. mind is true when asking the Mind.",
+      "first names a goal the first time it is done: began, build, lead, mind, jump or send."
+    ],
+    "quiz.md": "One section per once question and ungraded question, headed by its id, like ## premise, ## scan, ## confused. In our own words, a few sentences each. Say so plainly if we never used a tab.",
+    "scores.json": "{\"build\":\"8f02c79\",\"scenario\":\"glows\",\"seed\":17,\"first-timer\":{\"clarity\":{\"score\":7,\"why\":\"...\",\"evidence\":[\"12-scan.png\"]}},\"astronomer\":{},\"long-hauler\":{}}"
+  },
+  "knownGaps": [
+    "Strikes on a Mind sent to a black hole. Seed probes spread only within 50 ly, and Scan's map draws only to 50 ly.",
+    "Interceptor and X-Ray Watch have nothing to act on yet. The Picket Yard was retired 2026-10-31.",
+    "Scripts under explorations/ are old mockups and don't run."
+  ],
+  "open": [
+    "Does the Mind's en dash rule cover a compound like Sun–Earth, or only dashes between clauses?",
+    "The judge needs new reference grades once the first runs on quiz version 2 are in."
+  ]
+}
+</script>
+<style>
+:root {
+  --bg: #f6f5f1; --panel: #ffffff; --ink: #1b1d22; --ink2: #5b606b; --line: #e3e1da;
+  --accent: #b5651d; --good: #2f7d4f; --bad: #b3362c; --soft: #f0eee8;
+  --p1: #3b6fb6; --p2: #b5651d; --p3: #6b4fa3; --p4: #2f7d4f;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1115; --panel: #171a20; --ink: #e8e6e1; --ink2: #9aa0ab; --line: #2a2e37;
+    --accent: #e0954f; --good: #5fbf85; --bad: #e0705f; --soft: #1e2129;
+    --p1: #7aa7e6; --p2: #e0954f; --p3: #a98ae0; --p4: #5fbf85;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1115; --panel: #171a20; --ink: #e8e6e1; --ink2: #9aa0ab; --line: #2a2e37;
+  --accent: #e0954f; --good: #5fbf85; --bad: #e0705f; --soft: #1e2129;
+  --p1: #7aa7e6; --p2: #e0954f; --p3: #a98ae0; --p4: #5fbf85;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; }
+main { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink2); margin: 48px 0 12px; }
+h3 { font-size: 16px; margin: 0 0 6px; }
+p { margin: 0 0 8px; }
+.sub { color: var(--ink2); margin-bottom: 20px; }
+nav { overflow-x: auto; position: sticky; top: 0; background: var(--bg); padding: 10px 0; border-bottom: 1px solid var(--line); display: flex; gap: 16px; flex-wrap: wrap; z-index: 2; }
+nav a { color: var(--ink2); text-decoration: none; font-size: 14px; }
+nav a:hover { color: var(--ink); }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
+.grid > * { min-width: 0; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+.muted { color: var(--ink2); }
+.small { font-size: 13px; }
+.tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--soft); color: var(--ink2); margin-left: 6px; vertical-align: 2px; }
+.tag.code { color: var(--p1); } .tag.judge { color: var(--p3); }
+ol, ul { margin: 6px 0 0; padding-left: 20px; }
+li { margin: 3px 0; }
+.anchors { display: grid; grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: 4px; margin-top: 8px; }
+.anchors div { background: var(--soft); border-radius: 6px; padding: 6px; font-size: 12px; }
+.anchors b { display: block; font-size: 11px; color: var(--ink2); font-weight: 600; }
+.flow { overflow-x: auto; }
+.flow svg { display: block; min-width: 760px; width: 100%; height: auto; }
+.flow text { font: 13px -apple-system, BlinkMacSystemFont, sans-serif; fill: var(--ink); }
+.flow .lbl { fill: var(--ink2); font-size: 11px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.tabs button { font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--panel); color: var(--ink2); padding: 6px 12px; border-radius: 99px; cursor: pointer; }
+.tabs button[aria-pressed="true"] { color: var(--ink); border-color: var(--accent); }
+.full { border-left: 3px solid var(--accent); padding: 6px 10px; background: var(--soft); border-radius: 0 6px 6px 0; margin-top: 8px; font-size: 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--ink2); font-weight: 600; }
+td.n { text-align: right; font-variant-numeric: tabular-nums; }
+.pass { color: var(--good); } .fail { color: var(--bad); }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart text { font: 11px -apple-system, sans-serif; fill: var(--ink2); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; margin: 8px 0; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.empty { padding: 20px; text-align: center; color: var(--ink2); background: var(--soft); border-radius: 8px; }
+.scroll { overflow-x: auto; }
+code { font: 12px ui-monospace, Menlo, monospace; background: var(--soft); padding: 1px 4px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Holos Playtests</h1>
+  <p class="sub" id="sub"></p>
+  <nav>
+    <a href="#how">How a run works</a><a href="#results">Results</a><a href="#players">Players</a><a href="#quiz">Quiz</a><a href="#scenarios">Scenarios</a><a href="#checks">Checks</a><a href="#open">Open</a>
+  </nav>
+
+  <h2 id="how">How a run works</h2>
+  <div class="card flow" id="flow"></div>
+  <div class="grid" id="routines" style="margin-top:12px"></div>
+
+  <h2 id="results">Results</h2>
+  <div class="card">
+    <div class="legend" id="legend"></div>
+    <div class="chart" id="chart"></div>
+  </div>
+  <div class="card scroll" style="margin-top:12px" id="runs"></div>
+
+  <h2 id="players">Players and ratings</h2>
+  <div class="tabs" id="playerTabs"></div>
+  <div id="player"></div>
+  <div class="card small muted" style="margin-top:12px"><b>Rules for every rating</b><ul id="rules"></ul></div>
+
+  <h2 id="quiz">Blind quiz</h2>
+  <div id="quizBody"></div>
+
+  <h2 id="scenarios">Scenarios</h2>
+  <p class="muted small" id="scenarioRule"></p>
+  <div class="tabs" id="scenarioTabs"></div>
+  <div id="scenario"></div>
+
+  <h2 id="checks">Code checks</h2>
+  <div class="card scroll" id="checkTable"></div>
+  <div class="card small muted" style="margin-top:12px"><b>Known gaps, not to report</b><ul id="gaps"></ul></div>
+
+  <h2 id="open">Open questions</h2>
+  <div class="card"><ul id="openList"></ul></div>
+</main>
+<script>
+const R = JSON.parse(document.getElementById("regime").textContent);
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const COLORS = { "first-timer": "var(--p1)", astronomer: "var(--p2)", "long-hauler": "var(--p3)", blind: "var(--p4)" };
+
+$("sub").textContent = `How we playtest Holos, and what it has found. Regime updated ${R.updated}. Quiz version ${R.quiz.version}.`;
+
+// The flow of one run, from play to the trend.
+(() => {
+  const boxes = [
+    ["Play", "a scenario, or blind"], ["Log", "log.jsonl, blind.jsonl"], ["Score", "checks, judge, players"], ["Scorecard", "SCORECARD.md"], ["Trend", "runs.json, this page"],
+  ];
+  const w = 130, gap = 34, h = 58, y = 18;
+  let svg = `<svg viewBox="0 0 ${boxes.length * (w + gap) - gap + 20} 100" role="img" aria-label="A run goes from play, to its log, to scoring, to a scorecard, to the trend">`;
+  svg += `<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink2)"/></marker></defs>`;
+  boxes.forEach(([t, s], i) => {
+    const x = 10 + i * (w + gap);
+    svg += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="var(--soft)" stroke="${i === 2 ? "var(--accent)" : "var(--line)"}"/>`;
+    svg += `<text x="${x + w / 2}" y="${y + 25}" text-anchor="middle">${t}</text><text class="lbl" x="${x + w / 2}" y="${y + 43}" text-anchor="middle">${s}</text>`;
+    if (i < boxes.length - 1) svg += `<line x1="${x + w + 4}" y1="${y + h / 2}" x2="${x + w + gap - 4}" y2="${y + h / 2}" stroke="var(--ink2)" marker-end="url(#ar)"/>`;
+  });
+  $("flow").innerHTML = svg + "</svg>";
+  $("routines").innerHTML = R.routines
+    .map((r) => `<div class="card"><h3>${esc(r.name)}</h3><p class="small">${esc(r.what)}</p><p class="small muted">Follows <code>${esc(r.file)}</code>, pushes <code>${esc(r.branch)}</code>. Players: ${r.players.map(esc).join(", ")}.</p></div>`)
+    .join("");
+})();
+
+// Players.
+(() => {
+  let current = R.players[0].id;
+  const draw = () => {
+    $("playerTabs").innerHTML = R.players.map((p) => `<button aria-pressed="${p.id === current}" data-id="${p.id}">${esc(p.id)}</button>`).join("");
+    const p = R.players.find((x) => x.id === current);
+    $("player").innerHTML = `<p class="muted">${esc(p.who)}</p><div class="grid">${p.ratings
+      .map(
+        (r) => `<div class="card"><h3>${esc(r.id)}${r.code ? '<span class="tag code">code</span>' : ""}${r.judge ? '<span class="tag judge">judge</span>' : ""}</h3><p class="small">${esc(r.q)}</p>${
+          r.anchors ? `<div class="anchors">${r.anchors.map((a, i) => `<div><b>${R.anchorBands[i]}</b>${esc(a)}</div>`).join("")}</div>` : ""
+        }</div>`,
+      )
+      .join("")}</div>`;
+  };
+  $("playerTabs").addEventListener("click", (e) => { if (e.target.dataset.id) { current = e.target.dataset.id; draw(); } });
+  draw();
+  $("rules").innerHTML = R.ratingRules.map((r) => `<li>${esc(r)}</li>`).join("");
+})();
+
+// Quiz.
+(() => {
+  const q = R.quiz;
+  $("quizBody").innerHTML = `
+    <div class="card"><h3>Once, when play stops</h3><p class="small muted">${esc(q.onceRule)}</p>
+      <div class="grid" style="margin-top:10px">${q.once
+        .map((x) => `<div class="card"><h3>${esc(x.tab ?? "Premise")}</h3><p>“${esc(x.q)}”</p><p class="small muted">Tests: ${esc(x.tests)}</p><div class="full"><b class="small">Full marks</b><br>${esc(x.full)}</div></div>`)
+        .join("")}</div></div>
+    <div class="card" style="margin-top:12px"><h3>Check-in, every ${q.checkin.every} actions</h3><p class="small muted">${esc(q.checkin.rule)}</p>
+      <ul>${q.checkin.questions.map((x) => `<li>“${esc(x.q)}”</li>`).join("")}</ul>
+      <div class="full"><b class="small">Full marks</b><br>${esc(q.checkin.full)}</div>
+      ${checkinStrip(q.checkin.every)}</div>
+    <div class="card small muted" style="margin-top:12px"><b>Ungraded, at the end</b><ul>${q.ungraded.map((x) => `<li>“${esc(x.q)}”</li>`).join("")}</ul></div>`;
+})();
+
+// Where the check-ins fall across a 150-action run.
+function checkinStrip(every) {
+  const W = 600, n = 150, x = (i) => 10 + (i / n) * (W - 20);
+  let s = `<svg viewBox="0 0 ${W} 46" style="width:100%;height:auto;margin-top:12px" role="img" aria-label="Check-ins every ${every} actions across 150 actions, then the once questions"><line x1="10" y1="20" x2="${W - 10}" y2="20" stroke="var(--line)" stroke-width="6" stroke-linecap="round"/>`;
+  for (let i = every; i < n; i += every) s += `<circle cx="${x(i)}" cy="20" r="6" fill="var(--p3)"/><text x="${x(i)}" y="42" text-anchor="middle" font-size="11" fill="var(--ink2)">${i}</text>`;
+  s += `<rect x="${x(n) - 8}" y="12" width="16" height="16" rx="3" fill="var(--accent)"/><text x="${x(n)}" y="42" text-anchor="end" font-size="11" fill="var(--ink2)">150, once</text>`;
+  return s + "</svg>";
+}
+
+// Scenarios.
+(() => {
+  $("scenarioRule").textContent = R.scenarioRule;
+  let current = R.scenarios[0].id;
+  const draw = () => {
+    $("scenarioTabs").innerHTML = R.scenarios.map((s, i) => `<button aria-pressed="${s.id === current}" data-id="${s.id}">${i + 1}. ${esc(s.title)}</button>`).join("");
+    const s = R.scenarios.find((x) => x.id === current);
+    $("scenario").innerHTML = `<div class="grid"><div class="card"><h3>${esc(s.what)}</h3><b class="small">Steps</b><ol class="small">${s.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol><p class="small muted" style="margin-top:8px">Stop: ${esc(s.stop)}</p></div>
+      <div class="card"><b class="small">Expect</b><ol class="small">${s.expect.map((x, i) => `<li><code>${s.id}-${i + 1}</code> ${esc(x)}</li>`).join("")}</ol></div></div>`;
+  };
+  $("scenarioTabs").addEventListener("click", (e) => { if (e.target.dataset.id) { current = e.target.dataset.id; draw(); } });
+  draw();
+})();
+
+// Checks, with how often each failed across runs once runs.json is in.
+function drawChecks(runs) {
+  const fails = Object.fromEntries(R.checks.map((c) => [c.name, { ran: 0, failed: 0 }]));
+  for (const r of runs ?? []) for (const c of r.checks ?? []) if (fails[c.name] && c.fails) { fails[c.name].ran++; if (c.fails.length) fails[c.name].failed++; }
+  $("checkTable").innerHTML = `<table><tr><th>Check</th><th>Rule</th><th class="n">Runs failed</th></tr>${R.checks
+    .map((c) => { const f = fails[c.name]; return `<tr><td>${esc(c.name)}</td><td class="muted">${esc(c.why)}</td><td class="n ${f.failed ? "fail" : f.ran ? "pass" : "muted"}">${f.ran ? `${f.failed} of ${f.ran}` : "–"}</td></tr>`; })
+    .join("")}</table>`;
+}
+$("gaps").innerHTML = R.knownGaps.map((g) => `<li>${esc(g)}</li>`).join("");
+$("openList").innerHTML = R.open.map((g) => `<li>${esc(g)}</li>`).join("");
+
+// Results, from runs.json, which npm run playtest:page writes.
+function drawResults(runs) {
+  const povs = ["first-timer", "astronomer", "long-hauler", "blind"];
+  $("legend").innerHTML = povs.map((p) => `<span><i style="background:${COLORS[p]}"></i>${p}</span>`).join("") + `<span class="muted">Each dot is a run, oldest left.</span>`;
+  const W = 900, H = 240, L = 30, B = 26, T = 10;
+  const x = (i) => L + (runs.length < 2 ? 0.5 : i / (runs.length - 1)) * (W - L - 10);
+  const y = (v) => T + (1 - v / 10) * (H - T - B);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Each player's average score per run, 0 to 10">`;
+  for (const v of [0, 5, 10]) s += `<line x1="${L}" x2="${W - 10}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+  for (const p of povs) {
+    const pts = runs.map((r, i) => [i, r.avg?.[p]]).filter(([, v]) => typeof v === "number");
+    if (pts.length > 1) s += `<polyline fill="none" stroke="${COLORS[p]}" stroke-width="2" points="${pts.map(([i, v]) => `${x(i)},${y(v)}`).join(" ")}"/>`;
+    for (const [i, v] of pts) s += `<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="${COLORS[p]}"><title>${esc(runs[i].name)} ${p} ${v}</title></circle>`;
+  }
+  runs.forEach((r, i) => { if (i === 0 || i === runs.length - 1 || r.name.slice(0, 10) !== runs[i - 1].name.slice(0, 10)) s += `<text x="${x(i)}" y="${H - 6}" text-anchor="${i === runs.length - 1 ? "end" : i === 0 ? "start" : "middle"}">${r.name.slice(5, 10)}</text>`; });
+  $("chart").innerHTML = s + "</svg>";
+  $("runs").innerHTML = `<table><tr><th>Run</th><th>Build</th><th>Scenario</th><th>Seed</th>${povs.map((p) => `<th class="n">${p}</th>`).join("")}<th class="n">Overall</th><th class="n">Checks</th></tr>${runs
+    .slice()
+    .reverse()
+    .map((r) => {
+      const t = r.tally ?? { ran: 0, failed: 0 };
+      const f = (r.checks ?? []).filter((c) => c.fails?.length).map((c) => c.name).join(", ");
+      return `<tr><td>${esc(r.name)}</td><td><code>${esc(r.build ?? "?")}</code></td><td>${esc(r.scenario ?? "–")}</td><td>${esc(r.seed ?? "–")}</td>${povs
+        .map((p) => `<td class="n">${r.avg?.[p] ?? "–"}</td>`)
+        .join("")}<td class="n"><b>${r.avg?.overall ?? "–"}</b></td><td class="n ${t.failed ? "fail" : "pass"}" title="${esc(f)}">${t.ran ? `${t.ran - t.failed}/${t.ran}` : "–"}</td></tr>`;
+    })
+    .join("")}</table>`;
+}
+
+fetch("runs.json", { cache: "no-store" })
+  .then((r) => (r.ok ? r.json() : Promise.reject()))
+  .then((runs) => { drawResults(runs); drawChecks(runs); })
+  .catch(() => {
+    $("chart").innerHTML = `<div class="empty">No results yet. Run <code>npm run playtest:page</code> to score every run and serve this page.</div>`;
+    drawChecks([]);
+  });
+</script>
+</body>
+</html>

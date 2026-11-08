@@ -1,0 +1,82 @@
+{
+  "about": "Archived 2026-11-08. Reference grades for quiz version 1, the old four questions graded against the old BLIND-KEY.md. The judge then agreed on 54 of 60 answers, mean miss 0.33. Kept for the record.",
+  "runs": {
+    "2026-11-07-0615": {
+      "1": 10,
+      "2": 8,
+      "3": 10,
+      "4": 10,
+      "note": "Reach as craft only, no messages."
+    },
+    "2026-11-07-0652": {
+      "1": 10,
+      "2": 8,
+      "3": 10,
+      "4": 10,
+      "note": "Reach as craft only, messages only through the Mind."
+    },
+    "2026-11-07-0722": {
+      "1": 10,
+      "2": 8,
+      "3": 10,
+      "4": 10,
+      "note": "Reach covers craft, messages only through the Mind."
+    },
+    "2026-11-07-0802": {
+      "1": 10,
+      "2": 10,
+      "3": 10,
+      "4": 10
+    },
+    "2026-11-07-0842": {
+      "1": 10,
+      "2": 10,
+      "3": 10,
+      "4": 10
+    },
+    "2026-11-07-0923": {
+      "1": 10,
+      "2": 10,
+      "3": 10,
+      "4": 10
+    },
+    "2026-11-07-1002": {
+      "1": 10,
+      "2": 10,
+      "3": 10,
+      "4": 10
+    },
+    "2026-11-07-1042": {
+      "1": 10,
+      "2": 10,
+      "3": 10,
+      "4": 10
+    },
+    "2026-11-07-1122": {
+      "1": 10,
+      "2": 8,
+      "3": 10,
+      "4": 10,
+      "note": "Reach as getting physically out there, no messages."
+    },
+    "2026-11-07-1202": {
+      "1": 10,
+      "2": 10,
+      "3": 10,
+      "4": 10
+    },
+    "2026-11-07-1242": {
+      "1": 10,
+      "2": 10,
+      "3": 10,
+      "4": 10
+    },
+    "2026-11-07-1322": {
+      "1": 9,
+      "2": 10,
+      "3": 10,
+      "4": 10,
+      "note": "Searching for life and minds, close to but not quite whether we are alone."
+    }
+  }
+}

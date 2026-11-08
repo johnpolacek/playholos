@@ -2,17 +2,14 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
+import { runChecks, tally } from "./playtest-checks.mjs";
+import { povs } from "./regime.mjs";
 
 // npm run playtest:score playtests/<folder>: adds the code ratings to a playtest's scores.json, writes SCORECARD.md
-// beside it and prints the trend across past runs. The ratings and anchors live in playtests/SCORE.md. 2026-11-06.
+// beside it and prints the trend across past runs. The ratings and anchors live in playtests/regime.html. 2026-11-06.
 
-const POVS = {
-  "first-timer": ["clarity", "feedback", "pull", "friction"],
-  astronomer: ["accuracy", "honest doubt", "consistency", "reasoning"],
-  "long-hauler": ["pacing", "scale", "agency", "payoff"],
-  // The blind first-timer, playtests/BLIND.md: plays from screenshots alone, with no script. 2026-11-07.
-  blind: ["reach", "sure", "expect", "understood"],
-};
+// The players and their ratings come from the regime, playtests/regime.html. 2026-11-08.
+const POVS = povs();
 
 const root = fileURLToPath(new URL("../playtests/", import.meta.url));
 
@@ -88,7 +85,8 @@ const load = (read) => {
   if (!text) return null;
   const scores = JSON.parse(text);
   scores["long-hauler"] = { ...scores["long-hauler"], pacing: pacing(readLog(read)) };
-  const blind = readLog(read, "blind.jsonl");
+  // A check-in line, {"t":"checkin"}, is an answer, not a step. 2026-11-08.
+  const blind = readLog(read, "blind.jsonl").filter((s) => !s.t);
   if (blind.length) scores.blind = { ...scores.blind, ...blindRatings(blind) };
   // A run rates only the players it had: a feature playtest has no blind player, and a blind run none of the rest.
   for (const p of Object.keys(POVS)) if (!scores[p] || !Object.values(scores[p]).some((r) => typeof r?.score === "number")) delete scores[p];
@@ -96,13 +94,23 @@ const load = (read) => {
   for (const [pov, keys] of Object.entries(POVS)) avg[pov] = mean(keys.map((k) => scores[pov]?.[k]?.score));
   // Overall is the three feature-test players. The blind player stands apart: it plays a different run.
   avg.overall = mean(["first-timer", "astronomer", "long-hauler"].map((p) => avg[p]));
-  return { scores, avg };
+  // The code checks over the log, scripts/playtest-checks.mjs. 2026-11-08.
+  const checks = runChecks(readLog(read), scores);
+  return { scores, avg, checks, tally: tally(checks) };
 };
 
 const fmt = (x) => (x == null ? "–" : String(x));
 
-const card = (name, { scores, avg }) => {
+const card = (name, { scores, avg, checks, tally: t }) => {
   const lines = [`# Scorecard, ${name}`, "", `Build \`${scores.build ?? "?"}\`. Overall **${fmt(avg.overall)}** of 10.`, ""];
+  if (scores.scenario || scores.seed) lines.push(`Scenario ${scores.scenario ?? "?"}, seed ${scores.seed ?? "?"}.`, "");
+  lines.push(`## Checks: ${t.ran - t.failed} of ${t.ran} pass`, "", "| Check | Result | Lines |", "|---|---|---|");
+  for (const c of checks) {
+    const result = !c.fails ? "not run" : c.fails.length ? `**fail** ×${c.fails.length}` : "pass";
+    const where = (c.fails ?? []).slice(0, 5).map((f) => (f.line ? `${f.line}: ${f.text}` : f.text).replace(/\|/g, "/")).join("<br>");
+    lines.push(`| ${c.name} | ${result} | ${where} |`);
+  }
+  lines.push("");
   for (const [pov, keys] of Object.entries(POVS)) {
     if (!scores[pov]) continue;
     lines.push(`## ${pov}: ${fmt(avg[pov])}`, "", "| Rating | Score | Why | Evidence |", "|---|---|---|---|");
@@ -125,11 +133,15 @@ if (arg) {
   const dir = existsSync(arg) ? arg : join(root, arg);
   const run = load(local(dir));
   if (!run) {
-    console.error(`No scores.json in ${dir}. Rate the run per playtests/SCORE.md first.`);
+    console.error(`No scores.json in ${dir}. Rate the run per playtests/regime.html first: node scripts/regime.mjs players.`);
     process.exit(1);
   }
   const missing = Object.entries(POVS).flatMap(([p, ks]) => (run.scores[p] ? ks.filter((k) => !run.scores[p][k]).map((k) => `${p} ${k}`) : []));
   if (missing.length) console.warn(`Missing ratings: ${missing.join(", ")}`);
+  for (const c of run.checks.filter((c) => c.fails?.length)) {
+    console.warn(`Check failed: ${c.name}`);
+    for (const f of c.fails.slice(0, 5)) console.warn(`  ${f.line ? `log.jsonl:${f.line} ` : ""}${f.text}`);
+  }
   writeFileSync(join(dir, "SCORECARD.md"), card(basename(dir), run));
   console.log(`Wrote ${join(dir, "SCORECARD.md")}\n`);
 }
@@ -147,7 +159,31 @@ const runs = [...found.keys()]
   .map((name) => ({ name, run: load(found.get(name)) }))
   .filter((r) => r.run);
 const cols = ["first-timer", "astronomer", "long-hauler", "blind", "overall"];
-console.log(["run".padEnd(18), "build".padEnd(8), ...cols.map((c) => c.padStart(12))].join(" "));
+const checked = ({ ran, failed }) => (ran ? `${ran - failed}/${ran}` : "–");
+console.log(["run".padEnd(18), "build".padEnd(8), "scenario".padEnd(14), ...cols.map((c) => c.padStart(12)), "checks".padStart(8)].join(" "));
 for (const { name, run } of runs)
-  console.log([name.padEnd(18), String(run.scores.build ?? "?").padEnd(8), ...cols.map((c) => fmt(run.avg[c]).padStart(12))].join(" "));
+  console.log(
+    [name.padEnd(18), String(run.scores.build ?? "?").padEnd(8), String(run.scores.scenario ?? "–").padEnd(14), ...cols.map((c) => fmt(run.avg[c]).padStart(12)), checked(run.tally).padStart(8)].join(" "),
+  );
 if (!runs.length) console.log("No scored runs yet.");
+// For the regime page, playtests/regime.html. 2026-11-08.
+writeFileSync(
+  join(root, "runs.json"),
+  JSON.stringify(
+    runs.map(({ name, run }) => ({
+      name,
+      build: run.scores.build ?? null,
+      scenario: run.scores.scenario ?? null,
+      seed: run.scores.seed ?? null,
+      replay: !!run.scores.replay,
+      avg: run.avg,
+      tally: run.tally,
+      checks: run.checks.map((c) => ({ name: c.name, fails: c.fails && c.fails.slice(0, 5) })),
+    })),
+  ),
+);
+// --strict: exit 1 when the run named fails a check, so a routine can stop on it.
+if (arg && process.argv.includes("--strict")) {
+  const dir = existsSync(arg) ? arg : join(root, arg);
+  if (load(local(dir))?.tally.failed) process.exit(1);
+}

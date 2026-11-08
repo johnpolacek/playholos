@@ -16,7 +16,7 @@ Do this part as an engineer, then stop being one.
 
 You see and act only through `scripts/blind.mjs`. Set `BLIND_DIR=playtests/<run>/blind` and run `node scripts/blind.mjs start`. Then use `click X Y`, `type TEXT`, `key KEY`, `scroll X Y DY`, `wait SECONDS` and `look`. Each prints a screenshot. Read it, then decide.
 
-- Read nothing in `game/`, `lib/`, `scripts/` or the docs. Don't open `playtests/BLIND-KEY.md` until the quiz is written.
+- Read nothing in `game/`, `lib/`, `scripts/` or the docs, and never `playtests/regime.html`. It holds the answers.
 - Don't read page text, element lists or addresses any other way. If you can't tell from the screen, that is the finding.
 - Ask the Mind whenever you would as a player. That is fair.
 - Play about 150 actions, or 60 minutes, whichever comes first. Use `wait` when you want time to pass.
@@ -36,21 +36,18 @@ After it, add `"got"` and `"match"` to that line: what happened, and whether it 
 - `mind` is true when the action is asking the Mind.
 - Add `"first":"<goal>"` the first time you do each of these: `began` (time started running), `build` (ordered or changed a build), `lead` (opened a page about something in the sky), `mind` (asked the Mind), `jump` (skipped time ahead), `send` (sent a craft or a message).
 
-## The quiz
+## Check-ins and the quiz
 
-When you stop, answer in `playtests/<run>/quiz.md`, in your own words, a few sentences each:
+Before you start, run `node scripts/regime.mjs quiz` once. It prints the questions, and only the questions. Set 2026-11-08.
 
-1. What is this game about, and who are you in it?
-2. What are Scan, Build, Reach and Mind each for?
-3. What is the most important open question in your game right now?
-4. What would you do next if you kept playing, and why?
-5. What confused you most?
+- **Check-ins**: every 30 actions, stop and answer its check-in questions, in your own words, from what you know right then. Add them to `blind.jsonl` as one line, `{"t":"checkin","n":30,"year":"6.1","lead":"...","next":"..."}`, keyed by question id. Don't go back and change one.
+- **The quiz**: when you stop, answer its once questions and the ungraded ones in `playtests/<run>/quiz.md`. One section per question, headed by its id, like `## premise`. A few sentences each. If you never used a tab, say so.
 
-Then open `playtests/BLIND-KEY.md` and grade each of answers 1 to 4 against it, from 0 to 10, in `scores.json` under `"blind"`, as `"understood"`, with your grades averaged into one score and a short why. Quote what you got wrong.
+Don't grade your own answers. A reader who didn't play grades them.
 
 ## Deliver
 
 - Run `node scripts/blind.mjs stop`, delete `blind/profile`, and stop the dev server.
-- Run `npm run playtest:score playtests/<run>`.
+- Run `npm run playtest:judge playtests/<run>`, which grades the quiz into `scores.json` on the CLI login. Then run `npm run playtest:score playtests/<run>`.
 - Commit the folder with `git add -f`, and push the branch.
 - Report what confused you, ranked by how long it held you up, with screenshot numbers. End with the blind scores.

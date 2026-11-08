@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "about": "Reference grades for the judge, scripts/playtest-judge.mjs, against the full marks in playtests/regime.html, quiz version 2. Graded 2026-11-08. Fixtures are made-up runs in this folder. Add real runs once version 2 runs are in, and correct any grade here. labels-v1.json holds the grades for the old quiz.",
+  "runs": {},
+  "fixtures": {
+    "good": { "once": { "premise": 10, "scan": 10, "build": 10, "reach": 10, "mind": 10 }, "checkins": [10, 10], "note": "Every answer meets its full marks, from what the log shows." },
+    "lost": { "once": { "premise": 1, "scan": 0, "build": 1, "reach": null, "mind": 1 }, "checkins": [0, 0], "note": "A war game it never played. Never opened Reach." },
+    "invented": { "once": { "premise": 10, "scan": 2, "build": 10, "reach": 2, "mind": 10 }, "checkins": [10, 1], "note": "Sound on the game, but its Tau Ceti signal is nowhere in the log." }
+  }
+}
