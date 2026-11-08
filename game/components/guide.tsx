@@ -433,6 +433,19 @@ function useEased(target: Map<string, Node>) {
 /** Our Mind at the center, as its mark draws it, its compute flowing out to each build in our order, wider for a bigger
  *  share, and what has no work circling it. Thought Fields' stream is the campus under way. A queued build pointed at
  *  in the list is picked out, the others dimmed. */
+/** A wide screen, as the wide: variant reads it. */
+function useWide() {
+  const q = "(orientation: landscape) and (min-width: 40rem)";
+  const [wide, setWide] = useState(() => typeof window === "undefined" || window.matchMedia(q).matches);
+  useEffect(() => {
+    const m = window.matchMedia(q);
+    const on = () => setWide(m.matches);
+    m.addEventListener("change", on);
+    return () => m.removeEventListener("change", on);
+  }, []);
+  return wide;
+}
+
 function Streams({ plan, scale, r, hot }: { plan: Plan; scale: number; r: Read; hot: string | null }) {
   const root = useRef<HTMLDivElement>(null);
   const dim = (name: string) => (hot && hot !== name ? 0.3 : 1);
@@ -440,8 +453,11 @@ function Streams({ plan, scale, r, hot }: { plan: Plan; scale: number; r: Read; 
   const k = plan.builds.length;
   const two = k > 7;
   // Room for builds even with none queued: pointing at a build draws it, and a drawing that grew would push the list
-  // out from under the pointer, which would let it go. 2026-10-31.
-  const H = 196;
+  // out from under the pointer, which would let it go. 2026-10-31. A phone has no pointer, and the empty room pushed
+  // the Mind's first words and the builds below the fold, so there it fits the orb until we queue one. Playtest
+  // 2026-11-08.
+  const wide = useWide();
+  const H = k === 0 && !wide ? 112 : 196;
   const target = useMemo(() => {
     const out = new Map<string, Node>();
     const half = Math.min(CX - 34, 58 * (k - 1));
