@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { KeyMark, Prompt } from "@/components/icons";
+import { useEffect, useRef, useState } from "react";
+import { Check, KeyMark, Prompt } from "@/components/icons";
+import { FREE_QUESTIONS } from "@/lib/access";
 import type { Wrong } from "@/lib/access";
-import { unlock } from "@/lib/key";
+import { earnPass, unlock, useAllowance } from "@/lib/key";
 import { ASK, STEPS_URL as STEPS } from "@/components/run-local";
 
 // Where the player's key goes, drawn as a route: kept in their browser, carried through the game's server, which
@@ -37,6 +38,7 @@ const WHOLE = /^sk-ant-[A-Za-z0-9_-]{20,}$/;
 export function Unlock() {
   const [wrong, setWrong] = useState<Wrong>();
   const [busy, setBusy] = useState(false);
+  const { free } = useAllowance();
 
   const open = async (entry: string) => {
     if (!entry || busy) return;
@@ -49,8 +51,9 @@ export function Unlock() {
   return (
     <>
       <p className="mt-3 text-[13px] leading-[1.45] text-page-ink2">
-        Our Mind thinks with Claude. Two ways open it: your own API key here, or your Claude plan on your own computer.
+        Our Mind thinks with Claude. {free ? "Three ways open it: on us, with your own API key, or on your Claude plan on your own computer." : "Two ways open it: your own API key here, or your Claude plan on your own computer."}
       </p>
+      {free && <OnUs site={free} />}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -94,6 +97,80 @@ export function Unlock() {
   );
 }
 
+
+type Turnstile = {
+  render(el: HTMLElement, opts: Record<string, unknown>): string;
+  remove(id: string): void;
+};
+declare global {
+  interface Window {
+    turnstile?: Turnstile;
+  }
+}
+
+/** Loads Cloudflare's Turnstile script once, when a player first asks for a pass. */
+let loading: Promise<Turnstile> | undefined;
+function loadTurnstile() {
+  loading ??= new Promise((done, fail) => {
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.async = true;
+    script.onload = () => (window.turnstile ? done(window.turnstile) : fail(new Error("No Turnstile")));
+    script.onerror = () => {
+      loading = undefined;
+      fail(new Error("No Turnstile"));
+    };
+    document.head.append(script);
+  });
+  return loading;
+}
+
+// The first way in, 2026-11-08: our Mind on our credit, a hundred questions a day, once Turnstile is sure a person
+// asks. The check shows only if Turnstile is unsure, and a pass keeps for a week.
+function OnUs({ site }: { site: string }) {
+  const [state, setState] = useState<"idle" | "checking" | "failed">("idle");
+  const box = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (state !== "checking" || !box.current) return;
+    let id: string | undefined;
+    let ts: Turnstile | undefined;
+    loadTurnstile()
+      .then((t) => {
+        ts = t;
+        id = t.render(box.current!, {
+          sitekey: site,
+          appearance: "interaction-only",
+          callback: (token: string) => void earnPass(token).then((no) => no && setState("failed")),
+          "error-callback": () => setState("failed"),
+        });
+      })
+      .catch(() => setState("failed"));
+    return () => {
+      if (ts && id) ts.remove(id);
+    };
+  }, [state, site]);
+  return (
+    <section className="mt-3 flex flex-col gap-3 rounded-lg border border-dashed border-muted bg-paper p-3.5">
+      <div className="flex items-center gap-2 font-mono text-[10px] tracking-[.12em] text-page-ink2">
+        <Check size={13} />
+        ON US
+      </div>
+      <p className="text-[13px] text-page-ink2">
+        Ask our Mind up to {FREE_QUESTIONS} questions a day, free. A quick check makes sure you’re a person.
+      </p>
+      <div ref={box} />
+      <button
+        type="button"
+        disabled={state === "checking"}
+        onClick={() => setState("checking")}
+        className="h-10 self-start rounded-md bg-ink px-3.5 text-[13px] text-paper disabled:opacity-60"
+      >
+        {state === "checking" ? "Checking…" : "Open our Mind"}
+      </button>
+      {state === "failed" && <p className="text-xs text-other">The check didn’t pass. Try again, or use a key below.</p>}
+    </section>
+  );
+}
 
 // The other way in, 2026-10-27: on the player's own computer, the Mind answers through Claude Code on their own Claude
 // plan, so no key. Claude Code can set it up itself, so the card gives the ask to paste in, and the one command for doing

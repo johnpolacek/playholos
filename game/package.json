@@ -12,6 +12,7 @@
     "deploy": "npm run build && npm run worlds && wrangler deploy",
     "worlds": "node scripts/worlds.mjs",
     "worlds:local": "node scripts/worlds.mjs --local",
+    "events": "node scripts/events.mjs",
     "lint": "eslint",
     "test": "node --test lib/sim/sim.test.mts lib/mind/queue.test.mts lib/game/build-offer.test.mts",
     "check:mind": "node scripts/check-mind.mjs",

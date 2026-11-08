@@ -1,6 +1,9 @@
+import { env, waitUntil } from "cloudflare:workers";
 import { type AnthropicLanguageModelOptions, createAnthropic } from "@ai-sdk/anthropic";
 import { APICallError, convertToModelMessages, createUIMessageStreamResponse, streamText, type TextStreamPart, toUIMessageStream, type ToolSet, type UIMessage } from "ai";
-import { BAD_KEY, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, readMindPick, type Usage } from "@/lib/access";
+import { BAD_KEY, costOf, FREE_ASKED, FREE_MODEL, FREE_SPENT, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, readMindPick, type Usage } from "@/lib/access";
+import { NEWS } from "@/lib/mind/news";
+import { QUEUE } from "@/lib/mind/queue";
 import { realTime, tenths, yearText, YEAR_0, yearAt } from "@/lib/game/clock";
 import type { Will } from "@/lib/game/types";
 import { describeCharter } from "@/lib/game/charter";
@@ -22,6 +25,7 @@ import { describeChances } from "@/lib/game/chance";
 import { leadsOf, readingsOf } from "@/lib/game/leads";
 import { describe, describeSearch, willKnows } from "@/lib/sim/knowledge";
 import { apiKeyFor, workspaceFor } from "./access";
+import { allowance } from "./allowance";
 import { pastOf } from "./earth";
 import { inPool, loadWorld } from "./world";
 
@@ -105,8 +109,9 @@ function readCharter(c: unknown) {
 export async function mind(req: Request) {
   // The Mind spends real money: the player's own key spends theirs, and the access code spends ours.
   // Their key is used for this call only, never stored or logged here.
-  const apiKey = apiKeyFor(req);
-  if (apiKey === null) return Response.json({ error: "Locked." }, { status: 401 });
+  const opened = await apiKeyFor(req);
+  if (opened === null) return Response.json({ error: "Locked." }, { status: 401 });
+  const { key: apiKey, pass } = opened;
   const {
     messages,
     beganAt,
@@ -225,7 +230,19 @@ export async function mind(req: Request) {
     return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .dev.vars." }, { status: 503 });
   }
   const workspace = workspaceFor(req);
-  const { model, effort } = readMindPick(pick);
+  const picked = readMindPick(pick);
+  const effort = picked.effort;
+  // A pass thinks with Sonnet at most, and asks only while today's allowance holds. A question takes one of the
+  // player's; news told unasked takes only from the day's dollars. 2026-11-08.
+  const model = pass && picked.model === "claude-opus-5-5" ? FREE_MODEL : picked.model;
+  const store = pass ? allowance(env) : null;
+  if (store && pass) {
+    const asked = messages.findLast((m: UIMessage) => m.role === "user");
+    const text = asked?.parts.find((p: UIMessage["parts"][number]) => p.type === "text");
+    const news = !!text && "text" in text && (text.text.startsWith(NEWS) || text.text.startsWith(QUEUE));
+    const taken = await store.take(pass, req.headers.get("cf-connecting-ip") ?? "", !news);
+    if (!taken.ok) return Response.json({ error: taken.why === "spent" ? FREE_SPENT : FREE_ASKED }, { status: 429 });
+  }
   const result = streamText({
     model: createAnthropic({ apiKey, headers: workspace ? { "anthropic-workspace-id": workspace } : undefined })(model),
     system: [
@@ -261,6 +278,7 @@ export async function mind(req: Request) {
       cacheWrite: u.inputTokenDetails.cacheWriteTokens ?? 0,
       output: u.outputTokens ?? 0,
     };
+    if (store) waitUntil(store.spend(costOf(usage)));
     return { usage };
   };
   return createUIMessageStreamResponse({ stream: toUIMessageStream({ stream: result.stream, onError, messageMetadata }) });

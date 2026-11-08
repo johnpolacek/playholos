@@ -3,7 +3,9 @@ import type { UIMessage } from "ai";
 import { NEWS } from "@/lib/mind/news";
 import { QUEUE } from "@/lib/mind/queue";
 import { access } from "./access";
+export { Allowance } from "./allowance";
 import { earth } from "./earth";
+import { events } from "./events";
 import { known, leads, next } from "./leads";
 import { mind } from "./mind";
 
@@ -31,6 +33,7 @@ const ROUTES: Record<string, (req: Request) => Promise<Response>> = {
   "POST /api/known": known,
   "POST /api/next": next,
   "POST /api/mind": limited,
+  "POST /api/event": events,
 };
 
 export default {

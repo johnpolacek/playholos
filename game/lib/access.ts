@@ -39,11 +39,22 @@ export function costOf(u: Usage) {
   return (u.input * price.input + u.cacheRead * price.cacheRead + u.cacheWrite * price.cacheWrite + u.output * price.output) / 1e6;
 }
 
-/** What opens the Mind in this browser: the player's own key, the code, or nothing. */
-export type Access = "key" | "code" | null;
+/** What opens the Mind: the player's key, the code, a pass that spends ours up to a daily allowance, or nothing. */
+export type Access = "key" | "code" | "free" | null;
 
-/** Why an entry didn't open the Mind: not a key Anthropic takes, no workspace it can ask in, or not the code. */
-export type Wrong = "key" | "workspace" | "code";
+/** Questions a pass may ask in a day. worker/allowance.ts holds it to this. 2026-11-08. */
+export const FREE_QUESTIONS = 100;
+
+/** The model a pass thinks with when the Will picks Opus: our credit lasts about twice as long. 2026-11-08. */
+export const FREE_MODEL = "claude-sonnet-5-5";
+
+/** What the Mind says when a pass has asked all it may today, and when all of today's allowance is spent. */
+export const FREE_ASKED = "That’s all the questions we can ask on the house today. Ask again tomorrow, or open our Mind with your own key.";
+export const FREE_SPENT = "Our Mind has thought all it can on the house today. Ask again tomorrow, or open it with your own key.";
+
+/** Why an entry didn't open the Mind: not a key Anthropic takes, no workspace it can ask in, not the code, or a
+ *  Turnstile check that didn't pass. */
+export type Wrong = "key" | "workspace" | "code" | "check";
 
 /** What the Mind says when Anthropic turns the player's key away. */
 export const BAD_KEY = "That key doesn’t open the Mind.";

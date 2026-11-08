@@ -11,7 +11,7 @@ import { MindThinking, useThinking } from "@/components/mind-thinking";
 import { usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { SendCard } from "@/components/send-card";
-import { BAD_KEY, costOf, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, MIND_MODELS, MIND_UNREACHED, type MindModel, readMindPick, type Usage } from "@/lib/access";
+import { BAD_KEY, costOf, FREE_MODEL, FREE_QUESTIONS, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, MIND_MODELS, MIND_UNREACHED, type MindModel, readMindPick, type Usage } from "@/lib/access";
 import { readBuildOffer } from "@/lib/game/build-offer";
 import { type Lead, properGlows, starName } from "@/lib/game/leads";
 import { leadsNamed, onMap } from "@/lib/game/named-leads";
@@ -20,10 +20,11 @@ import { SITES } from "@/lib/game/sites";
 import { NEWS } from "@/lib/mind/news";
 import { nextNote, QUEUE } from "@/lib/mind/queue";
 import { schedule, sharesAt } from "@/lib/game/plan";
-import { useAccess } from "@/lib/key";
+import { refreshAccess, useAccess, useAllowance } from "@/lib/key";
 import { readOffer } from "@/lib/game/sends";
 import { browserStore } from "@/lib/game/store";
 import { forgetKey } from "@/lib/key";
+import { track } from "@/lib/track";
 
 // Which model the Mind thinks with and how hard, picked on the Mind tab and kept in this browser. Storage can be
 // missing, so a miss means the defaults, and the server checks the pick again.
@@ -121,7 +122,7 @@ const retries = (error: Error) => [MIND_BUSY, MIND_UNREACHED].includes(failure(e
 /** Keeps our talk in the save, from one place always there, so news told on any tab is kept. An answer from the
  *  Mind, on any tab, also marks Begin's Mind step done. */
 export function useKeepTalk() {
-  const { save, did, setTalk } = useGame();
+  const { save, did, setTalk, year } = useGame();
   const { messages, busy, lastAnswer, error, regenerate } = useMind();
   const seed = save?.seed;
   const kept = save?.talk;
@@ -139,6 +140,26 @@ export function useKeepTalk() {
   useEffect(() => {
     if (lastAnswer) did("asked");
   }, [lastAnswer, did]);
+  // On a pass, each answer spends one of today's questions, so the count is asked for again. 2026-11-08.
+  const open = useAccess();
+  useEffect(() => {
+    if (open === "free" && lastAnswer && !busy) void refreshAccess();
+  }, [open, lastAnswer, busy]);
+  // Notes each question the Will asks, never its words, and each failed answer by what the Will read. News and the
+  // queue the Mind is told unasked aren't questions. 2026-11-08.
+  const noted = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    const q = messages.findLast((m) => m.role === "user");
+    // What was asked before this load was noted then.
+    if (noted.current === undefined) return void (noted.current = q?.id ?? "");
+    if (!q || noted.current === q.id) return;
+    noted.current = q.id;
+    const text = q.parts.find((p) => p.type === "text")?.text ?? "";
+    if (!text.startsWith(NEWS) && !text.startsWith(QUEUE)) track("ask", String(messages.filter((m) => m.role === "user").length), year);
+  }, [messages, year]);
+  useEffect(() => {
+    if (error) track("mind_error", failure(error), year);
+  }, [error, year]);
   // Kept once an answer is done, not on every word of it.
   useEffect(() => {
     if (!busy && seed !== undefined && messages.length && messages !== kept) setTalk(messages);
@@ -326,7 +347,8 @@ function KeyRow() {
 
 /** The Mind's settings, out of the way of play: which model it thinks with and how hard, what this talk has cost,
  *  and the player's key. The next question uses a new pick. */
-export function MindSettings({ keyed }: { keyed: boolean }) {
+export function MindSettings({ keyed, free = false }: { keyed: boolean; free?: boolean }) {
+  const { left } = useAllowance();
   const { save } = useGame();
   const { messages } = useChat({ chat: useMemo(() => chatFor(save?.seed), [save?.seed]) });
   const [pick, setPick] = useState(loadPick);
@@ -335,13 +357,15 @@ export function MindSettings({ keyed }: { keyed: boolean }) {
     setPick(p);
     savePick(p);
   };
+  const shown = free && pick.model === "claude-opus-5-5" ? FREE_MODEL : pick.model;
   const toggle = (on: boolean) =>
     `rounded-full px-2 py-0.5 transition-colors ${on ? "bg-ink text-paper" : "text-page-ink2 hover:text-ink"}`;
   return (
     <div className="mb-3 flex flex-col gap-2 rounded-lg border border-dashed border-muted p-3 font-mono text-[10.5px] tracking-[.06em] uppercase">
       <Row name="Model">
-        {(Object.keys(MIND_MODELS) as MindModel[]).map((m) => (
-          <button key={m} type="button" aria-pressed={pick.model === m} onClick={() => choose({ model: m })} className={toggle(pick.model === m)}>
+        {/* On us, Opus thinks as Sonnet, so it isn't offered. 2026-11-08. */}
+        {(Object.keys(MIND_MODELS) as MindModel[]).filter((m) => !free || m !== "claude-opus-5-5").map((m) => (
+          <button key={m} type="button" aria-pressed={shown === m} onClick={() => choose({ model: m })} className={toggle(shown === m)}>
             {MIND_MODELS[m].name}
           </button>
         ))}
@@ -356,6 +380,13 @@ export function MindSettings({ keyed }: { keyed: boolean }) {
       <Row name="This talk">
         <span className="px-2 text-page-ink2 normal-case tabular-nums">{spent(messages)}</span>
       </Row>
+      {free && left !== undefined && (
+        <Row name="Today">
+          <span className="px-2 text-page-ink2 normal-case tabular-nums">
+            {left} of {FREE_QUESTIONS} questions left on us
+          </span>
+        </Row>
+      )}
       {keyed && <KeyRow />}
     </div>
   );

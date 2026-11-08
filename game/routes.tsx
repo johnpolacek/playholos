@@ -1,4 +1,6 @@
-import { createBrowserRouter, Outlet, redirect, ScrollRestoration } from "react-router";
+import { useEffect } from "react";
+import { createBrowserRouter, Outlet, redirect, ScrollRestoration, useLocation } from "react-router";
+import { track } from "@/lib/track";
 import { loadLayout, PAGES } from "@/app/about/load";
 import NotFound from "@/app/not-found";
 import PlayLayout from "@/app/play/layout";
@@ -64,6 +66,9 @@ export const router = createBrowserRouter([
 // A new page starts at its top, and back returns to where it was. Every full load shares one history key, so a load
 // keeps its place by address instead, or one page would open at another's.
 function Root() {
+  // Each page opened, by its address, for lib/track.ts. 2026-11-08.
+  const { pathname } = useLocation();
+  useEffect(() => track("page", pathname), [pathname]);
   return (
     <>
       <ScrollRestoration getKey={(location) => (location.key === "default" ? location.pathname : location.key)} />

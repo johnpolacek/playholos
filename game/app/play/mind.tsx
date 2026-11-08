@@ -36,7 +36,7 @@ export default function Mind() {
       <TabHead title="MIND" right={open === null ? "LOCKED" : undefined} tool={tool} />
       {open ? (
         <>
-          {settings && <MindSettings keyed={open === "key"} />}
+          {settings && <MindSettings keyed={open === "key"} free={open === "free"} />}
           <MindChat ask={question} />
         </>
       ) : (

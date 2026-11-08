@@ -1,8 +1,22 @@
 import { createContext, use, useEffect, useRef, useState } from "react";
 import { MS_PER_YEAR, ordersLand, yearAt } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
+import { track } from "@/lib/track";
 import { POOL } from "@/lib/sim/pool";
-import type { Save, Sent, Will } from "@/lib/game/types";
+import type { Plan, Save, Sent, Will } from "@/lib/game/types";
+
+/** Notes what a new plan adds to the last: builds queued or ordered, builds taken back, Close Readings, lenses,
+ *  sentinels. Each is noted once, as it joins. 2026-11-08. */
+function trackPlan(was: Plan | undefined, now: Plan, year: number | null) {
+  const added = <T,>(a: T[] | undefined, b: T[] | undefined) => (b ?? []).slice((a ?? []).length);
+  const queued = new Set(was?.builds ?? []);
+  for (const name of now.builds.filter((b) => !queued.has(b))) track("build", name, year);
+  for (const o of added(was?.later, now.later)) track("build", o.name, o.y);
+  for (const o of added(was?.stops, now.stops)) track("stop", o.name, o.y);
+  for (const o of added(was?.closeReads, now.closeReads)) track("close_read", o.name, o.y);
+  for (const o of added(was?.lenses, now.lenses)) track("lens", o.name, o.y);
+  for (const o of added(was?.sentinels, now.sentinels)) track("sentinel", o.name, o.y);
+}
 
 /** How long a snoozed build stays out of the Mind's suggestions, in Years: 25 of the Will's minutes. 2026-11-07. */
 export const SNOOZE_YEARS = 5;
@@ -104,18 +118,54 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       const y = yearAt(began, save?.held ?? now, save?.will);
       return y === null ? null : ordersLand(y, save?.will);
     })(),
-    moveWill: (will) => change((s) => (s.will ? s : { ...s, will })),
-    wake: () => change((s) => ({ ...s, woke: true })),
-    setCharter: (charter) => change((s) => ({ ...s, charter })),
-    setPlan: (plan) => change((s) => ({ ...s, plan })),
+    moveWill: (will) =>
+      change((s) => {
+        if (s.will) return s;
+        track("will", will.hole, will.y);
+        return { ...s, will };
+      }),
+    wake: () =>
+      change((s) => {
+        if (!s.woke) track("wake");
+        return { ...s, woke: true };
+      }),
+    setCharter: (charter) =>
+      change((s) => {
+        track("charter", charter.dials.join(","));
+        return { ...s, charter };
+      }),
+    setPlan: (plan) =>
+      change((s) => {
+        trackPlan(s.plan, plan, yearAt(s.beganAt, s.held ?? Date.now(), s.will));
+        return { ...s, plan };
+      }),
     setGuide: (guide) => change((s) => ({ ...s, guide })),
     setTalk: (talk) => change((s) => ({ ...s, talk })),
-    send: (message) => change((s) => (s.sent?.some((x) => x.id === message.id) ? s : { ...s, sent: [...(s.sent ?? []), message] })),
+    send: (message) =>
+      change((s) => {
+        if (s.sent?.some((x) => x.id === message.id)) return s;
+        // Where and how big, never our words.
+        track("send", `${message.to}|${message.size}|${message.holds.join("+")}`, message.y);
+        return { ...s, sent: [...(s.sent ?? []), message] };
+      }),
     stopSending: (id, y) => change((s) => ({ ...s, sent: s.sent?.map((x) => (x.id === id && x.stopped === undefined ? { ...x, stopped: y } : x)) })),
     see: (ids) => change((s) => ({ ...s, seen: [...new Set([...(s.seen ?? []), ...ids])] })),
-    snooze: (build, y) => change((s) => ({ ...s, snoozed: { ...s.snoozed, [build]: y + SNOOZE_YEARS } })),
-    did: (step) => void ((latest.current ?? save)?.[step] || change((s) => ({ ...s, [step]: true }))),
-    begin: () => change((s) => ({ ...s, beganAt: Date.now() })),
+    snooze: (build, y) =>
+      change((s) => {
+        track("snooze", build, y);
+        return { ...s, snoozed: { ...s.snoozed, [build]: y + SNOOZE_YEARS } };
+      }),
+    did: (step) =>
+      void ((latest.current ?? save)?.[step] ||
+        change((s) => {
+          if (step !== "asked") track(step);
+          return { ...s, [step]: true };
+        })),
+    begin: () =>
+      change((s) => {
+        track("begin", String(s.plan?.builds.length ?? 0));
+        return { ...s, beganAt: Date.now() };
+      }),
     tell: (y) => change((s) => (y > (s.told ?? 0) ? { ...s, told: y } : s)),
     read: (id) => void ((latest.current ?? save)?.read === id || change((s) => ({ ...s, read: id }))),
     // A skip moves Begin back, so the clock reads the later Year and runs on from there. On a refuge's slow clock the
@@ -127,12 +177,16 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         const r = released(s);
         const from = yearAt(r.beganAt, Date.now(), r.will) ?? 0;
         if (to <= from) return r;
+        track("skip", String(Math.round(to - from)), from);
         const rate = r.will && from >= r.will.at ? r.will.rate : 1;
         return { ...r, beganAt: r.beganAt! - ((to - from) / rate) * MS_PER_YEAR };
       }),
     hold: (last) => change((s) => (s.beganAt === null || s.held !== undefined ? s : { ...s, held: Date.now(), heldFor: last })),
     playOn: () => change(released),
-    newGame: () => update(freshSave()),
+    newGame: () => {
+      track("new_game", "", yearAt(began, save?.held ?? Date.now(), save?.will));
+      update(freshSave());
+    },
   };
   return <GameContext value={game}>{children}</GameContext>;
 }
