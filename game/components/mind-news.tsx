@@ -220,9 +220,10 @@ export function YearZero() {
       role="dialog"
       aria-modal
       aria-label="Year 0"
-      className="fixed inset-0 z-[90] flex flex-col items-center justify-center overflow-y-auto bg-paper/80 px-4 backdrop-blur-[3px]"
+      className="fixed inset-0 z-[90] flex flex-col items-center overflow-y-auto bg-paper/80 px-4 pt-[max(32px,calc(50dvh-330px))] pb-8 backdrop-blur-[3px]"
     >
-      <svg aria-hidden viewBox="-100 -100 200 200" className="w-[min(260px,60vw)]">
+      {/* Anchored from the top, with room kept for the Mind's words, so nothing moves as they arrive. 2026-11-08. */}
+      <svg aria-hidden viewBox="-100 -100 200 200" className="w-[min(260px,60vw)] shrink-0">
         {[92, 70, 48].map((r, i) => (
           <circle key={r} data-z="ring" r={r} fill="none" stroke="var(--you)" strokeOpacity={0.15 + i * 0.15} strokeWidth={0.8} />
         ))}
@@ -235,7 +236,7 @@ export function YearZero() {
       <h1 data-z="item" className="mt-1 text-[34px] leading-none font-medium tracking-tight">
         Year 0
       </h1>
-      <div data-z="item" className="mt-6 w-full max-w-[440px]">
+      <div data-z="item" className="mt-6 min-h-[168px] w-full max-w-[440px]">
         <MindNote still={!busy} className="text-[15px] leading-[1.5]">
           <span aria-live="polite">
             {!open || (error && !ours)
