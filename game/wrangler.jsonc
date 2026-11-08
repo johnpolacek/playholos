@@ -23,7 +23,7 @@
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Allowance"] }],
   // Turnstile's public key, which the page shows its check with. Its secret is TURNSTILE_SECRET, set with
   // npx wrangler secret put. With neither, no one gets a pass. 2026-11-08.
-  "vars": { "TURNSTILE_SITE_KEY": "" },
+  "vars": { "TURNSTILE_SITE_KEY": "0x4AAAAAAF5KNiLWNtYVpwG4" },
   "r2_buckets": [{ "binding": "WORLDS", "bucket_name": "holos-worlds" }],
   // Six questions a minute from one address. Each one spends money, ours behind the code. The Mind's news, told
   // unasked, has three of its own, so it never takes a question's place. 2026-11-03.
