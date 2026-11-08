@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useBeams } from "@/components/beams";
 import { useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
@@ -71,6 +72,22 @@ export function Heard() {
           ]] as [string, string | undefined][])),
     ],
   }));
+  // The signal open shows on the map: its light on the way from their star to us, as a message of theirs. Opened, it
+  // left the map on the leads, its star nowhere. 2026-11-07.
+  const beams = useBeams();
+  const { pick } = beams;
+  const ours = useRef(false);
+  const shownH = heard.find((h) => heardId(h) === open);
+  useEffect(() => {
+    if (shownH) {
+      ours.current = true;
+      pick([{ key: heardId(shownH), star: shownH.star, sent: YEAR_0 + shownH.sent - shownH.d, ly: shownH.d, reply: true }], 0);
+    } else if (ours.current) {
+      ours.current = false;
+      pick([], null);
+    }
+  }, [shownH, pick]);
+  useEffect(() => () => void (ours.current && pick([], null)), [pick]);
   const aim = (key: string): Aim => ({
     shown: open === key,
     lit: open === key || lit === key,

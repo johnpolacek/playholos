@@ -93,7 +93,8 @@ export function Messages() {
   }, [plan, scale]);
   const bullets = useMemo(() => bulletRows(fired), [fired]);
   const ours = useMemo(() => [...sentRows(save?.sent ?? []), ...bullets], [save?.sent, bullets]);
-  const { pick, peek, picked } = useBeams();
+  const beams = useBeams();
+  const { pick, peek, picked } = beams;
   // Every row aimed at a star can be shown on the map: Earth's old messages, then ours. Not a call sent every way.
   const aimable = useMemo(() => [...ROWS, ...ours.filter((r) => r.name !== EVERYWHERE)], [ours]);
   const list: Beam[] = useMemo(
@@ -105,9 +106,10 @@ export function Messages() {
   useEffect(() => () => pick([], null), [pick]);
   const [hover, setHover] = useState<string | null>(null);
   const aim = (i: number): Aim => ({
-    shown: picked === i,
-    lit: picked === i || hover === list[i].key,
-    toggle: () => pick(list, picked === i ? null : i),
+    // By its key: a signal heard, open above, shows on the map by the same pick. 2026-11-07.
+    shown: picked !== null && beams.list[picked]?.key === list[i].key,
+    lit: (picked !== null && beams.list[picked]?.key === list[i].key) || hover === list[i].key,
+    toggle: () => pick(list, picked !== null && beams.list[picked]?.key === list[i].key ? null : i),
     point: (on) => {
       setHover(on ? list[i].key : null);
       peek(on ? i : null);
