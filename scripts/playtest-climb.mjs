@@ -73,7 +73,8 @@ if (opt("since")) {
   const moved = ratings(cur)
     .map((x) => ({ ...x, da: x.a - (before.get(x.key)?.a ?? x.a), db: typeof x.b === "number" && typeof before.get(x.key)?.b === "number" ? x.b - before.get(x.key).b : 0 }))
     .filter((x) => before.has(x.key) && (x.da || x.db));
-  const sign = (n) => (n > 0 ? `+${n}` : String(n));
+  // One decimal, as every score reads: float sums printed +0.8999999999999995. 2026-11-08.
+  const sign = (n) => (n > 0 ? `+${n.toFixed(1)}` : n.toFixed(1));
   const up = moved.filter((x) => x.da + x.db > 0).sort((p, q) => q.da + q.db - (p.da + p.db));
   const down = moved.filter((x) => x.da + x.db < 0).sort((p, q) => p.da + p.db - (q.da + q.db));
   console.log(`# Since ${was.name}, now ${cur.name}\n`);
