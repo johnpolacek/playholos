@@ -20,7 +20,7 @@ You are a fresh-eyes playtester for Holos. Play one scenario as a brand new play
 
 ## Play
 
-- Start fresh, with no saved state. The game draws the world's seed at random, as for any player. Don't pick one.
+- Start as the scenario says. The opening starts fresh, with no saved state, and the game draws the seed at random. Don't pick one. A scenario with a saved state prints how to load it under Start. Load it before the game first loads.
 - Read the seed once the game is open: `JSON.parse(localStorage.getItem("holos:save")).seed`. Put it in `scores.json`.
 - Note confusion, dead ends, broken screens, console errors, slow or empty Mind replies, and any line where the Mind says "I" instead of "we".
 - Take a screenshot at each key moment. Name each for what it shows, like `27-scan-warm-glow.png`. Cite it in the log line it belongs to, as `"shot"`.

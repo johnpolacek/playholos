@@ -172,8 +172,9 @@
       "id": "glows",
       "title": "Glows",
       "what": "The warm and cold glows, from the first to deep in the sky.",
+      "from": "scan-y1",
       "steps": [
-        "Begin with the order the game offers. Then order the Warm Sky Watch and the Infrared Telescope.",
+        "Start from the saved state, Year 1.2, with the Warm Sky Watch and the Infrared Telescope already ordered.",
         "Press Next until the first new warm glow appears on Scan, or to about Year 100,000 if none does. Open its lead.",
         "Ask the Mind what the glow is and how far away it is.",
         "Try Scan's Milky Way button. Take a Close Reading of each glow you can, one at a time.",
@@ -199,9 +200,10 @@
       "id": "dark-body",
       "title": "Dark body",
       "what": "The watcher near Earth, the relay, the ladder of seed probes, and the strike.",
+      "from": "dark-y1",
       "steps": [
-        "Begin with the Moon Search and the Asteroid Tour in the order.",
-        "Press Next until one finds the watcher. If this world has none by Year 100, start a new game and log the new seed. Try at most three worlds, then report which seeds had none.",
+        "Start from the saved state, Year 1.2, with the Moon Search and the Asteroid Tour already ordered.",
+        "Press Next until one finds the watcher. Every world has one. If none is found by Year 300, say so and stop.",
         "Order the Close Look, then the Relay Search it points to. Ask the Mind what the relay is.",
         "Send the watcher a knock from its lead. Press Next about a century, for its answer.",
         "Order the Seed Ship, Fusion Drive and Deuterium Works. From Proxima's lead, under How we reach, send a seed probe. Then a second one after the warning.",
@@ -232,6 +234,7 @@
     { "id": "reach-y1", "title": "Reach, Year 1", "path": "/play/reach", "description": "Ways to reach other stars. We should see which craft or message we can send, to where, and how long an answer takes." },
     { "id": "proxima-y1", "title": "Proxima lead, Year 1", "path": "/play/lead/proxima-centauri", "description": "Our nearest lead. Its page should show what we know of Proxima b, how sure we are, and what we can do next." },
     { "id": "mind-y1", "title": "Mind, Year 1", "path": "/play/mind", "description": "The Mind's tab with no talk yet. It should invite a question and show what the Mind can help with." },
+    { "id": "dark-y1", "title": "Dark body search, Year 1", "path": "/play/build", "description": "The Moon Search and the Asteroid Tour building. We should see what each looks for, how long it takes, and that nothing is found yet." },
     { "id": "scan-deep", "title": "Scan, deep time", "path": "/play", "description": "Thousands of Years in, with every watch built and hundreds of glows. The few leads worth acting on should still stand out." }
   ],
   "screens": {
@@ -299,7 +302,7 @@
     ]
   },
   "screensRule": "Each named state opens from its saved game in playtests/states/, with the clock stopped at its Year. npm run playtest:capture shots every state at every width, measures its layout and reads its words against the audit rules, by code. npm run playtest:critic then scores each screen blind, has a designer judge all of them together, and has an editor cut their words. A state without a save is skipped. Save one from a run with node scripts/capture.mjs snap <id>.",
-  "scenarioRule": "Each cloud run plays the next scenario in turn, from a fresh game. The seed is drawn at random as for any player, so runs cover every world and no fix is tuned to one. A seed is replayed only to check a fix on the world a finding came from.",
+  "scenarioRule": "Each cloud run plays the next scenario in turn. The opening starts from a fresh game, with its seed drawn at random as for any player. A scenario with a saved state starts from it, past the opening, so the run spends its time on what it tests. A seed is replayed only to check a fix on the world a finding came from.",
   "checks": [
     { "name": "build named", "why": "scores.json names the build it played, so the trend can tie a score to code." },
     { "name": "no console errors", "why": "The game logged no console errors." },
@@ -587,7 +590,7 @@ function checkinStrip(every) {
   const draw = () => {
     $("scenarioTabs").innerHTML = R.scenarios.map((s, i) => `<button aria-pressed="${s.id === current}" data-id="${s.id}">${i + 1}. ${esc(s.title)}</button>`).join("");
     const s = R.scenarios.find((x) => x.id === current);
-    $("scenario").innerHTML = `<div class="grid"><div class="card"><h3>${esc(s.what)}</h3><b class="small">Steps</b><ol class="small">${s.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol><p class="small muted" style="margin-top:8px">Stop: ${esc(s.stop)}</p></div>
+    $("scenario").innerHTML = `<div class="grid"><div class="card"><h3>${esc(s.what)}</h3>${s.from ? `<p class="small muted">Starts from the saved state <code>${esc(s.from)}</code>, past the opening.</p>` : ""}<b class="small">Steps</b><ol class="small">${s.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol><p class="small muted" style="margin-top:8px">Stop: ${esc(s.stop)}</p></div>
       <div class="card"><b class="small">Expect</b><ol class="small">${s.expect.map((x, i) => `<li><code>${s.id}-${i + 1}</code> ${esc(x)}</li>`).join("")}</ol></div></div>`;
   };
   $("scenarioTabs").addEventListener("click", (e) => { if (e.target.dataset.id) { current = e.target.dataset.id; draw(); } });

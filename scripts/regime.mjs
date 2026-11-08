@@ -35,7 +35,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       console.error(`No scenario ${id}. The scenarios: ${r.scenarios.map((x) => x.id).join(", ")}.`);
       process.exit(1);
     }
-    print([`# Scenario: ${s.id}`, "", s.what, "", "## Steps", "", ...s.steps.map((x) => `- ${x}`), "", "## Expect", "", ...s.expect.map((x, i) => `${s.id}-${i + 1}. ${x}`), "", `Stop: ${s.stop}`]);
+    const from = s.from
+      ? ["## Start", "", `From the saved state ${s.from}, not a fresh game. Before the game first loads:`, "", "```", 'import { fixture, seedPage } from "./scripts/states.mjs";', `await seedPage(page, fixture(${JSON.stringify(s.from)}));`, "```", "", "Its seed is the state's. Put it in scores.json, with \"from\".", ""]
+      : [];
+    print([`# Scenario: ${s.id}`, "", s.what, "", ...from, "## Steps", "", ...s.steps.map((x) => `- ${x}`), "", "## Expect", "", ...s.expect.map((x, i) => `${s.id}-${i + 1}. ${x}`), "", `Stop: ${s.stop}`]);
   } else if (what === "quiz") {
     const q = r.quiz;
     print([
