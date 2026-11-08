@@ -365,6 +365,12 @@
       "since": "2026-11-07",
       "call": "When a build finishes and under 80% of our compute is at work, the clock pauses so we choose: add a build, or play on. The top bar says what the spare compute is doing.",
       "match": "(idle|spare|searching|at work).{0,60}paus|paus.{0,60}(idle|spare|compute|stops me|stopped)"
+    },
+    {
+      "id": "intro-plays",
+      "since": "2026-11-08",
+      "call": "The intro plays in full, about 7 screens before the first choice. Each screen's Skip and Next rise once its animation settles.",
+      "match": "intro (length|runs long|is long|too long)|(montage|intro|opening).{0,40}(before the first|no button yet|long)|actions of montage"
     }
   ],
   "knownGaps": [
