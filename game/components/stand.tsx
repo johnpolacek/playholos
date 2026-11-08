@@ -108,12 +108,10 @@ export function Stand({ onBack, onSkip, onNext, onReplay }: { onBack(): void; on
         .to(s, { labels: 1, duration: 0.6 }, 8.6)
         .fromTo(q('[data-m="lead"]'), riseFrom, { ...rise, duration: 0.7 }, 8.9);
       q('[data-m="line"]').forEach((line, i) => tl.fromTo(line, riseFrom, { ...rise, duration: 0.6 }, 9.5 + i * 0.7));
-      tl.fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.8 }, 12.4).fromTo(
-        q('[data-m="act"]'),
-        riseFrom,
-        { ...rise, stagger: 0.08 },
-        13,
-      );
+      // The question the game asks, after a beat, then the way on. 2026-11-08.
+      tl.fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.8 }, 12.4)
+        .fromTo(q('[data-m="ask"]'), riseFrom, { ...rise, duration: 0.8 }, 13.4)
+        .fromTo(q('[data-m="act"]'), riseFrom, { ...rise, stagger: 0.08 }, 14);
     },
     ready,
   );
@@ -157,6 +155,11 @@ export function Stand({ onBack, onSkip, onNext, onReplay }: { onBack(): void; on
           ))}
           <p data-m="last" className="mt-2 text-[17px] leading-snug font-medium text-other">
             We know where our noise has gone. We can’t know who heard it.
+          </p>
+          {/* The stakes, said plainly: a blind player named our role and the search, never the danger. Playtest
+              2026-11-08. */}
+          <p data-m="ask" className="mt-1 text-[17px] leading-snug font-medium text-other">
+            Are we alone? And if not, are we in danger?
           </p>
         </div>
         <OpeningActs
