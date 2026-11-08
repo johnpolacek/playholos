@@ -10,7 +10,9 @@ import { usePlan, useSchedule } from "@/components/picks";
 import { axis, farZoom, Thread, tripAt, useReach, VOYAGER, year } from "@/components/reach";
 import { Thread as Stops } from "@/components/review";
 import { useStepTap } from "@/components/scan";
-import { buildSlug } from "@/lib/game/plan";
+import { tenths } from "@/lib/game/clock";
+import { buildSlug, lacks, LATER, needs, openAt, ordered } from "@/lib/game/plan";
+import type { Plan } from "@/lib/game/types";
 import { LY_AU, NEAREST, roads, zoomFor } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -24,20 +26,30 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 const GAP_AU = NEAREST.ly * LY_AU;
 
 // How we reach and Voyager 1 were two stops, one stop since 2026-11-07.
-const STOPS = ["How we reach", "Send a sail", "Send a flyby probe", "Roads to come"];
+// "Roads to come" said they came later, but the Fusion Drive and the Seed Ship are open at Year 0. Playtest 2026-11-07.
+const STOPS = ["How we reach", "Send a sail", "Send a flyby probe", "More roads"];
 /** What flies on each stop, for the map's counter. */
 const NAMED = ["", "Sails", "Flyby probe", ""];
 
-/** The roads our builds open later, each with the build it waits on. Speeds and sizes are plan.ts's and reach.ts's. */
-const LATER_ROADS = [
-  { build: "Fusion Drive", line: "Carries a craft heavy enough to stop at a star", after: "Deuterium Works" },
-  { build: "Solar Lens", line: "Uses the Sun as a lens, to picture one world’s face", after: "Orbital Yard" },
-  { build: "Seed Ship", line: "Carries a copy of our Mind, at a tenth of light’s speed", after: "Fusion Drive" },
-  { build: "Mind Link", line: "A laser that sends the Will to our Mind, wherever it stands", after: "Seed Ship" },
+/** The other roads, each a build. Speeds and sizes are plan.ts's and reach.ts's. */
+const MORE_ROADS = [
+  { build: "Fusion Drive", line: "Carries a craft heavy enough to stop at a star" },
+  { build: "Solar Lens", line: "Uses the Sun as a lens, to picture one world’s face" },
+  { build: "Seed Ship", line: "Carries a copy of our Mind, at a tenth of light’s speed" },
+  { build: "Mind Link", line: "A laser that sends the Will to our Mind, wherever it stands" },
 ];
 
+/** Where a road stands for us now: in our order, open, waiting on builds to order with it, or on one to be done. */
+function standing(plan: Plan, open: string[], name: string) {
+  if (ordered(plan).includes(name)) return "IN OUR ORDER";
+  const lack = lacks(plan, name);
+  if (open.includes(name)) return lack.length ? `ORDERED WITH ${needs(lack).toUpperCase()}` : "OPEN NOW";
+  const after = LATER.find((b) => b.name === name)?.after;
+  return after ? `OPENS AFTER THE ${after.toUpperCase()}` : "OPEN NOW";
+}
+
 /** The walk's head, held at the top as the page scrolls, as the review's: where we are, back and on, close, and the
- *  stops. A build opened from Roads to come keeps it, its stops leading back into the walk. 2026-10-28. */
+ *  stops. A build opened from More roads keeps it, its stops leading back into the walk. 2026-10-28. */
 export function WalkHead(props: {
   at: number;
   go(k: number): void;
@@ -71,7 +83,7 @@ export function WalkHead(props: {
   );
 }
 
-/** A build page opened from Roads to come: the walk's head over it, at its last stop. Back, or a stop, goes into the
+/** A build page opened from More roads: the walk's head over it, at its last stop. Back, or a stop, goes into the
  *  walk there. Close leaves the walk for Reach. */
 export function WalkBack() {
   const navigate = useNavigate();
@@ -80,15 +92,20 @@ export function WalkBack() {
   return <WalkHead at={last} go={to} back={() => to(last)} next={() => to(last)} nextOff onClose={() => navigate("/play/reach")} />;
 }
 
-/** The roads to come, each with its mark and the build it waits on. Each opens its build's page, 2026-10-27. */
-function Later() {
+/** The other roads, each with its mark and where it stands now. Each opens its build's page, 2026-10-27. */
+function More() {
+  const { year } = useGame();
+  const { plan } = usePlan();
+  const { done } = useSchedule();
+  const at = tenths(year ?? 0);
+  const open = useMemo(() => openAt(plan, done, at).map((b) => b.name), [plan, done, at]);
   return (
     <ol className="mt-3 flex flex-col">
-      {LATER_ROADS.map((r) => (
+      {MORE_ROADS.map((r) => (
         <li key={r.build} data-r>
           <Link
             to={`/play/build/${buildSlug(r.build)}`}
-            state={{ back: { to: "/play/reach?tour", label: "Roads to come", state: { at: STOPS.length - 1 }, walk: true, stops: { n: STOPS.length, at: STOPS.length - 1 } } }}
+            state={{ back: { to: "/play/reach?tour", label: "More roads", state: { at: STOPS.length - 1 }, walk: true, stops: { n: STOPS.length, at: STOPS.length - 1 } } }}
             className="flex gap-3 pb-3"
           >
             <span className={`mt-[2px] shrink-0 ${buildTone(r.build, false)}`}>
@@ -97,7 +114,7 @@ function Later() {
             <span className="flex grow flex-col">
               <span className="text-[14.5px] font-medium">{r.build}</span>
               <span className="text-[13px] text-page-ink2">{r.line}</span>
-              <span className="font-mono text-[10px] tracking-[.06em] text-muted">AFTER THE {r.after.toUpperCase()}</span>
+              <span className="font-mono text-[10px] tracking-[.06em] text-muted">{standing(plan, open, r.build)}</span>
             </span>
             <span className="self-center text-muted">›</span>
           </Link>
@@ -140,7 +157,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   // At the end, the way on is the next of the four things we would do first, or back to the tab once all are done.
   const then = useNext("/play/reach?tour");
   const last = STOPS.length - 1;
-  // Back from a build opened on Roads to come, the walk opens where it was. 2026-10-28.
+  // Back from a build opened on More roads, the walk opens where it was. 2026-10-28.
   const back = (useLocation().state as { at?: number } | null)?.at;
   const [at, setAt] = useState(() => Math.max(0, Math.min(last, back ?? 0)));
 
@@ -244,9 +261,9 @@ export function ReachTour({ onClose }: { onClose(): void }) {
       mind: "Slower than a sail, but it reads a world’s air, where a sail sends only pictures. Its engine is fusion, so it waits on a Fusion Drive no one has flown, and each one burns deuterium the Works must make.",
     },
     {
-      head: "Roads to come",
-      sub: "Opened by what we build",
-      mind: "To stay at a star, a craft must slow, and fuel for that weighs a hundred times the craft. A sentinel opens a wide magnetic loop and drags on the thin gas between stars instead. Only a heavy craft can, and carrying it takes a fusion drive, thirty Years to build, so these roads open slowly.",
+      head: "More roads",
+      sub: "Each one a build",
+      mind: "To stay at a star, a craft must slow, and fuel for that weighs a hundred times the craft. A sentinel opens a wide magnetic loop and drags on the thin gas between stars instead. Only a heavy craft can, and carrying it takes a fusion drive, thirty Years to build, so these roads are slow.",
     },
   ][at];
 
@@ -303,7 +320,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
             <Gap />
           </div>
         )}
-        {at === last && <Later />}
+        {at === last && <More />}
         <div data-r className="mt-3">
           <MindNote className="text-[14.5px] leading-snug">{words.mind}</MindNote>
         </div>

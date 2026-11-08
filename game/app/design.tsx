@@ -61,7 +61,7 @@ const LEADS: { name: string; art: Art }[] = [
 ];
 
 const SIGHTS = ["bare", "seas", "green", "ice", "haze", "dark", "rocks"] as const;
-const STOPS = ["How we reach", "Voyager 1", "Send a sail", "Send a flyby probe", "Roads to come"].map((name) => ({ name }));
+const STOPS = ["How we reach", "Voyager 1", "Send a sail", "Send a flyby probe", "More roads"].map((name) => ({ name }));
 
 /** One part: its name, its file, when to use it, and it drawn. */
 function Part({ name, file, use, children }: { name: string; file: string; use: string; children: React.ReactNode }) {
@@ -179,7 +179,7 @@ export default function Design() {
       >
         <div className="flex flex-col gap-3">
           <BackBar to="/design" label="All builds" />
-          <BackBar to="/design" label="Roads to come" stops={{ n: 5, at: 4 }} />
+          <BackBar to="/design" label="More roads" stops={{ n: 5, at: 4 }} />
         </div>
       </Part>
       <Part name="TabHead" file="components/tab-head.tsx" use="The top line of a tab: its name, and on the right the walk through it and the ⓘ that opens its real record.">

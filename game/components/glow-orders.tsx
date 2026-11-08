@@ -80,6 +80,34 @@ function findRate(minds: MindsSeen | undefined, kind: Kind, within: number, now:
   return { found, start, span, perYear: found.filter((f) => f.ly <= within).length / span, nearest: Math.min(...found.map((f) => f.ly)) };
 }
 
+/** What an order at this pace sends or draws a Year. */
+function paceValue(pace: NonNullable<ReturnType<typeof findRate>>, by: By) {
+  const r = pace.perYear;
+  if (!r) return "None yet";
+  if (by === "sails") return r >= 1 ? `${Math.round(r)} a Year` : `1 every ${Math.round(1 / r)} Years`;
+  return `${t(r * CATALOG[by].fuel)} a Year`;
+}
+
+/** Each find on a line of the Years we have looked, lit if it falls in range. */
+function Finds({ pace, now, within }: { pace: NonNullable<ReturnType<typeof findRate>>; now: number; within: number }) {
+  const x = (y: number) => 4 + ((y - pace.start) / Math.max(1, now - pace.start)) * 92;
+  return (
+    <div className="relative mt-1.5 h-3.5" aria-hidden>
+      <i className="absolute inset-x-[4%] top-1/2 h-px bg-faint" />
+      {pace.found.map((f, i) => {
+        const near = f.ly <= within;
+        return (
+          <i
+            key={i}
+            className={`absolute top-1/2 -translate-x-1/2 -translate-y-1/2 animate-fade rounded-full motion-reduce:animate-none ${near ? "size-2 bg-other" : "size-1 bg-muted/60"}`}
+            style={{ left: `${x(f.seen)}%`, animationDelay: `${i * 40}ms` }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 /** The projection, drawn: each find on a line of the Years we have looked, lit if it falls in range, and the deuterium
  *  it would draw a Year against what the Works makes. 2026-11-07, the Will asked for it at the top. */
 function Projection({ pace, now, within, by }: { pace: NonNullable<ReturnType<typeof findRate>>; now: number; within: number; by: By }) {
@@ -89,27 +117,14 @@ function Projection({ pace, now, within, by }: { pace: NonNullable<ReturnType<ty
   const draw = pace.perYear * fuel;
   const share = draw / CATALOG.deuterium.perYear;
   const r = pace.perYear;
-  const value = !r ? "None yet" : by === "sails" ? (r >= 1 ? `${Math.round(r)} a Year` : `1 every ${Math.round(1 / r)} Years`) : `${t(draw)} a Year`;
-  const x = (y: number) => 4 + ((y - pace.start) / Math.max(1, now - pace.start)) * 92;
+  const value = paceValue(pace, by);
   return (
     <div className="mt-2 rounded-lg border border-faint bg-paper/40 px-2.5 py-2">
       <div className="flex items-baseline justify-between gap-3">
         <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">Projected</span>
         <b className={`font-mono text-[13px] font-semibold ${share > 1 ? "text-other" : "text-ink"}`}>{value}</b>
       </div>
-      <div className="relative mt-1.5 h-3.5" aria-hidden>
-        <i className="absolute inset-x-[4%] top-1/2 h-px bg-faint" />
-        {pace.found.map((f, i) => {
-          const near = f.ly <= within;
-          return (
-            <i
-              key={i}
-              className={`absolute top-1/2 -translate-x-1/2 -translate-y-1/2 animate-fade rounded-full motion-reduce:animate-none ${near ? "size-2 bg-other" : "size-1 bg-muted/60"}`}
-              style={{ left: `${x(f.seen)}%`, animationDelay: `${i * 40}ms` }}
-            />
-          );
-        })}
-      </div>
+      <Finds pace={pace} now={now} within={within} />
       <div className="mt-0.5 flex justify-between font-mono text-[10px] text-muted">
         <span>Year {Math.round(pace.start)}</span>
         <span>
@@ -155,6 +170,8 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
   const [by, setBy] = useState<By>(order?.by ?? (kind === "warm" ? "probe" : "sentinel"));
   const [within, setWithin] = useState<number>(order?.within ?? (kind === "warm" ? 30_000 : 50));
   const [asking, setAsking] = useState(false);
+  // Compact until asked: a line for the order and its finds, the rest behind More. 2026-11-08.
+  const [open, setOpen] = useState(false);
   const missing = NEEDS[by].find((n) => !inOrder(plan, n));
   const sent =
     (plan.flybys ?? []).filter((o) => o.name.startsWith(`${kind === "warm" ? "Warm" : "Cold"} glow `)).length +
@@ -176,10 +193,26 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
       : `Set now, it sends ${NAME[by].toLowerCase()} to each of the ${glows(now)} we have found within ${lyText(within)}: ${t(now * fuel)} of deuterium${allIn === null ? "" : `, all in by Year ${yearText(Math.max(from, allIn))}`}.`;
   return (
     <div className="mt-2 border-t border-faint pt-2">
-      <div className="flex items-center justify-between gap-3">
+      <button onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex w-full items-center justify-between gap-3 text-left">
         <b className="text-[14px] font-semibold">{kind === "warm" ? "Warm glows" : "Cold glows"} · {found}</b>
-        <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">Sent · {sent}</span>
-      </div>
+        <span className="flex items-center gap-2 font-mono text-[10px] tracking-[.1em] text-muted uppercase">
+          Sent · {sent}
+          <span className={`text-[12px] transition-transform duration-200 motion-reduce:transition-none ${open ? "rotate-90" : ""}`}>›</span>
+        </span>
+      </button>
+      {!open ? (
+        <button onClick={() => setOpen(true)} className="mt-0.5 block w-full text-left">
+          <span className="flex items-baseline justify-between gap-3">
+            <span className="text-[12.5px] leading-snug text-page-ink2">
+              {order ? `${NAME[order.by]} to each within ${lyText(order.within)}` : "No order set"}
+            </span>
+            {order && pace && <b className="font-mono text-[12px] font-semibold text-ink">{paceValue(pace, order.by)}</b>}
+          </span>
+          {pace && <Finds pace={pace} now={from} within={order?.within ?? within} />}
+          <span className="text-[12px] text-you">More ›</span>
+        </button>
+      ) : (
+        <>
       {pace && <Projection pace={pace} now={from} within={order?.within ?? within} by={order?.by ?? by} />}
       {order ? (
         <>
@@ -242,6 +275,11 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
               </button>
             )}
           </div>
+        </>
+      )}
+          <button onClick={() => setOpen(false)} className="mt-2 block text-[12px] text-you">
+            Less ‹
+          </button>
         </>
       )}
     </div>

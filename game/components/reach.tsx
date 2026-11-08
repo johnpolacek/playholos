@@ -225,29 +225,47 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
   return <ReachContext value={value}>{children}</ReachContext>;
 }
 
-/** The probes and sails we sent past stars, folded into one row: there can be dozens. Opened, each by its glow's
- *  chance of a mind, likeliest first. 2026-11-05. */
-function Flybys({ rows, now }: { rows: { id: string; slug?: string; name: string; mind?: string; mindAt: number; note: string; home: number; leaves: number }[]; now: number }) {
+/** Craft of one kind folded into one row: a line of where each is, from leaving to its word home, and opened, each.
+ *  The probes and sails we sent past stars first, 2026-11-05, every kind of craft 2026-11-08. */
+function Fleet({ title, build, rows, now, children }: { title: string; build: string; rows: { id: string; leaves: number; home: number }[]; now: number; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   if (!rows.length) return null;
   const home = rows.filter((r) => r.home <= now).length;
   // None gone yet says when the first goes: "On their way" read as flying for probes that leave in Year 37.7. Blind
   // playtest 2026-11-07.
   const first = Math.min(...rows.map((r) => r.leaves));
-  const sorted = [...rows].sort((a, b) => b.mindAt - a.mindAt || a.home - b.home);
+  const next = Math.min(...rows.filter((r) => r.home > now).map((r) => r.home));
+  const line = now < first ? `The first leaves in Year ${year(first)}.` : home === rows.length ? "All have sent word home." : `${home ? `${home} have sent word home. ` : ""}Next word home in Year ${year(next)}.`;
   return (
     <li className="border-t border-faint">
       <button onClick={() => setOpen(!open)} aria-expanded={open} className="block w-full py-2.5 text-left">
-        <Face
-          mark={<BuildMark name="Probe Yard" />}
-          tone="text-you"
-          name={<b className="font-semibold">Flyby probes and sails · {rows.length}</b>}
-          line={home ? `${home} have sent word home. Open for each, likeliest mind first.` : now < first ? `The first leaves in Year ${year(first)}. Open for each, likeliest mind first.` : "On their way. Open for each, likeliest mind first."}
-          right={open ? "Close" : "Open"}
-          more={false}
-        />
+        <Face mark={<BuildMark name={build} />} tone="text-you" name={<b className="font-semibold">{title} · {rows.length}</b>} line={line} right={open ? "Close" : "Open"} more={false} />
+        {/* Each craft on one line, from leaving to its word home. */}
+        <span className="relative mt-1.5 ml-7 block h-3" aria-hidden>
+          <i className="absolute inset-x-0 top-1/2 border-t border-dashed border-faint" />
+          {rows.map((r, i) => {
+            const f = Math.max(0, Math.min(1, (now - r.leaves) / Math.max(0.1, r.home - r.leaves)));
+            return (
+              <i
+                key={r.id}
+                className={`absolute top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 animate-fade rounded-full motion-reduce:animate-none ${f >= 1 ? "bg-other" : now < r.leaves ? "bg-muted/60" : "bg-you"}`}
+                style={{ left: `${f * 100}%`, animationDelay: `${i * 30}ms` }}
+              />
+            );
+          })}
+        </span>
       </button>
-      {open && (
+      {open && children}
+    </li>
+  );
+}
+
+/** The probes and sails we sent past stars: there can be dozens. Opened, each by its glow's chance of a mind,
+ *  likeliest first. 2026-11-05. */
+function Flybys({ rows, now }: { rows: { id: string; slug?: string; name: string; mind?: string; mindAt: number; note: string; home: number; leaves: number }[]; now: number }) {
+  const sorted = [...rows].sort((a, b) => b.mindAt - a.mindAt || a.home - b.home);
+  return (
+    <Fleet title="Flyby probes and sails" build="Probe Yard" rows={rows} now={now}>
         <ul className="mb-1 pl-7">
           {sorted.map((r) => (
             <li key={r.id} className="border-t border-faint first:border-t-0">
@@ -261,8 +279,42 @@ function Flybys({ rows, now }: { rows: { id: string; slug?: string; name: string
             </li>
           ))}
         </ul>
-      )}
-    </li>
+    </Fleet>
+  );
+}
+
+/** How many destinations show before All. */
+const FEW = 5;
+
+/** Every destination on one line by distance, ten times farther at each tick, so the near and the Galaxy-wide fit
+ *  together. Ours on the way or reached are lit. 2026-11-08. */
+function Spread({ places }: { places: { lead: Lead; reached: number | null; bound: number | null }[] }) {
+  if (places.length < 2) return null;
+  const top = Math.max(5, Math.ceil(Math.log10(Math.max(...places.map((p) => p.lead.range?.[1] ?? p.lead.ly)))));
+  const x = (ly: number) => 2 + (Math.max(0, Math.log10(Math.max(1, ly))) / top) * 96;
+  return (
+    <div className="mt-2 mb-1" aria-hidden>
+      <div className="relative h-4">
+        <i className="absolute inset-x-[2%] top-1/2 h-px bg-faint" />
+        {places.map((p, i) => {
+          const ours = p.reached !== null || p.bound !== null;
+          return (
+            <i
+              key={p.lead.slug}
+              className={`absolute top-1/2 -translate-x-1/2 -translate-y-1/2 animate-fade rounded-full motion-reduce:animate-none ${ours ? "size-2 bg-you" : p.lead.reply ? "size-1.5 bg-other" : "size-1 bg-muted/60"}`}
+              style={{ left: `${x(p.lead.range ? Math.sqrt(p.lead.range[0] * p.lead.range[1]) : p.lead.ly)}%`, animationDelay: `${i * 15}ms` }}
+            />
+          );
+        })}
+      </div>
+      <div className="relative h-3 font-mono text-[10px] text-muted">
+        {Array.from({ length: top }, (_, k) => k + 1).filter((k) => k % (top > 5 ? 2 : 1) === 0 || k === 1).map((k) => (
+          <span key={k} className="absolute -translate-x-1/2" style={{ left: `${x(10 ** k)}%` }}>
+            {(10 ** k).toLocaleString("en-US")} ly
+          </span>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -810,6 +862,8 @@ export function Reach() {
   // Cold glows no craft of ours has seen up close gather in one row, as on Scan, and faded warm glows we haven't
   // messaged in another. Playtest 2026-11-01.
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  // The nearest few, the rest behind All. 2026-11-08.
+  const [allPlaces, setAllPlaces] = useState(false);
   const messaged = new Set((save?.sent ?? []).map((m) => m.to));
   type Place = (typeof places)[number];
   const groups = [
@@ -827,6 +881,10 @@ export function Reach() {
     },
   ].map((g) => ({ ...g, members: places.filter(g.test) }));
   const groupOf = (p: Place) => groups.find((g) => g.members.length > 1 && g.test(p));
+  const shown = places.filter((p) => {
+    const g = groupOf(p);
+    return !g || p === g.members[0];
+  }).length;
 
   // Our sails and probe join Voyager 1 once they leave, each on its way from leaving to its word home from Proxima b.
   const flying: Row[] = base
@@ -880,6 +938,9 @@ export function Reach() {
     }];
   });
 
+  // Voyager 1 stands for what we have sent only until a craft of ours leaves. 2026-11-08.
+  const gone = clock !== null && (flying.length > 0 || stays.some((r) => r.road.leaves !== null && clock >= r.road.leaves));
+
   // The map shows the way to our latest craft still on its way, or the nearest star with none. 2026-11-05.
   const latest = [...stays].filter((s) => (clock ?? 0) < s.home).sort((a, b) => b.y - a.y)[0];
   const bound = latest?.star;
@@ -927,14 +988,32 @@ export function Reach() {
       <GlowOrderCard from={from} />
 
       {/* "Sent" read as our messages too, and a blind first-timer missed theirs here twice. 2026-11-07. */}
-      <ListHead left={`Craft sent · ${1 + flying.length + stays.length}`} right="Word home" className="mt-4" />
+      <ListHead left={`Craft sent · ${(gone ? 0 : 1) + flying.length + stays.length}`} right="Word home" className="mt-4" />
       <ul className="mt-1">
         {flying.map((r) => (
           <Item key={r.key} row={r} now={clock ?? 0} began={clock !== null} />
         ))}
-        {stays.filter((r) => !r.flyby).map((r) => (
-          <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} />
-        ))}
+        {/* Two or more of a kind fold into one row, a line of where each is, opened for each. 2026-11-08. */}
+        {(["A lens", "A sentinel", "A seed probe"] as const).map((what) => {
+          const kin = stays.filter((r) => !r.flyby && r.id.startsWith(`${what}:`));
+          if (kin.length < 2)
+            return kin.map((r) => <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} />);
+          return (
+            <Fleet
+              key={what}
+              title={{ "A lens": "Lenses", "A sentinel": "Sentinels", "A seed probe": "Seed probes" }[what]}
+              build={kin[0].key}
+              rows={kin.map((r) => ({ id: r.id, leaves: r.road.leaves ?? r.home, home: r.home }))}
+              now={clock ?? 0}
+            >
+              <ul className="mb-1 pl-7">
+                {kin.map((r) => (
+                  <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} />
+                ))}
+              </ul>
+            </Fleet>
+          );
+        })}
         <Flybys
           now={clock ?? 0}
           rows={stays.filter((r) => r.flyby).map((r) => {
@@ -944,7 +1023,7 @@ export function Reach() {
             return { id: r.id, slug: lead?.slug, name: r.name, note: r.note, home: r.home, leaves: r.road.leaves ?? r.home, mind: c?.ruledOut ? "ruled out" : m ? rangeText(m) : undefined, mindAt: m ? (m.lo + m.hi) / 2 : -1 };
           })}
         />
-        <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={voyager} />
+        {!gone && <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={voyager} />}
       </ul>
       {/* Craft are here, and our messages on Scan: a blind first-timer looked for a message just sent, found only
           Voyager, and had to ask the Mind where it went. 2026-11-07. */}
@@ -954,11 +1033,17 @@ export function Reach() {
       </Link>
 
       <ListHead left={`Destinations · ${places.length}`} right="Soonest" className="mt-5" />
+      <Spread places={places} />
       <ul className="mt-1">
-        {places.map((p) => {
+        {places
+          .filter((p) => {
+            const g = groupOf(p);
+            return !g || p === g.members[0];
+          })
+          .slice(0, allPlaces ? undefined : FEW)
+          .map((p) => {
           const g = groupOf(p);
           if (!g) return place(p);
-          if (p !== g.members[0]) return null;
           const open = openGroup === g.key;
           const near = (q: Place) => q.lead.range?.[0] ?? q.lead.ly;
           const far = (q: Place) => q.lead.range?.[1] ?? q.lead.ly;
@@ -980,6 +1065,11 @@ export function Reach() {
           );
         })}
       </ul>
+      {shown > FEW && (
+        <button onClick={() => setAllPlaces(!allPlaces)} className="border-t border-faint py-2.5 text-left text-[13px] text-you">
+          {allPlaces ? "Fewer ‹" : `All ${shown.toLocaleString("en-US")} ›`}
+        </button>
+      )}
     </div>
   );
 }
