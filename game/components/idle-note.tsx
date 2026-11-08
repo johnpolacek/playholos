@@ -143,6 +143,11 @@ export function IdleNote() {
         .sort((a, b) => b.o.y - a.o.y)[0]
     : undefined;
   const openSky = spent && !glow && !heat && !reading && !step && !flight;
+  // The craft's own destination on Reach, and the reading's lead, so each note's link flies the map there: "See it on
+  // Reach" opened on Reach's default star, not the one the craft flies to. 2026-11-08.
+  const flightTo = flight && leads.find((l) => l.star === flight.o.name);
+  const flightPage = flightTo ? `/play/reach/${flightTo.slug}` : "/play/reach";
+  const readLead = reading && leads.find((l) => l.star === reading.name);
   const clock = held && <span className="text-page-ink2"> The clock waits.</span>;
   const what = pick ? `${pick.build.what.charAt(0).toLowerCase()}${pick.build.what.slice(1)}` : "";
   return (
@@ -285,8 +290,13 @@ export function IdleNote() {
               {step.label} ›
             </Link>
           )}
-          {!watchNew && flight && path !== "/play/reach" && (
-            <Link to="/play/reach" className="text-[12.5px] text-you hover:underline">
+          {!watchNew && readLead && path !== `/play/lead/${readLead.slug}` && (
+            <Link to={`/play/lead/${readLead.slug}#close-reading`} className="text-[12.5px] text-you hover:underline">
+              See {starName(readLead.star)} ›
+            </Link>
+          )}
+          {!watchNew && flight && path !== flightPage && (
+            <Link to={flightPage} className="text-[12.5px] text-you hover:underline">
               See it on Reach ›
             </Link>
           )}

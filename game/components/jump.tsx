@@ -9,7 +9,7 @@ import { useMindNews } from "@/components/mind-chat";
 import { usePlan, useSchedule } from "@/components/picks";
 import { heardId, useLeads } from "@/components/scan";
 import { yearText } from "@/lib/game/clock";
-import { starName } from "@/lib/game/leads";
+import { type Lead, starName } from "@/lib/game/leads";
 import { buildSlug, drawAt, ordered } from "@/lib/game/plan";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { glowNamed } from "@/lib/game/glow-names";
@@ -22,6 +22,22 @@ import { gsap, prefersReducedMotion } from "@/lib/motion";
 // nothing on screen said what had changed.
 
 const JUMP = "holos:jump";
+
+/** The lead a jump's card turns the map to, while the card is open, so the map shows it off Scan too. 2026-11-08. */
+let jumpLead: Lead | null = null;
+const heedLead = new Set<() => void>();
+function setJumpLead(l: Lead | null) {
+  if (jumpLead === l) return;
+  jumpLead = l;
+  heedLead.forEach((f) => f());
+}
+export function useJumpLead() {
+  return useSyncExternalStore(
+    (f) => (heedLead.add(f), () => void heedLead.delete(f)),
+    () => jumpLead,
+    () => null,
+  );
+}
 
 /** Tells the Year and the sky a jump has begun. */
 export const announceJump = (from: number, to: number) => window.dispatchEvent(new CustomEvent(JUMP, { detail: { from, to } }));
@@ -191,7 +207,10 @@ const gifted = (h: { gift?: number }) => (h.gift && h.gift > 1 ? h.gift.toFixed(
 
 /** What reached us at the Year we jumped to: builds done, leads new to Scan, readings landed, signals heard. */
 export function Arrived({ from, to, snap }: { from: number; to: number; snap: Snap }) {
-  const { leads, readings, heard, dials, minds } = useLeads();
+  const { leads, readings, heard, dials, minds, look, setLook } = useLeads();
+  // What the map's Close View was on before the card, to give back once it closes, read as the card opens.
+  const lookNow = useRef(look);
+  useEffect(() => void (lookNow.current = look));
   const { plan } = usePlan();
   const { done, scale } = useSchedule();
   const [listening, setListening] = useState(true);
@@ -329,15 +348,21 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
     const i = leads.findIndex((l) => `lead:${l.slug}` === first.key);
     if (i < 0) return;
     const before = dials.focus ?? 0;
+    const was = lookNow.current;
     Object.assign(dials, { focus: i + 1 });
+    // Its look too, so Close View flies into that lead's system, and the map shows it off Scan as well. 2026-11-08.
+    setLook(leads[i]);
+    setJumpLead(leads[i]);
     return () => {
+      setJumpLead(null);
       if (dials.focus !== i + 1) return;
       // The card's lead, opened from it, stays in view once the card is put away: the camera left it while its page
       // stayed open. Elsewhere the map goes back to what it showed before. 2026-11-07.
       if (window.location.pathname === `/play/lead/${leads[i].slug}`) return;
       Object.assign(dials, { focus: before });
+      setLook(was);
     };
-  }, [first, leads, dials]);
+  }, [first, leads, dials, setLook]);
 
   // Our first warm glow is the game's first real sign, so it gets its own word. 2026-11-03.
   const firstWarm = leads.find((l) => l.slug === "warm-glow-1" && !snap.slugs.has(l.slug));

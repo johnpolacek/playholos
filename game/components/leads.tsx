@@ -307,9 +307,14 @@ export function LeadList({
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [quietOpen, setQuietOpen] = useState(false);
   const shown = peeked ?? picked;
+  // The focus held before a row was pointed at, put back when the pointer leaves: leaving set it to none, and wiped the
+  // lead a jump's card had turned the map to. 2026-11-08.
+  const before = useRef<number | null>(null);
   const look = (peek: number | null, pick = picked) => {
+    if (peek !== null && before.current === null) before.current = dials.focus ?? 0;
     setPeeked(peek);
-    Object.assign(dials, { focus: (peek ?? pick ?? -1) + 1 });
+    Object.assign(dials, { focus: peek !== null ? peek + 1 : pick !== null ? pick + 1 : (before.current ?? 0) });
+    if (peek === null) before.current = null;
   };
   const pick = (i: number | null) => {
     setPicked(i);

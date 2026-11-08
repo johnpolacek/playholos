@@ -16,6 +16,7 @@ import { readBuildOffer } from "@/lib/game/build-offer";
 import { type Lead, properGlows, starName } from "@/lib/game/leads";
 import { leadsNamed, onMap } from "@/lib/game/named-leads";
 import { buildNamed } from "@/lib/game/plan";
+import { SITES } from "@/lib/game/sites";
 import { NEWS } from "@/lib/mind/news";
 import { readOffer } from "@/lib/game/sends";
 import { browserStore } from "@/lib/game/store";
@@ -157,21 +158,27 @@ const textOf = (message?: UIMessage) => message?.parts.map((part) => (part.type 
 /** The words of an answer and the question it answers, with the lines its cards are drawn from taken off. */
 const spoken = (asked: UIMessage | undefined, answer: UIMessage) => `${textOf(asked)}\n${readOffer(readBuildOffer(textOf(answer)).words).words}`;
 
-/** What our talk is on: the lead named in the latest answer that names one, the question first. The map opens on it. It
- *  stays there through answers that name nothing, so the map doesn't fly home and back. 2026-11-04. */
-export function useTalkSubject() {
+/** What our talk is on: the lead named in the latest answer that names one, the question first, or the build the
+ *  latest answer offers. The map opens on it. It stays there through answers that name nothing, so the map doesn't fly
+ *  home and back. 2026-11-04. */
+export function useTalkSubject(): { lead: Lead | null; build: string | null; from: string } | null {
   const { messages, busy } = useMind();
   const { leads } = useLeads();
   for (let i = messages.length - 1; i >= 0; i--) {
     // A question naming a lead flies there as it is asked: the map sat on Earth until the answer came. 2026-11-07.
     if (messages[i].role === "user") {
       const lead = i === messages.length - 1 || messages[i + 1]?.role !== "assistant" ? leadsNamed(textOf(messages[i]), leads, true).find(onMap) : undefined;
-      if (lead) return { lead, from: messages[i].id };
+      if (lead) return { lead, build: null, from: messages[i].id };
       continue;
     }
     if (messages[i].role !== "assistant") continue;
+    // A build the Mind offers shows where it would stand, as its page does, ahead of a lead the same answer names: the
+    // card is what the answer leads to. The map stayed on Earth under it. 2026-11-08.
+    const offered = readBuildOffer(textOf(messages[i])).name;
+    const build = offered ? buildNamed(offered)?.name : undefined;
+    if (build && SITES[build]) return { lead: null, build, from: messages[i].id };
     const lead = leadsNamed(spoken(messages[i - 1], messages[i]), leads, !busy || i < messages.length - 1).find(onMap);
-    if (lead) return { lead, from: messages[i].id };
+    if (lead) return { lead, build: null, from: messages[i].id };
   }
   return null;
 }

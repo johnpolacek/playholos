@@ -1,6 +1,6 @@
 import { useLocation } from "react-router";
 import { Arrival } from "@/components/arrival";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
 import { BeginOnMap } from "@/components/begin";
 import { useTalkSubject } from "@/components/mind-chat";
@@ -13,7 +13,9 @@ import { FlightCount, ReachMap, Ruler, useReach } from "@/components/reach";
 import { MapKey } from "@/components/leads";
 import { ScanMap, useLeads, useStepTap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
-import { useWorks, WorksMap } from "@/components/works";
+import { placedOf, useWorks, WorksMap } from "@/components/works";
+import { useJumpLead } from "@/components/jump";
+import { usePlan, useSchedule } from "@/components/picks";
 import type { Stop } from "@/lib/flight";
 import type { Mark } from "@/lib/drift";
 import { PLANETS } from "../../src/astronomy.js";
@@ -49,7 +51,12 @@ export function MapStrip() {
   // On the Mind tab, the map opens on what our talk is on, until sent home. 2026-11-04.
   const subject = useTalkSubject();
   const [sentHome, setSentHome] = useState<string | null>(null);
-  const talked = path === "/play/mind" && subject && subject.from !== sentHome ? subject.lead : null;
+  const talking = path === "/play/mind" && subject && subject.from !== sentHome ? subject : null;
+  const talked = talking?.lead ?? null;
+  // Or the build the Mind offers, where it would stand, as its page shows it. 2026-11-08.
+  const talkedBuild = talking?.build ?? null;
+  // A jump's card open off Scan shows its lead there too, until the card closes. 2026-11-08.
+  const jumped = useJumpLead();
   // Reach's map stays on a destination's page, and flies out to its star.
   const reaching = path === "/play/reach" || path.startsWith("/play/reach/");
   const beams = useBeams();
@@ -97,6 +104,43 @@ export function MapStrip() {
             <Globe />
             Back to Earth
           </button>
+        </>
+      ) : jumped && !scan ? (
+        <>
+          <ScanMap quick className="absolute inset-0" />
+          <TalkLook lead={jumped} />
+          <span className={LABEL}>
+            {starName(jumped.star).toUpperCase()}
+            {leads.close && " · CLOSE VIEW"}
+          </span>
+          {leads.look?.system && (
+            <button onClick={() => leads.setClose(!leads.close)} className={`absolute top-2 right-2.5 ${PILL}`}>
+              <Lens closer={!leads.close} />
+              {leads.close ? "Pull Back" : "Close View"}
+            </button>
+          )}
+        </>
+      ) : talkedBuild ? (
+        <>
+          <WorksMap className="absolute inset-0" />
+          <TalkBuild name={talkedBuild} />
+          {works.close && <Turn />}
+          <span className={LABEL}>
+            {talkedBuild.toUpperCase()}
+            {works.close && " · CLOSE VIEW"}
+          </span>
+          <div className="absolute right-2.5 bottom-3 flex gap-1.5">
+            {CLOSE[talkedBuild] && (
+              <button onClick={() => works.setClose(!works.close)} className={PILL}>
+                <Lens closer={!works.close} />
+                {works.close ? "Pull Back" : "Close View"}
+              </button>
+            )}
+            <button onClick={() => setSentHome(subject!.from)} className={PILL}>
+              <Globe />
+              Back to Earth
+            </button>
+          </div>
         </>
       ) : talked ? (
         <>
@@ -216,7 +260,7 @@ export function MapStrip() {
 }
 
 /** Holds the lead our talk is on in the map's view, as its page does, as the Mind's shot of it: a dashed line, then a
- *  drift in. */
+ *  drift in. A jump's card holds its lead the same way, off Scan. */
 function TalkLook({ lead }: { lead: Lead }) {
   const { leads, dials, setLook } = useLeads();
   const i = leads.findIndex((l) => l.slug === lead.slug);
@@ -229,6 +273,20 @@ function TalkLook({ lead }: { lead: Lead }) {
       setLook(null);
     };
   }, [dials, i, leads, setLook]);
+  return null;
+}
+
+/** Holds the build the Mind offers in the map's view, among our builds with places, as its page does. 2026-11-08. */
+function TalkBuild({ name }: { name: string }) {
+  const { set, pick } = useWorks();
+  const { plan } = usePlan();
+  const { scale, done } = useSchedule();
+  const placed = useMemo(() => placedOf(plan, done, scale), [plan, done, scale]);
+  useEffect(() => set(placed), [set, placed]);
+  useEffect(() => {
+    pick(name);
+    return () => pick(null);
+  }, [pick, name]);
   return null;
 }
 

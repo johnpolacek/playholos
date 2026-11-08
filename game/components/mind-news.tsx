@@ -15,7 +15,7 @@ import { readOffer, target } from "@/lib/game/sends";
 import { useAccess } from "@/lib/key";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 import type { Heard } from "@/lib/sim/types";
-import { properGlows, WINDOWS } from "@/lib/game/leads";
+import { properGlows, starName, WINDOWS } from "@/lib/game/leads";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 
 // The Mind speaks unasked. Pressing Begin felt like nothing happened, a playtest found 2026-10-31, so Year 0 opens on
@@ -76,15 +76,35 @@ function newsBetween(from: number, to: number, plan: Plan | undefined, done: Rec
 }
 
 /** Where the news points, read back from the lines `newsBetween` writes: a build done opens its page, and a star
- *  heard from, reached or with a window open opens its lead. So each note ends on something to do. 2026-11-02. */
-function newsLinks(news: string, leads: { star: string; slug: string }[]) {
-  const links: { to: string; label: string }[] = [];
-  for (const [, name] of news.matchAll(/our (.+?) is done\./g)) links.push({ to: `/play/build/${buildSlug(name)}`, label: `See ${name}` });
-  for (const [, star] of news.matchAll(/(?:reached us from|reply from|our message to) (.+?)(?:,| opened| reached)/g)) {
-    const lead = leads.find((l) => l.star === star);
-    if (lead && !links.some((k) => k.to === `/play/lead/${lead.slug}`)) links.push({ to: `/play/lead/${lead.slug}`, label: `Open ${star}` });
+ *  heard from, reached or with a window open opens its lead. So each note ends on something to do. 2026-11-02. A
+ *  search ended opens its build, a glow or any lead's star named opens its lead, word from our colony opens the lead
+ *  where it lives, and a message reaching a star with no lead opens our messages. News of each sat with no way to it.
+ *  2026-11-08. */
+function newsLinks(news: string, leads: { star: string; slug: string }[], colony?: string) {
+  const links: { to: string; label: string; at: number; lead?: string }[] = [];
+  const add = (to: string, label: string, at: number, lead?: string) => !links.some((k) => k.to === to) && links.push({ to, label, at, lead });
+  const open = (lead: { star: string; slug: string }, at: number) => add(`/play/lead/${lead.slug}`, `Open ${starName(lead.star)}`, at, lead.slug);
+  for (const m of news.matchAll(/our ([^.:,“”]+?) (?:is done|ended and found)/g)) add(`/play/build/${buildSlug(m[1])}`, `See ${m[1]}`, m.index);
+  for (const m of news.matchAll(/(?:reached us from|reply from|our message to) (.+?)(?:,| opened| reached)/g)) {
+    const lead = leads.find((l) => l.star === m[1]);
+    if (lead) open(lead, m.index);
+    else if (m[0].startsWith("our message to")) add("/play#messages", "See our messages", m.index);
   }
-  return links.slice(0, 2);
+  for (const m of news.matchAll(/\b(Warm|Cold) glow (\d+)\b/g)) {
+    const lead = leads.find((l) => l.slug === `${m[1].toLowerCase()}-glow-${m[2]}`);
+    if (lead) open(lead, m.index);
+  }
+  if (colony) {
+    const at = news.indexOf("word from our colony");
+    const lead = leads.find((l) => l.star === colony);
+    if (at >= 0 && lead) open(lead, at);
+  }
+  // Any other lead whose star the news names, as a cold glow's beside a star.
+  for (const lead of leads) {
+    const at = news.search(new RegExp(`\\b${lead.star.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`));
+    if (at >= 0) open(lead, at);
+  }
+  return links.sort((a, b) => a.at - b.at);
 }
 
 /** Always there: keeps our talk, and hands the Mind news as it lands, once each tenth of a Year, never twice. */
@@ -249,12 +269,27 @@ export function MindSays() {
   const { save, year, read } = useGame();
   const path = useLocation().pathname;
   const { last, words, news, busy } = useMindNews();
-  const { leads } = useLeads();
+  const { leads, dials } = useLeads();
   const [away, setAway] = useState<string | null>(null);
   const root = useRef<HTMLDivElement>(null);
   // During a jump these words sit in the note that tells it, one voice in one place. 2026-11-04.
   const leap = useLeap();
   const shown = !leap && year !== null && !!last && news !== null && news !== BEGUN && last !== save?.read && last !== away && path !== "/play/mind";
+  const colony = save?.plan?.colony?.name;
+  const links = useMemo(() => (news ? newsLinks(news, leads, colony) : []), [news, leads, colony]);
+  // On Scan's map, the first lead the news names is in view while the note shows, and put away it goes back. The map
+  // sat on Earth under news of a star. 2026-11-08.
+  const named = links.find((k) => k.lead)?.lead;
+  useEffect(() => {
+    if (!shown || path !== "/play" || !named) return;
+    const i = leads.findIndex((l) => l.slug === named);
+    if (i < 0) return;
+    const before = dials.focus ?? 0;
+    Object.assign(dials, { focus: i + 1 });
+    return () => {
+      if (dials.focus === i + 1) Object.assign(dials, { focus: before });
+    };
+  }, [shown, path, named, leads, dials]);
   useGSAP(
     () => {
       if (shown && !prefersReducedMotion()) gsap.fromTo(root.current, riseFrom, rise);
@@ -277,7 +312,7 @@ export function MindSays() {
         <p className="mb-1 font-mono text-[10px] leading-snug tracking-[.06em] text-muted">{properGlows(news)}</p>
         {said(words) || "…"}
         <span className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px]">
-          {newsLinks(news, leads).map((k) => (
+          {links.slice(0, 2).map((k) => (
             <Link key={k.to} to={k.to} onClick={() => read(last)} className="font-medium text-you hover:underline">
               {k.label} ›
             </Link>
