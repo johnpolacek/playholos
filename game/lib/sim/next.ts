@@ -19,9 +19,13 @@ export function nextKnown(ahead: EarthView, year: number): number | null {
  *  button names it, 2026-11-01: a jump to a bare Year read as unexplained. A signal, a reading and the sky's own news
  *  are one word, our next finding, and the Year goes unsaid, 2026-11-04: "something new in the sky" read as cryptic. */
 export type Why = string;
-export function whyOf(path: readonly string[]): Why {
+// A lens's or the Hypertelescope's pictures come from home, not a craft: "Jump to word from our craft" landed on the
+// Hypertelescope's first pictures, and no craft had spoken. Playtest 2026-11-07.
+export function whyOf(path: readonly string[], owner?: unknown): Why {
   const [top] = path;
   const key = path.at(-1);
+  const by = (owner as { by?: string } | undefined)?.by;
+  if (top === "visits" && (by === "lens" || by === "hyper")) return "our next finding";
   if (top === "visits" || top === "colony" || key === "near" || key === "home" || (top === "minds" && path.includes("seedsLost"))) return "word from our craft";
   return "our next finding";
 }
@@ -30,11 +34,13 @@ export function whyOf(path: readonly string[]): Why {
 export function nextKnownWhy(ahead: EarthView, year: number): { at: number; why: Why } | null {
   let best: number | null = null;
   let where: string[] = [];
-  const walk = (x: unknown, key = "", path: string[] = []) => {
+  let whose: unknown;
+  const walk = (x: unknown, key = "", path: string[] = [], owner?: unknown) => {
     if (typeof x === "number") {
       if (WHEN.has(key) && x > year + 1e-6 && (best === null || x < best)) {
         best = x;
         where = path;
+        whose = owner;
       }
     } else if (Array.isArray(x)) {
       // A list of numbers is a place, as [ra, dec, d], not a time.
@@ -43,7 +49,7 @@ export function nextKnownWhy(ahead: EarthView, year: number): { at: number; why:
       // A warm glow shows on Scan once ranged, not when first seen: a stop then found nothing new there. Playtest
       // 2026-10-30.
       // A seed gone silent shows once its silence is known, not at the Year it was lost. 2026-11-01.
-      for (const [k, v] of Object.entries(x)) if (!(k === "seen" && "ranged" in x) && !(k === "at" && "known" in x)) walk(v, k, [...path, k]);
+      for (const [k, v] of Object.entries(x)) if (!(k === "seen" && "ranged" in x) && !(k === "at" && "known" in x)) walk(v, k, [...path, k], x);
     }
   };
   // Only the first cold glow stops the skip. The Halo Survey finds one every few Years, and each stopping it took about
@@ -64,7 +70,7 @@ export function nextKnownWhy(ahead: EarthView, year: number): { at: number; why:
   // Word from our craft at one still stops it, under visits.
   const holes = [...(ahead.holes ?? [])].sort((a, b) => a.found - b.found).slice(0, 1);
   walk({ ...ahead, holes, minds: ahead.minds && { ...ahead.minds, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
-  return best === null ? null : { at: best, why: whyOf(where) };
+  return best === null ? null : { at: best, why: whyOf(where, whose) };
 }
 
 /** The next Year to stop at: the soonest of what Earth will learn, the builds we finish, and any other Year something

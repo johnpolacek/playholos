@@ -623,3 +623,12 @@ test("a sail launched at a warm glow flashes there, and a peer awake when it lan
   }
   assert.fail("no awake peer in the seeds tried");
 });
+
+// The Hypertelescope's pictures are a finding, not word from our craft. Playtest 2026-11-07.
+test("a jump to home telescope pictures is not word from our craft", async () => {
+  const { nextKnownWhy } = await import("./next.ts");
+  const v = (by: string, home: number) => ({ star: "Proxima Centauri", world: "b", by, passed: home, home, sight: "seas" });
+  const ahead = { year: 0, felt: [], heard: [], visits: [v("hyper", 100.5), v("sails", 137.5)] } as never;
+  assert.deepEqual(nextKnownWhy(ahead, 0), { at: 100.5, why: "our next finding" });
+  assert.deepEqual(nextKnownWhy(ahead, 101), { at: 137.5, why: "word from our craft" });
+});
