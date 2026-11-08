@@ -120,7 +120,8 @@ export function language(texts) {
     const ours = t.text.replace(/“[^”]*”|"[^"]*"/g, "").replace(/(\d)\s?–\s?(\d)/g, "$1-$2");
     for (const c of RULES) if (c.test(ours, {})) out.push({ rule: c.name, text: t.text.slice(0, 160) });
     // A sign is never a mind until seen: it might be one, never would. m:238.
-    if (/\bwould\b[^.]*\bminds?\b|\bminds?\b[^.]*\bwould\b/i.test(t.text)) out.push({ rule: "would be a mind", text: t.text.slice(0, 160) });
+    // Only a claim, like “would be a mind” or “it would be minds”, not “we would start the Halo Survey” beside minds.
+    if (/\bwould be\b[^.]{0,30}\bminds?\b/i.test(t.text)) out.push({ rule: "would be a mind", text: t.text.slice(0, 160) });
     // Humans are we and us, never they. m:106.
     if (/\b(humans|humanity|people)\b[^.]*\bthey\b/i.test(t.text)) out.push({ rule: "humans are they", text: t.text.slice(0, 160) });
     if (t.kind === "button" && words(t.text.replace(/›/g, "")) > LIMITS.button) out.push({ rule: "long button", text: t.text, note: `${words(t.text)} words` });
