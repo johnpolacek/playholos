@@ -6,6 +6,7 @@ import { access } from "./access";
 export { Allowance } from "./allowance";
 import { earth } from "./earth";
 import { events } from "./events";
+import { feedback } from "./feedback";
 import { known, leads, next } from "./leads";
 import { mind } from "./mind";
 
@@ -34,6 +35,7 @@ const ROUTES: Record<string, (req: Request) => Promise<Response>> = {
   "POST /api/next": next,
   "POST /api/mind": limited,
   "POST /api/event": events,
+  "POST /api/feedback": feedback,
 };
 
 export default {

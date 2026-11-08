@@ -5,7 +5,7 @@ import { EVENT_NAMES, type EventName } from "@/lib/events";
 // or a playtest, sends nothing, so our tests never count as players, and no one's local game reports to us unasked.
 // Global Privacy Control turns it off, and so does marking a browser as ours. 2026-11-08.
 
-const LIVE = typeof location !== "undefined" && /^(www\.)?playholos\.com$/.test(location.hostname);
+export const LIVE = typeof location !== "undefined" && /^(www\.)?playholos\.com$/.test(location.hostname);
 const PLAYER = "holos-player";
 
 const ME = "holos-me";
@@ -50,5 +50,20 @@ export function track(name: EventName, detail = "", year: number | null = null) 
     if (!navigator.sendBeacon?.("/api/event", blob)) void fetch("/api/event", { method: "POST", body, keepalive: true }).catch(() => undefined);
   } catch {
     // Tracking never gets in the way of play.
+  }
+}
+
+/** Sends a player's note from the menu, with where they were. Only playholos.com and the dev server offer it. True once
+ *  it is kept. 2026-11-08. */
+export async function sendFeedback(text: string, screen: string, year: number | null) {
+  try {
+    const res = await fetch("/api/feedback", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ text, screen, year, player: player() }),
+    });
+    return res.ok;
+  } catch {
+    return false;
   }
 }

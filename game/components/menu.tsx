@@ -1,11 +1,12 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { GalacticYear } from "@/components/galactic-year";
 import { useGame } from "@/components/game-provider";
 import { RunLocal } from "@/components/run-local";
 import { useLeaveShell } from "@/components/wake";
-import { forgetKey, useAccess } from "@/lib/key";
+import { forgetKey, useAccess, useAllowance } from "@/lib/key";
 import { plainClick, useLeaveFor } from "@/lib/leave";
+import { LIVE, sendFeedback } from "@/lib/track";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 // Ways out of the game, each a section: the universe and the simulation, then the about pages. 2026-11-04.
@@ -29,6 +30,56 @@ function Label({ children }: { children: React.ReactNode }) {
 
 const row = "flex min-h-11 items-center justify-between gap-3 border-b border-rowline text-[15px]";
 
+// A note to the game's maker, with the screen and Year sent beside it, so we know where the player was. Only on
+// playholos.com and the dev server, since a local game has no one to send it to. 2026-11-08.
+function Feedback() {
+  const { pathname } = useLocation();
+  const { year } = useGame();
+  const [text, setText] = useState("");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "failed">("idle");
+  if (!LIVE && !import.meta.env.DEV) return null;
+  const send = async () => {
+    if (!text.trim() || state === "sending") return;
+    setState("sending");
+    const ok = await sendFeedback(text, pathname, year);
+    setState(ok ? "sent" : "failed");
+    if (ok) setText("");
+  };
+  return (
+    <>
+      <Label>FEEDBACK</Label>
+      <div data-d="item" className="flex flex-col gap-2 py-2">
+        {state === "sent" ? (
+          <p className="text-[13px] text-page-ink2">Sent. Thank you, it’s read.</p>
+        ) : (
+          <>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.currentTarget.value)}
+              maxLength={1000}
+              rows={3}
+              placeholder="What’s confusing, broken, or wonderful?"
+              aria-label="Feedback for the game’s maker"
+              className="min-h-20 w-full resize-y rounded-md border border-faint bg-panel p-2.5 text-[14px] outline-none placeholder:text-muted focus:border-muted"
+            />
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xs text-muted">{state === "failed" ? "That didn’t send. Try again in a minute." : "Goes to the game’s maker, with this screen."}</span>
+              <button
+                type="button"
+                onClick={() => void send()}
+                disabled={!text.trim() || state === "sending"}
+                className="h-9 shrink-0 rounded-md bg-ink px-3.5 text-[13px] text-paper disabled:opacity-50"
+              >
+                {state === "sending" ? "Sending…" : "Send"}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </>
+  );
+}
+
 // The drawer slides in from the left over the whole screen. A native modal dialog, so focus stays inside it, the game
 // behind can't be reached, and Escape closes it.
 function Drawer({ onClose }: { onClose(): void }) {
@@ -39,6 +90,7 @@ function Drawer({ onClose }: { onClose(): void }) {
   const leaveFor = useLeaveFor();
   const open = useAccess();
   const keyed = open === undefined ? null : open === "key";
+  const { free } = useAllowance();
   const [sure, setSure] = useState(false);
 
   useEffect(() => {
@@ -119,7 +171,9 @@ function Drawer({ onClose }: { onClose(): void }) {
                 : keyed
                   ? "In use. Each question is billed to it."
                   : open === null
-                    ? "Locked. A key opens it, or play on your Claude plan."
+                    ? free
+                      ? "Locked. Open it on us, with a key, or on your Claude plan."
+                      : "Locked. A key opens it, or play on your Claude plan."
                     : open === "free"
                       ? "On us, with a daily limit. A key lifts it."
                       : "None. The Mind tab takes one."}
@@ -166,6 +220,8 @@ function Drawer({ onClose }: { onClose(): void }) {
             ))}
           </Fragment>
         ))}
+
+        <Feedback />
 
         <Label>ELSEWHERE</Label>
         {ELSEWHERE.map(([href, label]) => (
