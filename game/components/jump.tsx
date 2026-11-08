@@ -328,9 +328,14 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
     if (!first) return;
     const i = leads.findIndex((l) => `lead:${l.slug}` === first.key);
     if (i < 0) return;
+    const before = dials.focus ?? 0;
     Object.assign(dials, { focus: i + 1 });
     return () => {
-      if (dials.focus === i + 1) Object.assign(dials, { focus: 0 });
+      if (dials.focus !== i + 1) return;
+      // The card's lead, opened from it, stays in view once the card is put away: the camera left it while its page
+      // stayed open. Elsewhere the map goes back to what it showed before. 2026-11-07.
+      if (window.location.pathname === `/play/lead/${leads[i].slug}`) return;
+      Object.assign(dials, { focus: before });
     };
   }, [first, leads, dials]);
 
