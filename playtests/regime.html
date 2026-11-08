@@ -37,7 +37,7 @@
       "name": "Screen check",
       "file": "scripts/capture.mjs",
       "branch": "none, local",
-      "what": "Every named state, opened from its saved game and shot at desktop and phone width. A critic who sees only the shots scores each one. Run it after any change to a screen.",
+      "what": "Every named state, opened from its saved game and shot at laptop and phone width. A critic who sees only the shots scores each one. Run it after any change to a screen.",
       "players": ["screens"]
     }
   ],
@@ -220,7 +220,7 @@
     }
   ],
   "viewports": {
-    "desktop": { "width": 1280, "height": 800 },
+    "laptop": { "width": 1280, "height": 800 },
     "phone": { "width": 390, "height": 844, "scale": 2, "touch": true }
   },
   "capture": { "settleMs": 2500, "timeoutMs": 30000 },
@@ -235,7 +235,7 @@
     { "id": "scan-deep", "title": "Scan, deep time", "path": "/play", "description": "Thousands of Years in, with every watch built and hundreds of glows. The few leads worth acting on should still stand out." }
   ],
   "screens": {
-    "who": "A reader who never played and never saw the code. It sees only the screenshots, desktop and phone, and what each state should show.",
+    "who": "A reader who never played and never saw the code. It sees only the screenshots, laptop and phone, and what each state should show.",
     "ratings": [
       { "id": "purpose", "q": "Can a new player tell what this screen is for, and what to do on it?", "anchors": ["no idea", "guessing", "clear after a look", "plain at a glance"] },
       { "id": "hierarchy", "q": "Does what matters most here read first?", "anchors": ["the key thing is buried", "hard to find", "found after a look", "reads first"] },
@@ -245,7 +245,7 @@
     "rules": [
       "Judge only what is on screen. Never the code, the diff, or what a change meant to do.",
       "Rate from the anchors, so a 6 means the same every run.",
-      "Rate desktop and phone apart. The phone is held to the same anchors.",
+      "Rate laptop and phone apart. The phone is held to the same anchors.",
       "Name the worst thing on screen, where it is, and one fix, in a short line each."
     ]
   },
