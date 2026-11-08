@@ -634,6 +634,7 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - *What it is.* A 110 km vacuum tunnel through Cayambe, on the equator, throws 40 t craft out at 8.8 km/s, ten a day. Cargo only, at 30 g. The mountain is ours: they named the Andes or Africa.
   - *Its price:* 12 Years, a sample from their 10 to 20. About two flagships, from its $20 billion. A ground build, so no matter.
   - *What it gives:* 128 kt a Year of lift, three times the Launch Complex. Open at Year 0, but not in the walk on Build, since nothing we could start then waits on lift.
+  - *Its use, since 2026-11-07:* our craft build a fifth faster once it is done: the Probe Yard, Fusion Drive, Seed Ship and Strike Yard. Hulls and fuel are what cheap lift helps most. The fifth is ours, since StarTram gives a price, not a pace. It stacks with the Orbital Yard. Not the Laser Sail Array, whose beam stands on Earth, nor the readying of bullets.
   - *Untested:* the door of charged air that keeps the sky out of the tunnel.
 - **A rock coming, and the Rock Deflector, built 2026-10-28.** Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#a-rock-coming-2026-10-28).
   - *Which games:* each seed rolls the rocks no survey had mapped by Year 0, at real rates, over its first 1,000 Years. 12 of 33 seeds send one, mostly 50 to 70 m, one 140 m at Year 67.

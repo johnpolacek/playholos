@@ -221,6 +221,15 @@ test("Earth lost: its works leave the line, and a backup builds only off Earth",
   assert.ok(offEarth("Moon vault") && offEarth("Seed ship") && !offEarth("Launch complex"));
 });
 
+test("the Launch Tunnel builds our craft a fifth faster, and nothing else", () => {
+  const took = (work: string, tunnel: boolean) => {
+    const orders: Order[] = [...(tunnel ? [{ y: 0, begin: "Launch tunnel" }] : []), { y: 50, begin: work }];
+    return pace(orders, 200).done[work] - 50;
+  };
+  assert.ok(Math.abs(took("Strike yard", true) / took("Strike yard", false) - 0.8) < 1e-3);
+  assert.ok(Math.abs(took("Infrared telescope", true) / took("Infrared telescope", false) - 1) < 1e-3);
+});
+
 test("a lens pictures a felt world's face once its picture is home: its ground, never cities, now no one lives near", async () => {
   const world = await loadWorld(10);
   const f = world.finds[0];

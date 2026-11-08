@@ -273,7 +273,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "Nothing we have built has flown faster than Parker Solar Probe: 192 km/s, at its closest to the Sun in 2024.",
       where: "In low orbit, 400 km up, on the Orbital Yard’s path, about 180 km behind it.",
       why: "A probe this big can’t be launched whole. Its parts come up to orbit, so we join and fuel it there.",
-      takes: `${kt("Probe Yard")} kt of the matter we hold in orbit. Its probes burn fusion, so the first flies 12 Years after the yard, a Fusion Drive and the Deuterium Works are done.`,
+      takes: `${kt("Probe Yard")} kt of the matter we hold in orbit. Its probes burn fusion, so the first flies 12 Years after the yard, a Fusion Drive and the Deuterium Works are done. The yard is built a fifth quicker once the Launch Tunnel is done.`,
       before:
         "Project Daedalus, from 1973 to 1978, planned a two-stage fusion probe of 54,000 t, built in Earth orbit as this one is. It would pass Barnard’s Star about 50 years after launch.",
     },
@@ -324,7 +324,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "A nuclear weapon’s yield tops out near 50 Mt. Nothing we have flies faster than Parker Solar Probe’s 0.06% of light speed.",
       where: "In the Orbital Foundry’s high orbit, where Moon rock and fusion fuel come in.",
       why: "Any mind could fire one. Whatever another can build, we can. Fired, it coasts dark: only a watcher in our own system sees it leave.",
-      takes: "Per bullet, 1,000 t and 61 kt of fusion fuel, 20 Years to ready, and 37 kt of it helium-3 from the harvest. The yard itself, 10 Years.",
+      takes: "Per bullet, 1,000 t and 61 kt of fusion fuel, 20 Years to ready, and 37 kt of it helium-3 from the harvest. The yard itself, 10 Years, a fifth less once the Launch Tunnel is done.",
       before: "No one has built a weapon that crosses between stars. Its physics is a rocket’s, pointed.",
     },
   },
@@ -647,7 +647,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "Fusion plants are being built, but none feeds the grid yet. No fusion engine has ever fired.",
       where: "In low orbit, 400 km up, on the Orbital Yard’s path, about 350 km behind it.",
       why: "Its parts come up to orbit and are joined there, as Project Icarus planned for its Firefly. It burns deuterium and throws off radiation, so it is first lit behind the Moon, far from Earth.",
-      takes: "An engine and radiators of 1,400 to 4,000 t, by Firefly’s figures scaled to our ship. Built in orbit, it takes a quarter less time once the yard is done.",
+      takes: "An engine and radiators of 1,400 to 4,000 t, by Firefly’s figures scaled to our ship. Built in orbit, it takes a quarter less time once the yard is done, and a fifth less once the Launch Tunnel is.",
       before:
         "Firefly, drawn in 2015, burns deuterium for 10 years to reach 4.7% of light speed. Its pinch draws 1,175 GW. Zap Energy’s best ran at 39 kW in 2025.",
     },
@@ -664,7 +664,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "Nothing we have launched can stop at another star. Voyager 1, our farthest, passes 1.7 ly from one in 40,000 years.",
       where: "In low orbit, 400 km up, on the Orbital Yard’s path, about 530 km behind it, 180 km past its Fusion Drive.",
       why: "At about 1,500 t it can’t be launched whole. Its parts come up to orbit, so we join it there, beside the drive that will carry it.",
-      takes: `${kt("Seed Ship")} kt of the matter we hold in orbit. About half is the magnetic sail it brakes on. The seed itself is about 443 t.`,
+      takes: `${kt("Seed Ship")} kt of the matter we hold in orbit. About half is the magnetic sail it brakes on. The seed itself is about 443 t. It is built a fifth quicker once the Launch Tunnel is done.`,
       before:
         "In 1980 Robert Freitas drew REPRO, a 443 t seed that lands on a giant planet’s moon and grows into a 346,000 t factory over 500 years.",
     },

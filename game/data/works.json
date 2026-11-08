@@ -28,7 +28,8 @@
   "Probe yard": {
    "years": 24,
    "want": 10,
-   "orbit": true
+   "orbit": true,
+   "craft": true
   },
   "Laser sail array": {
    "years": 25,
@@ -76,12 +77,14 @@
   "Fusion drive": {
    "years": 30,
    "want": 10,
-   "orbit": true
+   "orbit": true,
+   "craft": true
   },
   "Seed ship": {
    "years": 18,
    "want": 5,
-   "orbit": true
+   "orbit": true,
+   "craft": true
   },
   "Deuterium works": {
    "years": 5,
@@ -180,7 +183,8 @@
   "Strike yard": {
    "years": 10,
    "want": 3,
-   "orbit": true
+   "orbit": true,
+   "craft": true
   },
   "Fusion plants": {
    "years": 30,
@@ -276,6 +280,10 @@
  "yard": {
   "work": "Orbital yard",
   "cut": 0.25
+ },
+ "tunnel": {
+  "work": "Launch tunnel",
+  "cut": 0.2
  },
  "rock": {
   "Mass driver": 600,

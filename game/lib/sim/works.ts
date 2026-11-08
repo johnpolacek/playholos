@@ -29,6 +29,7 @@ interface Work {
   years?: number;                   // standard Years, at the thought its want buys
   want: number;                     // flagships of thought for standard pace
   orbit?: boolean;                  // built faster once the orbital yard is done
+  craft?: boolean;                  // a craft lifted from Earth, built faster once the launch tunnel is done
   milestone?: [string, number];     // a step done when this many standard Years are left
   then?: string[];                  // works that join the line when it is done
   copies?: [number, string];        // built this many times, each named this and its number
@@ -47,6 +48,8 @@ interface Catalog {
   floor: number; push: number; flagship: number; gridRoom: number; step: number; studies: number;
   dataCenter: { years: number; aside: number };
   yard: { work: string; cut: number };
+  /** The Launch Tunnel's cut to craft: cheap lift for hulls and fuel. Ours, 2026-11-07. */
+  tunnel: { work: string; cut: number };
   halo: { floor: number; every: number };
   lens: { au: number; flight: number; look: number; km30pc: number };
   /** Calcs/mercury.py: what pushes a lens, the Solar Swarm's glow, and what the Hypertelescope pictures. 2026-10-29. */
@@ -80,6 +83,12 @@ export const offEarth = (w: string) => OFF_EARTH.has(w) || WORKS[w]?.orbit === t
 
 /** The most doublings a growing work counts, so its thought stays a number. */
 const MOST_DOUBLINGS = 900;
+
+/** Works that speed others once done: the yard what is built in orbit, the tunnel our craft. 2026-11-07. */
+const SPEEDERS = [
+  { ...CATALOG.yard, cuts: (w: string) => WORKS[w].orbit === true },
+  { ...CATALOG.tunnel, cuts: (w: string) => WORKS[w].craft === true },
+];
 
 /** Years a work takes when given s times the thought its standard pace needs. */
 export const paced = (years: number, s: number) => years * (FLOOR + (1 - FLOOR) / s);
@@ -134,9 +143,9 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   const queue = [...orders].sort((a, b) => a.y - b.y);                     // a stable sort keeps one Year's orders as given
   const line: string[] = [], left = new Map<string, number>(), begun = new Map<string, number>(), moved = new Set<string>();
   const done: Record<string, number> = {}, built = new Map<string, number>(), dataCenters: number[] = [];
-  // A work taken back: its standard Years left of the whole, and whether the yard was done then, so it gets the yard's
-  // cut once. The whole is each work's standard Years when begun, cut with what is left, so the share built holds.
-  const kept = new Map<string, { left: number; whole: number; yard: boolean }>(), whole = new Map<string, number>();
+  // A work taken back: its standard Years left of the whole, and the speeders done then, so it gets each one's cut
+  // once. The whole is each work's standard Years when begun, cut with what is left, so the share built holds.
+  const kept = new Map<string, { left: number; whole: number; sped: string[] }>(), whole = new Map<string, number>();
   let t = 0, studies = CATALOG.studies, fits = centers(scale), more = 0, queued = 0, standing = false, building: number | null = null;
   let s: number[] = [], room = 0, idle = 0, thought = 0, searched = 0;
   const searchLog: [number, number][] = [[0, 0]];
@@ -171,13 +180,16 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   // orbit and the cold annex never share the same megatonnes. 2026-10-26.
   const rockSpent = () => Object.keys(done).reduce((kt, w) => kt + (WORKS[w]?.rock ?? 0), 0);
   const rockFirst = () => line.find((w) => WORKS[w].rock !== undefined);
-  const yardDone = () => done[CATALOG.yard.work] !== undefined;
+  // What a work's standard Years are cut to by the speeders done, past those it already had.
+  const cutOf = (w: string, had: readonly string[] = []) =>
+    SPEEDERS.reduce((c, x) => (x.cuts(w) && done[x.work] !== undefined && !had.includes(x.work) ? c * (1 - x.cut) : c), 1);
+  const sped = () => SPEEDERS.filter((x) => done[x.work] !== undefined).map((x) => x.work);
   // A work that joins the line later takes its parent's place in the order begun: before works begun after it,
   // unless the player moved those to the front. As the mocks place the far-side array behind a seed ship's works.
   const place = (w: string) => { const i = line.findIndex((x) => begun.get(x)! > begun.get(w)! && !moved.has(x)); return i < 0 ? line.length : i; };
   const join = (w: string, at: number, since: number, years = WORKS[w].years) => {
     begun.set(w, since);
-    if (years !== undefined) whole.set(w, left.set(w, years * (WORKS[w].orbit && yardDone() ? 1 - CATALOG.yard.cut : 1)).get(w)!);
+    if (years !== undefined) whole.set(w, left.set(w, years * cutOf(w)).get(w)!);
     line.splice(at, 0, w);
   };
 
@@ -200,8 +212,9 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
           if (n < work.copies[0]) join(w, place(w), begun.get(w)!);
         } else done[w] = t;
         if (work.grows) grown.set(w, { years: 0, since: t });
-        if (w === CATALOG.yard.work)
-          for (const x of line) if (WORKS[x].orbit && left.has(x)) { left.set(x, left.get(x)! * (1 - CATALOG.yard.cut)); whole.set(x, whole.get(x)! * (1 - CATALOG.yard.cut)); }
+        for (const sp of SPEEDERS)
+          if (w === sp.work)
+            for (const x of line) if (sp.cuts(x) && left.has(x)) { left.set(x, left.get(x)! * (1 - sp.cut)); whole.set(x, whole.get(x)! * (1 - sp.cut)); }
         if (follow && work.then) { const at = place(w); work.then.filter((x) => !backup.o || offEarth(x)).forEach((x, i) => join(x, at + i, begun.get(w)!)); }
       }
       while (queue.length && queue[0].y <= t + EPS) {
@@ -220,7 +233,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
           if (g && g.since !== null) { g.years += t - g.since; g.since = null; }
           if (o.drop === "Data center") standing = false;
           else if (line.includes(o.drop)) {
-            if (left.has(o.drop)) kept.set(o.drop, { left: left.get(o.drop)!, whole: whole.get(o.drop)!, yard: yardDone() });
+            if (left.has(o.drop)) kept.set(o.drop, { left: left.get(o.drop)!, whole: whole.get(o.drop)!, sped: sped() });
             line.splice(line.indexOf(o.drop), 1); left.delete(o.drop);
           }
         }
@@ -230,7 +243,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
           join(o.begin, line.length, t);
           const k = kept.get(o.begin);
           if (k) {
-            const cut = WORKS[o.begin].orbit && !k.yard && yardDone() ? 1 - CATALOG.yard.cut : 1;
+            const cut = cutOf(o.begin, k.sped);
             left.set(o.begin, k.left * cut); whole.set(o.begin, k.whole * cut); kept.delete(o.begin);
           }
         }

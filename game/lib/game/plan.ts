@@ -45,7 +45,7 @@ export const BUILDS: Build[] = [
   { name: "X-Ray Watch", what: "Sees a probe’s fusion flame as it brakes into our system, weeks out.", does: "see" },
   { name: "Quiet Radars", what: "Cuts the radars that tell every listener we are here.", does: "keep" },
   // StarTram's Gen-1, 2026-10-27: a ground build, so it spends no matter, and lifts three times what the complex does.
-  { name: "Launch Tunnel", what: "Throws cargo to orbit from a tunnel in the Andes, 128 kt a Year.", does: "lift" },
+  { name: "Launch Tunnel", what: "Builds our craft a fifth faster, with cheap lift from a tunnel in the Andes.", does: "lift" },
   { name: "Orbital Yard", what: "Cuts build time in orbit by a quarter.", kt: 1, does: "lift" },
   { name: "Moon Vault", what: "A second home for our Mind, in the Moon’s rock.", kt: 10, does: "keep" },
   // The two roads to the nearest star, open at Year 0 since 2026-10-18. Even last in line, the probe yard's large want
@@ -261,7 +261,7 @@ export const SAYS: Record<string, string> = {
   "Launch Complex":
     "It doubles what we lift to orbit. Nothing we could start now waits on lift, but the Mass Driver can’t reach the Moon without it.",
   "Launch Tunnel":
-    "Superconducting magnets throw 40 t craft down a 110 km vacuum tunnel and out of a mountain at 8.8 km/s, ten a day. That is 128 kt a Year, three times the Launch Complex, at about $50 a kilogram. Cargo only: it pulls 30 g. No one has built one, and the door of charged air that keeps the sky out of the tunnel is untested. Nothing we could start now waits on lift.",
+    "Superconducting magnets throw 40 t craft down a 110 km vacuum tunnel and out of a mountain at 8.8 km/s, ten a day. That is 128 kt a Year, three times the Launch Complex, at about $50 a kilogram. Cargo only: it pulls 30 g. Hulls and fuel come up cheaply, so the Probe Yard, Fusion Drive, Seed Ship and Strike Yard take a fifth less time once it is done. No one has built one, and the door of charged air that keeps the sky out of the tunnel is untested.",
   "Orbital Yard": "It builds in orbit in a quarter less time. It pays most if we mean to build a lot up there.",
   "Moon Vault":
     "Nothing we know of threatens Earth yet. This keeps a copy of us out of reach of anything that hits Earth, in case something does. It takes half the matter we hold in orbit.",
@@ -272,7 +272,7 @@ export const SAYS: Record<string, string> = {
   "Deuterium Works":
     "Fusion burns heavy hydrogen, and the sea holds plenty: about one hydrogen atom in 6,400 is heavy. It takes little, and pays only once a drive is coming.",
   "Fusion Drive":
-    "No one has flown one yet. It carries a craft of 1,000 t to a tenth of light speed, heavy enough to slow at a star on a magnetic sail and stay, where a flyby is past within minutes. The longest roads need it. It takes thirty Years at standard pace, a quarter less once the Orbital Yard is done.",
+    "No one has flown one yet. It carries a craft of 1,000 t to a tenth of light speed, heavy enough to slow at a star on a magnetic sail and stay, where a flyby is past within minutes. The longest roads need it. It takes thirty Years at standard pace, a quarter less once the Orbital Yard is done, and a fifth less once the Launch Tunnel is.",
   "Seed Ship":
     "A copy of our Mind that goes and stays, about 1,500 tonnes with its seed. It flies only on a Fusion Drive, fed by the Deuterium Works, so it leaves once both are done.",
   "Ground Solar":
