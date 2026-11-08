@@ -1,5 +1,7 @@
-import type { Lead, Reading } from "@/lib/game/leads";
-import { chancesOf, type Range, rangeText } from "@/lib/game/chance";
+import { useEffect, useState } from "react";
+import { type Lead, lifeOf, type Odds, type Reading } from "@/lib/game/leads";
+import { type Chances as ChanceSet, chancesOf, type Range, rangeText } from "@/lib/game/chance";
+import { prefersReducedMotion } from "@/lib/motion";
 
 // A lead's chance of life and of a mind, each a glowing band on a track from none to certain. A wide, soft band is a
 // guess, a narrow, sharp one a reading, and under it what the chance rests on. A reading landing slides the band to
@@ -35,8 +37,81 @@ function Band({ label, range, sure, color }: { label: string; range: Range | "un
   );
 }
 
-export function Chances({ lead, readings, className = "" }: { lead: Lead; readings: readonly Reading[]; className?: string }) {
+/** The readings that came before `r`, in the order lifeOf weighs them: earlier Years first, then list order. */
+export function before(readings: readonly Reading[], r: Reading) {
+  const i = readings.indexOf(r);
+  return readings.filter((x, j) => x !== r && (x.at < r.at || (x.at === r.at && j < i)));
+}
+
+const same = (a?: Range | "unknown", b?: Range | "unknown") =>
+  a === b || (!!a && !!b && a !== "unknown" && b !== "unknown" && rangeText(a) === rangeText(b));
+
+/** How one reading moved our chances, said short: "life 20–35% → 44–56%", or where it stands when it moved nothing.
+ *  Life when we weigh life, else a mind. A reading never said what it did to the odds, so its worth was buried.
+ *  Playtest 2026-11-07. */
+export function movedBy(lead: Lead, readings: readonly Reading[], r: Reading) {
+  const now = chancesOf(lead, [...before(readings, r), r]);
+  if (!now) return null;
+  const was = chancesOf(lead, before(readings, r));
+  return chanceShift(was, now);
+}
+
+export function chanceShift(was: ChanceSet | null, now: ChanceSet) {
+  if (now.ruledOut) return { label: "mind", from: was?.ruledOut || !was?.mind || was.mind === "unknown" ? null : rangeText(was.mind), to: "ruled out", up: false };
+  const pick = now.life ? "life" : now.mind && now.mind !== "unknown" ? "mind" : null;
+  if (!pick) return null;
+  const to = now[pick] as Range;
+  const from = was?.[pick];
+  const moved = from && from !== "unknown" && !same(from, to);
+  return { label: pick, from: moved ? rangeText(from) : null, to: rangeText(to), up: !!moved && (to.lo + to.hi) / 2 > (from.lo + from.hi) / 2 };
+}
+
+/** A chance in a row, as on Scan and the jump card: "life 44–56%", with where it was when the last reading moved it. */
+export function ChanceTag({ shift, className = "" }: { shift: ReturnType<typeof chanceShift>; className?: string }) {
+  if (!shift) return null;
+  const color = shift.label === "life" ? "var(--see)" : "var(--other)";
+  return (
+    <span className={`font-mono text-[11px] whitespace-nowrap tabular-nums ${className}`}>
+      <span className="text-muted">{shift.label} </span>
+      {shift.from && <span className="text-muted">{shift.from} → </span>}
+      <span style={{ color }}>{shift.to}</span>
+    </span>
+  );
+}
+
+const SAY: Record<Odds, string> = {
+  "almost no chance": "Almost no chance of life",
+  "very unlikely": "Life is very unlikely",
+  unlikely: "Life is unlikely",
+  "roughly even": "About even odds of life",
+  likely: "Life is likely",
+  "very likely": "Life is very likely",
+  "almost certain": "Life is almost certain",
+};
+
+/** The page's answer in a line: what we last learned, and what it means for life. Null where life isn't the question. */
+export function verdictOf(lead: Lead, readings: readonly Reading[]) {
   const c = chancesOf(lead, readings);
+  if (!c) return null;
+  const read = readings.at(-1);
+  if (c.ruledOut) return `${read ? `${read.title}. ` : ""}No mind here.`;
+  const word = lifeOf(lead, readings);
+  if (!word) return null;
+  return `${read ? `${read.title}. ` : ""}${SAY[word]}.`;
+}
+
+/** `was`: the readings before the latest, so the bands open where they stood and slide to where it put them. */
+export function Chances({ lead, readings, was, className = "" }: { lead: Lead; readings: readonly Reading[]; was?: readonly Reading[]; className?: string }) {
+  const end = chancesOf(lead, readings);
+  const start = was ? chancesOf(lead, was) : null;
+  const [slid, setSlid] = useState(!start || prefersReducedMotion());
+  useEffect(() => {
+    if (slid) return;
+    const t = setTimeout(() => setSlid(true), 450);
+    return () => clearTimeout(t);
+  }, [slid]);
+  // Opens where the last reading found them, only when that held the same bands.
+  const c = !slid && start && !!start.life === !!end?.life && !start.ruledOut ? start : end;
   if (!c) return null;
   return (
     <div className={`flex flex-col gap-1.5 ${className}`} aria-label={`Chance of life ${c.life ? rangeText(c.life) : "none"}, of a mind ${c.ruledOut ? "ruled out" : c.mind === "unknown" ? "unknown" : c.mind ? rangeText(c.mind) : "none"}, ${c.basis}`}>

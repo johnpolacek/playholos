@@ -1,4 +1,4 @@
-import { Chances } from "@/components/chances";
+import { before, ChanceTag, Chances, movedBy, verdictOf } from "@/components/chances";
 import { Link, useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
@@ -12,6 +12,7 @@ import { SystemArt } from "@/components/system-art";
 import { LeadMark } from "@/components/marks";
 import { useLeads } from "@/components/scan";
 import { span, lyOf, yearText } from "@/lib/game/clock";
+import { chancesOf } from "@/lib/game/chance";
 import { ODDS, type Odds, type Reading, starName } from "@/lib/game/leads";
 import { dates } from "@/lib/game/sends";
 import { VisitArt } from "@/components/visit-art";
@@ -179,6 +180,8 @@ export function LeadPage({ slug }: { slug: string }) {
   // What came before the latest stays on the page, newest first: the watcher's answer and its relay were gone once a
   // strike landed. Playtest 2026-11-01.
   const earlier = all.slice(0, -1).reverse();
+  const verdict = lead ? verdictOf(lead, all) : null;
+  const hasChances = !!lead && !!chancesOf(lead, all);
 
   // Opening the page reads what landed on it.
   // Every one not yet opened, however old: the Mind's word on the watcher waits on it. 2026-11-05.
@@ -260,6 +263,14 @@ export function LeadPage({ slug }: { slug: string }) {
           </>
         )}
       </p>
+      {/* The answer first: our chance of life and of a mind, and what the latest reading means for them, said in a line.
+          They sat below two readings, near the fold, and a playtest found the page's point buried. 2026-11-07. */}
+      {lead.art.kind !== "warm" && (verdict || hasChances) && (
+        <div data-m className="mt-2.5 flex flex-col gap-2">
+          {verdict && <p className="text-[14.5px] leading-snug font-medium">{verdict}</p>}
+          <Chances lead={lead} readings={all} was={read ? before(all, read) : undefined} />
+        </div>
+      )}
       {/* A way to go there, as a button: a link at the end of this line went unseen. Playtest 2026-11-05. Once a probe of
           ours is on its way, as our standing order sends to each warm glow, it says so in its place. */}
       {lead.art.kind !== "near" && probeRoad && (
@@ -284,6 +295,11 @@ export function LeadPage({ slug }: { slug: string }) {
 
       {/* What we can do comes first, above what we know. It sat two screens down until a playtest, 2026-11-04. */}
       {lead.art.kind === "warm" && <CloseReading lead={lead} />}
+      {lead.art.kind === "warm" && (
+        <div data-m className="mt-3">
+          <Chances lead={lead} readings={all} />
+        </div>
+      )}
 
       {read && (
         <section data-m className="mt-3 rounded-xl border border-you/60 bg-you/[.06] px-3 py-2.5">
@@ -292,6 +308,7 @@ export function LeadPage({ slug }: { slug: string }) {
           </span>
           <h2 className="mt-1 text-[16px] leading-snug font-semibold">{read.title}</h2>
           <p className="mt-0.5 text-[13.5px] leading-snug">{read.line}</p>
+          <ChanceTag shift={movedBy(lead, all, read)} className="mt-1 block" />
           {VOICED.has(read.id) && <ListenButton onClick={() => setVoice(true)} />}
           {read.air && <AirBands air={read.air} />}
           {read.sight && (
@@ -321,6 +338,7 @@ export function LeadPage({ slug }: { slug: string }) {
               </span>
               <h3 className="mt-0.5 text-[14.5px] leading-snug font-semibold">{r.title}</h3>
               <p className="mt-0.5 text-[13.5px] leading-snug text-page-ink2">{r.line}</p>
+              <ChanceTag shift={movedBy(lead, all, r)} className="mt-1 block" />
               {VOICED.has(r.id) && <ListenButton onClick={() => setVoice(true)} />}
               {r.sight && (
                 <div className="mt-2 flex justify-center">
@@ -336,10 +354,6 @@ export function LeadPage({ slug }: { slug: string }) {
           ))}
         </section>
       )}
-
-      <div data-m className="mt-3">
-        <Chances lead={lead} readings={all} />
-      </div>
 
       <div data-m className="mt-3 rounded-xl border border-faint bg-paper px-2 py-1">
         {lead.system && lead.art.kind === "orbit" ? (

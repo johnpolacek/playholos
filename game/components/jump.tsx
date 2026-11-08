@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import { Link } from "react-router";
 import { watcherWords } from "@/lib/game/watcher-words";
 import { useGame } from "@/components/game-provider";
+import { ChanceTag, chanceShift } from "@/components/chances";
+import { chancesOf } from "@/lib/game/chance";
 import { BuildMark, buildColor, LeadMark } from "@/components/marks";
 import { useMindNews } from "@/components/mind-chat";
 import { usePlan, useSchedule } from "@/components/picks";
@@ -180,6 +182,8 @@ interface Item {
   mark: React.ReactNode;
   title: string;
   line: string;
+  /** What it did to our chance of life, or of a mind, on a lead. 2026-11-07. */
+  chance?: ReturnType<typeof chanceShift>;
 }
 
 /** How many times as far a gift takes our thinking, said to a tenth, or null when it holds nothing for it. */
@@ -285,6 +289,11 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
       const read = fresh.at(-1);
       // Each new warm glow says how many we have found: the count is the story. 2026-11-03.
       const nth = l.slug.match(/^warm-glow-(\d+)$/)?.[1];
+      // What the jump did to our chance there: "Cloud and seas" said nothing of life until the page was opened and
+      // scrolled. Playtest 2026-11-07.
+      const had = (readings[l.slug] ?? []).filter((r) => snap.reads.has(r.id));
+      const now = chancesOf(l, [...had, ...fresh]);
+      const shift = now ? chanceShift(snap.slugs.has(l.slug) ? chancesOf(l, had) : null, now) : null;
       out.push({
         key: `lead:${l.slug}`,
         // A lead new to Scan comes with its first reading, so it ranks as new, not as news on a lead we knew: a new
@@ -294,6 +303,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
         mark: <LeadMark art={l.art} />,
         // A glow that earned a name since says which it was. 2026-11-07.
         title: glowNamed(l.star) ? `${starName(l.star)}, once ${properName(l.star)}` : starName(l.star),
+        chance: now?.mind === "unknown" && !now.life ? null : shift,
         line: isNew && nth && nth !== "1" ? `A new warm glow, ${nth} found so far` : read ? `${read.title}, Year ${yearText(read.at)}` : close ? `${NEWS[close[0]]}, ${close[1]}` : l.what,
       });
     }
@@ -371,6 +381,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
                 <span className="flex min-w-0 flex-col">
                   <b className="truncate text-[13.5px] font-semibold">{x.title}</b>
                   <span className="truncate text-[12px] text-muted">{x.line}</span>
+                  {x.chance && <ChanceTag shift={x.chance} />}
                 </span>
                 <span className="ml-auto text-muted">›</span>
               </Link>

@@ -1,3 +1,5 @@
+import { ChanceTag, chanceShift } from "@/components/chances";
+import { chancesOf } from "@/lib/game/chance";
 import { Link } from "react-router";
 import { useSchedule } from "@/components/picks";
 import { strikesOf } from "@/lib/game/reach";
@@ -314,6 +316,10 @@ export function LeadList({
     look(null, i);
   };
 
+  const chance = (l: Lead) => {
+    const c = chancesOf(l, readings[l.slug] ?? []);
+    return c && !(c.mind === "unknown" && !c.life) ? chanceShift(null, c) : null;
+  };
   const row = (l: Lead) => {
     const read = readings[l.slug]?.at(-1);
     const isNew = !!read && !!fresh?.has(read.id);
@@ -341,6 +347,8 @@ export function LeadList({
             ) : (
               lineAt(l, year)
             )}
+            {/* Our chance at it, on its row: the main thing about a world sat on its page, below the fold. 2026-11-07. */}
+            {chance(l) && <ChanceTag shift={chance(l)} className="mt-0.5 block" />}
             {readable?.includes(l) && <span className="mt-0.5 block font-medium text-other">Ready for a Close Reading</span>}
           </>
         }
