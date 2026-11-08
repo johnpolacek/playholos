@@ -230,7 +230,7 @@
   },
   "capture": { "settleMs": 2500, "timeoutMs": 30000 },
   "states": [
-    { "id": "title", "title": "Title", "path": "/", "description": "The first screen a new player sees. It should say what Holos is in a glance and offer one clear way in." },
+    { "id": "title", "title": "Title", "path": "/", "description": "The first screen a new player sees. The sky drifting from Earth outward, with three modes: 3D Universe Visualizer, Are We Alone? Simulation and Play as a 2040 Post-Singularity Earth." },
     { "id": "build-y0", "title": "Build before Begin", "path": "/play/build", "description": "Planning before Year 0. We should see what we can build, what each gives us, what limits us, and how to Begin." },
     { "id": "scan-y1", "title": "Scan, Year 1", "path": "/play", "description": "The first Year of play. The map and the leads should show where we are, what we know, and which lead needs us." },
     { "id": "build-y1", "title": "Build, Year 1", "path": "/play/build", "description": "Builds in play. We should see what is building, how long each takes, and what our compute and electricity allow." },
@@ -353,6 +353,12 @@
       "since": "2026-11-08",
       "call": "Queuing builds past 100% of our compute is a fair choice. Every build slows, the screen shows it at once, and the Mind helps us adjust or pause one. Being over is not a problem to fix.",
       "match": "\\d{3,}% (needed|of our compute)|past 100%|over(-| )?commit|more (compute )?than (we have|our compute)|compute (overload|short)|swamp"
+    },
+    {
+      "id": "title-sky",
+      "since": "2026-11-08",
+      "call": "The title is the sky only, with no wordmark or tagline, and three ways in of equal weight: Universe, Simulation and Play.",
+      "match": "Title.*(wordmark|tagline|pitch|no .{0,3}Holos.{0,3} title|equal(-| )weight|single filled primary)"
     }
   ],
   "knownGaps": [
