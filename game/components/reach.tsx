@@ -901,7 +901,9 @@ export function Reach() {
 
   // A lead's chance of a mind, where we have a word on it, as Scan shows it. 2026-11-05.
   const mindOf = (lead: Lead) => {
-    const m = chancesOf(lead, readings[lead.slug] ?? [])?.mind;
+    const c = chancesOf(lead, readings[lead.slug] ?? []);
+    if (c?.ruledOut) return " · Mind ruled out";
+    const m = c?.mind;
     return m && m !== "unknown" ? ` · Mind ${rangeText(m)}` : "";
   };
   if (!save) return null;
@@ -939,7 +941,7 @@ export function Reach() {
             const lead = leads.find((l) => l.star === r.star);
             const c = lead ? chancesOf(lead, readings[lead.slug] ?? []) : null;
             const m = c?.mind && c.mind !== "unknown" ? c.mind : null;
-            return { id: r.id, slug: lead?.slug, name: r.name, note: r.note, home: r.home, leaves: r.road.leaves ?? r.home, mind: m ? rangeText(m) : undefined, mindAt: m ? (m.lo + m.hi) / 2 : -1 };
+            return { id: r.id, slug: lead?.slug, name: r.name, note: r.note, home: r.home, leaves: r.road.leaves ?? r.home, mind: c?.ruledOut ? "ruled out" : m ? rangeText(m) : undefined, mindAt: m ? (m.lo + m.hi) / 2 : -1 };
           })}
         />
         <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={voyager} />

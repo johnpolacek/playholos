@@ -123,6 +123,33 @@ function ListenButton({ onClick }: { onClick(): void }) {
   );
 }
 
+
+/** Where a warm glow stands, in one line at the top of its page: ruled out, worth a closer look, open, or lost. A
+ *  playtest read "nothing more for us to do here" beside an Engage button and a 0.8 to 5% mind, and couldn't tell
+ *  which to believe. 2026-11-07. */
+function GlowVerdict({ flash }: { flash: { read?: { saw: string }; faded?: number } }) {
+  const saw = flash.read?.saw;
+  const shining = flash.faded === undefined;
+  const [tag, line, tone] =
+    saw === "dust"
+      ? ["RULED OUT", "Its light is dust. No life or mind here.", "border-faint text-muted"]
+      : saw === "smooth"
+        ? shining
+          ? ["WORTH A CLOSER LOOK", "Plain heat, not dust. A mind might be making it.", "border-other/60 text-other"]
+          : ["UNSETTLED", "Plain heat, not dust, but it faded before we could look closer.", "border-faint text-page-ink2"]
+        : saw
+          ? ["LOST", "It faded before our reading was done.", "border-faint text-muted"]
+          : shining
+            ? ["OPEN", "Most glows like this are dust. Reading its light will tell.", "border-faint text-page-ink2"]
+            : ["LOST", "It faded before we read its light.", "border-faint text-muted"];
+  return (
+    <p data-m className={`mt-2 self-start rounded-lg border px-2.5 py-1.5 text-[13px] leading-snug ${tone}`}>
+      <span className="mr-2 font-mono text-[10px] tracking-[.1em]">{tag}</span>
+      {line}
+    </p>
+  );
+}
+
 export function LeadPage({ slug }: { slug: string }) {
   const { leads, dials, readings, fresh, setLook, minds } = useLeads();
   const { see, save } = useGame();
@@ -244,7 +271,8 @@ export function LeadPage({ slug }: { slug: string }) {
           </Link>
         </p>
       )}
-      {lead.art.kind !== "near" && !probeRoad && (
+      {lead.art.kind === "warm" && flash && <GlowVerdict flash={flash} />}
+      {lead.art.kind !== "near" && !probeRoad && !(lead.art.kind === "warm" && flash?.read?.saw === "dust") && (
         <Link
           data-m
           to={`/play/reach/${lead.slug}`}

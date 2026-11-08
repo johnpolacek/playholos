@@ -46,6 +46,8 @@ export interface Chances {
   basis: string;
   /** 0 for a guess, 1 for seen up close: how sharp the band is drawn. */
   sure: number;
+  /** A reading settled it: no life and no mind here. */
+  ruledOut?: boolean;
 }
 
 const logit = (p: number) => Math.log(p / (1 - p));
@@ -95,6 +97,9 @@ function madeByEvidence(lead: Lead, readings: readonly Reading[]): number | null
 
 /** The chance of life and of a mind at a lead, from its readings so far. Null where neither is the question. */
 export function chancesOf(lead: Lead, readings: readonly Reading[]): Chances | null {
+  // Settled: a warm glow read as dust holds no mind. Its band said 0.8 to 5% beside "nothing more for us to do here",
+  // and a playtest couldn't tell which to believe. 2026-11-07.
+  if (readings.some((r) => r.ruledOut)) return { mind: { lo: 0, hi: 0 }, basis: "ruled out by its light", sure: 1, ruledOut: true };
   const basis = basisOf(lead, readings);
   const word = lifeOf(lead, readings);
   const sure = 1 - (basis.spread - BASES.close.spread) / (BASES.tug.spread - BASES.close.spread);
@@ -143,7 +148,7 @@ export function describeChances(leads: Lead[], readings: Record<string, Reading[
   const lines = leads.flatMap((l) => {
     const c = chancesOf(l, readings[l.slug] ?? []);
     if (!c) return [];
-    const mind = c.mind === "unknown" ? "a mind unknown" : c.mind && `a mind ${rangeText(c.mind, " to ")}`;
+    const mind = c.ruledOut ? "ruled out, no mind" : c.mind === "unknown" ? "a mind unknown" : c.mind && `a mind ${rangeText(c.mind, " to ")}`;
     const parts = [c.life && `life ${rangeText(c.life, " to ")}`, mind].filter(Boolean).join(", ");
     return [`- ${starName(l.star)}, ${l.what.toLowerCase()}: ${parts}, ${c.basis}.`];
   });

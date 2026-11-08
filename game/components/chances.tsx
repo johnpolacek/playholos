@@ -39,9 +39,17 @@ export function Chances({ lead, readings, className = "" }: { lead: Lead; readin
   const c = chancesOf(lead, readings);
   if (!c) return null;
   return (
-    <div className={`flex flex-col gap-1.5 ${className}`} aria-label={`Chance of life ${c.life ? rangeText(c.life) : "none"}, of a mind ${c.mind === "unknown" ? "unknown" : c.mind ? rangeText(c.mind) : "none"}, ${c.basis}`}>
+    <div className={`flex flex-col gap-1.5 ${className}`} aria-label={`Chance of life ${c.life ? rangeText(c.life) : "none"}, of a mind ${c.ruledOut ? "ruled out" : c.mind === "unknown" ? "unknown" : c.mind ? rangeText(c.mind) : "none"}, ${c.basis}`}>
       {c.life && <Band label="LIFE" range={c.life} sure={c.sure} color="var(--see)" />}
-      {c.mind && <Band label="MIND" range={c.mind} sure={c.sure} color="var(--other)" />}
+      {c.ruledOut ? (
+        <div className="grid grid-cols-[38px_1fr_auto] items-center gap-2.5">
+          <span className="font-mono text-[9.5px] tracking-[.1em] text-muted">MIND</span>
+          <span className="h-[6px] rounded-full bg-track" />
+          <span className="min-w-[64px] text-right font-mono text-[12px] text-muted">ruled out</span>
+        </div>
+      ) : (
+        c.mind && <Band label="MIND" range={c.mind} sure={c.sure} color="var(--other)" />
+      )}
       <span className="pl-[48px] text-[11.5px] leading-none text-muted">{c.basis}</span>
     </div>
   );

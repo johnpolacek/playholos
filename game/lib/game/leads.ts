@@ -62,6 +62,9 @@ export interface Reading {
   close?: { ra: number; dec: number };
   /** The Mind's word, now, that something lives there, where this reading says. 2026-10-29. */
   life?: Odds;
+  /** This reading settles it: nothing lives or thinks here, as a warm glow read as dust. A playtest couldn't tell
+   *  a settled glow from an open one, 2026-11-07. */
+  ruledOut?: true;
 }
 
 /** What a lead's page draws: a world's orbit against its star's warm zone, or a message's trip. */
@@ -1405,6 +1408,7 @@ export function warmReadings(flashes: readonly MindsSeen["flashes"][number][], y
                 mind: "It was dust all along. Now we know what the real thing wouldn’t look like.",
                 now: read.kind === "merger" ? ["unlikely", "very likely", "almost no chance"] : ["very likely", "unlikely", "almost no chance"],
                 tells: [],
+                ruledOut: true,
               }]
             : [{
                 id: `warm-${i + 1}-read`, needs: "", at: read.at, by: by2,
