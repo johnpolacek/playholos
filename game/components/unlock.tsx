@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, KeyMark, Prompt } from "@/components/icons";
-import { FREE_QUESTIONS } from "@/lib/access";
 import type { Wrong } from "@/lib/access";
 import { earnPass, unlock, useAllowance } from "@/lib/key";
 import { ASK, STEPS_URL as STEPS } from "@/components/run-local";
@@ -125,7 +124,7 @@ function loadTurnstile() {
   return loading;
 }
 
-// The first way in, 2026-11-08: our Mind on our credit, a hundred questions a day, once Turnstile is sure a person
+// The first way in, 2026-11-08: our Mind on our credit, up to a daily limit the card doesn't number, once Turnstile is sure a person
 // asks. The check shows only if Turnstile is unsure, and a pass keeps for a week.
 function OnUs({ site }: { site: string }) {
   const [state, setState] = useState<"idle" | "checking" | "failed">("idle");
@@ -156,7 +155,7 @@ function OnUs({ site }: { site: string }) {
         ON US
       </div>
       <p className="text-[13px] text-page-ink2">
-        Ask our Mind up to {FREE_QUESTIONS} questions a day, free. A quick check makes sure you’re a person.
+        Ask our Mind free, up to a daily limit. A quick check makes sure you’re a person.
       </p>
       <div ref={box} />
       <button

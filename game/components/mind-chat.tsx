@@ -11,7 +11,7 @@ import { MindThinking, useThinking } from "@/components/mind-thinking";
 import { usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { SendCard } from "@/components/send-card";
-import { BAD_KEY, costOf, FREE_MODEL, FREE_QUESTIONS, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, MIND_MODELS, MIND_UNREACHED, type MindModel, readMindPick, type Usage } from "@/lib/access";
+import { BAD_KEY, costOf, FREE_MODEL, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, MIND_MODELS, MIND_UNREACHED, type MindModel, readMindPick, type Usage } from "@/lib/access";
 import { readBuildOffer } from "@/lib/game/build-offer";
 import { type Lead, properGlows, starName } from "@/lib/game/leads";
 import { leadsNamed, onMap } from "@/lib/game/named-leads";
@@ -20,7 +20,7 @@ import { SITES } from "@/lib/game/sites";
 import { NEWS } from "@/lib/mind/news";
 import { nextNote, QUEUE } from "@/lib/mind/queue";
 import { schedule, sharesAt } from "@/lib/game/plan";
-import { refreshAccess, useAccess, useAllowance } from "@/lib/key";
+import { useAccess } from "@/lib/key";
 import { readOffer } from "@/lib/game/sends";
 import { browserStore } from "@/lib/game/store";
 import { forgetKey } from "@/lib/key";
@@ -140,11 +140,6 @@ export function useKeepTalk() {
   useEffect(() => {
     if (lastAnswer) did("asked");
   }, [lastAnswer, did]);
-  // On a pass, each answer spends one of today's questions, so the count is asked for again. 2026-11-08.
-  const open = useAccess();
-  useEffect(() => {
-    if (open === "free" && lastAnswer && !busy) void refreshAccess();
-  }, [open, lastAnswer, busy]);
   // Notes each question the Will asks, never its words, and each failed answer by what the Will read. News and the
   // queue the Mind is told unasked aren't questions. 2026-11-08.
   const noted = useRef<string | undefined>(undefined);
@@ -348,7 +343,6 @@ function KeyRow() {
 /** The Mind's settings, out of the way of play: which model it thinks with and how hard, what this talk has cost,
  *  and the player's key. The next question uses a new pick. */
 export function MindSettings({ keyed, free = false }: { keyed: boolean; free?: boolean }) {
-  const { left } = useAllowance();
   const { save } = useGame();
   const { messages } = useChat({ chat: useMemo(() => chatFor(save?.seed), [save?.seed]) });
   const [pick, setPick] = useState(loadPick);
@@ -380,13 +374,6 @@ export function MindSettings({ keyed, free = false }: { keyed: boolean; free?: b
       <Row name="This talk">
         <span className="px-2 text-page-ink2 normal-case tabular-nums">{spent(messages)}</span>
       </Row>
-      {free && left !== undefined && (
-        <Row name="Today">
-          <span className="px-2 text-page-ink2 normal-case tabular-nums">
-            {left} of {FREE_QUESTIONS} questions left on us
-          </span>
-        </Row>
-      )}
       {keyed && <KeyRow />}
     </div>
   );

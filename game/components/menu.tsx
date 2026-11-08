@@ -4,7 +4,7 @@ import { GalacticYear } from "@/components/galactic-year";
 import { useGame } from "@/components/game-provider";
 import { RunLocal } from "@/components/run-local";
 import { useLeaveShell } from "@/components/wake";
-import { forgetKey, useAccess, useAllowance } from "@/lib/key";
+import { forgetKey, useAccess } from "@/lib/key";
 import { plainClick, useLeaveFor } from "@/lib/leave";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
@@ -39,7 +39,6 @@ function Drawer({ onClose }: { onClose(): void }) {
   const leaveFor = useLeaveFor();
   const open = useAccess();
   const keyed = open === undefined ? null : open === "key";
-  const { left } = useAllowance();
   const [sure, setSure] = useState(false);
 
   useEffect(() => {
@@ -122,7 +121,7 @@ function Drawer({ onClose }: { onClose(): void }) {
                   : open === null
                     ? "Locked. A key opens it, or play on your Claude plan."
                     : open === "free"
-                      ? `On us${left !== undefined ? `, ${left} questions left today` : ""}. A key lifts the limit.`
+                      ? "On us, with a daily limit. A key lifts it."
                       : "None. The Mind tab takes one."}
             </span>
           </span>
