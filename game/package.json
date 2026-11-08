@@ -14,7 +14,7 @@
     "worlds:local": "node scripts/worlds.mjs --local",
     "events": "node scripts/events.mjs",
     "lint": "eslint",
-    "test": "node --test lib/sim/sim.test.mts lib/mind/queue.test.mts lib/game/build-offer.test.mts",
+    "test": "node --test lib/sim/sim.test.mts lib/mind/queue.test.mts lib/mind/news.test.mts lib/game/build-offer.test.mts",
     "check:mind": "node scripts/check-mind.mjs",
     "trace:mind": "node scripts/trace-mind.mjs",
     "review:mind": "node scripts/review-mind.mjs",

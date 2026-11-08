@@ -1281,6 +1281,15 @@
       "build": false
     },
     {
+      "id": "n06",
+      "state": "silence-y40",
+      "kind": "news",
+      "charter": null,
+      "ask": "News from Earth: Year 2.3: the first window for a reply from Luyten’s Star opened. Year 9: the first window for a reply from Gliese 526 opened. Year 9.9: the first window for a reply from Gliese 581 opened. Year 27.2: the first window for a reply from Gliese 49 opened. Year 30.4: the first window for a reply from Kappa¹ Ceti opened. Year 38: the first window for a reply from Gliese 208 opened. And 2 more since.",
+      "offer": false,
+      "build": false
+    },
+    {
       "id": "r01",
       "state": "before-begin",
       "kind": "rules",

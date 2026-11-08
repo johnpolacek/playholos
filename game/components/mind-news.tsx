@@ -17,6 +17,7 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 import type { Heard } from "@/lib/sim/types";
 import { properGlows, starName, WINDOWS } from "@/lib/game/leads";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
+import { type NewsItem, pickNews, unquoted } from "@/lib/mind/news";
 
 // The Mind speaks unasked. Pressing Begin felt like nothing happened, a playtest found 2026-10-31, so Year 0 opens on
 // a moment of its own with the Mind's first words, and from then the Mind tells us what lands as it lands: a build
@@ -24,31 +25,32 @@ import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 // so they need the Mind open. Locked, Year 0 still has its moment, in words written here.
 
 const BEGUN = "Year 0 has begun.";
-/** The most news told at once, as after a night away or a skip. The rest is counted. */
+/** The most news told at once, as after a night away or a skip. Those that matter most are told, and the rest counted. */
 const MOST = 6;
 
 /** What landed after Year `from`, up to `to`, as news from Earth, or "" if nothing did. */
 function newsBetween(from: number, to: number, plan: Plan | undefined, done: Record<string, number | null>, heard: Heard[], sent: Sent[], firstGlow?: { ranged?: number; range?: [number, number] }, watcher?: { by: string } | null, firstCold?: { seen: number; d: number; n: number }) {
   const within = (at: number | null | undefined): at is number => typeof at === "number" && at > from && at <= to;
   const named = new Set([...(plan?.builds ?? []), ...(plan?.later ?? []).map((o) => o.name)]);
-  const items: { at: number; say: string }[] = [];
-  for (const name of named) if (within(done[name])) items.push({ at: done[name]!, say: `our ${name} is done` });
+  // How much each matters, 0 most: what we hear, then what we find, then our own work, then our messages arriving.
+  const items: NewsItem[] = [];
+  for (const name of named) if (within(done[name])) items.push({ at: done[name]!, say: `our ${name} is done`, rank: 2 });
   for (const h of heard) {
     const at = h.found ?? h.arrived;
     if (!within(at)) continue;
-    if (h.ours) items.push({ at, say: `word from our colony: it chose to ${h.ours.chose}` });
+    if (h.ours) items.push({ at, say: `word from our colony: it chose to ${h.ours.chose}`, rank: 0 });
     else {
       const text = h.text ? `, which reads: “${h.text.slice(0, 280)}”` : "";
-      items.push({ at, say: `${kindOf(h).toLowerCase()} reached us from ${h.star}${h.found !== undefined ? ", found in old recordings" : ""}${text}` });
+      items.push({ at, say: `${kindOf(h).toLowerCase()} reached us from ${h.star}${h.found !== undefined ? ", found in old recordings" : ""}${text}`, rank: 0 });
     }
   }
   // Our first warm glow, once placed. Later ones gather on Scan: there are hundreds. 2026-11-03.
   if (firstGlow?.range && within(firstGlow.ranged))
-    items.push({ at: firstGlow.ranged!, say: `our first new warm glow, Warm glow 1, was ranged at ${firstGlow.range[0].toLocaleString("en-US")} to ${firstGlow.range[1].toLocaleString("en-US")} ly, where nothing shone before` });
+    items.push({ at: firstGlow.ranged!, say: `our first new warm glow, Warm glow 1, was ranged at ${firstGlow.range[0].toLocaleString("en-US")} to ${firstGlow.range[1].toLocaleString("en-US")} ly, where nothing shone before`, rank: 1 });
   // Our first cold glow too: it came while the clock ran, no jump card named it, and a blind first-timer learned of it
   // only when the Mind compared Cold glow 2 to it. 2026-11-07.
   if (firstCold && within(firstCold.seen))
-    items.push({ at: firstCold.seen, say: `our Halo Survey found its first cold glow, Cold glow ${firstCold.n}, beside a star ${Math.round(firstCold.d * 10) / 10} ly away` });
+    items.push({ at: firstCold.seen, say: `our Halo Survey found its first cold glow, Cold glow ${firstCold.n}, beside a star ${Math.round(firstCold.d * 10) / 10} ly away`, rank: 1 });
   // A search near Earth ending empty is news too: it rules places out. The Moon Search and the asteroid maps ended in
   // silence, and players wondered if they had run at all. Playtests 2026-11-06 and 2026-11-07.
   const searches = [
@@ -59,20 +61,20 @@ function newsBetween(from: number, to: number, plan: Plan | undefined, done: Rec
     const built = done[x.name];
     if (built == null || !named.has(x.name) || watcher?.by === x.by) continue;
     const end = x.ends(built);
-    if (within(end)) items.push({ at: end, say: `our ${x.name} ended and found nothing made at ${x.where}` });
+    if (within(end)) items.push({ at: end, say: `our ${x.name} ended and found nothing made at ${x.where}`, rank: 2 });
   }
   // A reply window opening on one of the stars we messaged before Year 0. 2026-11-01.
-  for (const w of WINDOWS) if (within(w.at)) items.push({ at: w.at, say: `the first window for a reply from ${w.star} opened` });
+  for (const w of WINDOWS) if (within(w.at)) items.push({ at: w.at, say: `the first window for a reply from ${w.star} opened`, rank: 1 });
   // A message lands at a Year we can name only when its star's distance is known, not a range.
   for (const s of sent) {
     if (s.to === "everywhere" || s.d === undefined || target(s.to)?.range) continue;
-    if (within(s.y + s.d)) items.push({ at: s.y + s.d, say: `our message to ${s.to} reached it` });
+    if (within(s.y + s.d)) items.push({ at: s.y + s.d, say: `our message to ${s.to} reached it`, rank: 3 });
   }
   if (!items.length) return "";
-  items.sort((a, b) => a.at - b.at);
-  const told = items.slice(0, MOST).map((i) => `Year ${yearText(i.at)}: ${i.say}.`);
-  if (items.length > MOST) told.push(`And ${items.length - MOST} more since.`);
-  return told.join(" ");
+  const { told, more } = pickNews(items, MOST);
+  const lines = told.map((i) => `Year ${yearText(i.at)}: ${i.say}.`);
+  if (more) lines.push(`And ${more} more since.`);
+  return lines.join(" ");
 }
 
 /** Where the news points, read back from the lines `newsBetween` writes: a build done opens its page, and a star
@@ -80,7 +82,9 @@ function newsBetween(from: number, to: number, plan: Plan | undefined, done: Rec
  *  search ended opens its build, a glow or any lead's star named opens its lead, word from our colony opens the lead
  *  where it lives, and a message reaching a star with no lead opens our messages. News of each sat with no way to it.
  *  2026-11-08. */
-function newsLinks(news: string, leads: { star: string; slug: string }[], colony?: string) {
+function newsLinks(told: string, leads: { star: string; slug: string }[], colony?: string) {
+  // From Earth's words, never a signal's: a stranger's words naming a star linked to it. 2026-11-08.
+  const news = unquoted(told);
   const links: { to: string; label: string; at: number; lead?: string }[] = [];
   const add = (to: string, label: string, at: number, lead?: string) => !links.some((k) => k.to === to) && links.push({ to, label, at, lead });
   const open = (lead: { star: string; slug: string }, at: number) => add(`/play/lead/${lead.slug}`, `Open ${starName(lead.star)}`, at, lead.slug);
