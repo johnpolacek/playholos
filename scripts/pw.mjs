@@ -1,4 +1,5 @@
 import { execSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
 
@@ -16,4 +17,16 @@ export function playwright() {
     } catch {}
   console.error("Playwright isn't installed. Run: npm i -g playwright && npx playwright install chromium");
   process.exit(1);
+}
+
+/** The Chrome to run: CHROME, else Playwright's own when downloaded, else the Mac's Google Chrome. Undefined lets
+ *  Playwright say what is missing. */
+export function chromePath(pw) {
+  if (process.env.CHROME) return process.env.CHROME;
+  try {
+    const own = pw.chromium.executablePath();
+    if (existsSync(own)) return own;
+  } catch {}
+  const mac = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+  return existsSync(mac) ? mac : undefined;
 }

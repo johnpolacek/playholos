@@ -53,7 +53,7 @@ const critic = existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : {};
 Object.assign(critic, { model: MODEL, at: new Date().toISOString() });
 
 // Each screen on its own.
-if (PASSES.includes("screens")) {
+const screensPass = async () => {
   const S = R.screens;
   const ids = S.ratings.map((r) => r.id);
   const prompt = (state, vps) => `You review screens of a space game, Holos, as a careful player who has never played it. You never saw its code. You see only the screenshots above${vps.length > 1 ? `, one for each width: ${vps.join(", ")}` : ""}.
@@ -83,10 +83,10 @@ Reply with JSON only, no other text:
       }
     }),
   );
-}
+};
 
 // Every screen at once, for how they hold together.
-if (PASSES.includes("design")) {
+const designPass = async () => {
   const D = R.design;
   const shots = states.flatMap((s) => okShots(s.id));
   const prompt = `You are a product designer reviewing every screen of a space game, Holos, at once. You never saw its code. The screenshots above are named <state>-<width>.png. The screens:
@@ -109,10 +109,10 @@ Reply with JSON only, no other text:
     critic.design = { error: e.message };
     console.warn(`design: ${e.message}`);
   }
-}
+};
 
 // Each screen's words, cut.
-if (PASSES.includes("editor")) {
+const editorPass = async () => {
   const E = R.editor;
   const prompt = (state, lines) => `You edit the words of a space game, Holos. The screenshot above is the screen "${state.title}". What it should show: ${state.description}
 
@@ -147,7 +147,14 @@ Reply with JSON only, no other text:
       }
     }),
   );
-}
+};
+
+// The three passes ask at once: none reads another's answer.
+await Promise.all([
+  PASSES.includes("screens") && screensPass(),
+  PASSES.includes("design") && designPass(),
+  PASSES.includes("editor") && editorPass(),
+]);
 
 writeFileSync(path, JSON.stringify(critic, null, 2) + "\n");
 writeIndex();

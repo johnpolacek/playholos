@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { playwright } from "./pw.mjs";
+import { chromePath, playwright } from "./pw.mjs";
 
 // The blind first-timer's hands and eyes: it sees the game only as screenshots, and acts only by clicking where it
 // looks, typing and pressing keys, as a person would. No page text, no element lists, no addresses. playtests/BLIND.md
@@ -30,7 +30,7 @@ const [cmd, ...args] = process.argv.slice(2);
 const pw = playwright();
 
 if (cmd === "start") {
-  const chrome = process.env.CHROME ?? pw.chromium.executablePath();
+  const chrome = chromePath(pw);
   const child = spawn(
     chrome,
     ["--headless=new", "--no-sandbox", `--remote-debugging-port=${PORT}`, `--user-data-dir=${join(dir, "profile")}`, `--window-size=${W},${H}`, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "about:blank"],

@@ -18,6 +18,7 @@
     "playtest:rate": "node scripts/playtest-rate.mjs",
     "playtest:capture": "node scripts/capture.mjs",
     "playtest:critic": "node scripts/playtest-critic.mjs",
+    "playtest:local": "node scripts/playtest-local.mjs",
     "playtests": "node -e \"require('child_process').spawn(process.platform==='win32'?'explorer':process.platform==='darwin'?'open':'xdg-open',['playtests/regime.html'],{stdio:'ignore',detached:true}).unref()\"",
     "playtests:serve": "node scripts/playtests-serve.mjs"
   },
@@ -27,6 +28,7 @@
     "three": "0.180.0"
   },
   "devDependencies": {
-    "esbuild": "0.25.9"
+    "esbuild": "0.25.9",
+    "playwright": "^1.62.1"
   }
 }
