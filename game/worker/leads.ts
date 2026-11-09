@@ -122,7 +122,7 @@ export async function next(req: Request) {
     ...ends,
     // A reply window on a star messaged before Year 0: a jump went past Luyten's Star's at Year 2.3 in two blind
     // playtests, though both players were waiting for it. 2026-11-07.
-    ...WINDOWS.map((w) => ({ at: w.at, why: `the window for ${w.star}’s reply` })),
+    ...WINDOWS.map((w) => ({ at: w.at, why: `${w.star}’s reply window` })),
     { at: skyOf(seed).betelgeuse, why: "our next finding" },
   ]);
   return Response.json({ next: stop?.at ?? null, why: stop?.why ?? null, ahead: AHEAD });
