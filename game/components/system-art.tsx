@@ -25,6 +25,9 @@ const RINGS: [s: number, name: string][] = [
   [36000, "10 hours"],
 ];
 
+/** Where on its ring a ring's label stands: up and to the right, 40° above the line through the star. */
+const SLANT = [Math.cos((40 * Math.PI) / 180), Math.sin((40 * Math.PI) / 180)];
+
 /** A star's color, by how hot it is. */
 const tint = (k: number) =>
   k < 3600 ? "#ffb98a" : k < 5000 ? "#ffd7a3" : k < 6200 ? "#fff0d2" : k < 7500 ? "#f8f7ff" : "#dfe8ff";
@@ -84,11 +87,13 @@ export function SystemArt({ system }: { system: System }) {
   return (
     <figure className="m-0">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Its system, from above">
-        {/* Labels on alternate rows, as the names are, so close rings don't crowd. */}
-        {rings.map(({ au, name }, i) => (
+        {/* Each ring's label at its upper right, out along a slant, so close rings step apart and clear the worlds' names
+            on the line through the star: on the line, “10 seconds”, “1 minute” and “b” piled up. Screen critic,
+            2026-11-09. */}
+        {rings.map(({ au, name }) => (
           <g key={name}>
             <circle cx={CX} cy={CY} r={px(au)} fill="none" stroke="var(--faint)" strokeWidth={0.7} strokeDasharray="1.5 3" />
-            <text x={CX + px(au) + 3} y={CY - 3 - (i % 2) * 8} className="fill-muted font-mono text-[7px]">
+            <text x={CX + px(au) * SLANT[0] + 2} y={CY - px(au) * SLANT[1] - 2} className="fill-muted font-mono text-[7px]">
               {name}
             </text>
           </g>
