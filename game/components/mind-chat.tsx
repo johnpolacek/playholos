@@ -573,7 +573,14 @@ export function MindChat({ ask }: { ask?: string }) {
         {/* Clear of the ask box, which sticks over the talk's foot, so a card under the last answer shows whole. */}
         <div ref={end} className="scroll-mb-20" />
       </div>
-      <AskBox focus busy={busy} onAsk={(text) => sendMessage({ text })} className="sticky bottom-0 mt-auto bg-panel pb-3" />
+      {/* Before our first question the box follows the hello and its starters, not stuck over them: on a phone it sat on
+          the first starter. Screen audit, 2026-11-09. */}
+      <AskBox
+        focus
+        busy={busy}
+        onAsk={(text) => sendMessage({ text })}
+        className={`${messages.length || ask ? "sticky bottom-0" : ""} mt-auto bg-panel pb-3`}
+      />
     </>
   );
 }
