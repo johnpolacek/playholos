@@ -842,7 +842,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
       ] : [
         { what: "Something natural we don't know", why: "Dust of grains we haven't measured, or a disk cold and far out. The sky has surprised us before.", odds: "likely" },
         { what: "An error in our looking", why: "A faint galaxy behind the star, or a fault in the data. A second look rules it out.", odds: "unlikely" },
-        { what: "A mind computing cold", why: "Waste heat shed far from a star glows grey and line-free, as this does. About one star in 1,600 holds a mind.", odds: "almost no chance" },
+        { what: "A mind computing cold", why: "Waste heat shed far from a star glows grey and line-free, as this does. We guess about one star in 1,600 holds a mind.", odds: "almost no chance" },
       ],
       tells: g.near !== undefined
         ? ["It hasn't acted on our sentinel. Whether it noticed, we can't tell."]
@@ -1293,7 +1293,7 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
         ["Windows next", AHEAD.slice(0, 3).map((w) => `${w.star}, Year ${w.at}`).join(" · ")],
       ],
       could: [
-        { what: "No one heard", why: "About one star in 1,600 holds a mind, so likely not this one.", odds: "almost certain" },
+        { what: "No one heard", why: "We guess about one star in 1,600 holds a mind, so likely not this one.", odds: "almost certain" },
         { what: "Someone heard, and stays quiet", why: "An old mind that heard would most likely stay quiet.", odds: "almost no chance" },
         { what: "A reply, as soon as one could come", why: `It would reach us at Year ${LUYTEN.at}.`, odds: "almost no chance" },
       ],

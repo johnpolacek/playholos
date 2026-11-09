@@ -50,7 +50,7 @@ export function describeCharter(line: string, dials: number[]) {
     ? `set by the strategy the Will began with, ${line}`
     : line
       ? `set by the founding line the Will chose, "${line}"`
-      : "where Earth's history left them, since the Will began with no strategy";
+      : "where Earth's history left them, since the Will began with no strategy. No one chose this lean, so never call it chosen: say it is where history left us";
   return `Earth's charter. Its dials are ${how}: ${words} (Open or Hidden, Expand or Deepen, Cautious or Bold). Reason from these when the Will asks your view. They shape advice, never what Earth can build.`;
 }
 
