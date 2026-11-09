@@ -557,8 +557,10 @@ export function MindChat({ ask }: { ask?: string }) {
   const leadCount = useLeads().leads.length;
 
   // A block body: newer browsers return a Promise from scrollIntoView, and React would call it as cleanup.
+  // Before we have said anything, the Mind's hello opens at its top: scrolled to its end, a phone cut off “We are the
+  // Mind” and opened mid-sentence. Screen critic, 2026-11-08.
   useEffect(() => {
-    end.current?.scrollIntoView({ block: "end" });
+    if (messages.length) end.current?.scrollIntoView({ block: "end" });
     // Our leads can come after the talk, on a reload, and with them the steps under its last answer.
   }, [messages, status, leadCount]);
 
