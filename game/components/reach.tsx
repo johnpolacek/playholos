@@ -389,8 +389,11 @@ function Spread({ places }: { places: { lead: Lead; reached: number | null; boun
           );
         })}
       </div>
+      {/* The tick before the farthest goes unlabeled: the farthest, ending at its mark, ran into it, “10,000 ly100,000 ly”.
+          Screen critic, 2026-11-08. */}
       <div className="relative h-3 font-mono text-[10px] text-muted">
-        {Array.from({ length: top }, (_, k) => k + 1).filter((k) => k % (top > 5 ? 2 : 1) === 0 || k === 1).map((k) => (
+        {Array.from({ length: top }, (_, k) => k + 1)
+          .filter((k) => (k % (top > 5 ? 2 : 1) === 0 || k === 1) && k !== top - 1).map((k) => (
           // The farthest tick ends at its mark, not centered on it, so “100,000 ly” stays inside the panel on one line.
           // It ran off the edge and wrapped “ly” under itself. Screen critic, 2026-11-08.
           <span key={k} className={`absolute whitespace-nowrap ${k === top ? "-translate-x-full" : "-translate-x-1/2"}`} style={{ left: `${x(10 ** k)}%` }}>
