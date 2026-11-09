@@ -336,13 +336,13 @@ function Held({ idle }: { idle: boolean }) {
           : `Paused: ${Math.round(spare * 100)}% of our compute ${searching ? "only searches old recordings" : "sits idle"}.`}</span>
       <Link
         to="/play/build"
-        className="-my-1 inline-flex h-7 shrink-0 items-center rounded-full border border-you px-3 font-medium whitespace-nowrap text-you hover:bg-you/10"
+        className="-my-1 inline-flex h-7 items-center rounded-full border border-you px-3 font-medium text-you hover:bg-you/10"
       >
         Add a build
       </Link>
       <button
         onClick={playOn}
-        className="-my-1 inline-flex h-7 shrink-0 items-center rounded-full bg-you px-3 font-medium whitespace-nowrap text-paper hover:brightness-110"
+        className="-my-1 inline-flex h-7 items-center rounded-full bg-you px-3 font-medium text-paper hover:brightness-110"
       >
         Play on ›
       </button>
