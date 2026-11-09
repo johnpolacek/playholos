@@ -47,15 +47,20 @@ export function Build() {
         </div>
       )}
       <Struck />
+      {/* In play, what works and rises comes first, then what it costs: on a phone under the map, the compute drawing
+          filled the sheet and the Rising builds and their times sat under the tab bar. Screen critic, 2026-11-08. */}
       {year === null ? (
-        <Guide />
+        <>
+          <Guide />
+          <Queue />
+        </>
       ) : (
         <>
+          <Queue />
           <Costs />
           <Ceilings />
         </>
       )}
-      <Queue />
       <div className="mt-auto flex shrink-0 flex-col gap-2 pt-4 pb-4">
         <button onClick={() => leaveShell(newGame)} className="h-9 rounded-full border border-ink text-sm">
           New game
