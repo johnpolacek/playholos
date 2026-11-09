@@ -322,9 +322,7 @@ export function IdleNote() {
               </Link>
             </>
           )}
-          {/* Nothing needs us: the top bar already offers this jump, and the same button twice read as two things to do.
-              Screen critic, 2026-11-08. */}
-          {(!idle || !pick) && ahead && !nothing && (
+          {(!idle || !pick) && ahead && (
             <button
               onClick={ahead.go}
               className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow || heat || openSky || flight || step ? "border border-you/60 text-you" : "bg-you text-paper"}`}
