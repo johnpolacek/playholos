@@ -155,13 +155,14 @@ export function IdleNote() {
   const clock = held && <span className="text-page-ink2"> The clock waits.</span>;
   const what = pick ? `${pick.build.what.charAt(0).toLowerCase()}${pick.build.what.slice(1)}` : "";
   // Nothing needs us: the note only repeats the jump the top bar offers. On a phone it covered a third of the map for
-  // that, so it shows only on a wide screen. Playtest 2026-11-08.
+  // that, playtest 2026-11-08. On a wide screen too it covered the map's corner and read as a second call beside the
+  // top bar's, on four screens, so it shows only when something needs us. Screen critic, 2026-11-08.
   const nothing = !watchNew && !idle && !glow && !spare;
   return (
     <div
       ref={root}
       role="status"
-      className={`absolute top-10 left-2.5 z-20 w-[min(400px,calc(100%-20px))] rounded-xl border border-other/50 bg-paper/90 pt-2 pr-2 backdrop-blur-sm ${nothing ? "hidden wide:block" : ""}`}
+      className={`absolute top-10 left-2.5 z-20 w-[min(400px,calc(100%-20px))] rounded-xl border border-other/50 bg-paper/90 pt-2 pr-2 backdrop-blur-sm ${nothing ? "hidden" : ""}`}
     >
       <button onClick={() => setAway(key)} aria-label="Put away" className="absolute top-0 right-0 z-10 flex size-9 items-center justify-center text-muted hover:text-ink">
         <svg aria-hidden width="10" height="10" viewBox="0 0 12 12">
