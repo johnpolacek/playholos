@@ -589,7 +589,9 @@ export function describe(view: EarthView): string {
             (c.watts && !c.lost && c.mode === "furnace" ? ` Its furnace runs at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it, under what any sky survey sees until about 2×10^20 W.` : c.mode === "refuge" || c.mode === "quiet" ? " It keeps small and dark, and no one looking from outside would know it is there." : ""));
   const holesText = dark.length ? `\n\nBlack holes we have found. A star mapper finds more as they pass in front of stars:\n${dark.join("\n")}` : "";
   const mindsText = view.minds ? describeMinds(view.minds, one) : "";
-  return `Worlds Earth has felt by their tug on their stars, as of Year ${yearText(view.year)}:
+  // Only this game's new finds and Proxima b are here. Worlds known before, as Luyten's Star's, are in Earth's leads:
+  // the Mind read this list as every world and said Luyten's Star had none. Mind lane, 2026-11-09.
+  return `New worlds Earth's planet hunters have felt by their tug on their stars, as of Year ${yearText(view.year)}. Worlds known before them, as Luyten's Star's two, are in Earth's leads:
 ${felt}${nearest}
 
 Signals Earth's watch has caught:

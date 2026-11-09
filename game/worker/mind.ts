@@ -20,7 +20,7 @@ import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/
 import { describeSent, readSent, WATCHER } from "@/lib/game/sends";
 import { aimedOf } from "@/lib/game/known-query";
 import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
-import { EARTH_LEADS } from "@/lib/mind/leads";
+import { earthLeads } from "@/lib/mind/leads";
 import { describeChances } from "@/lib/game/chance";
 import { leadsOf, readingsOf } from "@/lib/game/leads";
 import { describe, describeSearch, willKnows } from "@/lib/sim/knowledge";
@@ -203,7 +203,7 @@ export async function mind(req: Request) {
     charter: readCharter(charter),
     kit: EARTH_AT_YEAR_0,
     road,
-    leads: EARTH_LEADS,
+    leads: earthLeads(inPool(seed) ? proximaSeen(seed) : undefined),
     scan: describeLeads(readObserve(observe), at, inPool(seed) ? proximaSeen(seed) : undefined),
     builds: describeBuilds(),
     queue: describeQueue(plan, done, year),

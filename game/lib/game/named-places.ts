@@ -68,6 +68,9 @@ export function placesNamed(words: string, leads: Lead[], done: boolean): Place[
     if (at < 0) continue;
     // A lead at the same star, or the same star by its pair's name, is already here.
     if (found.some((f) => near(f.place.pos, s.pos) && (f.place.lead || Math.abs(f.at - at) < s.said.length + 3))) continue;
+    // A lead by the same name, though its two lists set it a little apart, as Luyten's Star at 12.4 and 12.26 ly. It
+    // drew twice, "0.1 ly apart". Science lane, 2026-11-09.
+    if (found.some((f) => f.place.lead && plain(f.place.lead.star) === plain(s.name))) continue;
     found.push({ place: { name: s.name, pos: s.pos }, at });
   }
   // "Alpha Centauri A" is named once, not also as "Alpha Centauri".

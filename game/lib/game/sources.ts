@@ -241,6 +241,14 @@ const LEADS_SOURCES: Source[] = [
     ],
   },
   {
+    title: "Proxima b",
+    text: "Found by its star’s sway in 2016. Its tug gives at least 1.06 Earth masses and an 11.2-day year, 24 light-seconds from a flaring red dwarf. How its orbit tilts to us is not yet measured, so its true mass is unknown. Ground telescopes may catch its reflected light in the 2030s, which would give both. What they catch, its tilt, mass and how much light it reflects, is rolled for this game.",
+    links: [
+      ["Proxima Centauri b", W("Proxima_Centauri_b")],
+      ["Bugatti et al. 2025", "https://arxiv.org/abs/2509.07644"],
+    ],
+  },
+  {
     title: "Luyten’s Star, and our other messages",
     text: "Sónar Calling GJ273b was sent there in 2017 and 2018, and both reached it in 2030. A reply to the first could reach Earth in Year 2.3, the first window of the twelve stars our fifteen aimed messages went to since 1983. Replies could have come from Altair, Teegarden’s Star and TZ Arietis by now, and none did.",
     links: [
