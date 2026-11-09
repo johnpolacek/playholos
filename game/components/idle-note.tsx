@@ -250,7 +250,7 @@ export function IdleNote() {
             </button>
           )}
           {!watchNew && pick && (
-            <button onClick={() => snooze(pick.build.name, year ?? 0)} className="text-[12.5px] text-muted hover:text-ink">
+            <button onClick={() => snooze(pick.build.name, year ?? 0)} className="inline-flex min-h-6 items-center text-[12.5px] text-muted hover:text-ink">
               Snooze this one
             </button>
           )}
@@ -334,7 +334,7 @@ export function IdleNote() {
             <Link
               to="/play/build"
               onClick={() => setTimeout(() => document.getElementById("catalog")?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" }), 250)}
-              className="text-[12.5px] text-you hover:underline"
+              className="inline-flex min-h-6 items-center text-[12.5px] text-you hover:underline"
             >
               See the Catalog ›
             </Link>
@@ -343,7 +343,7 @@ export function IdleNote() {
             <button
               onClick={playOn}
               // Waiting on a reading, the clock is the one thing to move.
-              className={reading ? "h-8 rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110" : "text-[12.5px] text-muted hover:text-ink"}
+              className={reading ? "h-8 rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110" : "inline-flex min-h-6 items-center text-[12.5px] text-muted hover:text-ink"}
             >
               Play on
             </button>

@@ -103,7 +103,7 @@ function Meter({
       {go ? (
         <Link
           to={go}
-          className="truncate text-[11px] leading-tight tracking-normal text-you hover:underline"
+          className="-my-[5px] block truncate py-[5px] text-[11px] leading-tight tracking-normal text-you hover:underline"
         >
           {sub} ›
         </Link>
