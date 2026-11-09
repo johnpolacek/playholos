@@ -21,9 +21,9 @@ const PLACES: [upTo: number, name: string][] = [
 
 /** The title's ways in, each a reactor of its own. 2026-11-04. */
 const WAYS = [
-  { id: "universe", label: "Universe", to: "/universe", mood: "orbit", tone: "border-[#a9c8ee]/80 hover:bg-[#a9c8ee]" },
-  { id: "sim", label: "Simulation", to: "/sim", mood: "web", tone: "border-[#e0a24a]/80 hover:bg-[#e0a24a]" },
-  { id: "play", label: "Play", to: "/play", mood: "pulse", tone: "border-white hover:bg-white" },
+  { id: "universe", label: "Universe", hint: "Our sky, to scale", to: "/universe", mood: "orbit", tone: "border-[#a9c8ee]/80 hover:bg-[#a9c8ee]" },
+  { id: "sim", label: "Simulation", hint: "How minds might spread", to: "/sim", mood: "web", tone: "border-[#e0a24a]/80 hover:bg-[#e0a24a]" },
+  { id: "play", label: "Play", hint: "Play as Earth’s Mind", to: "/play", mood: "pulse", tone: "border-white hover:bg-white" },
 ] as const;
 
 // The first screen, and the landing for everyone. No title, only the sky: the view drifts out from Earth past the
@@ -101,17 +101,23 @@ export function Drift({ onNext, dive = true }: { onBack?(): void; onSkip(): void
           <span ref={far} />
         </div>
         <div className="flex flex-col items-center gap-5 sm:flex-row sm:gap-8">
+          {/* Each with a dim line under it of what it is: bare, “Universe” and “Simulation” puzzled a first look.
+              Screen critic, 2026-11-09. */}
           {WAYS.map((w, i) => (
-            <Reactor
-              key={w.id}
-              mood={w.mood}
-              ref={(r) => void (reactors.current[i] = r)}
-              data-m="act"
-              onClick={() => begin(i)}
-              className={`h-[46px] w-[180px] rounded-full border bg-paper text-[15px] font-medium transition-colors duration-300 hover:text-paper ${w.tone}`}
-            >
-              {w.label}
-            </Reactor>
+            <div key={w.id} className="flex flex-col items-center gap-1.5">
+              <Reactor
+                mood={w.mood}
+                ref={(r) => void (reactors.current[i] = r)}
+                data-m="act"
+                onClick={() => begin(i)}
+                className={`h-[46px] w-[180px] rounded-full border bg-paper text-[15px] font-medium transition-colors duration-300 hover:text-paper ${w.tone}`}
+              >
+                {w.label}
+              </Reactor>
+              <span data-m="foot" className="font-mono text-[11px] text-page-ink2">
+                {w.hint}
+              </span>
+            </div>
           ))}
         </div>
       </div>
