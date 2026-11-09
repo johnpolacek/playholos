@@ -54,7 +54,9 @@ export function Drift({ onNext, dive = true }: { onBack?(): void; onSkip(): void
   // Where the view is, written straight to the page each frame, not through React.
   const onFrame = useCallback((au: number) => {
     const name = PLACES.find(([upTo]) => au < upTo)![1];
-    const away = au < 1e-9 ? "" : `${lightTime(au)} from Earth`;
+    // Where we look from, not how far the place is: “Milky Way, 210,000 light-years from Earth” puzzled a first look,
+    // as we live inside it. Screen critic, 2026-11-09.
+    const away = au < 1e-9 ? "" : `seen from ${lightTime(au)} out`;
     if (place.current && place.current.textContent !== name) {
       place.current.textContent = name;
       gsap.fromTo(place.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6, overwrite: true });
