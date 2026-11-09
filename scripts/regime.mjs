@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 //   node scripts/regime.mjs formats           the files a run writes
 //   node scripts/regime.mjs gaps              known gaps, not to report
 //   node scripts/regime.mjs settled           design calls made, not to call problems again
+//   node scripts/regime.mjs lanes             the focused lanes, their groups, and the impact scale for findings
 
 const file = fileURLToPath(new URL("../playtests/regime.html", import.meta.url));
 
@@ -25,6 +26,24 @@ export function regime() {
  *  match, so playtest:climb sets aside a call that raises it again. 2026-11-08. */
 export const settledLines = (r = regime()) => (r.settled ?? []).map((s) => `- ${s.id}: ${s.call}`);
 export const settledHit = (text, r = regime()) => (r.settled ?? []).find((s) => new RegExp(s.match, "i").test(String(text ?? "")));
+
+/** The lanes a pick names: one id, ids joined by commas, a group as @name, or all. Unknown names throw. 2026-11-09. */
+export function pickLanes(pick = "all", r = regime()) {
+  const L = r.lanes;
+  const ids = new Set();
+  for (const p of String(pick).split(",").map((x) => x.trim()).filter(Boolean)) {
+    if (p === "all") L.list.forEach((l) => ids.add(l.id));
+    else if (p.startsWith("@")) {
+      const g = L.groups[p.slice(1)];
+      if (!g) throw new Error(`No lane group ${p}. The groups: ${Object.keys(L.groups).map((x) => `@${x}`).join(", ")}.`);
+      g.forEach((id) => ids.add(id));
+    } else if (L.list.some((l) => l.id === p)) ids.add(p);
+    else throw new Error(`No lane ${p}. The lanes: ${L.list.map((l) => l.id).join(", ")}.`);
+  }
+  // In the regime's order, so a run reads the same each time.
+  return L.list.filter((l) => ids.has(l.id));
+}
+export const laneOf = (id, r = regime()) => r.lanes.list.find((l) => l.id === id);
 
 /** Each player's rating ids, in order. */
 export const povs = (r = regime()) => Object.fromEntries(r.players.map((p) => [p.id, p.ratings.map((x) => x.id)]));
@@ -72,12 +91,21 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         "",
       ]).concat(["## Rules", "", ...r.ratingRules.map((x) => `- ${x}`)]),
     );
+  else if (what === "lanes")
+    print([
+      ...r.lanes.list.map((l) => `- ${l.id}: ${l.question}`),
+      "",
+      "Groups: " + Object.entries(r.lanes.groups).map(([g, ids]) => `@${g} (${ids.join(", ")})`).join(", "),
+      "",
+      "Impact, worst first:",
+      ...r.lanes.impact.map((x) => `- ${x.id}: ${x.what}`),
+    ]);
   else if (what === "gaps") print(r.knownGaps.map((x) => `- ${x}`));
   else if (what === "settled") print(settledLines(r));
   else if (what === "formats")
     print(Object.entries(r.formats).flatMap(([k, v]) => [`## ${k}`, "", ...(Array.isArray(v) ? v.map((x) => (x.startsWith("{") ? x : `- ${x}`)) : [v]), ""]));
   else {
-    console.error("Usage: node scripts/regime.mjs scenarios | scenario <id> | quiz | players | formats | gaps | settled");
+    console.error("Usage: node scripts/regime.mjs scenarios | scenario <id> | quiz | players | formats | gaps | settled | lanes");
     process.exit(1);
   }
 }

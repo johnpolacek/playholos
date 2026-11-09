@@ -81,6 +81,22 @@ function checkRun(dir) {
     for (const s of runner.steps) add("runner", `${s.step} finished`, s.code === 0, `exit ${s.code} after ${s.secs}s`, `Run ${s.step} by hand on this folder and fix what it prints.`);
     add("runner", "the player exited cleanly", runner.player.code === 0, `exit ${runner.player.code}`, "Read the tail of player.jsonl for the error, then fix the player's command or sandbox.");
   }
+  // A lane that plays from LANE.md, not blind: its own checks, then out. 2026-11-09.
+  if (runner?.kind === "lane") {
+    const pngs = readdirSync(dir).filter((f) => f.endsWith(".png")).length;
+    const found = lines(read(dir, "findings.jsonl"));
+    add("player", "the player saw the game", pngs >= 1, `${pngs} shots`, "Read player.jsonl's last lines for why Playwright never shot.");
+    if (!smoke) {
+      add("player", "the player played", runner.player.minutes >= 5, `${runner.player.minutes} min`, "A short run means a stall or a crash. Read player.jsonl's last lines.");
+      add("player", "every finding parses", found.every((e) => !e.bad), `${found.filter((e) => e.bad).length} bad of ${found.length}`, "Give the player a one-line helper that appends valid JSON.");
+      add("player", "every finding has evidence", found.every((e) => e.bad || e.shot || e.log), `${found.filter((e) => !e.bad && (e.shot || e.log)).length}/${found.length}`, "Say again in LANE.md: no evidence, no finding.");
+      add("readers", "the lane was rated", json(dir, "lane.json")?.ratings, json(dir, "lane.json") ? "lane.json" : "no lane.json", "Run node scripts/playtest-lane-rate.mjs on this folder and read its error.");
+    }
+    add("player", "the report was written", read(dir, "REPORT.md"), read(dir, "REPORT.md") ? "REPORT.md" : "no REPORT.md", "Have the runner save the player's last message as REPORT.md.");
+    add("runner", "the build is named in scores.json", scores.build, scores.build ?? "none", "Have the runner write the build into scores.json before the scorer runs.");
+    add("cost", "minutes and tokens were logged", scores.cost?.minutes != null && scores.cost?.total > 0, scores.cost ? `${scores.cost.minutes} min, ${Math.round((scores.cost.total ?? 0) / 1000)}k tokens` : "no cost", "Run run-cost.mjs with the player's session.");
+    return { name, who: runner.who, build: runner.build ?? scores.build, checks: C, peeks: [], scores };
+  }
   // Even a smoke run must see the game once, or nothing after it means anything.
   add("player", "the player saw the game", shots >= 1, `${shots} shots`, "blind.mjs start failed. Read player.jsonl for its error. For codex, Chrome may not start in its sandbox: try --codex-open.");
   if (!smoke) {
