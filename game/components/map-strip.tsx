@@ -1,4 +1,3 @@
-import { useGame } from "@/components/game-provider";
 import { useLocation } from "react-router";
 import { Arrival } from "@/components/arrival";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -49,10 +48,7 @@ const BUTTON = `absolute right-2.5 bottom-3 ${PILL}`;
 export function MapStrip() {
   const { pathname: path, search } = useLocation();
   // The walkthroughs, the Scan review and the Build tour, need room under the map on a phone for the Mind's words.
-  // Build before Begin is the Mind's guide, so it gets that room too: under a 45% map its words and the first builds
-  // sat under the tab bar. Screen critic, 2026-11-08.
-  const { year } = useGame();
-  const guided = /[?&](review|tour)\b/.test(search) || (path === "/play/build" && year === null);
+  const guided = /[?&](review|tour)\b/.test(search);
   const scan = path === "/play" || path.startsWith("/play/lead/");
   // On the Mind tab, the map opens on what our talk is on, until sent home. 2026-11-04.
   const subject = useTalkSubject();
