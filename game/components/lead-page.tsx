@@ -295,12 +295,14 @@ export function LeadPage({ slug }: { slug: string }) {
         </p>
       )}
       {lead.art.kind === "warm" && flash && <GlowVerdict flash={flash} />}
+      {/* Engage holds at the panel's foot while the page under it scrolls: on a phone the tab bar cut it in half.
+          Screen critic, 2026-11-09. */}
       {lead.art.kind !== "near" && !probeRoad && !(lead.art.kind === "warm" && flash?.read?.saw === "dust") && (
         <Link
           data-m
           to={`/play/reach/${lead.slug}`}
           state={{ engage: true }}
-          className="mt-2.5 inline-flex h-8 items-center self-start rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+          className="sticky bottom-3 z-10 mt-2.5 inline-flex h-8 items-center self-start rounded-full bg-you px-4 text-[13px] font-medium text-paper shadow-[0_0_0_4px_var(--panel)] transition-[filter] hover:brightness-110"
         >
           Engage {starName(lead.star)}: send a craft or a message ›
         </Link>
