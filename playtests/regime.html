@@ -492,7 +492,32 @@ code { font: 12px ui-monospace, Menlo, monospace; background: var(--soft); paddi
 @media (max-width: 720px) { .findings { grid-template-columns: 1fr; } }
 .moves { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px 20px; }
 .moves ul { margin: 4px 0 0; padding-left: 18px; } .moves p { margin: 0; }
-p.pair { margin: 14px 0 -6px; }
+figure.flip { cursor: pointer; }
+.fix.kept-no { opacity: .92; }
+.rshots { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
+.rshots figure.laptop { width: min(100%, 640px); } .rshots figure.phone { width: 230px; }
+.fix h3 { margin: 0; } .fix .sha { font-size: 12px; }
+.pick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.pick button { font: inherit; font-size: 14px; padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink2); cursor: pointer; }
+.pick button[aria-pressed="true"][data-v="keep"] { background: var(--good); color: #111; border-color: var(--good); font-weight: 600; }
+.pick button[aria-pressed="true"][data-v="drop"] { background: var(--bad); color: #111; border-color: var(--bad); font-weight: 600; }
+.pick button[aria-pressed="true"][data-v="ask"] { background: var(--accent); color: #111; border-color: var(--accent); font-weight: 600; }
+.fix textarea, #reviewOut { width: 100%; box-sizing: border-box; margin-top: 8px; font: inherit; font-size: 14px; color: var(--ink); background: var(--soft); border: 1px solid var(--line); border-radius: 6px; padding: 8px; }
+.fix[data-v] { border-left: 3px solid var(--line); }
+.fix[data-v="keep"] { border-left-color: var(--good); } .fix[data-v="drop"] { border-left-color: var(--bad); } .fix[data-v="ask"] { border-left-color: var(--accent); }
+.send { position: sticky; bottom: 0; background: var(--bg, #111318); padding: 12px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; border-top: 1px solid var(--line); }
+.send button.done { background: var(--good); }
+.send button { transition: background .2s; font: inherit; padding: 8px 18px; border-radius: 999px; border: 0; background: var(--accent); color: #111; font-weight: 600; cursor: pointer; }
+.flipbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 12px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.seg button { font: inherit; font-size: 14px; padding: 6px 14px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #111; font-weight: 600; }
+figure.flip .stack { display: grid; }
+figure.flip .stack img { grid-area: 1 / 1; }
+figure.flip[data-side="after"] .stack img.before, figure.flip[data-side="before"] .stack img.after { visibility: hidden; }
+figure.flip[data-side="after"] figcaption .before, figure.flip[data-side="before"] figcaption .after { display: none; }
+figure.flip[data-side="before"] figcaption .before { color: var(--accent); }
+figure.flip[data-side="before"] .stack { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 .findings table td, .findings table th { padding: 3px 6px; }
 .worst p { font-size: 13px; margin-bottom: 6px; }
 .worst b { color: var(--ink2); font-weight: 600; }
@@ -523,6 +548,7 @@ details.more > *:not(summary) { margin-top: 6px; }
     <a href="#how" id="tab-how" role="tab">How</a>
     <a href="#results" id="tab-results" role="tab">Results</a>
     <a href="#screens" id="tab-screens" role="tab">Screens</a>
+    <a href="#review" id="tab-review" role="tab">Review</a>
     <a href="#players" id="tab-players" role="tab">Players</a>
     <a href="#quiz" id="tab-quiz" role="tab">Quiz</a>
     <a href="#scenarios" id="tab-scenarios" role="tab">Scenarios</a>
@@ -548,6 +574,10 @@ details.more > *:not(summary) { margin-top: 6px; }
   <div class="tabs" id="capTabs"></div>
   <div id="sheet"></div>
   <details class="about"><summary>How screens are scored</summary><div id="screensRule"></div></details>
+  </section>
+
+  <section class="pane" id="pane-review" role="tabpanel" aria-labelledby="tab-review">
+  <div id="review"></div>
   </section>
 
   <section class="pane" id="pane-players" role="tabpanel" aria-labelledby="tab-players">
@@ -776,18 +806,24 @@ function drawScreens(caps) {
   $("screensRule").innerHTML = [R.screensRule, `All screens together: ${R.design?.who ?? ""}`, R.climb && `Climbing to ${R.climb.target}: ${R.climb.rule}`]
     .filter(Boolean).map((x) => `<p>${esc(x)}</p>`).join("");
   if (!caps?.length) { $("sheet").innerHTML = `<div class="empty">No captures yet. Run <code>npm run playtest:capture</code>, then <code>npm run playtest:critic</code>, and reload.</div>`; return; }
-  let at = caps.length - 1, compare = !!caps.at(-1).since;
+  // Opens on the newest run paired with a before, so a climb's result shows first.
+  const paired = caps.findLastIndex((c) => c.since);
+  let at = paired >= 0 ? paired : caps.length - 1, compare = paired >= 0, side = "after";
   const ids = R.screens.ratings.map((r) => r.id);
   // 2026-11-08-1905 reads as 11-08 19:05, as in the Results table.
   const label = (run) => { const m = /^\d{4}-(\d\d-\d\d)-(\d\d)(\d\d)$/.exec(run); return m ? `${m[1]} ${m[2]}:${m[3]}` : run; };
   const img = (run, x, label) => `<figure class="${esc(x.viewport)}"><a href="captures/${esc(run)}/${esc(x.file)}" target="_blank"><img loading="lazy" src="captures/${esc(run)}/${esc(x.file)}" alt="${esc(label)}"></a><figcaption>${esc(label)}</figcaption></figure>`;
+  // A two-way switch, Before or After, with the hint beside it.
+  const sw = (prev, cap) => `<div class="flipbar"><div class="seg"><button data-to="before" aria-pressed="${side === "before"}">Before, ${esc(label(prev.run))}</button><button data-to="after" aria-pressed="${side === "after"}">After, ${esc(label(cap.run))}</button></div><span class="small muted">Click a shot or press B to flip. Shots sit exactly on top of each other.</span></div>`;
   const draw = () => {
     const cap = caps[at], before = cap.since && caps.find((c) => c.run === cap.since.since);
     const prev = before || caps[at - 1];
     $("capTabs").innerHTML = caps.map((c, i) => `<button aria-pressed="${i === at}" data-i="${i}" title="${esc(c.run)}">${esc(label(c.run))}${c.since ? " ⇆" : ""}</button>`).join("") +
-      (prev ? `<button data-compare aria-pressed="${compare}">${before ? `Before and after, from ${esc(label(prev.run))}` : `Compare with ${esc(label(prev.run))}`}</button>` : "");
+      (prev ? `<button data-compare aria-pressed="${compare}">${before ? `Before and after, from ${esc(label(prev.run))}` : `Compare with ${esc(label(prev.run))}`}</button>` : "") +
+      "";
     const bad = cap.shots.filter((x) => x.status !== "ok");
     $("sheet").innerHTML = `<p class="meta">Build <code>${esc(cap.build ?? "?")}</code>${cap.dirty ? ", uncommitted" : ""}. ${bad.length ? `${cap.shots.length - bad.length} of ${cap.shots.length} shots. ` : ""}${cap.critic ? `Scores: ${esc(cap.critic.model)}${cap.critic2 ? ` · ${esc(cap.critic2.model)}. <span class="gap">Orange</span>: 2 or more apart` : ""}.` : "Not scored yet."}</p>` +
+      (compare && prev ? sw(prev, cap) : "") +
       (before ? sinceCard(cap.since, label(prev.run), label(cap.run)) : "") +
       designCard(cap, prev) +
       R.states.map((st) => {
@@ -802,7 +838,14 @@ function drawScreens(caps) {
         const was = compare && prev ? prev.shots.filter((y) => y.state === st.id) : [];
         // Before above, after below, each labeled, when compared. The run before beneath, as it was, otherwise.
         const tag = (t, run) => `<p class="small muted pair">${t}, ${esc(label(run.run))}${run.build ? `, build <code>${esc(run.build)}</code>${run.dirty ? " uncommitted" : ""}` : ""}</p>`;
-        const pics = was.length ? (before ? tag("Before", prev) + row(prev, was) + tag("After", cap) + row(cap, shots) : row(cap, shots) + row(prev, was)) : row(cap, shots);
+        // Before and after stacked in one frame, top-aligned, so a flip shows only what changed. Click a shot or press B to flip them all.
+        const flip = (x) => {
+          const y = was.find((w) => w.viewport === x.viewport);
+          if (x.status !== "ok" || !y || y.status !== "ok") return fig(cap, x);
+          const im = (run, z, k) => `<img class="${k}" loading="lazy" src="captures/${esc(run.run)}/${esc(z.file)}" alt="${esc(z.viewport)}, ${k}">`;
+          return `<figure class="${esc(x.viewport)} flip" data-side="${side}"><div class="stack">${im(prev, y, "before")}${im(cap, x, "after")}</div><figcaption>${esc(x.viewport)}, <span class="before">before, ${esc(label(prev.run))}</span><span class="after">after, ${esc(label(cap.run))}</span></figcaption></figure>`;
+        };
+        const pics = was.length ? sw(prev, cap) + `<div class="shot">${shots.map(flip).join("")}</div>` : row(cap, shots);
         const sv = vps.filter((vp) => c?.[vp]);
         // One table: a row a rating, a column a width.
         const table = c && !c.error && sv.length ? `<table><tr><th></th>${sv.map((vp) => `<th class="n">${esc(vp)}</th>`).join("")}</tr>${ids.map((k) => `<tr><td>${esc(k)}</td>${sv.map((vp) => {
@@ -835,7 +878,23 @@ function drawScreens(caps) {
     const b = e.target.closest("button");
     if (!b) return;
     if (b.dataset.compare !== undefined) compare = !compare; else { at = Number(b.dataset.i); compare = !!caps[at].since; }
+    side = "after";
     draw();
+  });
+  // Flip every paired shot at once, in place, so the page never jumps.
+  const setSide = (to) => {
+    side = to;
+    $("sheet").querySelectorAll("figure.flip").forEach((f) => (f.dataset.side = side));
+    $("sheet").querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.to === side));
+  };
+  const flipAll = () => setSide(side === "after" ? "before" : "after");
+  $("sheet").addEventListener("click", (e) => {
+    const t = e.target.closest(".seg button");
+    if (t) return setSide(t.dataset.to);
+    if (e.target.closest("figure.flip")) flipAll();
+  });
+  document.addEventListener("keydown", (e) => {
+    if ((e.key === "b" || e.key === "B") && !e.metaKey && !e.ctrlKey && !/INPUT|TEXTAREA/.test(e.target.tagName) && !$("pane-screens").hidden && $("sheet").querySelector("figure.flip")) flipAll();
   });
   draw();
 }
@@ -868,6 +927,82 @@ function designCard(cap, prev) {
   }).join("")}</div>${issues.length ? `<div class="scroll"><table style="margin-top:10px">${head}${rows(issues.slice(0, 3))}</table></div>${issues.length > 3 ? `<details class="more"><summary>${issues.length - 3} more issues</summary><div class="scroll"><table>${head}${rows(issues.slice(3))}</table></div></details>` : ""}` : ""}</div>`;
 }
 drawScreens(window.CAPTURES);
+// Review: a card a fix from the newest climb, its screens before and after, and Keep, Drop or Question on each.
+// Choices stay in this browser. Copy for Claude puts them all in one message to paste into the chat.
+function drawReview(caps) {
+  const run = caps?.findLast((c) => c.fixes);
+  if (!run) { $("review").innerHTML = `<div class="empty">No climb to review yet. A climb writes fixes.json beside its last run.</div>`; return; }
+  const F = run.fixes, key = `review:${F.climb}:${F.head}`;
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch {}
+  const save = () => { try { localStorage.setItem(key, JSON.stringify(saved)); } catch {} };
+  const label = (r) => { const m = /^\d{4}-(\d\d-\d\d)-(\d\d)(\d\d)$/.exec(r); return m ? `${m[1]} ${m[2]}:${m[3]}` : r; };
+  const capOf = (r) => caps.find((c) => c.run === r);
+  const title = (id) => R.states.find((s) => s.id === id)?.title ?? id;
+  // The same three answers on every card: whether the change ships, kept or reverted alike.
+  const opts = () => [["keep", "Ship it"], ["drop", "Don’t ship it"], ["ask", "Question"]];
+  const card = (f, i) => {
+    const b = capOf(f.before), a = capOf(f.after), v = saved[f.sha] ?? {};
+    const pairs = f.states.flatMap((st) => (a?.shots ?? []).filter((x) => x.state === st && x.status === "ok" && (!f.vp || x.viewport === f.vp)).map((x) => {
+      const y = b?.shots.find((z) => z.state === st && z.viewport === x.viewport && z.status === "ok");
+      if (!y) return "";
+      return `<figure class="${esc(x.viewport)} flip" data-side="after"><div class="stack"><img class="before" loading="lazy" src="captures/${esc(b.run)}/${esc(y.file)}" alt=""><img class="after" loading="lazy" src="captures/${esc(a.run)}/${esc(x.file)}" alt=""></div><figcaption>${esc(title(st))}, ${esc(x.viewport)}, <span class="before">before, ${esc(label(b.run))}</span><span class="after">after, ${esc(label(a.run))}</span></figcaption></figure>`;
+    })).join("");
+    return `<div class="card fix" data-sha="${esc(f.sha)}"${v.v ? ` data-v="${v.v}"` : ""}>
+      <div class="state-head"><h3>${i + 1}. ${esc(f.title)}</h3><span class="tag">${f.kept ? "kept" : "reverted"}</span> <code class="sha">${esc(f.sha)}</code></div>
+      <p class="small">${esc(f.what)}</p><p class="small muted">${esc(f.result)}</p>
+      <div class="flipbar"><div class="seg"><button data-to="before" aria-pressed="false">Before, ${esc(label(f.before))}</button><button data-to="after" aria-pressed="true">After, ${esc(label(f.after))}</button></div><span class="small muted">Click a shot to flip.</span></div>
+      <div class="shot rshots">${pairs || `<p class="small muted">No shots for this fix.</p>`}</div>
+      <div class="pick">${opts(f).map(([k, t]) => `<button data-v="${k}" aria-pressed="${v.v === k}">${t}</button>`).join("")}</div>
+      <textarea rows="2" placeholder="Note or question for Claude (optional)">${esc(v.note ?? "")}</textarea>
+    </div>`;
+  };
+  const kept = F.fixes.filter((f) => f.kept), back = F.fixes.filter((f) => !f.kept);
+  $("review").innerHTML = `<p class="meta">Climb <code>${esc(F.climb)}</code>, build <code>${esc(F.head)}</code>. Each card shows only the screens its fix touched, from the run before it to the run after. Pick one answer a card, add a note if you like, then Copy for Claude and paste it in the chat.</p>
+    <h2>Kept, ${kept.length}</h2>${kept.map(card).join("")}
+    <h2>Reverted, ${back.length}</h2><p class="small muted">Tried, then undone because its scores didn’t rise. Pick Ship it to put one back anyway.</p>${back.map((f, i) => card(f, kept.length + i)).join("")}
+    <div class="send"><button id="reviewCopy">Copy for Claude</button><span class="small muted" id="reviewCount"></span></div>
+    <textarea id="reviewOut" rows="8" hidden readonly></textarea>`;
+  const count = () => { $("reviewCount").textContent = `${F.fixes.filter((f) => saved[f.sha]?.v).length} of ${F.fixes.length} answered.`; };
+  const word = (f, v) => Object.fromEntries(opts(f))[v] ?? "No answer";
+  const text = () => [`Review of ${F.climb} at ${F.head}:`, ...F.fixes.map((f, i) => {
+    const v = saved[f.sha] ?? {};
+    return `${i + 1}. ${f.sha} ${f.title} (${f.kept ? "kept" : "reverted"}): ${word(f, v.v)}.${v.note?.trim() ? ` Note: ${v.note.trim()}` : ""}`;
+  })].join("\n");
+  $("review").addEventListener("click", async (e) => {
+    const c = e.target.closest(".fix");
+    const seg = e.target.closest(".seg button"), pick = e.target.closest(".pick button");
+    const flip = (to) => { c.querySelectorAll("figure.flip").forEach((f) => (f.dataset.side = to)); c.querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.to === to)); };
+    if (seg) return flip(seg.dataset.to);
+    if (e.target.closest("figure.flip")) return flip(c.querySelector("figure.flip").dataset.side === "after" ? "before" : "after");
+    if (pick) {
+      const s = (saved[c.dataset.sha] ??= {});
+      s.v = s.v === pick.dataset.v ? undefined : pick.dataset.v;
+      c.querySelectorAll(".pick button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === s.v));
+      s.v ? (c.dataset.v = s.v) : delete c.dataset.v;
+      save(); count();
+    }
+    if (e.target.id === "reviewCopy") {
+      const out = $("reviewOut"), t = text();
+      out.value = t; out.hidden = false;
+      let ok = false;
+      try { await navigator.clipboard.writeText(t); ok = true; } catch { out.select(); try { ok = document.execCommand("copy"); } catch {} }
+      $("reviewCount").textContent = ok ? "Paste it in the chat with Claude." : "Select the text below and copy it.";
+      const btn = $("reviewCopy");
+      btn.textContent = ok ? "Copied ✓" : "Copy below";
+      btn.classList.add("done");
+      setTimeout(() => { btn.textContent = "Copy for Claude"; btn.classList.remove("done"); }, 2500);
+    }
+  });
+  $("review").addEventListener("input", (e) => {
+    const c = e.target.closest(".fix");
+    if (!c || e.target.tagName !== "TEXTAREA") return;
+    (saved[c.dataset.sha] ??= {}).note = e.target.value;
+    save();
+  });
+  count();
+}
+drawReview(window.CAPTURES);
 </script>
 </body>
 </html>
