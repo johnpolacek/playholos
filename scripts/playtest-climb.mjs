@@ -12,9 +12,12 @@ import { writeIndex } from "./states.mjs";
 //   npm run playtest:climb                       the calls from the newest capture run
 //   npm run playtest:climb -- --since <run>      what rose and fell since that run
 //   npm run playtest:climb -- --run <run> --max 20
+//   npm run playtest:climb -- --noise <run>      how far scores drift with no change: that run against the newest,
+//                                                both shot from the same build. Saved to captures/noise.json
 //
-// The loop: npm run playtest:local -- screens, then this. Pick letters. Fix them. Then
-// npm run playtest:local -- screens --dirty --only <states>, and this with --since, to see the climb. Keep or revert.
+// The loop: npm run playtest:local -- screens, then this. Pick letters. Fix ONE. Then
+// npm run playtest:local -- screens --dirty --only <its states>, look at the after shot, and run this with --since.
+// It prints KEEP or REVERT for each screen it shot, by the climb rule, so the call never drifts. 2026-11-08.
 
 const capDir = fileURLToPath(new URL("../playtests/captures/", import.meta.url));
 const R = regime();
@@ -65,6 +68,33 @@ function flags(run) {
   return [...by.values()];
 }
 
+// Noise: the same build shot twice. Any move between them is the readers, not the game. The 90th-percentile move,
+// for each reader, is how far a score must move before we believe it. 2026-11-08.
+const NOISE_FILE = join(capDir, "noise.json");
+if (opt("noise")) {
+  const was = load(opt("noise"));
+  if (!was.a) {
+    console.error(`No scored capture run ${opt("noise")}.`);
+    process.exit(1);
+  }
+  if (was.results?.build !== cur.results?.build || was.results?.dirty || cur.results?.dirty)
+    console.log(`Warning: ${was.name} is build ${was.results?.build}${was.results?.dirty ? " dirty" : ""}, ${cur.name} is ${cur.results?.build}${cur.results?.dirty ? " dirty" : ""}. Noise needs the same committed build.\n`);
+  const before = new Map(ratings(was).map((x) => [x.key, x]));
+  const da = [], db = [];
+  for (const x of ratings(cur)) {
+    const y = before.get(x.key);
+    if (!y) continue;
+    da.push(Math.abs(x.a - y.a));
+    if (typeof x.b === "number" && typeof y.b === "number") db.push(Math.abs(x.b - y.b));
+  }
+  const p90 = (xs) => { const s = [...xs].sort((p, q) => p - q); return s.length ? Math.round(s[Math.floor(s.length * 0.9)] * 10) / 10 : 0; };
+  const max = (xs) => Math.round(Math.max(0, ...xs) * 10) / 10;
+  const n = { from: was.name, to: cur.name, build: cur.results?.build, a: p90(da), b: p90(db), maxA: max(da), maxB: max(db), count: da.length };
+  writeFileSync(NOISE_FILE, JSON.stringify(n, null, 2) + "\n");
+  console.log(`Noise over ${n.count} scores, same build twice:\n  Claude: 90% move ${n.a} or less, largest ${n.maxA}\n  second reader: 90% move ${n.b} or less, largest ${n.maxB}\nSaved to playtests/captures/noise.json. --since now trusts only moves past these.`);
+  process.exit(0);
+}
+
 if (opt("since")) {
   const was = load(opt("since"));
   if (!was.a) {
@@ -97,8 +127,28 @@ if (opt("since")) {
   const flag = (g) => ({ rule: g.rule, text: g.text, shots: g.shots });
   writeFileSync(join(capDir, cur.name, "since.json"), JSON.stringify({ since: was.name, rose: up.map(pair), fell: down.map(pair), cleared: gone.map(flag), fresh: fresh.map(flag) }, null, 2) + "\n");
   writeIndex();
-  console.log(`\nBefore and after, side by side: npm run playtests, Screens, ${cur.name}.`);
-  console.log("\nKeep the change if nothing you care about fell and the target rose. Readers vary by a point run to run, so trust a move of 2.");
+  // The climb rule, applied here so it never drifts: a screen climbed when one rating rose past the noise for both
+  // readers on average, or past it for one with the other not falling, or a code flag on it cleared. It fell when
+  // any rating fell past the noise for either reader. Noise is captures/noise.json, never under 2. 2026-11-08.
+  const noise = existsSync(NOISE_FILE) ? JSON.parse(readFileSync(NOISE_FILE, "utf8")) : null;
+  const barA = Math.max(2, noise?.a ?? 0), barB = Math.max(2, noise?.b ?? 0);
+  const rose = (x) => (x.da / barA + x.db / barB) / 2 >= 0.75 || (x.da >= barA && x.db >= 0) || (x.db >= barB && x.da >= 0);
+  const fell = (x) => x.da <= -barA || x.db <= -barB;
+  const screens = [...shot].map((k) => {
+    const [state, vp] = k.split(" ");
+    const mine = moved.filter((x) => x.state === state && x.vp === vp);
+    const up2 = mine.filter(rose), down2 = mine.filter(fell);
+    const clr = gone.filter((g) => g.shots.includes(k));
+    const verdict = down2.length ? "REVERT" : up2.length || clr.length ? "KEEP" : "FLAT";
+    return { k, verdict, why: [...up2.map((x) => `${x.rating} ${sign(x.da)}, ${sign(x.db)}`), ...clr.map((g) => `cleared ${g.rule}`), ...down2.map((x) => `fell ${x.rating} ${sign(x.da)}, ${sign(x.db)}`)].join("; ") };
+  });
+  const wordsFell = moved.filter((x) => x.key.startsWith("words") && fell(x) && (shot.has(`${x.state} phone`) || shot.has(`${x.state} laptop`)));
+  console.log(`\n# Verdict, bar ${barA} and ${barB}${noise ? ` from noise ${noise.from} and ${noise.to}` : ", no noise measured yet: npm run playtest:climb -- --noise <run>"}`);
+  for (const s of screens) console.log(`  ${s.verdict.padEnd(6)} ${s.k}${s.why ? `: ${s.why}` : ""}`);
+  for (const x of wordsFell) console.log(`  REVERT words ${x.state}: fell ${x.rating} ${sign(x.da)}, ${sign(x.db)}`);
+  const any = (v) => screens.some((s) => s.verdict === v);
+  const call = any("REVERT") || wordsFell.length ? "REVERT" : any("KEEP") ? "KEEP" : "REVERT (flat: nothing rose past the noise)";
+  console.log(`\nCall: ${call}. Check the after shot by eye before keeping: npm run playtests, Screens, ${cur.name}.`);
   process.exit(0);
 }
 
