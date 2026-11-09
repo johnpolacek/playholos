@@ -562,8 +562,9 @@ export function Ruler() {
   const at = useCallback((au: number) => l + (Math.log10(au / NEAR_AU) / decades) * (r - l), [l, r, decades]);
   const auAt = (x: number) => NEAR_AU * 10 ** (((Math.min(r, Math.max(l, x)) - l) / (r - l)) * decades);
   const end = farZoom(target.ly);
-  // Labels climb as the marks crowd toward our farthest craft.
-  const lift = [0, 0, 0, 0, 10, 20];
+  // Labels climb as the marks crowd toward our farthest craft, a full line each: at 10 px apart “New Horizons” sat on
+  // “Neptune” on a phone. Screen critic, 2026-11-09.
+  const lift = [0, 0, 0, 0, 12, 24];
 
   // The view's mark follows the map's zoom, however it moves.
   useEffect(() => {
@@ -652,7 +653,8 @@ export function Ruler() {
       ))}
       <circle cx={r} cy={45} r={3} className="fill-ink/70" />
       <circle cx={r} cy={45} r={6.5} className="fill-ink/10" />
-      <text x={r + 3} y={33} textAnchor="end" className="fill-page-ink2 font-mono text-[8px]">
+      {/* Its name ends short of the view's mark, which stands at the end when the map looks out that far and cut it. */}
+      <text x={r - 6} y={33} textAnchor="end" className="fill-page-ink2 font-mono text-[8px]">
         {target.name}
       </text>
       <text x={l - 2} y={80} className="fill-muted/80 font-mono text-[7.5px]">
