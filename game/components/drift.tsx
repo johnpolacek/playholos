@@ -90,10 +90,12 @@ export function Drift({ onNext, dive = true }: { onBack?(): void; onSkip(): void
     <div ref={root} className="relative flex grow flex-col overflow-hidden">
       <SkyArt mode="title" onFrame={onFrame} className="hidden" />
       <div className="relative mt-auto flex flex-col items-center px-6 pb-10">
-        <div data-m="where" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+        {/* Where the sky is, a step larger and brighter, so it reads over the stars: dim and tiny, it sank into the
+            galaxy's arm. Screen critic, 2026-11-08. */}
+        <div data-m="where" className="font-mono text-[11.5px] tracking-[.1em] text-page-ink2">
           <span ref={place}>EARTH</span>
         </div>
-        <div data-m="where" className="mt-1 mb-7 h-4 font-mono text-[10.5px] text-muted tabular-nums">
+        <div data-m="where" className="mt-1 mb-7 h-4 font-mono text-[11.5px] text-page-ink2 tabular-nums">
           <span ref={far} />
         </div>
         <div className="flex flex-col items-center gap-5 sm:flex-row sm:gap-8">
