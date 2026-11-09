@@ -275,7 +275,7 @@ export function MapStrip() {
         onClick={() => setTall(!tall)}
         aria-label={tall ? "Show less of the map" : "Show more of the map"}
         aria-expanded={tall}
-        className="absolute bottom-0 left-1/2 flex h-6 w-16 -translate-x-1/2 items-end justify-center pb-[5px] wide:hidden"
+        className="absolute bottom-0 left-1/2 flex h-5 w-16 -translate-x-1/2 items-end justify-center pb-[5px] wide:hidden"
       >
         <span className="h-1 w-9 rounded-sm bg-faint" />
       </button>
