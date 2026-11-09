@@ -111,7 +111,8 @@ export function Drift({ onNext, dive = true }: { onBack?(): void; onSkip(): void
           ))}
         </div>
       </div>
-      <footer className="relative flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-6 pb-5 font-mono text-[10px] tracking-[.1em] text-muted uppercase">
+      {/* Each link stands 24px tall, so a thumb can take it: at 15px the screen audit called them small targets. 2026-11-08. */}
+      <footer className="relative flex flex-wrap items-center justify-center gap-x-4 gap-y-0 px-6 pb-4 font-mono text-[10px] tracking-[.1em] text-muted uppercase">
         <Link
           data-m="foot"
           to="/about/research"
@@ -120,7 +121,7 @@ export function Drift({ onNext, dive = true }: { onBack?(): void; onSkip(): void
             e.preventDefault();
             leaveFor("/about/research");
           }}
-          className="transition-colors hover:text-ink"
+          className="inline-flex min-h-6 items-center transition-colors hover:text-ink"
         >
           About
         </Link>
@@ -132,20 +133,20 @@ export function Drift({ onNext, dive = true }: { onBack?(): void; onSkip(): void
           href="https://github.com/johnpolacek/playholos"
           target="_blank"
           rel="noopener noreferrer"
-          className="transition-colors hover:text-ink"
+          className="inline-flex min-h-6 items-center transition-colors hover:text-ink"
         >
           GitHub
         </a>
         <span data-m="foot" className="opacity-60">
           <Astroid />
         </span>
-        <RunLocal data-m="foot" className="uppercase transition-colors hover:text-ink" />
+        <RunLocal data-m="foot" className="inline-flex min-h-6 items-center uppercase transition-colors hover:text-ink" />
         <span data-m="foot" className="opacity-60">
           <Astroid />
         </span>
         <span data-m="foot">
           Created by{" "}
-          <a href="https://johnpolacek.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-ink">
+          <a href="https://johnpolacek.com" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-6 items-center transition-colors hover:text-ink">
             John Polacek
           </a>
         </span>
