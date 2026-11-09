@@ -295,17 +295,19 @@ export function LeadPage({ slug }: { slug: string }) {
         </p>
       )}
       {lead.art.kind === "warm" && flash && <GlowVerdict flash={flash} />}
-      {/* Engage holds at the panel's foot while the page under it scrolls: on a phone the tab bar cut it in half.
-          Screen critic, 2026-11-09. */}
+      {/* Engage holds at the panel's foot while the page under it scrolls: on a phone the tab bar cut it in half. On a
+          bar of its own, so what scrolls under it hides whole rather than showing half under the button. Screen critic,
+          2026-11-09. */}
       {lead.art.kind !== "near" && !probeRoad && !(lead.art.kind === "warm" && flash?.read?.saw === "dust") && (
-        <Link
-          data-m
-          to={`/play/reach/${lead.slug}`}
-          state={{ engage: true }}
-          className="sticky bottom-3 z-10 mt-2.5 inline-flex h-8 items-center self-start rounded-full bg-you px-4 text-[13px] font-medium text-paper shadow-[0_0_0_4px_var(--panel)] transition-[filter] hover:brightness-110"
-        >
-          Engage {starName(lead.star)}: send a craft or a message ›
-        </Link>
+        <div data-m className="sticky bottom-0 z-10 -mx-4 mt-1.5 bg-panel px-4 pt-1 pb-3">
+          <Link
+            to={`/play/reach/${lead.slug}`}
+            state={{ engage: true }}
+            className="inline-flex h-8 items-center rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+          >
+            Engage {starName(lead.star)}: send a craft or a message ›
+          </Link>
+        </div>
       )}
 
       {/* What we can do comes first, above what we know. It sat two screens down until a playtest, 2026-11-04. */}
