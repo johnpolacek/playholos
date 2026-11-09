@@ -8,6 +8,7 @@
 // helium was made disputed 2026-10-28, after two JWST papers found none. The reply windows were worded to hold at any Year
 // 2026-11-02, after Luyten's lead still promised a reply at Year 173.
 // GJ 887 d was added 2026-11-07, from Hartogh et al. 2026 (arXiv 2602.08929), after a research recheck found it missing.
+// Our radar given one reach, about 90 ly, 2026-11-09: the Mind lane heard 90 in one answer and 50 in the next.
 // Proxima b's line follows what the 2030s caught of its light, and Luyten's two worlds were added, 2026-11-09: the Mind
 // lane called it stripped bare in one answer and a gas world in the next, and said Luyten's Star had no worlds.
 /** Earth's leads, with Proxima b as the 2030s left it in this game: its true mass, once its light gave its tilt. */
@@ -26,7 +27,7 @@ Old records the Mind studies on its own from Begin. It can read them better than
 - LHS 1140 b, 48.8 ly: its crossings ruled out a hydrogen world in 2024 and hinted at heavier air over water. In 2026 a ground telescope saw helium escaping it, once in two tries. The space telescope saw none in four crossings. Whether it keeps air is disputed.
 
 Earth's noise, and who it reached:
-- Radars since the 1950s. Their first sweeps are 90 ly out, so every star within 50 ly has been crossed. They still sweep.
+- Radars since the 1950s. Their first sweeps are about 90 ly out, so every star to 90 ly has been crossed, every star we can name within 50 ly among them. Give our radar's reach as about 90 ly. They still sweep.
 - 15 aimed messages, 1983 to 2018, to 12 stars within 50 ly. Each lasted minutes to hours.
 - Voyager 1, launched 1977, about 30 light-hours out and silent since its power ran out in the 2030s. It carries the Golden Record, for whoever finds it, and passes 1.7 ly from Gliese 445 in about 40,000 years.
 - Windows that opened before Year 0, with no reply: Altair from 2017, Teegarden's Star from 2035, TZ Arietis from 2039. A passed window isn't closed. A reply can still come.

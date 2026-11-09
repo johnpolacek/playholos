@@ -105,7 +105,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "Webb and Roman fly, and the ELT watches from Chile. The Habitable Worlds Observatory is about 8 Years from done. None can read another world’s air.",
       where:
         "At L2, 1.5 million km out on Earth’s night side, where Webb flies. The Sun, Earth and Moon all stay behind it.",
-      why: "Infrared is heat, so the telescope must be colder than the worlds it reads. One shade blocks all three, and behind it Webb holds near 40 K while its sunny side reaches 110 °C.",
+      why: "Infrared is heat, so the telescope must be colder than the worlds it reads. One shade blocks all three, and behind it Webb holds near 40 K while its shade’s sunny outer layer reaches 110 °C.",
       takes: "Built in orbit, it takes a quarter less time once the yard is done.",
       before:
         "NASA’s Habitable Worlds Observatory was to read the air of at least 25 such worlds from here in the 2040s. In April 2026 NASA asked only $5 million for it, down from $150 million.",

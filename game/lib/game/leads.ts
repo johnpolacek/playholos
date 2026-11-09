@@ -1124,7 +1124,7 @@ export function proximaLead(seen?: ProximaSeen): Lead {
     star: "Proxima Centauri",
     what: "A world next door",
     line: seen
-      ? `${seen.mass.toFixed(2)} Earths, in its star’s warm zone, and ${gas ? "heavy enough for thick gas" : tone}. Its air is unread.`
+      ? `Seen in the 2030s: ${seen.mass.toFixed(2)} Earths, in its star’s warm zone, and ${gas ? "heavy enough for thick gas" : tone}. Its air is unread.`
       : "About Earth’s mass, in its star’s warm zone. Its air is unread.",
     ly: 4.24,
     ask: "Could Proxima b keep its air?",
@@ -1132,10 +1132,11 @@ export function proximaLead(seen?: ProximaSeen): Lead {
       ? `The nearest world outside our solar system, warm enough for water. In the 2030s, telescopes on the ground caught its starlight reflected, and gave its tilt, its true mass, ${seen.mass.toFixed(2)} Earths, and how much light it reflects: about ${Math.round(seen.albedo * 100)}%, ${tone}. No one has read its air. The 15 m Mirror would barely reach it, and going there would show it whole.`
       : "The nearest world outside our solar system, about Earth’s mass and warm enough for water. Its star flares, and has likely stripped its air. No one has read its air. The 15 m Mirror would barely reach it, and going there would show it whole.",
     facts: [
-      ["Mass", seen ? `${seen.mass.toFixed(2)} Earths, from its tilt` : "At least 1.06 Earths"],
+      // Dated, as a find is: the science lane read the bare number as measured today. 2026-11-09.
+      ["Mass", seen ? `${seen.mass.toFixed(2)} Earths, from its tilt seen in the 2030s` : "At least 1.06 Earths"],
       ...(seen
         ? ([
-            ["Its tilt", `${Math.round(seen.tilt)}° from face on`],
+            ["Its tilt", `${Math.round(seen.tilt)}° from face on, seen in the 2030s`],
             ["It reflects", `About ${Math.round(seen.albedo * 100)}% of its starlight`],
           ] as [string, string][])
         : []),
