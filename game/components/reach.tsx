@@ -1088,8 +1088,48 @@ export function Reach() {
     <div className="flex flex-col pb-4">
       <GlowOrderCard from={from} />
 
+      {/* Where we could go comes first, then the craft already out: on a phone under the map, Voyager 1 filled the sheet
+          and the destinations with their years sat below it. Screen critic, 2026-11-08. */}
+      <ListHead left={`Destinations · ${places.length}`} right="Soonest" className="mt-4" />
+      <Spread places={places} />
+      <ul className="mt-1">
+        {places
+          .filter((p) => {
+            const g = groupOf(p);
+            return !g || p === g.members[0];
+          })
+          .slice(0, allPlaces ? undefined : FEW)
+          .map((p) => {
+          const g = groupOf(p);
+          if (!g) return place(p);
+          const open = openGroup === g.key;
+          const near = (q: Place) => q.lead.range?.[0] ?? q.lead.ly;
+          const far = (q: Place) => q.lead.range?.[1] ?? q.lead.ly;
+          const soonest = g.members.map((q) => q.soonest).filter((y): y is number => y !== null);
+          return (
+            <li key={g.key} className="border-t border-faint">
+              <button onClick={() => setOpenGroup(open ? null : g.key)} aria-expanded={open} className="block w-full py-2.5 text-left">
+                <Face
+                  mark={<LeadMark art={p.lead.art} />}
+                  tone="text-you"
+                  name={<b className="font-semibold">{g.title} · {g.members.length.toLocaleString("en-US")}</b>}
+                  line={`${g.line} · ${lyOf(Math.min(...g.members.map(near)))} to ${lyOf(Math.max(...g.members.map(far)))} ly`}
+                  right={soonest.length ? `Year ${year(Math.min(...soonest))}` : "Not yet"}
+                  more={false}
+                />
+              </button>
+              {open && <ul className="mb-1 pl-5">{g.members.map(place)}</ul>}
+            </li>
+          );
+        })}
+      </ul>
+      {shown > FEW && (
+        <button onClick={() => setAllPlaces(!allPlaces)} className="border-t border-faint py-2.5 text-left text-[13px] text-you">
+          {allPlaces ? "Fewer ‹" : `All ${shown.toLocaleString("en-US")} ›`}
+        </button>
+      )}
       {/* "Sent" read as our messages too, and a blind first-timer missed theirs here twice. 2026-11-07. */}
-      <ListHead left={`Craft sent · ${(gone ? 0 : 1) + flying.length + stays.length}`} right="Word home" className="mt-4" />
+      <ListHead left={`Craft sent · ${(gone ? 0 : 1) + flying.length + stays.length}`} right="Word home" className="mt-5" />
       <ul className="mt-1">
         {flying.map((r) => (
           <Item key={r.key} row={r} now={clock ?? 0} began={clock !== null} aim={aimAt(r.key)} />
@@ -1130,48 +1170,10 @@ export function Reach() {
       {/* Craft are here, and our messages on Scan: a blind first-timer looked for a message just sent, found only
           Voyager, and had to ask the Mind where it went. 2026-11-07. */}
       <Link to="/play#messages" className="border-t border-faint py-2.5 text-[13px] text-page-ink2 hover:text-ink">
-        {(save?.sent ?? []).length ? `Our messages, ${(save?.sent ?? []).length.toLocaleString("en-US")} sent, are on Scan. To send one, open a destination below` : "Messages we send are listed on Scan. To send one, open a destination below"}{" "}
+        {(save?.sent ?? []).length ? `Our messages, ${(save?.sent ?? []).length.toLocaleString("en-US")} sent, are on Scan. To send one, open a destination above` : "Messages we send are listed on Scan. To send one, open a destination above"}{" "}
         <span className="text-you">›</span>
       </Link>
 
-      <ListHead left={`Destinations · ${places.length}`} right="Soonest" className="mt-5" />
-      <Spread places={places} />
-      <ul className="mt-1">
-        {places
-          .filter((p) => {
-            const g = groupOf(p);
-            return !g || p === g.members[0];
-          })
-          .slice(0, allPlaces ? undefined : FEW)
-          .map((p) => {
-          const g = groupOf(p);
-          if (!g) return place(p);
-          const open = openGroup === g.key;
-          const near = (q: Place) => q.lead.range?.[0] ?? q.lead.ly;
-          const far = (q: Place) => q.lead.range?.[1] ?? q.lead.ly;
-          const soonest = g.members.map((q) => q.soonest).filter((y): y is number => y !== null);
-          return (
-            <li key={g.key} className="border-t border-faint">
-              <button onClick={() => setOpenGroup(open ? null : g.key)} aria-expanded={open} className="block w-full py-2.5 text-left">
-                <Face
-                  mark={<LeadMark art={p.lead.art} />}
-                  tone="text-you"
-                  name={<b className="font-semibold">{g.title} · {g.members.length.toLocaleString("en-US")}</b>}
-                  line={`${g.line} · ${lyOf(Math.min(...g.members.map(near)))} to ${lyOf(Math.max(...g.members.map(far)))} ly`}
-                  right={soonest.length ? `Year ${year(Math.min(...soonest))}` : "Not yet"}
-                  more={false}
-                />
-              </button>
-              {open && <ul className="mb-1 pl-5">{g.members.map(place)}</ul>}
-            </li>
-          );
-        })}
-      </ul>
-      {shown > FEW && (
-        <button onClick={() => setAllPlaces(!allPlaces)} className="border-t border-faint py-2.5 text-left text-[13px] text-you">
-          {allPlaces ? "Fewer ‹" : `All ${shown.toLocaleString("en-US")} ›`}
-        </button>
-      )}
     </div>
   );
 }
