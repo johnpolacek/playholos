@@ -490,6 +490,9 @@ code { font: 12px ui-monospace, Menlo, monospace; background: var(--soft); paddi
 .state-head .tag { margin-left: 0; }
 .findings { display: grid; grid-template-columns: minmax(200px, 1fr) 2fr; gap: 12px 20px; margin-top: 12px; align-items: start; }
 @media (max-width: 720px) { .findings { grid-template-columns: 1fr; } }
+.moves { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px 20px; }
+.moves ul { margin: 4px 0 0; padding-left: 18px; } .moves p { margin: 0; }
+p.pair { margin: 14px 0 -6px; }
 .findings table td, .findings table th { padding: 3px 6px; }
 .worst p { font-size: 13px; margin-bottom: 6px; }
 .worst b { color: var(--ink2); font-weight: 600; }
@@ -764,6 +767,8 @@ else {
   drawChecks([]);
 }
 // Screens: each named state's shots from the newest capture run, beside the run before, with the critic's scores.
+// A run that npm run playtest:climb -- --since paired with the run its fix came from opens on before and after:
+// that run's shots above, this run's below, and the scores' moves counted from it, not from the run just before.
 // Shots, scores and the worst thing on each width show. The fix, the second reader, code's flags and the editor's cuts fold away.
 // Rounded to a tenth, so float noise like 0.5999999 never shows.
 function delta(v, w) { const d = typeof v === "number" && typeof w === "number" ? Math.round((v - w) * 10) / 10 : 0; return d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d.toFixed(1)}</span>` : ""; }
@@ -771,17 +776,19 @@ function drawScreens(caps) {
   $("screensRule").innerHTML = [R.screensRule, `All screens together: ${R.design?.who ?? ""}`, R.climb && `Climbing to ${R.climb.target}: ${R.climb.rule}`]
     .filter(Boolean).map((x) => `<p>${esc(x)}</p>`).join("");
   if (!caps?.length) { $("sheet").innerHTML = `<div class="empty">No captures yet. Run <code>npm run playtest:capture</code>, then <code>npm run playtest:critic</code>, and reload.</div>`; return; }
-  let at = caps.length - 1, compare = false;
+  let at = caps.length - 1, compare = !!caps.at(-1).since;
   const ids = R.screens.ratings.map((r) => r.id);
   // 2026-11-08-1905 reads as 11-08 19:05, as in the Results table.
   const label = (run) => { const m = /^\d{4}-(\d\d-\d\d)-(\d\d)(\d\d)$/.exec(run); return m ? `${m[1]} ${m[2]}:${m[3]}` : run; };
   const img = (run, x, label) => `<figure class="${esc(x.viewport)}"><a href="captures/${esc(run)}/${esc(x.file)}" target="_blank"><img loading="lazy" src="captures/${esc(run)}/${esc(x.file)}" alt="${esc(label)}"></a><figcaption>${esc(label)}</figcaption></figure>`;
   const draw = () => {
-    const cap = caps[at], prev = caps[at - 1];
-    $("capTabs").innerHTML = caps.map((c, i) => `<button aria-pressed="${i === at}" data-i="${i}" title="${esc(c.run)}">${esc(label(c.run))}</button>`).join("") +
-      (prev ? `<button data-compare aria-pressed="${compare}">Compare with ${esc(label(prev.run))}</button>` : "");
+    const cap = caps[at], before = cap.since && caps.find((c) => c.run === cap.since.since);
+    const prev = before || caps[at - 1];
+    $("capTabs").innerHTML = caps.map((c, i) => `<button aria-pressed="${i === at}" data-i="${i}" title="${esc(c.run)}">${esc(label(c.run))}${c.since ? " ⇆" : ""}</button>`).join("") +
+      (prev ? `<button data-compare aria-pressed="${compare}">${before ? `Before and after, from ${esc(label(prev.run))}` : `Compare with ${esc(label(prev.run))}`}</button>` : "");
     const bad = cap.shots.filter((x) => x.status !== "ok");
     $("sheet").innerHTML = `<p class="meta">Build <code>${esc(cap.build ?? "?")}</code>${cap.dirty ? ", uncommitted" : ""}. ${bad.length ? `${cap.shots.length - bad.length} of ${cap.shots.length} shots. ` : ""}${cap.critic ? `Scores: ${esc(cap.critic.model)}${cap.critic2 ? ` · ${esc(cap.critic2.model)}. <span class="gap">Orange</span>: 2 or more apart` : ""}.` : "Not scored yet."}</p>` +
+      (before ? sinceCard(cap.since, label(prev.run), label(cap.run)) : "") +
       designCard(cap, prev) +
       R.states.map((st) => {
         const shots = cap.shots.filter((x) => x.state === st.id);
@@ -793,7 +800,9 @@ function drawScreens(caps) {
         const fig = (run, x) => x.status === "ok" ? img(run.run, x, `${x.viewport}${run === cap ? "" : `, ${label(run.run)}`}${x.errors?.length ? `, ${x.errors.length} console error(s)` : ""}`) : `<div class="empty small">${esc(x.viewport)}: ${esc(x.status)}${x.errors?.[0] ? `<br>${esc(x.errors[0])}` : ""}</div>`;
         const row = (run, list) => `<div class="shot">${list.map((x) => fig(run, x)).join("")}</div>`;
         const was = compare && prev ? prev.shots.filter((y) => y.state === st.id) : [];
-        const pics = row(cap, shots) + (was.length ? row(prev, was) : "");
+        // Before above, after below, each labeled, when compared. The run before beneath, as it was, otherwise.
+        const tag = (t, run) => `<p class="small muted pair">${t}, ${esc(label(run.run))}${run.build ? `, build <code>${esc(run.build)}</code>${run.dirty ? " uncommitted" : ""}` : ""}</p>`;
+        const pics = was.length ? (before ? tag("Before", prev) + row(prev, was) + tag("After", cap) + row(cap, shots) : row(cap, shots) + row(prev, was)) : row(cap, shots);
         const sv = vps.filter((vp) => c?.[vp]);
         // One table: a row a rating, a column a width.
         const table = c && !c.error && sv.length ? `<table><tr><th></th>${sv.map((vp) => `<th class="n">${esc(vp)}</th>`).join("")}</tr>${ids.map((k) => `<tr><td>${esc(k)}</td>${sv.map((vp) => {
@@ -825,10 +834,19 @@ function drawScreens(caps) {
   $("capTabs").addEventListener("click", (e) => {
     const b = e.target.closest("button");
     if (!b) return;
-    if (b.dataset.compare !== undefined) compare = !compare; else { at = Number(b.dataset.i); }
+    if (b.dataset.compare !== undefined) compare = !compare; else { at = Number(b.dataset.i); compare = !!caps[at].since; }
     draw();
   });
   draw();
+}
+// What moved between a fix's before and after: the code flags it cleared or raised, and the ratings that rose or fell.
+function sinceCard(s, from, to) {
+  const n = (x) => `${x > 0 ? "+" : ""}${x.toFixed(1)}`;
+  const move = (x) => `<li>${x.kind === "design" ? "All screens" : `${x.kind === "words" ? "Words on " : ""}${esc(R.states.find((t) => t.id === x.state)?.title ?? x.state)}`}${x.vp ? `, ${esc(x.vp)}` : ""}: ${esc(x.rating)} <b>${n(x.a)}</b>${x.b ? ` <span class="muted" title="Second reader">· ${n(x.b)}</span>` : ""}</li>`;
+  const flag = (g) => `<li>${esc(g.rule)}: “${esc(g.text)}”${g.shots?.length ? ` <span class="muted">${esc(g.shots.join(", "))}</span>` : ""}</li>`;
+  const list = (h, xs, f, cls) => `<div><p class="${cls}"><b>${h}: ${xs.length}</b></p>${xs.length ? `<ul class="small">${xs.slice(0, 8).map(f).join("")}${xs.length > 8 ? `<li class="muted">${xs.length - 8} more</li>` : ""}</ul>` : ""}</div>`;
+  return `<div class="card"><h3>Before ${esc(from)}, after ${esc(to)}</h3><p class="small muted">Only the screens this run shot. Readers vary by a point run to run, so trust a move of 2.</p><div class="moves">` +
+    list("Rose", s.rose ?? [], move, "up") + list("Fell", s.fell ?? [], move, "down") + list("Flags cleared", s.cleared ?? [], flag, "up") + list("Flags new", s.fresh ?? [], flag, "down") + `</div></div>`;
 }
 // The second reader's score beside Claude's, marked when they part by 2 or more.
 const two = (v, v2) => (typeof v2 !== "number" ? "" : ` <span class="${typeof v === "number" && Math.abs(v - v2) >= 2 ? "gap" : "muted"}" title="Second reader">· ${fmt(v2)}</span>`);

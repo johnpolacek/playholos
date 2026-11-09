@@ -1,11 +1,13 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { regime, settledHit } from "./regime.mjs";
+import { writeIndex } from "./states.mjs";
 
 // The hill climb's next calls: what the newest capture run says most needs fixing, worst first, lettered so one
 // letter picks it. Both readers agreeing outranks one, and code's flags are facts. With --since, how each rating and
-// flag moved from an earlier run, so a fix shows whether it climbed. 2026-11-08.
+// flag moved from an earlier run, so a fix shows whether it climbed. 2026-11-08. The --since also writes since.json into
+// the newer run, so the Screens tab on playtests/regime.html shows each reshot screen before and after. 2026-11-08.
 //
 //   npm run playtest:climb                       the calls from the newest capture run
 //   npm run playtest:climb -- --since <run>      what rose and fell since that run
@@ -89,6 +91,13 @@ if (opt("since")) {
   const fresh = fa.filter((g) => !fb.some((h) => key(h) === key(g)));
   console.log(`Code flags cleared: ${gone.length}${gone.length ? `\n${gone.map((g) => `  ${g.rule}: ${g.text}`).join("\n")}` : ""}`);
   console.log(`Code flags new: ${fresh.length}${fresh.length ? `\n${fresh.map((g) => `  ${g.rule}: ${g.text} (${g.shots.join(", ")})`).join("\n")}` : ""}`);
+  // The pairing for the Screens tab: this run's shots after, the earlier run's before, and what moved between.
+  const tenth = (n) => Math.round(n * 10) / 10;
+  const pair = (x) => ({ kind: x.key.split(" ")[0] === "design" ? "design" : x.key.startsWith("words") ? "words" : "screen", state: x.state, vp: x.vp, rating: x.rating, a: tenth(x.da), b: tenth(x.db) });
+  const flag = (g) => ({ rule: g.rule, text: g.text, shots: g.shots });
+  writeFileSync(join(capDir, cur.name, "since.json"), JSON.stringify({ since: was.name, rose: up.map(pair), fell: down.map(pair), cleared: gone.map(flag), fresh: fresh.map(flag) }, null, 2) + "\n");
+  writeIndex();
+  console.log(`\nBefore and after, side by side: npm run playtests, Screens, ${cur.name}.`);
   console.log("\nKeep the change if nothing you care about fell and the target rose. Readers vary by a point run to run, so trust a move of 2.");
   process.exit(0);
 }
