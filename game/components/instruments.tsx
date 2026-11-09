@@ -234,17 +234,9 @@ export function Instruments({ catalog }: { catalog?: (idle: boolean) => React.Re
     );
   return (
     <>
-      {working.length > 0 && (
-        <>
-          <ListHead left={`Working now · ${working.length}`} right="" className="mt-1" />
-          <ul className="mt-2 flex flex-col gap-2">
-            {[...working].sort((a, b) => done[b]! - done[a]!).map((n) => (
-              <Card key={n} name={n} since={done[n]!} {...doing(n, known, done[n]!)} />
-            ))}
-          </ul>
-        </>
-      )}
-      <ListHead left={`Rising · ${rising.length}`} right="Done in" className={working.length ? "mt-5" : "mt-1"} />
+      {/* What rises, with its time, comes before what works: under a tall card, a phone put Asteroid Tour and its time
+          below the fold. Screen critic, 2026-11-09. */}
+      <ListHead left={`Rising · ${rising.length}`} right="Done in" className="mt-1" />
       {rising.length ? (
         <ul className="mt-1">
           {rising.map((n) => {
@@ -270,6 +262,16 @@ export function Instruments({ catalog }: { catalog?: (idle: boolean) => React.Re
           })}
         </ul>
       ) : null}
+      {working.length > 0 && (
+        <>
+          <ListHead left={`Working now · ${working.length}`} right="" className="mt-5" />
+          <ul className="mt-2 flex flex-col gap-2">
+            {[...working].sort((a, b) => done[b]! - done[a]!).map((n) => (
+              <Card key={n} name={n} since={done[n]!} {...doing(n, known, done[n]!)} />
+            ))}
+          </ul>
+        </>
+      )}
       {catalog?.(false)}
     </>
   );
