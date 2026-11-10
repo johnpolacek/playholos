@@ -27,6 +27,14 @@ Spoilers: the design docs and `game/data/worlds/` say who the neighbors are.
 
 Anyone with a paid Claude or ChatGPT plan can run the game on their own computer, with the Mind answering on their own login. No API key, no cost beyond the plan.
 
+The quickest way is to paste this into Claude Code or Codex:
+
+```
+Run npx playholos in the background and tell me when Holos is open in my browser.
+```
+
+Or by hand:
+
 1. Install [Node](https://nodejs.org) 20.9 or later, and [Claude Code](https://claude.com/claude-code) or [Codex](https://developers.openai.com/codex). Run it once to log in.
 2. Then:
 
@@ -40,7 +48,6 @@ It downloads the game to `~/playholos`, installs what it needs, and opens it at 
 - On Codex, the Mind runs on Codex's own model. It was written and tested for Claude, so it may sound a little different. `MIND_CODEX_MODEL` names another model.
 - `npx playholos --update` fetches the newest version. Your game is saved in the browser, so it carries over.
 - `npx playholos <folder>` puts the game somewhere else.
-- Or ask your agent: “Set up Holos for me to play: run npx playholos.”
 
 ## Contributing
 
