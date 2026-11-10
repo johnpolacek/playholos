@@ -2313,17 +2313,21 @@ void main() {
     // While the Galaxy is in view, Sol holds its place on its arm and the Galaxy carries it: the whole turns about Sol
     // by TURN across the deep past, in the sense the Sun runs, and stands today's way round by a million years ago,
     // where the near stars take over. Its true twenty turns since the Sun was born, and the Sun's drift from arm to
-    // arm, read as spinning, so this is a hint of them. The road is the arc Sol has come along, which the turning
-    // Galaxy leaves behind it, and each moment of the deep past sits on it where the Sun was then. 2026-11-10.
+    // arm, read as spinning, so this is a hint of them. The road runs back along Sol's own arm, the Local arm, behind
+    // it in the sense of the turn: along the orbit's circle it peeled away from the arm and read as Sol leaving it.
+    // Each moment of the deep past sits on the road where the Sun was then. 2026-11-10.
     // The turn runs by years, not by the road's log time, so it is even across the deep past's moments.
     const TURN = 0.25;
     const gone = (u: number) => Math.min(1, Math.max(0, 1 - agoAt(u) / AGE));
     const turned = (u: number) => TURN * gone(u);
-    /** A point on the Sun's orbit this far behind Sol, in radians, from where Sol is, in kly. */
-    const arc = (a: number, out = new THREE.Vector3()) => out.set(...inDisk(R0, -a, height(0))).sub(now);
-    // The road: an arc of the orbit behind Sol, longer than the turn so it reads, drawn out as the years go, a dot
-    // every 250 light-years.
-    const ARC = 1.2;
+    /** A point on Sol's arm this far behind Sol, in radians of azimuth, from where Sol is, in kly. The arm's ridge
+     *  runs a little outside Sol, so the road keeps that offset and runs beside it. */
+    const LOCAL = ARMS[3];
+    const arc = (a: number, out = new THREE.Vector3()) =>
+      out.set(...inDisk(armR(LOCAL, -a / DEG) + R0 - armR(LOCAL, 0), -a, height(0))).sub(now);
+    // The road: as far back along the arm as it is drawn, longer than the turn so it reads, drawn out as the years
+    // go, a dot every 250 light-years.
+    const ARC = 0.55;
     const laps = new Cloud();
     const dots = Math.round((ARC * R0 * kpc) / 0.25);
     for (let i = 1; i <= dots; i++) {
