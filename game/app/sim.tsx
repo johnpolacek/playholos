@@ -492,13 +492,13 @@ export default function Sim() {
                   key={s.id}
                   to={s.to}
                   aria-current={section === s.id ? "page" : undefined}
-                  className={`rounded-full px-3 py-0.5 ${section === s.id ? "bg-ink/15 text-ink" : "text-muted hover:text-ink"}`}
+                  className={`knock rounded-full px-3 py-0.5 ${section === s.id ? "bg-ink/15 text-ink" : "text-muted"}`}
                   onClick={() => (s.id === "universe" ? (goTab("tour"), setAt(0)) : goTab("minds"))}
                 >
                   {s.label}
                 </Link>
               ))}
-              <Link to="/play" state={{ play: true }} className="flex items-center gap-1.5 rounded-full px-3 py-0.5 text-muted hover:text-ink">
+              <Link to="/play" state={{ play: true }} className="knock knock-play flex items-center gap-1.5 rounded-full px-3 py-0.5 text-muted">
                 Play
                 <Play size={11} />
               </Link>
