@@ -1960,9 +1960,17 @@ void main() {
     // and drawn out from the Sun as the Mind's shot of a lead is, since a row of faint dots hardly showed, 2026-11-05.
     const alpha = new THREE.Vector3();
     const nearestGlow = glow({ fixed: true });
-    const towardMat = line("mind", 0);
+    // The star we would go to flares, and the craft on its way. 2026-11-09.
+    nearestGlow.uniforms.uGain.value = 1.6;
+    // Light runs out along the dashes, as along a thread on Scan. 2026-11-09.
+    const towardMat = thread("mind", 0);
     const toward = new THREE.LineSegments(
-      new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(CHART_DASHES * 6), 3)),
+      new THREE.BufferGeometry()
+        .setAttribute("position", new THREE.BufferAttribute(new Float32Array(CHART_DASHES * 6), 3))
+        .setAttribute(
+          "aT",
+          new THREE.Float32BufferAttribute(Array.from({ length: CHART_DASHES * 2 }, (_, k) => (Math.floor(k / 2) + (k % 2) * 0.55) / CHART_DASHES), 1),
+        ),
       towardMat,
     );
     toward.frustumCulled = false;
@@ -1973,6 +1981,7 @@ void main() {
     // running back toward the Sun as fast as light. Dated by the plan: a craft lost on the way sends nothing, so its
     // word's line still runs, and nothing arrives. 2026-11-05.
     const craftGlow = glow({ fixed: true });
+    craftGlow.uniforms.uGain.value = 1.7;
     const craftCloud = new Cloud();
     craftCloud.add(0, 0, 0, 8, 1, K.lamp);
     const craftPts = craftCloud.points(craftGlow);
@@ -1994,7 +2003,9 @@ void main() {
         pts.geometry.dispose();
       }
       const nearest = new Cloud();
-      nearest.add(alpha.x, alpha.y, alpha.z, 9, 0.5, K.mind);
+      nearest.add(alpha.x, alpha.y, alpha.z, 9, 0.6, K.mind);
+      // And a soft halo round it, so it reads as a place, not a speck.
+      nearest.add(alpha.x, alpha.y, alpha.z, 34, 0.2, K.mind);
       drawn = [nearest.points(nearestGlow)];
       stars.scene.add(...drawn);
       const dash = toward.geometry.attributes.position as THREE.BufferAttribute;
@@ -2061,7 +2072,10 @@ void main() {
       const ringed = far * starBand(x) * (1 - ramp(sysDown, 0.2, 0.6));
       nearestGlow.uniforms.uOpacity.value = ringed;
       towardMat.uniforms.uOpacity.value = 0.85 * ringed;
+      towardMat.uniforms.uTime.value = clock;
       const out = still ? 1 : easeInOut(Math.min(1, Math.max(0, (clock - towardAt) / CHART_DRAW)));
+      // The light along the way starts once the line is drawn out.
+      towardMat.uniforms.uPulse.value = still ? 0 : ramp(out, 0.9, 1);
       toward.geometry.setDrawRange(0, 2 * Math.ceil(out * CHART_DASHES));
       const trip = spec.mode === "reach" ? dialsOf.reach : undefined;
       const goes = trip?.craft ?? -1, back = trip?.signal ?? -1;
