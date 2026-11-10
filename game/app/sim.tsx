@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Play } from "@/components/icons";
 import { placeLabel } from "@/components/place-label";
@@ -75,7 +75,6 @@ export default function Sim() {
   // The flight drifts on by itself until we take it in hand.
   const [auto, setAuto] = useState(true);
   const [arrived, setArrived] = useState<string | null>(null);
-  const [open, setOpen] = useState(false);
   // Each place opens on its line from Sol, seen from the side. Once the line has had its moment, the place this was
   // set for is seen close.
   const [closeFor, setCloseFor] = useState<string | null>(null);
@@ -222,17 +221,14 @@ export default function Sim() {
     if (toSim !== onSim) navigate(toSim ? "/sim" : "/universe");
     setPlace(0);
     setAuto(true);
-    setOpen(false);
     setOpening(false);
   };
   const go = (i: number) => {
     setPlace(Math.max(0, Math.min(places.length - 1, i)));
-    setOpen(false);
   };
-  // A tap flies to what is there, in whichever list holds it, and a second tap on the place in view reads it.
+  // A tap flies to what is there, in whichever list holds it.
   const onTap = (id: string | null) => {
-    if (!id || !drawn || !tab) return setOpen(false);
-    if (id === here?.id) return setOpen((o) => !o);
+    if (!id || !drawn || !tab || id === here?.id) return;
     for (const t of [tab, ...tabs.map((x) => x.id).filter((x) => x !== tab)]) {
       const i = placesOf(t, drawn.minds, drawn.names, drawn.near, TODAY, TO_NOW).findIndex((p) => p.id === id);
       if (i < 0) continue;
@@ -240,7 +236,6 @@ export default function Sim() {
       else setUTab(t as "stars" | "known");
       setPlace(i);
       setAuto(false);
-      setOpen(false);
       return;
     }
   };
@@ -248,7 +243,9 @@ export default function Sim() {
     () => (drawn && tab && onSim ? pickablesOf(drawn.minds, [], drawn.names, drawn.starOf) : []),
     [drawn, tab, onSim],
   );
-  const detail: Pickable | undefined = here && open ? (pickables.find((p) => p.id === here.id) ?? readOf(here)) : undefined;
+  // All we know of the place in view, on its card: what is measured, and, on the Simulation side, what the dials drew.
+  // A Find out more button opened this apart until 2026-11-10; there was little enough to show it all.
+  const read: Pickable | undefined = here ? (pickables.find((p) => p.id === here.id) ?? readOf(here)) : undefined;
 
   const sim = useMemo(
     () =>
@@ -488,7 +485,6 @@ export default function Sim() {
                 onTouch={() => setAuto(false)}
               />
             )}
-            {detail && <Details item={detail} onClose={() => setOpen(false)} />}
             <nav ref={bar} className="absolute top-4 right-4 flex items-center gap-1 rounded-full border border-faint bg-paper/70 p-0.5 font-mono text-[11px] backdrop-blur-sm">
               {SECTIONS.map((s) => (
                 <Link
@@ -607,17 +603,25 @@ export default function Sim() {
                 <h2 data-rise className="mt-1.5 font-semibold" style={{ color: here?.kind === "fills" ? ROSE : undefined }}>
                   {here ? here.title : drawn ? emptyOf(tab).title : "Drawing…"}
                 </h2>
-                <p data-rise className="mt-1 text-[14px] leading-snug text-ink/85">
-                  {here ? here.words : drawn ? emptyOf(tab).words : ""}
-                </p>
-                {here && (
-                  <button
-                    className="mt-2.5 rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] text-ink hover:bg-ink/10"
-                    aria-expanded={open}
-                    onClick={() => (setAuto(false), setOpen((o) => !o))}
-                  >
-                    {open ? "Close" : "Find out more"}
-                  </button>
+                {!read && (
+                  <p data-rise className="mt-1 text-[14px] leading-snug text-ink/85">
+                    {drawn ? emptyOf(tab).words : ""}
+                  </p>
+                )}
+                {read?.real.map((l, i) => (
+                  <p key={l} data-rise className={`${i ? "mt-0.5" : "mt-1"} text-[14px] leading-snug ${read.drawn.length ? "text-page-ink2" : "text-ink/85"}`}>
+                    {l}
+                  </p>
+                ))}
+                {read && read.drawn.length > 0 && (
+                  <div data-rise className="mt-2 border-l border-dashed border-[#b39ef2]/60 pl-2.5">
+                    <p className="font-mono text-[10px] tracking-[.12em] text-[#b39ef2]">SPECULATION</p>
+                    {read.drawn.map((l) => (
+                      <p key={l} className="mt-0.5 text-[14px] leading-snug text-ink/85">
+                        {l}
+                      </p>
+                    ))}
+                  </div>
                 )}
                 {tab === "peers" && drawn && drawn.minds.peers.length > 0 && (
                   <Time
@@ -964,58 +968,40 @@ function Field({ perStar }: { perStar: number }) {
   return <canvas ref={canvas} className="h-[84px] w-[84px] shrink-0" aria-hidden />;
 }
 
-/** What we know of a tapped world or mind: what is measured, then, set apart in violet, what the dials drew. */
-function Details({ item, onClose }: { item: Pickable; onClose(): void }) {
-  const box = useRef<HTMLElement>(null);
-  useEffect(() => {
-    if (!box.current || prefersReducedMotion()) return;
-    const t = gsap.fromTo(
-      box.current,
-      { autoAlpha: 0, x: 24 },
-      { autoAlpha: 1, x: 0, duration: 0.45, ease: "power3.out" },
-    );
-    return () => void t.kill();
-  }, [item.id]);
-  return (
-    <section
-      ref={box}
-      className="absolute top-16 right-4 w-[min(340px,calc(100%-2rem))] rounded-lg border border-faint bg-paper/95 p-4 shadow-lg shadow-black/40 backdrop-blur-sm"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-semibold">{item.title}</h3>
-        <button aria-label="Close" className="font-mono text-[12px] text-muted hover:text-ink" onClick={onClose}>
-          ✕
-        </button>
-      </div>
-      <p className="mt-3 font-mono text-[10.5px] tracking-[.12em] text-muted">MEASURED</p>
-      {item.real.map((l) => (
-        <p key={l} className="mt-1 text-[13px] leading-snug text-ink/90">
-          {l}
-        </p>
-      ))}
-      {item.drawn.length > 0 && <p className="mt-3 font-mono text-[10.5px] tracking-[.12em] text-[#b39ef2]">SPECULATION</p>}
-      {item.drawn.map((l) => (
-        <p
-          key={l}
-          className="mt-1 border-l border-dashed border-[#b39ef2]/60 pl-2 text-[13px] leading-snug text-page-ink2"
-        >
-          {l}
-        </p>
-      ))}
-    </section>
-  );
-}
-
-/** The tabs at a card's head: a section's lists, one lit. */
+/** The tabs at a card's head: a section's lists, one lit by a pill that slides to whichever is picked, and stretches a
+ *  little on the way as if it had weight. 2026-11-10. */
 function Tabs({ tabs, active, onPick }: { tabs: { id: string; label: string }[]; active: string | null; onPick(id: string): void }) {
+  const row = useRef<HTMLDivElement>(null);
+  const pill = useRef<HTMLSpanElement>(null);
+  const was = useRef<{ x: number; w: number } | null>(null);
+  useLayoutEffect(() => {
+    const el = row.current?.querySelector<HTMLButtonElement>(`[data-tab="${active}"]`);
+    const p = pill.current;
+    if (!el || !p) return;
+    const to = { x: el.offsetLeft, w: el.offsetWidth };
+    const from = was.current;
+    was.current = to;
+    if (!from || prefersReducedMotion()) {
+      gsap.set(p, { x: to.x, width: to.w, autoAlpha: 1 });
+      return;
+    }
+    // On the way it spans from where it was to where it goes, then settles to the new tab's width.
+    const lo = Math.min(from.x, to.x), hi = Math.max(from.x + from.w, to.x + to.w);
+    const tl = gsap.timeline();
+    tl.to(p, { x: lo, width: hi - lo, duration: 0.18, ease: "power2.out" });
+    tl.to(p, { x: to.x, width: to.w, duration: 0.28, ease: "power3.out" });
+    return () => void tl.kill();
+  }, [active, tabs]);
   return (
-    <div role="tablist" className="flex flex-wrap gap-1 font-mono text-[11px]">
+    <div ref={row} role="tablist" className="relative flex flex-wrap gap-1 font-mono text-[11px]">
+      <span ref={pill} aria-hidden className="pointer-events-none absolute top-0 bottom-0 left-0 rounded-full bg-ink/15 opacity-0" />
       {tabs.map((t) => (
         <button
           key={t.id}
           role="tab"
+          data-tab={t.id}
           aria-selected={active === t.id}
-          className={`rounded-full px-3 py-0.5 ${active === t.id ? "bg-ink/15 text-ink" : "text-muted hover:text-ink"}`}
+          className={`relative z-10 rounded-full px-3 py-0.5 transition-colors duration-300 ${active === t.id ? "text-ink" : "text-muted hover:text-ink"}`}
           onClick={() => onPick(t.id)}
         >
           {t.label}
