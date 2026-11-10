@@ -262,6 +262,7 @@ export default function Sim() {
               ...(stop?.notes
                 ? stop.notes.map((n) => (n === closeNote ? { ...n, rim: false } : n))
                 : [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }]),
+              ...(stop?.notes && stop.sol ? [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }] : []),
               ...(spokes ? near.map((n, i) => ({ id: `near-${i}`, pos: n.pos })) : []),
             ],
           },

@@ -30,6 +30,8 @@ export interface Stop {
   time?: boolean;
   /** The place in view is only where the view turns round: no thread out to it, no pulse. */
   bare?: boolean;
+  /** Sol keeps its name beside the notes. */
+  sol?: boolean;
   /** Words the map puts by places, light-years in the atlas frame, each joined to its place by a line. `off` is where
    *  the words sit from the place, in px: right and down. They stand in for Sol's name. */
   /** `rim` puts the place on the edge sphere's outline as seen, not at `pos`, so it stays in view as the view turns. */
@@ -95,6 +97,10 @@ export interface Clash {
 }
 
 const LY_AU = 63241.077;
+/** One light-day, in AU, and Voyager 1's distance today: 121.6 AU at the heliopause on 2012-08-25, then 3.57 AU a
+ *  year, as lib/drift.ts draws it. */
+const LIGHT_DAY_AU = 173.14;
+const VOYAGER_AU = 121.6 + 3.57 * (Date.now() / (365.25 * 864e5) + 1970 - 2012.65);
 const zoomFor = (ly: number) => Math.log10(2.5 * ly * LY_AU);
 /** For a place off to one side: farther out, since the view turns round Sol and the place sits toward its edge. */
 const sideZoom = (ly: number) => Math.min(10.3, Math.max(6.6, Math.log10(4.5 * ly * LY_AU)));
@@ -126,7 +132,7 @@ const LOCAL: [string, string, [number, number]][] = [
   ["smc", "Small Magellanic Cloud", [-80, 80]],
   ["ngc6822", "NGC 6822", [60, -90]],
   ["ic1613", "IC 1613", [-60, -100]],
-  ["wlm", "WLM", [60, 90]],
+  ["wlm", "WLM", [-110, 50]],
 ];
 const CATALOG_LY = 326;
 /** Above about this many fillers on average, more likely than not one mind's family filled the Galaxy. */
@@ -216,7 +222,8 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     words:
       "Three big spirals, the Milky Way, Andromeda and Triangulum, and dozens of small galaxies round them, all held together by gravity, across about 10 million light-years.",
     focus: GROUP,
-    zoom: 11.85,
+    // Close enough that Andromeda and Triangulum show their disks, 2026-11-10: the far dwarfs' notes sit at the edge.
+    zoom: 11.7,
     bare: true,
     notes: [
       { id: "mw", pos: CENTER, text: "The Milky Way, ours", off: [-70, 50], go: "galaxy" },
@@ -244,8 +251,15 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
       "Eight planets, and one with life we know of: ours. Voyager 1, the farthest we have reached, is about one light-day out. " +
       "We know thousands of worlds round other stars, 227 of them within 50 light-years. We have heard no one, seen no one’s works, and met no settlers.",
     focus: null,
-    zoom: 1.75,
+    // Out to a light-day, so the whole of the planets' round sits small inside one day of light, with Voyager 1 at its
+    // edge. 2026-11-10.
+    zoom: 2.7,
     label: "Sol",
+    sol: true,
+    notes: [
+      { id: "voyager", pos: at(258.75, 12.4, VOYAGER_AU / LY_AU), text: `Voyager 1, ${Math.round(VOYAGER_AU)} AU out: the farthest we have reached`, off: [70, -60] },
+      { id: "lightday", pos: at(0, 0, LIGHT_DAY_AU / LY_AU), text: "One light-day from the Sun", off: [60, 60] },
+    ],
   });
   const first = nearest[0];
   stops.push({

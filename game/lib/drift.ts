@@ -573,11 +573,13 @@ void main() {
 }`;
 const THREAD_FRAG = /* glsl */ `
 uniform vec3 uColor;
-uniform float uOpacity, uTime, uPhase, uPulse, uFog, uFogRef;
+uniform float uOpacity, uTime, uPhase, uPulse, uFog, uFogRef, uWrap;
 varying float vT;
 varying float vDepth;
 void main() {
-  float head = fract(uTime * 0.12 + uPhase);
+  // With uWrap off, the head runs once from Sol to the end and on past it, so a line can time its light's arrival:
+  // Our nearest stars' lines, whose light leaves Sol together and lands in order. 2026-11-10.
+  float head = uWrap > 0.5 ? fract(uTime * 0.12 + uPhase) : uTime * 0.12 + uPhase;
   float d = vT - head;
   float pulse = exp(-abs(d) * 14.0) * step(d, 0.0) * uPulse;
   float fog = uFog > 0.0 ? min(1.0, exp(-uFog * (vDepth - uFogRef))) : 1.0;
@@ -1132,6 +1134,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     });
   }
   function thread(kind: Kind, phase: number) {
+    return lit(kind, phase);
+  }
+  /** A thread's material: a line with light running along it. The name `thread` is taken by a line in places. */
+  function lit(kind: Kind, phase: number) {
     return new THREE.ShaderMaterial({
       uniforms: {
         uColor: { value: pal[K[kind]] },
@@ -1141,6 +1147,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         uPulse: { value: 0 },
         uFog: { value: 0 },
         uFogRef: { value: 0 },
+        uWrap: { value: 1 },
       },
       vertexShader: THREAD_VERT,
       fragmentShader: THREAD_FRAG,
@@ -1496,6 +1503,24 @@ void main() {
   }
   const oortGlow = glow({ minPx: 0.8, maxPx: 2.2, near: [80, 900] });
   solar.scene.add(oort.points(oortGlow));
+
+  // One light-day out, 173.14 AU: a ring in the ecliptic, with Voyager 1 just at it. Voyager 1 crossed the heliopause
+  // at 121.6 AU on 2012-08-25 and runs out at 3.57 AU a year toward RA 17h 15m, Dec +12.4° (HOLOS_RESEARCH.md), so
+  // its distance follows the date. 2026-11-10.
+  const LIGHT_DAY = 173.14;
+  const lightDay = loop(
+    Array.from({ length: 256 }, (_, i) => ecliptic(LIGHT_DAY, (i / 256) * 2 * Math.PI, 0)),
+    line("ink", 0),
+  );
+  solar.scene.add(lightDay);
+  const voyagerAU = 121.6 + 3.57 * (date.getTime() / (365.25 * 864e5) + 1970 - 2012.65);
+  const voyager = new THREE.Vector3().copy(skyBasis(258.75, 12.4).radial).multiplyScalar(voyagerAU);
+  const craft = new Cloud();
+  craft.add(voyager.x, voyager.y, voyager.z, 3.5, 1, K.white);
+  craft.add(voyager.x, voyager.y, voyager.z, 12, 0.3, K.white);
+  const craftGlow = glow({ fixed: true });
+  craftGlow.uniforms.uGain.value = 1.4;
+  solar.scene.add(craft.points(craftGlow));
 
   // ── The stars, in light-years: HYG, loaded when it comes ──
   const starMat = new THREE.ShaderMaterial({
@@ -2626,13 +2651,67 @@ void main() {
     const pulseGlow = glow({ fixed: true });
     const pulsePts = pulse.points(pulseGlow);
     stars.scene.add(thread, pulsePts);
-    // Our nearest stars' lines, which grow out from Sol together when they come.
+    // Our nearest stars' lines, which grow out from Sol together when they come. Then light leaves Sol along all of
+    // them at once and lands on each star in turn, at a second and a half a light-year, and the star flares as it
+    // lands: Proxima's in six seconds, Ross 248's in fifteen. Then it sets out again. 2026-11-10.
     const SPOKES = 16;
-    const spokeMat = line("ink", 0);
-    const spokePos = new Float32Array(SPOKES * 6);
-    const spokes = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(spokePos, 3)), spokeMat);
-    spokes.frustumCulled = false;
-    stars.scene.add(spokes);
+    const SPOKE_SECONDS = 1.5;
+    const SPOKE_AGAIN = 20;
+    const spokeMats = Array.from({ length: SPOKES }, () => {
+      const m = lit("white", 0);
+      m.uniforms.uWrap.value = 0;
+      return m;
+    });
+    const spokes = spokeMats.map((m) => {
+      const g = new THREE.BufferGeometry()
+        .setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3))
+        .setAttribute("aT", new THREE.Float32BufferAttribute([0, 1], 1));
+      const l = new THREE.Line(g, m);
+      l.frustumCulled = false;
+      return l;
+    });
+    stars.scene.add(...spokes);
+    const spokeStars = new Cloud();
+    for (let i = 0; i < SPOKES; i++) spokeStars.add(0, 0, 0, 18, 0, K.white);
+    const spokeStarGlow = glow({ fixed: true });
+    spokeStarGlow.uniforms.uGain.value = 1.6;
+    const spokeStarPts = spokeStars.points(spokeStarGlow);
+    stars.scene.add(spokeStarPts);
+    // Laniakea's fall: everything within a few hundred million light-years of us drifts toward the Great Attractor,
+    // and a few hundred faint motes drift that way on the map, each fading in and out, so the flow shows. The
+    // Attractor's place is the tour's, 220 million light-years toward RA 16h 14m, Dec −61°. 2026-11-10.
+    const FLOW_N = 420;
+    const attractor = new THREE.Vector3().copy(skyBasis(243.6, -60.9).radial).multiplyScalar(2.2e5);
+    const flows = Array.from({ length: FLOW_N }, () => ({ p: new THREE.Vector3(), v: new THREE.Vector3(), t: 0, life: 1 }));
+    const seedFlow = (f: (typeof flows)[number], t: number) => {
+      f.p.set(gauss(), gauss(), gauss()).multiplyScalar(1.1e5).addScaledVector(attractor, 0.4);
+      f.v.copy(attractor).sub(f.p).normalize();
+      f.t = t;
+      f.life = 6 + rand() * 6;
+    };
+    const flow = new Cloud();
+    for (const f of flows) {
+      seedFlow(f, -rand() * 12);
+      flow.add(f.p.x, f.p.y, f.p.z, 1.8, 0, K.ink);
+    }
+    const flowGlow = glow({ fixed: true });
+    const flowPts = flow.points(flowGlow);
+    cosmos.scene.add(flowPts);
+    let flowAt = 0;
+    // The Local Group's galaxies as marks, so the small ones show at the group's scale where their own dots are
+    // too few to see: each a soft point sized by its size, the big three warm. 2026-11-10.
+    const groupMarks = new Cloud();
+    for (const g of GALAXIES) {
+      const at = new THREE.Vector3().copy(galaxyPosition(g)).divideScalar(1000);
+      const big = g.id === "m31" || g.id === "m33";
+      const px = Math.min(28, Math.max(12, 9 + 4 * Math.log10(Math.max(1, galaxyViewRadius(g) / 1000))));
+      groupMarks.add(at.x, at.y, at.z, px, big ? 0.45 : 0.8, big ? K.warm : K.ink);
+      groupMarks.add(at.x, at.y, at.z, px * 3.2, 0.22, big ? K.warm : K.ink);
+    }
+    groupMarks.add(gc.x, gc.y, gc.z, 18, 0.4, K.warm);
+    groupMarks.add(gc.x, gc.y, gc.z, 54, 0.16, K.warm);
+    const groupGlow = glow({ fixed: true });
+    cosmos.scene.add(groupMarks.points(groupGlow));
     // The nearest mind's likely distance, a ring in the plane that eases out or in as the dials turn.
     const ringMat = line("mind", 0);
     const ringLoop = loop(
@@ -2648,6 +2727,8 @@ void main() {
     const EDGE_KLY = 4.65e7;
     // Dots of a fixed size: at these distances a galaxy is far smaller than a pixel, and would fade to nothing.
     const surveyGlow = glow({ fixed: true });
+    // The brightest galaxies flare a little past white, so the walls and clusters glow where they crowd. 2026-11-10.
+    surveyGlow.uniforms.uGain.value = 1.3;
     let surveyAt = Infinity;
     fetch(new URL("../../data/2mrs.bin", import.meta.url))
       .then((r) => r.arrayBuffer())
@@ -2829,12 +2910,46 @@ void main() {
         spokesAt = clock;
       }
       const out = still ? 1 : smooth((clock - spokesAt - 0.6) / 1.8);
+      // The light sets out once the lines are drawn, and again every SPOKE_AGAIN seconds.
+      const since = clock - spokesAt - 2.6;
+      const leg = still || since < 0 ? -1 : since % SPOKE_AGAIN;
+      const ssb = spokeStarPts.geometry.attributes.aBright as THREE.BufferAttribute;
+      const ssp = spokeStarPts.geometry.attributes.position as THREE.BufferAttribute;
       for (let i = 0; i < SPOKES; i++) {
         const p = spokesOf?.[i] ?? [0, 0, 0];
-        spokePos.set([0, 0, 0, p[0] * out, p[1] * out, p[2] * out], i * 6);
+        const sp = spokes[i].geometry.attributes.position as THREE.BufferAttribute;
+        sp.setXYZ(1, p[0] * out, p[1] * out, p[2] * out);
+        sp.needsUpdate = true;
+        const trip = Math.max(0.5, Math.hypot(p[0], p[1], p[2])) * SPOKE_SECONDS;
+        const head = leg < 0 ? -1 : leg / trip;
+        const m = spokeMats[i];
+        m.uniforms.uTime.value = head / 0.12;
+        m.uniforms.uPulse.value = head >= 0 ? 1 : 0;
+        m.uniforms.uOpacity.value = spokesOf?.length ? 0.4 * on : 0;
+        ssp.setXYZ(i, p[0], p[1], p[2]);
+        ssb.setX(i, head >= 1 ? Math.exp(-((head - 1) * trip) / 1.4) : 0);
       }
-      spokes.geometry.attributes.position.needsUpdate = true;
-      spokeMat.uniforms.uOpacity.value = spokesOf?.length ? 0.4 * on : 0;
+      ssp.needsUpdate = ssb.needsUpdate = true;
+      spokeStarGlow.uniforms.uOpacity.value = spokesOf?.length ? on * out : 0;
+      // Laniakea's fall shows only at its own stop's scale.
+      const falling = on * band(x, 13.2, 13.6, 14.1, 14.6);
+      flowGlow.uniforms.uOpacity.value = falling;
+      if (falling > 0.01 && !still) {
+        const fp = flowPts.geometry.attributes.position as THREE.BufferAttribute;
+        const fb = flowPts.geometry.attributes.aBright as THREE.BufferAttribute;
+        const dt = Math.min(0.1, Math.max(0, clock - flowAt));
+        flowAt = clock;
+        flows.forEach((f, i) => {
+          const age = clock - f.t;
+          if (age > f.life) seedFlow(f, clock);
+          f.p.addScaledVector(f.v, 1.4e4 * dt);
+          fp.setXYZ(i, f.p.x, f.p.y, f.p.z);
+          const k = Math.max(0, age) / f.life;
+          fb.setX(i, 0.6 * Math.sin(Math.PI * Math.min(1, k)));
+        });
+        fp.needsUpdate = fb.needsUpdate = true;
+      }
+      groupGlow.uniforms.uOpacity.value = on * band(x, 11.0, 11.4, 12.2, 12.8);
       if (s && s.minds !== built) {
         for (const m of made) {
           stars.scene.remove(m);
@@ -4623,6 +4738,8 @@ void main() {
     beltGlow.uniforms.uOpacity.value = band(x, -0.8, 0.1, 2.6, 3.4);
     kuiperGlow.uniforms.uOpacity.value = band(x, 0.6, 1.5, 3.8, 4.6);
     oortGlow.uniforms.uOpacity.value = band(x, 2.6, 3.6, 5.2, 6.0);
+    (lightDay.material as THREE.ShaderMaterial).uniforms.uOpacity.value = 0.3 * band(x, 2.0, 2.4, 3.3, 3.8);
+    craftGlow.uniforms.uOpacity.value = band(x, 1.5, 2.0, 3.3, 3.8);
     pairGlow.uniforms.uOpacity.value = band(x, -2.7, -2.3, -0.9, -0.4);
     // From inside the Milky Way, the other galaxies are faint smudges.
     // Out past the Local Group, only a simulation goes: each galaxy's own dots pile onto a pixel or two, which costs
