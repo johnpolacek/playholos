@@ -312,7 +312,7 @@ attribute float aSize, aBright, aKind, aRank;
 // The Galaxy played back: each point turns round the center at its own rate, drifts at its own speed, and is gone
 // before it was born. uAgo is years before today. Where we come from sets it; every other screen leaves it 0. 2026-11-09.
 uniform vec3 uCenter;
-uniform float uAgo;
+uniform float uAgo, uFrame;
 attribute float aRate;
 attribute vec3 aVel;
 attribute vec2 aEra;
@@ -322,7 +322,9 @@ varying float vAlpha;
 void main() {
   vec3 pos = position;
 #ifdef TURN
-  float turn = aRate * uAgo;
+  // Seen from a frame that rides with the Sun's orbit round the center, turned back by uFrame at this uAgo: what
+  // circles with the Sun holds still, the bar and the inner disk creep ahead, the outer disk falls behind.
+  float turn = aRate * uAgo - uFrame;
   vec3 r = pos - uCenter;
   pos = uCenter + vec3(r.x * cos(turn) + r.z * sin(turn), r.y, r.z * cos(turn) - r.x * sin(turn)) + aVel * uAgo;
 #endif
@@ -1124,6 +1126,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   const glows: THREE.ShaderMaterial[] = [];
   /** Years before today the turning clouds show. Where we come from sets it with its dial. */
   const turnAgo = { value: 0 };
+  /** The frame the Galaxy is played back in: how far round the center the Sun's orbit had turned back at turnAgo,
+   *  in radians, so the view rides with the Sun and the Galaxy turns slowly under it instead of twenty times over.
+   *  Where we come from sets it with the years. 2026-11-09. */
+  const turnFrame = { value: 0 };
   function glow({
     minPx = 1,
     maxPx = 64,
@@ -1137,7 +1143,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       defines: turn ? { TURN: "" } : {},
       uniforms: {
         ...shared,
-        ...(turn ? { uCenter: { value: new THREE.Vector3() }, uAgo: turnAgo } : {}),
+        ...(turn ? { uCenter: { value: new THREE.Vector3() }, uAgo: turnAgo, uFrame: turnFrame } : {}),
         uOpacity: { value: 1 },
         uMinPx: { value: minPx },
         uMaxPx: { value: maxPx },
@@ -1593,11 +1599,11 @@ void main() {
   const ARM_RATE = RATE(28);
   /** Each set of arms: the years ago it lived, and how far round it lay. Today's first. */
   const ARM_SETS: { era: [number, number]; turned: number }[] = [
-    { era: [-1, 1.2e9], turned: 0 },
-    { era: [1.3e9, 2.3e9], turned: 2.1 },
-    { era: [2.5e9, 3.4e9], turned: 4.4 },
-    { era: [3.6e9, 4.7e9], turned: 1.2 },
-    { era: [4.9e9, 6e9], turned: 3.5 },
+    { era: [-1, 1.25e9], turned: 0 },
+    { era: [1.15e9, 2.45e9], turned: 2.1 },
+    { era: [2.35e9, 3.65e9], turned: 4.4 },
+    { era: [3.55e9, 4.85e9], turned: 1.2 },
+    { era: [4.75e9, 6e9], turned: 3.5 },
   ];
   const born = (): [number, number] => [-1, rand() < 0.5 ? 9e9 + rand() * 3.5e9 : rand() * 9e9];
   const mw = new Cloud();
@@ -1677,9 +1683,11 @@ void main() {
       .normalize()
       .multiplyScalar(r * kpc)
       .add(gc);
-    globulars.add(v.x, v.y, v.z, 0.05, 0.9, K.warm);
+    globulars.add(v.x, v.y, v.z, 0.05, 0.9, K.warm, 0, {});
   }
-  cosmos.scene.add(globulars.points(glow({ minPx: 1.1, maxPx: 3 })));
+  const globularGlow = glow({ minPx: 1.1, maxPx: 3, turn: true });
+  globularGlow.uniforms.uCenter.value.copy(gc);
+  cosmos.scene.add(globulars.points(globularGlow));
 
   // The Local Group: each galaxy where the Local Volume Database puts it, its disk tilted as its outline shows.
   const others = new Cloud();
@@ -2391,7 +2399,12 @@ void main() {
     const guide = (ago: number) => mean + k * ago;
     const radius = (ago: number) => guide(ago) - A * Math.cos(phase(ago));
     const omega = v / R0;
-    const behind = (ago: number) => (v / k) * Math.log(guide(ago) / mean) + ((2 * omega) / kappa) * (A / R0) * (Math.sin(phase(ago)) - Math.sin(phase(0)));
+    /** How far round the center the orbit's middle had turned back, by then. */
+    const frame = (ago: number) => (v / k) * Math.log(guide(ago) / mean);
+    // Drawn in the frame that rides with the orbit's middle, as the Galaxy is played back: the laps fold into the
+    // swing in and out, a scribble a kiloparsec wide that drifts outward, while the Galaxy turns slowly under it.
+    // The laps are still run: the frame turns with them. 2026-11-09.
+    const behind = (ago: number) => ((2 * omega) / kappa) * (A / R0) * (Math.sin(phase(ago)) - Math.sin(phase(0)));
     const bob = Math.asin(0.0208 / 0.085);
     const height = (ago: number) => 0.085 * Math.sin(bob - (2 * Math.PI * ago) / 8e7);
     const now = new THREE.Vector3(...inDisk(R0, 0, height(0)));
@@ -2403,7 +2416,7 @@ void main() {
     const laps = new Cloud();
     for (let ago = AGE; ago > 1e6; ago -= 4e5) {
       const p = road(ago);
-      laps.add(p.x, p.y, p.z, 2.2, 0.85, K.warm, placeOf(ago));
+      laps.add(p.x, p.y, p.z, 2.2, 0.45, K.warm, placeOf(ago));
     }
     const near = new Cloud();
     for (let i = 0; i <= 700; i++) {
@@ -2432,7 +2445,7 @@ void main() {
     const trailGlow = glow({ fixed: true });
     const deepGlow = glow({ fixed: true });
     const recentGlow = glow({ fixed: true });
-    nearGlow.uniforms.uGain.value = lapsGlow.uniforms.uGain.value = 1.25;
+    nearGlow.uniforms.uGain.value = 1.25;
     deepGlow.uniforms.uGain.value = recentGlow.uniforms.uGain.value = 1.4;
     // The Sun's light, traveling the road.
     const sun = new Cloud();
@@ -2455,6 +2468,7 @@ void main() {
       const u = dials?.u ?? 1;
       // The Galaxy turns back with the road, and back to today as the screen goes.
       turnAgo.value = agoAt(u) * p;
+      turnFrame.value = frame(turnAgo.value);
       for (const m of [lapsGlow, nearGlow, trailGlow, deepGlow, recentGlow]) m.uniforms.uReveal.value = u;
       // The laps and the deep past while the galaxy is in view, the last million years once it is not.
       lapsGlow.uniforms.uOpacity.value = deepGlow.uniforms.uOpacity.value = p * ramp(x, 8.2, 9.2);
