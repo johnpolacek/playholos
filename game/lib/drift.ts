@@ -2305,28 +2305,48 @@ void main() {
     const bob = Math.asin(0.0208 / 0.085);
     const height = (ago: number) => 0.085 * Math.sin(bob - (2 * Math.PI * ago) / 8e7);
     const now = new THREE.Vector3(...inDisk(R0, 0, height(0)));
+    const at0 = new THREE.Vector3();
     /** Where the Sun was, from where it is, in kly. */
     const road = (ago: number, out = new THREE.Vector3()) =>
       out.set(...inDisk(radius(ago), -behind(ago), height(ago))).sub(now);
 
-    // Its laps, drawn as its light passes, and the last million years, close to home.
+    // While the Galaxy is in view, Sol holds its place on its arm and the Galaxy carries it: the whole turns about Sol
+    // by TURN across the deep past, in the sense the Sun runs, and stands today's way round by a million years ago,
+    // where the near stars take over. Its true twenty turns since the Sun was born, and the Sun's drift from arm to
+    // arm, read as spinning, so this is a hint of them. The road is the arc Sol has come along, which the turning
+    // Galaxy leaves behind it, and each moment of the deep past sits on it where the Sun was then. 2026-11-10.
+    // The turn runs by years, not by the road's log time, so it is even across the deep past's moments.
+    const TURN = 0.25;
+    const gone = (u: number) => Math.min(1, Math.max(0, 1 - agoAt(u) / AGE));
+    const turned = (u: number) => TURN * gone(u);
+    /** A point on the Sun's orbit this far behind Sol, in radians, from where Sol is, in kly. */
+    const arc = (a: number, out = new THREE.Vector3()) => out.set(...inDisk(R0, -a, height(0))).sub(now);
+    // The road: an arc of the orbit behind Sol, longer than the turn so it reads, drawn out as the years go, a dot
+    // every 250 light-years.
+    const ARC = 1.2;
     const laps = new Cloud();
-    for (let ago = AGE; ago > 1e6; ago -= 4e5) {
-      const p = road(ago);
-      laps.add(p.x, p.y, p.z, 2.2, 0.85, K.warm, placeOf(ago));
+    const dots = Math.round((ARC * R0 * kpc) / 0.25);
+    for (let i = 1; i <= dots; i++) {
+      const p = arc((ARC * i) / dots);
+      laps.add(p.x, p.y, p.z, 4, 1, K.warm, i / dots);
     }
+    // The last million years, close to home.
     const near = new Cloud();
     for (let i = 0; i <= 700; i++) {
       const ago = 10 ** (6 - (6 * i) / 700);
       const p = road(ago);
       near.add(p.x, p.y, p.z, 2.2, 0.85, K.warm, placeOf(ago));
     }
-    // Each moment, a knot on the road where the Sun was then. The ones that set a dial glow blue.
+    // Each moment, a knot on the road where the Sun was then. The ones that set a dial glow blue. The deep past's
+    // knots are placed each frame, on the arc as far behind Sol as the Galaxy has turned since.
     const deep = new Cloud();
+    const deepAt: number[] = [];
     const recent = new Cloud();
     for (const { u, dial } of moments) {
-      const p = road(agoAt(u));
-      const c = agoAt(u) > 1e6 ? deep : recent;
+      const far = agoAt(u) > 1e6;
+      const p = far ? at0 : road(agoAt(u));
+      const c = far ? deep : recent;
+      if (far) deepAt.push(u);
       c.add(p.x, p.y, p.z, 7, 1, dial ? K.mind : K.sun, u);
       c.add(p.x, p.y, p.z, 20, 0.4, dial ? K.mind : K.warm, u);
     }
@@ -2342,7 +2362,9 @@ void main() {
     const trailGlow = glow({ fixed: true });
     const deepGlow = glow({ fixed: true });
     const recentGlow = glow({ fixed: true });
-    nearGlow.uniforms.uGain.value = lapsGlow.uniforms.uGain.value = 1.25;
+    nearGlow.uniforms.uGain.value = 1.25;
+    // One line of dots against the whole Galaxy: it flares a little harder.
+    lapsGlow.uniforms.uGain.value = 1.7;
     deepGlow.uniforms.uGain.value = recentGlow.uniforms.uGain.value = 1.4;
     // The Sun's light, traveling the road.
     const sun = new Cloud();
@@ -2352,31 +2374,32 @@ void main() {
     sunGlow2.uniforms.uGain.value = 1.7;
     const sunPts = sun.points(sunGlow2);
     // The road and the Sun's light ride in the Galaxy's group, so they turn with it.
-    galaxy.add(
-      laps.points(lapsGlow),
-      near.points(nearGlow),
-      trail.points(trailGlow),
-      deep.points(deepGlow),
-      recent.points(recentGlow),
-      sunPts,
-    );
+    const deepPts = deep.points(deepGlow);
+    galaxy.add(laps.points(lapsGlow), near.points(nearGlow), trail.points(trailGlow), deepPts, recent.points(recentGlow), sunPts);
     const at = new THREE.Vector3();
     return (x: number, p: number) => {
       const dials = dialsOf.origins;
       const u = dials?.u ?? 1;
-      for (const m of [lapsGlow, nearGlow, trailGlow, deepGlow, recentGlow]) m.uniforms.uReveal.value = u;
-      // The laps and the deep past while the galaxy is in view, the last million years once it is not.
+      for (const m of [nearGlow, trailGlow, deepGlow, recentGlow]) m.uniforms.uReveal.value = u;
+      galaxy.rotation.y = TURN - turned(u);
+      lapsGlow.uniforms.uReveal.value = gone(u);
+      // The arc and the deep past while the galaxy is in view, the last million years once it is not.
       lapsGlow.uniforms.uOpacity.value = deepGlow.uniforms.uOpacity.value = p * ramp(x, 8.2, 9.2);
       nearGlow.uniforms.uOpacity.value = recentGlow.uniforms.uOpacity.value = trailGlow.uniforms.uOpacity.value = p * (1 - ramp(x, 9.0, 9.8));
-      sunPts.position.copy(road(agoAt(u), at));
+      // Sol's light holds its place while the Galaxy is in view, and runs the last million years home once the near
+      // stars have come, no earlier than where that road begins.
+      sunPts.position.copy(road(Math.min(agoAt(u), 1e6), at)).multiplyScalar(1 - ramp(x, 8.8, 9.4));
       sunGlow2.uniforms.uOpacity.value = p * (1 - (dials?.earth ?? 0));
-      // The laps fade behind the Sun's light, by about 16,000 light-years of road. 2026-11-10.
-      lapsGlow.uniforms.uTail.value = 16;
+      // The road fades behind Sol, by about 10,000 light-years of it.
+      lapsGlow.uniforms.uTail.value = 10;
       (lapsGlow.uniforms.uTailAt.value as THREE.Vector3).copy(sunPts.position);
-      // The Galaxy turns about Sol, a fifth of a radian across the deep past, in the sense the Sun runs, and stands
-      // today's way round by a million years ago, where the near stars take over. Its true twenty turns since the Sun
-      // was born read as spinning, so this is a hint of them. 2026-11-10.
-      galaxy.rotation.y = 0.2 * (1 - ramp(u, 0, 0.4));
+      const knots = deepPts.geometry.attributes.position as THREE.BufferAttribute;
+      deepAt.forEach((m, i) => {
+        arc(ARC * (gone(u) - gone(m)), at);
+        knots.setXYZ(2 * i, at.x, at.y, at.z);
+        knots.setXYZ(2 * i + 1, at.x, at.y, at.z);
+      });
+      knots.needsUpdate = true;
     };
   }
 

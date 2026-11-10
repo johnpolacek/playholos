@@ -9,10 +9,10 @@ import { LAP, agoAt, place, roadZoom } from "@/lib/game/road";
 import { originsSources } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
-// "Where we come from": 4.6 billion years as the Sun's road around the Milky Way, in the game's scene. The Sun's light
-// laps the galaxy about twenty times while the deep past sweeps by, and each moment lights on the road where the Sun was
-// then. As time runs short the view closes in: the nearby stars for the first people, the Sun's neighborhood for
-// writing, and home. The road ends on Earth, this morning, as it wakes.
+// "Where we come from": 4.6 billion years as the Sun's road around the Milky Way, in the game's scene. Sol holds its
+// place on its arm while the deep past sweeps by and the Galaxy carries it a little way round, and each moment lights
+// on the arc behind it where the Sun was then. As time runs short the view closes in: the nearby stars for the first
+// people, the Sun's neighborhood for writing, and home. The road ends on Earth, this morning, as it wakes.
 
 /** The clock under the road: years ago in the deep past, then dates. */
 function when(ago: number) {
