@@ -13,7 +13,7 @@ import { steadySide } from "../steady-side.ts";
 import { CENTER } from "./tour.ts";
 
 type Vec = [number, number, number];
-export type BodyKind = "star" | "sol" | "awake" | "asleep" | "peer" | "fills" | "animals" | "oxygen" | "microbes" | "lifeless";
+export type BodyKind = "star" | "sol" | "awake" | "asleep" | "peer" | "fills" | "animals" | "oxygen" | "microbes" | "lifeless" | "known";
 
 /** Something the flight draws and names. Stars are named only: their light is the catalog's. */
 export interface Body {
@@ -57,7 +57,8 @@ export interface Flight {
 const LY_PER_PC = 3.2616;
 /** The census's reach: HYG's stars inside it are Gaia's already. */
 const CENSUS_LY = 326;
-const KIND_N: Record<BodyKind, number> = { star: 0, sol: 1, awake: 2, asleep: 3, peer: 4, fills: 5, animals: 6, oxygen: 7, microbes: 8, lifeless: 9 };
+// known: a star with a real planet, drawn as a world is. 2026-11-10.
+const KIND_N: Record<BodyKind, number> = { star: 0, sol: 1, awake: 2, asleep: 3, peer: 4, fills: 5, animals: 6, oxygen: 7, microbes: 8, lifeless: 9, known: 10 };
 /** Each kind's words on the map. Old minds are gold, peers amber, worlds as icons.tsx colors them. */
 const INK: Record<BodyKind, string> = {
   star: "rgba(230,227,219,.9)",
@@ -70,9 +71,10 @@ const INK: Record<BodyKind, string> = {
   oxygen: "rgb(255,206,150)",
   microbes: "rgb(168,198,255)",
   lifeless: "rgba(230,227,219,.7)",
+  known: "rgb(255,206,150)",
 };
 /** How near the camera a body must come before the map names it unasked, light-years. */
-const NAME_WITHIN: Record<BodyKind, number> = { star: 30, sol: Infinity, awake: 110, asleep: 60, peer: 900, fills: 900, animals: 20, oxygen: 20, microbes: 20, lifeless: 12 };
+const NAME_WITHIN: Record<BodyKind, number> = { star: 30, sol: Infinity, awake: 110, asleep: 60, peer: 900, fills: 900, animals: 20, oxygen: 20, microbes: 20, lifeless: 12, known: 20 };
 
 // A star's color from B − V, as the eye sees it.
 const BV: [number, number, number, number][] = [
@@ -185,8 +187,10 @@ void main() {
   // A core a few pixels across however near, so a body up close is a bright point in a wide glow, not a disk.
   float core = exp(-pow(r * vPx / 4.0, 2.0)) + 0.35 * exp(-pow(r * vPx / 14.0, 2.0));
   if (vKind == 1.0) {
+    // Sol: a tight core and a quiet halo. Its wide glow was a third before the bloom came, and bloomed to a blot
+    // from a few light-years off. 2026-11-10.
     col = vec3(1.0);
-    a = core + 0.3 * exp(-r * r * 2.5) + 0.06 * exp(-r);
+    a = core + 0.1 * exp(-r * r * 2.5) + 0.02 * exp(-r);
   } else if (vKind == 2.0) {
     // Awake: a heartbeat, two rings going out in turn, and a slow dashed ring round its core.
     col = vec3(1.0, 0.77, 0.47);

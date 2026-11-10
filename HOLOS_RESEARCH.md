@@ -413,6 +413,10 @@ For sending in play: what a message costs, how far it can be read, and how long 
   - 227 known planets within 50 ly, with masses, orbits and eccentricities.
   - Matters: a host is dropped when a known planet of 10 Earth masses or more crosses its warm zone.
   - Used: data/hosts-50ly.csv.
+  - **The Universe section's Worlds flight, 2026-11-10** · the same 227 planets, placed at their stars and flown to nearest first, each with its mass, its orbit against ours, whether that orbit lies in its star's warm zone (Kopparapu et al. 2013's conservative edges, as calcs/hosts.py), and how it was found. 189 by their star's wobble, 31 by transit, 5 imaged, 1 by astrometry, 1 by timing; 33 in a warm zone, giants among them. Only the real shows there: the drawn worlds left the flights the same day (user's call, option b).
+    - The archive was offline for maintenance on 2026-11-10, so `calcs/export_planets.py` builds from October's cached download. Discovery years and facilities were not in that download and wait for a refetch; the card says how, not when.
+    - Ten hosts are not in our star files (TRAPPIST-1, Teegarden's Star, HD 69830 and others): their places come from the [CDS Sesame name resolver](https://cds.unistra.fr/cgi-bin/nph-sesame), SIMBAD's coordinates, cached in .cache/sesame-hosts.json. Hosts and planets take our maps' star names where we have them, so eps Eri b reads Ran b and Proxima Cen b reads Proxima Centauri b; the archive's Barnard b stays, since that is its name.
+    - Used: game/data/planets-50ly.json, game/lib/sim/flight-stops.ts.
 - **[El-Badry, Rix and Heintz 2021, a million binaries from Gaia](https://arxiv.org/abs/2101.05282)** · Published, MNRAS.
   - Bound pairs agree in parallax and move together within what an orbit allows, about 2.1 km/s at 1,000 AU.
   - Matters: the test calcs/hosts.py applies to find companions. Their catalog was unreachable on VizieR in October 2026, so the pairs are found directly.
