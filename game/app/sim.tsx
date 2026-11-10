@@ -35,8 +35,8 @@ const SECTIONS = [
 const KICK = "font-mono text-[10.5px] tracking-[.1em] text-muted";
 /** One dials object for the whole page, so a new stop eases the view there, not a fresh flight. */
 const DIALS_SIM: Dials = {};
-/** While the flight has the screen, the map under it rests on a cheap view: our Sun, close. */
-const RESTING = { minds: [], focus: null, zoom: 1.75, marks: [] };
+/** While the flight has the screen, the map under it rests: our Sun, close, and not drawn at all. */
+const RESTING = { minds: [], focus: null, zoom: 1.75, marks: [], rest: true };
 /** Seconds the flight holds at each place before drifting on to the next. */
 const HOLD = 7;
 /** Seconds the line from Sol lingers before the view comes in close. */

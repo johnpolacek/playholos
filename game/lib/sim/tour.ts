@@ -210,7 +210,7 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     focus: null,
     zoom: 13.85,
     notes: [
-      { id: "virgo", pos: at(187.7, 12.4, 5.4e7), text: "Virgo Cluster, 54 million ly: a knot of over a thousand galaxies", off: [70, -70], r: 8e6 },
+      { id: "virgo", pos: at(187.7, 12.4, 5.4e7), text: "Virgo Cluster, 54 million ly: a knot of over a thousand galaxies", off: [-70, -70], r: 8e6 },
       { id: "attractor", pos: at(243.6, -60.9, 2.2e8), text: "The Great Attractor, 220 million ly: where Laniakea’s galaxies flow", off: [-60, 70], r: 3e7 },
       { id: "wall", pos: at(195.0, 28.0, 3.2e8), text: "The Great Wall through Coma, 320 million ly: a sheet of galaxies", off: [60, 60], r: 8e7 },
       { id: "void", pos: at(285, 10, 7.5e7), text: "The Local Void, next to us: nearly empty", off: [-70, -60], r: 3e7 },

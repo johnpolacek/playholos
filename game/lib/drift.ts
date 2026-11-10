@@ -186,6 +186,9 @@ export interface Show {
     /** Time passing: how many years from now the sky shows. Peers glow only while their warm light reaches us, and
      *  our own light, out since our first radio, spreads to `light` light-years. Unset, every peer glows. */
     time?: { years: number; light: number };
+    /** The simulation's own flight covers the sky: it draws nothing until the next view, so the two don't share the
+     *  frame. 2026-11-10. */
+    rest?: boolean;
   };
   /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
    *  and whether it is the reply that could come back. */
@@ -4809,6 +4812,8 @@ void main() {
     const inside = Number(!!systemOf() && !!dialsOf[spec.mode]?.close);
     if (still && !dirty && Number(!!dialsOf.works?.close) === downAt && inside === sysAt) return;
     clock = pilot.clock(now);
+    // Under the simulation's flight, the sky rests: nothing of it shows, and its frame would cost the flight's.
+    if (spec.mode === "sim" && spec.sim?.rest) return;
     dirty = false;
     draw();
   }

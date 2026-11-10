@@ -4,6 +4,11 @@
 // off and fills the view as we arrive. Far out, a drawn disk stands in for the Galaxy's other stars. Its own canvas, apart
 // from lib/drift.ts, so the Universe section's map is untouched.
 import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { prefersReducedMotion } from "../motion.ts";
 import { steadySide } from "../steady-side.ts";
 import { CENTER } from "./tour.ts";
 
@@ -101,6 +106,8 @@ void main() {
   float m = aAbs + 5.0 * log(pc) / log(10.0) - 5.0;
   float f = pow(10.0, -0.4 * (m - 7.0));
   vA = clamp(0.1 + pow(f, 0.5), 0.0, 1.0) * step(0.004, f);
+  // The stars are many and add up, so they stay at white: only the few brightest from here go a little past it.
+  vColor *= 1.0 + 0.5 * smoothstep(60.0, 600.0, f);
   gl_PointSize = clamp(1.4 + 1.5 * pow(f, 0.33), 1.0, 30.0) * uDpr;
   gl_Position = projectionMatrix * mv;
 }`;
@@ -143,9 +150,10 @@ const BODY_VERT = /* glsl */ `
 attribute vec3 iPos;
 attribute float iSize, iKind, iPhase, iLit;
 uniform vec2 uRes;
-uniform float uFocal;
+uniform float uFocal, uFlare;
+uniform vec3 uFlareAt;
 varying vec2 vUv;
-varying float vKind, vPhase, vLit, vPx;
+varying float vKind, vPhase, vLit, vPx, vFlare, vExt;
 const float REACH = 2.4;
 void main() {
   vec4 mv = modelViewMatrix * vec4(iPos, 1.0);
@@ -155,15 +163,18 @@ void main() {
   float lo = iKind == 1.0 ? 5.0 : iKind >= 6.0 ? 3.5 : iKind == 3.0 ? 3.5 : 5.5;
   float px = clamp(max(iSize * uFocal / z, lo), 0.0, 2600.0);
   vPx = px;
-  vUv = position.xy * REACH;
+  // The body the thread's light reaches flares, and its quad grows to hold the flare. 2026-11-10.
+  vFlare = uFlare * step(distance(iPos, uFlareAt), 1e-4 * (1.0 + length(iPos)));
+  vExt = vFlare > 0.0 ? max(1.0, 40.0 / (REACH * px)) : 1.0;
+  vUv = position.xy * REACH * vExt;
   vec4 clip = projectionMatrix * mv;
-  clip.xy += position.xy * REACH * px * 2.0 / uRes * clip.w;
+  clip.xy += position.xy * REACH * vExt * px * 2.0 / uRes * clip.w;
   gl_Position = clip;
 }`;
 const BODY_FRAG = /* glsl */ `
 uniform float uTime;
 varying vec2 vUv;
-varying float vKind, vPhase, vLit, vPx;
+varying float vKind, vPhase, vLit, vPx, vFlare, vExt;
 float ring(float r, float at, float w) { return smoothstep(w, 0.0, abs(r - at)); }
 void main() {
   float r = length(vUv);
@@ -209,7 +220,18 @@ void main() {
   }
   // Soft to nothing before the quad's edge, so a small body never shows a square.
   a *= smoothstep(2.4, 1.5, r);
-  gl_FragColor = vec4(col, clamp(a, 0.0, 1.0));
+  // Light in the drawing, 2026-11-10: the core goes past white, so it blooms, Sol most, then the awake minds and the
+  // peers whose glow reaches us. Only the core: the rings stay at white and crisp.
+  float hot = exp(-pow(r * vPx / 4.0, 2.0));
+  bool lively = vKind == 2.0 || vKind == 4.0 || vKind == 5.0;
+  float live = vKind == 2.0 ? 1.0 : step(0.9, vLit);
+  float G = vKind == 1.0 ? 2.6 : lively ? 1.8 * (0.3 + 0.7 * live) : vKind == 3.0 ? 0.5 : 0.6;
+  float gain = 1.0 + G * hot + (lively ? 0.35 * live * exp(-pow(r * vPx / 16.0, 2.0)) : 0.0);
+  // The flare, when the light from Sol arrives: a bright point and a wide soft glow, in pixels however near.
+  float fr = r * vPx;
+  a += vFlare * (exp(-pow(fr / 7.0, 2.0)) + 0.35 * exp(-pow(fr / 26.0, 2.0))) * smoothstep(2.4 * vExt, 1.8 * vExt, r);
+  gain += vFlare * 2.5 * exp(-pow(fr / 9.0, 2.0));
+  gl_FragColor = vec4(col * gain, clamp(a, 0.0, 1.0));
 }`;
 
 // Our light, out since our first radio: a shell whose rim glows where we see it edge-on.
@@ -228,6 +250,43 @@ varying vec3 vV;
 void main() {
   float rim = pow(1.0 - abs(dot(vN, vV)), 3.0);
   gl_FragColor = vec4(0.6, 0.85, 1.0, 0.04 + rim * 0.5);
+}`;
+
+// Light running out along the thread from Sol, 2026-11-10: a ribbon a few pixels wide over the clipped line, in view
+// space so it never crosses behind the camera. A bright head leaves Sol, a tail fades behind it, both past white.
+const THREAD_VERT = /* glsl */ `
+attribute float aEnd, aSide, aCap;
+uniform vec3 uA, uB;
+uniform float uTa, uTb, uHalf;
+uniform vec2 uRes;
+varying float vT, vSide, vCap;
+void main() {
+  vec4 a = projectionMatrix * vec4(uA, 1.0), b = projectionMatrix * vec4(uB, 1.0);
+  vec2 d = (b.xy / b.w - a.xy / a.w) * uRes;
+  d = length(d) > 1e-4 ? normalize(d) : vec2(1.0, 0.0);
+  vec2 n = vec2(-d.y, d.x);
+  vec4 clip = aEnd > 0.5 ? b : a;
+  clip.xy += (n * aSide + d * aCap) * uHalf * 2.0 / uRes * clip.w;
+  vT = mix(uTa, uTb, aEnd);
+  vSide = aSide;
+  vCap = abs(aCap);
+  gl_Position = clip;
+}`;
+const THREAD_FRAG = /* glsl */ `
+uniform vec3 uInk;
+uniform float uHead, uHeadA, uTail, uHalf, uDpr, uShown, uBurst;
+uniform vec2 uHeadPx;
+varying float vT, vSide, vCap;
+void main() {
+  float x = abs(vSide) * uHalf;
+  float on = (1.0 - step(1e-4, vCap)) * step(0.0, vT) * step(vT, uHead);
+  float tail = on * exp(-(uHead - vT) / uTail);
+  float line = exp(-x * x / 1.6) + 0.2 * exp(-x / 4.0);
+  float d = distance(gl_FragCoord.xy, uHeadPx) / uDpr;
+  float head = uHeadA * (exp(-d * d / 7.0) + 0.3 * exp(-d / 7.0));
+  // A star in view has no halo of its own to flare, so the head flares for it where it lands.
+  head += uBurst * (1.2 * exp(-d * d / 30.0) + 0.3 * exp(-d / 9.0));
+  gl_FragColor = vec4(uInk * (1.5 * tail * line + 2.8 * head), uShown);
 }`;
 
 function diskOf(): THREE.BufferGeometry {
@@ -309,6 +368,34 @@ export function mountFlight(
   over.style.cssText = "position:absolute;inset:0;width:100%;height:100%;pointer-events:none";
   el.appendChild(over);
   const g2 = over.getContext("2d")!;
+
+  // Light in the drawing, 2026-11-10, as the main sky has it (lib/drift.ts): drawn to a half-float buffer so light past
+  // white is kept, bloomed, then a last pass rolls the brightest off, darkens the corners a little and lays a faint
+  // grain. ?flat draws straight to the screen. Multisampling only on a 1x screen: at 2x it costs too much.
+  const post = !new URLSearchParams(location.search).has("flat");
+  const samples = (window.devicePixelRatio || 1) < 1.5 ? 4 : 0;
+  const composer = post ? new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples })) : null;
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.5, 0.85);
+  const finish = new ShaderPass({
+    uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uGrain: { value: 0.02 } },
+    vertexShader: /* glsl */ `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+    fragmentShader: /* glsl */ `
+uniform sampler2D tDiffuse;
+uniform float uTime, uGrain;
+varying vec2 vUv;
+float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+void main() {
+  vec3 c = texture2D(tDiffuse, vUv).rgb;
+  // A soft shoulder above 0.85: light past white rolls off instead of clipping.
+  float L = max(c.r, max(c.g, c.b));
+  if (L > 0.85) c *= (0.85 + 0.15 * (1.0 - exp(-(L - 0.85) / 0.35))) / L;
+  float v = smoothstep(1.35, 0.45, length(vUv - 0.5));
+  c *= 0.9 + 0.1 * v;
+  c += (hash(gl_FragCoord.xy + fract(uTime * 0.37) * 1000.0) - 0.5) * uGrain;
+  gl_FragColor = vec4(c, 1.0);
+}`,
+  });
+  const grainStill = !!opts.still || prefersReducedMotion();
   const mono = `${getComputedStyle(document.body).getPropertyValue("--font-plex-mono").trim() || "ui-monospace"}, ui-monospace, monospace`;
 
   const scene = new THREE.Scene();
@@ -317,6 +404,11 @@ export function mountFlight(
   const res = new THREE.Vector2(1, 1);
   const time = { value: 0 };
   const blend = { transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending } as const;
+  if (composer) {
+    composer.addPass(new RenderPass(scene, camera));
+    composer.addPass(bloom);
+    composer.addPass(finish);
+  }
 
   // The far Galaxy, then the real stars, then the shell and the bodies, in that order.
   const disk = new THREE.Points(
@@ -386,10 +478,38 @@ export function mountFlight(
     uniforms: { uRes: { value: res }, uFocal: focal, uTime: time },
     ...blend,
   });
+  bodyMat.uniforms.uFlare = { value: 0 };
+  bodyMat.uniforms.uFlareAt = { value: new THREE.Vector3() };
   const bodyMesh = new THREE.Mesh(quad, bodyMat);
   bodyMesh.frustumCulled = false;
   scene.add(bodyMesh);
   let list: Body[] = [];
+
+  // The thread's running light: four quads in a row, a cap at each end so the head's glow is not cut off at Sol or
+  // at the place, and the line between. Its uniforms are set each frame by glint().
+  const strip = new THREE.BufferGeometry();
+  {
+    const end: number[] = [], side: number[] = [], cap: number[] = [];
+    for (const [e, c] of [[0, -1], [0, 0], [1, 0], [1, 1]]) for (const sd of [-1, 1]) {
+        end.push(e);
+        side.push(sd);
+        cap.push(c);
+      }
+    strip.setAttribute("position", new THREE.Float32BufferAttribute(new Array(24).fill(0), 3));
+    strip.setAttribute("aEnd", new THREE.Float32BufferAttribute(end, 1));
+    strip.setAttribute("aSide", new THREE.Float32BufferAttribute(side, 1));
+    strip.setAttribute("aCap", new THREE.Float32BufferAttribute(cap, 1));
+    strip.setIndex([0, 1, 3, 0, 3, 2, 2, 3, 5, 2, 5, 4, 4, 5, 7, 4, 7, 6]);
+  }
+  const runU = {
+    uA: { value: new THREE.Vector3() }, uB: { value: new THREE.Vector3() }, uTa: { value: 0 }, uTb: { value: 1 },
+    uHalf: { value: 26 }, uRes: { value: res }, uInk: { value: new THREE.Color() }, uHead: { value: 0 },
+    uHeadA: { value: 0 }, uTail: { value: 0.22 }, uDpr: { value: dpr }, uShown: { value: 0 }, uBurst: { value: 0 }, uHeadPx: { value: new THREE.Vector2() },
+  };
+  const run = new THREE.Mesh(strip, new THREE.ShaderMaterial({ vertexShader: THREAD_VERT, fragmentShader: THREAD_FRAG, uniforms: runU, ...blend, side: THREE.DoubleSide }));
+  run.frustumCulled = false;
+  run.visible = false;
+  scene.add(run);
 
   // The flight: from where the camera is to a place, its distance from the place easing in the log, so a long leg
   // pulls back to see the way and a short one glides. Then it holds there, turning slowly round it.
@@ -521,6 +641,55 @@ export function mountFlight(
     g2.shadowBlur = 0;
   }
 
+  // The light along the thread, each frame: a head leaves Sol, reaches the place in RUN seconds whatever the distance,
+  // and the body there flares and settles; then again, every PERIOD seconds. In the place's own ink. 2026-11-10.
+  const RUN = 2.5, PERIOD = 4.2;
+  let runFrom = 0;
+  const ra = new THREE.Vector3(), rb = new THREE.Vector3(), rh = new THREE.Vector3();
+  function glint(now: number) {
+    run.visible = false;
+    bodyMat.uniforms.uFlare.value = 0;
+    if (opts.still || shown < 0.01 || !end || Math.hypot(...end) < 1e-6) return;
+    ra.set(0, 0, 0).applyMatrix4(camera.matrixWorldInverse);
+    rb.set(...end).applyMatrix4(camera.matrixWorldInverse);
+    const NEAR = -0.02;
+    if (ra.z > NEAR && rb.z > NEAR) return;
+    let ta = 0, tb = 1;
+    if (ra.z > NEAR) ta = (ra.z - NEAR) / (ra.z - rb.z);
+    if (rb.z > NEAR) tb = 1 - (rb.z - NEAR) / (rb.z - ra.z);
+    const k = ((now - runFrom) % PERIOD) / RUN;
+    const at = Math.min(k, 1);
+    rh.set(end[0] * at, end[1] * at, end[2] * at).applyMatrix4(camera.matrixWorldInverse);
+    const past = Math.max(0, k - 1) * RUN;
+    let headA = k < 1 ? Math.min(1, k / 0.04) : Math.exp(-past / 0.25);
+    if (rh.z > NEAR) headA = 0;
+    else {
+      rh.applyMatrix4(camera.projectionMatrix);
+      runU.uHeadPx.value.set((rh.x * 0.5 + 0.5) * W * dpr, (rh.y * 0.5 + 0.5) * H * dpr);
+    }
+    const target = leg?.to.mark ?? leg?.to.id;
+    const same = (p: Vec) => Math.hypot(p[0] - end![0], p[1] - end![1], p[2] - end![2]) < 1e-4 * (1 + Math.hypot(...end!));
+    const body = list.find((b) => b.id === target && same(b.pos)) ?? list.find((b) => same(b.pos));
+    const ink = INK[body?.kind ?? "star"];
+    const n = ink.startsWith("#") ? [1, 3, 5].map((i) => parseInt(ink.slice(i, i + 2), 16)) : ink.match(/[\d.]+/g)!.slice(0, 3).map(Number);
+    runU.uInk.value.setRGB(n[0] / 255, n[1] / 255, n[2] / 255);
+    runU.uA.value.copy(ra).lerp(rb, ta);
+    runU.uB.value.copy(ra).lerp(rb, tb);
+    runU.uTa.value = ta;
+    runU.uTb.value = tb;
+    runU.uHead.value = k;
+    runU.uHeadA.value = headA;
+    runU.uShown.value = shown;
+    run.visible = true;
+    // The flare rises in a twentieth of a second and settles over about two thirds of one: the body's own, or the
+    // head's where the place is a star, drawn without a halo.
+    const flare = past > 0 ? Math.exp(-past / 0.6) * (1 - Math.exp(-past / 0.05)) : 0;
+    const halo = !!body && body.kind !== "star" && body.size > 0;
+    bodyMat.uniforms.uFlare.value = halo ? shown * flare : 0;
+    runU.uBurst.value = halo ? 0 : flare;
+    bodyMat.uniforms.uFlareAt.value.set(...end);
+  }
+
   function names(W: number, H: number) {
     g2.setTransform(dpr, 0, 0, dpr, 0, 0);
     g2.clearRect(0, 0, W, H);
@@ -594,6 +763,8 @@ export function mountFlight(
     H = el.clientHeight;
     if (!W || !H) return;
     renderer.setSize(W, H, false);
+    composer?.setPixelRatio(dpr);
+    composer?.setSize(W, H);
     over.width = W * dpr;
     over.height = H * dpr;
     camera.aspect = W / H;
@@ -616,7 +787,11 @@ export function mountFlight(
     camera.up.copy(UP);
     camera.lookAt(cam.look);
     camera.updateMatrixWorld();
-    renderer.render(scene, camera);
+    glint(now);
+    if (composer) {
+      finish.uniforms.uTime.value = grainStill ? 0 : now;
+      composer.render();
+    } else renderer.render(scene, camera);
     names(W, H);
   };
   raf = requestAnimationFrame(frame);
@@ -645,6 +820,8 @@ export function mountFlight(
     },
     thread(to) {
       threaded = !!to;
+      // A new place starts the light from Sol again.
+      if (to && (!end || to.some((x, i) => x !== end![i]))) runFrom = performance.now() / 1000;
       if (to) end = to;
     },
     light(ly) {
@@ -660,6 +837,9 @@ export function mountFlight(
         m.geometry?.dispose();
         (m.material as THREE.Material | undefined)?.dispose?.();
       });
+      bloom.dispose();
+      finish.dispose();
+      composer?.dispose();
       renderer.dispose();
       gl.remove();
       over.remove();
