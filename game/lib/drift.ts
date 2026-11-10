@@ -2290,9 +2290,22 @@ void main() {
     // 8.28. Estimates of where it was born run from about 5 to 7 kpc. It bobs through the disk too, about 85 pc up and
     // down about 2.7 times a lap, and is 21 pc up and rising now.
     const v = (236 / 3.0857e16) * 3.15576e7;
-    const k = (7 - R0) / AGE;
-    const radius = (ago: number) => R0 + k * ago;
-    const behind = (ago: number) => (v / k) * Math.log(radius(ago) / R0);
+    // Its orbit is no circle: it swings in and out every 170 million years or so, between about 0.995 and 1.145 of
+    // today's distance, and is falling inward now, nearest the center 15 million years from now (Bovy et al. 2012,
+    // e ≈ 0.06; HOLOS_RESEARCH.md, The Sun's road). The swing is an epicycle: as it falls in it runs ahead, as it
+    // climbs out it falls behind, by 2Ω/κ times as far. 2026-11-09.
+    const SWING = 1.7e8;
+    const kappa = (2 * Math.PI) / SWING;
+    const A = 0.075 * R0;
+    const PERI = -1.5e7;
+    const phase = (ago: number) => kappa * (ago - PERI);
+    const mean = R0 + A * Math.cos(phase(0));
+    const k = (7 - mean) / AGE;
+    /** The orbit's middle, drifting out from where the Sun was born. */
+    const guide = (ago: number) => mean + k * ago;
+    const radius = (ago: number) => guide(ago) - A * Math.cos(phase(ago));
+    const omega = v / R0;
+    const behind = (ago: number) => (v / k) * Math.log(guide(ago) / mean) + ((2 * omega) / kappa) * (A / R0) * (Math.sin(phase(ago)) - Math.sin(phase(0)));
     const bob = Math.asin(0.0208 / 0.085);
     const height = (ago: number) => 0.085 * Math.sin(bob - (2 * Math.PI * ago) / 8e7);
     const now = new THREE.Vector3(...inDisk(R0, 0, height(0)));
