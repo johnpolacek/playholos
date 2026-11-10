@@ -10,7 +10,7 @@ import type { Dials, Mark } from "@/lib/drift";
 import { YEAR_0 } from "@/lib/game/clock";
 import { HOLOS_ODDS, type Odds } from "@/lib/sim/draw-minds";
 import { pickablesOf, type Pickable } from "@/lib/sim/pick";
-import { bodiesOf, DRAWN_TABS, placesOf, rankOf, REAL_TABS, realBodiesOf, type Place, type Tab } from "@/lib/sim/flight-stops";
+import { bodiesOf, DRAWN_TABS, KNOWN, placesOf, rankOf, REAL_TABS, realBodiesOf, type Place, type Tab } from "@/lib/sim/flight-stops";
 import type { Target } from "@/lib/sim/flight-view";
 import type { WorldOdds } from "@/lib/sim/draw-worlds";
 import type { Ask, Drawn } from "@/lib/sim/draw-worker";
@@ -40,8 +40,8 @@ const DIALS_SIM: Dials = {};
 const RESTING = { minds: [], focus: null, zoom: 1.75, marks: [], rest: true };
 /** Seconds the flight holds at each place before drifting on to the next. */
 const HOLD = 7;
-/** Seconds the line from Sol lingers before the view comes in close. */
-const LINGER = 5;
+/** Seconds the line from Sol lingers before the view comes in close. Five until 2026-11-10: it dragged. */
+const LINGER = 2.2;
 /** With no peers, the flight stands back to see the whole Galaxy from above. */
 const GALAXY_VIEW: Target = { id: "galaxy", pos: CENTER, stand: 95_000, dir: [0.2, 1, 0.35] };
 const NONE: never[] = [];
@@ -206,7 +206,7 @@ export default function Sim() {
   useEffect(() => {
     if (!here || close || arrived !== `${here.id}:beside`) return;
     const fade = setTimeout(() => setFadeFor(here.id), LINGER * 1000);
-    const near = setTimeout(() => setCloseFor(here.id), (LINGER + 1.2) * 1000);
+    const near = setTimeout(() => setCloseFor(here.id), (LINGER + 0.6) * 1000);
     return () => (clearTimeout(fade), clearTimeout(near));
   }, [here, close, arrived]);
   // Held close for a while, then on to the next nearest.
@@ -610,7 +610,15 @@ export default function Sim() {
                 <p data-rise className="mt-1 text-[14px] leading-snug text-ink/85">
                   {here ? here.words : drawn ? emptyOf(tab).words : ""}
                 </p>
-                {here && <p className="mt-1.5 font-mono text-[10.5px] text-muted">Tap it again to read what we know.</p>}
+                {here && (
+                  <button
+                    className="mt-2.5 rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] text-ink hover:bg-ink/10"
+                    aria-expanded={open}
+                    onClick={() => (setAuto(false), setOpen((o) => !o))}
+                  >
+                    {open ? "Close" : "Find out more"}
+                  </button>
+                )}
                 {tab === "peers" && drawn && drawn.minds.peers.length > 0 && (
                   <Time
                     years={years}
@@ -1025,15 +1033,28 @@ function emptyOf(tab: Tab): { title: string; words: string } {
   return { title: "Nothing here yet", words: "The stars are still on their way." };
 }
 
-/** What we know of a star, a known world or a peer, for the places pick.ts does not cover. */
+/** What we know of a star, a known world or a peer, for the places pick.ts does not cover. A known world's card
+ *  adds its star's other planets, and any of our nearest star's known planets. */
 function readOf(p: Place): Pickable {
   const real = p.kind === "star" || p.kind === "known";
+  const lines = [p.words];
+  const host = p.kind === "known" ? KNOWN.find((k) => `known:${k.name}` === p.id)?.host : p.kind === "star" ? p.title : undefined;
+  if (host) {
+    const others = KNOWN.filter((k) => k.host.toLowerCase() === host.toLowerCase() && `known:${k.name}` !== p.id);
+    const warm = others.filter((k) => k.warm).length;
+    if (others.length)
+      lines.push(
+        `${p.kind === "known" ? "Also round" : "Known planets round"} ${host}: ${others.map((k) => k.name).join(", ")}.` +
+          (warm ? ` ${warm === 1 ? "One sits" : `${warm} sit`} in the warm zone.` : ""),
+      );
+    else if (p.kind === "star") lines.push("No planet found round it yet.");
+  }
   return {
     id: p.id,
     pos: p.pos,
     d: p.d,
     title: p.title,
-    real: real ? [p.words] : ["No catalog reaches it. The dials placed it among the Galaxy’s stars."],
+    real: real ? lines : ["No catalog reaches it. The dials placed it among the Galaxy’s stars."],
     drawn: real ? [`Nothing. This ${p.kind === "star" ? "star" : "world"} is as we know it.`] : [p.words],
   };
 }

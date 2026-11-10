@@ -543,7 +543,8 @@ void main() {
     const span = from.distanceTo(T.clone().addScaledVector(dir1, t.stand));
     leg = {
       to: t, t0: now, from, look0: cam.look.clone(), dir0: back.normalize(), dir1, d0,
-      dur: opts.still ? 0.001 : Math.min(15, 4.5 + 1.5 * Math.log(1 + span / Math.max(t.stand, 1))),
+      // Quicker since 2026-11-10: the fly-in dragged at four and a half seconds and up.
+      dur: opts.still ? 0.001 : Math.min(9, 2.6 + 1.1 * Math.log(1 + span / Math.max(t.stand, 1))),
       arc: span > 200 ? span * 0.22 : 0, arrived: false,
     };
     user.yaw = user.pitch = 0;
