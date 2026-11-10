@@ -305,7 +305,7 @@ const PALETTE: { bg: string } & Record<Kind, string> = {
 // pass spreads it. uGain lifts a glow past white where it should flare, as the Sun and the city lamps.
 const GLOW_VERT = /* glsl */ `
 uniform vec3 uPal[10];
-uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal, uFlash, uGain;
+uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal, uFlash, uGain, uFog, uFogRef;
 uniform vec2 uNear;
 attribute float aSize, aBright, aKind, aRank;
 varying vec3 vColor;
@@ -331,6 +331,8 @@ void main() {
     px = min(px, uMaxPx * uDpr);
   }
   if (uNear.y > 0.0) a *= smoothstep(uNear.x, uNear.y, depth);
+  // On a map with depth, what lies past Sol fades into the dark.
+  if (uFog > 0.0) a *= min(1.0, exp(-uFog * (depth - uFogRef)));
   vColor = uPal[int(aKind + 0.5)] * uGain;
   vAlpha = a;
   gl_PointSize = px;
@@ -530,11 +532,74 @@ void main() {
   gl_FragColor = vec4(uColor, (0.025 + 0.5 * pow(edge, 4.0)) * uOpacity);
 }`;
 
-const LINE_VERT = /* glsl */ `void main() { gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
+const LINE_VERT = /* glsl */ `
+varying float vDepth;
+void main() {
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  vDepth = -mv.z;
+  gl_Position = projectionMatrix * mv;
+}`;
 const LINE_FRAG = /* glsl */ `
 uniform vec3 uColor;
-uniform float uOpacity;
-void main() { gl_FragColor = vec4(uColor, uOpacity); }`;
+uniform float uOpacity, uFog, uFogRef;
+varying float vDepth;
+void main() {
+  float fog = uFog > 0.0 ? min(1.0, exp(-uFog * (vDepth - uFogRef))) : 1.0;
+  gl_FragColor = vec4(uColor, uOpacity * fog);
+}`;
+
+// A thread from Sol to a lead, with light running along it: a head that goes out and a tail that fades behind it,
+// past white so it blooms. aT is 0 at Sol and 1 at the star. 2026-11-09.
+const THREAD_VERT = /* glsl */ `
+attribute float aT;
+varying float vT;
+varying float vDepth;
+void main() {
+  vT = aT;
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  vDepth = -mv.z;
+  gl_Position = projectionMatrix * mv;
+}`;
+const THREAD_FRAG = /* glsl */ `
+uniform vec3 uColor;
+uniform float uOpacity, uTime, uPhase, uPulse, uFog, uFogRef;
+varying float vT;
+varying float vDepth;
+void main() {
+  float head = fract(uTime * 0.12 + uPhase);
+  float d = vT - head;
+  float pulse = exp(-abs(d) * 14.0) * step(d, 0.0) * uPulse;
+  float fog = uFog > 0.0 ? min(1.0, exp(-uFog * (vDepth - uFogRef))) : 1.0;
+  gl_FragColor = vec4(uColor * (1.0 + 2.2 * pulse), uOpacity * fog * (1.0 + 2.5 * pulse));
+}`;
+
+// The Galaxy's plane under the leads: a disc light falls on, brightest at Sol, each ten light-years a shade lighter
+// toward its ring, and faint spokes every 30°. Added to the sky, so the stars behind still show. 2026-11-09.
+const PLANE_VERT = /* glsl */ `
+varying vec2 vP;
+varying float vDepth;
+void main() {
+  vP = position.xy;
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  vDepth = -mv.z;
+  gl_Position = projectionMatrix * mv;
+}`;
+const PLANE_FRAG = /* glsl */ `
+uniform vec3 uColor;
+uniform float uOpacity, uFog, uFogRef;
+varying vec2 vP;
+varying float vDepth;
+void main() {
+  float r = length(vP);
+  float glow = 0.08 * exp(-r / 18.0);
+  float band = 0.03 * (1.0 - fract(r / 10.0)) * step(r, 50.0);
+  float ang = atan(vP.y, vP.x);
+  float spoke = smoothstep(0.012, 0.0, abs(fract(ang / 0.5236 + 0.5) - 0.5) * r * 0.5236) * 0.08 * step(5.0, r);
+  float edge = 1.0 - smoothstep(48.0, 58.0, r);
+  vec3 c = uColor * glow + vec3(0.6, 0.6, 0.58) * (band + spoke) * 0.6;
+  float fog = uFog > 0.0 ? min(1.0, exp(-uFog * (vDepth - uFogRef))) : 1.0;
+  gl_FragColor = vec4(c * edge * uOpacity * fog, 1.0);
+}`;
 
 /** A cloud of points under construction: position, size, brightness and palette kind for each. */
 class Cloud {
@@ -1030,6 +1095,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         uReveal: { value: 1 },
         uFlash: { value: 0 },
         uGain: { value: 1 },
+        uFog: { value: 0 },
+        uFogRef: { value: 0 },
       },
       vertexShader: GLOW_VERT,
       fragmentShader: GLOW_FRAG,
@@ -1043,12 +1110,30 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   }
   function line(kind: Kind, opacity: number, depthTest = false) {
     return new THREE.ShaderMaterial({
-      uniforms: { uColor: { value: pal[K[kind]] }, uOpacity: { value: opacity } },
+      uniforms: { uColor: { value: pal[K[kind]] }, uOpacity: { value: opacity }, uFog: { value: 0 }, uFogRef: { value: 0 } },
       vertexShader: LINE_VERT,
       fragmentShader: LINE_FRAG,
       transparent: true,
       depthWrite: false,
       depthTest,
+    });
+  }
+  function thread(kind: Kind, phase: number) {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uColor: { value: pal[K[kind]] },
+        uOpacity: { value: 0 },
+        uTime: { value: 0 },
+        uPhase: { value: phase },
+        uPulse: { value: 0 },
+        uFog: { value: 0 },
+        uFogRef: { value: 0 },
+      },
+      vertexShader: THREAD_VERT,
+      fragmentShader: THREAD_FRAG,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
     });
   }
   const loop = (pts: THREE.Vector3[], material: THREE.Material) => {
@@ -2704,6 +2789,23 @@ void main() {
     const ringAt = (r: number, i: number, n: number) =>
       new THREE.Vector3(r * Math.cos((i / n) * 2 * Math.PI), 0, r * Math.sin((i / n) * 2 * Math.PI));
     for (const r of RINGS) group.add(loop(Array.from({ length: 128 }, (_, i) => ringAt(r, i, 128)), ringMat));
+    // The plane itself, lit from Sol, under everything.
+    const planeMat = new THREE.ShaderMaterial({
+      uniforms: { uColor: { value: pal[K.mind] }, uOpacity: { value: 0 }, uFog: { value: 0 }, uFogRef: { value: 0 } },
+      vertexShader: PLANE_VERT,
+      fragmentShader: PLANE_FRAG,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const plane = new THREE.Mesh(new THREE.CircleGeometry(58, 128), planeMat);
+    plane.rotation.x = -Math.PI / 2;
+    plane.renderOrder = -1;
+    plane.frustumCulled = false;
+    group.add(plane);
+    /** How fast the far side fades, per light-year past Sol's distance. */
+    const FOG = 0.012;
     // Each lead: a point, a halo that breathes, a stalk down to the plane, and a thread out from Sol.
     const core = new Cloud();
     const halo = new Cloud();
@@ -2718,9 +2820,11 @@ void main() {
       halo.add(at.x, at.y, at.z, 26, 0, kind);
       feet.add(at.x, 0, at.z, 2.5, 0.7, K.ink);
       stalk.push(at.x, at.y, at.z, at.x, 0, at.z);
-      const mat = line(inkOf(id), 0);
+      const mat = thread(inkOf(id), (ids.indexOf(id) * 0.37) % 1);
       const l = new THREE.Line(
-        new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3)),
+        new THREE.BufferGeometry()
+          .setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3))
+          .setAttribute("aT", new THREE.Float32BufferAttribute([0, 1], 1)),
         mat,
       );
       l.frustumCulled = false;
@@ -2737,6 +2841,9 @@ void main() {
     const coreGlow = glow({ fixed: true });
     const haloGlow = glow({ fixed: true });
     const feetGlow = glow({ fixed: true });
+    // The stars' hearts and Sol go past white, so they flare.
+    coreGlow.uniforms.uGain.value = 1.5;
+    solGlow.uniforms.uGain.value = 1.8;
     const corePts = core.points(coreGlow);
     const haloPts = halo.points(haloGlow);
     group.add(haloPts, corePts, feet.points(feetGlow));
@@ -2876,8 +2983,16 @@ void main() {
         group.add(cold.points(dim));
       }
       if (dim) dim.uniforms.uOpacity.value = p * grid * (1 - farOut);
+      // The far side fades: what lies past Sol's distance goes into the dark, and nothing nearer brightens.
+      const fogRef = stars.camera.position.length();
+      const fogAt = (at: THREE.Vector3) => Math.min(1, Math.exp(-FOG * (stars.camera.position.distanceTo(at) - fogRef)));
+      for (const m of [coreGlow, haloGlow, feetGlow, beadGlow, ringMat, stalkMat, planeMat, ...(dim ? [dim] : []), ...threads.map((t) => t.mat), ...paths.map((q) => q.mat)]) {
+        m.uniforms.uFog.value = FOG * (1 - farOut);
+        m.uniforms.uFogRef.value = fogRef;
+      }
       // Close in, the Mind's shot has only the lead and its line home.
-      ringMat.uniforms.uOpacity.value = 0.12 * p * grid * (1 - farOut) * (1 - chartIn);
+      ringMat.uniforms.uOpacity.value = 0.18 * p * grid * (1 - farOut) * (1 - chartIn);
+      planeMat.uniforms.uOpacity.value = p * grid * (1 - farOut) * (1 - chartIn);
       coreGlow.uniforms.uOpacity.value = p;
       haloGlow.uniforms.uOpacity.value = p;
       feetGlow.uniforms.uOpacity.value = p * (1 - farOut);
@@ -2953,6 +3068,9 @@ void main() {
         const stepped = calm * (spec.hush?.[leads[i].n] ?? 0) * (1 - seen);
         threads[i].mat.uniforms.uOpacity.value =
           (warmOf[i] ? 0.12 + 0.13 * seen : 0.3 + 0.4 * seen - 0.15 * any * (1 - seen)) * p * Math.min(1, shown[i] * 4) * (1 - stepped) * (1 - aside) * (charting && i === focus ? 0 : 1);
+        // Light runs along each thread once it is lit, and rests while the sky holds still.
+        threads[i].mat.uniforms.uTime.value = clock;
+        threads[i].mat.uniforms.uPulse.value = still ? 0 : lit * (1 - stepped);
         paths[i].mat.uniforms.uOpacity.value = 0.3 * looked[i] * lit * p * (charting ? 0 : 1);
         for (let b = paths[i].from; b < paths[i].to; b++) beadB.setX(b, charting && i === focus ? 0 : 0.9 * seen * lit);
         coreB.setX(i, lit * (1 - aside) * (faded ? 0.5 : 1));
@@ -3024,7 +3142,7 @@ void main() {
         };
         const marks: Mark[] = leads.map(({ id, at }, i) => {
           const s = onScreen(at);
-          return { id, x: s.x, y: s.y, a: s.z < 1 ? (i === focus ? on : p) * ramp(shown[i], 0.6, 1) : 0 };
+          return { id, x: s.x, y: s.y, a: s.z < 1 ? (i === focus ? on : p) * ramp(shown[i], 0.6, 1) * (0.4 + 0.6 * fogAt(at)) : 0 };
         });
         const sol = onScreen(new THREE.Vector3());
         marks.push({ id: "Sol", x: sol.x, y: sol.y, a: p });
