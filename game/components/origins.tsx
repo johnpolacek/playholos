@@ -81,9 +81,11 @@ export function Origins({ onBack, onSkip, onNext }: { onBack(): void; onSkip(): 
       let t = 0.6;
       moments.forEach((m, i) => {
         const u = place(m.ago);
-        // Longer for the laps the Sun runs between moments, and for each power of ten the view closes in.
+        // Longer for the laps the Sun runs between moments, and for each power of ten the view closes in. Nearly half a
+        // second a lap, so the Galaxy turns slowly under the road: at an eighth of a second the deep past was a blur of
+        // spin, 2026-11-09.
         const laps = (agoAt(prev) - agoAt(u)) / LAP;
-        const move = 0.35 + 2.4 * (u - prev) + 0.12 * laps + 0.35 * Math.abs(roadZoom(prev) - roadZoom(u));
+        const move = 0.35 + 2.4 * (u - prev) + 0.45 * laps + 0.35 * Math.abs(roadZoom(prev) - roadZoom(u));
         // The last caption leaves as the clock starts to run, so no frame pairs it with another moment's Year. It
         // left as the next arrived until 2026-10-30, and one frame read "450,000 years ago · Oxygen fills the air".
         if (i > 0) tl.to(caps[i - 1], { autoAlpha: 0, y: -6, duration: 0.18, ease: "power2.in" }, t);

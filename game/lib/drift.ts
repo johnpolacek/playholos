@@ -1056,8 +1056,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         return () => [-3.59, 1.222 + (1 - (d?.rise ?? 1)) * 0.105, -0.2, 0];
       // Where we come from: the camera follows the Sun's light from the whole galaxy down to Earth. A still shows the
       // whole road.
+      // Where we come from: from high above the Galaxy, face on, leaning down as the deep past runs, so the road's
+      // first billion years are a slow descent, then the zoom carries on in. 2026-11-09.
       case "origins":
-        return (t) => [still ? WHOLE_ROAD : roadZoom(d?.u ?? 1), 0.6 + drift(t, 360), 0, 0];
+        return (t) => [still ? WHOLE_ROAD : roadZoom(d?.u ?? 1), 0.6 + drift(t, 360), still ? 0 : 0.45 * (1 - ramp(d?.u ?? 1, 0, 0.1)), 0];
       // Who we are: 150° round from the Sun, a little above the equator.
       case "people":
         return () => [-3.6, 0.9, 0.18, 0];
@@ -2411,12 +2413,14 @@ void main() {
     /** Where the Sun was, from where it is, in kly. */
     const road = (ago: number, out = new THREE.Vector3()) =>
       out.set(...inDisk(radius(ago), -behind(ago), height(ago))).sub(now);
+    /** Where the middle of its orbit was: the road without the swing in and out. */
+    const middle = (ago: number, out = new THREE.Vector3()) => out.set(...inDisk(guide(ago), 0, height(ago))).sub(now);
 
     // Its laps, drawn as its light passes, and the last million years, close to home.
     const laps = new Cloud();
     for (let ago = AGE; ago > 1e6; ago -= 4e5) {
       const p = road(ago);
-      laps.add(p.x, p.y, p.z, 2.2, 0.45, K.warm, placeOf(ago));
+      laps.add(p.x, p.y, p.z, 1.5, 0.28, K.warm, placeOf(ago));
     }
     const near = new Cloud();
     for (let i = 0; i <= 700; i++) {
@@ -2473,7 +2477,11 @@ void main() {
       // The laps and the deep past while the galaxy is in view, the last million years once it is not.
       lapsGlow.uniforms.uOpacity.value = deepGlow.uniforms.uOpacity.value = p * ramp(x, 8.2, 9.2);
       nearGlow.uniforms.uOpacity.value = recentGlow.uniforms.uOpacity.value = trailGlow.uniforms.uOpacity.value = p * (1 - ramp(x, 9.0, 9.8));
-      sunPts.position.copy(road(agoAt(u), at));
+      // Over the whole Galaxy the Sun's light rides the middle of its orbit, since its swing in and out, a loop every
+      // 170 million years, is a flicker at that scale. Closer in, where the last million years are drawn, it sits on
+      // the road itself. 2026-11-09.
+      const ago = agoAt(u);
+      sunPts.position.copy(middle(ago, at)).lerp(road(ago), 1 - ramp(x, 8.4, 9.4));
       sunGlow2.uniforms.uOpacity.value = p * (1 - (dials?.earth ?? 0));
     };
   }
