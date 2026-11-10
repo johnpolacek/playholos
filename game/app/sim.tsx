@@ -218,6 +218,7 @@ export default function Sim() {
     const toSim = t === "minds" || t === "peers";
     if (toSim) setSTab(t);
     else setUTab(t);
+    if (t === "tour") setAt(0);
     if (toSim !== onSim) navigate(toSim ? "/sim" : "/universe");
     setPlace(0);
     setAuto(true);
@@ -524,16 +525,19 @@ export default function Sim() {
                 </div>
               )}
             </div>
-            {stop && (
+            {/* One card for the tour and the flights, so the tabs stay put and their pill slides between Tour and the rest. */}
+            {(stop || tab) && (
               <section
                 ref={card}
-                className={`absolute top-16 left-4 right-4 max-w-md md:top-4 md:right-80 rounded-lg border border-faint bg-paper/95 p-3 shadow-lg shadow-black/40 backdrop-blur-sm transition-opacity duration-700 ${opening ? "pointer-events-none opacity-0" : "opacity-100"}`}
+                className={`absolute top-16 left-4 right-4 max-w-md md:top-4 md:right-80 rounded-lg border border-faint bg-paper/95 p-3 shadow-lg shadow-black/40 backdrop-blur-sm transition-opacity duration-700 ${stop && opening ? "pointer-events-none opacity-0" : "opacity-100"}`}
               >
                 <Tabs
-                  tabs={[{ id: "tour", label: "Tour" }, ...REAL_TABS]}
-                  active="tour"
-                  onPick={(id) => (id === "tour" ? setAt(0) : goTab(id as Tab))}
+                  tabs={onSim ? DRAWN_TABS : [{ id: "tour", label: "Tour" }, ...REAL_TABS]}
+                  active={tab ?? "tour"}
+                  onPick={(id) => goTab(id as Tab | "tour")}
                 />
+                {stop && (
+                  <>
                 <div className="mt-2.5 flex items-center justify-between gap-2">
                   <p className={KICK}>
                     UNIVERSE {Math.min(at, split - 1) + 1} / {split}
@@ -560,18 +564,10 @@ export default function Sim() {
                 <p data-rise className="mt-1 text-[14px] leading-snug text-ink/85">
                   {stop.words}
                 </p>
-              </section>
-            )}
-            {tab && (
-              <section
-                ref={card}
-                className="absolute top-16 left-4 right-4 max-w-md rounded-lg border border-faint bg-paper/95 p-3 shadow-lg shadow-black/40 backdrop-blur-sm md:top-4 md:right-80"
-              >
-                <Tabs
-                  tabs={onSim ? DRAWN_TABS : [{ id: "tour", label: "Tour" }, ...REAL_TABS]}
-                  active={tab}
-                  onPick={(id) => goTab(id as Tab | "tour")}
-                />
+                  </>
+                )}
+                {tab && (
+                  <>
                 <div className="mt-2.5 flex items-center justify-between gap-2">
                   <p className={KICK}>
                     {here ? `${rankOf(place, tabs.find((t) => t.id === tab)!.one).toUpperCase()} · ${place + 1} / ${places.length}` : "\u00a0"}
@@ -631,6 +627,8 @@ export default function Sim() {
                     onPlay={() => (years >= AHEAD && setYears(0), setPlaying((p) => !p))}
                     {...timeOf(drawn.minds, years, TO_NOW, TODAY)}
                   />
+                )}
+                  </>
                 )}
               </section>
             )}
