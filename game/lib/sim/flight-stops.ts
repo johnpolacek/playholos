@@ -96,10 +96,12 @@ export function placesOf(tab: Tab, m: DrawnMinds, names: Record<string, string>,
       words: `${s.d.toFixed(1)} light-years away. The light we see tonight left it in ${Math.round(today - s.d)}.`,
       stand: 1.4,
     }));
+  // A known planet's star that is one of our nearest takes the nearest star's own place, so the flights agree.
+  const nearAt = new Map(near.map((s) => [s.name.toLowerCase(), s.pos]));
   if (tab === "known")
     return KNOWN.map((p) => ({
       id: `known:${p.name}`,
-      pos: at(p.ra, p.dec, p.d),
+      pos: nearAt.get(p.host.toLowerCase()) ?? at(p.ra, p.dec, p.d),
       d: p.d,
       kind: "known",
       title: p.name,
@@ -136,17 +138,21 @@ export function placesOf(tab: Tab, m: DrawnMinds, names: Record<string, string>,
 }
 
 /** What the Universe section's flights draw: Sol, the nearest stars by name, and each star with a known planet. A
- *  star with a known planet is named once, by its planets' host name. 2026-11-10. */
+ *  nearest star with a known planet keeps its own place and id, and is drawn as a known world's star. 2026-11-10. */
 export function realBodiesOf(near: Near[]): Body[] {
   const hosts = new Map<string, Planet>();
-  for (const p of KNOWN) if (!hosts.has(p.host)) hosts.set(p.host, p);
-  const hostNames = new Set([...hosts.keys()].map((h) => h.toLowerCase()));
+  for (const p of KNOWN) if (!hosts.has(p.host.toLowerCase())) hosts.set(p.host.toLowerCase(), p);
+  const nearNames = new Set(near.map((s) => s.name.toLowerCase()));
   return [
     { id: "sol", pos: [0, 0, 0], kind: "sol", label: "Sol", size: 0.5 },
-    ...near
-      .filter((s) => !hostNames.has(s.name.toLowerCase()))
-      .map((s): Body => ({ id: `star:${s.name}`, pos: s.pos, kind: "star", label: s.name, size: 0 })),
-    ...[...hosts.values()].map((p): Body => ({ id: `host:${p.host}`, pos: at(p.ra, p.dec, p.d), kind: "known", label: p.host, size: 0.03 })),
+    ...near.map((s): Body =>
+      hosts.has(s.name.toLowerCase())
+        ? { id: `star:${s.name}`, pos: s.pos, kind: "known", label: s.name, size: 0.03 }
+        : { id: `star:${s.name}`, pos: s.pos, kind: "star", label: s.name, size: 0 },
+    ),
+    ...[...hosts.values()]
+      .filter((p) => !nearNames.has(p.host.toLowerCase()))
+      .map((p): Body => ({ id: `host:${p.host}`, pos: at(p.ra, p.dec, p.d), kind: "known", label: p.host, size: 0.03 })),
   ];
 }
 

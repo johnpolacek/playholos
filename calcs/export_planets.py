@@ -54,7 +54,14 @@ def main():
         host_name = (host or star or {}).get('name') or r['hostname']
         # Our unnamed stars go by their Gaia number: the archive's name is better there.
         if host_name.lower() == r['hostname'].lower() or host_name.startswith('Gaia '): host_name = r['hostname']
-        pl_name = host_name + r['pl_name'][len(r['hostname']):] if r['pl_name'].startswith(r['hostname']) else r['pl_name']
+        pl_name = r['pl_name']
+        for alias in [r['hostname'], r['hd_name'], r['hip_name']]:
+            if alias and pl_name.startswith(alias + ' '):
+                pl_name = host_name + pl_name[len(alias):]
+                break
+        # The archive's composite distance is wrong for a few stars (GJ 411 at 5.7 pc, which is 2.5): where the star is
+        # in our files, our distance stands, Gaia's.
+        d_ly = host['d'] if host else star['distance'] if star else float(r['sy_dist']) * LY_PER_PC
         lum = 10 ** float(r['st_lum']) if r['st_lum'] else None
         a = float(r['pl_orbsmax']) if r['pl_orbsmax'] else None
         warm = None
@@ -64,7 +71,7 @@ def main():
         method = {'Radial Velocity': 'wobble', 'Transit': 'transit', 'Imaging': 'image', 'Astrometry': 'astrometry',
                   'Transit Timing Variations': 'timing'}.get(r['discoverymethod'], r['discoverymethod'].lower())
         out.append({
-            'name': pl_name, 'host': host_name, 'd': round(float(r['sy_dist']) * LY_PER_PC, 2),
+            'name': pl_name, 'host': host_name, 'd': round(d_ly, 2),
             'ra': round(ra, 4), 'dec': round(dec, 4),
             'mass': round(float(r['pl_bmasse']), 2) if r['pl_bmasse'] else None,
             'a': round(a, 4) if a is not None else None,
