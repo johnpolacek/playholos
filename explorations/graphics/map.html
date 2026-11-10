@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scan map, with depth</title>
+<!-- A one-off: the Scan tab's map of the leads, with depth. The same rings at 10, 20, 30 and 40 light-years, Sol, and
+     eight leads dropped to the plane, but the plane is a surface light falls on, the far side fades, the threads carry
+     light along them, and the labels sit in the scene. Serve the repo root and open
+     /explorations/graphics/map.html. 2026-11-09. -->
+<style>
+  :root { --ink: #e6e3db; --muted: #9c988f; --you: #5bb8d6; --other: #e0a24a; --wait: #9fc4d1; }
+  html, body { margin: 0; height: 100%; background: #0b0c0d; color: var(--ink); font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #panel { position: fixed; top: 16px; left: 16px; padding: 12px 14px; background: rgba(18,19,20,.72); border: 1px solid #2a2b2e; border-radius: 12px; backdrop-filter: blur(8px); display: grid; gap: 6px; min-width: 200px; z-index: 2; }
+  #panel h1 { font: 500 11px/1 ui-monospace, monospace; letter-spacing: .1em; color: var(--muted); margin: 0 0 6px; }
+  #panel label { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+  #panel input { accent-color: var(--you); }
+  #panel .k { margin-left: auto; font: 11px ui-monospace, monospace; color: var(--muted); }
+  #labels { position: fixed; inset: 0; pointer-events: none; }
+  .lbl { position: absolute; transform: translate(10px, -50%); font: 11px/1 ui-monospace, monospace; letter-spacing: .04em; color: var(--you); white-space: nowrap; text-shadow: 0 0 6px rgba(11,12,13,.9), 0 0 2px rgba(11,12,13,1); }
+  .lbl.ring { color: var(--muted); font-size: 10px; transform: translate(-50%, 6px); }
+  .lbl.sol { color: var(--ink); }
+  .lbl.other { color: var(--other); }
+  .lbl small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+  #cap { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); text-align: center; font: 11px/1.6 ui-monospace, monospace; letter-spacing: .1em; color: var(--muted); }
+  #cap b { display: block; font-weight: 500; color: var(--ink); }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="panel">
+  <h1>SCAN MAP, WITH DEPTH</h1>
+  <label><input type="checkbox" data-k="plane" checked /> A plane light falls on <span class="k">1</span></label>
+  <label><input type="checkbox" data-k="fog" checked /> The far side fades <span class="k">2</span></label>
+  <label><input type="checkbox" data-k="threads" checked /> Light along the threads <span class="k">3</span></label>
+  <label><input type="checkbox" data-k="halos" checked /> Halos on the stars <span class="k">4</span></label>
+  <label><input type="checkbox" data-k="bloom" checked /> Bloom <span class="k">5</span></label>
+  <label><input type="checkbox" data-k="drift" checked /> The map breathes <span class="k">space</span></label>
+</div>
+<div id="labels"></div>
+<div id="cap"><b>LEADS</b>8 leads, 4.2 to 1,560 light-years out · drag to turn</div>
+<script type="module">
+import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const on = Object.fromEntries([...document.querySelectorAll("#panel input")].map((i) => [i.dataset.k, i.checked]));
+for (const i of document.querySelectorAll("#panel input")) i.addEventListener("change", () => (on[i.dataset.k] = i.checked));
+addEventListener("keydown", (e) => {
+  const keys = { 1: "plane", 2: "fog", 3: "threads", 4: "halos", 5: "bloom", " ": "drift" };
+  const k = keys[e.key]; if (!k) return;
+  document.querySelector(`[data-k="${k}"]`).checked = on[k] = !on[k];
+});
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0c0d);
+const camera = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, 0.1, 1000);
+camera.position.set(0, 52, 68);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.enablePan = false; controls.minDistance = 30; controls.maxDistance = 160;
+controls.minPolarAngle = 0.25; controls.maxPolarAngle = 1.35;
+
+const YOU = new THREE.Color(0x5bb8d6), OTHER = new THREE.Color(0xe0a24a), INK = new THREE.Color(0xe6e3db), WAIT = new THREE.Color(0x9fc4d1);
+
+// Eight leads: name, light-years, galactic longitude and latitude in degrees, from the game's leads. Gaia BH1 is 1,560
+// ly out and sits past the rings; here it is pinned at the map's edge with its own note, as the game does.
+const LEADS = [
+  ["Proxima Centauri", 4.2, 313.9, -1.9, "a world next door"],
+  ["Luyten’s Star", 12.3, 212.3, 10.4, "we messaged it"],
+  ["82 Eridani", 19.7, 250.8, -56.2, "a stretched orbit"],
+  ["Gliese 675", 41.7, 316.0, 5.0, "a new world"],
+  ["Gliese 706", 42.1, 40.2, 20.1, "silent"],
+  ["HIP 103039", 25.0, 96.0, -41.0, "a faint one"],
+  ["Gaia …1815808", 36.0, 85.0, 28.0, "a dim pair"],
+  ["Gaia BH1", 44.5, 15.3, 28.6, "a black hole · 1,560 ly"],
+];
+const place = ([name, ly, l, b]) => {
+  const L = (l * Math.PI) / 180, B = (b * Math.PI) / 180;
+  return new THREE.Vector3(ly * Math.cos(B) * Math.cos(L), ly * Math.sin(B), -ly * Math.cos(B) * Math.sin(L));
+};
+
+// ── The plane: a disc light falls on, brightest near Sol, with the rings etched into it. ──
+const plane = new THREE.Mesh(
+  new THREE.CircleGeometry(60, 128),
+  new THREE.ShaderMaterial({
+    uniforms: { uOn: { value: 1 }, uTime: { value: 0 } },
+    transparent: true, depthWrite: false,
+    vertexShader: `varying vec2 vP; void main(){ vP = position.xy; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader: /* glsl */ `uniform float uOn, uTime; varying vec2 vP;
+      void main(){
+        float r = length(vP);
+        // Light falls off from Sol, and the disc fades at 48 ly.
+        float glow = 0.05 * exp(-r / 18.0) * uOn;
+        // The rings at 10, 20, 30, 40 ly: a thin line, and a soft inner shade so each band reads as a step.
+        float ring = 0.0;
+        for (int i = 1; i <= 4; i++) { float d = abs(r - float(i) * 10.0); ring += smoothstep(0.09, 0.0, d) * 0.3; }
+        float band = 0.018 * (1.0 - fract(r / 10.0)) * step(r, 40.0) * uOn;
+        // A faint grid of spokes, every 30°.
+        float ang = atan(vP.y, vP.x);
+        float spoke = smoothstep(0.012, 0.0, abs(fract(ang / 0.5236 + 0.5) - 0.5) * r * 0.5236) * 0.08 * step(5.0, r);
+        float edge = 1.0 - smoothstep(42.0, 52.0, r);
+        vec3 c = vec3(0.357, 0.722, 0.839) * glow + vec3(0.6, 0.6, 0.58) * (ring + band + spoke) * 0.6;
+        gl_FragColor = vec4(c, edge);
+      }`,
+  }),
+);
+plane.rotation.x = -Math.PI / 2;
+plane.renderOrder = 0;
+scene.add(plane);
+
+// ── Background stars, dim, fogged with distance from the plane. ──
+{
+  const n = 6000, pos = [], col = [];
+  let seed = 7;
+  const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+  for (let i = 0; i < n; i++) {
+    const r = 20 + rand() * 120;
+    const v = new THREE.Vector3(rand() - 0.5, (rand() - 0.5) * 0.5, rand() - 0.5).normalize().multiplyScalar(r);
+    pos.push(v.x, v.y, v.z);
+    const m = Math.pow(rand(), 4);
+    col.push(0.5 + m, 0.5 + m * 0.95, 0.48 + m * 0.9);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  scene.add(new THREE.Points(g, new THREE.ShaderMaterial({
+    uniforms: { uDpr: { value: renderer.getPixelRatio() } },
+    vertexShader: `uniform float uDpr; varying vec3 vC; void main(){ vC = color; vec4 mv = modelViewMatrix*vec4(position,1.0); gl_Position = projectionMatrix*mv; gl_PointSize = (1.0 + 1.2*(vC.r-0.5)) * uDpr * 1.4; }`,
+    fragmentShader: `varying vec3 vC; void main(){ vec2 p = gl_PointCoord*2.0-1.0; float r2 = dot(p,p); if (r2>1.0) discard; gl_FragColor = vec4(vC*0.55, exp(-r2*3.0)*0.7); }`,
+    vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  })));
+}
+
+// ── Sol: a point of light with a halo and a glint. ──
+const haloTex = (() => {
+  const c = document.createElement("canvas"); c.width = c.height = 128;
+  const g = c.getContext("2d");
+  const grd = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grd.addColorStop(0, "rgba(255,255,255,1)"); grd.addColorStop(0.12, "rgba(255,255,255,0.6)"); grd.addColorStop(0.4, "rgba(255,255,255,0.08)"); grd.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = grd; g.fillRect(0, 0, 128, 128);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+})();
+const halo = (color, size, gain = 2) => {
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: haloTex, color: color.clone().multiplyScalar(gain), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+  s.scale.set(size, size, 1); return s;
+};
+const sol = halo(INK, 2.6, 3);
+scene.add(sol);
+
+// ── The leads: a star above the plane, a drop line to it, a foot, and a thread from Sol. ──
+const labels = document.getElementById("labels");
+const label = (text, cls, sub) => { const d = document.createElement("div"); d.className = "lbl " + cls; d.innerHTML = text + (sub ? `<small>${sub}</small>` : ""); labels.append(d); return d; };
+const dropMat = new THREE.LineBasicMaterial({ color: YOU, transparent: true, opacity: 0.35 });
+const leads = LEADS.map((L, i) => {
+  const p = place(L);
+  const foot = p.clone().setY(0);
+  const star = halo(i === 1 ? WAIT : YOU, 1.6, 2.4);
+  star.position.copy(p);
+  const drop = new THREE.Line(new THREE.BufferGeometry().setFromPoints([foot, p]), dropMat);
+  const footDot = new THREE.Mesh(new THREE.RingGeometry(0.28, 0.42, 24), new THREE.MeshBasicMaterial({ color: YOU, transparent: true, opacity: 0.5, side: THREE.DoubleSide }));
+  footDot.rotation.x = -Math.PI / 2; footDot.position.copy(foot).setY(0.02);
+  // The thread: a tube of points from Sol to the star, lit by a pulse that travels its length each few seconds.
+  const N = 140, pos = [], t = [];
+  for (let k = 0; k <= N; k++) { const u = k / N; const q = new THREE.Vector3().lerpVectors(new THREE.Vector3(), p, u); pos.push(q.x, q.y, q.z); t.push(u); }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute("aT", new THREE.Float32BufferAttribute(t, 1));
+  const thread = new THREE.Points(g, new THREE.ShaderMaterial({
+    uniforms: { uDpr: { value: renderer.getPixelRatio() }, uTime: { value: 0 }, uPhase: { value: i * 0.37 }, uColor: { value: i === 1 ? WAIT : YOU }, uLit: { value: 1 } },
+    vertexShader: /* glsl */ `attribute float aT; uniform float uDpr, uTime, uPhase, uLit; varying float vA;
+      void main(){ gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0);
+        float head = fract(uTime*0.12 + uPhase); float d = aT - head; float pulse = exp(-abs(d)*18.0) * step(d, 0.0) * uLit;
+        vA = 0.18 + 1.6 * pulse; gl_PointSize = (1.1 + 2.2*pulse) * uDpr; }`,
+    fragmentShader: `uniform vec3 uColor; varying float vA; void main(){ vec2 p = gl_PointCoord*2.0-1.0; float r2 = dot(p,p); if (r2>1.0) discard; gl_FragColor = vec4(uColor*vA, exp(-r2*3.0)); }`,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  }));
+  scene.add(star, drop, footDot, thread);
+  const lbl = label(L[0], i === 7 ? "other" : "", L[4]);
+  return { p, star, drop, footDot, thread, lbl };
+});
+const solLbl = label("Sol", "sol");
+const ringLbls = [10, 20, 30, 40].map((r) => ({ r, el: label(`${r} ly`, "ring") }));
+
+
+// Fog from the camera: the far side of the map fades into the dark.
+scene.fog = new THREE.FogExp2(0x0b0c0d, 0.006);
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.4, 0.6, 0.9);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); });
+
+const toScreen = (v, el, hide = false) => {
+  const s = v.clone().project(camera);
+  const x = (s.x * 0.5 + 0.5) * innerWidth, y = (-s.y * 0.5 + 0.5) * innerHeight;
+  el.style.left = x + "px"; el.style.top = y + "px";
+  // Labels fade with the fog, so a far one never shouts over a near one.
+  const d = camera.position.distanceTo(v);
+  el.style.opacity = hide || s.z > 1 ? 0 : String(Math.max(0.25, Math.exp(-0.006 * d * 1.4) * 1.6));
+};
+const clock = new THREE.Clock();
+let t = 0;
+renderer.setAnimationLoop(() => {
+  const dt = clock.getDelta(); if (on.drift) t += dt;
+  controls.autoRotate = on.drift; controls.autoRotateSpeed = 0.12;
+  plane.material.uniforms.uOn.value = on.plane ? 1 : 0;
+  scene.fog.density = on.fog ? 0.006 : 0;
+  bloom.enabled = on.bloom;
+  for (const L of leads) {
+    L.thread.material.uniforms.uTime.value = t; L.thread.material.uniforms.uLit.value = on.threads ? 1 : 0;
+    L.star.visible = on.halos; L.star.material.opacity = 0.85 + 0.15 * Math.sin(t * 2 + L.p.x);
+    toScreen(L.p, L.lbl);
+  }
+  sol.visible = on.halos;
+  toScreen(new THREE.Vector3(), solLbl);
+  // Each ring's label sits on its near edge, toward the camera.
+  const toward = new THREE.Vector3(camera.position.x, 0, camera.position.z).normalize();
+  for (const { r, el } of ringLbls) toScreen(toward.clone().multiplyScalar(r), el);
+  controls.update();
+  composer.render();
+});
+</script>
+</body>
+</html>

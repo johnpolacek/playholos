@@ -3,7 +3,12 @@
 // from the atlas's ephemeris, NASA's night lights, the HYG stars, the Local Volume galaxies, and a Milky Way drawn to
 // the measured arms and bar. Sources in HOLOS_RESEARCH.md, The drift. Client only.
 import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { Pass } from "three/addons/postprocessing/Pass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import earthDaymap from "../../assets/earth_daymap.jpg";
+import earthClouds from "../../assets/earth_clouds.jpg";
 import moonMap from "../../assets/moon.jpg";
 import planckMap from "../../assets/planck_cmb.jpg";
 import mercuryMap from "../../assets/mercury.jpg";
@@ -32,6 +37,7 @@ import { CLOSE } from "./game/close";
 import { SWARM } from "./sim/conflict";
 import { CATALOG } from "./sim/works";
 import { scarsNow } from "./scars";
+import { prefersReducedMotion } from "./motion";
 import type { System } from "./game/systems";
 import {
   DEG,
@@ -295,9 +301,11 @@ const PALETTE: { bg: string } & Record<Kind, string> = {
   wait: "159,196,209",
 };
 
+// Light in the drawing, 2026-11-09: the sky is drawn to a half-float buffer, so a color above 1 is kept, and a bloom
+// pass spreads it. uGain lifts a glow past white where it should flare, as the Sun and the city lamps.
 const GLOW_VERT = /* glsl */ `
 uniform vec3 uPal[10];
-uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal, uFlash;
+uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal, uFlash, uGain;
 uniform vec2 uNear;
 attribute float aSize, aBright, aKind, aRank;
 varying vec3 vColor;
@@ -323,7 +331,7 @@ void main() {
     px = min(px, uMaxPx * uDpr);
   }
   if (uNear.y > 0.0) a *= smoothstep(uNear.x, uNear.y, depth);
-  vColor = uPal[int(aKind + 0.5)];
+  vColor = uPal[int(aKind + 0.5)] * uGain;
   vAlpha = a;
   gl_PointSize = px;
   if (a < 0.0015 || mv.z > 0.0) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
@@ -361,30 +369,79 @@ void main() {
   if (a < 0.004 || mv.z > 0.0) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
 
-// A globe in two tones: the night, a little lighter where the Sun is up, and a rim.
+// A globe in two tones: the night, a little lighter where the Sun is up, and a rim. With uOcean, Earth's: the sea a
+// dark slate blue under the dots, the land a hint of its own ground, the Sun's glint on the water, and a thin warm
+// band along the terminator. The night stays as it was. 2026-11-09.
 const GLOBE_VERT = /* glsl */ `
 varying vec3 vN;
 varying vec3 vW;
+varying vec2 vUv;
 void main() {
   vN = normalize(mat3(modelMatrix) * normal);
   vec4 w = modelMatrix * vec4(position, 1.0);
   vW = w.xyz;
+  vUv = uv;
   gl_Position = projectionMatrix * viewMatrix * w;
 }`;
 
 const GLOBE_FRAG = /* glsl */ `
 uniform vec3 uBg, uInk, uRimColor, uSun;
-uniform float uDay, uRim;
+uniform float uDay, uRim, uOcean;
+uniform sampler2D uMap;
+varying vec3 vN;
+varying vec3 vW;
+varying vec2 vUv;
+const vec3 SEA = vec3(0.045, 0.085, 0.115);
+const vec3 LAND = vec3(0.16, 0.17, 0.15);
+const vec3 DAWN = vec3(1.0, 0.62, 0.30);
+void main() {
+  vec3 n = normalize(vN);
+  vec3 v = normalize(cameraPosition - vW);
+  float sunlit = dot(n, uSun);
+  float lit = smoothstep(-0.12, 0.3, sunlit);
+  float rim = pow(1.0 - max(dot(n, v), 0.0), 2.5);
+  vec3 c = mix(uBg, uInk, uDay * lit);
+  if (uOcean > 0.0) {
+    vec3 day = texture2D(uMap, vUv).rgb;
+    float sea = smoothstep(0.02, 0.12, day.b - day.r);
+    float lum = dot(day, vec3(0.3, 0.59, 0.11));
+    vec3 real = mix(LAND * (0.5 + 0.9 * lum), SEA, sea) * (0.05 + 0.38 * lit);
+    c = mix(c, max(c, real), uOcean);
+    vec3 h = normalize(uSun + v);
+    float ndh = max(dot(n, h), 0.0);
+    c += (0.08 * pow(ndh, 80.0) + 0.35 * pow(ndh, 1600.0)) * sea * lit * uOcean * vec3(1.0, 0.95, 0.85);
+    c += exp(-pow((sunlit + 0.02) / 0.03, 2.0)) * 0.06 * uOcean * DAWN;
+  }
+  c = mix(c, uRimColor, clamp(rim * uRim * (0.35 + 0.65 * lit), 0.0, 1.0));
+  gl_FragColor = vec4(c, 1.0);
+}`;
+
+// Thin cloud over Earth, lit by the Sun, read off the atlas's cloud map. Faint, so the dots stay the drawing. 2026-11-09.
+const CLOUD_VERT = /* glsl */ `
+varying vec2 vUv;
+varying vec3 vN;
+varying vec3 vW;
+void main() {
+  vUv = uv;
+  vN = normalize(mat3(modelMatrix) * normal);
+  vec4 w = modelMatrix * vec4(position, 1.0);
+  vW = w.xyz;
+  gl_Position = projectionMatrix * viewMatrix * w;
+}`;
+const CLOUD_FRAG = /* glsl */ `
+uniform sampler2D uMap;
+uniform vec3 uSun;
+uniform float uOpacity, uShift;
+varying vec2 vUv;
 varying vec3 vN;
 varying vec3 vW;
 void main() {
   vec3 n = normalize(vN);
-  vec3 v = normalize(cameraPosition - vW);
-  float lit = smoothstep(-0.12, 0.3, dot(n, uSun));
-  float rim = pow(1.0 - max(dot(n, v), 0.0), 2.5);
-  vec3 c = mix(uBg, uInk, uDay * lit);
-  c = mix(c, uRimColor, clamp(rim * uRim * (0.35 + 0.65 * lit), 0.0, 1.0));
-  gl_FragColor = vec4(c, 1.0);
+  float d = texture2D(uMap, vec2(fract(vUv.x + uShift), vUv.y)).r;
+  float lit = smoothstep(-0.1, 0.4, dot(n, uSun));
+  float face = smoothstep(0.0, 0.3, dot(n, normalize(cameraPosition - vW)));
+  vec3 c = mix(vec3(0.02, 0.03, 0.04), vec3(0.6, 0.62, 0.66), lit);
+  gl_FragColor = vec4(c, d * d * 0.28 * face * uOpacity);
 }`;
 
 // The air: a shell's back faces, brightest at the planet's limb and gone at the shell's edge, on the day side.
@@ -399,7 +456,9 @@ void main() {
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }`;
 
-// Looking toward the Sun through the air, it scatters forward and burns gold: dawn from space.
+// Looking toward the Sun through the air, it scatters forward and burns gold: dawn from space. A cheap stand-in for
+// Rayleigh and Mie: how much air the ray crosses, thickest at the limb; blue where the Sun is up; a gold lobe toward
+// the Sun. Added to the sky. 2026-11-09.
 const AIR_FRAG = /* glsl */ `
 uniform vec3 uColor, uSun, uDawn;
 uniform float uOpacity, uEdge;
@@ -408,16 +467,21 @@ varying vec3 vNw;
 varying vec3 vW;
 void main() {
   float k = clamp(-normalize(vNv).z / uEdge, 0.0, 1.0);
-  float lit = smoothstep(-0.35, 0.45, dot(normalize(vNw), uSun));
-  float dawn = pow(max(dot(normalize(vW - cameraPosition), uSun), 0.0), 40.0);
-  gl_FragColor = vec4(mix(uColor, uDawn, min(1.0, dawn * 2.0)), k * k * k * (lit + dawn * 3.0) * uOpacity);
+  float thick = pow(k, 2.6);
+  float lit = smoothstep(-0.3, 0.5, dot(normalize(vNw), uSun));
+  float cosT = dot(normalize(vW - cameraPosition), uSun);
+  vec3 rayleigh = uColor * lit * 0.9;
+  float g = 0.85;
+  float mie = (1.0 - g * g) / pow(1.0 + g * g - 2.0 * g * cosT, 1.5) * 0.02;
+  vec3 forward = uDawn * mie * smoothstep(-0.6, 0.2, dot(normalize(vNw), uSun));
+  gl_FragColor = vec4((rayleigh + forward) * thick * uOpacity, 1.0);
 }`;
 
 // Earth's land in dots, lit by the Sun, and its night lights where the Sun is down.
 const SURFACE_VERT = /* glsl */ `
 uniform vec3 uPal[10];
 uniform vec3 uSun;
-uniform float uFocal, uDpr, uOpacity, uLights, uLit;
+uniform float uFocal, uDpr, uOpacity, uLights, uLit, uGain;
 attribute float aSize, aBright, aKind, aRank;
 varying vec3 vColor;
 varying float vAlpha;
@@ -435,7 +499,8 @@ void main() {
   if (px < lo) { a *= px * px / (lo * lo); px = lo; }
   gl_PointSize = min(px, 5.0 * uDpr);
   a *= smoothstep(0.0, 0.22, dot(n, normalize(cameraPosition - w.xyz)));
-  vColor = uPal[int(aKind + 0.5)];
+  // The lamps go past white, so they bloom.
+  vColor = uPal[int(aKind + 0.5)] * (aKind < 0.5 ? 1.0 : uGain);
   vAlpha = a * uOpacity;
   if (vAlpha < 0.002) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
@@ -443,7 +508,7 @@ void main() {
 // A planet's ground in dots, as the Moon's, lit from the Sun, all of it in the planet's own color. 2026-10-29.
 const PLANET_VERT = SURFACE_VERT.replace("uniform float uFocal,", "uniform float uTint;\nuniform float uFocal,")
   .replace(/float a = aKind < 0\.5[\s\S]*?;\n  float px/, "float a = aBright * mix(0.12, 0.85, smoothstep(-0.1, 0.25, sun));\n  float px")
-  .replace("vColor = uPal[int(aKind + 0.5)];", "vColor = uPal[int(uTint + 0.5)];");
+  .replace("vColor = uPal[int(aKind + 0.5)] * (aKind < 0.5 ? 1.0 : uGain);", "vColor = uPal[int(uTint + 0.5)];");
 
 // A sphere seen from outside, brightest where we look along its skin: Earth's radar shell.
 const SHELL_VERT = /* glsl */ `
@@ -964,6 +1029,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         uNear: { value: new THREE.Vector2(...near) },
         uReveal: { value: 1 },
         uFlash: { value: 0 },
+        uGain: { value: 1 },
       },
       vertexShader: GLOW_VERT,
       fragmentShader: GLOW_FRAG,
@@ -1047,8 +1113,64 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   );
   sys.on = false;
   const layers = [cosmos, stars, solar, sys, earth, local];
+  function drawLayers() {
+    renderer.clear();
+    for (const L of layers) {
+      if (!L.on) continue;
+      renderer.clearDepth();
+      renderer.render(L.scene, L.camera);
+    }
+  }
+
+  // ── Light in the drawing, 2026-11-09 ──
+  // The layers are drawn to one half-float buffer, so light that adds up past white is kept. Bloom spreads what is
+  // brighter than white: the Sun, the city lamps, a flare. Then a last pass rolls the brightest light off instead of
+  // clipping it, darkens the corners a little, and lays a faint grain over all of it. ?flat draws straight to the
+  // screen as before, to compare or to spare a slow device.
+  const post = typeof location === "undefined" || !new URLSearchParams(location.search).has("flat");
+  class LayersPass extends Pass {
+    constructor() {
+      super();
+      this.needsSwap = false;
+    }
+    render(r: THREE.WebGLRenderer, _write: THREE.WebGLRenderTarget, read: THREE.WebGLRenderTarget) {
+      r.setRenderTarget(this.renderToScreen ? null : read);
+      drawLayers();
+    }
+  }
+  // Multisampling smooths the thin lines, but resolving a half-float buffer at a 2x screen costs more than all the
+  // rest: 25 fps against 60 on a laptop, measured 2026-11-09. At 2x the lines are fine without it, so only a 1x
+  // screen, with a quarter of the pixels, gets it.
+  const samples = (window.devicePixelRatio || 1) < 1.5 ? 4 : 0;
+  const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples }));
+  composer.addPass(new LayersPass());
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.5, 0.85);
+  composer.addPass(bloom);
+  const finish = new ShaderPass({
+    uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uGrain: { value: 0.02 } },
+    vertexShader: /* glsl */ `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+    fragmentShader: /* glsl */ `
+uniform sampler2D tDiffuse;
+uniform float uTime, uGrain;
+varying vec2 vUv;
+float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+void main() {
+  vec3 c = texture2D(tDiffuse, vUv).rgb;
+  // A soft shoulder above 0.85: light past white rolls off instead of clipping.
+  float L = max(c.r, max(c.g, c.b));
+  if (L > 0.85) c *= (0.85 + 0.15 * (1.0 - exp(-(L - 0.85) / 0.15))) / L;
+  float v = smoothstep(1.35, 0.45, length(vUv - 0.5));
+  c *= 0.9 + 0.1 * v;
+  c += (hash(gl_FragCoord.xy + fract(uTime * 0.37) * 1000.0) - 0.5) * uGrain;
+  gl_FragColor = vec4(c, 1.0);
+}`,
+  });
+  composer.addPass(finish);
+  const grainStill = prefersReducedMotion();
 
   // ── Earth and the Moon, in Earth radii ──
+  const dayMap = new THREE.TextureLoader().load(earthDaymap);
+  dayMap.colorSpace = THREE.SRGBColorSpace;
   const globeUniforms = () => ({
     uBg: { value: bg },
     uInk: { value: pal[K.ink] },
@@ -1056,12 +1178,15 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     uSun: { value: sunDir },
     uDay: { value: 0 },
     uRim: { value: 0 },
+    uOcean: { value: 0 },
+    uMap: { value: dayMap },
   });
   const earthGlobe = new THREE.ShaderMaterial({
     uniforms: globeUniforms(),
     vertexShader: GLOBE_VERT,
     fragmentShader: GLOBE_FRAG,
   });
+  earthGlobe.uniforms.uOcean.value = 1;
   const moonGlobe = new THREE.ShaderMaterial({
     uniforms: globeUniforms(),
     vertexShader: GLOBE_VERT,
@@ -1070,6 +1195,18 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   const spin = new THREE.Group();
   spin.add(new THREE.Mesh(new THREE.SphereGeometry(1, 96, 64), earthGlobe));
   earth.scene.add(spin);
+  // Thin cloud, a little above the ground, drifting a touch faster than Earth turns. 2026-11-09.
+  const cloudMap = new THREE.TextureLoader().load(earthClouds);
+  const cloud = new THREE.ShaderMaterial({
+    uniforms: { uMap: { value: cloudMap }, uSun: { value: sunDir }, uOpacity: { value: 1 }, uShift: { value: 0 } },
+    vertexShader: CLOUD_VERT,
+    fragmentShader: CLOUD_FRAG,
+    transparent: true,
+    depthWrite: false,
+  });
+  const clouds = new THREE.Mesh(new THREE.SphereGeometry(1.006, 96, 64), cloud);
+  clouds.renderOrder = 1;
+  spin.add(clouds);
 
   // ── Strikes on Earth: a flash where each lands, gone within months, then a rose ring as wide as its blast. 2026-10-28.
   const MAX_SCARS = 6;
@@ -1120,10 +1257,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   const AIR = 1.06;
   const air = new THREE.ShaderMaterial({
     uniforms: {
-      uColor: { value: pal[K.mind] },
-      uDawn: { value: pal[K.sun] },
+      uColor: { value: new THREE.Color(0.3, 0.55, 1.0) },
+      uDawn: { value: new THREE.Color(1.0, 0.62, 0.28) },
       uSun: { value: sunDir },
-      uOpacity: { value: 0.6 },
+      uOpacity: { value: 1 },
       uEdge: { value: Math.sqrt(1 - 1 / (AIR * AIR)) },
     },
     vertexShader: AIR_VERT,
@@ -1132,7 +1269,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     transparent: true,
     depthWrite: false,
   });
-  earth.scene.add(new THREE.Mesh(new THREE.SphereGeometry(AIR, 96, 64), air));
+  const airShell = new THREE.Mesh(new THREE.SphereGeometry(AIR, 96, 64), air);
+  airShell.renderOrder = 2;
+  earth.scene.add(airShell);
 
   const surface = new THREE.ShaderMaterial({
     uniforms: {
@@ -1141,6 +1280,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       uOpacity: { value: 0 },
       uLights: { value: 1 },
       uLit: { value: 1 },
+      uGain: { value: 2.2 },
     },
     vertexShader: SURFACE_VERT,
     fragmentShader: GLOW_FRAG,
@@ -1180,6 +1320,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   sun.add(0, 0, 0, 0.18, 0.7, K.sun);
   sun.add(0, 0, 0, 0.02, 1, K.sun);
   const sunGlow = glow({ minPx: 2.5, maxPx: 190 });
+  // Past white at its heart, so it flares, and burns at the limb on Wake.
+  sunGlow.uniforms.uGain.value = 1.8;
   solar.scene.add(sun.points(sunGlow));
 
   const jd = julianDate(date);
@@ -3908,6 +4050,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     dpr = Math.min(2, window.devicePixelRatio || 1);
     renderer.setPixelRatio(dpr);
     renderer.setSize(w, h, false);
+    composer.setPixelRatio(dpr);
+    composer.setSize(w, h);
     shared.uDpr.value = dpr;
     dirty = true;
   }
@@ -4273,11 +4417,13 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     if (local.on && closing) (nearby ??= closeUp())(closing);
     if (spec.onScale && framing) spec.onScale((D * 149597870.7) / focal, framing.w, framing.h);
 
-    renderer.clear();
-    for (const L of layers) {
-      if (!L.on) continue;
-      renderer.clearDepth();
-      renderer.render(L.scene, L.camera);
+    cloud.uniforms.uShift.value = still ? 0 : (clock / 3600) % 1;
+    if (post) {
+      finish.uniforms.uTime.value = still || grainStill ? 0 : clock;
+      composer.render();
+    } else {
+      renderer.setRenderTarget(null);
+      drawLayers();
     }
     if (spec.mode === "title") spec.onFrame?.(Math.max(0, cam.distanceTo(earthAU) - R_E_AU));
   }
@@ -4349,6 +4495,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
             (o.material as THREE.Material).dispose();
           }
         });
+      composer.dispose();
       renderer.dispose();
       renderer.forceContextLoss();
       renderer.domElement.remove();

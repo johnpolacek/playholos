@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Earth, lit</title>
+<!-- A one-off: the game's Earth with cinematic light. The same dotted land and night lights it draws now, over a real
+     ocean, under an atmosphere that scatters, with thin clouds, HDR bloom, and a little grain. Each piece can be turned
+     off to judge it. Serve the repo root (python3 -m http.server) and open /explorations/graphics/earth.html. 2026-11-09. -->
+<style>
+  :root { --paper: #121314; --ink: #e6e3db; --muted: #9c988f; --you: #5bb8d6; --other: #e0a24a; }
+  html, body { margin: 0; height: 100%; background: #0b0c0d; color: var(--ink); font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #panel { position: fixed; top: 16px; left: 16px; padding: 12px 14px; background: rgba(18,19,20,.72); border: 1px solid #2a2b2e; border-radius: 12px; backdrop-filter: blur(8px); display: grid; gap: 6px; min-width: 200px; }
+  #panel h1 { font: 500 11px/1 ui-monospace, monospace; letter-spacing: .1em; color: var(--muted); margin: 0 0 6px; }
+  #panel label { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+  #panel input { accent-color: var(--you); }
+  #panel .k { margin-left: auto; font: 11px ui-monospace, monospace; color: var(--muted); }
+  #cap { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); text-align: center; font: 11px/1.6 ui-monospace, monospace; letter-spacing: .1em; color: var(--muted); }
+  #cap b { display: block; font-weight: 500; color: var(--ink); }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="panel">
+  <h1>EARTH, LIT</h1>
+  <label><input type="checkbox" data-k="atmosphere" checked /> Atmosphere scatters <span class="k">1</span></label>
+  <label><input type="checkbox" data-k="ocean" checked /> Ocean and land <span class="k">2</span></label>
+  <label><input type="checkbox" data-k="clouds" checked /> Thin clouds <span class="k">3</span></label>
+  <label><input type="checkbox" data-k="dots" checked /> Dotted land, as now <span class="k">4</span></label>
+  <label><input type="checkbox" data-k="bloom" checked /> HDR bloom <span class="k">5</span></label>
+  <label><input type="checkbox" data-k="grain" checked /> Grain and vignette <span class="k">6</span></label>
+  <label><input type="checkbox" data-k="turn" checked /> Turning <span class="k">space</span></label>
+  <label><input type="checkbox" data-k="dawn" /> Dawn, as on Wake <span class="k">d</span></label>
+</div>
+<div id="cap"><b>EARTH</b>seen from 30,000 km out · drag to orbit</div>
+<script type="module">
+import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const ASSETS = "../../assets/";
+const on = Object.fromEntries([...document.querySelectorAll("#panel input")].map((i) => [i.dataset.k, i.checked]));
+for (const i of document.querySelectorAll("#panel input")) i.addEventListener("change", () => (on[i.dataset.k] = i.checked));
+addEventListener("keydown", (e) => {
+  const keys = { 1: "atmosphere", 2: "ocean", 3: "clouds", 4: "dots", 5: "bloom", 6: "grain", " ": "turn", d: "dawn" };
+  const k = keys[e.key];
+  if (!k) return;
+  const box = document.querySelector(`[data-k="${k}"]`);
+  box.checked = on[k] = !on[k];
+});
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0c0d);
+const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.01, 100);
+camera.position.set(0, 0.35, 3.6);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.minDistance = 1.6;
+controls.maxDistance = 8;
+
+const loader = new THREE.TextureLoader();
+const tex = (f, srgb = true) => {
+  const t = loader.load(ASSETS + f);
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  return t;
+};
+const dayMap = tex("earth_daymap.jpg");
+const nightMap = tex("earth_nightmap.jpg");
+const cloudMap = tex("earth_clouds.jpg", false);
+
+// The Sun: low on the right so the terminator crosses the face, as the game frames Earth.
+const sun = new THREE.Vector3(1, 0.25, 0.55).normalize();
+
+// ── The globe: slate ocean with a sun glint, land as a faint albedo under the dots, city lights that bloom ──
+const globe = new THREE.Mesh(
+  new THREE.SphereGeometry(1, 128, 96),
+  new THREE.ShaderMaterial({
+    uniforms: {
+      uDay: { value: dayMap },
+      uNight: { value: nightMap },
+      uSun: { value: sun },
+      uOcean: { value: 1 },
+      uLights: { value: 1 },
+      uTime: { value: 0 },
+    },
+    vertexShader: /* glsl */ `
+      varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+      void main() {
+        vUv = uv;
+        vN = normalize(mat3(modelMatrix) * normal);
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vW = w.xyz;
+        gl_Position = projectionMatrix * viewMatrix * w;
+      }`,
+    fragmentShader: /* glsl */ `
+      uniform sampler2D uDay, uNight;
+      uniform vec3 uSun;
+      uniform float uOcean, uLights, uTime;
+      varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+      // The game's palette, as light: slate, chalk, the lamp's amber, our blue.
+      const vec3 SLATE = vec3(0.071, 0.075, 0.078);
+      const vec3 SEA = vec3(0.045, 0.085, 0.115);
+      const vec3 LAND = vec3(0.16, 0.17, 0.15);
+      const vec3 LAMP = vec3(1.0, 0.72, 0.36);
+      const vec3 DAWN = vec3(1.0, 0.62, 0.30);
+      const vec3 BLUE = vec3(0.357, 0.722, 0.839);
+      void main() {
+        vec3 n = normalize(vN);
+        vec3 v = normalize(cameraPosition - vW);
+        vec3 day = texture2D(uDay, vUv).rgb;
+        // Sea is the blue of the map; land is what is left.
+        float sea = smoothstep(0.02, 0.12, day.b - day.r);
+        float sunlit = dot(n, uSun);
+        float lit = smoothstep(-0.08, 0.35, sunlit);
+        // The ground by day: desaturated, kept dark so the dots stay the drawing. Land carries a hint of its albedo.
+        float lum = dot(day, vec3(0.3, 0.59, 0.11));
+        vec3 ground = mix(LAND * (0.5 + 0.9 * lum), SEA, sea);
+        ground = mix(SLATE * 1.4, ground, uOcean);
+        // The Sun's glint on the sea: a soft lobe and a tight hot one, kept small.
+        vec3 h = normalize(uSun + v);
+        float ndh = max(dot(n, h), 0.0);
+        float glint = (0.08 * pow(ndh, 80.0) + 0.9 * pow(ndh, 1600.0)) * sea * lit * uOcean;
+        // The terminator burns a little warm, as the air does there: a thin band.
+        float term = exp(-pow((sunlit + 0.02) / 0.03, 2.0)) * 0.06;
+        // The day side stays dim: the game lives at night, and the drawing is the dots.
+        vec3 c = ground * (0.05 + 0.38 * lit) + glint * vec3(1.0, 0.95, 0.85) + term * DAWN;
+        // City lights where the Sun is down, bright enough to bloom.
+        vec3 night = texture2D(uNight, vUv).rgb;
+        float lamps = dot(night, vec3(0.33)) * (1.0 - smoothstep(-0.2, 0.05, sunlit));
+        c += LAMP * pow(lamps, 1.3) * 2.6 * uLights;
+        // A faint rim of our blue, so the limb reads against the dark.
+        float rim = pow(1.0 - max(dot(n, v), 0.0), 3.0);
+        c += BLUE * rim * (0.08 + 0.25 * lit);
+        gl_FragColor = vec4(c, 1.0);
+      }`,
+  }),
+);
+scene.add(globe);
+
+// ── The land in dots, as the game draws it now, read off the day map once ──
+const dots = await (async () => {
+  const img = await new Promise((res) => { const i = new Image(); i.src = ASSETS + "earth_daymap.jpg"; i.onload = () => res(i); });
+  const c = document.createElement("canvas");
+  c.width = 1024; c.height = 512;
+  const g = c.getContext("2d");
+  g.drawImage(img, 0, 0, c.width, c.height);
+  const px = g.getImageData(0, 0, c.width, c.height).data;
+  const pos = [], rank = [];
+  const N = 180; // rings of latitude
+  for (let i = 0; i < N; i++) {
+    const lat = -90 + (i + 0.5) * (180 / N);
+    const cs = Math.cos((lat * Math.PI) / 180);
+    const M = Math.max(8, Math.round(2 * N * cs));
+    for (let j = 0; j < M; j++) {
+      const lon = -180 + (j + 0.5) * (360 / M);
+      const x = Math.floor(((lon + 180) / 360) * c.width), y = Math.floor(((90 - lat) / 180) * c.height);
+      const k = (y * c.width + x) * 4;
+      if (px[k + 2] - px[k] > 18) continue; // sea
+      const phi = ((90 - lat) * Math.PI) / 180, th = ((lon + 180) * Math.PI) / 180;
+      const r = 1.003;
+      pos.push(-r * Math.sin(phi) * Math.cos(th), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(th));
+      rank.push(Math.random());
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  const mat = new THREE.ShaderMaterial({
+    uniforms: { uSun: { value: sun }, uDpr: { value: renderer.getPixelRatio() }, uOpacity: { value: 1 } },
+    vertexShader: /* glsl */ `
+      uniform vec3 uSun; uniform float uDpr;
+      varying float vA;
+      void main() {
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vec4 mv = viewMatrix * w;
+        gl_Position = projectionMatrix * mv;
+        vec3 n = normalize(mat3(modelMatrix) * position);
+        float s = dot(n, uSun);
+        vA = mix(0.12, 0.55, smoothstep(-0.1, 0.3, s)) * smoothstep(0.0, 0.25, dot(n, normalize(cameraPosition - w.xyz)));
+        gl_PointSize = clamp(0.006 * 900.0 / -mv.z, 0.7, 2.2) * uDpr;
+      }`,
+    fragmentShader: /* glsl */ `
+      uniform float uOpacity; varying float vA;
+      void main() {
+        vec2 p = gl_PointCoord * 2.0 - 1.0; float r2 = dot(p, p); if (r2 > 1.0) discard;
+        gl_FragColor = vec4(vec3(0.9, 0.89, 0.86), vA * uOpacity * (1.0 - r2));
+      }`,
+    transparent: true, depthWrite: false,
+  });
+  const p = new THREE.Points(geo, mat);
+  p.renderOrder = 2;
+  return p;
+})();
+scene.add(dots);
+
+// ── Clouds: thin, lit by the Sun, their shadow skipped. They turn a little faster than the ground. ──
+const clouds = new THREE.Mesh(
+  new THREE.SphereGeometry(1.006, 96, 72),
+  new THREE.ShaderMaterial({
+    uniforms: { uMap: { value: cloudMap }, uSun: { value: sun }, uOpacity: { value: 1 } },
+    vertexShader: /* glsl */ `varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+      void main(){ vUv = uv; vN = normalize(mat3(modelMatrix)*normal); vec4 w = modelMatrix*vec4(position,1.0); vW = w.xyz; gl_Position = projectionMatrix*viewMatrix*w; }`,
+    fragmentShader: /* glsl */ `uniform sampler2D uMap; uniform vec3 uSun; uniform float uOpacity;
+      varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+      void main(){
+        vec3 n = normalize(vN); float d = texture2D(uMap, vUv).r;
+        float lit = smoothstep(-0.1, 0.4, dot(n, uSun));
+        float face = smoothstep(0.0, 0.3, dot(n, normalize(cameraPosition - vW)));
+        vec3 c = mix(vec3(0.02,0.03,0.04), vec3(0.6,0.62,0.66), lit);
+        gl_FragColor = vec4(c, d * d * 0.28 * face * uOpacity);
+      }`,
+    transparent: true, depthWrite: false,
+  }),
+);
+clouds.renderOrder = 3;
+scene.add(clouds);
+
+// ── The atmosphere: a shell seen from inside its back faces, blue where the Sun is up, gold looking toward it. ──
+// A cheap stand-in for Rayleigh and Mie: the limb glows, the day side is a haze, and forward scatter burns at dawn.
+const air = new THREE.Mesh(
+  new THREE.SphereGeometry(1.045, 96, 72),
+  new THREE.ShaderMaterial({
+    uniforms: { uSun: { value: sun }, uOpacity: { value: 1 } },
+    side: THREE.BackSide,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    vertexShader: /* glsl */ `varying vec3 vNv; varying vec3 vNw; varying vec3 vW;
+      void main(){ vNv = normalize(normalMatrix*normal); vNw = normalize(mat3(modelMatrix)*normal); vW = (modelMatrix*vec4(position,1.0)).xyz; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader: /* glsl */ `uniform vec3 uSun; uniform float uOpacity;
+      varying vec3 vNv; varying vec3 vNw; varying vec3 vW;
+      void main(){
+        // How much air this ray crosses: thickest at the limb, nothing at the shell's edge.
+        float k = clamp(-normalize(vNv).z / 0.33, 0.0, 1.0);
+        float thick = pow(k, 2.6);
+        float lit = smoothstep(-0.3, 0.5, dot(normalize(vNw), uSun));
+        vec3 ray = normalize(vW - cameraPosition);
+        float cosT = dot(ray, uSun);
+        // Rayleigh: blue, where the Sun is up. Mie: a gold lobe toward the Sun.
+        vec3 rayleigh = vec3(0.30, 0.55, 1.0) * lit * 0.55;
+        float g = 0.85; float mie = (1.0 - g*g) / pow(1.0 + g*g - 2.0*g*cosT, 1.5) * 0.02;
+        vec3 forward = vec3(1.0, 0.62, 0.28) * mie * smoothstep(-0.6, 0.2, dot(normalize(vNw), uSun));
+        vec3 c = (rayleigh + forward) * thick;
+        gl_FragColor = vec4(c * uOpacity, 1.0);
+      }`,
+  }),
+);
+air.renderOrder = 4;
+scene.add(air);
+
+// ── The Sun itself, when dawn is on: an HDR disc past the limb, for the bloom to flare. ──
+const sunDisc = new THREE.Mesh(
+  new THREE.CircleGeometry(0.06, 48),
+  new THREE.MeshBasicMaterial({ color: new THREE.Color(5, 4.6, 3.8), transparent: true, opacity: 0 }),
+);
+sunDisc.position.copy(sun).multiplyScalar(6);
+scene.add(sunDisc);
+
+// ── Stars: a few thousand, colored by temperature, the bright ones sized to bloom. ──
+{
+  const n = 4000, pos = [], col = [], size = [];
+  const planck = (t) => {
+    // 0 cool (orange) → 1 hot (blue-white)
+    return new THREE.Color().setHSL(t < 0.5 ? 0.08 - 0.08 * t * 2 : 0.6, t < 0.5 ? 0.6 - 0.5 * t * 2 : 0.25 + 0.5 * (t - 0.5) * 2, 0.8);
+  };
+  for (let i = 0; i < n; i++) {
+    const v = new THREE.Vector3().randomDirection().multiplyScalar(60);
+    pos.push(v.x, v.y, v.z);
+    const t = Math.random();
+    const c = planck(t);
+    const m = Math.pow(Math.random(), 6); // few bright
+    col.push(c.r * (0.35 + 1.8 * m), c.g * (0.35 + 1.8 * m), c.b * (0.35 + 1.8 * m));
+    size.push(1 + 2.5 * m);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  g.setAttribute("aSize", new THREE.Float32BufferAttribute(size, 1));
+  const m = new THREE.ShaderMaterial({
+    uniforms: { uDpr: { value: renderer.getPixelRatio() } },
+    vertexShader: `attribute float aSize; uniform float uDpr; varying vec3 vC; void main(){ vC = color; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); gl_PointSize = aSize*uDpr; }`,
+    fragmentShader: `varying vec3 vC; void main(){ vec2 p = gl_PointCoord*2.0-1.0; float r2 = dot(p,p); if (r2>1.0) discard; gl_FragColor = vec4(vC, exp(-r2*4.0)); }`,
+    vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  });
+  scene.add(new THREE.Points(g, m));
+}
+
+// ── Post: bloom for the lamps, the glint and the dawn, then grain and a vignette. ──
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.5, 0.5, 0.85);
+composer.addPass(bloom);
+const grain = new ShaderPass({
+  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uAmount: { value: 1 } },
+  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+  fragmentShader: /* glsl */ `uniform sampler2D tDiffuse; uniform float uTime, uAmount; varying vec2 vUv;
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7)) + uTime) * 43758.5453); }
+    void main(){
+      vec4 c = texture2D(tDiffuse, vUv);
+      float v = smoothstep(1.25, 0.35, length(vUv - 0.5));
+      float g = (hash(vUv * 1800.0) - 0.5) * 0.035;
+      c.rgb = mix(c.rgb, c.rgb * (0.78 + 0.22 * v) + g, uAmount);
+      gl_FragColor = c;
+    }`,
+});
+composer.addPass(grain);
+composer.addPass(new OutputPass());
+
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+});
+
+const clock = new THREE.Clock();
+let turned = 0;
+renderer.setAnimationLoop(() => {
+  const dt = clock.getDelta();
+  if (on.turn) turned += dt;
+  globe.rotation.y = dots.rotation.y = turned * 0.03;
+  clouds.rotation.y = turned * 0.036;
+  // Dawn: swing the Sun just past the limb, so the air burns gold and the disc flares.
+  const want = on.dawn ? new THREE.Vector3(0.62, 0.12, -0.78).normalize() : new THREE.Vector3(1, 0.25, 0.55).normalize();
+  sun.lerp(want, 1 - Math.exp(-dt * 2)).normalize();
+  sunDisc.position.copy(sun).multiplyScalar(6);
+  sunDisc.lookAt(camera.position);
+  sunDisc.material.opacity += ((on.dawn ? 1 : 0) - sunDisc.material.opacity) * (1 - Math.exp(-dt * 3));
+  air.material.uniforms.uOpacity.value = on.atmosphere ? 1 : 0;
+  air.visible = on.atmosphere;
+  clouds.visible = on.clouds;
+  dots.visible = on.dots;
+  globe.material.uniforms.uOcean.value = on.ocean ? 1 : 0;
+  globe.material.uniforms.uTime.value = turned;
+  bloom.enabled = on.bloom;
+  grain.uniforms.uTime.value = turned;
+  grain.uniforms.uAmount.value = on.grain ? 1 : 0;
+  controls.update();
+  composer.render();
+});
+</script>
+</body>
+</html>

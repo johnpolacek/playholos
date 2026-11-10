@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Milky Way, lit</title>
+<!-- A one-off: the title's Milky Way with light in it. The same measured arms and bar the game draws, as HDR points
+     that add up, dust that dims what lies behind it, a core that glows, and bloom. "As now" strips it back to flat grey
+     dots, for the eye to compare. Serve the repo root and open /explorations/graphics/galaxy.html. 2026-11-09. -->
+<style>
+  :root { --ink: #e6e3db; --muted: #9c988f; --you: #5bb8d6; }
+  html, body { margin: 0; height: 100%; background: #0b0c0d; color: var(--ink); font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #panel { position: fixed; top: 16px; left: 16px; padding: 12px 14px; background: rgba(18,19,20,.72); border: 1px solid #2a2b2e; border-radius: 12px; backdrop-filter: blur(8px); display: grid; gap: 6px; min-width: 200px; }
+  #panel h1 { font: 500 11px/1 ui-monospace, monospace; letter-spacing: .1em; color: var(--muted); margin: 0 0 6px; }
+  #panel label { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+  #panel input { accent-color: var(--you); }
+  #panel .k { margin-left: auto; font: 11px ui-monospace, monospace; color: var(--muted); }
+  #cap { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); text-align: center; font: 11px/1.6 ui-monospace, monospace; letter-spacing: .1em; color: var(--muted); }
+  #cap b { display: block; font-weight: 500; color: var(--ink); }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="panel">
+  <h1>MILKY WAY, LIT</h1>
+  <label><input type="checkbox" data-k="hdr" checked /> Stars that add up (HDR) <span class="k">1</span></label>
+  <label><input type="checkbox" data-k="dust" checked /> Dust lanes <span class="k">2</span></label>
+  <label><input type="checkbox" data-k="core" checked /> Core glow <span class="k">3</span></label>
+  <label><input type="checkbox" data-k="bloom" checked /> Bloom <span class="k">4</span></label>
+  <label><input type="checkbox" data-k="grain" checked /> Grain and vignette <span class="k">5</span></label>
+  <label><input type="checkbox" data-k="orbit" checked /> Slow orbit <span class="k">space</span></label>
+  <label><input type="checkbox" data-k="asnow" /> As now: flat grey dots <span class="k">0</span></label>
+</div>
+<div id="cap"><b>MILKY WAY</b>seen from 120,000 light-years out · drag to orbit</div>
+<script type="module">
+import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const on = Object.fromEntries([...document.querySelectorAll("#panel input")].map((i) => [i.dataset.k, i.checked]));
+for (const i of document.querySelectorAll("#panel input")) i.addEventListener("change", () => (on[i.dataset.k] = i.checked));
+addEventListener("keydown", (e) => {
+  const keys = { 1: "hdr", 2: "dust", 3: "core", 4: "bloom", 5: "grain", " ": "orbit", 0: "asnow" };
+  const k = keys[e.key];
+  if (!k) return;
+  document.querySelector(`[data-k="${k}"]`).checked = on[k] = !on[k];
+});
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0c0d);
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 2000);
+camera.position.set(0, 30, 46);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.minDistance = 12;
+controls.maxDistance = 200;
+
+// Seeded, so the drawing is the same every load.
+let seed = 2040;
+const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+const gauss = () => Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
+const DEG = Math.PI / 180;
+
+// ── The Milky Way's measured arms, Reid et al. 2019, as the game has them: a log spiral with a kink. kpc. ──
+const ARMS = [
+  { name: "Norma", r: 4.46, kink: 18, a: -1.0, b: 19.5, lo: 5, hi: 54, w: 0.14, share: 0.9, ext: 40 },
+  { name: "Sct-Cen", r: 4.91, kink: 23, a: 14.1, b: 12.1, lo: 0, hi: 104, w: 0.23, share: 1.6, ext: 60 },
+  { name: "Sgr-Car", r: 6.04, kink: 24, a: 17.1, b: 1.0, lo: 2, hi: 97, w: 0.27, share: 1.5, ext: 60 },
+  { name: "Local", r: 8.26, kink: 9, a: 11.4, b: 11.4, lo: -8, hi: 34, w: 0.31, share: 0.8, ext: 40 },
+  { name: "Perseus", r: 8.87, kink: 40, a: 10.3, b: 8.7, lo: -21, hi: 88, w: 0.35, share: 1.5, ext: 60 },
+  { name: "Outer", r: 12.24, kink: 18, a: 3.0, b: 9.4, lo: -6, hi: 71, w: 0.65, share: 0.6, ext: 40 },
+];
+const armR = (arm, beta) => {
+  const b = Math.min(arm.hi, Math.max(arm.lo, beta));
+  const psi = b < arm.kink ? arm.a : arm.b;
+  let ln = Math.log(arm.r) - (b - arm.kink) * DEG * Math.tan(psi * DEG);
+  if (beta !== b) ln -= (beta - b) * DEG * Math.tan(12 * DEG);
+  return Math.exp(ln);
+};
+const shares = ARMS.reduce((s, a) => s + a.share, 0);
+function onArm() {
+  for (;;) {
+    let pick = rand() * shares;
+    const arm = ARMS.find((a) => (pick -= a.share) < 0) ?? ARMS[0];
+    const beta = arm.lo - arm.ext + rand() * (arm.hi - arm.lo + 2 * arm.ext);
+    const over = Math.max(arm.lo - beta, beta - arm.hi, 0) / arm.ext;
+    if (rand() < over * 0.9) continue;
+    const R = armR(arm, beta);
+    if (R > 2.9 && R < 17) return [R, beta * DEG, arm];
+  }
+}
+const inDisk = (R, beta, z) => [-R * Math.cos(beta), z, -R * Math.sin(beta)];
+const BAR = { half: 5.0, angle: 28 };
+const along = new THREE.Vector3(-Math.cos(BAR.angle * DEG), 0, -Math.sin(BAR.angle * DEG));
+const across = new THREE.Vector3(Math.sin(BAR.angle * DEG), 0, -Math.cos(BAR.angle * DEG));
+const inBar = (a, c, z) => [along.x * a + across.x * c, z, along.z * a + across.z * c];
+
+// Light, in the game's palette, but as HDR: a value above 1 blooms.
+const C = {
+  old: new THREE.Color(1.0, 0.86, 0.66),   // the old disk and bulge: warm
+  young: new THREE.Color(0.62, 0.76, 1.0),  // young arm stars: blue-white
+  ink: new THREE.Color(0.9, 0.89, 0.86),    // chalk
+  rose: new THREE.Color(1.0, 0.45, 0.5),    // star-forming knots
+  core: new THREE.Color(1.0, 0.92, 0.78),
+};
+
+class Cloud {
+  constructor() { this.pos = []; this.col = []; this.size = []; this.bright = []; }
+  add(x, y, z, size, bright, color) { this.pos.push(x, y, z); this.size.push(size); this.bright.push(bright); this.col.push(color.r, color.g, color.b); }
+  geometry() {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(this.pos, 3));
+    g.setAttribute("color", new THREE.Float32BufferAttribute(this.col, 3));
+    g.setAttribute("aSize", new THREE.Float32BufferAttribute(this.size, 1));
+    g.setAttribute("aBright", new THREE.Float32BufferAttribute(this.bright, 1));
+    return g;
+  }
+}
+const VERT = /* glsl */ `
+  attribute float aSize, aBright;
+  uniform float uDpr, uFocal, uGain, uFlat;
+  varying vec3 vC; varying float vA;
+  void main() {
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * mv;
+    float px = aSize * uFocal / max(-mv.z, 0.001);
+    float lo = 1.0 * uDpr;
+    float a = aBright;
+    if (px < lo) { a *= px / lo; px = lo; }
+    gl_PointSize = min(px, 3.5 * uDpr);
+    // Flat: the grey of the drawing as now. Lit: the star's own color, gained so a crowd of them goes past white.
+    vC = mix(color, vec3(0.75, 0.74, 0.72), uFlat) * mix(uGain, 1.0, uFlat);
+    vA = a;
+  }`;
+const FRAG = /* glsl */ `
+  varying vec3 vC; varying float vA;
+  void main() { vec2 p = gl_PointCoord * 2.0 - 1.0; float r2 = dot(p, p); if (r2 > 1.0) discard;
+    gl_FragColor = vec4(vC * vA * (exp(-r2 * 4.5) - 0.011), 1.0); }`;
+const starMat = (gain) => new THREE.ShaderMaterial({
+  uniforms: { uDpr: { value: renderer.getPixelRatio() }, uFocal: { value: 1 }, uGain: { value: gain }, uFlat: { value: 0 } },
+  vertexShader: VERT, fragmentShader: FRAG, vertexColors: true, transparent: true, depthWrite: false, depthTest: false,
+  blending: THREE.AdditiveBlending,
+});
+
+// The old disk: many, faint, warm.
+const old = new Cloud();
+for (let n = 0; n < 60000;) {
+  const R = -2.6 * Math.log(rand() * rand());
+  if (R > 16) continue;
+  const [x, y, z] = inDisk(R, rand() * 2 * Math.PI, gauss() * 0.3 * (0.7 + R / 10));
+  old.add(x, y, z, 0.05, 0.13 + 0.1 * rand(), rand() < 0.6 ? C.old : C.ink);
+  n++;
+}
+// The bulge and the bar.
+for (let n = 0; n < 16000; n++) { const [x, y, z] = inBar(gauss() * 0.95, gauss() * 0.5, gauss() * 0.4); old.add(x, y, z, 0.07, 0.1, C.old); }
+for (let n = 0; n < 9000; n++) { const [x, y, z] = inBar(BAR.half * (rand() - rand()), gauss() * 0.3, gauss() * 0.12); old.add(x, y, z, 0.06, 0.12, rand() < 0.7 ? C.old : C.ink); }
+for (let n = 0; n < 2500; n++) { const [x, y, z] = inBar(gauss() * 0.15, gauss() * 0.15, gauss() * 0.1); old.add(x, y, z, 0.05, 0.2, C.core); }
+const oldPts = new THREE.Points(old.geometry(), starMat(1.3));
+oldPts.renderOrder = 1;
+scene.add(oldPts);
+
+// Dust along the arms' inner edges, which dims the light behind it: dark sprites, multiplied in.
+const dust = new Cloud();
+for (let n = 0; n < 14000; n++) {
+  const [R, beta, arm] = onArm();
+  const [x, y, z] = inDisk(R - 0.18 - Math.abs(gauss()) * 0.2, beta + gauss() * 0.012, gauss() * 0.05);
+  dust.add(x, y, z, 0.25 + rand() * 0.2, 0.3 + 0.25 * rand(), C.ink);
+}
+const dustMat = new THREE.ShaderMaterial({
+  uniforms: { uDpr: { value: renderer.getPixelRatio() }, uFocal: { value: 1 }, uOpacity: { value: 1 } },
+  vertexShader: /* glsl */ `attribute float aSize, aBright; uniform float uDpr, uFocal; varying float vA;
+    void main(){ vec4 mv = modelViewMatrix*vec4(position,1.0); gl_Position = projectionMatrix*mv;
+      float px = aSize*uFocal/max(-mv.z,0.001); vA = aBright; gl_PointSize = min(px, 14.0*uDpr); }`,
+  fragmentShader: /* glsl */ `uniform float uOpacity; varying float vA;
+    void main(){ vec2 p = gl_PointCoord*2.0-1.0; float r2 = dot(p,p); if (r2>1.0) discard;
+      float a = vA*uOpacity*exp(-r2*3.0); gl_FragColor = vec4(vec3(0.0), a); }`,
+  transparent: true, depthWrite: false, depthTest: false,
+  // Multiply: what is behind is dimmed by the dust's alpha.
+  blending: THREE.CustomBlending, blendSrc: THREE.ZeroFactor, blendDst: THREE.OneMinusSrcAlphaFactor,
+});
+const dustPts = new THREE.Points(dust.geometry(), dustMat);
+dustPts.renderOrder = 2;
+scene.add(dustPts);
+
+// The arms' young stars, and the knots where stars are forming, over the dust.
+const young = new Cloud();
+for (let n = 0; n < 70000; n++) {
+  const [R, beta, arm] = onArm();
+  const [x, y, z] = inDisk(R + gauss() * (0.22 + arm.w * 0.5), beta + gauss() * 0.01, gauss() * 0.09);
+  const k = rand();
+  young.add(x, y, z, 0.045, 0.16 + 0.12 * rand(), k < 0.55 ? C.young : k < 0.9 ? C.ink : C.old);
+}
+for (let c = 0; c < 220; c++) {
+  const [R, beta] = onArm();
+  const count = 8 + Math.floor(rand() * 18);
+  for (let n = 0; n < count; n++) {
+    const [x, y, z] = inDisk(R + gauss() * 0.07, beta + (gauss() * 0.07) / R, gauss() * 0.03);
+    young.add(x, y, z, 0.03, 0.7, n % 5 ? C.rose : C.young);
+  }
+}
+const youngPts = new THREE.Points(young.geometry(), starMat(1.5));
+youngPts.renderOrder = 3;
+scene.add(youngPts);
+
+// The halo's globular clusters.
+const glob = new Cloud();
+for (let n = 0; n < 160; n++) {
+  const r = 2 + Math.abs(gauss()) * 9;
+  const v = new THREE.Vector3().randomDirection().multiplyScalar(r);
+  glob.add(v.x, v.y * 0.8, v.z, 0.05, 0.5, C.old);
+}
+scene.add(new THREE.Points(glob.geometry(), starMat(1.2)));
+
+// The core: one soft HDR glow, drawn as a sprite that always faces us.
+const coreTex = (() => {
+  const c = document.createElement("canvas"); c.width = c.height = 256;
+  const g = c.getContext("2d");
+  const grd = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  grd.addColorStop(0, "rgba(255,240,210,1)"); grd.addColorStop(0.25, "rgba(255,225,180,0.45)"); grd.addColorStop(0.6, "rgba(255,200,140,0.08)"); grd.addColorStop(1, "rgba(0,0,0,0)");
+  g.fillStyle = grd; g.fillRect(0, 0, 256, 256);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+})();
+const core = new THREE.Sprite(new THREE.SpriteMaterial({ map: coreTex, color: new THREE.Color(1.6, 1.45, 1.25), transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending }));
+core.scale.set(4.5, 3.4, 1);
+core.renderOrder = 4;
+scene.add(core);
+// A thin, wider haze along the whole disk, so the galaxy reads as one body from afar.
+const haze = new THREE.Sprite(new THREE.SpriteMaterial({ map: coreTex, color: new THREE.Color(0.9, 0.8, 0.7), transparent: true, opacity: 0.1, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending }));
+haze.scale.set(30, 26, 1);
+haze.renderOrder = 0;
+scene.add(haze);
+
+// Sol, 8.3 kpc out, with a small label, so we can always find ourselves.
+const sol = new THREE.Sprite(new THREE.SpriteMaterial({ map: coreTex, color: new THREE.Color(0.357, 0.722, 0.839).multiplyScalar(4), transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending }));
+sol.position.set(-8.3, 0.02, 0);
+sol.scale.set(0.9, 0.9, 1);
+sol.renderOrder = 5;
+scene.add(sol);
+
+// ── Post ──
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.5, 0.7, 0.7);
+composer.addPass(bloom);
+const grain = new ShaderPass({
+  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uAmount: { value: 1 } },
+  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+  fragmentShader: /* glsl */ `uniform sampler2D tDiffuse; uniform float uTime, uAmount; varying vec2 vUv;
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7)) + uTime) * 43758.5453); }
+    void main(){ vec4 c = texture2D(tDiffuse, vUv);
+      float v = smoothstep(1.25, 0.35, length(vUv - 0.5)); float g = (hash(vUv * 1800.0) - 0.5) * 0.035;
+      c.rgb = mix(c.rgb, c.rgb * (0.78 + 0.22 * v) + g, uAmount); gl_FragColor = c; }`,
+});
+composer.addPass(grain);
+composer.addPass(new OutputPass());
+
+const focal = () => (innerHeight * renderer.getPixelRatio()) / (2 * Math.tan((camera.fov * DEG) / 2));
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight);
+});
+
+const clock = new THREE.Clock();
+let t = 0;
+renderer.setAnimationLoop(() => {
+  const dt = clock.getDelta();
+  if (on.orbit) t += dt;
+  controls.autoRotate = on.orbit; controls.autoRotateSpeed = 0.25;
+  const f = focal();
+  for (const m of [oldPts.material, youngPts.material, dustMat]) m.uniforms.uFocal.value = f;
+  const flat = on.asnow ? 1 : 0;
+  for (const p of [oldPts, youngPts]) { p.material.uniforms.uFlat.value = flat; p.material.uniforms.uGain.value = on.hdr && !on.asnow ? (p === oldPts ? 1.3 : 1.5) : 1; }
+  dustPts.visible = on.dust && !on.asnow;
+  core.visible = haze.visible = on.core && !on.asnow;
+  bloom.enabled = on.bloom && !on.asnow;
+  grain.uniforms.uAmount.value = on.grain && !on.asnow ? 1 : 0;
+  grain.uniforms.uTime.value = t;
+  renderer.toneMapping = on.asnow ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
+  controls.update();
+  composer.render();
+});
+</script>
+</body>
+</html>
