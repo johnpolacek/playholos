@@ -14,11 +14,12 @@ export const LAP = 2.2e8;
 
 /**
  * How far the camera stands as the Sun's light nears this morning: log10 of years ago, then log10 of AU. The whole
- * galaxy for the deep past, then the nearby stars for the first people, the Sun's neighborhood for writing, and home.
+ * galaxy at the Sun's birth, closing on its arm across the deep past, then the nearby stars for the first people, the
+ * Sun's neighborhood for writing, and home.
  */
 const ZOOM: [lt: number, logD: number][] = [
   [9.67, 10.15],
-  [8.0, 10.15],
+  [8.0, 9.5],
   [6.5, 8.9],
   [5.5, 7.65],
   [3.7, 5.75],

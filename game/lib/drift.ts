@@ -305,8 +305,9 @@ const PALETTE: { bg: string } & Record<Kind, string> = {
 // pass spreads it. uGain lifts a glow past white where it should flare, as the Sun and the city lamps.
 const GLOW_VERT = /* glsl */ `
 uniform vec3 uPal[10];
-uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal, uFlash, uGain, uFog, uFogRef;
+uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal, uFlash, uGain, uFog, uFogRef, uTail;
 uniform vec2 uNear;
+uniform vec3 uTailAt;
 attribute float aSize, aBright, aKind, aRank;
 varying vec3 vColor;
 varying float vAlpha;
@@ -333,6 +334,8 @@ void main() {
   if (uNear.y > 0.0) a *= smoothstep(uNear.x, uNear.y, depth);
   // On a map with depth, what lies past Sol fades into the dark.
   if (uFog > 0.0) a *= min(1.0, exp(-uFog * (depth - uFogRef)));
+  // A trail fades with its distance from what leaves it, as the Sun's road behind its light. 2026-11-10.
+  if (uTail > 0.0) a *= exp(-distance(position, uTailAt) / uTail);
   vColor = uPal[int(aKind + 0.5)] * uGain;
   vAlpha = a;
   gl_PointSize = px;
@@ -1105,6 +1108,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         uGain: { value: 1 },
         uFog: { value: 0 },
         uFogRef: { value: 0 },
+        uTail: { value: 0 },
+        uTailAt: { value: new THREE.Vector3() },
       },
       vertexShader: GLOW_VERT,
       fragmentShader: GLOW_FRAG,
@@ -1535,6 +1540,10 @@ void main() {
     }
   }
 
+  // The Galaxy's own points hang in a group that Where we come from turns a little about Sol, as the Sun's road runs,
+  // a hint of the turn and not its twenty laps, which read as spinning. 2026-11-10.
+  const galaxy = new THREE.Group();
+  cosmos.scene.add(galaxy);
   const mw = new Cloud();
   // The old disk.
   for (let n = 0; n < 46000;) {
@@ -1583,7 +1592,7 @@ void main() {
   const mwGlow = glow({ maxPx: 3.5, near: [0.5, 2.6] });
   // The arms add up past white where they crowd, so the Galaxy glows from afar. 2026-11-09.
   mwGlow.uniforms.uGain.value = 1.12;
-  cosmos.scene.add(mw.points(mwGlow));
+  galaxy.add(mw.points(mwGlow));
 
   // Dust along the arms' inner edges, which dims the light behind it.
   const dust = new Cloud();
@@ -1595,7 +1604,7 @@ void main() {
   const dustGlow = glow({ maxPx: 4, near: [0.5, 2.6], dust: true });
   const dustPts = dust.points(dustGlow);
   dustPts.renderOrder = 1;
-  cosmos.scene.add(dustPts);
+  galaxy.add(dustPts);
 
   // About 157 globular clusters in the halo, thinning as r^-3.5. Harris 2010.
   const globulars = new Cloud();
@@ -1607,7 +1616,7 @@ void main() {
       .add(gc);
     globulars.add(v.x, v.y, v.z, 0.05, 0.9, K.warm);
   }
-  cosmos.scene.add(globulars.points(glow({ minPx: 1.1, maxPx: 3 })));
+  galaxy.add(globulars.points(glow({ minPx: 1.1, maxPx: 3 })));
 
   // The Local Group: each galaxy where the Local Volume Database puts it, its disk tilted as its outline shows.
   const others = new Cloud();
@@ -2342,7 +2351,8 @@ void main() {
     const sunGlow2 = glow({ fixed: true });
     sunGlow2.uniforms.uGain.value = 1.7;
     const sunPts = sun.points(sunGlow2);
-    cosmos.scene.add(
+    // The road and the Sun's light ride in the Galaxy's group, so they turn with it.
+    galaxy.add(
       laps.points(lapsGlow),
       near.points(nearGlow),
       trail.points(trailGlow),
@@ -2360,6 +2370,13 @@ void main() {
       nearGlow.uniforms.uOpacity.value = recentGlow.uniforms.uOpacity.value = trailGlow.uniforms.uOpacity.value = p * (1 - ramp(x, 9.0, 9.8));
       sunPts.position.copy(road(agoAt(u), at));
       sunGlow2.uniforms.uOpacity.value = p * (1 - (dials?.earth ?? 0));
+      // The laps fade behind the Sun's light, by about 16,000 light-years of road. 2026-11-10.
+      lapsGlow.uniforms.uTail.value = 16;
+      (lapsGlow.uniforms.uTailAt.value as THREE.Vector3).copy(sunPts.position);
+      // The Galaxy turns about Sol, a fifth of a radian across the deep past, in the sense the Sun runs, and stands
+      // today's way round by a million years ago, where the near stars take over. Its true twenty turns since the Sun
+      // was born read as spinning, so this is a hint of them. 2026-11-10.
+      galaxy.rotation.y = 0.2 * (1 - ramp(u, 0, 0.4));
     };
   }
 
