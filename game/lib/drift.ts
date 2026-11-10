@@ -2310,19 +2310,31 @@ void main() {
       c.add(p.x, p.y, p.z, 7, 1, dial ? K.mind : K.sun, u);
       c.add(p.x, p.y, p.z, 20, 0.4, dial ? K.mind : K.warm, u);
     }
+    // And a soft trail under the last million years, so the road reads as a path of light. 2026-11-09.
+    const trail = new Cloud();
+    for (let i = 0; i <= 700; i += 2) {
+      const ago = 10 ** (6 - (6 * i) / 700);
+      const p = road(ago);
+      trail.add(p.x, p.y, p.z, 11, 0.09, K.warm, placeOf(ago));
+    }
     const lapsGlow = glow({ fixed: true });
     const nearGlow = glow({ fixed: true });
+    const trailGlow = glow({ fixed: true });
     const deepGlow = glow({ fixed: true });
     const recentGlow = glow({ fixed: true });
+    nearGlow.uniforms.uGain.value = lapsGlow.uniforms.uGain.value = 1.25;
+    deepGlow.uniforms.uGain.value = recentGlow.uniforms.uGain.value = 1.4;
     // The Sun's light, traveling the road.
     const sun = new Cloud();
     sun.add(0, 0, 0, 34, 0.6, K.sun);
     sun.add(0, 0, 0, 9, 1, K.sun);
     const sunGlow2 = glow({ fixed: true });
+    sunGlow2.uniforms.uGain.value = 1.7;
     const sunPts = sun.points(sunGlow2);
     cosmos.scene.add(
       laps.points(lapsGlow),
       near.points(nearGlow),
+      trail.points(trailGlow),
       deep.points(deepGlow),
       recent.points(recentGlow),
       sunPts,
@@ -2331,10 +2343,10 @@ void main() {
     return (x: number, p: number) => {
       const dials = dialsOf.origins;
       const u = dials?.u ?? 1;
-      for (const m of [lapsGlow, nearGlow, deepGlow, recentGlow]) m.uniforms.uReveal.value = u;
+      for (const m of [lapsGlow, nearGlow, trailGlow, deepGlow, recentGlow]) m.uniforms.uReveal.value = u;
       // The laps and the deep past while the galaxy is in view, the last million years once it is not.
       lapsGlow.uniforms.uOpacity.value = deepGlow.uniforms.uOpacity.value = p * ramp(x, 8.2, 9.2);
-      nearGlow.uniforms.uOpacity.value = recentGlow.uniforms.uOpacity.value = p * (1 - ramp(x, 9.0, 9.8));
+      nearGlow.uniforms.uOpacity.value = recentGlow.uniforms.uOpacity.value = trailGlow.uniforms.uOpacity.value = p * (1 - ramp(x, 9.0, 9.8));
       sunPts.position.copy(road(agoAt(u), at));
       sunGlow2.uniforms.uOpacity.value = p * (1 - (dials?.earth ?? 0));
     };
@@ -2368,6 +2380,22 @@ void main() {
           ringMat,
         ),
       );
+    // The plane itself, lit from Sol, as under Scan's leads, and the far side fading past Sol. 2026-11-09.
+    const planeMat = new THREE.ShaderMaterial({
+      uniforms: { uColor: { value: pal[K.lamp] }, uOpacity: { value: 0 }, uFog: { value: 0 }, uFogRef: { value: 0 } },
+      vertexShader: PLANE_VERT,
+      fragmentShader: PLANE_FRAG,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const plane = new THREE.Mesh(new THREE.CircleGeometry(58, 128), planeMat);
+    plane.rotation.x = -Math.PI / 2;
+    plane.renderOrder = -1;
+    plane.frustumCulled = false;
+    stars.scene.add(plane);
+    const FOG = 0.012;
     // The twelve stars Earth knocked on, at their real places.
     const targets = Object.entries(SKY.targets as unknown as Record<string, [ra: number, ly: number]>).map(
       ([name, [ra, ly]]) => ({
@@ -2379,6 +2407,7 @@ void main() {
     const marks = new Cloud();
     for (const t of targets) marks.add(t.at.x, t.at.y, t.at.z, 6, 0.9, K.ink);
     const marksGlow = glow({ fixed: true });
+    marksGlow.uniforms.uGain.value = 1.3;
     stars.scene.add(marks.points(marksGlow));
     // Each aimed message: a beam toward its star, and a pulse moving out along it at the speed of light.
     const beams = KNOCKS.map(([, sent, target, ly]) => {
@@ -2397,7 +2426,10 @@ void main() {
     });
     const pulses = new Cloud();
     for (let i = 0; i < beams.length; i++) pulses.add(0, 0, 0, 7, 1, K.sun);
-    const pulsePts = pulses.points(glow({ fixed: true }));
+    const pulseGlow = glow({ fixed: true });
+    // The front of each knock goes past white, so it flares.
+    pulseGlow.uniforms.uGain.value = 1.7;
+    const pulsePts = pulses.points(pulseGlow);
     stars.scene.add(pulsePts);
     // The stars themselves come in with the stars' points once the HYG list has come.
     let lit: THREE.ShaderMaterial | null = null;
@@ -2430,7 +2462,13 @@ void main() {
       shell.scale.setScalar(Math.max(0.01, shellLy));
       // Past the map's edge the shell runs on unseen, as on the old map, so it never washes the view.
       shellMat.uniforms.uOpacity.value = p * ramp(shellLy, 0, 2) * (1 - 0.9 * ramp(shellLy, 46, 64));
-      ringMat.uniforms.uOpacity.value = 0.12 * p * grid;
+      const fogRef = stars.camera.position.length();
+      for (const m of [ringMat, marksGlow, planeMat, pulseGlow, ...(dim ? [dim] : []), ...(lit ? [lit] : []), ...beams.map((b) => b.mat)]) {
+        m.uniforms.uFog.value = FOG;
+        m.uniforms.uFogRef.value = fogRef;
+      }
+      planeMat.uniforms.uOpacity.value = 0.8 * p * grid;
+      ringMat.uniforms.uOpacity.value = 0.16 * p * grid;
       marksGlow.uniforms.uOpacity.value = p * grid;
       const bright = pulsePts.geometry.attributes.aBright as THREE.BufferAttribute;
       const pos = pulsePts.geometry.attributes.position as THREE.BufferAttribute;
@@ -2602,7 +2640,13 @@ void main() {
           float l = atan(-vDir.z, vDir.x);
           float b = asin(clamp(vDir.y, -1.0, 1.0));
           vec2 uv = vec2(fract(0.5 - l / 6.2831853), 0.5 + b / 3.1415927);
-          gl_FragColor = vec4(texture2D(uMap, uv).rgb, uOpacity);
+          // Planck paints hot red and cold blue. Here the cold runs to our blue and the hot to warm chalk, softly, so
+          // the first light reads as a drawing with the rest of the sky, not a weather map. 2026-11-09.
+          vec3 t = texture2D(uMap, uv).rgb;
+          float lum = dot(t, vec3(0.3, 0.59, 0.11));
+          float hot = clamp((t.r - t.b) * 1.0 + 0.5, 0.0, 1.0);
+          vec3 c = mix(vec3(0.26, 0.46, 0.64), vec3(0.92, 0.86, 0.76), hot) * (0.6 + 0.4 * lum);
+          gl_FragColor = vec4(c, uOpacity);
         }`,
       transparent: true,
       depthWrite: false,
@@ -2694,7 +2738,7 @@ void main() {
       show(knotGlow, on * arrived(surveyAt) * far);
       const edgeIn = ramp(x, 14.6, 15.4) * (shot ? ramp(shot.k, 0.75, 0.95) : 1);
       show(edgeMat, on * edgeIn);
-      cmbMat.uniforms.uOpacity.value = cmbMat.uniforms.uMap.value ? on * edgeIn * 0.13 : 0;
+      cmbMat.uniforms.uOpacity.value = cmbMat.uniforms.uMap.value ? on * edgeIn * 0.16 : 0;
       show(fillGlow, on * ramp(x, 13.6, 14.4));
       const s = spec.mode === "sim" ? spec.sim : undefined;
       if (s?.ring) ringR = ringR ? ringR * Math.exp(Math.log(s.ring / ringR) * (1 - Math.exp(-dt60() * 5))) : s.ring;
