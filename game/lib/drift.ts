@@ -365,8 +365,12 @@ void main() {
   float L = exp2(-1.3287712 * (m - 6.5));
   float a = clamp(L * 0.3, 0.0, 1.0) * uOpacity;
   gl_PointSize = clamp(1.15 * pow(L, 0.18), 1.0, 6.5) * uDpr;
+  // A star brighter than the fifth magnitude goes past white, so it flares. 2026-11-09.
+  float gain = 1.0 + 0.9 * clamp(L * 0.3 - 1.0, 0.0, 2.0);
+  // Blue-white, white, warm, then the reddest dwarfs and giants toward rose.
   float t = clamp((aBV + 0.25) / 1.85, 0.0, 1.0);
-  vColor = t < 0.3 ? mix(uPal[2], uPal[0], t / 0.3) : mix(uPal[0], uPal[1], (t - 0.3) / 0.7);
+  vec3 c = t < 0.3 ? mix(uPal[2], uPal[0], t / 0.3) : t < 0.7 ? mix(uPal[0], uPal[1], (t - 0.3) / 0.4) : mix(uPal[1], mix(uPal[1], uPal[3], 0.7), (t - 0.7) / 0.3);
+  vColor = c * gain;
   vAlpha = a;
   if (a < 0.004 || mv.z > 0.0) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
@@ -1243,7 +1247,7 @@ void main() {
   vec3 c = texture2D(tDiffuse, vUv).rgb;
   // A soft shoulder above 0.85: light past white rolls off instead of clipping.
   float L = max(c.r, max(c.g, c.b));
-  if (L > 0.85) c *= (0.85 + 0.15 * (1.0 - exp(-(L - 0.85) / 0.15))) / L;
+  if (L > 0.85) c *= (0.85 + 0.15 * (1.0 - exp(-(L - 0.85) / 0.35))) / L;
   float v = smoothstep(1.35, 0.45, length(vUv - 0.5));
   c *= 0.9 + 0.1 * v;
   c += (hash(gl_FragCoord.xy + fract(uTime * 0.37) * 1000.0) - 0.5) * uGrain;
@@ -1555,17 +1559,19 @@ void main() {
   ];
   for (let n = 0; n < 13000; n++) {
     const [x, y, z] = inBar(gauss() * 0.95, gauss() * 0.5, gauss() * 0.4);
-    mw.add(x, y, z, 0.5, 0.15, K.warm);
+    mw.add(x, y, z, 0.5, 0.06, K.warm);
   }
   for (let n = 0; n < 8000; n++) {
     const [x, y, z] = inBar(BAR.half * (rand() - rand()), gauss() * 0.3, gauss() * 0.12);
-    mw.add(x, y, z, 0.4, 0.2, rand() < 0.7 ? K.warm : K.ink);
+    mw.add(x, y, z, 0.4, 0.08, rand() < 0.7 ? K.warm : K.ink);
   }
   for (let n = 0; n < 1600; n++) {
     const [x, y, z] = inBar(gauss() * 0.15, gauss() * 0.15, gauss() * 0.1);
-    mw.add(x, y, z, 0.3, 0.3, K.warm);
+    mw.add(x, y, z, 0.3, 0.14, K.warm);
   }
   const mwGlow = glow({ maxPx: 3.5, near: [0.5, 2.6] });
+  // The arms add up past white where they crowd, so the Galaxy glows from afar. 2026-11-09.
+  mwGlow.uniforms.uGain.value = 1.12;
   cosmos.scene.add(mw.points(mwGlow));
 
   // Dust along the arms' inner edges, which dims the light behind it.
@@ -1573,7 +1579,7 @@ void main() {
   for (let n = 0; n < 16000; n++) {
     const [R, beta] = onArm();
     const [x, y, z] = inDisk(R * 0.975 + gauss() * 0.14, beta, gauss() * 0.04);
-    dust.add(x, y, z, 0.5, 0.32, K.dust);
+    dust.add(x, y, z, 0.5, 0.4, K.dust);
   }
   const dustGlow = glow({ maxPx: 4, near: [0.5, 2.6], dust: true });
   const dustPts = dust.points(dustGlow);
@@ -1597,6 +1603,8 @@ void main() {
   // Each big galaxy's glow, so the Local Group reads from afar. The Milky Way's first.
   const halos = new Cloud();
   halos.add(gc.x, gc.y, gc.z, 120, 0.18, K.warm);
+  // And its core, a tighter glow in the Sun's own color that blooms. 2026-11-09.
+  halos.add(gc.x, gc.y, gc.z, 9, 0.5, K.sun);
   type Basis = { u: THREE.Vector3; v: THREE.Vector3; n: THREE.Vector3; size: number };
   function basisOf(g: (typeof GALAXIES)[number]): Basis {
     const e = galaxyExtent(g);
@@ -1666,6 +1674,7 @@ void main() {
   const othersGlow = glow({ minPx: 0.8, maxPx: 3.5 });
   cosmos.scene.add(others.points(othersGlow));
   const halosGlow = glow({ minPx: 2, maxPx: 160 });
+  halosGlow.uniforms.uGain.value = 1.3;
   cosmos.scene.add(halos.points(halosGlow));
 
   // Home: a marker where the Sun is, once it is too small to see.
