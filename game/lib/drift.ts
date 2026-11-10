@@ -391,8 +391,8 @@ void main() {
 }`;
 
 const GLOBE_FRAG = /* glsl */ `
-uniform vec3 uBg, uInk, uRimColor, uSun;
-uniform float uDay, uRim, uOcean;
+uniform vec3 uBg, uInk, uRimColor, uSun, uTint;
+uniform float uDay, uRim, uOcean, uAlbedo, uOpacity;
 uniform sampler2D uMap;
 varying vec3 vN;
 varying vec3 vW;
@@ -417,9 +417,13 @@ void main() {
     float ndh = max(dot(n, h), 0.0);
     c += (0.08 * pow(ndh, 80.0) + 0.35 * pow(ndh, 1600.0)) * sea * lit * uOcean * vec3(1.0, 0.95, 0.85);
     c += exp(-pow((sunlit + 0.02) / 0.03, 2.0)) * 0.06 * uOcean * DAWN;
+  } else if (uAlbedo > 0.0) {
+    // The Moon's maria and a planet's bands, faint under the dots, in the world's own chalk. 2026-11-09.
+    float lum = dot(texture2D(uMap, vUv).rgb, vec3(0.3, 0.59, 0.11));
+    c = max(c, lum * lum * uTint * (0.03 + 0.2 * lit) * uAlbedo);
   }
   c = mix(c, uRimColor, clamp(rim * uRim * (0.35 + 0.65 * lit), 0.0, 1.0));
-  gl_FragColor = vec4(c, 1.0);
+  gl_FragColor = vec4(c, uOpacity);
 }`;
 
 // Thin cloud over Earth, lit by the Sun, read off the atlas's cloud map. Faint, so the dots stay the drawing. 2026-11-09.
@@ -1268,6 +1272,9 @@ void main() {
     uDay: { value: 0 },
     uRim: { value: 0 },
     uOcean: { value: 0 },
+    uAlbedo: { value: 0 },
+    uOpacity: { value: 1 },
+    uTint: { value: pal[K.ink] },
     uMap: { value: dayMap },
   });
   const earthGlobe = new THREE.ShaderMaterial({
@@ -1281,6 +1288,10 @@ void main() {
     vertexShader: GLOBE_VERT,
     fragmentShader: GLOBE_FRAG,
   });
+  const moonTex = new THREE.TextureLoader().load(moonMap);
+  moonTex.colorSpace = THREE.SRGBColorSpace;
+  moonGlobe.uniforms.uMap.value = moonTex;
+  moonGlobe.uniforms.uAlbedo.value = 0.9;
   const spin = new THREE.Group();
   spin.add(new THREE.Mesh(new THREE.SphereGeometry(1, 96, 64), earthGlobe));
   earth.scene.add(spin);
@@ -3702,7 +3713,7 @@ void main() {
     }
     // The planets, each in dots read off its map as the Moon is, lit from the Sun, made when a build there is first in
     // view. Saturn wears its rings. 2026-10-29.
-    const globes = new Map<string, { mat: THREE.ShaderMaterial; rings: THREE.ShaderMaterial | null; at: number }>();
+    const globes = new Map<string, { mat: THREE.ShaderMaterial; globe: THREE.ShaderMaterial; rings: THREE.ShaderMaterial | null; at: number }>();
     function globeOf(body: string) {
       if (globes.has(body)) return globes.get(body)!;
       const group = new THREE.Group();
@@ -3720,10 +3731,26 @@ void main() {
       });
       const rings = body === "Saturn" ? glow({ maxPx: 4, depthTest: false }) : null;
       if (rings) rings.blending = THREE.AdditiveBlending;
-      const made = { mat, rings, at: Infinity };
-      globes.set(body, made);
       const i = PLANETS.findIndex((x: { name: string }) => x.name === body);
       const R = planetR(body);
+      // Its globe under the dots: the night, its own map faint by day in its chalk, and a rim. 2026-11-09.
+      const globe = new THREE.ShaderMaterial({ uniforms: globeUniforms(), vertexShader: GLOBE_VERT, fragmentShader: GLOBE_FRAG, transparent: true });
+      const tex = new THREE.TextureLoader().load(PLANET_MAP[body]);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      globe.uniforms.uMap.value = tex;
+      globe.uniforms.uSun.value = toSun;
+      globe.uniforms.uDay.value = 0.05;
+      globe.uniforms.uRim.value = 0.5;
+      globe.uniforms.uRimColor.value = pal[K[PLANET_KIND[i]]];
+      globe.uniforms.uTint.value = pal[K[PLANET_KIND[i]]];
+      globe.uniforms.uAlbedo.value = 1;
+      globe.uniforms.uOpacity.value = 0;
+      const ball = new THREE.Mesh(new THREE.SphereGeometry(R, 64, 48), globe);
+      // Drawn before the dots, which write no depth, or it would paint over them.
+      ball.renderOrder = -1;
+      group.add(ball);
+      const made = { mat, globe, rings, at: Infinity };
+      globes.set(body, made);
       faceOf(PLANET_MAP[body]).then((face) => {
         if (gone) return;
         // Each map's own range of light, so a pale gas giant shows its bands as a dark cratered world shows its craters.
@@ -3842,6 +3869,7 @@ void main() {
       for (const [body, g] of globes) {
         const o = p * arrived(g.at) * Number(focus?.site.on === "planet" && focus.site.body === body);
         g.mat.uniforms.uOpacity.value = o;
+        g.globe.uniforms.uOpacity.value = o;
         if (g.rings) g.rings.uniforms.uOpacity.value = o;
       }
       const flash = still ? 0 : Math.exp(-((clock % beat) / beat) * 5);
