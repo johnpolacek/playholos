@@ -41,7 +41,7 @@ const RESTING = { minds: [], focus: null, zoom: 1.75, marks: [], rest: true };
 /** Seconds the flight holds at each place before drifting on to the next. */
 const HOLD = 7;
 /** Seconds the line from Sol lingers before the view comes in close. Five until 2026-11-10: it dragged. */
-const LINGER = 2.2;
+const LINGER = 1.0;
 /** With no peers, the flight stands back to see the whole Galaxy from above. */
 const GALAXY_VIEW: Target = { id: "galaxy", pos: CENTER, stand: 95_000, dir: [0.2, 1, 0.35] };
 const NONE: never[] = [];
@@ -206,7 +206,7 @@ export default function Sim() {
   useEffect(() => {
     if (!here || close || arrived !== `${here.id}:beside`) return;
     const fade = setTimeout(() => setFadeFor(here.id), LINGER * 1000);
-    const near = setTimeout(() => setCloseFor(here.id), (LINGER + 0.6) * 1000);
+    const near = setTimeout(() => setCloseFor(here.id), (LINGER + 0.3) * 1000);
     return () => (clearTimeout(fade), clearTimeout(near));
   }, [here, close, arrived]);
   // Held close for a while, then on to the next nearest.
@@ -993,7 +993,7 @@ function Details({ item, onClose }: { item: Pickable; onClose(): void }) {
           {l}
         </p>
       ))}
-      <p className="mt-3 font-mono text-[10.5px] tracking-[.12em] text-[#b39ef2]">SPECULATION</p>
+      {item.drawn.length > 0 && <p className="mt-3 font-mono text-[10.5px] tracking-[.12em] text-[#b39ef2]">SPECULATION</p>}
       {item.drawn.map((l) => (
         <p
           key={l}
@@ -1055,7 +1055,8 @@ function readOf(p: Place): Pickable {
     d: p.d,
     title: p.title,
     real: real ? lines : ["No catalog reaches it. The dials placed it among the Galaxy’s stars."],
-    drawn: real ? [`Nothing. This ${p.kind === "star" ? "star" : "world"} is as we know it.`] : [p.words],
+    // The real has nothing drawn, so its card has no speculation at all.
+    drawn: real ? [] : [p.words],
   };
 }
 
