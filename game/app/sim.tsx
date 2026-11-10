@@ -16,6 +16,7 @@ import type { WorldOdds } from "@/lib/sim/draw-worlds";
 import type { Ask, Drawn } from "@/lib/sim/draw-worker";
 import { AHEAD, CENTER, UNIVERSE, clashesOf, framing, lightAt, timeOf, tourOf } from "@/lib/sim/tour";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
+import { seededRandom } from "../../src/astronomy.js";
 
 // Simulation mode, 2026-11-01: no game, only a sky drawn at the odds we set. The six steps from stars to minds, as on
 // /about/research, and how far a mind may spread. Then a tour through what they make: our nearest mind, the old minds
@@ -505,7 +506,7 @@ export default function Sim() {
                 <Play size={11} />
               </Link>
             </nav>
-            {onSim && <Count minds={result.galaxy} />}
+            {onSim && <Reckoning minds={result.galaxy} perStar={perStar} />}
             <div className="pointer-events-none absolute bottom-4 left-4 flex max-w-xl flex-col items-start gap-2 pr-4">
               {tab && clashes.length > 0 && (
                 <div
@@ -527,15 +528,6 @@ export default function Sim() {
                 </div>
               )}
             </div>
-            {/* Where the real ends: on the Simulation side, the minds are drawn, not seen. */}
-            {onSim && (
-              <p className="pointer-events-none absolute right-4 bottom-4 flex max-w-[320px] items-start gap-2 rounded-lg border border-dashed border-[#b39ef2]/60 bg-paper/90 px-3 py-1.5 font-mono text-[11px] text-[#b39ef2] backdrop-blur-sm">
-                <span className="tracking-[.12em]">SPECULATION</span>
-                <span className="text-page-ink2">
-                  Real stars. The minds are drawn at the dials’ odds.
-                </span>
-              </p>
-            )}
             {stop && (
               <section
                 ref={card}
@@ -841,8 +833,10 @@ function Turn({ onTap, hit }: { onTap?(x: number, y: number): void; hit?(x: numb
 /** The count as it reads. Under ln 2 on average, more likely than not there is no other mind at all. */
 const countText = (n: number) => (n < Math.LN2 ? "Likely none but us" : round(n));
 
-/** The minds in our Galaxy at these odds, large, counting to each new value as a dial turns. */
-function Count({ minds }: { minds: number }) {
+/** The reckoning, one card at the foot of the simulation, 2026-11-10: a field of 1,600 drawn stars with the minds
+ *  among them lit, one at the Holos odds, the count in our Galaxy counting to each new value as a dial turns, the odds
+ *  in words, and where the real ends. */
+function Reckoning({ minds, perStar }: { minds: number; perStar: number }) {
   const el = useRef<HTMLSpanElement>(null);
   const shown = useRef({ v: minds });
   useEffect(() => {
@@ -868,19 +862,98 @@ function Count({ minds }: { minds: number }) {
     return () => void tw.kill();
   }, [minds]);
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-6 text-center [text-shadow:0_0_8px_#000,0_0_16px_#000]">
-      <span
-        ref={el}
-        className="block text-[44px] leading-none font-semibold tracking-tight"
-        style={{ color: "var(--you)" }}
-      >
-        {countText(minds)}
-      </span>
-      <span className="mt-1 block font-mono text-[12px] text-page-ink2">
-        {minds < Math.LN2 ? "IN THE MILKY WAY" : "MINDS IN THE MILKY WAY"}
-      </span>
+    <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center px-4">
+      <div className="flex max-w-[640px] items-center gap-5 rounded-xl border border-faint bg-paper/85 py-3 pr-5 pl-4 shadow-lg shadow-black/40 backdrop-blur-sm">
+        <Field perStar={perStar} />
+        <div className="min-w-0">
+          <span
+            ref={el}
+            className="block text-[36px] leading-none font-semibold tracking-tight"
+            style={{ color: "var(--you)" }}
+          >
+            {countText(minds)}
+          </span>
+          <span className="mt-1 block font-mono text-[11px] tracking-[.1em] text-page-ink2">
+            {minds < Math.LN2 ? "IN THE MILKY WAY" : "MINDS IN THE MILKY WAY"} · ONE STAR IN {round(1 / perStar).toUpperCase()}
+          </span>
+          <span className="mt-2 block border-t border-dashed border-[#b39ef2]/50 pt-1.5 font-mono text-[10.5px] leading-snug text-muted">
+            <span className="tracking-[.12em] text-[#b39ef2]">SPECULATION</span> Real stars. The minds are drawn at the dials’ odds.
+          </span>
+        </div>
+      </div>
     </div>
   );
+}
+
+/** 1,600 stars as a square of dots, each a chalk fleck, and the minds among them lit in our blue, breathing. At the
+ *  Holos odds exactly one lights. Past 1 in 1,600 the one dims toward nothing, since no star in the field would hold a
+ *  mind; the dials nearer, more light. A new count lights its stars one by one, scattered through the field. */
+const FIELD = 40;
+function Field({ perStar }: { perStar: number }) {
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const lit = useRef({ n: 0, dim: 0 });
+  useEffect(() => {
+    const c = canvas.current!;
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const size = 84;
+    c.width = c.height = size * dpr;
+    const g = c.getContext("2d")!;
+    g.scale(dpr, dpr);
+    // Each dot's place in the lighting order, fixed, so the field reads the same from one odds to the next.
+    const r = seededRandom(7);
+    const order = Array.from({ length: FIELD * FIELD }, (_, i) => i).sort(() => r() - 0.5);
+    const flecks = order.map(() => 0.5 + 0.5 * r());
+    const pitch = size / FIELD;
+    const want = () => Math.min(FIELD * FIELD, FIELD * FIELD * perStar);
+    let raf = 0;
+    let last = performance.now();
+    const draw = (now: number) => {
+      raf = requestAnimationFrame(draw);
+      const dt = Math.min(0.1, (now - last) / 1000);
+      last = now;
+      const w = want();
+      // Whole stars light one by one; a fraction under one is the one star, dimmer the longer the odds.
+      const target = Math.max(1, w);
+      lit.current.n += (target - lit.current.n) * (1 - Math.exp(-dt * 6));
+      lit.current.dim += (Math.min(1, w) - lit.current.dim) * (1 - Math.exp(-dt * 4));
+      g.clearRect(0, 0, size, size);
+      const breath = 0.8 + 0.2 * Math.sin(now / 900);
+      for (let i = 0; i < FIELD * FIELD; i++) {
+        const k = order[i];
+        const x = (k % FIELD) * pitch + pitch / 2, y = Math.floor(k / FIELD) * pitch + pitch / 2;
+        const on = i < lit.current.n ? Math.min(1, lit.current.n - i) : 0;
+        if (on > 0) {
+          const a = on * (i === 0 ? 0.25 + 0.75 * lit.current.dim : 1) * breath;
+          g.fillStyle = `rgba(91,184,214,${a})`;
+          g.beginPath();
+          g.arc(x, y, 1.6, 0, 6.2832);
+          g.fill();
+          g.fillStyle = `rgba(91,184,214,${a * 0.3})`;
+          g.beginPath();
+          g.arc(x, y, 4.5, 0, 6.2832);
+          g.fill();
+          g.fillStyle = `rgba(91,184,214,${a * 0.1})`;
+          g.beginPath();
+          g.arc(x, y, 9, 0, 6.2832);
+          g.fill();
+        }
+        if (on < 1) {
+          g.fillStyle = `rgba(230,227,219,${(1 - on) * 0.55 * flecks[i]})`;
+          g.fillRect(x - 0.6, y - 0.6, 1.2, 1.2);
+        }
+      }
+    };
+    if (prefersReducedMotion()) {
+      lit.current.n = Math.max(1, want());
+      lit.current.dim = Math.min(1, want());
+      draw(performance.now());
+      cancelAnimationFrame(raf);
+      return;
+    }
+    raf = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(raf);
+  }, [perStar]);
+  return <canvas ref={canvas} className="h-[84px] w-[84px] shrink-0" aria-hidden />;
 }
 
 /** What we know of a tapped world or mind: what is measured, then, set apart in violet, what the dials drew. */
