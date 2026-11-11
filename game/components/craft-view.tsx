@@ -4,12 +4,20 @@
 // clear background, so the sky behind is the map's. Sizes are real, in metres, from calcs/craft.py and Parkin 2018:
 // a sail 4.1 m across with its 1 g chip, a probe of 150 t of instruments, 6,100 t of deuterium (about 36,000 m³ of
 // liquid, at 0.169 t a m³) and 400 t of engine and radiators, and a sentinel's loop 1,600 km across (Gros 2017).
+// Since 2026-11-10 each has faces, as the builds have in Close View: they hide the lines behind them and carry dots,
+// at 35%, lit by the light that is really there. Voyager 1 by the Sun far behind it, a sail by its beam, a probe by
+// the Sun it leaves and its own heat, a sentinel by the star ahead.
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { prefersReducedMotion } from "@/lib/motion";
+import { steadySide } from "@/lib/steady-side";
 import { CATALOG } from "@/lib/sim/works";
 
 export type CraftKind = "voyager" | "sail" | "probe" | "sentinel";
+
+/** How bright the dots on a face are, and the most of them a craft carries. As a build's, in lib/drift.ts. */
+const DOTS = 0.35;
+const MOST_DOTS = 36_000;
 
 /** Seconds from opening close to the craft until it is a point and the map's flight takes over. */
 export const CRAFT_SHOT_SECS = 11;
@@ -29,6 +37,40 @@ function ring(c: V, r: number, axis: "x" | "y" | "z", n = 48): number[] {
   return out;
 }
 const seg = (a: V, b: V) => [...a, ...b];
+/** A number from 0 to 1 for each bit of a flow, and another for each `k`, with no rhythm between them. With the golden
+ *  ratio for how far out one began and which way round, they lay on one spiral, and a flame was a corkscrew. 2026-11-10. */
+const chance = (i: number, k: number) => {
+  const x = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453;
+  return x - Math.floor(x);
+};
+const quad = (a: V, b: V, c: V, d: V) => [...a, ...b, ...c, ...a, ...c, ...d];
+/** A face turned round an axis through `c`, as triangles. `outline` is its edge: at each point, how far along the
+ *  axis and how far out. Its corners fall where `ring`'s do. */
+function lathe(c: V, axis: "x" | "y" | "z", outline: [number, number][], n = 24): number[] {
+  const at = (along: number, r: number, k: number): V => {
+    const a = (k / n) * 2 * Math.PI;
+    const [u, v] = [r * Math.cos(a), r * Math.sin(a)];
+    return axis === "x" ? [c[0] + along, c[1] + u, c[2] + v] : axis === "y" ? [c[0] + u, c[1] + along, c[2] + v] : [c[0] + u, c[1] + v, c[2] + along];
+  };
+  const out: number[] = [];
+  for (let j = 0; j + 1 < outline.length; j++) {
+    const [[a0, r0], [a1, r1]] = [outline[j], outline[j + 1]];
+    for (let k = 0; k < n; k++) {
+      if (r0 > 0) out.push(...at(a0, r0, k), ...at(a0, r0, k + 1), ...at(a1, r1, k + 1));
+      if (r1 > 0) out.push(...at(a0, r0, k), ...at(a1, r1, k + 1), ...at(a1, r1, k));
+    }
+  }
+  return out;
+}
+
+/** Faces of one kind. They hide what is behind them and carry dots. */
+interface Skin {
+  tris: number[];
+  /** In the build's color, as the lines of what works are. */
+  hot?: boolean;
+  /** Light of its own, 0 to 1: a radiator's heat, a power cell's warmth. */
+  glow?: number;
+}
 
 interface Model {
   /** Structure, drawn in ink. */
@@ -37,6 +79,16 @@ interface Model {
   hot: number[];
   /** Its path, drawn in the amber of our craft on the map, so it can't be taken for a part of it. */
   path?: number[];
+  /** Its faces. */
+  skins: Skin[];
+  /** The way to the light that falls on it. */
+  light: V;
+  /** The light is its beam, in the build's color, not a star's. */
+  beam?: boolean;
+  /** How bright a face turned from the light still is, 0 to 1. Starlight, and a long exposure. */
+  fill?: number;
+  /** Where the camera stands round it at first, and how fast it turns, in radians. */
+  turn?: [number, number];
   /** Lights: points, each x, y, z. */
   lamps: number[];
   /** Names, at points on it. */
@@ -45,7 +97,21 @@ interface Model {
   near: number;
   far: number;
   /** Particles: where each starts, and how it moves each second. Wrapped between `from` and `to` along `axis`. */
-  flow?: { n: number; axis: 0 | 1 | 2; from: number; to: number; speed: number; spread: (i: number) => [number, number]; hot: boolean };
+  flow?: {
+    n: number;
+    axis: 0 | 1 | 2;
+    from: number;
+    to: number;
+    speed: number;
+    spread: (i: number) => [number, number];
+    hot: boolean;
+    /** Where one stops short, by how far out it is: light that meets the sail goes no farther. */
+    stop?: (r: number) => number | null;
+    /** How far out one is pushed, by where it is along the way and how far out it began. */
+    bend?: (along: number, r: number) => number;
+    /** Each is drawn as a streak this long, back the way it came, so the flow's turn shows. */
+    streak?: number;
+  };
   /** Its look: elevation above its side, in degrees. */
   el: number;
 }
@@ -65,6 +131,8 @@ function sail(): Model {
   }
   // The chip, about 2 cm across.
   ink.push(...ring([0, 0, z(0) - 0.01], 0.02, "z", 12));
+  // The film itself, a mirror to its beam.
+  const film = lathe([0, 0, 0], "z", Array.from({ length: 9 }, (_, j): [number, number] => [z((j / 8) * R), (j / 8) * R]), 64);
   // The beam, a column of light up from below, wider than the sail: what misses it goes on.
   const hot: number[] = [];
   for (let k = 0; k < 28; k++) {
@@ -75,6 +143,12 @@ function sail(): Model {
   return {
     ink,
     hot,
+    skins: [{ tris: film }],
+    // Its beam outshines the Sun on it ten million times over, so the beam is its only light.
+    light: [0, 0, -1],
+    beam: true,
+    fill: 0.1,
+    turn: [0.9, 0.12],
     lamps: [0, 0, z(0) - 0.01],
     labels: [
       { at: [R, 0, 0], head: "SAIL · 4.1 M · 2.6 G", line: "thinner than a soap film" },
@@ -92,11 +166,12 @@ function sail(): Model {
       to: 18,
       speed: 9,
       spread: (i) => {
-        const r = 2.5 * Math.sqrt(((i * 0.618) % 1));
-        const a = i * 2.39996;
+        const r = 2.5 * Math.sqrt(chance(i, 1));
+        const a = chance(i, 2) * 2 * Math.PI;
         return [r * Math.cos(a), r * Math.sin(a)];
       },
       hot: true,
+      stop: (r) => (r < R ? z(r) : null),
     },
   };
 }
@@ -120,8 +195,8 @@ function probe(): Model {
     const a = (k / 16) * 2 * Math.PI;
     ink.push(...seg([-30, 12 * Math.cos(a), 12 * Math.sin(a)], [48, 12 * Math.cos(a), 12 * Math.sin(a)]));
   }
-  // The truss back to the engine.
-  for (const [y, z] of [[4, 4], [-4, 4], [4, -4], [-4, -4]] as const) ink.push(...seg([-30, y, z], [-72, y, z]));
+  // The truss back to the engine, its four long rods at the corners of its frames.
+  for (const [y, z] of [[5.6, 0], [-5.6, 0], [0, 5.6], [0, -5.6]] as const) ink.push(...seg([-30, y, z], [-72, y, z]));
   for (let x = -72; x <= -30; x += 7) ink.push(...ring([x, 0, 0], 5.6, "x", 4));
   // Radiators: most of the engine's mass. Fusion's heat must go somewhere.
   for (const s of [1, -1]) {
@@ -137,6 +212,15 @@ function probe(): Model {
   return {
     ink,
     hot,
+    skins: [
+      { tris: [...lathe([0, 0, 0], "x", [[50, 0], [50, 3], [62, 3], [62, 0]], 24), ...lathe([0, 0, 0], "x", [[66, 0], [63, 7]], 40)] },
+      { tris: lathe([0, 0, 0], "x", [[-30, 0], [-30, 12], [48, 12], [48, 0]], 48) },
+      // The radiators glow with the engine's heat, and the nozzle with its flame.
+      { tris: [1, -1].flatMap((s) => quad([-68, 0, 6 * s], [-34, 0, 6 * s], [-34, 0, 38 * s], [-68, 0, 38 * s])), hot: true, glow: 0.55 },
+      { tris: lathe([0, 0, 0], "x", [[-72, 4], [-87, 10.5]], 32), hot: true, glow: 0.3 },
+    ],
+    // It leaves from by the Sun, engine lit. Which side the Sun is on turns with the season, so this is one of them.
+    light: [0.6, 0.3, 0.74],
     lamps: [66, 0, 0, -80, 0, 0],
     labels: [
       { at: [56, 0, 3], head: "INSTRUMENTS · 150 T", line: "reads a world’s air" },
@@ -154,8 +238,8 @@ function probe(): Model {
       to: -300,
       speed: -260,
       spread: (i) => {
-        const r = 2 + 5 * ((i * 0.618) % 1);
-        const a = i * 2.39996;
+        const r = 2 + 5 * chance(i, 1);
+        const a = chance(i, 2) * 2 * Math.PI;
         return [r * Math.cos(a), r * Math.sin(a)];
       },
       hot: true,
@@ -183,6 +267,15 @@ function sentinel(): Model {
   return {
     ink,
     hot,
+    skins: [
+      { tris: lathe([0, 0, 0], "x", [[-12, 0], [-12, 5], [12, 5], [12, 0]], 24) },
+      { tris: lathe([0, 0, 0], "x", [[-12, 3], [-21, 6.6]], 24) },
+    ],
+    // Between the stars the only light is the one it flies to, dead ahead.
+    light: [1, 0, 0],
+    fill: 0.3,
+    // Seen from a little ahead, so its loop is a ring to us and not a line.
+    turn: [0.85, 0.03],
     lamps: [12, 0, 0],
     labels: [
       { at: [0, 0, 5], head: "SENTINEL · 1,000 T" },
@@ -198,11 +291,24 @@ function sentinel(): Model {
       to: -3e6,
       speed: -2.4e6,
       spread: (i) => {
-        const r = 1.6e6 * Math.sqrt((i * 0.618) % 1);
-        const a = i * 2.39996;
+        const r = 1.6e6 * Math.sqrt(chance(i, 1));
+        const a = chance(i, 2) * 2 * Math.PI;
         return [r * Math.cos(a), r * Math.sin(a)];
       },
       hot: false,
+      streak: 2.6e5,
+      // The loop's field turns the gas aside over about its own span, and that push is the brake (Gros 2017). Drawn
+      // as a stream parting round a ball as wide as the loop, with the hollow it leaves behind.
+      bend: (along, b) => {
+        const x = Math.max(0, along);
+        let [lo, hi] = [Math.sqrt(Math.max(0, R * R - x * x)), b + R];
+        for (let k = 0; k < 14; k++) {
+          const mid = (lo + hi) / 2;
+          if (mid * mid * (1 - R ** 3 / (x * x + mid * mid) ** 1.5) < b * b) lo = mid;
+          else hi = mid;
+        }
+        return hi;
+      },
     },
   };
 }
@@ -244,14 +350,15 @@ function voyager(): Model {
   ink.push(...seg([-0.25, -0.89, 0], [-0.25, -3.2, 0]));
   ink.push(...ring([-0.25, -3.2, 0], 0.3, "y", 4), ...ring([-0.25, -3.5, 0], 0.3, "y", 4));
   for (let k = 0; k < 4; k++) {
-    const a = (k / 4) * 2 * Math.PI + Math.PI / 4;
+    const a = (k / 4) * 2 * Math.PI;
     ink.push(...seg([-0.25 + 0.3 * Math.cos(a), -3.2, 0.3 * Math.sin(a)], [-0.25 + 0.3 * Math.cos(a), -3.5, 0.3 * Math.sin(a)]));
   }
   // The magnetometer boom, 13 m, a thin mast.
   ink.push(...seg([-0.2, 0.6, 0.6], [-0.2, 6.5, 11.3]));
   for (let k = 1; k <= 12; k++) ink.push(...ring([-0.2, 0.6 + (5.9 * k) / 12, 0.6 + (10.7 * k) / 12], 0.06, "x", 3));
-  // The Golden Record, 30 cm, on the body's side.
-  hot.push(...ring([-0.24, 0, -0.9], 0.15, "z", 24));
+  // The Golden Record, 30 cm, on one of the body's ten sides, facing out.
+  const side = 0.89 * Math.cos(Math.PI / 10);
+  hot.push(...ring([-0.24, 0, side + 0.02], 0.15, "z", 24), ...ring([-0.24, 0, side + 0.02], 0.05, "z", 12));
   // Its dotted road back to the Sun, as on the map, the dots spreading as they go, and a few ahead, outward.
   const path: number[] = [];
   for (let k = 0, x = -2.6; k < 34; k++, x *= 1.18) path.push(...seg([x, 0, 0], [x * 1.04, 0, 0]));
@@ -259,12 +366,29 @@ function voyager(): Model {
   return {
     ink,
     hot,
+    skins: [
+      {
+        tris: [
+          ...lathe([0, 0, 0], "x", [[-0.47, 0], [-0.47, 0.89], [0, 0.89], [0, 0]], 10),
+          ...lathe([0, 0, 0], "x", [[-0.5, 0], [-0.5, 0.4], [-0.75, 1.0], [-1.0, 1.45], [-1.3, 1.83]], 48),
+          ...lathe([0, 0, 0], "x", [[-2.1, 0], [-2.1, 0.14]], 16),
+          ...lathe([-0.25, 0, 0], "y", [[-3.2, 0], [-3.2, 0.3], [-3.5, 0.3], [-3.5, 0]], 4),
+        ],
+      },
+      { tris: [1.6, 2.2, 2.8].flatMap((y) => lathe([-0.25, 0, 0], "y", [[y, 0], [y, 0.2], [y + 0.45, 0.2], [y + 0.45, 0]], 16)), hot: true, glow: 0.22 },
+      { tris: lathe([-0.24, 0, 0], "z", [[side + 0.02, 0], [side + 0.02, 0.15]], 24), hot: true, glow: 0.12 },
+    ],
+    // The Sun, 220 times as far as from Earth and behind it, where its dish points. Dim there, about eight full Moons.
+    light: [-1, 0, 0],
+    fill: 0.2,
+    // Seen from a little behind, into the dish the Sun lights.
+    turn: [1.9, 0.05],
     path,
     // Its point of light, which lands on its dot on the map as the view pulls back.
     lamps: [-0.25, 0, 0],
     labels: [
       { at: [-1.3, 0, 1.83], head: "VOYAGER 1 · 722 KG", line: "launched 1977, silent now" },
-      { at: [-0.24, 0, -0.95], head: "GOLDEN RECORD", line: "sounds and pictures of Earth" },
+      { at: [-0.24, 0, side + 0.05], head: "GOLDEN RECORD", line: "sounds and pictures of Earth" },
       { at: [-0.25, 3.3, 0], head: "PLUTONIUM POWER", line: "nearly spent" },
       { at: [-0.2, 1.3, 1.9], head: "MAGNETOMETER BOOM · 13 M", line: "keeps its sensors clear of the craft" },
       { at: [2.6, 0, 0], head: "OUTWARD, 17 KM/S", line: "its path back to the Sun behind it" },
@@ -317,8 +441,8 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, 1, 0.01, 10);
     const [ink, hot, lamp] = [css("--ink"), css("--reach"), css("--other")];
-    const inkMat = new THREE.LineBasicMaterial({ color: ink, transparent: true, opacity: 0.75 });
-    const hotMat = new THREE.LineBasicMaterial({ color: hot, transparent: true, opacity: 0.9 });
+    const inkMat = new THREE.LineBasicMaterial({ color: ink, transparent: true, opacity: 0.75, depthWrite: false });
+    const hotMat = new THREE.LineBasicMaterial({ color: hot, transparent: true, opacity: 0.9, depthWrite: false });
     const lines = (pts: number[], mat: THREE.LineBasicMaterial) => {
       const l = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(pts, 3)), mat);
       l.frustumCulled = false;
@@ -327,26 +451,157 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
     };
     lines(m.ink, inkMat);
     if (m.hot.length) lines(m.hot, hotMat);
-    const pathMat = new THREE.LineBasicMaterial({ color: css("--other"), transparent: true, opacity: 0.9 });
+    const pathMat = new THREE.LineBasicMaterial({ color: css("--other"), transparent: true, opacity: 0.9, depthWrite: false });
     if (m.path?.length) lines(m.path, pathMat);
     const tex = dotTexture();
-    const lampMat = new THREE.PointsMaterial({ color: lamp, map: tex, size: 14, sizeAttenuation: false, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    // Its faces draw nothing themselves. They only write how far off they are, a thousandth farther than they stand,
+    // so the lines along their edges and the dots on them still show, and what is behind them does not.
+    const [az0, turn] = m.turn ?? [1.25, 0.05];
+    const el = (m.el * Math.PI) / 180;
+    const up = kind === "sail" ? -1 : 1;
+    const hide = new THREE.Mesh(
+      new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(m.skins.flatMap((k) => k.tris), 3)),
+      new THREE.ShaderMaterial({
+        colorWrite: false,
+        side: THREE.DoubleSide,
+        vertexShader: /* glsl */ `void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); mv.xyz *= 1.001; gl_Position = projectionMatrix * mv; }`,
+        fragmentShader: /* glsl */ `void main() { gl_FragColor = vec4(0.0); }`,
+      }),
+    );
+    hide.frustumCulled = false;
+    scene.add(hide);
+    // Dots over the faces, as many on each as it fills of the first view, to one for each few pixels of it.
+    const dotMat = new THREE.ShaderMaterial({
+      uniforms: {
+        uDpr: { value: renderer.getPixelRatio() },
+        uLight: { value: new THREE.Vector3(...m.light).normalize() },
+        uInk: { value: ink },
+        uHot: { value: hot },
+        uBeam: { value: m.beam ? 1 : 0 },
+        uFill: { value: m.fill ?? 0.16 },
+        uOpacity: { value: 0 },
+        uTime: { value: 0 },
+      },
+      vertexShader: /* glsl */ `
+uniform vec3 uLight, uInk, uHot;
+uniform float uDpr, uBeam, uFill, uOpacity, uTime;
+attribute float aHot, aGlow;
+varying vec3 vColor;
+varying float vAlpha;
+void main() {
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  gl_Position = projectionMatrix * mv;
+  vec3 n = normalize(normalMatrix * normal);
+  vec3 v = normalize(-mv.xyz);
+  vec3 s = normalize(mat3(viewMatrix) * uLight);
+  // A face is lit on whichever side we see.
+  if (dot(n, v) < 0.0) n = -n;
+  float lit = max(dot(n, s), 0.0);
+  float glint = pow(max(dot(n, normalize(s + v)), 0.0), 48.0);
+  float beat = fract(sin(dot(position, vec3(12.9898, 78.233, 37.719))) * 43758.5453) * 6.2832;
+  // A film in its beam shivers, in rings out from its middle.
+  lit *= 1.0 + uBeam * 0.3 * sin(length(position.xy) * 7.0 - uTime * 6.0);
+  // What is hot flickers, each dot at its own beat.
+  float glow = aGlow * (0.8 + 0.2 * sin(uTime * 3.0 + beat));
+  // A mirror in its beam is the brightest thing there.
+  float a = (uFill + (1.0 - uFill) * lit) * ${DOTS} * (1.0 + uBeam) + 0.35 * glint + 0.5 * glow;
+  vColor = mix(mix(uInk, uHot, aHot), uHot, uBeam * min(1.0, lit)) * (1.0 + 0.8 * glint + glow);
+  vAlpha = a * uOpacity;
+  gl_PointSize = 1.8 * uDpr;
+  if (vAlpha < 0.002) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+}`,
+      fragmentShader: /* glsl */ `
+varying vec3 vColor;
+varying float vAlpha;
+void main() {
+  vec2 p = gl_PointCoord * 2.0 - 1.0;
+  float r2 = dot(p, p);
+  if (r2 > 1.0) discard;
+  gl_FragColor = vec4(vColor, min(1.0, vAlpha * (1.0 - 0.5 * r2)));
+}`,
+      transparent: true,
+      depthWrite: false,
+    });
+    {
+      const look: V = [Math.cos(az0) * Math.cos(el), Math.sin(az0) * Math.cos(el), up * Math.sin(el)];
+      const tris: { p: number[]; n: V; w: number; k: Skin }[] = [];
+      let total = 0;
+      for (const k of m.skins)
+        for (let i = 0; i < k.tris.length; i += 9) {
+          const p = k.tris.slice(i, i + 9);
+          const [ux, uy, uz, vx, vy, vz] = [p[3] - p[0], p[4] - p[1], p[5] - p[2], p[6] - p[0], p[7] - p[1], p[8] - p[2]];
+          const [nx, ny, nz] = [uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx];
+          const l = Math.hypot(nx, ny, nz) || 1e-30;
+          const w = (l / 2) * Math.max(0.2, Math.abs(nx * look[0] + ny * look[1] + nz * look[2]) / l);
+          total += w;
+          tris.push({ p, n: [nx / l, ny / l, nz / l], w, k });
+        }
+      const perM = parent.clientHeight / (2 * Math.tan((20 * Math.PI) / 180)) / m.near;
+      const count = Math.round(Math.min(MOST_DOTS, (total * perM * perM) / 2.4));
+      const [pos, nor, heat, glow] = [new Float32Array(count * 3), new Float32Array(count * 3), new Float32Array(count), new Float32Array(count)];
+      let seed = 2040;
+      const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+      for (let d = 0, t = 0, acc = tris[0]?.w ?? 0; d < count; d++) {
+        const want = ((d + rnd()) / count) * total;
+        while (acc < want && t < tris.length - 1) acc += tris[++t].w;
+        let [u, v] = [rnd(), rnd()];
+        if (u + v > 1) [u, v] = [1 - u, 1 - v];
+        const { p, n, k } = tris[t];
+        for (let j = 0; j < 3; j++) pos[d * 3 + j] = p[j] + u * (p[3 + j] - p[j]) + v * (p[6 + j] - p[j]);
+        nor.set(n, d * 3);
+        heat[d] = k.hot ? 1 : 0;
+        glow[d] = k.glow ?? 0;
+      }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+      g.setAttribute("normal", new THREE.BufferAttribute(nor, 3));
+      g.setAttribute("aHot", new THREE.BufferAttribute(heat, 1));
+      g.setAttribute("aGlow", new THREE.BufferAttribute(glow, 1));
+      const dots = new THREE.Points(g, dotMat);
+      dots.frustumCulled = false;
+      scene.add(dots);
+    }
+    // A lamp shines through its craft, as a build's do, so its point is there to land on the map.
+    const lampMat = new THREE.PointsMaterial({ color: lamp, map: tex, size: 14, sizeAttenuation: false, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending });
     const lamps = new THREE.Points(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(m.lamps, 3)), lampMat);
     scene.add(lamps);
     // Its flow: the beam's light, the flame, or the gas between the stars.
     let flowPos: THREE.BufferAttribute | null = null;
+    const streakMat = new THREE.LineBasicMaterial({ color: ink, transparent: true, opacity: 0.35, depthWrite: false, blending: THREE.AdditiveBlending });
     const flowMat = new THREE.PointsMaterial({ color: m.flow?.hot ? hot : ink, map: tex, size: m.flow?.hot ? 4.5 : 1.8, sizeAttenuation: false, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending });
+    // Where each one ends, where it stops short of the rest, and where it began across the flow, for one that bends.
+    let flowEnd: Float32Array | null = null;
+    let flowOut: Float32Array | null = null;
+    let flowAt: Float32Array | null = null;
+    const [fu, fv] = m.flow?.axis === 0 ? [1, 2] : m.flow?.axis === 1 ? [0, 2] : [0, 1];
+    /** Puts one where it is along the flow, pushed out as far as the flow bends there. A streak has a second end. */
+    const place = (a: Float32Array, at: number, i: number, along: number) => {
+      const f = m.flow!;
+      const [u, v] = [flowOut![i * 2], flowOut![i * 2 + 1]];
+      const r = Math.hypot(u, v);
+      const k = f.bend && r > 0 ? f.bend(along, r) / r : 1;
+      a[at * 3 + f.axis] = along;
+      a[at * 3 + fu] = u * k;
+      a[at * 3 + fv] = v * k;
+    };
     if (m.flow) {
       const f = m.flow;
-      const arr = new Float32Array(f.n * 3);
+      const ends = f.streak ? 2 : 1;
+      const back = f.streak ? -Math.sign(f.speed) * f.streak : 0;
+      const arr = new Float32Array(f.n * ends * 3);
+      flowEnd = new Float32Array(f.n);
+      flowOut = new Float32Array(f.n * 2);
+      flowAt = new Float32Array(f.n);
       for (let i = 0; i < f.n; i++) {
-        const [u, v] = f.spread(i);
-        const along = f.from + (f.to - f.from) * ((i * 0.754877) % 1);
-        const p = f.axis === 0 ? [along, u, v] : f.axis === 1 ? [u, along, v] : [u, v, along];
-        arr.set(p, i * 3);
+        flowOut.set(f.spread(i), i * 2);
+        const end = (flowEnd[i] = f.stop?.(Math.hypot(...f.spread(i))) ?? f.to);
+        flowAt[i] = f.from + (end - f.from) * chance(i, 0);
+        place(arr, i * ends, i, flowAt[i]);
+        if (f.streak) place(arr, i * 2 + 1, i, flowAt[i] + back);
       }
       flowPos = new THREE.BufferAttribute(arr, 3);
-      const pts = new THREE.Points(new THREE.BufferGeometry().setAttribute("position", flowPos), flowMat);
+      const g = new THREE.BufferGeometry().setAttribute("position", flowPos);
+      const pts = f.streak ? new THREE.LineSegments(g, streakMat) : new THREE.Points(g, flowMat);
       pts.frustumCulled = false;
       scene.add(pts);
     }
@@ -390,11 +645,9 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
       const fade = Math.min(1, s / 0.8) * (1 - Math.max(0, (s - (CRAFT_SHOT_SECS - 1.2)) / 1.2));
       // Side on to its way forward, so it plainly flies across the view, turning a little. The sail is seen from
       // below, in its beam.
-      const az = kind === "sail" ? 0.9 + s * 0.12 : 1.25 + s * 0.05;
-      const el = (m.el * Math.PI) / 180;
-      // Travel is +x for the probe and sentinel, +z for the sail: the camera stands to the side and a little behind.
-      if (kind === "sail") camera.position.set(D * Math.cos(az) * Math.cos(el), D * Math.sin(az) * Math.cos(el), -D * Math.sin(el));
-      else camera.position.set(D * Math.cos(az) * Math.cos(el), D * Math.sin(az) * Math.cos(el), D * Math.sin(el));
+      const az = az0 + s * turn;
+      // Travel is +x for the probe and sentinel, +z for the sail: the camera stands to the side.
+      camera.position.set(D * Math.cos(az) * Math.cos(el), D * Math.sin(az) * Math.cos(el), up * D * Math.sin(el));
       camera.up.set(0, 0, 1);
       camera.lookAt(0, 0, 0);
       // Roll about the line of sight so its way forward on screen is its way on the map.
@@ -414,9 +667,11 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
       const to = anchor?.();
       // It reaches its place early in the pull, while still big enough to follow, then shrinks there to a point.
       const slide = Math.min(1, ease * 2.2);
-      if (to && pull > 0) camera.setViewOffset(pw, ph, -(to.x - pw / 2) * slide, -(to.y - ph / 2) * slide, pw, ph);
-      else camera.clearViewOffset();
-      camera.near = D / 2000;
+      // On a phone the map is short and its ruler lies along its foot, so up close the craft stands a little above
+      // the middle, clear of it.
+      const lift = ph < 420 ? 0.1 * ph * (1 - slide) : 0;
+      camera.setViewOffset(pw, ph, to ? -(to.x - pw / 2) * slide : 0, (to ? -(to.y - ph / 2) * slide : 0) + lift, pw, ph);
+      camera.near = D / 400;
       camera.far = D * 2000;
       camera.updateProjectionMatrix();
       inkMat.opacity = 0.75 * fade;
@@ -426,14 +681,25 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
       lampMat.opacity = fade;
       pathMat.opacity = 0.9 * fade;
       flowMat.opacity = 0.8 * fade;
-      if (flowPos && m.flow && !still) {
+      // As it shrinks its dots crowd together, so each dims, and the whole stays as bright as it was up close.
+      dotMat.uniforms.uOpacity.value = fade * (m.near / D) ** 1.5;
+      dotMat.uniforms.uTime.value = still ? 0 : s;
+      streakMat.opacity = 0.35 * fade;
+      if (flowPos && flowEnd && flowAt && m.flow && !still) {
         const f = m.flow;
         const a = flowPos.array as Float32Array;
-        const span = f.to - f.from;
+        const ends = f.streak ? 2 : 1;
+        const back = f.streak ? -Math.sign(f.speed) * f.streak : 0;
         for (let i = 0; i < f.n; i++) {
-          let x = a[i * 3 + f.axis] + f.speed * dt;
-          if ((span > 0 && x > f.to) || (span < 0 && x < f.to)) x -= span;
-          a[i * 3 + f.axis] = x;
+          const [end, span] = [flowEnd[i], flowEnd[i] - f.from];
+          let x = flowAt[i] + f.speed * dt;
+          if ((span > 0 && x > end) || (span < 0 && x < end)) x -= span;
+          flowAt[i] = x;
+          if (!f.bend && !f.streak) a[i * 3 + f.axis] = x;
+          else {
+            place(a, i * ends, i, x);
+            if (f.streak) place(a, i * 2 + 1, i, x + back);
+          }
         }
         flowPos.needsUpdate = true;
       }
@@ -446,16 +712,28 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
       renderer.autoClear = true;
       // Names follow their places, and fade as the view pulls back.
       const { clientWidth: w, clientHeight: h } = parent;
+      // Each beside its place, on the left where the right would run off the view, held inside the view, and moved
+      // down clear of the names set before it. On a phone they ran off the edge and lay over each other.
+      const set: [number, number, number, number][] = [];
       m.labels.forEach((l, i) => {
         const n = tags.current[i];
         if (!n) return;
         v.set(...l.at).project(camera);
         const on = v.z < 1 && Math.abs(v.x) < 1.1 && Math.abs(v.y) < 1.1;
-        n.style.transform = `translate(${((v.x + 1) / 2) * w + 10}px, ${((1 - v.y) / 2) * h}px) translate(0, -50%)`;
-        n.style.opacity = String(on ? fade * (l.keep ? Math.min(1, Math.max(0, pull * 2 - 1)) : 1 - Math.min(1, pull * 3)) : 0);
+        const a = on ? fade * (l.keep ? Math.min(1, Math.max(0, pull * 2 - 1)) : 1 - Math.min(1, pull * 3)) : 0;
+        n.style.opacity = String(a);
+        if (a < 0.02) return;
+        const [x, y, wd, ht] = [((v.x + 1) / 2) * w, ((1 - v.y) / 2) * h, n.offsetWidth, n.offsetHeight];
+        const left = steadySide(n, x, w - 18 - wd) && x - 10 - wd >= 8;
+        const tx = Math.max(8, Math.min(w - 8 - wd, left ? x - 10 - wd : x + 10));
+        let ty = y - ht / 2;
+        for (let pass = 0; pass < 2; pass++)
+          for (const [px, py, pw, ph] of set) if (tx < px + pw && px < tx + wd && ty < py + ph + 2 && py < ty + ht + 2) ty = py + ph + 2;
+        set.push([tx, ty, wd, ht]);
+        n.style.transform = `translate(${tx}px, ${ty}px)`;
+        n.style.textAlign = left ? "right" : "left";
       });
       if (s < CRAFT_SHOT_SECS && !still) raf = requestAnimationFrame(frame);
-      else if (still) renderer.render(scene, camera);
     };
     raf = requestAnimationFrame(frame);
     return () => {
@@ -464,6 +742,8 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
       renderer.dispose();
       tex.dispose();
       scene.traverse((o) => (o as THREE.Mesh).geometry?.dispose());
+      dotMat.dispose();
+      streakMat.dispose();
       renderer.domElement.remove();
     };
   }, [kind, shot, anchor, heading]);
@@ -475,10 +755,11 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
         <div
           key={`${kind}-${i}`}
           ref={(n) => void (tags.current[i] = n)}
-          className="absolute top-0 left-0 font-mono text-[10px] leading-tight tracking-[.08em] whitespace-nowrap opacity-0"
+          className="absolute top-0 left-0 font-mono text-[10px] leading-tight tracking-[.08em] whitespace-nowrap opacity-0 [text-shadow:0_0_4px_#0b0c0d,0_0_8px_#0b0c0d]"
         >
           <div className="text-ink">{l.head}</div>
-          {l.line && <div className="text-muted">{l.line}</div>}
+          {/* On a phone the map is too small for a second line under each name. */}
+          {l.line && <div className="hidden text-muted wide:block">{l.line}</div>}
         </div>
       ))}
     </div>
