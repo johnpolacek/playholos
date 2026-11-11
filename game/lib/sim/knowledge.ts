@@ -1,7 +1,7 @@
 // The knowledge wall: what Earth knows at a moment, from the seed's truth. Settled 2026-10-13: the Mind judges from
 // what Earth knows, never the seed. So nothing here passes on who lives where, a world's rung, or anything not yet
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
-import { atlasOf, glowsFound, mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
+import { atlasOf, glowsFound, guardAt, mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
 import targets from "../../data/targets.json" with { type: "json" };
 import { glowNames } from "../game/glow-names.ts";
 import { giftWords } from "../game/sends.ts";
@@ -10,6 +10,7 @@ import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB, proximaSeen } from "./proxima.ts";
 import { flashesOf, peerAnswers, type Aimed, type Call } from "./peers.ts";
+import { oldAnswers } from "./old-minds.ts";
 import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ladderOf } from "./ladder.ts";
@@ -318,6 +319,13 @@ export function earthKnows(
     if (d === undefined) continue;
     const passed = x.leaves + d / speed + burns, home = passed + d;
     if (home > year) continue;
+    // A hostile old mind in that system, awake or asleep, wrecks a craft that comes to stay, as it arrives: its last
+    // pictures show a craft not ours closing on it. 2026-11-11.
+    const t = targets.find((y) => y.name === x.star);
+    if (t && guardAt(world, atlasOf(t.ra, t.dec, t.d))) {
+      visits.push({ star: x.star, world: f ? `${x.star}’s world` : x.star, by: "sentinel", passed, home, sight: "far", lost: "catch" });
+      continue;
+    }
     if (!f) { visits.push(visit(world, "sentinel", { passed, home })); continue; }
     const air = AIR[f.truth.rung ?? ""] ?? "water";
     const sight = pictured(f);
@@ -383,12 +391,20 @@ export function earthKnows(
   }
   const ours: EarthView["colony"] | null = colony ? colonyAt(world, holes, colony, year) : null;
   if (ours && ladder.colonyLost !== null && ours.d !== undefined && ladder.colonyLost + ours.d <= year) ours.lost = { at: ladder.colonyLost, how: "strike" };
+  // An old mind's answer to a knock on its cold glow, or on a sleeping one where our craft stands by. Its glow or body
+  // is marked as having answered, which settles it. 2026-11-11.
+  const old = oldAnswers(world, minds, crafts, aimed, year);
+  for (const h of old) {
+    const n = Number(h.star.replace(/\D+/g, "")) - 1;
+    const at = h.star.startsWith("Cold glow") ? minds.glows[n] : minds.sleepers[n];
+    if (at) at.answered = h.arrived;
+  }
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     // A peer's answer, once it reaches us. 2026-10-31. lib/sim/peers.ts.
     // A sail's launch flashes its laser toward its star, 770 times the Sun in its color: a peer there sees it as a
     // knock with nothing written in it. 2026-11-07 (m:235), calcs/early_game.py launch_glare.
-    year, felt, heard: peerAnswers(world, kit0, [...aimed, ...flashesOf(flybys)], year, calls), visits,
+    year, felt, heard: [...peerAnswers(world, kit0, [...aimed, ...flashesOf(flybys)], year, calls), ...old].sort((a, b) => a.arrived - b.arrived), visits,
     ...(anyMind ? { minds } : {}),
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
     proximaSeen: proximaSeen(world.seed),
@@ -653,6 +669,8 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
           `- ${named(`Cold glow ${i + 1}`) || `Cold glow ${i + 1}, as Scan names it, `}${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${yearText(g.seen)}, steady. ` +
           `Its color fits no dust we know. It could be a cold disk of unusual grains, a measuring error, or computing done cold, far from a star.` +
           (g.imaged !== undefined ? ` Our Glow Imager resolved it from home at Year ${yearText(g.imaged)}: thin dark panels far out from the star, as cold as the glow, on orbits too orderly for rubble. Something made them. Nothing there could tell we looked.` : "") +
+          (g.answered !== undefined ? ` It answered our knock, its answer home at Year ${yearText(g.answered)}, in what we have heard: a mind is there.` : "") +
+          (g.lost !== undefined ? ` Our sentinel there went dark as it arrived, which we knew at Year ${yearText(g.lost)}: its last pictures show a craft not ours closing on it. Something there keeps its door.` : "") +
           (g.near !== undefined ? ` Our sentinel there sent word at Year ${yearText(g.near)}: thin dark panels far out from the star, as cold as the glow, on orbits too orderly for rubble. Something made them. It has not acted on our sentinel.` : "")).join("\n"),
     );
   if (m.watcher) {

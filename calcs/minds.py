@@ -135,6 +135,28 @@ def in_galaxy(r):
 
 
 # ---------- Old minds ----------
+# ---------- The settling: each old mind's part in it, and its nature ----------
+# Settled 2026-11-11, the designer's picks. The Galaxy began as groups, each agreeing within itself (Forgan 2017's
+# cliques), and long ago they became one, under one rule: build at no other star. Most agreed, and some were made to.
+# An old mind's age says whether it lived through that. Its part tilts three scores, each 1 to 10, which decide how
+# it answers a knock and what it does to a craft at its door. Nothing dates the settling, and nothing measures what a
+# mind wants: every number here is a sample. HOLOS_RESEARCH.md, "A settled Galaxy".
+SETTLING_YEARS = 3e9                    # how long ago the groups became one: about a third of old minds are older
+STOPPED_SHARE = 0.2                     # of those who lived through it, the share that spread and were made to stop
+# What each part leans to: hidden 1 to open 10, hostile 1 to peaceful 10, withholding 1 to generous 10.
+NATURE = dict(founder=(5, 7, 5), stopped=(3, 3, 3), after=(7, 7, 6))
+NATURE_SD = 2
+WAKES_SHARE = 0.5                       # of sleeping minds, the share a knock beside them wakes
+def nature(seed, i, age, asleep):
+    """Its part in the settling, its three scores, and, asleep, whether a knock wakes it. On its own key, so no other
+    draw moves."""
+    r = rng(seed, 'old', i, 'nature')
+    part = 'after' if age < SETTLING_YEARS else ('stopped' if r.random() < STOPPED_SHARE else 'founder')
+    score = lambda mean: max(1, min(10, round(r.gauss(mean, NATURE_SD))))
+    open_, peaceful, generous = [score(m) for m in NATURE[part]]
+    wakes = (r.random() < WAKES_SHARE) if asleep else None
+    return dict(part=part, open=open_, peaceful=peaceful, generous=generous, wakes=wakes)
+
 def old_mind(seed, i, pos, star=None):
     """How much older than us (about 2.3 billion years, typically), whether it sleeps, and how bright its cold glow is.
     Awake, it stays under what our maps would have caught at its distance, since none has been seen: IRAS and AKARI's
@@ -152,7 +174,7 @@ def old_mind(seed, i, pos, star=None):
     # Asleep, it folds up small and rests in the cold: 12 K lies about 540 AU from a Sun, 54 AU from a dim red dwarf.
     rest = round(log_between(r, *REST_AU)) if asleep else None
     return dict(id=f'old-{i}', pos=[round(c, 3) for c in pos], d=round(d, 2), star=star, age=age, asleep=asleep,
-                glowW=glow, restAU=rest)
+                glowW=glow, restAU=rest, **nature(seed, i, age, asleep))
 
 def head_start(r):
     """Years an old mind woke before us: its world's age less the time its mind took, past the peers' window."""

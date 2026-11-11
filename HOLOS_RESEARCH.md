@@ -2847,6 +2847,33 @@ Gathered by a research agent, for a telescope grown from the swarm’s mirrors. 
 - Why it matters: seeing what makes a glow from here, where today only a sentinel that stays can, takes an infrared array tens to hundreds of km wide, far less than a swarm’s width. The swarm’s width buys cities at a thousand light years, and no world we draw has any.
 - Used: the Glow Imager, built 2026-11-11, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). The swarm-wide eye is set aside.
 
+### A settled Galaxy: one rule, and how it came, 2026-11-11
+
+Gathered by a research agent, for whether old minds share a past. The designer’s idea, “the settling”: early civilizations spread or fought, that era ended, and since then all hold one rule against spreading, enforce it on newcomers, stay quiet and watch.
+
+- **[Forgan 2017, The Galactic Club or Galactic Cliques?](https://arxiv.org/abs/1608.08770)** · Published, International Journal of Astrobiology. Full text read by the agent.
+  - For most settings the Galaxy holds several “cliques”, each with its own agreed ways, and no single Club. One Club needs many civilizations, lives well over a million years, and arrivals bunched within a few million.
+  - Cliques may later merge. A Galaxy-wide single culture, if real, was “most likely imposed” by political or military means. That is the nearest published line to the settling.
+  - His [2011 paper](https://arxiv.org/abs/1105.2497), full text read: light’s speed stops an early civilization from shaping a far later one, so the chain of shared culture breaks in every run.
+- **[Fogg 1987, the interdict hypothesis](https://doi.org/10.1016/0019-1035(87)90112-6)** · Published, Icarus 69, 370. Abstract only: the paper is paywalled. Simulations of the first galactic civilizations’ rise, spread and meeting, and an interdict to explain why none is in the Solar System. Through Landis, Ćirković 2009 and Forgan: the Galaxy was filled before life left Earth’s seas, and a shared rule of no contact holds “for both our sake and theirs”. A steady state, spheres of influence and its timescales are not confirmed until the paper is read.
+- **[Ball 1973, the zoo hypothesis](https://doi.org/10.1016/0019-1035(73)90111-5)** · Published, Icarus 19, 347. Abstract only. Life may be nearly everywhere, and we are set aside as a wilderness or a zoo.
+- **[Crawford and Schulze-Makuch 2024](https://eprints.bbk.ac.uk/id/eprint/52771/1/Fermi_Paradox_Perspective_AAM.pdf)** · Published, Nature Astronomy 8, 44. Accepted manuscript read in full. Every answer from behavior fails unless it holds for all civilizations ever. So either technological civilizations are very rare, or the zoo holds. The zoo could work if the first civilization imposed non-interference on all later ones, for billions of years. Hiding gets harder as we look. They expect an answer within decades.
+- **[Sandberg, Armstrong and Ćirković 2017](https://arxiv.org/abs/1705.03394)**, logged above. Section 7 read again: “cultural convergence can be enforced”. Sleepers leave machines so that young civilizations are stopped from wasteful acts, and their example is a ban on launching self-copying colony probes. Defenders likely win, since moving matter between stars costs so much. Evenly matched old civilizations would hold borders and not fight.
+- **Enforcement and conflict.**
+  - [Brin 1983, The Great Silence](https://articles.adsabs.harvard.edu/pdf/1983QJRAS..24..283B), QJRAS 24, 283, parts read: one fearful species in thousands arming its probes “need only happen once”. The Sun drifts into other domains within about 10 million years, so holding one way across the Galaxy is hard to imagine.
+  - [Baum, Haqq-Misra and Domagal-Goldman 2011](https://arxiv.org/abs/1104.4462), Acta Astronautica 68, 2114, parts read: a civilization that cares for all might destroy a fast-spreading newcomer to protect others, most likely early in its spread.
+  - [Korhonen 2013](https://arxiv.org/abs/1302.0606), Acta Astronautica, abstract and conclusions read: attack is a gamble, since others may watch and punish, so conflict would stay rare.
+  - Abstracts or summaries only: Jebari and Asker 2024, The Monist 107, 176, if many exist and we still do, attack must be rare. Kuusela and Roy 2024, AAMAS, disagree: selfish agents always come to war. Yu 2015, JBIS 68, 142, the dark forest as hiding from unknown risk.
+  - None derives a lasting peace with an enforced rule as the likely end. Korhonen and Jebari come nearest.
+- **Would an old war show?**
+  - [Stevens, Forgan and O’Malley-James 2016](https://arxiv.org/abs/1507.08530), International Journal of Astrobiology, parts read: every sign of a civilization’s destruction fades within about 100,000 years. A destroyed planet gives a burst of days, then debris. Its text and table disagree on how long that debris lasts.
+  - [Jackson and Wyatt 2012](https://arxiv.org/abs/1206.4190), MNRAS, abstract and conclusions: debris from a Moon-forming impact shows for about 25 million years. Hughes, Duchêne and Matthews 2018, parts read: hot dust not renewed lasts about a century.
+  - So an era hundreds of millions of years gone would leave nothing to see. That a wrecked swarm clears as natural dust does is the agent’s step, not published.
+- **How the settling stands.** A close cousin of published ideas, and each part has a source: a first era then an interdict (Fogg), one civilization imposing its rule (Crawford and Schulze-Makuch), a ban on spreading kept by machines left on watch (Sandberg et al.), striking a spreader early (Baum et al.), one culture imposed between cliques (Forgan). No paper found joins an old era of conflict, one rule against spreading, and a ladder of warn, contain, strike. That joining is ours.
+- **The strongest objection:** one defector breaks it, and light’s speed means civilizations arise beyond each other’s reach, so the Galaxy starts as cliques (Forgan). The only repair in print is enforcement, which the settling supplies.
+- **Earth’s past, as an old mind shows it.** Dates written from general knowledge on 2026-11-11, not read from a source that day, so listed under To check: seas by about 4.4 billion years ago, the oldest fossil mats about 3.5, oxygen filling the air about 2.4, the last world-wide freeze ending about 650 million years ago, animals with shells and eyes about 540, the end-Permian dying about 252, the Chicxulub impact about 66.
+- Used: the settling, built 2026-11-11, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). Forgan 2017 for the groups, Korhonen 2013 and Jebari and Asker 2024 for how rare the fighting was, Sandberg et al. 2017 for machines that keep watch while their makers sleep.
+
 ## Watch list
 
 Results the design is waiting on, in date order. Check each when its date comes. Rewritten 2026-11-07 from that day’s sweep.
@@ -2890,6 +2917,8 @@ Results the design is waiting on, in date order. Check each when its date comes.
   - **Journal versions** of Garrett’s Slysh haloes (arXiv 2608.31153, under review at MNRAS), Turyshev 2602.04198, Gressier et al., Bennett et al., Wow! II, and the IAA declaration’s full text.
 
 ## To check
+
+- Open 2026-11-11: the seven dates of Earth’s past an old mind may show, in game/lib/sim/old-minds.ts. Written from general knowledge. Each wants a source read. See A settled Galaxy.
 
 - Added 2026-11-07, the nine sources missing from the alpha-1 list. All read through search summaries only. Read the primary texts: Curtis et al. 2608.12458, Huang et al. 2601.07297, Lazio 2606.13797, the Project Silica Nature paper, NASA’s post-flight O2O release (484 GB or half a terabyte), and SPHEREx’s release calendar at IRSA.
 

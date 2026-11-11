@@ -126,7 +126,7 @@ export function readAimed(raw: string | null): { to: string; y: number; question
     const v = JSON.parse(raw ?? "[]");
     if (!Array.isArray(v)) return [];
     return v
-      .filter((a) => a && typeof a.to === "string" && /^Warm glow \d+$/.test(a.to) && typeof a.y === "number" && Number.isFinite(a.y) && a.y >= 0)
+      .filter((a) => a && typeof a.to === "string" && /^(Warm glow|Cold glow|Warm body) \d+$/.test(a.to) && typeof a.y === "number" && Number.isFinite(a.y) && a.y >= 0)
       .map((a) => ({ to: a.to, y: a.y, questions: a.questions === true, lie: a.lie === true, travels: typeof a.travels === "string" ? a.travels.slice(0, 600) : "" }))
       .slice(0, 64);
   } catch {

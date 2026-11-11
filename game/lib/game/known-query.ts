@@ -43,6 +43,7 @@ export function callsOf(sent: readonly Sent[]) {
 
 export function aimedOf(sent: readonly Sent[]) {
   return sent
-    .filter((m) => /^Warm glow \d+$/.test(m.to))
+    // And at an old mind: its cold glow, or a sleeping one's warm body where our craft stands by. 2026-11-11.
+    .filter((m) => /^(Warm glow|Cold glow|Warm body) \d+$/.test(m.to))
     .map((m) => ({ to: m.to, y: m.y, questions: m.holds.includes("questions"), lie: !!m.lie, travels: m.travels.slice(0, 600) }));
 }

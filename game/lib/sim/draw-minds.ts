@@ -136,6 +136,24 @@ function inGalaxy(r: PyRandom): Vec {
   return [gx * PC_LY, gz * PC_LY, -gy * PC_LY];
 }
 
+// ---------- The settling: each old mind's part in it, and its nature ----------
+// calcs/minds.py's nature(), draw for draw. Every number is a sample: nothing dates the settling or measures what a
+// mind wants. 2026-11-11.
+const SETTLING_YEARS = 3e9;
+const STOPPED_SHARE = 0.2;
+const NATURE = { founder: [5, 7, 5], stopped: [3, 3, 3], after: [7, 7, 6] } as const;
+const NATURE_SD = 2;
+const WAKES_SHARE = 0.5;
+function nature(seed: number, i: number | string, age: number, asleep: boolean): Pick<OldMind, "part" | "open" | "peaceful" | "generous" | "wakes"> {
+  const r = rng(seed, "old", i, "nature");
+  const part = age < SETTLING_YEARS ? "after" : r.random() < STOPPED_SHARE ? "stopped" : "founder";
+  const score = (mean: number) => Math.max(1, Math.min(10, pyRound(r.gauss(mean, NATURE_SD))));
+  const [m0, m1, m2] = NATURE[part];
+  const open = score(m0), peaceful = score(m1), generous = score(m2);
+  const wakes = asleep ? r.random() < WAKES_SHARE : null;
+  return { part, open, peaceful, generous, wakes };
+}
+
 // ---------- Old minds ----------
 function oldMind(seed: number, i: number | string, pos: Vec, star: number | null = null): OldMind {
   const r = rng(seed, "old", i);
@@ -146,7 +164,7 @@ function oldMind(seed: number, i: number | string, pos: Vec, star: number | null
   const age = headStart(r);
   const glow = asleep ? null : Number(logBetween(r, Math.min(1e18, limit / 2), limit).toPrecision(3));
   const rest = asleep ? pyRound(logBetween(r, ...REST_AU)) : null;
-  return { id: `old-${i}`, pos: pos.map((c) => pyRound(c, 3)) as Vec, d: pyRound(d, 2), star, age, asleep, glowW: glow, restAU: rest };
+  return { id: `old-${i}`, pos: pos.map((c) => pyRound(c, 3)) as Vec, d: pyRound(d, 2), star, age, asleep, glowW: glow, restAU: rest, ...nature(seed, i, age, asleep) };
 }
 
 function headStart(r: PyRandom): number {

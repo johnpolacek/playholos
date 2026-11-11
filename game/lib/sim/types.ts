@@ -86,6 +86,15 @@ export interface OldMind {
   glowW: number | null;
   /** Asleep, how far from its star it rests, folded up small, in AU. Null awake. */
   restAU: number | null;
+  /** Its part in the settling, when the Galaxy's first groups became one under one rule: it helped set the rule, it
+   *  spread and was made to stop, or it was born after. calcs/minds.py's nature, 2026-11-11. */
+  part: "founder" | "stopped" | "after";
+  /** Three scores, 1 to 10, tilted by its part: hidden to open, hostile to peaceful, withholding to generous. */
+  open: number;
+  peaceful: number;
+  generous: number;
+  /** Asleep, whether a knock from a craft beside it wakes it. Null awake. */
+  wakes: boolean | null;
 }
 
 export interface Peer {

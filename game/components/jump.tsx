@@ -56,7 +56,7 @@ export interface Snap {
 
 /** Facts that are news when they first appear: a cold glow keeps our sentinel's word as one, and a rock its strike.
  *  The rock struck Earth on a stop that said "Nothing more reached us". Feature playtest 2026-11-07. */
-const NEWS: Record<string, string> = { "Up close": "Seen up close", Resolved: "Resolved from home", Struck: "Struck Earth" };
+const NEWS: Record<string, string> = { "Up close": "Seen up close", Resolved: "Resolved from home", "Our sentinel": "Our sentinel went dark", "It answered": "It answered us", Struck: "Struck Earth" };
 const newsFacts = (l: { slug: string; facts: [string, string][] }) => l.facts.filter(([k]) => k in NEWS).map(([k]) => `${l.slug}:${k}`);
 
 export function useSnap() {

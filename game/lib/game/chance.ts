@@ -89,7 +89,10 @@ const MINDFUL = /\bmind\b|made|built|someone/i;
  *  sentinel has seen up close. Null when only the first guess stands. */
 function madeByEvidence(lead: Lead, readings: readonly Reading[]): number | null {
   const now = latest(readings).find((r) => r.now.length)?.now;
-  const close = lead.facts.some(([k]) => k === "Up close");
+  // Resolved from home by our Glow Imager counts as seen: it showed the panels themselves. Its page read "0.07 to 2%,
+  // from its glow" under a drawing of what it had resolved. 2026-11-11.
+  // And a sentinel wrecked as it arrived: something there met it, which is what a mind did. 2026-11-11.
+  const close = lead.facts.some(([k]) => k === "Up close" || k === "Resolved" || k === "Our sentinel" || k === "It answered");
   if (!now && !close) return null;
   const words = lead.could.flatMap((c, i) => (MINDFUL.test(c.what) ? [now?.[i] ?? c.odds] : []));
   return words.length ? Math.max(...words.map((w) => MIDDLE[w])) : null;
@@ -99,7 +102,9 @@ function madeByEvidence(lead: Lead, readings: readonly Reading[]): number | null
 export function chancesOf(lead: Lead, readings: readonly Reading[]): Chances | null {
   // Settled: a warm glow read as dust holds no mind. Its band said 0.8 to 5% beside "nothing more for us to do here",
   // and a playtest couldn't tell which to believe. 2026-11-07.
-  if (readings.some((r) => r.ruledOut)) return { mind: { lo: 0, hi: 0 }, basis: "ruled out by its light", sure: 1, ruledOut: true };
+  // By its light, a Close Reading's dust, or by its shape, our Glow Imager's cloud. 2026-11-11.
+  const ruled = readings.find((r) => r.ruledOut);
+  if (ruled) return { mind: { lo: 0, hi: 0 }, basis: ruled.id.endsWith("-imaged") ? "ruled out by its shape" : "ruled out by its light", sure: 1, ruledOut: true };
   const basis = basisOf(lead, readings);
   const word = lifeOf(lead, readings);
   const sure = 1 - (basis.spread - BASES.close.spread) / (BASES.tug.spread - BASES.close.spread);
@@ -113,7 +118,8 @@ export function chancesOf(lead: Lead, readings: readonly Reading[]): Chances | n
     // Said as it was learned: seen up close only when it was. A watcher known only by its laser read "seen up close",
     // and a playtest caught it. 2026-11-07.
     const seen = basis === BASES.close || lead.facts.some(([k]) => k === "Up close");
-    if (made !== null && made > chain) return { life: around(life, basis.spread), mind: around(made, BASES.close.spread), basis: seen ? "seen up close" : "from what it did", sure: seen ? 1 : 0.8 };
+    const resolved = !seen && lead.facts.some(([k]) => k === "Resolved");
+    if (made !== null && made > chain) return { life: around(life, basis.spread), mind: around(made, BASES.close.spread), basis: seen ? "seen up close" : resolved ? "resolved from home" : "from what it did", sure: seen || resolved ? 1 : 0.8 };
     return { life: around(life, basis.spread), mind: around(chain, basis.spread + UNMEASURED), basis: basis.say, sure };
   }
   // A black hole: whether minds gather at them, no search has looked, so we have nothing to go by. 2026-11-01.
@@ -125,6 +131,8 @@ export function chancesOf(lead: Lead, readings: readonly Reading[]): Chances | n
   const words = lead.could.flatMap((c, i) => (MINDFUL.test(c.what) ? [now?.[i] ?? c.odds] : []));
   if (!words.length) return null;
   const mind = Math.max(...words.map((w) => MIDDLE[w]));
+  // A warm glow our Glow Imager showed as a made ring rests on that, not on its glow. 2026-11-11.
+  if (lead.facts.some(([k]) => k === "Resolved")) return { mind: around(mind, BASES.close.spread), basis: "resolved from home", sure: 1 };
   return { mind: around(mind, basis.spread), basis: basis.say, sure };
 }
 

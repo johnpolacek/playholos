@@ -6,7 +6,7 @@ import type { EarthView } from "./types.ts";
 // "near": a sentinel's word on a cold glow, up close, 2026-10-31. The watcher's answer comes under "at".
 // "warned" and "known": the watcher's warning and a seed gone silent, playtest 2026-11-01.
 // "imaged": our Glow Imager's look at a cold glow, from home, 2026-11-11.
-const WHEN = new Set(["arrived", "found", "home", "seen", "ranged", "faded", "lands", "stands", "at", "near", "imaged", "warned", "known"]);
+const WHEN = new Set(["arrived", "found", "home", "seen", "ranged", "faded", "lands", "stands", "at", "near", "imaged", "lost", "answered", "warned", "known"]);
 
 /** Years at least between two warm glows that stop the skip. */
 export const GLOW_GAP = 1000;
@@ -75,7 +75,7 @@ export function nextKnownWhy(ahead: EarthView, year: number): { at: number; why:
   // 2026-11-11.
   const rings = (ahead.minds?.flashes ?? []).flatMap((f) => (f.imaged?.saw === "ring" ? [f.imaged.at] : []));
   const ring = rings.length ? { ring: { at: Math.min(...rings) } } : {};
-  walk({ ...ahead, holes, minds: ahead.minds && { ...ahead.minds, ...ring, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
+  walk({ ...ahead, holes, minds: ahead.minds && { ...ahead.minds, ...ring, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near, lost: g.lost, answered: g.answered })) } });
   return best === null ? null : { at: best, why: whyOf(where, whose) };
 }
 

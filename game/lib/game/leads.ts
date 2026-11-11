@@ -513,6 +513,19 @@ function flybyReading(v: Visit): Reading {
 /** What a sentinel saw once it braked and stayed, as a reading on its lead: its face as a pass sees it, and its air.
  *  It keeps watching. 2026-10-26. */
 function sentinelReading(v: Visit): Reading {
+  // Wrecked as it arrived, by a mind that keeps its door: all we have is its last word. 2026-11-11.
+  if (v.lost)
+    return {
+      id: `sentinel-${slugOf(v.star)}-lost`,
+      needs: "",
+      at: Math.floor(v.home * 10 + 1e-9) / 10,
+      by: "Our sentinel",
+      title: "Our sentinel went dark",
+      line: `Our sentinel reached ${starName(v.star)} and went silent as it arrived. Its last pictures show a craft not ours closing on it.`,
+      mind: "Something there met it. A rock doesn’t steer. Someone keeps that star, and did not want us to stay.",
+      now: [],
+      tells: ["A message from home is safe to send. Another craft sent to stay would likely end the same way."],
+    };
   const SAW: Record<Visit["sight"], [string, string]> = {
     bare: ["Bare rock", "bare rock and craters, no cloud and no sea"],
     seas: ["Cloud and seas", "cloud, and seas under it"],
@@ -839,19 +852,23 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         ["First seen", `${year(g.seen)}, by our Halo Survey`],
         ...(g.imaged !== undefined ? ([["Resolved", `${year(g.imaged)}, by our Glow Imager, from home`]] as [string, string][]) : []),
         ...(g.near !== undefined ? ([["Up close", `${year(g.near)}, by our sentinel`]] as [string, string][]) : []),
+        ...(g.lost !== undefined ? ([["Our sentinel", `Went dark as it arrived, ${year(g.lost)}. A craft not ours closed on it`]] as [string, string][]) : []),
+        ...(g.answered !== undefined ? ([["It answered", `${year(g.answered)}. Its words are in what we have heard`]] as [string, string][]) : []),
         ...(names[`Cold glow ${i + 1}`] ? ([["We named it", `${names[`Cold glow ${i + 1}`].name}, for ${names[`Cold glow ${i + 1}`].after}. Once Cold Glow ${i + 1}`]] as [string, string][]) : []),
       ],
       // A sentinel that stays sees its source up close, and that settles it. 2026-10-31.
-      could: g.near !== undefined || g.imaged !== undefined ? [
-        { what: "Something natural we don't know", why: "Nothing natural we know sets panels on orbits this orderly.", odds: "almost no chance" },
-        { what: "An error in our looking", why: g.near !== undefined ? "Our sentinel is there, and sees it." : "Our Glow Imager shows each panel apart, on its own orbit.", odds: "almost no chance" },
+      could: g.near !== undefined || g.imaged !== undefined || g.lost !== undefined || g.answered !== undefined ? [
+        { what: "Something natural we don't know", why: g.near !== undefined || g.imaged !== undefined ? "Nothing natural we know sets panels on orbits this orderly." : g.answered !== undefined ? "Nothing natural answers a knock in our own words." : "Nothing natural steers a craft to meet ours.", odds: "almost no chance" },
+        { what: "An error in our looking", why: g.near !== undefined ? "Our sentinel is there, and sees it." : g.imaged !== undefined ? "Our Glow Imager shows each panel apart, on its own orbit." : g.answered !== undefined ? "It answered what we sent, and showed us our own world." : "Something there met our sentinel and silenced it.", odds: "almost no chance" },
         { what: "A mind computing cold", why: "Made panels shedding heat at 12 K, far from their star, are what cold computing would build.", odds: "almost certain" },
       ] : [
         { what: "Something natural we don't know", why: "Dust of grains we haven't measured, or a disk cold and far out. The sky has surprised us before.", odds: "likely" },
         { what: "An error in our looking", why: "A faint galaxy behind the star, or a fault in the data. A second look rules it out.", odds: "unlikely" },
         { what: "A mind computing cold", why: "Waste heat shed far from a star glows grey and line-free, as this does. We guess about one star in 1,600 holds a mind.", odds: "almost no chance" },
       ],
-      tells: g.near !== undefined
+      tells: g.lost !== undefined
+        ? ["It wrecked the craft we sent to stay. A message from home is still safe to send.", "Our Glow Imager can look from here, where nothing can reach it."]
+        : g.near !== undefined
         ? ["It hasn't acted on our sentinel. Whether it noticed, we can't tell."]
         : g.imaged !== undefined
           // Seen from home, it can't know we looked. A sentinel still does what a look can't. 2026-11-11.
@@ -878,9 +895,13 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
       facts: [
         ["Word home", year(x.seen)],
         ["Its heat", "About 10^10 W, from within"],
+        ...(x.answered !== undefined ? ([["It answered", `${year(x.answered)}. Its words are in what we have heard`]] as [string, string][]) : []),
         ["Its place", `${lightTime(x.restAU)} from its star, where starlight leaves things near ${Math.round(278 / Math.sqrt(x.restAU))} K`],
       ],
-      could: [
+      could: x.answered !== undefined ? [
+        { what: "Something made, resting", why: "It woke to our knock and answered.", odds: "almost certain" },
+        { what: "A body warmed from inside", why: "Rock doesn’t answer.", odds: "almost no chance" },
+      ] : [
         { what: "Something made, resting", why: "A body folded small and cold, keeping just enough warmth, as a mind waiting would.", odds: "likely" },
         { what: "A body warmed from inside", why: "Radioactive rock or tides warm small worlds, but not this much this far out.", odds: "unlikely" },
       ],

@@ -488,10 +488,12 @@ test("finding minds: a flash while the warm watch runs, most cold glows, the wat
       assert.equal(watcherOf(world, kit, seen.relay!.at - 0.01)?.relay, undefined);
       assert.equal(watcherOf(world, { ...kit, relaySearch: null }, 1e5)?.relay, undefined);
     }
-    // A craft that stays finds a sleeper. A flyby only if it rests within a 1 m telescope's reach.
+    // A craft that stays finds a sleeper. A flyby only if it rests within a 1 m telescope's reach. A hostile one's
+    // machines wreck a craft that comes to stay, so it finds nothing there. 2026-11-11.
     for (const o of m.old.filter((o) => o.asleep)) {
-      const stay = sleeperOf(o, [{ pos: o.pos, arrives: 5000, stays: true }], 1e6);
-      assert.equal(stay?.seen, 5000 + STAY_SEARCH_YEARS + o.d);
+      const stay = sleeperOf(o, [{ pos: o.pos, arrives: 5000, stays: true }], 1e6, w.maker);
+      if (o.peaceful <= 3 && o.id !== w.maker) assert.equal(stay, null);
+      else assert.equal(stay?.seen, 5000 + STAY_SEARCH_YEARS + o.d);
       const pass = sleeperOf(o, [{ pos: o.pos, arrives: 5000, stays: false }], 1e6);
       assert.equal(pass !== null, o.restAU! <= FLYBY_SEES_AU);
       assert.equal(sleeperOf(o, [{ pos: [o.pos[0] + 1, o.pos[1], o.pos[2]], arrives: 5000, stays: true }], 1e6), null);
@@ -669,6 +671,74 @@ test("a call through our Galaxy Broadcast Array is answered once by each awake p
   assert.ok(once.some((h) => /too short to read/.test(h.text!)) && once.every((h) => h.d > 6674 === /too short to read/.test(h.text!)));
   // No call, no answer.
   assert.equal(peerAnswers(world, {}, [], year).length, 0);
+});
+
+test("old minds differ by their part in the settling: one answers a knock, one stays silent, a hostile one wrecks our sentinel", async () => {
+  const { mindsSeen, guardAt, hostile, HOSTILE } = await import("./minds.ts");
+  const { oldAnswers, ANSWERS_IN, SILENT, WAKES_IN, pastSeen, GIVES_KNOWLEDGE } = await import("./old-minds.ts");
+  const world = await loadWorld(10);
+  const olds = world.minds!.old, maker = world.minds!.watcher.maker;
+  // Every old mind has a part and three scores from 1 to 10, and only a sleeping one has a word on waking.
+  for (const m of olds) {
+    assert.ok(["founder", "stopped", "after"].includes(m.part));
+    assert.ok([m.open, m.peaceful, m.generous].every((s) => Number.isInteger(s) && s >= 1 && s <= 10));
+    assert.equal(m.wakes === null, !m.asleep);
+    assert.equal(m.part === "after", m.age < 3e9);
+  }
+  // About two thirds were born after, and of those who lived through it, about 1 in 5 was made to stop.
+  const lived = olds.filter((m) => m.part !== "after");
+  assert.ok(Math.abs(olds.filter((m) => m.part === "after").length / olds.length - 0.67) < 0.1);
+  assert.ok(Math.abs(lived.filter((m) => m.part === "stopped").length / lived.length - 0.2) < 0.12);
+  // The mind that made our watcher is never hostile to a craft: it told us we may look.
+  assert.ok(!hostile(olds.find((m) => m.id === maker)!, maker));
+  const kit = { halo: 3, haloArray: 20 };
+  const year = 5000;
+  const seen = mindsSeen(world, kit, year);
+  const mind = (id: string) => olds.find((m) => m.id === id)!;
+  const knock = (to: string) => ({ to, y: 100, questions: true, lie: false, travels: "We see you. Who are you?" });
+  // An awake, open mind answers a message from home, once, its distance and its own time on, and its distance back.
+  const i = seen.glows.findIndex((g) => mind(g.id).open > SILENT);
+  const m = mind(seen.glows[i].id);
+  const [a] = oldAnswers(world, seen, [], [knock(`Cold glow ${i + 1}`), { ...knock(`Cold glow ${i + 1}`), y: 200 }], year);
+  assert.equal(a.star, `Cold glow ${i + 1}`);
+  assert.ok(Math.abs(a.arrived - (100 + 2 * m.d + ANSWERS_IN[m.open])) < 1e-6);
+  assert.match(a.text!, /build at no other star/);
+  if (m.generous > 3) assert.ok(a.text!.includes(pastSeen(m.age)));
+  assert.equal(a.gift !== undefined, m.generous >= GIVES_KNOWLEDGE);
+  // A hidden one never answers, however long we wait.
+  const h = seen.glows.findIndex((g) => mind(g.id).open <= SILENT);
+  assert.ok(h >= 0);
+  assert.equal(oldAnswers(world, seen, [], [knock(`Cold glow ${h + 1}`)], 1e6).length, 0);
+  // A hostile one wrecks a sentinel that comes to stay, as it arrives: no word up close, only that it went dark.
+  const g = seen.glows.findIndex((x) => hostile(mind(x.id), maker));
+  assert.ok(g >= 0 && mind(seen.glows[g].id).peaceful <= HOSTILE);
+  const bad = mind(seen.glows[g].id);
+  const there = [{ pos: bad.pos, arrives: 900, stays: true }];
+  const after = mindsSeen(world, { ...kit, craft: there }, year).glows.find((x) => x.id === bad.id)!;
+  assert.equal(after.near, undefined);
+  assert.ok(Math.abs(after.lost! - (900 + bad.d)) < 1e-6);
+  assert.equal(guardAt(world, bad.pos)!.id, bad.id);
+  // A peaceful one lets it stay, and it sees what glows.
+  const good = mind(seen.glows.find((x) => !hostile(mind(x.id), maker))!.id);
+  const stayed = mindsSeen(world, { ...kit, craft: [{ pos: good.pos, arrives: 900, stays: true }] }, year).glows.find((x) => x.id === good.id)!;
+  assert.ok(stayed.near !== undefined && stayed.lost === undefined);
+  // A sleeping mind hears nothing from afar. With a craft of ours beside it, one a knock wakes answers, later by its waking.
+  const s = olds.find((x) => x.asleep && x.wakes && x.open > SILENT && !hostile(x, maker))!;
+  const by = [{ pos: s.pos, arrives: 800, stays: true }];
+  const found = mindsSeen(world, { ...kit, craft: by }, year);
+  const n = found.sleepers.findIndex((x) => x.id === s.id);
+  assert.ok(n >= 0);
+  const [w] = oldAnswers(world, found, by, [knock(`Warm body ${n + 1}`)], 1e5);
+  assert.ok(Math.abs(w.arrived - (Math.max(100 + s.d, 800) + WAKES_IN + ANSWERS_IN[s.open] + s.d)) < 1e-6);
+  assert.match(w.text!, /^You woke us/);
+  assert.equal(oldAnswers(world, found, [], [knock(`Warm body ${n + 1}`)], 1e5).length, 0);
+  // One a knock doesn't wake never answers, and a hostile sleeper is never found by a craft that stays.
+  const deep = olds.find((x) => x.asleep && !x.wakes && !hostile(x, maker))!;
+  const byDeep = [{ pos: deep.pos, arrives: 800, stays: true }];
+  const fd = mindsSeen(world, { ...kit, craft: byDeep }, year);
+  assert.equal(oldAnswers(world, fd, byDeep, [knock(`Warm body ${fd.sleepers.findIndex((x) => x.id === deep.id) + 1}`)], 1e6).length, 0);
+  const guarded = olds.find((x) => x.asleep && hostile(x, maker));
+  if (guarded) assert.ok(!mindsSeen(world, { ...kit, craft: [{ pos: guarded.pos, arrives: 800, stays: true }] }, year).sleepers.some((x) => x.id === guarded.id));
 });
 
 test("a glow earns its name in the order we read it, and only plain heat or a sentinel's look earns one", async () => {

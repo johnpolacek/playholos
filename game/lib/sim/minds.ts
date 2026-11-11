@@ -70,6 +70,13 @@ export interface ColdGlowSeen {
   /** The Year our Glow Imager showed its source from home: thin panels on orderly orbits, as a craft up close sees.
    *  2026-11-11. */
   imaged?: number;
+  /** The Year we knew our sentinel there went dark as it arrived: a hostile mind wrecks a craft at its door.
+   *  2026-11-11. */
+  lost?: number;
+  /** The Year its answer to our knock reached us. Nothing settles a glow like its own voice. 2026-11-11. */
+  answered?: number;
+  /** The old mind it is, for its answer to a knock. Earth learns nothing from it. */
+  id: string;
 }
 
 export interface WatcherSeen {
@@ -106,6 +113,10 @@ export interface SleeperSeen {
   d: number;
   seen: number;
   restAU: number;
+  /** The Year its answer to our knock reached us. 2026-11-11. */
+  answered?: number;
+  /** The old mind it is, for its answer to a knock. Earth learns nothing from it. */
+  id: string;
 }
 
 export interface MindsSeen {
@@ -295,7 +306,7 @@ export const ARRAY_RATE = 40000;
 /** An awake old mind's glow is seen once a survey looking star by star, nearest first, reaches its star, if it is over
  *  the floor at its distance. A whole-sky map can't: far-infrared skies are crowded with faint galaxies, so only an
  *  array sees a faint glow sharply, one star at a time. It has glowed for ages, so its light is already here. */
-export function coldGlowOf(m: OldMind, halo: number | null | undefined, year: number, array: number | null = null, craft: MindKit["craft"] = []): ColdGlowSeen | null {
+export function coldGlowOf(m: OldMind, halo: number | null | undefined, year: number, array: number | null = null, craft: MindKit["craft"] = [], maker?: string): ColdGlowSeen | null {
   if (m.asleep || m.glowW === null) return null;
   const { floor } = catalog.halo;
   if (m.glowW < floor * (m.d / (10 * PC_LY)) ** 2) return null;
@@ -303,9 +314,42 @@ export function coldGlowOf(m: OldMind, halo: number | null | undefined, year: nu
   const when = [halo != null ? halo + n / HALO_RATE : Infinity, array != null ? array + n / ARRAY_RATE : Infinity];
   const seen = Math.min(...when);
   if (seen > year) return null;
+  // A hostile mind wrecks a craft that comes to stay, as it arrives: we know once its word is overdue. 2026-11-11.
+  if (hostile(m, maker)) {
+    const came = arrival(m, craft);
+    return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW, id: m.id, ...(came !== null && came + m.d <= year ? { lost: came + m.d } : {}) };
+  }
   // A craft that stays in its system maps it in a few Years and sees what glows, up close. 2026-10-31.
   const near = closest(m, craft, true);
-  return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW, ...(near !== null && near <= year ? { near } : {}) };
+  return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW, id: m.id, ...(near !== null && near <= year ? { near } : {}) };
+}
+
+/** At or under this score, hostile to peaceful, a mind is hostile: it wrecks a craft of ours that comes to stay in its
+ *  system, as it arrives. A craft that only passes is gone before it matters. The mind that made our watcher never
+ *  does: it has let us be for ages, and told us we may look. A sample, and the designer's pick, 2026-11-11. */
+export const HOSTILE = 3;
+export const hostile = (m: OldMind, maker?: string) => m.peaceful <= HOSTILE && m.id !== maker;
+
+/** The Year the first craft of ours to stay reaches a mind's system, or null. */
+function arrival(m: OldMind, craft: MindKit["craft"]): number | null {
+  let best: number | null = null;
+  for (const c of craft ?? []) {
+    if (!c.stays || Math.hypot(c.pos[0] - m.pos[0], c.pos[1] - m.pos[1], c.pos[2] - m.pos[2]) > SAME_SYSTEM_LY) continue;
+    if (best === null || c.arrives < best) best = c.arrives;
+  }
+  return best;
+}
+
+/** The hostile old mind in the system at `pos`, if one is there, awake or asleep: a sentinel sent there for any reason
+ *  goes dark as it arrives. */
+export function guardAt(world: World, pos: readonly [number, number, number]): OldMind | null {
+  const maker = world.minds?.watcher?.maker;
+  return world.minds?.old.find((m) => hostile(m, maker) && Math.hypot(pos[0] - m.pos[0], pos[1] - m.pos[1], pos[2] - m.pos[2]) <= SAME_SYSTEM_LY) ?? null;
+}
+
+/** The Year a craft of ours that stays is beside a mind, to pass a knock on, or null: never at a hostile one. */
+export function standsBy(m: OldMind, craft: MindKit["craft"], maker?: string): number | null {
+  return hostile(m, maker) ? null : arrival(m, craft);
 }
 
 /** The soonest word home from a craft of ours in a mind's system, a craft that stays only if `stays`. */
@@ -365,17 +409,20 @@ export function watcherOf(world: World, kit: MindKit, year: number): WatcherSeen
 
 /** A sleeping old mind, found only by our craft in its system: one that stays always finds it, a flyby only if the
  *  mind rests within a 1 m telescope's reach of its path. Word comes home at light speed. */
-export function sleeperOf(m: OldMind, craft: MindKit["craft"], year: number): SleeperSeen | null {
+export function sleeperOf(m: OldMind, craft: MindKit["craft"], year: number, maker?: string): SleeperSeen | null {
   if (!m.asleep || m.restAU === null) return null;
+  // A hostile one's machines keep watch while it sleeps: a craft that comes to stay is wrecked before it finds it.
+  const guarded = hostile(m, maker);
   let best: number | null = null;
   for (const c of craft ?? []) {
     if (Math.hypot(c.pos[0] - m.pos[0], c.pos[1] - m.pos[1], c.pos[2] - m.pos[2]) > SAME_SYSTEM_LY) continue;
+    if (c.stays && guarded) continue;
     if (!c.stays && m.restAU > FLYBY_SEES_AU) continue;
     const home = c.arrives + (c.stays ? STAY_SEARCH_YEARS : 0) + m.d;
     if (best === null || home < best) best = home;
   }
   if (best === null || best > year) return null;
-  return { ...skyOf(m.pos), d: m.d, seen: best, restAU: m.restAU };
+  return { ...skyOf(m.pos), d: m.d, seen: best, restAU: m.restAU, id: m.id };
 }
 
 /** Years our Glow Imager takes to turn to a glow and show it: a week, a sample, as the Hypertelescope's turn.
@@ -437,12 +484,13 @@ export function mindsSeen(world: World, kit: MindKit, year: number): MindsSeen {
       const saw = src.flash[1] < done ? ("gone" as const) : "kind" in src ? ("dust" as const) : ("smooth" as const);
       return { ...f, read: { from, at, saw, ...(saw === "dust" ? { kind: (src as NaturalGlow).kind } : {}) } };
   });
-  const glows = bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year, kit.haloArray ?? null, kit.craft)));
+  const maker = m.watcher?.maker;
+  const glows = bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year, kit.haloArray ?? null, kit.craft, maker)));
   imagerLooks(found, flashes, glows, kit.imager, year);
   return {
     flashes,
     glows,
     watcher: watcherOf(world, kit, year),
-    sleepers: bySeen(m.old.map((o) => sleeperOf(o, kit.craft, year))),
+    sleepers: bySeen(m.old.map((o) => sleeperOf(o, kit.craft, year, maker))),
   };
 }
