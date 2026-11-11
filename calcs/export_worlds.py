@@ -117,6 +117,7 @@ def golden():
 # The game runs one loop for any order (game/lib/sim/works.ts). Its numbers come from here, so they have one source.
 import early_game as eg, signs
 FH = {w: years for w, _, years in eg.FIRST_HOUR}
+CRAFT = ('Probe yard', 'Fusion drive', 'Seed ship', 'Strike yard')    # the Launch Tunnel's cut, HOLOS_GAME_CONCEPT.md, 2026-11-07
 ORBIT = ('Infrared telescope', 'Probe yard', 'A 15 m mirror', 'Orbital foundry', 'Seed ship', 'Fusion drive')    # the yard's cut, as the mocks apply it. The drive since 2026-10-22: it is joined in orbit, as Icarus's Firefly
 
 def works_catalog():
@@ -197,6 +198,8 @@ def works_catalog():
     import craft as craft_mod
     craft = craft_mod.catalog()
     works.update(more)
+    # What the Launch Tunnel speeds: the craft whose hulls and fuel its cheap lift carries. 2026-11-07.
+    for w in CRAFT: works[w]['craft'] = True
     return dict(works=works, floor=eg.FLOOR, push=eg.PUSH, flagship=eg.FLAGSHIP_THOUGHT, gridRoom=eg.GRID_ROOM, step=1.5,
                 dataCenter=dict(years=1, aside=0.05), halo=dict(floor=eg.HALO['floor'], every=eg.HALO['every']), lens=dict(au=signs.LENS_AU, flight=round(signs.LENS_FLIGHT, 3), look=signs.LENS_LOOK, km30pc=25),
                 sentinel=dict(build=S.ROCKET_BUILD, speed=S.ROCKET_V, burns=S.ROCKET_BURNS, brake=craft['sentinelBrake'], fuel=craft['sentinelFuel']),
@@ -204,6 +207,9 @@ def works_catalog():
                 seedShip=dict(speed=S.SHIP_V, burn=S.BURN, brake=S.BRAKE, stands=S.STANDS),
                 seedProbe=dict(build=S.PROBE_BUILD, first=S.STANDS + S.FIRST_SHIP, every=S.EVERY, copies=S.PROBE_COPIES, generations=S.PROBE_GENERATIONS),
                 mindLink=dict(bits=H.MIND_BITS, aperture=H.LINK_APERTURE, watts=H.LINK_W, wave=H.LINK_WAVE, photons=H.LINK_PHOTONS), studies=0.1, yard=dict(work='Orbital yard', cut=0.25),
+                # The Launch Tunnel's cut to our craft, ours, settled 2026-11-07: cheap lift for hulls and fuel. It was
+                # written into works.json by hand, so this export dropped it until 2026-11-11.
+                tunnel=dict(work='Launch tunnel', cut=0.2),
                 rock={'Mass driver': eg.DRIVER_KT, 'Belt mining': eg.MINING_KT, 'Orbital ring': eg.RING_KT}, **kit)
 
 def mock_orders(order=eg.BY_START, extra=(), front=()):

@@ -36,6 +36,9 @@ export function readingStands(lead: Lead, minds: ReturnType<typeof useLeads>["mi
   if (!flash) return null;
   if (flash.read?.saw) return "done";
   if (flash.reading || reads.some((o) => o.name === lead.star)) return "under way";
+  // Our Glow Imager has shown its shape, which settles it: a reading of its light has nothing left to tell. A cloud's
+  // page still offered "Read its light" under "ruled out". 2026-11-11.
+  if (flash.imaged) return null;
   return flash.faded === undefined ? "open" : null;
 }
 
@@ -104,7 +107,7 @@ export function CloseReading({ lead }: { lead: Lead }) {
   const shining = flash?.faded === undefined;
   // Ordered, by us or unasked after our first, and not yet done: the sim says when it comes into view and is done.
   const mine = flash?.reading;
-  if (!flash || (!shining && !mine && !read && !asked)) return null;
+  if (!flash || (!shining && !mine && !read && !asked) || (flash.imaged && !mine && !read && !asked)) return null;
   const saw = read?.saw;
   const reading = mine && !saw;
   // What we know lands each tenth of a Year, every thirty seconds, so a reading's answer reaches us at the first tenth

@@ -140,11 +140,17 @@ function ListenButton({ onClick }: { onClick(): void }) {
 /** Where a warm glow stands, in one line at the top of its page: ruled out, worth a closer look, open, or lost. A
  *  playtest read "nothing more for us to do here" beside an Engage button and a 0.8 to 5% mind, and couldn't tell
  *  which to believe. 2026-11-07. */
-function GlowVerdict({ flash }: { flash: { read?: { saw: string }; faded?: number } }) {
+function GlowVerdict({ flash }: { flash: { read?: { saw: string }; imaged?: { saw: string }; faded?: number } }) {
   const saw = flash.read?.saw;
   const shining = flash.faded === undefined;
+  // Our Glow Imager's word comes first: its shape settles a glow, whatever its light did or didn't tell. A ring's
+  // page read "LOST. It faded before we read its light." above "resolved from home". 2026-11-11.
   const [tag, line, tone] =
-    saw === "dust"
+    flash.imaged?.saw === "ring"
+      ? ["MADE", "A ring round a star, set in place. Someone built it.", "border-other/60 text-other"]
+      : flash.imaged?.saw === "cloud"
+        ? ["RULED OUT", "Its shape is a cloud of dust. No life or mind here.", "border-faint text-muted"]
+        : saw === "dust"
       ? ["RULED OUT", "Its light is dust. No life or mind here.", "border-faint text-muted"]
       : saw === "smooth"
         ? shining

@@ -4,10 +4,6 @@
    "years": 6,
    "want": 0.2
   },
-  "Galaxy broadcast array": {
-   "years": 8,
-   "want": 1.0
-  },
   "Deep flash watch": {
    "years": 6,
    "want": 0.1
@@ -151,6 +147,10 @@
   "Launch tunnel": {
    "years": 12,
    "want": 2.0
+  },
+  "Galaxy broadcast array": {
+   "years": 8,
+   "want": 1.0
   },
   "Orbital ring": {
    "years": 10,

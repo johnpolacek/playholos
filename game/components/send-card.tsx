@@ -184,6 +184,7 @@ function GalaxyReach({ first, later }: { first: number; later: number | null }) 
       ))}
       <circle r={5} className="fill-muted/40" />
       <g clipPath="url(#disk)">
+        {/* Kept up, it is read as far as the Galaxy's center: the ring that reaches it. */}
         {later !== null && <circle cy={sun} r={r(later)} className="fill-you/5 stroke-you/30" strokeDasharray="3 3" />}
         <circle cy={sun} r={r(first)} className="fill-you/15 stroke-you/70" />
         <g className="motion-reduce:hidden">
@@ -193,8 +194,8 @@ function GalaxyReach({ first, later }: { first: number; later: number | null }) 
         </g>
       </g>
       <circle cy={sun} r={2.4} className="fill-ink" />
-      <text y={sun + 13} textAnchor="middle" className="fill-you font-mono text-[7px]">READ {n(first)} LY</text>
-      <text y={-9} textAnchor="middle" className="fill-muted font-mono text-[7px]">THE GALAXY’S CENTER</text>
+      <text y={sun - r(first) - 4} textAnchor="middle" className="fill-you font-mono text-[7px]">READ {n(first)} LY</text>
+      <text y={12} textAnchor="middle" className="fill-muted font-mono text-[7px]">THE GALAXY’S CENTER</text>
       <text y={r(50000) + 9} textAnchor="middle" className="fill-muted font-mono text-[7px]">NOTICED ACROSS THE GALAXY</text>
     </svg>
   );
@@ -222,9 +223,9 @@ function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: str
     ? [
         ["Power", `${share(power)}, in pulses`],
         ["Each star gets", "About a second a Year"],
-        ["Noticed", "Across the Galaxy, on the first pass"],
+        ["Noticed", "Across the Galaxy, first pass"],
         ["Read on the first pass to", `${n(reach)} ly`],
-        ["Read at the Galaxy’s center after", `${callPasses(bits, 27000).toLocaleString("en-US")} Years of repeats`],
+        ["Read at the Galaxy’s center", (sent ? sent.repeat : repeat) ? `After ${callPasses(bits, 27000).toLocaleString("en-US")} Years` : "Only if it repeats"],
       ]
     : [
         ["Power", share(power)],
@@ -255,7 +256,7 @@ function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: str
           <input type="range" min={5} max={50} value={dial} onChange={(e) => setDial(Number(e.target.value))} className="w-full accent-you" />
         </label>
       )}
-      {galaxy ? <GalaxyReach first={reach} later={(sent ? sent.repeat : repeat) ? callReach(bits, 100) : null} /> : <Rings reach={reach} notice={notice} />}
+      {galaxy ? <GalaxyReach first={reach} later={(sent ? sent.repeat : repeat) ? 27000 : null} /> : <Rings reach={reach} notice={notice} />}
       {galaxy && draft.size !== "page" && (
         <p className="text-[12.5px] text-other">Only a page of words reads far in a second a Year. This is larger, so it is read only near us.</p>
       )}
