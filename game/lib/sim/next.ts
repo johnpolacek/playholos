@@ -5,7 +5,8 @@ import type { EarthView } from "./types.ts";
 /** Times in what Earth knows that mark something arriving or being found, by their keys. */
 // "near": a sentinel's word on a cold glow, up close, 2026-10-31. The watcher's answer comes under "at".
 // "warned" and "known": the watcher's warning and a seed gone silent, playtest 2026-11-01.
-const WHEN = new Set(["arrived", "found", "home", "seen", "ranged", "faded", "lands", "stands", "at", "near", "warned", "known"]);
+// "imaged": our Glow Imager's look at a cold glow, from home, 2026-11-11.
+const WHEN = new Set(["arrived", "found", "home", "seen", "ranged", "faded", "lands", "stands", "at", "near", "imaged", "warned", "known"]);
 
 /** Years at least between two warm glows that stop the skip. */
 export const GLOW_GAP = 1000;
@@ -69,7 +70,12 @@ export function nextKnownWhy(ahead: EarthView, year: number): { at: number; why:
   // with nothing to do there, and the next jump's card still names it. Blind playtest, the Will's call, 2026-11-07.
   // Word from our craft at one still stops it, under visits.
   const holes = [...(ahead.holes ?? [])].sort((a, b) => a.found - b.found).slice(0, 1);
-  walk({ ...ahead, holes, minds: ahead.minds && { ...ahead.minds, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
+  // Our Glow Imager turns to every glow we find, a week each. Only its first cold glow stops the skip, as only the
+  // first found does, and only its first made ring among the warm ones: the first sure sight of another mind's works.
+  // 2026-11-11.
+  const rings = (ahead.minds?.flashes ?? []).flatMap((f) => (f.imaged?.saw === "ring" ? [f.imaged.at] : []));
+  const ring = rings.length ? { ring: { at: Math.min(...rings) } } : {};
+  walk({ ...ahead, holes, minds: ahead.minds && { ...ahead.minds, ...ring, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
   return best === null ? null : { at: best, why: whyOf(where, whose) };
 }
 

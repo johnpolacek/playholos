@@ -6,7 +6,7 @@ import { useGame } from "@/components/game-provider";
 import { Arrived, setLeap, useLeap } from "@/components/jump";
 import { useAhead, useIdleNow } from "@/components/hud";
 import { useMindNews } from "@/components/mind-chat";
-import { useJumpWords } from "@/components/mind-news";
+import { MindSays, useJumpWords } from "@/components/mind-news";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
 import { Quiet } from "@/components/quiet";
@@ -28,6 +28,17 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 
 /** Idle compute worth a word: less than this at work. */
 const SPARE = 0.8;
+
+/** Puts a note away, from its top corner, the same on every note here. */
+function PutAway({ onClick }: { onClick(): void }) {
+  return (
+    <button onClick={onClick} aria-label="Put away" className="absolute top-0 right-0 z-10 flex size-9 items-center justify-center text-muted hover:text-ink">
+      <svg aria-hidden width="10" height="10" viewBox="0 0 12 12">
+        <path d="M1.5 1.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.4" />
+      </svg>
+    </button>
+  );
+}
 
 export function IdleNote() {
   const { save, year, orderAt, playOn, snooze } = useGame();
@@ -72,7 +83,11 @@ export function IdleNote() {
     if (first.current?.to !== leap.to) first.current = { to: leap.to, said: latest };
     else if (first.current.said !== latest) setLeap(null);
   }, [leap, told.fresh, latest]);
-  const shown = year !== null && (idle || quiet || watchNew) && away !== key && path !== "/play/mind";
+  // Nothing needs us: the note only repeats the jump the top bar offers. On a phone it covered a third of the map for
+  // that, playtest 2026-11-08. On a wide screen too it covered the map's corner and read as a second call beside the
+  // top bar's, on four screens, so it shows only when something needs us. Screen critic, 2026-11-08.
+  const nothing = !watchNew && !idle && !glow && !spare;
+  const shown = year !== null && (idle || quiet || watchNew) && !nothing && away !== key && path !== "/play/mind";
   const pick = useMindPick(shown && (idle || spare));
   const root = useRef<HTMLDivElement>(null);
   useGSAP(
@@ -88,32 +103,36 @@ export function IdleNote() {
         role="status"
         className="absolute top-10 left-2.5 z-20 max-h-[calc(100%-3.5rem)] w-[min(400px,calc(100%-20px))] overflow-y-auto rounded-xl border border-faint bg-paper/90 pt-2 pr-2 backdrop-blur-sm"
       >
-        <MindNote still={!told.busy} edge={false} className="text-[13.5px] leading-[1.45]">
-          <Quiet
-            key={leap.to}
-            from={leap.from}
-            to={leap.to}
-            onClose={() => {
-              told.read();
-              setLeap(null);
-            }}
-          >
+        {/* Put away as every note here is. It was a button, Go on, which read as “tell us more” and as a clock waiting
+            to restart, and it did neither. 2026-11-10. */}
+        <PutAway
+          onClick={() => {
+            told.read();
+            setLeap(null);
+          }}
+        />
+        <MindNote still={!told.busy} edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
+          <Quiet key={leap.to} from={leap.from} to={leap.to}>
             {/* What reached us first, the Mind's words after: they stream in late, and above the list they pushed its rows
                 from under the cursor, in two blind playtests. 2026-11-07. */}
             <Arrived from={leap.from} to={leap.to} snap={leap.snap} />
-            {told.fresh && path !== "/play/mind" && (
+            {(told.fresh || told.coming) && path !== "/play/mind" && (
               <p aria-live="polite">
                 {told.words || "…"}{" "}
-                <Link to="/play/mind" onClick={told.read} className="inline-flex min-h-6 items-center text-[12.5px] whitespace-nowrap text-you hover:underline">
-                  Reply ›
-                </Link>
+                {told.fresh && (
+                  <Link to="/play/mind" onClick={told.read} className="inline-flex min-h-6 items-center text-[12.5px] whitespace-nowrap text-you hover:underline">
+                    Reply ›
+                  </Link>
+                )}
               </p>
             )}
           </Quiet>
         </MindNote>
       </div>
     );
-  if (!shown) return null;
+  // With no word of its own, this corner is the Mind's news. One voice, one corner: news that landed as the clock ran
+  // opened bottom left, apart from every other note. It waits its turn behind a jump or what needs us. 2026-11-10.
+  if (!shown) return <MindSays />;
   const start = () => {
     if (!pick || orderAt === null) return;
     change(orderLater(pick.build.name, tenths(orderAt)));
@@ -154,21 +173,13 @@ export function IdleNote() {
   const readLead = reading && leads.find((l) => l.star === reading.name);
   const clock = held && <span className="text-page-ink2"> The clock waits.</span>;
   const what = pick ? `${pick.build.what.charAt(0).toLowerCase()}${pick.build.what.slice(1)}` : "";
-  // Nothing needs us: the note only repeats the jump the top bar offers. On a phone it covered a third of the map for
-  // that, playtest 2026-11-08. On a wide screen too it covered the map's corner and read as a second call beside the
-  // top bar's, on four screens, so it shows only when something needs us. Screen critic, 2026-11-08.
-  const nothing = !watchNew && !idle && !glow && !spare;
   return (
     <div
       ref={root}
       role="status"
-      className={`absolute top-10 left-2.5 z-20 w-[min(400px,calc(100%-20px))] rounded-xl border border-other/50 bg-paper/90 pt-2 pr-2 backdrop-blur-sm ${nothing ? "hidden" : ""}`}
+      className="absolute top-10 left-2.5 z-20 w-[min(400px,calc(100%-20px))] rounded-xl border border-other/50 bg-paper/90 pt-2 pr-2 backdrop-blur-sm"
     >
-      <button onClick={() => setAway(key)} aria-label="Put away" className="absolute top-0 right-0 z-10 flex size-9 items-center justify-center text-muted hover:text-ink">
-        <svg aria-hidden width="10" height="10" viewBox="0 0 12 12">
-          <path d="M1.5 1.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.4" />
-        </svg>
-      </button>
+      <PutAway onClick={() => setAway(key)} />
       <MindNote edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
         {watchNew && watchLead ? (
           <p>
@@ -323,9 +334,7 @@ export function IdleNote() {
               </Link>
             </>
           )}
-          {/* Nothing needs us: the top bar already offers this jump, and the same button twice read as two things to do.
-              Screen critic, 2026-11-08. */}
-          {(!idle || !pick) && ahead && !nothing && (
+          {(!idle || !pick) && ahead && (
             <button
               onClick={ahead.go}
               className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow || heat || openSky || flight || step ? "border border-you/60 text-you" : "bg-you text-paper"}`}

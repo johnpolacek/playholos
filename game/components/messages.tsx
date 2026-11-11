@@ -45,7 +45,9 @@ function sentRows(sent: Sent[]): Row[] {
     if (s.to === "everywhere")
       return [{
         key: `sent${i}`, name: EVERYWHERE, at: s.y + s.reach!, kind: "send", msg, sent: YEAR_0 + s.y, ly: s.reach,
-        note: s.repeat && s.stopped === undefined ? `Calling, readable to ${s.reach} ly` : `Readable to ${s.reach} ly`,
+        note: s.galaxy
+          ? s.repeat && s.stopped === undefined ? "Calling along the Galaxy’s plane" : "Sent along the Galaxy’s plane"
+          : s.repeat && s.stopped === undefined ? `Calling, readable to ${s.reach} ly` : `Readable to ${s.reach} ly`,
       }];
     // A far warm glow has only a range, so its rows count to the near end, at the soonest. Playtest 2026-11-01.
     const range = s.range ?? target(s.to)?.range;

@@ -41,7 +41,7 @@ export function usePath(): { stages: Stage[]; next: Step | null } {
   const read = !!minds?.flashes.some((f) => f.read);
   const close = (plan.sentinels ?? []).some((o) => warm(o.name)) || (plan.flybys ?? []).some((o) => warm(o.name));
   const found =
-    visits.some((v) => v.sight === "works") || !!minds?.watcher || (minds?.sleepers.length ?? 0) > 0 || !!minds?.glows.some((g) => g.near !== undefined);
+    visits.some((v) => v.sight === "works") || !!minds?.watcher || (minds?.sleepers.length ?? 0) > 0 || !!minds?.glows.some((g) => g.near !== undefined || g.imaged !== undefined);
   // Where our Mind could stay: the nearest world we have felt, or the world next door.
   const home = leads.find((l) => l.what === "A new world") ?? leads.find((l) => l.slug === "proxima-centauri");
   const colony = plan.colony ? leads.find((l) => l.star === plan.colony!.name) : undefined;

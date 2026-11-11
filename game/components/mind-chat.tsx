@@ -68,6 +68,7 @@ const transport = new DefaultChatTransport({
       colony: save?.plan?.colony ?? null,
       will: save?.will ?? null,
       stops: save?.plan?.stops ?? [],
+      switches: save?.plan?.switches ?? [],
       sent: save?.sent ?? [],
       pick: loadPick(),
     };
@@ -164,14 +165,17 @@ export function useKeepTalk() {
 }
 
 /** The Mind speaking unasked: `tell` hands it news from Earth, which it speaks of first. With the latest of its words,
- *  for showing them away from the Mind tab, and whether the news led to them. 2026-10-31. */
+ *  for showing them away from the Mind tab, and whether the news led to them. 2026-10-31. `handed` is the news it was
+ *  last handed, answered or not, if nothing was asked since. */
 export function useMindNews() {
   const { messages, sendMessage, busy, lastAnswer, error } = useMind();
   const at = messages.findIndex((m) => m.id === lastAnswer);
   const before = at > 0 ? messages[at - 1].parts.map((p) => (p.type === "text" ? p.text : "")).join("") : "";
   const words = at >= 0 ? messages[at].parts.map((p) => (p.type === "text" ? p.text : "")).join("") : "";
+  const asked = textOf(messages.findLast((m) => m.role === "user"));
   const tell = useMemo(() => (news: string) => sendMessage({ text: NEWS + news }), [sendMessage]);
-  return { tell, busy, error, last: lastAnswer, words, news: before.startsWith(NEWS) ? before.slice(NEWS.length) : null };
+  const newsOf = (text: string) => (text.startsWith(NEWS) ? text.slice(NEWS.length) : null);
+  return { tell, busy, error, last: lastAnswer, words, news: newsOf(before), handed: newsOf(asked) };
 }
 
 const textOf = (message?: UIMessage) => message?.parts.map((part) => (part.type === "text" ? part.text : "")).join("") ?? "";

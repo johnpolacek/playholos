@@ -17,7 +17,7 @@ import { isHole, starName, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
 import { span, lyOf, yearText } from "@/lib/game/clock";
-import { buildSlug, moves } from "@/lib/game/plan";
+import { buildSlug, isOn, moves, recall } from "@/lib/game/plan";
 import {
   colonyRoad,
   lensKm,
@@ -26,18 +26,19 @@ import {
   NEAREST,
   type Road,
   roads,
-  SEED_NEEDS,
+  seedNeeds,
   seedReady,
   seedRoad,
   SENTINEL_NEEDS,
   sentinelReady,
   sentinelRoad,
   strikeRoad,
-  SHIP_NEEDS,
+  shipNeeds,
   shipReady,
   toward,
   willRoad,
 } from "@/lib/game/reach";
+import { CATALOG } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One destination, opened from Reach: a lead's star, and every way we could go there. The two roads open at Year 0,
@@ -76,7 +77,7 @@ const WHAT: Record<string, string> = {
   settle:
     "A copy of our Mind on the Seed Ship, to stand alone at this star. Settle, and it mines the moons and asteroids there and builds on the star’s light, growing as it goes, and a watcher counts that as growth. Keep it small, and it builds a receiver and a cold Mind from a comet’s worth of rock, and stays that size. It brakes in on its sail, unseen. One Seed Ship, one Mind: once sent, no other place.",
   seed:
-    "A seed ship with no Mind on board, built beside the Seed Ship. It brakes on its sail, unseen, and stays. It mines the moons and asteroids there to build two copies of itself, which go on to the nearest stars no probe of ours is bound for. Copies make copies, for three generations: at most seven craft. Once sent, it can’t be called back.",
+    "A seed ship with no Mind on board, built beside the Seed Ship. It brakes on its sail, unseen, and stays. It mines the moons and asteroids there to build two copies of itself, which go on to the nearest stars no probe of ours is bound for. Copies make copies, for three generations: at most seven craft. Once it leaves, it can’t be called back.",
   sentinel:
     "A probe built at the Probe Yard burns 41 kt of deuterium to reach a tenth of light speed, then brakes on a magnetic sail 1,600 km across, unseen, to stay. It watches for as long as it lasts, and sees what a pass can’t.",
   will: "The Will, sent by laser to our Mind here, to live. The crossing is dark: a Year for each light-year, with no orders and no news, while Earth goes on by our orders and charter. Then orders and news cross the light-years between us and Earth.",
@@ -105,17 +106,20 @@ function Sent(props: {
   right?: string;
   /** A control beside the needs, in place of sending. */
   extra?: React.ReactNode;
+  /** Cancels it, while it waits to leave. 2026-11-10. */
+  recall?: () => void;
   /** Whether its road plays on the map, and what plays it, or plays it again once sent. 2026-11-08. */
   previewing: boolean;
   preview(on: boolean): void;
 }) {
-  const { road, i, to, name, line, needs, have, can, send, what, choices, sentAs, right, extra, previewing, preview } = props;
+  const { road, i, to, name, line, needs, have, can, send, what, choices, sentAs, right, extra, recall, previewing, preview } = props;
   const sent = road.n !== null;
   // Ordered but not yet gone says when it goes: "Sail sent" read as flying while the Laser Sail Array was only queued.
   // Blind playtest 2026-11-07.
   const now = useGame().year ?? 0;
   const waiting = sent && road.leaves !== null && now < road.leaves;
-  // A send is never taken back, so it asks once before it goes. Playtest 2026-11-01: a seed probe went in one tap.
+  // A send is never taken back once it leaves, so it asks once before it goes. Playtest 2026-11-01: a seed probe went
+  // in one tap.
   const [asking, setAsking] = useState<{ label: string; send(): void } | null>(null);
   return (
     <li data-m style={buildBlue(needs[0])} className="border-t border-faint py-2.5">
@@ -143,7 +147,7 @@ function Sent(props: {
             ))}
           </span>
           {extra}
-          {can && !asking && (sent || !choices) && (
+          {can && !asking && (sent || !choices) && !(waiting && recall) && (
             <button
               disabled={sent}
               onClick={() => setAsking({ label: `Send it`, send })}
@@ -162,10 +166,20 @@ function Sent(props: {
             </span>
           )}
         </div>
+        {/* Waiting to leave, it says when on its own line, with Cancel: beside the needs, the two buttons squeezed the
+            needs to two lines each and ran off the panel. 2026-11-10. */}
+        {waiting && recall && (
+          <div className="mt-2 flex flex-wrap items-center justify-end gap-1.5">
+            <span className="text-[12.5px] text-muted">Leaves Year {year(road.leaves!)}.</span>
+            <button onClick={recall} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium hover:border-ink">
+              Cancel
+            </button>
+          </div>
+        )}
         {/* The ask sits on its own line: beside the needs it ran off the panel, playtest 2026-11-01. */}
         {can && !sent && asking && (
           <div className="mt-2 flex flex-wrap items-center justify-end gap-1.5">
-            <span className="text-[12.5px] text-muted">Can’t be called back.</span>
+            <span className="text-[12.5px] text-muted">{recall ? "We can cancel it until it leaves." : "Can’t be called back."}</span>
             <button onClick={() => setAsking(null)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
               Wait
             </button>
@@ -202,6 +216,8 @@ export function DestinationPage({ slug }: { slug: string }) {
   const before = clock === null;
   // Ordered from a hole, it begins on Earth a light-time later. 2026-10-26.
   const from = before ? 0 : Math.floor((orderAt ?? clock) * 10) / 10;
+  // The Ship Beam, in our order and kept dark by the Will: plan.ts's SWITCHED. 2026-11-11.
+  const dark = (plan.builds.includes("Ship Beam") || (plan.later ?? []).some((o) => o.name === "Ship Beam")) && !isOn(plan, "Ship Beam", from);
   const ly = lead?.ly ?? 0;
   const nearest = lead?.star === NEAREST.name;
   const ways = useMemo(() => roads(plan, scale, from).map((r) => toward(r, ly, nearest ? undefined : from)), [plan, scale, from, ly, nearest]);
@@ -218,9 +234,9 @@ export function DestinationPage({ slug }: { slug: string }) {
   );
   const tip = useMemo(() => sooner(plan, scale, from, ways[1].home, ly), [plan, scale, from, ways, ly]);
   const slow = useMemo(() => (before ? moves(plan, scale, "Probe Yard").late : null), [before, plan, scale]);
-  // A lens pictures only a world we have felt, one lens a star. 2026-10-26.
+  // A lens pictures only a world we know, one lens a star: one we have felt, or the world next door, 2026-11-10.
   const felt = lead?.what === "A new world";
-  const lens = useMemo(() => (felt && lead ? lensRoad(plan, scale, from, lead.star) : null), [felt, lead, plan, scale, from]);
+  const lens = useMemo(() => ((felt || lead?.slug === "proxima-centauri") && lead ? lensRoad(plan, scale, from, lead.star) : null), [felt, lead, plan, scale, from]);
   // A sentinel can go wherever a world is known, the world next door or one we've felt, or to a black hole we found.
   // Or to a cold glow's star, to see what glows, out to 326 ly. 2026-10-31. Or to a warm glow: it brakes once it sees
   // the glow up close, so a range is enough, and sees what makes the heat. 2026-11-05.
@@ -460,6 +476,8 @@ export function DestinationPage({ slug }: { slug: string }) {
               send={() => change((p) => ({ ...p, flybys: [...(p.flybys ?? []), { name: lead.star, y: from, d: ly, by }] }))}
               what={k ? "Probe" : "Sail"}
               {...way(by)}
+              // Only one we sent from here: Proxima's first flies by itself with its build.
+              recall={plan.flybys?.some((o) => o.name === lead.star && o.by === by) ? () => change((p) => recall(p, by, lead.star)) : undefined}
               right={road.arrives === null ? "Not yet" : `Year ${year(road.arrives)}`}
               extra={
                 queues && (
@@ -487,11 +505,12 @@ export function DestinationPage({ slug }: { slug: string }) {
             line={`${WHAT["Solar Lens"]} About ${Math.round(lensKm(lead.ly))} km a pixel here.${lens.push === "Star Beam" ? " The Star Beam pushes it there instead, in about two months." : lens.push ? ` The ${lens.push} pushes it there instead, in about 5 Years.` : ""}`}
             needs={["Solar Lens"]}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
-            // Sent once the Solar Lens is ordered: it leaves when it is done. One a star, and never taken back.
+            // Sent once the Solar Lens is ordered: it leaves when it is done. One a star, canceled only before it leaves.
             can={!before && inOrder("Solar Lens")}
             send={() => change((p) => ({ ...p, lenses: [...(p.lenses ?? []), { name: lead.star, y: from }] }))}
             what="Lens"
             {...way("lens")}
+            recall={() => change((p) => recall(p, "lens", lead.star))}
           />
         )}
         {mind && (
@@ -500,8 +519,8 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 2}
             to={to}
             name="Our Mind, to stay"
-            line={hole ? WHAT.mind : WHAT.settle}
-            needs={SHIP_NEEDS}
+            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The Ship Beam pushes it to speed in ${CATALOG.beams.shipDays} days, with no drive or fuel. Its beam points at the star for all of the push, so a mind awake there sees it, as it would a knock.` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            needs={shipNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // One Seed Ship, one Mind: once sent to one hole, no other. Sent once all three are in our order.
             can={shipReady(plan) && (!plan.colony || plan.colony.name === lead.star)}
@@ -547,6 +566,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             send={() => change((p) => ({ ...p, sentinels: [...(p.sentinels ?? []), { name: lead.star, y: from }] }))}
             what="Sentinel"
             {...way("sentinel")}
+            recall={() => change((p) => recall(p, "sentinel", lead.star))}
           />
         )}
         {seed && (
@@ -555,14 +575,15 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 4}
             to={to}
             name="A seed probe that copies itself"
-            line={WHAT.seed}
-            needs={SEED_NEEDS}
+            line={`${WHAT.seed}${seed.push ? ` The Ship Beam pushes it to speed in ${CATALOG.beams.shipDays} days, with no drive or fuel. Its beam points at the star for all of the push, so a mind awake there sees it, as it would a knock.` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            needs={seedNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Sent once all three are in our order, before Begin too: it is built once they are done.
             can={seedReady(plan)}
             send={() => change((p) => ({ ...p, seeds: [...(p.seeds ?? []), { name: lead.star, y: from }] }))}
             what="Seed probe"
             {...way("seed")}
+            recall={() => change((p) => recall(p, "seed", lead.star))}
           />
         )}
         {bullet && (

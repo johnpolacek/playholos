@@ -2706,6 +2706,16 @@ For a player’s plan: Mercury mined, its light beamed, giant telescopes at the 
   - Fields and cities need a pixel under about 50 km, our sample, so a lens shows them to about 195 ly and the hypertelescope never.
   - The swarm’s shape: a launch spread of 0.3 km/s, a sample, spreads Mercury’s 88-day period by 3 dv/v, 1.9%, so the arc widens about 28° a Year. One layer of collectors covering a share f of the sky fills a band with sin b = f. Earth’s shadow cone through the shell is about (R_E / AU)² / 4, 5×10⁻¹⁰ of it.
   - Used: Mercury Works, the Solar Swarm, the Star Beam and the Hypertelescope, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#parity-what-a-neighbor-can-do-we-can-build).
+- **The Ship Beam, 2026-11-10.** No new source read. This project’s arithmetic, `python3 calcs/mercury.py`, on sources logged above.
+  - Lubin 2016’s limit, as for lenses: a sail is pushed only inside the beam’s spot, at 2P/c. Top speed is highest when the sail weighs as much as its load.
+  - The Star Beam, 10 TW from 100 km, pushes a 1,500 t seed ship to 0.029 c at most, on a 44 km sail of 1 g/m² film, in 12 Years. An earlier line here, “1,000 t at a tenth of light speed needs about 50 TW from a 100 km array”, holds only for a sail of about 35 km that weighs as much as the ship, pushed for about 6 Years.
+  - 1,000 TW from 1,000 km, the same 1.27 kW/m² on its face: 1,500 t on a 1 km sail reaches a tenth of light speed in 78 days, 676 AU out, of the 2,584 AU the sail stays in the spot. 1.3 GW/m² on the sail. Parkin 2018’s sail takes about 15.
+  - Forward 1984’s lens was 1,000 km wide, logged under Travel through a secondary page. Only its width is used. Its powers stay unused, since the figures we have may be garbled.
+  - A patch 1,000 km across is 7.9×10⁵ km², 19.6 doublings of the swarm’s 1 km² seed, 39 Years at Metzger’s pace.
+  - Why it matters: beamed push replaces a seed ship’s 20-Year burn, its drive and its deuterium. It does not make it faster, since braking on a magnetic sail sets the speed (Gros 2017).
+  - Seen by its target, the designer’s pick, 2026-11-10, by the rule for a laser launch (Parkin 2018 and Lubin’s 2016 paper on directed energy and SETI, logged under Travel). Our arithmetic leaves doubt: the push ends 676 AU out with the spot still inside the sail, and the lead for a ship that lands decades later puts the beam about 80 AU from Proxima when its light arrives.
+  - Not checked: a tether that carries 0.45 g from a 0.8 t sail to a 1,500 t ship, and phasing mirrors over 1,000 km, ten times the Star Beam’s untested 100.
+  - Used: the Ship Beam, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#parity-what-a-neighbor-can-do-we-can-build).
 
 ### A close look at the watcher, 2026-10-30
 
@@ -2762,6 +2772,80 @@ For a player’s plan: Mercury mined, its light beamed, giant telescopes at the 
   - Used: a relay here is allowed, searchable, and barely searched.
 - **Turyshev et al. 2020,** above under lenses. 25 km a pixel at 30 pc scales to about 100 km at 400 ly.
   - Used since 2026-10-30: old minds watch living worlds, Earth’s included, from home.
+
+### Late works: star lifting, 2026-11-11
+
+Gathered by a research agent, for a build that mines the Sun for matter. What each line rests on is marked: read, abstract, or summary.
+
+- **Criswell 1985**, logged under Industry and big works. Still not read: the Internet Archive copy lends only. Second hand, through [Badescu and Cathcart 2006](https://www.dynamical-systems.org/zwicky/stellarengines.pdf), introduction read: lift about 6.5×10¹⁸ tons of the Sun’s plasma a year for about 300 million years, stored cool near its poles, to leave a white dwarf and skip the red giant. The decimal point was garbled in the text, so 6.5 is the agent’s reading.
+- **[Scoggins and Kipping 2023, Lazarus stars](https://arxiv.org/abs/2210.02338)** · Published, MNRAS, v2. Full text read by the agent, figures not seen.
+  - Lifting about 5×10¹⁹ kg a year, 0.05 of Ceres, holds the Sun’s light steady and adds up to 3 billion years to its life. Faster lifting dims it.
+  - It would show: dips as lifted gas crosses the disk, and a wind above about 10⁻¹⁰ solar masses a year, which can be measured (Lamers and Cassinelli 1999, as they cite it). The Sun’s own wind is 2.2×10⁻¹⁴.
+  - Their power shares don’t add up, by the agent’s check: 5×10¹⁹ kg a year takes 8×10⁻⁴ of the Sun’s light, not 10⁻⁴. Treat them as loose.
+  - Matloff 2017, JBIS 70, 458, not read, as they quote it: about 3% of the Sun over 600 million years.
+- **[Asplund, Amarsi and Grevesse 2021](https://arxiv.org/abs/2105.01661)** · Published, A&A 653, A141. Abstract and section 5 read, its table through a fetch summary. The Sun’s surface by mass: hydrogen 0.7438, helium 0.2423, all else 0.0139. Of that last part, oxygen, carbon, neon and nitrogen are over 77%. Asplund et al. 2009 had 0.0134.
+- **[Noerdlinger 2008](https://arxiv.org/abs/0801.3807)** · Preprint, abstract and section 2 read. The Sun’s wind carries 1.374×10⁹ kg a second.
+- **Star lifting, Wikipedia** · Secondary, through a fetch summary. Three ways, credited to Criswell: heat patches of the surface and channel the outflow out of the poles, squeeze it out with a ring current, or spin the gas up. Its 1.6×10¹³ J a kg to Mercury’s distance is about 85 times too high.
+- **This project’s arithmetic, with the agent’s.**
+  - Lifting a kilogram off the Sun costs GM/R, 1.9×10¹¹ J. All the Sun’s light lifts 2×10¹⁵ kg a second at most, 6.3×10²² kg a year. A tenth of it, Criswell’s rate, lifts 6.3×10²¹.
+  - Only about 0.25% of what comes up is magnesium, silicon and iron. At a tenth of the Sun’s light, that is one asteroid belt of rock, 3×10²¹ kg, in about 190 years.
+  - A kilogram off Mercury costs 9×10⁶ J, 20,000 times less, and nearly all of it is rock and iron. Mercury holds 110 belts. So rock from the Sun costs about 8 million times what Mercury’s does.
+- Why it matters: star lifting is no source of matter while a rocky planet is left. What the papers want it for is the Sun’s long life, which no game shows, and it would be seen from other stars.
+- Used: set aside 2026-11-11, the designer’s pick. No build lifts the Sun.
+
+### Late works: a call the Galaxy can hear, 2026-11-11
+
+Gathered by a research agent. One search result carried a planted instruction, which the agent ignored.
+
+- **[Benford, Benford and Benford 2010, Messaging with cost-optimized interstellar beacons](https://arxiv.org/abs/0810.3964)** · Published, Astrobiology 10(5). Full text read by the agent. Its companion, [Searching for cost-optimized interstellar beacons](https://arxiv.org/abs/0810.3966), key sections read.
+  - Past 1,000 ly a radio beacon needs over 10¹⁷ W of effective power, and 10²⁰ W to reach the Galaxy’s center. Arecibo was about 10¹³.
+  - Cost says: sweep the Galaxy’s plane, where 90% of stars lie in 9% of the sky, with short pulses. A listener gets about a second a year.
+  - Its text and its table disagree on range: 19,227 ly in one, 10,800 in the other.
+- **[Lubin 2016](https://arxiv.org/abs/1604.02108)**, logged under Travel. Passages read again. A 10 km array of 70 GW looks like a star of magnitude 5 from 10,000 ly, along its line. Our Star Beam is his class 5. He also says star positions can’t yet be predicted well enough to aim blind.
+- **[Howard et al. 2004](https://technosearch.seti.org/wp-content/uploads/2018-09/Nanosecond%20Optical%20Pulses.pdf)** · Published, ApJ 613, 1270. Abstract and sections 2.2 to 2.3 read. A 3 nanosecond pulse between two 10 m telescopes outshines the Sun 10,000 times in white light, at any range.
+- **[Clark and Cahoy 2018](https://iopscience.iop.org/article/10.3847/1538-4357/aae380)** · Published, ApJ 867, 97. Through a fetch summary. 1 MW through 40 m shows to about 20,000 ly.
+- **Using the star itself.** All three through fetch summaries.
+  - [Arnold 2005](https://arxiv.org/abs/astro-ph/0503580), ApJ 627, 534: screens the size of Jupiter crossing a star, shaped to look made, seen to about 2,500 pc.
+  - [Kipping and Teachey 2016](https://arxiv.org/abs/1603.08928), MNRAS: lasers that reshape our own transit, about 20 MW for 15 minutes, seen only from along our orbit’s plane.
+  - [Learned et al. 2008](https://arxiv.org/abs/0809.0339), preprint: tap a pulsing star to change its beat, seen in other galaxies.
+- **In every direction at once.** Abstracts only. [Margot et al. 2018](https://arxiv.org/abs/1802.01081): Green Bank hears 1,000 Arecibos to 13,000 ly. [Choza et al. 2024](https://iopscience.iop.org/article/10.3847/1538-3881/acf576): 10²⁶ W is what it could catch from another galaxy.
+- **Whether to call at all.** Abstracts only, save the statement, whose page was read.
+  - For asking first: the [2015 statement on METI](https://setiathome.berkeley.edu/meti_statement_0.html), [Billingham and Benford 2011](https://arxiv.org/abs/1102.1938), [Gertz 2016](https://arxiv.org/abs/1605.05663).
+  - For calling: [Zaitsev 2006](https://arxiv.org/abs/physics/0610031).
+  - [Haqq-Misra et al. 2013](https://arxiv.org/abs/1207.5540): today’s calls are fainter than Earth’s everyday emissions, and a large, long one is hard to justify.
+- **The agent’s arithmetic.**
+  - Power is no limit. Along its line, 10 TW from 100 km is 2×10¹² times the Sun in its color, at any range.
+  - Aim is. The spot at 10,000 ly is 2×10⁹ m wide, far smaller than a star’s warm zone, and a 1 km/s error in a star’s sideways speed is 2,100 AU after 10,000 years.
+  - Spread to cover 2 AU, one 10 TW beam swept over 2×10¹¹ stars in 1,000 years rests 0.16 s on each.
+  - All the Sun’s light sent as one color in every direction is 730 photons a square meter a second at 50,000 ly.
+- Why it matters: a swarm can afford any beacon. What is hard is being looked at when the flash comes, and knowing where to point.
+- **This project’s arithmetic, `python3 calcs/messages.py`,** on the Benfords’ short-pulse case and our own rule for reading: 10²⁰ W along the beam for one second leaves a listener with an all-sky watch 146,625 bits at 2,700 ly and 1,466 at 27,000. So a page of words, 24,000 bits, is read on the first pass to 6,674 ly, and in 17 yearly passes at the Galaxy’s center.
+- Used: the Galaxy Broadcast Array, built 2026-11-11, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#what-earth-sends). It is the Benfords’ swept radio pulse, chosen because present-day Earth would have missed one (Wright, Kanodia and Lubar 2018, logged under Listening). Set aside the same day: blinking the Sun with the swarm, which Gaia’s 1.8 billion stars argue no one does, and lasers aimed star by star.
+
+### Late works: an eye as wide as the swarm, 2026-11-11
+
+Gathered by a research agent, for a telescope grown from the swarm’s mirrors. Labeyrie’s imager and Turyshev’s lens are logged above.
+
+- **How wide anyone has drawn one.** No design reaches an AU, and none is drawn from a swarm.
+  - [Labeyrie, Mourard et al. 2017](https://orbi.uliege.be/bitstream/2268/213429/1/labeyrie_eii_2017.pdf), a chapter in the European Interferometry Initiative’s report, full text read: mirrors flying in space “up to perhaps 100,000 km” apart, held by small sails or by laser light. No sizes, times or tolerances behind it.
+  - [Labeyrie 2003](https://sci.esa.int/documents/33321/35974/1567254211528-LabeyrieESTEC2003.pdf), slides, read: 150 mirrors of 3 m over 150 km picture an Earth at 3 pc in 30 minutes. A later form has 10,000 mirrors over 400 km.
+  - [Schneider et al. 2010](https://arxiv.org/abs/0910.0726), Astrobiology 10, 121, full text read: a meter’s detail at Alpha Centauri needs 600,000 km, “unrealistic” unless laser-held mirrors work. For the same clearness in each pixel, a mirror’s area must grow as the count of pixels.
+  - Through [the ESA-ESO working group’s report, 2005](https://arxiv.org/abs/astro-ph/0506163), appendix B read: Bender and Stebbins 1996 wanted 150 to 200 craft over 2,000 km and ten years a planet, for 100 pixels across at 10 pc.
+- **How much light it takes. Two published cases disagree about 1,900 times a pixel.**
+  - Labeyrie: 1,060 m², an Earth at 3 pc, 30 minutes. No noise worked through in what was read.
+  - [Turyshev 2025](https://arxiv.org/abs/2506.20236), preprint v3, read through a summarizing fetch: 5,030 m², an Earth at 10 pc, 10 pixels across, about 7 days. He counts the star’s stray light at ten times the planet’s.
+  - The agent takes Labeyrie as the floor and Turyshev as the careful case.
+- **Holding the mirrors in step.** Combining light wave by wave needs paths held to about 5 nm, and mirrors placed to 1 cm over 100 km (Turyshev 2025). No source says how over 100,000 km.
+  - Counting photons’ arrival times instead, as Hanbury Brown and Twiss did, lets mirrors sit 0.3 to 3 m out of place and be rough light buckets ([Dravins et al. 2012](https://arxiv.org/abs/1207.0808), New Astronomy Reviews 56, 143, mostly read. [Ribak, Gurfil and Moreno 2012](https://phsites.technion.ac.il/publications/eribak/RibakGurfilMorenoSpaceIntensityInterferometrySPIE8445-8.pdf), SPIE 8445, read).
+  - Its price is light. Turyshev finds 6.6 billion years for an Earth at 10 pc with 1,000 m² buckets. Time falls as area squared, so a swarm’s buckets could win it back. That last step is the agent’s, not published.
+- **Cities.** Earth’s day side outshines its night side about 600,000 times ([Loeb and Turner 2012](https://arxiv.org/abs/1110.6181), Astrobiology 12, 290, read). City lights on an Earth twin are beyond LUVOIR ([Beatty 2022](https://arxiv.org/abs/2105.09990), MNRAS 513, 2652, abstract only). No one has published resolving cities or fields on another world.
+- **The agent’s arithmetic, with ours.**
+  - A 50 km pixel at half a micron needs 9,460 km at 100 ly, 94,600 km at 1,000 ly and 946,000 km at 10,000 ly.
+  - Light for an Earth at 50 km a pixel in a month: 0.29 km² at 1,000 ly on Labeyrie’s case, 560 km² on Turyshev’s. A full swarm is 4×10¹⁶ km². Area is never the limit. Holding step is.
+  - Earth’s turning carries its equator across a 50 km pixel in 108 seconds, so long looks must follow the turning.
+  - Ours: a cold glow’s panels, spread hundreds of AU round a star 54 ly off, need only about 10 km of baseline at a quarter of a millimeter to show a tenth of an AU. A swarm like ours, 0.4 AU out round a star 20,000 ly away, needs about 32 km at 10 microns to show as more than a point, and a few hundred km to show as a ring.
+- Why it matters: seeing what makes a glow from here, where today only a sentinel that stays can, takes an infrared array tens to hundreds of km wide, far less than a swarm’s width. The swarm’s width buys cities at a thousand light years, and no world we draw has any.
+- Used: the Glow Imager, built 2026-11-11, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). The swarm-wide eye is set aside.
 
 ## Watch list
 

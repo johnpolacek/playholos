@@ -336,6 +336,95 @@ function WarmArt({ near, far }: { near: number; far: number }) {
   );
 }
 
+/** A cold glow as our Glow Imager shows it from home: its star, and thin dark panels far out round it, each on its
+ *  own orbit, the outer ones slower, as nothing but made things keep. 2026-11-11. */
+function PanelsArt({ ly }: { ly: number }) {
+  const [cx, cy] = [160, 104];
+  const orbits = [{ rx: 58, n: 11, w: 0.2 }, { rx: 92, n: 15, w: 0.1 }, { rx: 128, n: 19, w: 0.055 }];
+  const panels = orbits.flatMap((o, k) => Array.from({ length: o.n }, (_, i) => ({ ...o, k, a0: (i / o.n) * 2 * Math.PI + k * 0.7 })));
+  const els = useRef<(SVGRectElement | null)[]>([]);
+  useTicks((t) => {
+    panels.forEach((p, i) => {
+      const a = p.a0 + t * p.w;
+      const front = Math.sin(a) > 0;
+      const el = els.current[i];
+      if (!el) return;
+      el.setAttribute("x", String(cx + p.rx * Math.cos(a) - 2.2));
+      el.setAttribute("y", String(cy + p.rx * 0.3 * Math.sin(a) - 0.8));
+      el.setAttribute("opacity", String(front ? 0.95 : 0.4));
+    });
+  }, 6);
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`Thin dark panels on orderly orbits round a star ${lyOf(ly)} light years away, as our Glow Imager shows them`}>
+      <text x={16} y={26} className="fill-muted font-mono text-[7.5px]">
+        AS OUR GLOW IMAGER SHOWS IT, FROM HOME
+      </text>
+      {orbits.map((o) => (
+        <ellipse key={o.rx} cx={cx} cy={cy} rx={o.rx} ry={o.rx * 0.3} fill="none" stroke="var(--faint)" strokeWidth={0.5} strokeDasharray="1 4" />
+      ))}
+      <circle cx={cx} cy={cy} r={3.5} fill="#f4f6ff" />
+      {panels.map((p, i) => (
+        <rect key={i} ref={(el) => void (els.current[i] = el)} width={4.4} height={1.6} rx={0.3} fill="var(--faint)" stroke="var(--muted)" strokeWidth={0.7} />
+      ))}
+      <text x={16} y={196} className="fill-muted font-mono text-[7.5px]">
+        {lyOf(ly)} LY · PANELS NEAR 12 K, EACH ON ITS OWN ORBIT
+      </text>
+      <text x={16} y={208} className="fill-other font-mono text-[7.5px]">
+        TOO ORDERLY FOR RUBBLE. SOMETHING MADE THEM
+      </text>
+    </svg>
+  );
+}
+
+/** A warm glow as our Glow Imager shows it from home. A made ring: collectors in one thin band round a star, even all
+ *  the way round, turning. Or nature's: a ragged cloud of dust that hides its star. 2026-11-11. */
+function ShapeArt({ shape, near, far }: { shape: "ring" | "cloud"; near: number; far: number }) {
+  const [cx, cy] = [160, 104];
+  const ring = shape === "ring";
+  const n = ring ? 96 : 14;
+  const els = useRef<(SVGCircleElement | null)[]>([]);
+  // The cloud's clumps, placed once: uneven in size and place, as dust is.
+  const clumps = Array.from({ length: n }, (_, i) => {
+    const h = Math.sin(i * 12.9898) * 43758.5453, u = h - Math.floor(h), g = Math.sin(i * 78.233) * 12543.123, v = g - Math.floor(g);
+    return { x: cx + (u - 0.5) * 150, y: cy + (v - 0.5) * 70, r: 9 + 16 * ((u * 7) % 1) };
+  });
+  useTicks((t) => {
+    els.current.forEach((el, i) => {
+      if (!el) return;
+      if (ring) {
+        const a = (i / n) * 2 * Math.PI + t * 0.12;
+        el.setAttribute("cx", String(cx + 96 * Math.cos(a)));
+        el.setAttribute("cy", String(cy + 22 * Math.sin(a)));
+        el.setAttribute("opacity", String(Math.sin(a) > 0 ? 0.95 : 0.35));
+      } else {
+        el.setAttribute("opacity", String(0.1 + 0.05 * Math.sin(t * 0.5 + i)));
+      }
+    });
+  }, 6);
+  const k = (ly: number) => ly.toLocaleString("en-US");
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={ring ? "A thin made ring round a star, as our Glow Imager shows it" : "A ragged cloud of dust, as our Glow Imager shows it"}>
+      <text x={16} y={26} className="fill-muted font-mono text-[7.5px]">
+        AS OUR GLOW IMAGER SHOWS IT, FROM HOME
+      </text>
+      {ring && <circle cx={cx} cy={cy} r={3.5} fill="#f4f6ff" />}
+      {Array.from({ length: n }, (_, i) =>
+        ring ? (
+          <circle key={i} ref={(el) => void (els.current[i] = el)} r={1.1} fill="var(--other)" />
+        ) : (
+          <circle key={i} ref={(el) => void (els.current[i] = el)} cx={clumps[i].x} cy={clumps[i].y} r={clumps[i].r} fill="var(--other)" opacity={0.12} />
+        ),
+      )}
+      <text x={16} y={196} className="fill-muted font-mono text-[7.5px]">
+        {k(near)} TO {k(far)} LY
+      </text>
+      <text x={16} y={208} className="fill-other font-mono text-[7.5px]">
+        {ring ? "A THIN RING IN ONE PLANE, EVEN ALL THE WAY ROUND. BUILT" : "A RAGGED CLOUD OF DUST. NO ONE BUILT IT"}
+      </text>
+    </svg>
+  );
+}
+
 /** A warm glow not yet ranged: somewhere on a line out from the Sun, a soft band sweeping along it as our Infrared
  *  Telescope works, and below, the Years from first sight to its range, filled to now. One that faded first stays grey.
  *  Before this it had no page, and its row on the jump card led nowhere. Playtest 2026-11-07. */
@@ -515,10 +604,12 @@ function NearArt({ where, struck, L = "L5", rock: on }: { where: "moon" | "co-or
 
 export function LeadArt({ art }: { art: Art }) {
   if (art.kind === "near") return <NearArt where={art.where} struck={art.struck} L={art.L} rock={art.rock} />;
+  if (art.kind === "warm" && art.shape) return <ShapeArt shape={art.shape} near={art.near} far={art.far} />;
   if (art.kind === "warm") return <WarmArt near={art.near} far={art.far} />;
   if (art.kind === "orbit") return <Orbit a={art.a} e={art.e} hz={art.hz} />;
   if (art.kind === "dark") return <Dark mass={art.mass} ly={art.ly} />;
   if (art.kind === "pair") return <Pair mass={art.mass} ly={art.ly} a={art.a} e={art.e} days={art.days} />;
+  if (art.kind === "glow" && art.panels) return <PanelsArt ly={art.ly} />;
   if (art.kind === "glow") return <GlowArt ly={art.ly} steady={art.steady} />;
   if (art.kind === "nova") return <NovaArt ly={art.ly} />;
   if (art.kind === "seed") return <VisitArt sight={art.sight} size={220} />;

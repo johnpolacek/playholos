@@ -107,6 +107,36 @@ BEAM_YEARS, BEAM_WANT = 10, 2.0
 LOOK, BEAM_SCOPE = 0.5, 3.0
 BEAM_LOOK = LOOK / BEAM_SCOPE ** 3
 
+# ---------- The Ship Beam: a beam wide enough to push a seed ship ----------
+# Settled 2026-11-10, the designer's pick. The Star Beam can't push a seed ship: on the best sail it could carry, a
+# 1,500 t ship tops out near 3% of light speed. A patch 10 times wider, with the same light on its face, has
+# 100 times the power: 1,000 TW from 1,000 km, the width of Forward 1984's lens. It pushes the seed ship on a 1 km
+# sail of the swarm's own film, and stops at a tenth of light speed, well inside the beam's reach, so the whole beam
+# stays on the sail. The ship still brakes on its magnetic sail, so its speed stays the seed ship's.
+SHIP_KG, SHIP_V = 1.5e6, 0.1 * C                                # every seed stands alone: about 1,500 t
+STAR_BEAM_W, STAR_BEAM_M = 10e12, 1e5
+SHIP_BEAM_M, SHIP_SAIL_M = 1e6, 1e3
+SHIP_BEAM_W = STAR_BEAM_W * (SHIP_BEAM_M / STAR_BEAM_M) ** 2    # the same W/m^2 on its face, 100 times the face
+SHIP_SAIL_KG = SWARM_KG_M2 * math.pi * SHIP_SAIL_M ** 2 / 4
+def ship_push(p, aperture, sail, payload, v=SHIP_V, lam=1.06e-6):
+    """Pushing a ship to speed v: its top speed, the Years of pushing, how far out it ends in AU, the Years that costs
+    over cruising, and the light on its sail in W/m^2. The sail's own film rides with the ship."""
+    kg = payload + SWARM_KG_M2 * math.pi * sail ** 2 / 4
+    a = 2 * p / C / kg
+    reach = aperture * sail / (2.44 * lam)
+    top = math.sqrt(2 * a * reach)
+    t = min(v, top) / a
+    return dict(top=top, years=t / YEAR, au=a * t ** 2 / 2 / AU, reach=reach / AU, lost=t / 2 / YEAR,
+                flux=p / (math.pi * sail ** 2 / 4), g=a / 9.81)
+SHIP_PUSH = ship_push(SHIP_BEAM_W, SHIP_BEAM_M, SHIP_SAIL_M, SHIP_KG)
+# The best the Star Beam could do: top speed is highest when the sail weighs as much as the ship (Lubin 2016).
+STAR_SAIL_M = math.sqrt(4 * SHIP_KG / (math.pi * SWARM_KG_M2))
+STAR_PUSH = ship_push(STAR_BEAM_W, STAR_BEAM_M, STAR_SAIL_M, SHIP_KG)
+# The swarm must grow to a patch that wide first: doublings from its 1 km^2 seed, and the Years they take.
+SHIP_BEAM_DOUBLINGS = math.log2(math.pi * SHIP_BEAM_M ** 2 / 4 / SEED_M2)
+# Its Years and want are samples. With the Star Beam's 10, they span the swarm's growth to that width at standard pace.
+SHIP_BEAM_YEARS, SHIP_BEAM_WANT = 30, 3.0
+
 # ---------- The Hypertelescope ----------
 # Labeyrie 1999 and 2018: 150 mirrors of 3 m spread over 150 km, 40 by 40 pixels of an Earth at 3 pc in 30 minutes.
 HYPER_BASE, HYPER_LAM, HYPER_MIN = 150e3, 0.5e-6, 30
@@ -121,7 +151,27 @@ HYPER_YEARS, HYPER_WANT, HYPER_KT = 20, 2.0, 0.2              # JWST took about 
 # Fields cleared in squares and cities show only to a pixel narrower than about 50 km.
 CITIES_KM = 50
 
+# ---------- The Glow Imager: seeing what makes a glow, from home ----------
+# Settled 2026-11-11, the designer's pick. Cold mirrors flying apart beyond L2, held in step as the Hypertelescope's
+# are, in infrared light. Its pixel is wavelength over baseline times distance, as the Hypertelescope's. What makes a
+# glow needs far less width than a swarm has: tens to hundreds of km. Twenty mirrors of 3 m out to 300 km, 15 Years
+# and 2 flagships, and a week to turn to each glow: samples. HOLOS_RESEARCH.md, "An eye as wide as the swarm".
+IMAGER_KM, IMAGER_YEARS, IMAGER_WANT = 300, 15, 2.0
+IMAGER_SLEW = 7 / 365.25
+COLD_LAM, WARM_LAM = 250e-6, 10e-6                             # near a 12 K glow's peak, and a 500 K swarm's
+def imager_au(lam, d_ly, km=IMAGER_KM):
+    """Its pixel at a glow d_ly away, in AU."""
+    return lam / (km * 1e3) * d_ly * LY / AU
+def baseline_km(lam, d_ly, au):
+    """The baseline that shows `au` at d_ly."""
+    return lam / (au * AU / (d_ly * LY)) / 1e3
+SWARM_AU = MERCURY_AU                                           # a swarm like ours, round its star
+
 if __name__ == '__main__':
+    print(f"Glow Imager: {IMAGER_KM} km of baseline. A cold glow's panels at 54 ly show {imager_au(COLD_LAM, 54):.4f} AU a pixel, "
+          f"at 326 ly {imager_au(COLD_LAM, 326):.3f}. A tenth of an AU at 54 ly needs only {baseline_km(COLD_LAM, 54, 0.1):.0f} km.")
+    print(f"  A swarm {SWARM_AU} AU out round a star 20,000 ly away: {imager_au(WARM_LAM, 20000):.3f} AU a pixel, "
+          f"{2 * SWARM_AU / imager_au(WARM_LAM, 20000):.0f} pixels across. More than a point needs {baseline_km(WARM_LAM, 20000, SWARM_AU):.0f} km.")
     print(f"Mercury: sunlight {FLUX:.0f} W/m^2. All its sunlit face catches {SURFACE_CATCH:.2e} W, "
           f"{SURFACE_CATCH / L_SUN:.1e} of the Sun.")
     print(f"Seed: {SEED_M2 / 1e6:.0f} km^2, {SEED_KT * 1000:.0f} t, catching {SEED_W:.2e} W.")
@@ -142,6 +192,14 @@ if __name__ == '__main__':
           f"The Star Beam to {BEAM_V / 1e3:.0f} km/s ({BEAM_V / C:.3f} c), {flight(BEAM_V):.2f} Years. Today's dive: "
           f"150 km/s, {flight(150e3):.1f} Years.")
     print(f"  A {BEAM_SCOPE:.0f} m telescope looks for {BEAM_LOOK * 365.25:.1f} days, not {LOOK * 365.25:.0f}.")
+    print(f"Seed ship: the Star Beam, on its best sail, {STAR_SAIL_M / 1e3:.0f} km wide and as heavy as the ship, pushes "
+          f"{SHIP_KG / 1e3:.0f} t to {STAR_PUSH['top'] / C:.3f} c at most, in {STAR_PUSH['years']:.0f} Years.")
+    print(f"  The Ship Beam: {SHIP_BEAM_W / 1e12:.0f} TW from {SHIP_BEAM_M / 1e3:.0f} km, a {SHIP_SAIL_M / 1e3:.0f} km sail of "
+          f"{SHIP_SAIL_KG / 1e3:.1f} t. To {SHIP_V / C:.1f} c in {SHIP_PUSH['years'] * 365.25:.0f} days at {SHIP_PUSH['g']:.2f} g, "
+          f"ending {SHIP_PUSH['au']:.0f} AU out of the {SHIP_PUSH['reach']:.0f} AU the sail stays in the spot.")
+    print(f"  {SHIP_PUSH['flux'] / 1e9:.1f} GW/m^2 on the sail; Starshot's takes {200e9 / (math.pi * 4.1 ** 2 / 4) / 1e9:.0f}. "
+          f"The push costs {SHIP_PUSH['lost']:.2f} Years over cruising, not the burn's 10.")
+    print(f"  A patch that wide is {SHIP_BEAM_DOUBLINGS:.1f} doublings of the swarm's seed, {SHIP_BEAM_DOUBLINGS * DOUBLING:.0f} Years.")
     print(f"Hypertelescope: {hyper_km(10):.0f} km a pixel at 10 ly, {hyper_km(100):.0f} at 100 ly. An Earth is 3 "
           f"pixels across at {HYPER_REACH:.0f} ly. Cities show within {CITIES_KM / hyper_km(1):.1f} ly.")
 
@@ -151,10 +209,15 @@ def catalog():
         'Mercury works': dict(years=WORKS_YEARS, want=WORKS_WANT, orbit=True),
         'Solar swarm': dict(years=SWARM_YEARS, want=SWARM_WANT, grows=DOUBLING, thinks=round(SEED_W * EFF / EARTH_THINK_W, 5), full=round(SWARM_FULL, 1)),
         'Star beam': dict(years=BEAM_YEARS, want=BEAM_WANT),
+        'Ship beam': dict(years=SHIP_BEAM_YEARS, want=SHIP_BEAM_WANT),
         'Hypertelescope': dict(years=HYPER_YEARS, want=HYPER_WANT, orbit=True),
+        'Glow imager': dict(years=IMAGER_YEARS, want=IMAGER_WANT, orbit=True),
     }
     return works, dict(
-        beams=dict(array=round(flight(ARRAY_V), 2), beam=round(flight(BEAM_V), 2), look=round(BEAM_LOOK, 4)),
+        # `ship`: the Years a seed ship's push by the Ship Beam costs over cruising, in place of its burn's.
+        beams=dict(array=round(flight(ARRAY_V), 2), beam=round(flight(BEAM_V), 2), look=round(BEAM_LOOK, 4),
+                   ship=round(SHIP_PUSH['lost'], 2), shipDays=round(SHIP_PUSH['years'] * 365.25)),
         swarm=dict(watts=float(f'{SEED_W:.3g}'), doubling=DOUBLING, excess=float(f'{FRACTION_SEEN * L_SUN:.3g}'),
                    perLy2=float(f'{W3_JY / jansky(1, T_SWARM, LY):.3g}'), kelvin=round(T_SWARM, -1), spread=round(SPREAD, 4)),
-        hyper=dict(kmPerLy=round(hyper_km(1), 2), reach=round(HYPER_REACH), slew=round(HYPER_SLEW, 4), cities=CITIES_KM))
+        hyper=dict(kmPerLy=round(hyper_km(1), 2), reach=round(HYPER_REACH), slew=round(HYPER_SLEW, 4), cities=CITIES_KM),
+        imager=dict(slew=round(IMAGER_SLEW, 4), km=IMAGER_KM))

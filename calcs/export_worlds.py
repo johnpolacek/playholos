@@ -160,6 +160,9 @@ def works_catalog():
     # The Launch Tunnel, settled 2026-10-27: StarTram's Gen-1, a ground build. Its lift is plan.ts's, as the Launch
     # Complex's is.
     works['Launch tunnel'] = dict(years=eg.TUNNEL_YEARS, want=eg.WANTS['Launch tunnel'][0])
+    # The Galaxy Broadcast Array, settled 2026-11-11: Benford et al. 2010's short-pulse beacon, about 13 billion
+    # dollars by their cost model, so about a flagship. Its 8 Years are a sample. calcs/messages.py galaxy_call.
+    works['Galaxy broadcast array'] = dict(years=8, want=1.0)
     # The Orbital Ring, settled 2026-10-28: Birch's seed ring of Moon metal, then its ladders. What they lift comes as
     # rock does, so the works that wait on megatonnes take it too.
     works['Orbital ring'] = dict(years=eg.RING_YEARS, want=eg.WANTS['Orbital ring'][0])

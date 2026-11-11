@@ -95,6 +95,34 @@ def everywhere():
               f'{read_reach(w, SIZES[1][1], DAY, sefd, passes=365):,.0f} ly once heard for a Year, '
               f'where it is noticed in a Year')
 
+# ---------- The Galaxy Broadcast Array: a call swept along the Galaxy's plane ----------
+# Settled 2026-11-11, the designer's pick. Benford, Benford and Benford 2010's cost-optimized beacon, their short-pulse
+# case: 218 GW through an array 2.9 km wide at 1 GHz, about 1e20 W along its beam, swept along the Galaxy's plane,
+# where nine tenths of its stars lie in 9% of the sky. Each listener gets about a second a Year. Our own searches,
+# which stare at a star for minutes and look for steady tones, would miss one: the test it had to pass.
+# A listener reads what its dwells carry, pass after pass, by the rule above. HOLOS_RESEARCH.md, "A call the Galaxy can hear".
+CALL_W, CALL_M, CALL_EIRP = 218e9, 2900, 1e20
+CALL_DWELL, CALL_EVERY = 1.0, 1.0                              # seconds on each listener a pass, and Years between passes
+def call_bits(ly, sefd=EARS[0][1]):
+    """Bits one pass leaves with a listener `ly` away."""
+    return rate(CALL_EIRP, ly, sefd) * CALL_DWELL
+def call_passes(bits, ly, sefd=EARS[0][1]):
+    """Yearly passes a listener `ly` away needs to read `bits`."""
+    return max(1, math.ceil(bits / call_bits(ly, sefd) - 1e-9))
+def call_reach(bits, passes=1, sefd=EARS[0][1]):
+    """Light-years at which `bits` are read after so many passes."""
+    return read_reach(CALL_EIRP, bits, CALL_DWELL, sefd, passes)
+def galaxy_call():
+    page = SIZES[1][1]
+    print(f'The Galaxy Broadcast Array: {CALL_W / 1e9:.0f} GW in pulses, {CALL_W / GRID_2040:.1%} of 2040 energy, {CALL_EIRP:.0e} W along its beam.')
+    print(f'  Noticed in one {CALL_DWELL:.0f} s dwell to {notice_reach(CALL_EIRP, EARS[0][1], CALL_DWELL):,.0f} ly: anywhere in the Galaxy.')
+    print(f'  A page of words: read on the first pass to {call_reach(page):,.0f} ly, after 100 passes to {call_reach(page, 100):,.0f} ly.')
+    for d in (2700, 10000, 27000, 50000):
+        print(f'    {d:>6,} ly: {call_bits(d):,.0f} bits a pass, {call_passes(page, d)} passes for a page')
+    for what, bits in SIZES[2:4]:
+        print(f'  {what}: read on the first pass to {call_reach(bits):,.1f} ly, after 1,000 passes to {call_reach(bits, 1000):,.0f} ly.')
+
 if __name__ == '__main__':
     aimed(); print()
-    everywhere()
+    everywhere(); print()
+    galaxy_call()

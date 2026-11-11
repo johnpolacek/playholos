@@ -2,7 +2,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
 import { Catalog } from "@/components/catalog";
-import { Instruments } from "@/components/instruments";
+import { Rising } from "@/components/instruments";
 import { Unqueued, usePlan, usePoint, useSchedule } from "@/components/picks";
 import { useWorks } from "@/components/works";
 import { SITES } from "@/lib/game/sites";
@@ -17,8 +17,8 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // our compute on their own, and what idle instruments sweep waits until sweeps are built, so neither is ours to set
 // here, 2026-10-19. Before Begin, each queued build can be dragged by its dots to a new place in line, or moved with
 // the arrow keys, since the first in line gets our compute first, 2026-10-22. Once Year 0 has begun, what our builds have opened waits below, to order in play, 2026-10-22.
-// In play, builds done become instruments, what is still building rises under them, and the Catalog holds the rest,
-// 2026-10-29.
+// In play, what is still building rises, the Catalog holds the rest, and builds done become instruments, last on
+// Build, 2026-11-10.
 
 function rowsOf(plan: typeof EMPTY, done: Record<string, number | null>): Row[] {
   return ordered(plan).map((name) => ({
@@ -204,7 +204,7 @@ export function Queue() {
   if (began)
     return (
       <div ref={root} className="relative">
-        <Instruments catalog={(idle) => <Catalog className={idle ? "mt-1" : "mt-5"} />} />
+        <Rising catalog={(idle) => <Catalog className={idle ? "mt-1" : "mt-5"} />} />
       </div>
     );
 

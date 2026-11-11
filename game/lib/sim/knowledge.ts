@@ -9,7 +9,7 @@ import { lightTime } from "../light.ts";
 import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB, proximaSeen } from "./proxima.ts";
-import { flashesOf, peerAnswers, type Aimed } from "./peers.ts";
+import { flashesOf, peerAnswers, type Aimed, type Call } from "./peers.ts";
 import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ladderOf } from "./ladder.ts";
@@ -30,11 +30,12 @@ export interface Kit {
   /** Each lens we sent, by the star it looks at as we name it: the Year it begins to look, and its picture is home. */
   lenses?: { star: string; looks: number; home: number }[];
   /** Our Mind sent to a black hole or a star: where, how it lives there, and the Year it leaves. */
-  colony?: { star: string; mode: ColonyMode; leaves: number } | null;
+  /** `burn`: the Years its start costs over cruising, where the Ship Beam pushed it. Its own burn's otherwise. */
+  colony?: { star: string; mode: ColonyMode; leaves: number; burn?: number } | null;
   /** Each sentinel we sent, by its star as we name it, and the Year it leaves. */
   sentinels?: { star: string; leaves: number }[];
   /** Each seed probe we sent, by its star as we name it, and the Year it leaves. Its copies follow from spread.ts. */
-  seeds?: { star: string; leaves: number }[];
+  seeds?: { star: string; leaves: number; burn?: number }[];
   /** Each sail or flyby probe we sent past a star: the Year it passes, and the Year its word reaches us. 2026-11-05. */
   flybys?: { star: string; by: "sails" | "probe"; leaves?: number; passed: number; home: number }[];
   /** Each road to Proxima b, if our order flies it: the Year it passes, and the Year its word reaches us. */
@@ -48,6 +49,8 @@ export interface Kit {
   /** What finds the realistic premise's minds, beyond the Halo Survey: lib/sim/minds.ts. 2026-10-29. */
   warmWatch?: number | null;
   haloArray?: number | null;
+  /** The Glow Imager's Year done: it shows what makes each glow we have found, from home. 2026-11-11. */
+  imager?: number | null;
   moonSearch?: number | null;
   /** Our Close Look, built once the watcher is found. 2026-10-30. */
   closeLook?: number | null;
@@ -55,6 +58,8 @@ export interface Kit {
   knocks?: number[];
   /** Our messages aimed at peers' warm glows, for their answers. 2026-10-31. */
   aimed?: Aimed[];
+  /** Our calls through the Galaxy Broadcast Array, for the answers of minds we never found. 2026-11-11. */
+  calls?: Call[];
   /** Our Close Readings of warm glows. 2026-11-03. */
   closeReads?: readonly { name: string; y: number }[];
   /** Our Relay Search, built once the Close Look is: when, and its Years each AU out. 2026-10-30. */
@@ -157,7 +162,7 @@ function visit(world: World, by: Visit["by"], { passed, home }: { passed: number
     passed,
     home,
     sight,
-    ...(by !== "sails" && by !== "hyper" && sight !== "haze" ? { air: { water: air !== "none", oxygen: air === "oxygen" } } : {}),
+    ...(by !== "sails" && by !== "hyper" && by !== "lens" && sight !== "haze" ? { air: { water: air !== "none", oxygen: air === "oxygen" } } : {}),
   };
 }
 
@@ -212,7 +217,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, imager = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [], calls = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -237,10 +242,17 @@ export function earthKnows(
   )
     .filter(([, road]) => road && road.home <= year)
     .map(([by, road]) => visit(world, by, road!));
-  // What each lens has pictured, once its picture is home. Only a felt world's star has one to picture.
+  // What each lens has pictured, once its picture is home. Only a known world's star has one to picture: a felt world,
+  // or Proxima b, whose truth proxima.ts keeps apart from the seed's finds. Proxima's lens had no target until
+  // 2026-11-10.
   for (const l of lenses) {
+    if (l.home > year) continue;
+    if (l.star === PROXIMA.star) {
+      visits.push({ ...visit(world, "lens", { passed: l.looks, home: l.home }), km: (LENS_KM_30PC * PROXIMA.d) / (30 * 3.2616) });
+      continue;
+    }
     const f = world.finds.find((x) => shown(x.star) === l.star);
-    if (!f || l.home > year) continue;
+    if (!f) continue;
     const km = (LENS_KM_30PC * f.d) / (30 * 3.2616);
     visits.push({ star: l.star, world: `${l.star}’s world`, by: "lens", passed: l.looks, home: l.home, sight: pictured(f), km });
   }
@@ -341,7 +353,7 @@ export function earthKnows(
   const firstSeed = builds.length ? Math.min(...builds) : null;
   // Our craft in other systems, for finding minds there: sentinels and seed probes stay, and a sentinel can go to a cold
   // glow's star, named as Scan names it. Until 2026-10-31 this list was never filled, so no game could find a sleeper.
-  const kit0 = { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, knocks, closeReads };
+  const kit0 = { telescope, warmWatch, halo, haloArray, imager, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, knocks, closeReads };
   const glows = mindsSeen(world, kit0, year).glows;
   const placeOf = (star: string): [number, number, number] | null => {
     const t = targets.find((x) => x.name === star);
@@ -376,7 +388,7 @@ export function earthKnows(
     // A peer's answer, once it reaches us. 2026-10-31. lib/sim/peers.ts.
     // A sail's launch flashes its laser toward its star, 770 times the Sun in its color: a peer there sees it as a
     // knock with nothing written in it. 2026-11-07 (m:235), calcs/early_game.py launch_glare.
-    year, felt, heard: peerAnswers(world, kit0, [...aimed, ...flashesOf(flybys)], year), visits,
+    year, felt, heard: peerAnswers(world, kit0, [...aimed, ...flashesOf(flybys)], year, calls), visits,
     ...(anyMind ? { minds } : {}),
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
     proximaSeen: proximaSeen(world.seed),
@@ -439,11 +451,11 @@ function air(f: FeltWorld) {
 /** Our Mind at a black hole, as far as its word has reached us by `year`: on its way, landed, or standing alone as a
  *  Mind, and, once it stands, who was there before it, and how its furnace has grown, a Mind's computing doubling every
  *  10 Years from our 2040 scale, as a neighbor's does. A refuge stays as small and dark as it began. 2026-10-26. */
-function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: ColonyMode; leaves: number }, year: number) {
+function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: ColonyMode; leaves: number; burn?: number }, year: number) {
   const { speed, burn, brake, stands } = catalog.seedShip;
   const h = holes.find((x) => x.name === c.star);
   if (!h) return colonyAtStar(world, c, year);
-  const lands = c.leaves + h.d / speed + burn + brake, alone = lands + stands;
+  const lands = c.leaves + h.d / speed + (c.burn ?? burn) + brake, alone = lands + stands;
   const heard = year - h.d;                                       // what its word home shows of it now
   const truth = world.holes!.find((x) => x.id === h.id)!;
   const watts = c.mode === "furnace" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
@@ -455,12 +467,12 @@ function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star:
 /** Our Mind settled at a star, on its light and its rock, as far as its word has reached us by `year`: on its way,
  *  landed, or standing alone as a Mind, and its works growing as a furnace's do. No slow clock: a star has no
  *  innermost orbit to live on. 2026-10-27. Who was there first went with the neighbors, 2026-10-31. */
-function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number }, year: number) {
+function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number; burn?: number }, year: number) {
   const { speed, burn, brake, stands } = catalog.seedShip;
   const id = Object.keys(world.stars).find((k) => world.stars[k].shown === c.star);
   if (!id) return { star: c.star, mode: c.mode, leaves: c.leaves };
   const d = world.stars[id].d;
-  const lands = c.leaves + d / speed + burn + brake, alone = lands + stands;
+  const lands = c.leaves + d / speed + (c.burn ?? burn) + brake, alone = lands + stands;
   const heard = year - d;
   // Settled, its works grow as a furnace's do. Kept small, it stays as it began. 2026-10-30.
   const watts = c.mode === "settle" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
@@ -553,7 +565,7 @@ export function describe(view: EarthView): string {
   const visits = (view.visits ?? []).map(
     (v) =>
       (v.by === "lens" || v.by === "hyper"
-        ? `- ${v.world}, ${one(view.felt.find((f) => f.star === v.star)?.d ?? 0)} ly, pictured by ${v.by === "lens" ? "our lens at the Sun’s focus" : "our Hypertelescope"} from Year ${yearText(v.passed)}, about ${Math.round(v.km ?? 0)} km a pixel, picture home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}. Nothing narrower than a pixel shows.`
+        ? `- ${v.world}, ${one(view.felt.find((f) => f.star === v.star)?.d ?? (v.star === PROXIMA.star ? PROXIMA.d : 0))} ly, pictured by ${v.by === "lens" ? "our lens at the Sun’s focus" : "our Hypertelescope"} from Year ${yearText(v.passed)}, about ${Math.round(v.km ?? 0)} km a pixel, picture home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}. Nothing narrower than a pixel shows.`
         : v.by === "seed" && v.sent
           ? `- ${v.world}: our seed probe there sent a copy of itself toward ${v.sent} at Year ${yearText(v.passed)}, word home at Year ${yearText(v.home)}.`
         : v.by === "seed"
@@ -617,6 +629,11 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
             : `Its distance isn't measured: too far for parallax, and our Infrared Telescope hasn't studied it while it shone. It has no page on Scan until our Infrared Telescope ranges it, in a few hours once the glow is out of the Sun's glare, so it can't be read yet. `) +
           `A glow like this fits a young star wrapped in dust, ` +
           `the dusty wreck of two stars merging, or something building around a star and catching its light. Natural glows fade: FU Orionis, the eruption best measured, has lost about 1% of its light a Year since 1936. So whether it fades is one thing that tells them apart.` +
+          (f.imaged?.saw === "ring"
+            ? ` Our Glow Imager resolved it at Year ${yearText(f.imaged.at)}: a thin ring of made things round a star, in one plane, too even for dust. Something built it. This settles it, as far as anything seen from home can.`
+            : f.imaged?.saw === "cloud"
+              ? ` Our Glow Imager resolved it at Year ${yearText(f.imaged.at)}: a ragged cloud of dust, ${f.imaged.kind === "merger" ? "the shell two merging stars threw off" : "round a young star"}. It is natural.`
+              : "") +
           (f.read?.saw === "smooth"
             ? ` Our Close Reading finished at Year ${yearText(f.read.at)}: smooth heat, no silicate dust bump at 10 microns. Built is now about even: carbon-rich dust can look this smooth too, so only a sentinel there or an answer settles it.`
             : f.read?.saw === "dust"
@@ -635,6 +652,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
         m.glows.map((g, i) =>
           `- ${named(`Cold glow ${i + 1}`) || `Cold glow ${i + 1}, as Scan names it, `}${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${yearText(g.seen)}, steady. ` +
           `Its color fits no dust we know. It could be a cold disk of unusual grains, a measuring error, or computing done cold, far from a star.` +
+          (g.imaged !== undefined ? ` Our Glow Imager resolved it from home at Year ${yearText(g.imaged)}: thin dark panels far out from the star, as cold as the glow, on orbits too orderly for rubble. Something made them. Nothing there could tell we looked.` : "") +
           (g.near !== undefined ? ` Our sentinel there sent word at Year ${yearText(g.near)}: thin dark panels far out from the star, as cold as the glow, on orbits too orderly for rubble. Something made them. It has not acted on our sentinel.` : "")).join("\n"),
     );
   if (m.watcher) {

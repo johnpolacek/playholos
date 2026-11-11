@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { Fragment, useEffect, useMemo, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { Lens } from "@/components/icons";
-import { BuildMark, buildTone, LockMark } from "@/components/marks";
+import { BuildMark, buildColor, buildTone, LockMark } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { BackBar } from "@/components/back-bar";
 import { Opens } from "@/components/opens";
@@ -28,6 +28,7 @@ import {
   takes,
   PAST,
 } from "@/lib/game/plan";
+import { isOn, SWITCHED, switchedAt, switchTo } from "@/lib/game/plan";
 import { GROWS, grownDone, grownSpans } from "@/lib/game/halo";
 import { WATCHED } from "@/lib/sim/minds";
 import { SWARM } from "@/lib/sim/conflict";
@@ -431,6 +432,39 @@ export interface Back {
 /** Where the build page open now came from, if somewhere with its own way back. */
 export const useBack = () => (useLocation().state as { back?: Back } | null)?.back;
 
+/** A build that acts on its own, armed or stood down: plan.ts's SWITCHED. The Will sets it at any time, from before
+ *  it is ordered, and it stays as set. Two sides of one switch, the side it stands on lit in the build's color, and
+ *  under it what that side means. From the designer, 2026-11-11: the Interceptor, built, need not be used. */
+function Switch({ name }: { name: string }) {
+  const { orderAt, year } = useGame();
+  const { plan, change } = usePlan();
+  const s = SWITCHED[name];
+  const now = orderAt === null ? 0 : tenths(orderAt);
+  const on = isOn(plan, name, now);
+  const at = switchedAt(plan, name, now);
+  return (
+    <div className="mt-3 rounded-lg border border-rowline p-2.5" style={{ "--c": buildColor(name) } as React.CSSProperties}>
+      <div role="radiogroup" aria-label={`How the ${name} stands`} className="grid grid-cols-2 gap-1 rounded-full bg-ink/[.06] p-1">
+        {[true, false].map((to) => (
+          <button
+            key={String(to)}
+            role="radio"
+            aria-checked={on === to}
+            onClick={() => to !== on && change(switchTo(name, now, to))}
+            className={`h-9 rounded-full text-[13.5px] font-medium transition-colors ${on === to ? (to ? "bg-(--c) text-paper" : "bg-ink text-paper") : "text-page-ink2 hover:text-ink"}`}
+          >
+            {to ? s.on : s.off}
+          </button>
+        ))}
+      </div>
+      <p className="mt-2 px-1 text-[13px] leading-snug text-page-ink2">
+        {on ? s.whenOn : s.whenOff}
+        {at !== null && year !== null ? ` Set at Year ${yearText(at)}.` : ""}
+      </p>
+    </div>
+  );
+}
+
 export function BuildPage({ slug }: { slug: string }) {
   const { year } = useGame();
   const { plan } = usePlan();
@@ -500,6 +534,11 @@ export function BuildPage({ slug }: { slug: string }) {
       <div data-m>
         {later ? <Waits build={later} scale={scale} done={done} /> : <Queueing name={build.name} scale={scale} done={done} />}
       </div>
+      {SWITCHED[build.name] && (
+        <div data-m>
+          <Switch name={build.name} />
+        </div>
+      )}
       <div data-m className="mt-3">
         <MindNote className="text-[14.5px] leading-snug">{SAYS[build.name]}</MindNote>
       </div>

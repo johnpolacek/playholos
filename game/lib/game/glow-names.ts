@@ -1,5 +1,6 @@
 // A glow earns a name, settled 2026-11-04. Warm Glow 3 keeps its number until a Close Reading finds plain heat, and a cold
-// glow until a sentinel of ours sees what makes it. Most glows are dust, so a name marks the rare one that matters. Warm
+// glow until a sentinel of ours sees what makes it. Since 2026-11-11 our Glow Imager earns one too: a warm glow it
+// shows as a made ring, and a cold glow it shows the panels of. Most glows are dust, so a name marks the rare one that matters. Warm
 // ones take fire from Earth's myths, as the real search for built heat around stars, Project Hephaistos, did. Cold ones
 // take winter. Names go in the order we earned them. "Warm glow 3" stays the id in saves, on the server and in orders.
 
@@ -39,15 +40,19 @@ function nth(list: [string, string][], i: number): GlowName {
 }
 
 /** Each named glow by its id, in the order we earned the names, so a name never moves once given. */
-export function glowNames(minds?: { flashes: { read?: { at: number; saw: string } }[]; glows: { near?: number }[] } | null) {
+export function glowNames(
+  minds?: { flashes: { read?: { at: number; saw: string }; imaged?: { at: number; saw: string } }[]; glows: { near?: number; imaged?: number }[] } | null,
+) {
   const out: Record<string, GlowName> = {};
   if (!minds) return out;
+  // The sooner of the two ways it earned one. A cloud earns none, and takes back none: a name never moves once given.
+  const soonest = (...ys: (number | undefined)[]) => { const xs = ys.filter((y): y is number => y !== undefined); return xs.length ? Math.min(...xs) : undefined; };
   minds.flashes
-    .flatMap((f, i) => (f.read?.saw === "smooth" ? [{ at: f.read.at, i }] : []))
+    .flatMap((f, i) => { const at = soonest(f.read?.saw === "smooth" ? f.read.at : undefined, f.imaged?.saw === "ring" ? f.imaged.at : undefined); return at !== undefined ? [{ at, i }] : []; })
     .sort((p, q) => p.at - q.at || p.i - q.i)
     .forEach(({ i }, k) => (out[`Warm glow ${i + 1}`] = nth(FIRE, k)));
   minds.glows
-    .flatMap((g, i) => (g.near !== undefined ? [{ at: g.near, i }] : []))
+    .flatMap((g, i) => { const at = soonest(g.near, g.imaged); return at !== undefined ? [{ at, i }] : []; })
     .sort((p, q) => p.at - q.at || p.i - q.i)
     .forEach(({ i }, k) => (out[`Cold glow ${i + 1}`] = nth(WINTER, k)));
   return out;

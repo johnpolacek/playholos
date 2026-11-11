@@ -841,6 +841,23 @@ const StarBeam = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The Ship Beam: a wider arc of collectors phased as one, and a sail riding its beam out. Ours. 2026-11-10. */
+const ShipBeam = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) => {
+      gsap.fromTo(part("beam"), { strokeDashoffset: 0 }, { strokeDashoffset: -4, duration: 0.8, ease: "none", repeat: -1, delay: offset() });
+      sway(part("sail"), { x: 0, y: 0 }, { x: 1.2, y: 0 }, 2.4);
+    }}
+  >
+    <path d="M2.4 1.4Q7 8 2.4 14.6" />
+    <path d="M3.2 3.6L7.2 8M3.2 12.4L7.2 8M4.6 8H7.2" opacity={0.55} />
+    <path data-k="beam" d="M7.2 8h4.6" strokeDasharray="2 2" />
+    <path data-k="sail" d="M12.6 5.2Q14.6 8 12.6 10.8" />
+  </Moving>
+);
+
 /** The Hypertelescope: mirrors spread wide in a curve, their light brought to one focus, which drifts as the fleet
  *  turns to a new star. Ours. 2026-10-29. */
 const Hyper = ({ size, still }: MarkProps) => (
@@ -852,6 +869,28 @@ const Hyper = ({ size, still }: MarkProps) => (
       <path d="M1.8 12.6L8 4M8 14.2V4M14.2 12.6L8 4" opacity={0.4} />
     </g>
     <circle cx="8" cy="3.4" r="1.1" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
+/** The Galaxy Broadcast Array: a dish, and its beam sweeping along the Galaxy's plane. Ours. 2026-11-11. */
+const GalaxyCall = ({ size, still }: MarkProps) => (
+  <Moving size={size} still={still} move={(_, part) => void rock(part("beam"), -24, 24, 3, "3.4 12.6")}>
+    <path d="M1.4 5.2Q8 0.8 14.6 5.2" opacity={0.45} strokeDasharray="1 2.2" />
+    <g data-k="beam">
+      <path d="M3.4 12.6L9.6 4" />
+    </g>
+    <path d="M1.2 10.6a3.2 3.2 0 0 0 4.2 4.2" />
+  </Moving>
+);
+
+/** The Glow Imager: a soft glow, and inside it the made ring our mirrors pick out, turning. Ours. 2026-11-11. */
+const GlowImager = ({ size, still }: MarkProps) => (
+  <Moving size={size} still={still} move={(_, part) => void rock(part("ring"), -14, 14, 3.6, "8 8")}>
+    <circle cx="8" cy="8" r="6.2" opacity={0.35} strokeDasharray="1 2.4" />
+    <g data-k="ring">
+      <ellipse cx="8" cy="8" rx="5" ry="1.7" />
+    </g>
+    <circle cx="8" cy="8" r="1" fill="currentColor" stroke="none" />
   </Moving>
 );
 
@@ -964,8 +1003,14 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <SolarSwarm size={size} still={still} />;
     case "Star Beam":
       return <StarBeam size={size} still={still} />;
+    case "Ship Beam":
+      return <ShipBeam size={size} still={still} />;
     case "Hypertelescope":
       return <Hyper size={size} still={still} />;
+    case "Glow Imager":
+      return <GlowImager size={size} still={still} />;
+    case "Galaxy Broadcast Array":
+      return <GalaxyCall size={size} still={still} />;
     case "Helium-3 Harvest":
       return <Harvest size={size} still={still} />;
     case "Star Mapper":

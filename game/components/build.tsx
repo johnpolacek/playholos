@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router";
 import { Ceilings, Costs, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
 import { Guide } from "@/components/guide";
+import { Working } from "@/components/instruments";
 import { useLeaveShell } from "@/components/wake";
 import { Queue } from "@/components/queue";
 import { Tour } from "@/components/tour";
@@ -47,7 +48,7 @@ export function Build() {
         </div>
       )}
       <Struck />
-      {/* In play, what works and rises comes first, then what it costs: on a phone under the map, the compute drawing
+      {/* In play, what rises comes first, then what it costs: on a phone under the map, the compute drawing
           filled the sheet and the Rising builds and their times sat under the tab bar. Screen critic, 2026-11-08. */}
       {year === null ? (
         <>
@@ -59,6 +60,8 @@ export function Build() {
           <Queue />
           <Costs />
           <Ceilings />
+          {/* What is done matters least to what we order next, so it comes last. 2026-11-10. */}
+          <Working />
         </>
       )}
       <div className="mt-auto flex shrink-0 flex-col gap-2 pt-4 pb-4">

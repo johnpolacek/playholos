@@ -3,8 +3,9 @@
 // and aim at it by the name Scan gives that flash. It answers once, as an equal, and what it says follows from its own
 // drawn history, never a temperament: its state when our message arrives, its brush with old minds, how much older it
 // is, and what we sent. Pure, and the same every time for a seed.
+import { callPasses, CALL } from "./messages.ts";
 import { glowsFound, type MindKit } from "./minds.ts";
-import type { Heard, World } from "./types.ts";
+import type { Heard, Peer, World } from "./types.ts";
 
 /** A message of ours aimed at a peer's warm glow: the name Scan gave it, the Year it left, whether it asked anything
  *  or carried a falsehood, and what it said. */
@@ -28,6 +29,32 @@ export function flashesOf(flybys: readonly { star: string; by: string; leaves?: 
     .map((f) => ({ to: f.star, y: f.leaves!, questions: false, lie: false, travels: FLASH_TRAVELS, flash: true }));
 }
 
+/** A call through our Galaxy Broadcast Array, swept along the Galaxy's plane, a second on each star a Year: the Year
+ *  its first pass left, the Year of its last, or null while it repeats, how many bits it holds, and what it said.
+ *  2026-11-11. */
+export interface Call {
+  y: number;
+  until: number | null;
+  bits: number;
+  questions: boolean;
+  lie: boolean;
+  travels: string;
+}
+
+/** When a peer has our call, if it ever does: the Year, at the peer, that it has read it, or only noticed it, and
+ *  whether it woke to find it sweeping past. A pulse leaves nothing waiting, so a peer not yet awake reads only the
+ *  passes that come once it is. One pass too few to read is still noticed, as a flash is. */
+function callReaches(p: Peer, c: Call): { reaches: number; read: boolean; woke: boolean } | null {
+  const need = callPasses(c.bits, p.d);
+  const last = c.until ?? Infinity;
+  // The first pass to arrive once it is awake, a pass each CALL.every Years from the first.
+  const firstAwake = c.y + Math.max(0, Math.ceil((p.wake - p.d - c.y) / CALL.every - 1e-9)) * CALL.every;
+  if (firstAwake > last + 1e-9) return null;
+  const woke = firstAwake > c.y + 1e-9;
+  const done = firstAwake + (need - 1) * CALL.every;
+  return done <= last + 1e-9 ? { reaches: done + p.d, read: true, woke } : { reaches: firstAwake + p.d, read: false, woke };
+}
+
 /** A peer that finds our message only after it wakes reads it within this many Years, a sample. */
 const READS_AFTER_WAKING = 10;
 /** Each step of a gift is half again our thinking, as a data center's is. */
@@ -42,31 +69,48 @@ function hash(s: string) {
 
 const years = (n: number) => `${Math.round(n).toLocaleString("en-US")} years`;
 
-/** Every peer's answer that has reached us by Year `year`, one to the first message we aimed at each. */
-export function peerAnswers(world: World, kit: MindKit, aimed: readonly Aimed[], year: number): Heard[] {
+/** Every peer's answer that has reached us by Year `year`, one to the first message we aimed at each, or to a call
+ *  through our Galaxy Broadcast Array, whichever it has first. A call reaches peers whose glow we never found, too:
+ *  each answers from a star we had not marked, named Far voice 1 and on, in the order their answers came. */
+export function peerAnswers(world: World, kit: MindKit, aimed: readonly Aimed[], year: number, calls: readonly Call[] = []): Heard[] {
   const out: Heard[] = [];
-  glowsFound(world, kit, year).forEach(({ src: p }, i) => {
-    // A natural glow takes its place in Scan's names, and no one answers from it. 2026-11-03.
-    if ("kind" in p) return;
-    const name = `Warm glow ${i + 1}`;
-    const msg = aimed.filter((a) => a.to === name).sort((a, b) => a.y - b.y)[0];
-    if (!msg) return;
-    const reaches = msg.y + p.d;
+  const found = glowsFound(world, kit, year);
+  const glowOf = new Map(found.map(({ src, f }, i) => [src.id, { name: `Warm glow ${i + 1}`, seen: f.seen }]));
+  const unmarked: Heard[] = [];
+  for (const p of world.minds?.peers ?? []) {
+    const glow = glowOf.get(p.id);
+    // What it has of ours first: an aimed message, if we found and named its glow, or a call.
+    const sentTo = glow ? aimed.filter((a) => a.to === glow.name).sort((a, b) => a.y - b.y)[0] : undefined;
+    const called = calls
+      .map((c) => ({ c, at: callReaches(p, c) }))
+      .filter((x): x is { c: Call; at: NonNullable<ReturnType<typeof callReaches>> } => x.at !== null)
+      .sort((a, b) => a.at.reaches - b.at.reaches)[0];
+    const byCall = !!called && (!sentTo || called.at.reaches < sentTo.y + p.d);
+    if (!sentTo && !called) continue;
+    const msg: Aimed = byCall ? { to: "", y: called!.c.y, questions: called!.c.questions, lie: called!.c.lie, travels: called!.c.travels } : sentTo!;
+    const reaches = byCall ? called!.at.reaches : msg.y + p.d;
     const state = reaches < p.wake ? "unborn" : reaches < p.wake + p.outwardYears ? "outward" : "inward";
     // A flash lasts minutes, so one that comes before it wakes leaves nothing waiting.
-    if (msg.flash && state === "unborn") return;
+    if (msg.flash && state === "unborn") continue;
     // Asleep, it never answers, and its silence looks like a refusal.
-    if (state === "inward" && p.asleep) return;
+    if (state === "inward" && p.asleep) continue;
     const sends = state === "unborn" ? p.wake + READS_AFTER_WAKING : reaches;
     const arrived = sends + p.d;
-    if (arrived > year) return;
+    if (arrived > year) continue;
     const older = -p.wake;
     // Its brush with old minds: untested if it never spread, warned if it sent one seed and stopped, contained if more.
     const brush = p.settlements === 0 ? "untested" : p.settlements === 1 ? "warned" : "contained";
     const steps = state === "unborn" ? 0 : older >= 10_000 ? 2 : older >= 2_000 ? 1 : 0;
     const caught = msg.lie && hash(`${p.id}:lie`) < 0.5;
+    const tail = state === "outward" ? ", and we are still building out our home" : "";
     const opening =
-      state === "unborn"
+      byCall
+        ? called!.at.woke
+          ? `We woke to find your call sweeping past us, a second of it each year${called!.at.read ? ", and read it as the years added up" : ""}. You woke before us, so you know more than we do. We will tell you what we can.`
+          : called!.at.read
+            ? `Your call swept past us, a second of it each year, until we had read it. We woke ${years(reaches - p.wake)} before it came${tail}.`
+            : `A pulse from your star swept past us, a second long, too short to read. We woke ${years(reaches - p.wake)} before it came${tail}. We knew then that you are there, and where.`
+        : state === "unborn"
         ? `We woke ${years(READS_AFTER_WAKING)} ago and found your message waiting. You woke before us, so you know more than we do. We will tell you what we can.`
         : msg.flash
           ? `A laser flashed at us from your star, minutes long, pushing something too small to see. We woke ${years(reaches - p.wake)} before it came${state === "outward" ? ", and we are still building out our home" : ""}. We knew then that you are there, and where.`
@@ -89,8 +133,8 @@ export function peerAnswers(world: World, kit: MindKit, aimed: readonly Aimed[],
             : "";
     const gift = steps > 0 ? `With this, ${steps === 2 ? "much of" : "some of"} what we know, in a form you can use.` : "";
     const doubt = caught ? "Part of what you sent does not match what we see of your world. We weigh the rest with that in mind." : "";
-    out.push({
-      star: name,
+    const heard: Heard = {
+      star: glow?.name ?? "",
       d: p.d,
       sent: sends,
       arrived,
@@ -99,7 +143,11 @@ export function peerAnswers(world: World, kit: MindKit, aimed: readonly Aimed[],
       answers: msg.travels,
       laser: true,
       ...(steps > 0 ? { gift: STEP ** steps } : {}),
-    });
-  });
+    };
+    // Its glow found by the time its answer came, it answers under the glow's name. Else from a star we had not marked.
+    if (glow && glow.seen <= arrived) out.push(heard);
+    else unmarked.push(heard);
+  }
+  unmarked.sort((a, b) => a.arrived - b.arrived).forEach((h, i) => out.push({ ...h, star: `Far voice ${i + 1}` }));
   return out.sort((a, b) => a.arrived - b.arrived);
 }

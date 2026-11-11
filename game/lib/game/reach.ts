@@ -3,7 +3,7 @@
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { BULLET, bulletsReady } from "@/lib/sim/conflict";
-import { horizonOf, ordersOf, pacedName, schedule, searchOf } from "./plan";
+import { horizonOf, isOn, onFrom, ordersOf, pacedName, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
 import { CATALOG, type Order, pace } from "@/lib/sim/works";
@@ -294,49 +294,80 @@ export function strikeRoad(plan: Plan, scale: number, from: number, star: string
  *  as a Mind 20 Years after landing. Dated as if sent at Year `from` when not sent. 2026-10-26. */
 const SHIP = CATALOG.seedShip;
 export const SHIP_NEEDS = ["Seed Ship", "Fusion Drive", "Deuterium Works"];
-export function colonyRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road & { stands: number | null } {
+/** The Ship Beam, done, pushes a seed ship in place of its drive and fuel: 1,000 TW from a patch of the swarm 1,000 km
+ *  wide, on a 1 km sail, to a tenth of light speed in about 78 days. It still brakes on its magnetic sail, so its
+ *  speed is the same and the trip is the burn's 10 Years shorter. calcs/mercury.py. 2026-11-10. */
+export const BEAM_NEEDS = ["Seed Ship", "Ship Beam"];
+/** What a seed ship needs: its drive and fuel, or, with the Ship Beam in our order and those not, the beam alone. */
+export const shipNeeds = (plan: Plan) => (inOrder(plan, "Ship Beam") && !SHIP_NEEDS.every((n) => inOrder(plan, n)) ? BEAM_NEEDS : SHIP_NEEDS);
+/** The Year a seed ship can leave, by its drive or by the beam, whichever is ready first, from each build's Year done. */
+function shipReadyAt(at: (name: string) => number | null | undefined) {
+  const all = (names: string[]) => (names.every((n) => at(n) != null) ? Math.max(...names.map((n) => at(n)!)) : null);
+  const drive = all(SHIP_NEEDS), beam = all(BEAM_NEEDS);
+  return drive === null ? beam : beam === null ? drive : Math.min(drive, beam);
+}
+/** When a ship ordered at Year `sent` leaves, `build` Years after all it needs is done, and the Years its start costs
+ *  over cruising. It leaves by its drive or by the beam, whichever is sooner. The beam pushes it if the Ship Beam is
+ *  done by then and not kept dark: plan.ts's SWITCHED. Kept dark, a ship with no drive waits until the beam is let
+ *  push again. `at` is each build's Year done. */
+export function shipLeaves(plan: Plan, at: (name: string) => number | null | undefined, sent: number, build = 0) {
+  const all = (names: string[]) => (names.every((n) => at(n) != null) ? Math.max(...names.map((n) => at(n)!)) : null);
+  const drive = all(SHIP_NEEDS), beam = all(BEAM_NEEDS);
+  const byDrive = drive === null ? null : Math.max(sent, drive) + build;
+  const byBeam = beam === null ? null : onFrom(plan, "Ship Beam", Math.max(sent, beam) + build);
+  const leaves = byDrive === null ? byBeam : byBeam === null ? byDrive : Math.min(byDrive, byBeam);
+  if (leaves === null) return { leaves: null, start: SHIP.burn, pushed: false };
+  const pushed = beam !== null && beam <= leaves && isOn(plan, "Ship Beam", leaves);
+  return { leaves, start: pushed ? CATALOG.beams.ship : SHIP.burn, pushed };
+}
+export function colonyRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road & { stands: number | null; push: string | null } {
   const { orders, ...opts } = ordersOf(plan);
-  const more: Order[] = SHIP_NEEDS.filter((n) => !inOrder(plan, n)).map((n) => ({ y: from, begin: pacedName(n) }));
+  const more: Order[] = shipNeeds(plan).filter((n) => !inOrder(plan, n)).map((n) => ({ y: from, begin: pacedName(n) }));
   const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
-  const ready = SHIP_NEEDS.every((n) => at[pacedName(n)] !== undefined) ? Math.max(...SHIP_NEEDS.map((n) => at[pacedName(n)])) : null;
+  const ready = shipReadyAt((n) => at[pacedName(n)]);
   const sent = plan.colony?.name === star ? plan.colony : undefined;
-  const leaves = ready === null ? null : Math.max(sent?.y ?? from, ready);
-  const arrives = leaves === null ? null : leaves + ly / SHIP.speed + SHIP.burn + SHIP.brake;
+  const { leaves, start, pushed } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from);
+  const arrives = leaves === null ? null : leaves + ly / SHIP.speed + start + SHIP.brake;
   return {
     name: "Send our Mind", n: sent ? 1 : null, build: "Seed Ship", craft: "A Mind", speed: SHIP.speed, done: ready, leaves, arrives,
     home: arrives === null ? null : arrives + ly, stands: arrives === null ? null : arrives + SHIP.stands,
+    push: pushed ? "Ship Beam" : null,
   };
 }
-export const shipReady = (plan: Plan) => SHIP_NEEDS.every((n) => inOrder(plan, n));
+export const shipReady = (plan: Plan) => shipNeeds(plan).every((n) => inOrder(plan, n));
 
 /** A seed probe: a seed ship with no Mind on board, built in 18 Years once the Seed Ship, its Fusion Drive and the
  *  Deuterium Works are done. It flies and brakes as the Seed Ship does, stays, and copies itself on: lib/sim/spread.ts.
  *  2026-10-26. */
 const PROBE = CATALOG.seedProbe;
-export const SEED_NEEDS = SHIP_NEEDS;
+export const seedNeeds = shipNeeds;
 export const seedReady = shipReady;
 
-/** The Year each seed probe we sent leaves, by its star, once what it needs is done. Null while any of it isn't. */
+/** The Year each seed probe we sent leaves, by its star, once what it needs is done, and the Years its start costs:
+ *  the Ship Beam's push if the beam is done by then, else its burn. Null while what it needs isn't done. */
 export function seedsOf(plan: Plan, scale: number) {
   const done = schedule(plan, scale);
-  const ready = SEED_NEEDS.every((n) => done[n] != null) ? Math.max(...SEED_NEEDS.map((n) => done[n]!)) : null;
-  return (plan.seeds ?? []).map((o) => ({ star: o.name, leaves: ready === null ? null : Math.max(o.y, ready) + PROBE.build }));
+  return (plan.seeds ?? []).map((o) => {
+    const { leaves, start } = shipLeaves(plan, (n) => done[n], o.y, PROBE.build);
+    return { star: o.name, leaves, burn: start };
+  });
 }
 
 /** A seed probe to a star `ly` away as a road: what it needs built, the probe built and flying, landing to stay, and
  *  its first word home. Sent or not, dated as if sent at Year `from`, and what it needs, if not in our order, as if
  *  begun then. Its first copy leaves 60 Years after it lands. */
-export function seedRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road & { copies: number | null } {
+export function seedRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road & { copies: number | null; push: string | null } {
   const { orders, ...opts } = ordersOf(plan);
-  const more: Order[] = SEED_NEEDS.filter((n) => !inOrder(plan, n)).map((n) => ({ y: from, begin: pacedName(n) }));
+  const more: Order[] = shipNeeds(plan).filter((n) => !inOrder(plan, n)).map((n) => ({ y: from, begin: pacedName(n) }));
   const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
-  const ready = SEED_NEEDS.every((n) => at[pacedName(n)] !== undefined) ? Math.max(...SEED_NEEDS.map((n) => at[pacedName(n)])) : null;
+  const ready = shipReadyAt((n) => at[pacedName(n)]);
   const sent = (plan.seeds ?? []).find((o) => o.name === star);
-  const leaves = ready === null ? null : Math.max(sent?.y ?? from, ready) + PROBE.build;
-  const arrives = leaves === null ? null : leaves + ly / SHIP.speed + SHIP.burn + SHIP.brake;
+  const { leaves, start, pushed } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from, PROBE.build);
+  const arrives = leaves === null ? null : leaves + ly / SHIP.speed + start + SHIP.brake;
   return {
     name: "Send a seed probe", n: sent ? 1 : null, build: "Seed Ship", craft: "A seed probe", speed: SHIP.speed, done: ready, leaves, arrives,
     home: arrives === null ? null : arrives + ly, copies: arrives === null ? null : arrives + PROBE.first,
+    push: pushed ? "Ship Beam" : null,
   };
 }
 
@@ -374,6 +405,7 @@ export function kitOf(plan: Plan, scale: number) {
     mirror: done["15 m Mirror"] ?? null,
     halo: done["Halo Survey"] ?? null,
     haloArray: done["Halo Array"] ?? null,
+    imager: done["Glow Imager"] ?? null,
     warmWatch: done["Warm Sky Watch"] ?? null,
     closeReads: plan.closeReads ?? [],
     moonSearch: done["Moon Search"] ?? null,
@@ -386,16 +418,18 @@ export function kitOf(plan: Plan, scale: number) {
     colony: (() => {
       const c = plan.colony;
       if (!c) return null;
-      const ready = SHIP_NEEDS.every((n) => done[n] != null) ? Math.max(...SHIP_NEEDS.map((n) => done[n]!)) : null;
-      return ready === null ? null : { star: c.name, mode: c.mode, leaves: Math.max(c.y, ready) };
+      const { leaves, start } = shipLeaves(plan, (n) => done[n], c.y);
+      return leaves === null ? null : { star: c.name, mode: c.mode, leaves, burn: start };
     })(),
     sentinels: sentinels(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves }] : [])),
-    seeds: seedsOf(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves }] : [])),
+    seeds: seedsOf(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves, burn: x.burn }] : [])),
     lenses: lenses(plan, scale).flatMap((l) => (l.looks !== null && l.home !== null ? [{ star: l.star, looks: l.looks, home: l.home }] : [])),
     flybys: flybysOf(plan, scale),
     sails: fly(sails),
     probe: PROBE_NEEDS.every((n) => inOrder(plan, n)) ? fly(probe) : null,
     xray: done["X-Ray Watch"] ?? null,
+    // Nothing in the simulation reads this yet: no probe comes for it to catch. When one does, it must catch only
+    // while armed: plan.ts's isOn. 2026-11-11.
     interceptor: done["Interceptor"] ?? null,
     quiet: done["Quiet Radars"] ?? null,
     strikes: strikesOf(plan, scale).flatMap((x) => (x.fired !== null ? [{ star: x.star, fired: x.fired }] : [])),

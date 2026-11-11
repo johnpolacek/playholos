@@ -98,7 +98,7 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
       </div>
       <div className="mt-[3px] flex justify-between gap-2.5 font-mono text-[9.5px] text-muted">
         <span>
-          {row.bullet ? row.msg : row.sent !== undefined ? `${row.sent > YEAR_0 + now ? "leaves" : "sent"} ${Math.floor(row.sent)} · ${row.msg}` : `from Year ${yearText(row.from ?? 0)}`}
+          {row.bullet ? row.msg : row.sent !== undefined ? `${row.sent > YEAR_0 + now ? "leaves" : row.kind === "flight" ? "left" : "sent"} ${row.kind === "flight" ? `Year ${yearText(row.sent - YEAR_0)}` : Math.floor(row.sent)} · ${row.msg}` : `from Year ${yearText(row.from ?? 0)}`}
         </span>
         {row.bullet ? (
           <span>
@@ -127,6 +127,7 @@ export function Item({
   point,
   style,
   counted,
+  children,
 }: {
   row: Row;
   now: number;
@@ -139,6 +140,8 @@ export function Item({
   style?: React.CSSProperties;
   /** Its line counts the Years itself, so the right says only once it's done. 2026-11-02. */
   counted?: boolean;
+  /** What sits under its journey, as a craft's call back. */
+  children?: React.ReactNode;
 }) {
   const done = over(row, now);
   const theirs = row.kind === "heard";
@@ -223,6 +226,7 @@ export function Item({
       <div className="pl-7">
         <Journey row={row} now={now} shown={!!aim?.shown} />
       </div>
+      {children}
       {row.story && (
         <div className="pl-7">
           <Story lines={row.story} tone="other" open={!!aim?.shown} />

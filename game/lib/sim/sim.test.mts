@@ -136,6 +136,17 @@ test("messages match calcs/messages.py: send times, power, and reach", async () 
   assert.equal(Math.round(powerFor(10, SIZES.genome) / GRID_2040 * 100), 2797);
 });
 
+test("the Galaxy Broadcast Array's call matches calcs/messages.py: a page read to 6,674 ly on the first pass", async () => {
+  const { callBits, callPasses, callReach, noticeReach, CALL, SIZES } = await import("./messages.ts");
+  assert.equal(Math.round(callReach(SIZES.page)), 6674);
+  assert.equal(Math.round(callReach(SIZES.page, 100)), 66736);
+  assert.equal(Math.round(callBits(2700)), 146625);
+  assert.deepEqual([2700, 10000, 27000, 50000].map((d) => callPasses(SIZES.page, d)), [1, 3, 17, 57]);
+  // Noticed anywhere in the Galaxy in one dwell. Cosmic Call 2's 220 MB would be read only next door.
+  assert.equal(Math.round(noticeReach(CALL.eirp, 12, CALL.dwell)), 323697);
+  assert.equal(Math.round(callReach(SIZES.collection) * 10) / 10, 24.6);
+});
+
 test("power from orbit and the cold annex never share rock: the second waits for its own megatonnes", () => {
   const g = golden.works[0];
   const alone = mock(g);
@@ -334,6 +345,17 @@ test("seed probes copy themselves to the nearest free stars, two each, for three
   // Two sent never chase the same star.
   const two = seedProbes([{ star: "Proxima Centauri", leaves: 45 }, { star: "Barnard’s Star", leaves: 45 }]);
   assert.equal(new Set(two.map((p) => p.star)).size, two.length);
+});
+
+test("a seed probe our Ship Beam pushed lands its burn sooner, and its copies still burn their own fuel", () => {
+  const { burn } = catalog.seedShip, { ship } = catalog.beams;
+  assert.ok(ship < 0.5 && burn === 10);
+  const [own] = seedProbes([{ star: "Proxima Centauri", leaves: 45 }]);
+  const pushed = seedProbes([{ star: "Proxima Centauri", leaves: 45, burn: ship }]);
+  assert.ok(Math.abs(pushed[0].lands - (own.lands - burn + ship)) < 1e-9);
+  // Each copy is built where no beam stands: its flight is as long as before, only begun sooner.
+  const copy = pushed.find((p) => p.gen === 2)!, before = seedProbes([{ star: "Proxima Centauri", leaves: 45 }]).find((p) => p.star === copy.star)!;
+  assert.ok(Math.abs(copy.lands - copy.leaves - (before.lands - before.leaves)) < 1e-9);
 });
 
 test("a seed probe's word comes home from each star a light-time after it lands, and its copies go on", async () => {
@@ -581,6 +603,72 @@ test("skipping ahead stops at the next thing we learn or build, and says when, n
   assert.equal(nextStop({ year: 0, felt: [], heard: [], visits: [] }, 5, {}), null);
   // A rock's Years stop it too, the past ones ignored.
   assert.equal(nextStop({ year: 0, felt: [], heard: [], visits: [] }, 5, {}, [3, null, 412.5]), 412.5);
+});
+
+test("our Glow Imager shows what makes each glow we have found, a week each: panels, a made ring, or a cloud", async () => {
+  const { mindsSeen, IMAGER_SLEW } = await import("./minds.ts");
+  const { glowNames } = await import("../game/glow-names.ts");
+  const { nextKnown } = await import("./next.ts");
+  const world = await loadWorld(10);
+  const kit = { warmWatch: 5, telescope: 8, halo: 3, haloArray: 20 };
+  const year = 2500;
+  const before = mindsSeen(world, kit, year);
+  assert.ok(before.glows.length > 1 && before.flashes.some((f) => f.range));
+  assert.ok(before.glows.every((g) => g.imaged === undefined) && before.flashes.every((f) => !f.imaged));
+  // Built at Year 400, it works through every glow found by then, the first a week on, then each new one as it comes.
+  const seen = mindsSeen(world, { ...kit, imager: 400 }, year);
+  assert.ok(seen.glows.every((g) => g.imaged !== undefined && g.imaged >= Math.max(400, g.seen) + IMAGER_SLEW - 1e-3));
+  const first = seen.glows.filter((g) => g.seen <= 400).map((g) => g.imaged!).sort((a, b) => a - b);
+  assert.ok(Math.abs(first[0] - (400 + IMAGER_SLEW)) < 2e-3 && first.every((t, i) => i === 0 || t - first[i - 1] > IMAGER_SLEW - 2e-3));
+  // A warm glow is shown only once ranged and while it shines: a peer's is a made ring, nature's a cloud of dust.
+  const found = glowsFound(world, kit, year);
+  seen.flashes.forEach((f, i) => {
+    if (!f.imaged) return;
+    assert.ok(f.ranged !== undefined && f.imaged.at >= f.ranged && f.imaged.at <= found[i].src.flash[1]);
+    assert.equal(f.imaged.saw, "kind" in found[i].src ? "cloud" : "ring");
+  });
+  assert.ok(seen.flashes.some((f) => f.imaged?.saw === "ring") && seen.flashes.some((f) => f.imaged?.saw === "cloud"));
+  assert.ok(seen.flashes.filter((f) => f.faded !== undefined && f.faded <= 400).every((f) => !f.imaged));
+  // A ring earns a warm glow its name, as plain heat does, and panels a cold glow's, as a sentinel's look does.
+  const names = glowNames(seen);
+  assert.ok(Object.keys(names).some((k) => k.startsWith("Warm glow")) && Object.keys(names).filter((k) => k.startsWith("Cold glow")).length === seen.glows.length);
+  // Skipping ahead stops at its first look at a cold glow, and not at each one after.
+  const kit2 = { telescope: 8, warmWatch: 5, halo: 3, haloArray: 20, imager: 400 };
+  const ahead = earthKnows(world, 420, kit2);
+  assert.ok(Math.abs(nextKnown(ahead, 400)! - (400 + IMAGER_SLEW)) < 2e-3);
+  const next = nextKnown(ahead, 400 + IMAGER_SLEW + 0.01);
+  assert.ok(next === null || next > 400 + 3 * IMAGER_SLEW);
+});
+
+test("a call through our Galaxy Broadcast Array is answered once by each awake peer, found or not, twice its distance on", async () => {
+  const { peerAnswers } = await import("./peers.ts");
+  const { callPasses, SIZES } = await import("./messages.ts");
+  const world = await loadWorld(10);
+  const peers = world.minds!.peers;
+  const call = { y: 150, until: null, bits: SIZES.page, questions: true, lie: false, travels: "We are here. Who are you?" };
+  const year = 60000;
+  // No watch built, so no glow is found: every answer comes from a star we had not marked, in the order they came.
+  const heard = peerAnswers(world, {}, [], year, [call]);
+  assert.ok(heard.length > 20);
+  assert.deepEqual(heard.map((h) => h.star), heard.map((_, i) => `Far voice ${i + 1}`));
+  assert.ok(heard.every((h, i) => i === 0 || h.arrived >= heard[i - 1].arrived));
+  // Each is a peer awake when it had read the call, and its answer takes its distance again to come home.
+  for (const h of heard) {
+    const p = peers.find((x) => x.d === h.d && !(x.asleep && h.sent >= x.wake + x.outwardYears))!;
+    assert.ok(p && h.sent >= p.wake - 1e-6 && Math.abs(h.arrived - h.sent - p.d) < 1e-6);
+    assert.ok(h.sent >= 150 + p.d + callPasses(SIZES.page, p.d) - 1 - 1e-6);
+    assert.equal(h.answers, call.travels);
+  }
+  // The first comes no sooner than twice the nearest answering peer's distance, thousands of Years on.
+  assert.ok(heard[0].arrived > 150 + 2 * Math.min(...peers.map((p) => p.d)) - 1e-6 && heard[0].arrived > 5000);
+  // The same answers stand as time goes on: none is renamed, and more only join.
+  const later = peerAnswers(world, {}, [], year + 20000, [call]);
+  assert.deepEqual(later.slice(0, heard.length).map((h) => [h.star, h.arrived]), heard.map((h) => [h.star, h.arrived]));
+  // Sent once, it is read only as far as one pass reads a page: farther minds notice a pulse they can't read.
+  const once = peerAnswers(world, {}, [], year, [{ ...call, until: 150 }]);
+  assert.ok(once.some((h) => /too short to read/.test(h.text!)) && once.every((h) => h.d > 6674 === /too short to read/.test(h.text!)));
+  // No call, no answer.
+  assert.equal(peerAnswers(world, {}, [], year).length, 0);
 });
 
 test("a glow earns its name in the order we read it, and only plain heat or a sentinel's look earns one", async () => {

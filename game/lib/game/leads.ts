@@ -73,9 +73,11 @@ export type Art =
   | { kind: "reply"; windows: Window[] }
   | { kind: "dark"; mass: number; ly: number }
   | { kind: "pair"; mass: number; ly: number; a: number; e: number; days: number }
-  | { kind: "glow"; ly: number; steady?: boolean }
-  /** A warm glow ranged, not measured: its nearest and farthest, light-years. 2026-10-29. */
-  | { kind: "warm"; near: number; far: number }
+  /** `panels`: our Glow Imager has shown what glows, from home. 2026-11-11. */
+  | { kind: "glow"; ly: number; steady?: boolean; panels?: boolean }
+  /** A warm glow ranged, not measured: its nearest and farthest, light-years. 2026-10-29. `shape`: what our Glow
+   *  Imager showed it to be. 2026-11-11. */
+  | { kind: "warm"; near: number; far: number; shape?: "ring" | "cloud" }
   | { kind: "seed"; sight: Visit["sight"] }
   /** Something here at home, drawn where it sits: at the Moon's L5, on a rock sharing our orbit, or a rock coming in.
    *  2026-10-30. */
@@ -805,6 +807,9 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
           ...(f.read?.saw === "smooth" ? [["Its light", `Smooth heat, no dust bump, ${year(f.read.at)}`] as [string, string]] : []),
           ...(names[`Warm glow ${i + 1}`] ? [["We named it", `${names[`Warm glow ${i + 1}`].name}, for ${names[`Warm glow ${i + 1}`].after}. Once Warm Glow ${i + 1}`] as [string, string]] : []),
           ...(f.read?.saw === "dust" ? [["Its light", `Dust, a bump at 10 microns, ${year(f.read.at)}`] as [string, string]] : []),
+          // What our Glow Imager showed of its shape, from home. 2026-11-11.
+          ...(f.imaged?.saw === "ring" ? [["Resolved", `A thin made ring round a star, ${year(f.imaged.at)}, by our Glow Imager`] as [string, string]] : []),
+          ...(f.imaged?.saw === "cloud" ? [["Its shape", `A ragged cloud of dust, ${year(f.imaged.at)}, by our Glow Imager`] as [string, string]] : []),
         ],
         could: [
           { what: "A young star wrapped in dust", why: "Stars forming in dust glow warm in infrared, and can brighten over decades.", odds: "likely" },
@@ -814,9 +819,10 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         tells: [
           "A young star sits in a dark cloud, and a merger leaves a fading shell. Neither would hold steady for centuries, then dim away together.",
           "A Close Reading of its light, while it shines, would show dust if dust is what it is.",
+          "A Glow Imager would show its shape from here: a made ring, or a cloud.",
           `Light from it takes ${far >= 20000 ? "tens of thousands of" : far >= 2000 ? "thousands of" : "hundreds of"} Years to cross. Whatever made it has moved on long since.`,
         ],
-        art: { kind: "warm", near, far },
+        art: { kind: "warm", near, far, ...(f.imaged ? { shape: f.imaged.saw } : {}) },
       }];
     }),
     ...m.glows.map((g, i): Lead => ({
@@ -827,17 +833,18 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
       line: `Cold light beside a star ${n(Math.round(g.d))} ly away, its color fitting no dust.`,
       ly: g.d,
       ask: `What is cold glow ${i + 1}?`,
-      brief: `Our Halo Survey saw a compact glow near 12 K beside a star ${n(Math.round(g.d))} ly away, about ${watts(g.watts)}, steady. Its color fits no dust we know. A cold disk of odd grains could glow so, or a fault in our looking. Computing done cold, far from a star, would too.${g.near !== undefined ? " Our sentinel there has seen what glows: thin dark panels far out from the star, each as cold as the glow, on orbits too orderly for rubble. Something made them." : ""}`,
+      brief: `Our Halo Survey saw a compact glow near 12 K beside a star ${n(Math.round(g.d))} ly away, about ${watts(g.watts)}, steady. Its color fits no dust we know. A cold disk of odd grains could glow so, or a fault in our looking. Computing done cold, far from a star, would too.${g.near !== undefined ? " Our sentinel there has seen what glows: thin dark panels far out from the star, each as cold as the glow, on orbits too orderly for rubble. Something made them." : g.imaged !== undefined ? " Our Glow Imager has shown what glows, from home: thin dark panels far out from the star, each as cold as the glow, on orbits too orderly for rubble. Something made them." : ""}`,
       facts: [
         ["Its glow", `About ${watts(g.watts)}, steady`],
         ["First seen", `${year(g.seen)}, by our Halo Survey`],
+        ...(g.imaged !== undefined ? ([["Resolved", `${year(g.imaged)}, by our Glow Imager, from home`]] as [string, string][]) : []),
         ...(g.near !== undefined ? ([["Up close", `${year(g.near)}, by our sentinel`]] as [string, string][]) : []),
         ...(names[`Cold glow ${i + 1}`] ? ([["We named it", `${names[`Cold glow ${i + 1}`].name}, for ${names[`Cold glow ${i + 1}`].after}. Once Cold Glow ${i + 1}`]] as [string, string][]) : []),
       ],
       // A sentinel that stays sees its source up close, and that settles it. 2026-10-31.
-      could: g.near !== undefined ? [
+      could: g.near !== undefined || g.imaged !== undefined ? [
         { what: "Something natural we don't know", why: "Nothing natural we know sets panels on orbits this orderly.", odds: "almost no chance" },
-        { what: "An error in our looking", why: "Our sentinel is there, and sees it.", odds: "almost no chance" },
+        { what: "An error in our looking", why: g.near !== undefined ? "Our sentinel is there, and sees it." : "Our Glow Imager shows each panel apart, on its own orbit.", odds: "almost no chance" },
         { what: "A mind computing cold", why: "Made panels shedding heat at 12 K, far from their star, are what cold computing would build.", odds: "almost certain" },
       ] : [
         { what: "Something natural we don't know", why: "Dust of grains we haven't measured, or a disk cold and far out. The sky has surprised us before.", odds: "likely" },
@@ -846,10 +853,16 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
       ],
       tells: g.near !== undefined
         ? ["It hasn't acted on our sentinel. Whether it noticed, we can't tell."]
+        : g.imaged !== undefined
+          // Seen from home, it can't know we looked. A sentinel still does what a look can't. 2026-11-11.
+          ? ["We saw it from here, so nothing there can tell we looked.", "A sentinel that stays would watch it over time, and find anything that sleeps beside it."]
         // Only moves we can make: "a second look in other bands" had no build behind it, and a blind first-timer
         // looked for one. 2026-11-07.
-        : [`A sentinel that stays there would see what makes it, about ${n(Math.round(g.d / CATALOG.sentinel.speed + CATALOG.sentinel.burns + CATALOG.sentinel.brake + 3 + g.d))} Years after it leaves.`],
-      art: { kind: "glow", ly: g.d, steady: true },
+        : [
+            "A Glow Imager would show what makes it from here, about a week after it turns to it.",
+            `A sentinel that stays there would see what makes it, about ${n(Math.round(g.d / CATALOG.sentinel.speed + CATALOG.sentinel.burns + CATALOG.sentinel.brake + 3 + g.d))} Years after it leaves.`,
+          ],
+      art: { kind: "glow", ly: g.d, steady: true, ...(g.imaged !== undefined ? { panels: true } : {}) },
       life: "unlikely",
     })),
     ...(m.watcher ? [watcherLead(m.watcher)] : []),
@@ -1413,6 +1426,8 @@ export function warmReadings(flashes: readonly MindsSeen["flashes"][number][], y
         const at = Math.round((f.seen + age) * 10) / 10;
         // Once read, waiting tells us nothing more.
         if (f.read && f.read.saw !== "gone" && at > f.read.at) return [];
+        // Nor once our Glow Imager has shown its shape.
+        if (f.imaged && at > f.imaged.at) return [];
         return at <= year && (f.faded === undefined || f.faded > at) ? [{ ...h, id: `warm-${i + 1}-${age}`, needs: "", at, by }] : [];
       });
       const read = f.read;
@@ -1448,7 +1463,30 @@ export function warmReadings(flashes: readonly MindsSeen["flashes"][number][], y
                 now: [],
                 tells: [],
               }];
-      const all = [...first, ...held, ...looked];
+      // Its shape, from our Glow Imager: a made ring settles it, and a cloud rules it out, as dust in its light does.
+      // 2026-11-11.
+      const im = f.imaged;
+      const shaped: Reading[] = !im
+        ? []
+        : im.saw === "ring"
+          ? [{
+              id: `warm-${i + 1}-imaged`, needs: "", at: im.at, by: "Glow Imager",
+              title: "Its shape: a made ring",
+              line: "A thin ring round a star, in one plane, even all the way round. Dust clumps and trails. This is set in place.",
+              mind: "Someone built this. We are seeing what they made thousands of Years ago, and they have moved on since.",
+              now: ["almost no chance", "almost no chance", "almost certain"],
+              tells: ["A message could ask who they are. An answer would take thousands of Years."],
+            }]
+          : [{
+              id: `warm-${i + 1}-imaged`, needs: "", at: im.at, by: "Glow Imager",
+              title: "Its shape: a cloud",
+              line: `A ragged cloud of dust, ${im.kind === "merger" ? "the shell two merging stars threw off" : "round a young star, as FU Orionis has"}.`,
+              mind: "It is dust, in the shape dust takes. No one built it.",
+              now: im.kind === "merger" ? ["unlikely", "very likely", "almost no chance"] : ["very likely", "unlikely", "almost no chance"],
+              tells: [],
+              ruledOut: true,
+            }];
+      const all = [...first, ...held, ...looked, ...shaped];
       return all.length ? [[`warm-glow-${i + 1}`, all]] : [];
     }),
   );

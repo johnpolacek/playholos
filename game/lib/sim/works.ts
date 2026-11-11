@@ -53,7 +53,8 @@ interface Catalog {
   halo: { floor: number; every: number };
   lens: { au: number; flight: number; look: number; km30pc: number };
   /** Calcs/mercury.py: what pushes a lens, the Solar Swarm's glow, and what the Hypertelescope pictures. 2026-10-29. */
-  beams: { array: number; beam: number; look: number };
+  /** `ship`: the Years a seed ship's push by the Ship Beam costs over cruising, and `shipDays` the push. 2026-11-10. */
+  beams: { array: number; beam: number; look: number; ship: number; shipDays: number };
   swarm: { watts: number; doubling: number; excess: number; perLy2: number; kelvin: number; spread: number };
   hyper: { kmPerLy: number; reach: number; slew: number; cities: number };
   /** A sentinel speeds up on deuterium and brakes on a magnetic sail: `burns` and `brake` are the Years each adds over
@@ -78,7 +79,7 @@ export const giftTimes = (steps: number) => STEP ** steps;
 /** Works a woken backup can still build: what is joined in orbit, and what stands on the Moon or among the rocks. All
  *  else is on Earth, and is lost with it, data centers too. 2026-10-28. */
 const OFF_EARTH = new Set(["Moon vault", "Orbital yard", "Mass driver", "Belt mining", "Far-side array, one fifth", "Power from orbit", "Cold annex", "Cold halo",
-  "Mercury works", "Solar swarm", "Star beam"]);
+  "Mercury works", "Solar swarm", "Star beam", "Ship beam"]);
 export const offEarth = (w: string) => OFF_EARTH.has(w) || WORKS[w]?.orbit === true;
 
 /** The most doublings a growing work counts, so its thought stays a number. */

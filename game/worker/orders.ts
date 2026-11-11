@@ -1,4 +1,4 @@
-import { BUILDS, LATER } from "@/lib/game/plan";
+import { BUILDS, LATER, SWITCHED } from "@/lib/game/plan";
 import type { Ordered, Size, Will } from "@/lib/game/types";
 import type { ColonyMode } from "@/lib/sim/types";
 import { GIFT_STEPS } from "@/lib/sim/messages";
@@ -27,6 +27,16 @@ export function readLater(l: unknown): Ordered[] {
     : [];
 }
 export const readStops = readLater;
+
+// Builds the Will has stood down or armed again, from the save: plan.ts's SWITCHED. Checked the same way. 2026-11-11.
+export function readSwitches(s: unknown): (Ordered & { on: boolean })[] {
+  return Array.isArray(s)
+    ? s
+        .filter((o): o is Ordered & { on: boolean } => !!o && typeof o.name === "string" && o.name in SWITCHED && typeof o.y === "number" && Number.isFinite(o.y) && o.y >= 0 && typeof o.on === "boolean")
+        .map(({ name, y, on }) => ({ name, y, on }))
+        .slice(-64)
+    : [];
+}
 
 // Gifts from another mind, from the save: a star's name, the Year all of it reached us, and its size. Checked, one a star, at
 // most 32.
@@ -96,6 +106,21 @@ export function readKnocks(raw: string | null): number[] {
 }
 
 /** Our messages aimed at peers' warm glows, from the save. Checked, at most 64. 2026-10-31. */
+// Our calls through the Galaxy Broadcast Array, from the save, checked. 2026-11-11.
+export function readCalls(raw: string | null): { y: number; until: number | null; bits: number; questions: boolean; lie: boolean; travels: string }[] {
+  try {
+    const v = JSON.parse(raw ?? "[]");
+    if (!Array.isArray(v)) return [];
+    const num = (x: unknown): x is number => typeof x === "number" && Number.isFinite(x) && x >= 0;
+    return v
+      .filter((c) => c && num(c.y) && num(c.bits) && c.bits > 0 && (c.until === null || (num(c.until) && c.until >= c.y)))
+      .map((c) => ({ y: c.y, until: c.until, bits: c.bits, questions: c.questions === true, lie: c.lie === true, travels: typeof c.travels === "string" ? c.travels.slice(0, 600) : "" }))
+      .slice(0, 16);
+  } catch {
+    return [];
+  }
+}
+
 export function readAimed(raw: string | null): { to: string; y: number; questions: boolean; lie: boolean; travels: string }[] {
   try {
     const v = JSON.parse(raw ?? "[]");

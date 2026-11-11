@@ -18,6 +18,8 @@ export interface MindKit {
   halo?: number | null;
   /** The Halo Array, our own, ten times as fast. */
   haloArray?: number | null;
+  /** The Glow Imager: cold mirrors flying apart, which show what makes a glow we have found, from home. 2026-11-11. */
+  imager?: number | null;
   /** A deep, stacked search of the Earth–Moon L4 and L5 points from Earth. */
   moonSearch?: number | null;
   /** The asteroid tour: the Year its probe reaches the first Earth co-orbital asteroid. It maps each in turn. */
@@ -51,6 +53,9 @@ export interface FlashSeen {
   reading?: { from: number; view: number; done: number };
   /** What a Close Reading of its light saw, once done: plain heat, dust and what made it, or it faded first. */
   read?: { from: number; at: number; saw: "smooth" | "dust" | "gone"; kind?: "eruption" | "merger" };
+  /** What our Glow Imager saw of its shape, while it shone, and when: a made ring round a star, or a cloud of dust and
+   *  what made it. A ring settles it, as nothing else from home does. 2026-11-11. */
+  imaged?: { at: number; saw: "ring" | "cloud"; kind?: "eruption" | "merger" };
 }
 
 /** A cold far-infrared glow beside a star, steady as nothing young is. */
@@ -62,6 +67,9 @@ export interface ColdGlowSeen {
   watts: number;
   /** The Year word comes home from a craft of ours that stayed in its system and saw its source up close. 2026-10-31. */
   near?: number;
+  /** The Year our Glow Imager showed its source from home: thin panels on orderly orbits, as a craft up close sees.
+   *  2026-11-11. */
+  imaged?: number;
 }
 
 export interface WatcherSeen {
@@ -370,14 +378,51 @@ export function sleeperOf(m: OldMind, craft: MindKit["craft"], year: number): Sl
   return { ...skyOf(m.pos), d: m.d, seen: best, restAU: m.restAU };
 }
 
+/** Years our Glow Imager takes to turn to a glow and show it: a week, a sample, as the Hypertelescope's turn.
+ *  calcs/mercury.py. */
+export const IMAGER_SLEW = catalog.imager.slew;
+
+/** Our Glow Imager turns to each glow we have found, on its own, a week each, in the order each was ready for it: a
+ *  cold glow once seen, a warm one once ranged. A warm glow must still shine when the look ends, and one already
+ *  faded takes none of its time. What it shows is the world's truth: a peer's swarm is a made ring, nature's glow a
+ *  cloud, and an old mind's cold glow thin panels on orderly orbits. 2026-11-11. */
+function imagerLooks(
+  found: { src: GlowSource }[],
+  flashes: FlashSeen[],
+  glows: ColdGlowSeen[],
+  imager: number | null | undefined,
+  year: number,
+) {
+  if (imager == null) return;
+  const queue = [
+    ...glows.map((g, i) => ({ ready: g.seen, cold: i, warm: -1 })),
+    ...flashes.flatMap((f, i) => (f.ranged !== undefined ? [{ ready: f.ranged, cold: -1, warm: i }] : [])),
+  ].sort((a, b) => a.ready - b.ready);
+  let free = imager;
+  for (const q of queue) {
+    const at = Math.max(free, q.ready) + IMAGER_SLEW;
+    if (q.warm >= 0) {
+      const src = found[q.warm].src;
+      if (src.flash[1] <= at) continue;
+      free = at;
+      if (at > year) continue;
+      const natural = "kind" in src ? (src as NaturalGlow) : null;
+      flashes[q.warm] = { ...flashes[q.warm], imaged: { at: Math.round(at * 1000) / 1000, saw: natural ? "cloud" : "ring", ...(natural ? { kind: natural.kind } : {}) } };
+    } else {
+      free = at;
+      if (at <= year) glows[q.cold] = { ...glows[q.cold], imaged: Math.round(at * 1000) / 1000 };
+    }
+  }
+}
+
 /** Every mind Earth has found by Year `year`, in the order found. */
 export function mindsSeen(world: World, kit: MindKit, year: number): MindsSeen {
   const m = world.minds;
   if (!m) return { flashes: [], glows: [], watcher: null, sleepers: [] };
   const bySeen = <T extends { seen: number }>(xs: (T | null)[]) => xs.filter((x): x is T => x !== null).sort((a, b) => a.seen - b.seen);
   const first = Math.min(...(kit.closeReads ?? []).map((o) => o.y));
-  return {
-    flashes: glowsFound(world, kit, year).map(({ src, f }, i) => {
+  const found = glowsFound(world, kit, year);
+  const flashes = found.map(({ src, f }, i): FlashSeen => {
       if (!f.range) return f;
       // After our first Close Reading, we read each glow we range while it shines, unasked. Readings take hours, so
       // our telescope never has to choose between them. 2026-11-08.
@@ -391,8 +436,12 @@ export function mindsSeen(world: World, kit: MindKit, year: number): MindsSeen {
       const at = Math.round(done * 1000) / 1000;
       const saw = src.flash[1] < done ? ("gone" as const) : "kind" in src ? ("dust" as const) : ("smooth" as const);
       return { ...f, read: { from, at, saw, ...(saw === "dust" ? { kind: (src as NaturalGlow).kind } : {}) } };
-    }),
-    glows: bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year, kit.haloArray ?? null, kit.craft))),
+  });
+  const glows = bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year, kit.haloArray ?? null, kit.craft)));
+  imagerLooks(found, flashes, glows, kit.imager, year);
+  return {
+    flashes,
+    glows,
     watcher: watcherOf(world, kit, year),
     sleepers: bySeen(m.old.map((o) => sleeperOf(o, kit.craft, year))),
   };

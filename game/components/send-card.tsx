@@ -6,7 +6,8 @@ import { useLeads } from "@/components/scan";
 import { tenths, yearText, YEAR_0 } from "@/lib/game/clock";
 import { dates, type Draft, farText, sendTime, target, WATCHER, watcherAway } from "@/lib/game/sends";
 import sky from "@/lib/game/sky.json";
-import { GRID_2040, noticeReach, powerFor, readReach, SIZES } from "@/lib/sim/messages";
+import { useSchedule } from "@/components/picks";
+import { CALL, callPasses, callReach, GRID_2040, noticeReach, powerFor, readReach, SIZES } from "@/lib/sim/messages";
 
 // The card the Mind offers when the Will asks to send. Aimed at a star, the ledger: where it goes, what travels, when
 // it is done sending, lands, and the soonest an answer could be home. Every way at once, a dial for how far it can be
@@ -159,28 +160,93 @@ const share = (p: number) => {
   return pc > 100 ? `${Math.round(pc / 100)} times Earth’s` : `${pc < 0.01 ? pc.toFixed(3) : pc < 1 ? pc.toFixed(2) : Math.round(pc)}% of Earth’s`;
 };
 
-/** Every way at once: the dial, the rings, and repeat or once. */
+/** The Galaxy seen from above its pole, the Sun 27,000 ly from its center, and how far a call through our Galaxy
+ *  Broadcast Array is read: on its first pass, and after a hundred Years of repeats. Its beam sweeps round the plane. */
+function GalaxyReach({ first, later }: { first: number; later: number | null }) {
+  const r = (ly: number) => (ly / 50000) * 96;
+  const sun = -r(27000);
+  const n = (ly: number) => Math.round(ly).toLocaleString("en-US");
+  return (
+    <svg viewBox="-110 -108 220 216" className="h-[210px] w-full" role="img" aria-label={`Read on the first pass to ${n(first)} light-years`}>
+      <defs>
+        <clipPath id="disk">
+          <circle r={r(50000)} />
+        </clipPath>
+      </defs>
+      <circle r={r(50000)} className="fill-muted/5 stroke-muted/40" strokeDasharray="2 3" />
+      {/* Two spiral arms, hinted: where the stars are. */}
+      {[0, Math.PI].map((turn) => (
+        <path
+          key={turn}
+          d={Array.from({ length: 60 }, (_, k) => { const a = turn + k * 0.11, rr = 8 + k * 1.45; return `${k ? "L" : "M"}${(rr * Math.cos(a)).toFixed(1)},${(rr * Math.sin(a)).toFixed(1)}`; }).join(" ")}
+          fill="none" className="stroke-faint" strokeWidth={5} strokeLinecap="round" opacity={0.5}
+        />
+      ))}
+      <circle r={5} className="fill-muted/40" />
+      <g clipPath="url(#disk)">
+        {later !== null && <circle cy={sun} r={r(later)} className="fill-you/5 stroke-you/30" strokeDasharray="3 3" />}
+        <circle cy={sun} r={r(first)} className="fill-you/15 stroke-you/70" />
+        <g className="motion-reduce:hidden">
+          <line y1={sun} x2={0} y2={sun - 200} className="stroke-you/60" strokeWidth={0.8}>
+            <animateTransform attributeName="transform" type="rotate" from={`0 0 ${sun}`} to={`360 0 ${sun}`} dur="9s" repeatCount="indefinite" />
+          </line>
+        </g>
+      </g>
+      <circle cy={sun} r={2.4} className="fill-ink" />
+      <text y={sun + 13} textAnchor="middle" className="fill-you font-mono text-[7px]">READ {n(first)} LY</text>
+      <text y={-9} textAnchor="middle" className="fill-muted font-mono text-[7px]">THE GALAXY’S CENTER</text>
+      <text y={r(50000) + 9} textAnchor="middle" className="fill-muted font-mono text-[7px]">NOTICED ACROSS THE GALAXY</text>
+    </svg>
+  );
+}
+
+/** Every way at once: the dial, the rings, and repeat or once. With our Galaxy Broadcast Array done, the Will picks
+ *  the stars near us or the Galaxy's plane: the array sends nothing unless we send it here. 2026-11-11. */
 function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: string }) {
   const { orderAt: year, save, send, stopSending } = useGame();
   const sent = save?.sent?.find((s) => s.id === id);
+  const { done } = useSchedule();
+  const array = done["Galaxy Broadcast Array"];
+  const canCall = array != null && array <= (year ?? 0);
   const [dial, setDial] = useState(20);
   const [repeat, setRepeat] = useState(true);
-  const reach = sent?.reach ?? dial;
+  const [far, setFar] = useState(false);
+  const galaxy = sent ? !!sent.galaxy : far && canCall;
   const bits = SIZES[draft.size];
-  const power = powerFor(reach, bits);
+  const reach = galaxy ? Math.round(callReach(bits)) : (sent?.reach ?? dial);
+  const power = galaxy ? CALL.watts : powerFor(reach, bits);
   const notice = noticeReach(power), heard = readReach(power, bits, 86400, 365);
-  const over = power > GRID_2040;
-  const stats: [string, string][] = [
-    ["Power", share(power)],
-    ["Noticed to, in a day", `${Math.round(notice)} ly`],
-    ["Read by a star that listens a Year", `${Math.round(heard)} ly`],
-  ];
+  const over = !galaxy && power > GRID_2040;
+  const n = (ly: number) => Math.round(ly).toLocaleString("en-US");
+  const stats: [string, string][] = galaxy
+    ? [
+        ["Power", `${share(power)}, in pulses`],
+        ["Each star gets", "About a second a Year"],
+        ["Noticed", "Across the Galaxy, on the first pass"],
+        ["Read on the first pass to", `${n(reach)} ly`],
+        ["Read at the Galaxy’s center after", `${callPasses(bits, 27000).toLocaleString("en-US")} Years of repeats`],
+      ]
+    : [
+        ["Power", share(power)],
+        ["Noticed to, in a day", `${Math.round(notice)} ly`],
+        ["Read by a star that listens a Year", `${Math.round(heard)} ly`],
+      ];
   const toggle = (on: boolean) => `rounded-full px-3 py-[5px] text-[12px] ${on ? "bg-faint text-ink" : "text-muted"}`;
   return (
     <div className={frame}>
       <span className={`${lab} text-you`}>To everyone</span>
       <Travels draft={draft} />
-      {!sent && (
+      {!sent && canCall && (
+        <div className="inline-flex self-start rounded-full border border-frame p-0.5" role="group" aria-label="How far">
+          <button type="button" aria-pressed={!far} onClick={() => setFar(false)} className={toggle(!far)}>
+            The stars near us
+          </button>
+          <button type="button" aria-pressed={far} onClick={() => setFar(true)} className={toggle(far)}>
+            The Galaxy
+          </button>
+        </div>
+      )}
+      {!sent && !galaxy && (
         <label className="flex flex-col gap-1.5">
           <span className="flex justify-between">
             <span className={`${lab} text-muted`}>Readable to</span>
@@ -189,7 +255,10 @@ function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: str
           <input type="range" min={5} max={50} value={dial} onChange={(e) => setDial(Number(e.target.value))} className="w-full accent-you" />
         </label>
       )}
-      <Rings reach={reach} notice={notice} />
+      {galaxy ? <GalaxyReach first={reach} later={(sent ? sent.repeat : repeat) ? callReach(bits, 100) : null} /> : <Rings reach={reach} notice={notice} />}
+      {galaxy && draft.size !== "page" && (
+        <p className="text-[12.5px] text-other">Only a page of words reads far in a second a Year. This is larger, so it is read only near us.</p>
+      )}
       <div>
         {stats.map(([k, v]) => (
           <div key={k} className="flex justify-between border-t border-rowline py-1.5 text-[12.5px]">
@@ -220,7 +289,7 @@ function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: str
             </button>
           </div>
           {over && <p className="text-[12.5px] text-other">More power than Earth makes. Send less, or not as far.</p>}
-          <Buttons label={repeat ? "Start calling" : "Send once"} off={over} onSend={() => send({ ...draft, id, y: year ?? 0, asked, reach: dial, repeat })} />
+          <Buttons label={repeat ? "Start calling" : "Send once"} off={over} onSend={() => send({ ...draft, id, y: year ?? 0, asked, reach: galaxy ? reach : dial, repeat, ...(galaxy ? { galaxy: true } : {}) })} />
         </>
       )}
     </div>

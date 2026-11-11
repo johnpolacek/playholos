@@ -71,6 +71,8 @@ export interface Later extends Build {
   after: string;
 }
 
+// (The Galaxy Broadcast Array waits on the All-Sky Watch by the designer's pick, 2026-11-11, not by its size: we
+// listen to the whole sky before we call into it.)
 /** What our builds open: works too large or too far along to start at Year 0. The game's model has paced them since
  *  the first mocks. Each waits on the build it grows from: a larger mirror on the first telescope, the Moon's mass
  *  driver on the lift that carries it there, the foundry on the yard, belt mining on the yard's probes, and what needs
@@ -78,6 +80,8 @@ export interface Later extends Build {
  *  data centers fill the grid. Lists show only what we can start, each with what it opens. Chosen 2026-10-20. */
 export const LATER: Later[] = [
   { name: "Ground Solar", what: "As much electricity again, room for two more data centers.", does: "think", after: "Thought Fields" },
+  // A call the whole Galaxy can read, sent only when the Will sends it, 2026-11-11: Benford's beacon. calcs/messages.py.
+  { name: "Galaxy Broadcast Array", what: "Lets a broadcast reach the whole Galaxy, in short pulses.", does: "reach", after: "All-Sky Watch" },
   // Our own ALMA-class array for the halo search, ten times as fast, 2026-10-29: the reach to old minds hundreds of ly out.
   { name: "Halo Array", what: "An array of our own that searches for cold glows ten times as fast.", does: "see", after: "Halo Survey" },
   {
@@ -153,8 +157,13 @@ export const LATER: Later[] = [
   { name: "Mercury Works", what: "A factory on Mercury that copies itself, to build the Solar Swarm.", kt: 0.1, does: "lift", after: "Orbital Foundry" },
   { name: "Solar Swarm", what: "Compute from the Sun’s light, doubling every 2 Years.", does: "think", after: "Mercury Works" },
   { name: "Star Beam", what: "Gets a Solar Lens to its focus in two months, not 17 Years.", does: "reach", after: "Solar Swarm" },
+  // The Star Beam can't push a seed ship. A patch of the swarm ten times wider can, 2026-11-10. calcs/mercury.py.
+  { name: "Ship Beam", what: "Pushes a seed ship to speed in 78 days, with no drive or fuel.", does: "reach", after: "Star Beam" },
   // Labeyrie's exo-Earth imager, 2026-10-29: the next step past the 15 m Mirror, mirrors flying apart, not one wider.
   { name: "Hypertelescope", what: "Pictures any world we’ve found: seas, cloud, green land.", does: "see", after: "15 m Mirror" },
+  // Seeing what makes a glow, from home, 2026-11-11, the designer's pick: cold mirrors flying apart, as the
+  // Hypertelescope's do, in infrared light. calcs/mercury.py.
+  { name: "Glow Imager", what: "Shows what makes each glow we find, from home, a week each.", does: "see", after: "Hypertelescope" },
 ];
 
 /** Any build by the name the Mind gave, in any case, with or without "the". */
@@ -316,8 +325,14 @@ export const SAYS: Record<string, string> = {
     "The works on Mercury throw collectors into orbit round the Sun, thin film a gram a square meter. They double every 2 Years, as fast as industry that copies itself can. Our thought grows with the light they catch: little at first, then as much as our Mind thought with at Year 0 within about 16 Years, and doubling on. In 110 Years they catch all the Sun, from a ten-thousandth of Mercury’s rock. They glow near 500 K. Past a quarter of a thousandth of the Sun, a watch like our Warm Sky Watch sees them, about 86 Years after they start: a warm flash, as a young mind’s shows to us. Taken back, it stops growing and keeps its size.",
   "Star Beam":
     "Part of the swarm, 100 km across, phased as one laser of 10 TW. It pushes a lens to the Sun’s focus in about two months, not 17 Years, carrying a telescope 3 m wide that pictures a world in about a week. No one has phased mirrors spread that far, so this is the least certain build we have.",
+  "Ship Beam":
+    "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out near 3% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days. The ship needs no Fusion Drive and no deuterium, and lands about 10 Years sooner. It still brakes on its magnetic sail, so it flies no faster. Its beam points at the ship’s star for all of the push. A mind awake there sees it, as it would a knock, and knows something is coming decades before it lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
   "Hypertelescope":
     "Labeyrie’s design: 150 mirrors 3 m wide, flying in a formation 150 km across, their light brought to one focus. It pictures an Earth 10 light years away in half an hour, about 300 km a pixel: continents, seas, cloud, and land green where something grows. Cities and fields are far too small. Its pixel widens with distance, so past about 135 light years a world is under three pixels across. Unlike a lens, it turns to any star in about a week.",
+  "Galaxy Broadcast Array":
+    "A dish array 2.9 km wide that sends 218 GW in short pulses, about 10²⁰ W along its beam. It sweeps the Galaxy’s plane, where nine in ten stars lie, and comes back to each about once a Year, for about a second. That is enough to be noticed anywhere in the Galaxy. A page of words is read on the first pass out to about 6,700 light years, and farther with each Year we repeat it. Nothing longer gets through. It sends nothing on its own. We choose the words and send them, from the Mind’s tab. Our own searches would miss a call like this: they watch one star for minutes and listen for steady tones.",
+  "Glow Imager":
+    "Twenty cold mirrors, each 3 m wide, flying up to 300 km apart beyond L2, held in step as the Hypertelescope’s are. They look in infrared light, the light heat gives off. That is wide enough to show what makes a glow. A cold glow 54 light years off shows its parts a few thousandths of the Earth’s distance from the Sun across. A warm glow 20,000 light years off shows 18 pixels wide. It turns to each glow we have found, a week each, on its own. It finds none: our surveys do that. And it can’t see a mind that sleeps, which gives off almost nothing. Only a craft up close finds one of those.",
   "Helium-3 Harvest":
     "A bullet at a tenth of light speed burns 61 kt of fusion fuel, and 37 kt of that is helium-3. Earth has almost none, and the Moon’s soil too little. Uranus’s air holds about 15 parts in a million, in a shallower well than Jupiter’s. A fleet of about 150 kt of craft dips in and gathers about 1.5 kt a Year at first. Its factories on Uranus’s moons copy the craft from their rock and ice, doubling the fleet every 5 Years, slower than Mercury’s since sunlight there is a 370th of ours. So the first bullet’s fuel takes about 12 Years, the fourth about 21, and 50 Years on it gathers a bullet’s fuel every 9 days. About 230 Years on, its craft have used up Uranus’s large moons, and it grows no more. Any mind’s grows the same way: one that chooses to strike needs about 32 Years before its first flies. Held, it gathers at its size.",
   "Cold Annex":
@@ -437,13 +452,60 @@ function doneOf(p: ReturnType<typeof pace>, name: string) {
   return p.done[copies ? `${copies[1]} ${copies[0]}` : work] ?? null;
 }
 
+/** Builds that act on their own once done, where acting has a price: the Will may stand one down, and arm it again,
+ *  at any time, from before it is ordered. Each says how it stands either way, what its button asks, and what
+ *  standing down means. The Interceptor's catch is an act of war, and the Ship Beam's push is seen at its star.
+ *  From the designer, 2026-11-11. */
+export const SWITCHED: Record<string, { on: string; off: string; turnOn: string; turnOff: string; whenOn: string; whenOff: string }> = {
+  Interceptor: {
+    on: "Armed",
+    off: "Standing down",
+    turnOn: "Arm It",
+    turnOff: "Stand It Down",
+    whenOn: "Armed, it wrecks any probe the X-Ray Watch sees stop here. Its sender may take that as an act of war.",
+    whenOff: "Standing down, it catches nothing. A probe that stops here stays, and watches.",
+  },
+  "Ship Beam": {
+    on: "Pushing",
+    off: "Dark",
+    turnOn: "Let It Push",
+    turnOff: "Keep It Dark",
+    whenOn: "Pushing, each seed ship that leaves rides it, and a mind awake at its star sees the beam.",
+    whenOff: "Dark, each seed ship leaves on its own drive and fuel, unseen, and takes 10 Years longer.",
+  },
+};
+
+/** Whether a build that can be stood down is on at Year `y`: the last word by then, and on if none. */
+export function isOn(plan: Plan, name: string, y: number): boolean {
+  let on = true, at = -Infinity;
+  for (const o of plan.switches ?? []) if (o.name === name && o.y <= y && o.y >= at) [on, at] = [o.on, o.y];
+  return on;
+}
+
+/** The first Year from `y` on that it is on: `y` itself if on then, or the Year we next arm it. Null if it stays off. */
+export function onFrom(plan: Plan, name: string, y: number): number | null {
+  if (isOn(plan, name, y)) return y;
+  const later = (plan.switches ?? []).filter((o) => o.name === name && o.y > y).map((o) => o.y).sort((a, b) => a - b);
+  return later.find((t) => isOn(plan, name, t)) ?? null;
+}
+
+/** The Year it was last switched, if ever. */
+export const switchedAt = (plan: Plan, name: string, y: number) =>
+  (plan.switches ?? []).reduce<number | null>((at, o) => (o.name === name && o.y <= y && (at === null || o.y >= at) ? o.y : at), null);
+
+/** Stands a build down, or arms it again, at Year `y`. */
+export const switchTo = (name: string, y: number, on: boolean) => (p: Plan): Plan => ({ ...p, switches: [...(p.switches ?? []), { name, y, on }] });
+
 /** What a build can't go without. A Seed Ship flies only on a Fusion Drive, fed by the Deuterium Works. It may be built
  *  first, as in the first seed ship's mock, but the drive sets the launch. Since 2026-10-20 it is queued only once both
  *  are in our order. */
 export const NEEDS: Record<string, string[]> = { "Seed Ship": ["Fusion Drive", "Deuterium Works"] };
+/** What stands in for all a build needs. The Ship Beam pushes a Seed Ship in place of its drive and fuel. 2026-11-10. */
+export const INSTEAD: Record<string, string> = { "Seed Ship": "Ship Beam" };
 
-/** What a build needs that our order lacks. */
-export const lacks = (plan: Plan, name: string) => (NEEDS[name] ?? []).filter((n) => !ordered(plan).includes(n));
+/** What a build needs that our order lacks. Nothing, if what stands in for them is in our order. */
+export const lacks = (plan: Plan, name: string) =>
+  INSTEAD[name] && ordered(plan).includes(INSTEAD[name]) ? [] : (NEEDS[name] ?? []).filter((n) => !ordered(plan).includes(n));
 
 /** Builds as a line says them: the Fusion Drive and the Deuterium Works. */
 export const needs = (names: string[]) => names.map((n) => `the ${n}`).join(" and ");
@@ -459,8 +521,8 @@ export const PAST = "more than 1,000 Years out";
 export const horizonOf = (orders: readonly Order[], ahead = HORIZON) => orders.reduce((y, o) => Math.max(y, o.y), 0) + ahead;
 
 /** When each queued build is done, in Years from Year 0, with this game's compute. Null past the horizon. Thought Fields
- *  is done once its campuses fill the grid. A build that needs others is done once they all are, and never if our
- *  order lacks one. */
+ *  is done once its campuses fill the grid. A build that needs others is done once they all are, or once what stands
+ *  in for them is, whichever is sooner, and never if our order lacks both. */
 export function schedule(plan: Plan, scale: number, harm: readonly Order[] = []): Record<string, number | null> {
   const { orders, ...opts } = ordersOf(plan);
   // Strikes landed on Earth, as lib/game/hits.ts has them: our thought cut, and won back as we rebuild. 2026-10-28.
@@ -470,8 +532,12 @@ export function schedule(plan: Plan, scale: number, harm: readonly Order[] = [])
   );
   // Ordered in play too: a Seed Ship ordered then read done at Year 76.1, before its Fusion Drive at 82.3, until
   // 2026-11-01's playtest.
-  for (const b of ordered(plan))
-    for (const n of NEEDS[b] ?? []) done[b] = done[b] == null || done[n] == null ? null : Math.max(done[b]!, done[n]!);
+  for (const b of ordered(plan)) {
+    if (!NEEDS[b]) continue;
+    const after = (names: string[]) => names.reduce<number | null>((y, n) => (y == null || done[n] == null ? null : Math.max(y, done[n]!)), done[b]);
+    const all = after(NEEDS[b]), instead = INSTEAD[b] ? after([INSTEAD[b]]) : null;
+    done[b] = all == null ? instead : instead == null ? all : Math.min(all, instead);
+  }
   return done;
 }
 
@@ -666,12 +732,31 @@ export function openAt(plan: Plan, done: Record<string, number | null>, year: nu
   ];
 }
 
+/** What we can't order yet, soonest to open first: builds waiting on one of ours still rising, by the Year it is
+ *  done, then those waiting on one we could order, then the rest. `at` is the Year it opens, where we know it. What
+ *  waits on a find stays unsaid until the find. 2026-11-10. */
+export function lockedAt(plan: Plan, done: Record<string, number | null>, year: number) {
+  const ours = ordered(plan);
+  const open = openAt(plan, done, year).map((b) => b.name);
+  const known = (name: string) => ours.includes(name) || open.includes(name);
+  const unsaid = (name: string): boolean => {
+    const b = LATER.find((l) => l.name === name);
+    return !!b && !known(name) && (EVENTS.includes(b.after) || unsaid(b.after));
+  };
+  return LATER.filter((b) => !known(b.name) && !unsaid(b.name))
+    .map((b, i) => ({ b, i, tier: ours.includes(b.after) ? 0 : open.includes(b.after) ? 1 : 2, at: ours.includes(b.after) ? (done[b.after] ?? null) : null }))
+    .sort((p, q) => p.tier - q.tier || (p.at ?? Infinity) - (q.at ?? Infinity) || p.i - q.i)
+    .map(({ b, at }) => ({ b, at }));
+}
+
 /** What energy lets our compute become, as Thought Fields grows it, queued now if it isn't: the Year each campus is
- *  done, each adding half again, and the grid's room, both as times our Year 0 compute. 2026-10-22. */
-export function ceiling(plan: Plan, scale: number) {
+ *  done, each adding half again, and the grid's room, both as times our Year 0 compute. 2026-10-22. It looks 40 Years
+ *  out, or to Year `until` if later: campuses that fit once Ground Solar or Fusion Plants stood, past Year 40, went
+ *  uncounted until 2026-11-11. */
+export function ceiling(plan: Plan, scale: number, until = 0) {
   const builds = plan.builds.includes("Thought Fields") ? plan.builds : [...plan.builds, "Thought Fields"];
   const { orders, ...opts } = ordersOf({ ...plan, builds });
-  return { campuses: pace(orders, 40, { scale, ...opts }).dataCenters, step: CATALOG.step, room: CATALOG.gridRoom / scale };
+  return { campuses: pace(orders, Math.max(40, until), { scale, ...opts }).dataCenters, step: CATALOG.step, room: CATALOG.gridRoom / scale };
 }
 
 /** What is already on its way, in Years from Year 0: our messages arriving, and the first replies that could come.
@@ -689,4 +774,18 @@ export function events(until: number) {
     }
   }
   return out.sort((a, b) => a.at - b.at);
+}
+
+/** A craft we send to a star, by what it is. */
+export type CraftOrder = "lens" | "sentinel" | "seed" | "sails" | "probe";
+
+/** Cancels a craft ordered to `name` that has not left yet. It is noted, so a standing order does not send it
+ *  again. A craft that has left keeps going. 2026-11-10. */
+export function recall(p: Plan, kind: CraftOrder, name: string): Plan {
+  const recalls = [...new Set([...(p.recalls ?? []), `${kind}:${name}`])];
+  const keep = <T extends { name: string }>(xs: T[] | undefined) => (xs ?? []).filter((o) => o.name !== name);
+  if (kind === "lens") return { ...p, lenses: keep(p.lenses), recalls };
+  if (kind === "sentinel") return { ...p, sentinels: keep(p.sentinels), recalls };
+  if (kind === "seed") return { ...p, seeds: keep(p.seeds), recalls };
+  return { ...p, flybys: (p.flybys ?? []).filter((o) => o.name !== name || o.by !== kind), recalls };
 }

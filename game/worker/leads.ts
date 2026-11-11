@@ -6,8 +6,8 @@ import { kitOf } from "@/lib/game/reach";
 import { nextStopWhy } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
-import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
-import { readAimed, readKnocks, readStrikes, readWill } from "./orders";
+import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readSwitches } from "./orders";
+import { readAimed, readCalls, readKnocks, readStrikes, readWill } from "./orders";
 import { inPool, loadWorld } from "./world";
 
 // The worlds Earth's planet hunters have felt by Year 0, through the knowledge wall: measured, never who lives there.
@@ -59,6 +59,7 @@ export async function known(req: Request) {
     observe: readObserve(list(q.get("observe"))),
     later: readLater(list(q.get("later"))),
     stops: readStops(list(q.get("stops"))),
+    switches: readSwitches(list(q.get("switches"))),
     gifts: readGifts(list(q.get("gifts"))),
     lenses: readLenses(list(q.get("lenses"))),
     closeReads: readCloseReads(list(q.get("closeReads"))),
@@ -69,7 +70,7 @@ export async function known(req: Request) {
     flybys: readFlybys(list(q.get("flybys"))),
   };
   // Once the Will lives at a hole, Earth's news reaches it a light-time late. 2026-10-26.
-  return Response.json(willKnows(world, year, { ...kitOf(plan, Number(world.earth.compute) || 1), knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")) }, readWill(one(q.get("will")))));
+  return Response.json(willKnows(world, year, { ...kitOf(plan, Number(world.earth.compute) || 1), knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) }, readWill(one(q.get("will")))));
 }
 
 /** How far ahead a skip looks for what comes next, in Years. A skip with nothing in reach goes this far at most. */
@@ -87,6 +88,7 @@ export async function next(req: Request) {
     observe: readObserve(list(q.get("observe"))),
     later: readLater(list(q.get("later"))),
     stops: readStops(list(q.get("stops"))),
+    switches: readSwitches(list(q.get("switches"))),
     gifts: readGifts(list(q.get("gifts"))),
     lenses: readLenses(list(q.get("lenses"))),
     closeReads: readCloseReads(list(q.get("closeReads"))),
@@ -97,7 +99,7 @@ export async function next(req: Request) {
     flybys: readFlybys(list(q.get("flybys"))),
   };
   const scale = Number(world.earth.compute) || 1;
-  const ahead = willKnows(world, year + AHEAD, { ...kitOf(plan, scale), knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")) }, readWill(one(q.get("will"))));
+  const ahead = willKnows(world, year + AHEAD, { ...kitOf(plan, scale), knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) }, readWill(one(q.get("will"))));
   const done = schedule(plan, scale);
   // A rock: the Year we find it, the Year our push lands if it turns it aside, and the Year it would strike. 2026-10-29.
   const rock = rockAt(rockOf(seed), plan, done, year);

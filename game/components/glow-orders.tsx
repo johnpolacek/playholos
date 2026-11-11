@@ -277,7 +277,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
               </Link>
             ) : asking ? (
               <>
-                <span className="text-[12.5px] text-muted">A craft sent can’t be called back.</span>
+                <span className="text-[12.5px] text-muted">A craft can be canceled until it leaves.</span>
                 <button onClick={() => setAsking(false)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
                   Wait
                 </button>
@@ -322,7 +322,8 @@ export function GlowOrders() {
     if (!o || NEEDS[o.by].some((n) => !inOrder(plan, n))) continue;
     const have = new Set(o.by === "sentinel" ? (plan.sentinels ?? []).map((s) => s.name) : (plan.flybys ?? []).filter((f) => f.by === o.by).map((f) => f.name));
     for (const l of leads) {
-      if (!l.slug.startsWith(`${kind}-glow-`) || have.has(l.star) || l.ly > o.within) continue;
+      // One we canceled stays canceled. 2026-11-10.
+      if (!l.slug.startsWith(`${kind}-glow-`) || have.has(l.star) || plan.recalls?.includes(`${o.by}:${l.star}`) || l.ly > o.within) continue;
       const ranged = kind === "warm" ? minds?.flashes[Number(l.slug.slice("warm-glow-".length)) - 1]?.ranged : undefined;
       want.push({ kind, by: o.by, name: l.star, y: Math.max(o.since, Math.floor((ranged ?? o.since) * 10) / 10), d: Math.round(l.ly) });
     }

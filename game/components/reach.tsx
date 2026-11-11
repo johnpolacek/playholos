@@ -16,7 +16,7 @@ import { YEAR_0, lyOf, yearText } from "@/lib/game/clock";
 import { LANDMARKS } from "@/lib/game/landmarks";
 import { chancesOf, rangeText } from "@/lib/game/chance";
 import { type Lead, skyId, starName, visitReading } from "@/lib/game/leads";
-import { lean, type moves } from "@/lib/game/plan";
+import { type CraftOrder, lean, type moves, recall } from "@/lib/game/plan";
 import { target as starOf } from "@/lib/game/sends";
 import {
   auFor,
@@ -322,7 +322,7 @@ function Fleet({ title, build, rows, now, children }: { title: string; build: st
 
 /** The probes and sails we sent past stars: there can be dozens. Opened, each by its glow's chance of a mind,
  *  likeliest first. 2026-11-05. */
-function Flybys({ rows, now, aimAt }: { rows: { id: string; slug?: string; name: string; mind?: string; mindAt: number; note: string; home: number; leaves: number; craft: CraftKind | null }[]; now: number; aimAt(id: string): Aim }) {
+function Flybys({ rows, now, aimAt }: { rows: { id: string; slug?: string; name: string; mind?: string; mindAt: number; note: string; home: number; leaves: number; craft: CraftKind | null; recall?: () => void }[]; now: number; aimAt(id: string): Aim }) {
   const sorted = [...rows].sort((a, b) => b.mindAt - a.mindAt || a.home - b.home);
   return (
     <Fleet title="Flyby probes and sails" build="Probe Yard" rows={rows} now={now}>
@@ -357,11 +357,30 @@ function Flybys({ rows, now, aimAt }: { rows: { id: string; slug?: string; name:
                     {words}
                   </button>
                 )}
+                {r.recall && <CancelCraft go={r.recall} />}
               </li>
             );
           })}
         </ul>
     </Fleet>
+  );
+}
+
+/** Cancels a craft that has not left. Inside a row that shows on the map, so a tap here only cancels it. */
+function CancelCraft({ go }: { go(): void }) {
+  return (
+    <div className="mt-1.5 flex justify-end pl-7">
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          go();
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+        className="h-7 rounded-full border border-faint px-3 text-[12.5px] font-medium hover:border-ink"
+      >
+        Cancel
+      </button>
+    </div>
   );
 }
 
@@ -903,7 +922,7 @@ export function Reach() {
   const { save, year: clock, orderAt } = useGame();
   const { fly, aim, setTrip, showCraft } = useReach();
   const { leads, visits, readings } = useLeads();
-  const { plan } = usePlan();
+  const { plan, change } = usePlan();
   const { scale } = useSchedule();
   // A craft row, picked, shows it on the map: its star, where it is on its road, and the craft up close. One at a time,
   // and picked again, the map goes back to what it shows by itself. Voyager 1 takes the map out to it. 2026-11-08.
@@ -960,7 +979,7 @@ export function Reach() {
       key: "cold-glows",
       title: "Cold glows",
       line: "A sentinel can go to any of them",
-      test: (p: Place) => p.lead.slug.startsWith("cold-glow-") && !p.lead.facts.some(([k]) => k === "Up close"),
+      test: (p: Place) => p.lead.slug.startsWith("cold-glow-") && !p.lead.facts.some(([k]) => k === "Up close" || k === "Resolved"),
     },
     {
       key: "faded-glows",
@@ -1002,12 +1021,12 @@ export function Reach() {
   // Our craft sent to other stars: lenses, sentinels, seed probes, and sails and probes passing. Reach listed only
   // Voyager 1 after all of these went, playtest 2026-11-01, and each showed only once it left, so a send seemed to do
   // nothing until 2026-11-05.
-  const stays: (Row & { id: string; star: string; y: number; home: number; road: Road; flyby: boolean; craft: CraftKind | null })[] = clock === null ? [] : [
-    ...(plan.lenses ?? []).map((o) => ({ o, road: lensRoad(plan, scale, from, o.name), what: "A lens", to: "at its Sun’s focus, toward" })),
-    ...(plan.sentinels ?? []).map((o) => ({ o, road: sentinelRoad(plan, scale, from, o.name, leads.find((l) => l.star === o.name)?.ly ?? starOf(o.name)?.d ?? 0), what: "A sentinel", to: "to stay at" })),
-    ...(plan.seeds ?? []).map((o) => ({ o, road: seedRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A seed probe", to: "to stay at" })),
-    ...(plan.flybys ?? []).map((o) => ({ o, road: flybyRoad(plan, scale, o.y, o), what: o.by === "sails" ? "Sails" : "A flyby probe", to: "to pass" })),
-  ].flatMap(({ o, road: r, what, to }) => {
+  const stays: (Row & { id: string; star: string; y: number; home: number; road: Road; flyby: boolean; craft: CraftKind | null; recall?: () => void })[] = clock === null ? [] : [
+    ...(plan.lenses ?? []).map((o) => ({ o, road: lensRoad(plan, scale, from, o.name), what: "A lens", to: "at its Sun’s focus, toward", order: "lens" as CraftOrder })),
+    ...(plan.sentinels ?? []).map((o) => ({ o, road: sentinelRoad(plan, scale, from, o.name, leads.find((l) => l.star === o.name)?.ly ?? starOf(o.name)?.d ?? 0), what: "A sentinel", to: "to stay at", order: "sentinel" as CraftOrder })),
+    ...(plan.seeds ?? []).map((o) => ({ o, road: seedRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A seed probe", to: "to stay at", order: "seed" as CraftOrder })),
+    ...(plan.flybys ?? []).map((o) => ({ o, road: flybyRoad(plan, scale, o.y, o), what: o.by === "sails" ? "Sails" : "A flyby probe", to: "to pass", order: o.by as CraftOrder })),
+  ].flatMap(({ o, road: r, what, to, order }) => {
     // A lens and a seed probe have no close-up of their own yet.
     const craft: CraftKind | null = what === "Sails" ? "sail" : what === "A flyby probe" ? "probe" : what === "A sentinel" ? "sentinel" : null;
     if (r.leaves === null || r.home === null || r.arrives === null) return [];
@@ -1020,6 +1039,8 @@ export function Reach() {
       road: r,
       craft,
       flyby: to === "to pass",
+      // Until it leaves, we can cancel it. It said sent, and could not be, while it waited Years to go. 2026-11-10.
+      recall: clock < r.leaves ? () => change((p) => recall(p, order, o.name)) : undefined,
       id: `${what}:${o.name}`,
       key: r.build,
       name: `${what}, ${star}`,
@@ -1032,8 +1053,9 @@ export function Reach() {
     }];
   });
 
-  // Voyager 1 stands for what we have sent only until a craft of ours leaves. 2026-11-08.
-  const gone = clock !== null && (flying.length > 0 || stays.some((r) => r.road.leaves !== null && clock >= r.road.leaves));
+  // Voyager 1 stands for what we have sent only until we order a craft of our own: beside one it read as clutter.
+  // 2026-11-08, from the order rather than the leaving since 2026-11-10.
+  const gone = flying.length > 0 || stays.length > 0;
 
   // The map shows the way to our latest craft still on its way, or the nearest star with none. 2026-11-05. A craft
   // picked shows its own way instead, 2026-11-08.
@@ -1096,7 +1118,8 @@ export function Reach() {
       <GlowOrderCard from={from} />
 
       {/* "Sent" read as our messages too, and a blind first-timer missed theirs here twice. 2026-11-07. */}
-      <ListHead left={`Craft sent · ${(gone ? 0 : 1) + flying.length + stays.length}`} right="Word home" className="mt-4" />
+      {/* "Craft sent · 2" counted a sentinel still Years from leaving. 2026-11-10. */}
+      <ListHead left={`Craft · ${(gone ? 0 : 1) + flying.length + stays.length}`} right="Word home" className="mt-4" />
       <ul className="mt-1">
         {flying.map((r) => (
           <Item key={r.key} row={r} now={clock ?? 0} began={clock !== null} aim={aimAt(r.key)} />
@@ -1105,7 +1128,9 @@ export function Reach() {
         {(["A lens", "A sentinel", "A seed probe"] as const).map((what) => {
           const kin = stays.filter((r) => !r.flyby && r.id.startsWith(`${what}:`));
           if (kin.length < 2)
-            return kin.map((r) => <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} aim={aimAt(r.id)} />);
+            return kin.map((r) => <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} aim={aimAt(r.id)}>
+                    {r.recall && <CancelCraft go={r.recall} />}
+                  </Item>);
           return (
             <Fleet
               key={what}
@@ -1116,7 +1141,9 @@ export function Reach() {
             >
               <ul className="mb-1 pl-7">
                 {kin.map((r) => (
-                  <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} aim={aimAt(r.id)} />
+                  <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} aim={aimAt(r.id)}>
+                    {r.recall && <CancelCraft go={r.recall} />}
+                  </Item>
                 ))}
               </ul>
             </Fleet>
@@ -1128,7 +1155,7 @@ export function Reach() {
             const lead = leads.find((l) => l.star === r.star);
             const c = lead ? chancesOf(lead, readings[lead.slug] ?? []) : null;
             const m = c?.mind && c.mind !== "unknown" ? c.mind : null;
-            return { id: r.id, slug: lead?.slug, name: r.name, note: r.note, home: r.home, leaves: r.road.leaves ?? r.home, craft: r.craft, mind: c?.ruledOut ? "ruled out" : m ? rangeText(m) : undefined, mindAt: m ? (m.lo + m.hi) / 2 : -1 };
+            return { id: r.id, slug: lead?.slug, name: r.name, note: r.note, home: r.home, leaves: r.road.leaves ?? r.home, craft: r.craft, recall: r.recall, mind: c?.ruledOut ? "ruled out" : m ? rangeText(m) : undefined, mindAt: m ? (m.lo + m.hi) / 2 : -1 };
           })}
           aimAt={aimAt}
         />

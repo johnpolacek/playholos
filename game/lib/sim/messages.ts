@@ -55,6 +55,17 @@ export function readReach(watts: number, bits: number, seconds = DAY, passes = 1
   return Math.min(read, noticeReach(watts, sefd, seconds * passes));
 }
 
+/** The Galaxy Broadcast Array, settled 2026-11-11: Benford, Benford and Benford 2010's short-pulse beacon, 218 GW
+ *  through 2.9 km at 1 GHz, about 1e20 W along its beam, swept along the Galaxy's plane, a second on each listener a
+ *  Year. calcs/messages.py's galaxy_call. */
+export const CALL = { watts: 218e9, eirp: 1e20, dwell: 1, every: 1 } as const;
+/** Bits one pass of the call leaves with a listener `ly` away. */
+export const callBits = (ly: number, sefd = WATCH_SEFD) => rate(CALL.eirp, ly, sefd) * CALL.dwell;
+/** Yearly passes a listener `ly` away needs to read `bits`. */
+export const callPasses = (bits: number, ly: number, sefd = WATCH_SEFD) => Math.max(1, Math.ceil(bits / callBits(ly, sefd) - 1e-9));
+/** Light-years at which `bits` are read after so many passes. */
+export const callReach = (bits: number, passes = 1, sefd = WATCH_SEFD) => readReach(CALL.eirp, bits, CALL.dwell, passes, sefd);
+
 /** Watts every way at once for a message of `bits`, a copy a day, to be read at `ly` from its first copy. */
 export const powerFor = (ly: number, bits: number, seconds = DAY, sefd = WATCH_SEFD) =>
   (sphere(ly) * bits * bitEnergy(sefd)) / seconds;

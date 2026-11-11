@@ -11,14 +11,14 @@ import { describeLeads } from "@/lib/game/leads";
 import { proximaSeen } from "@/lib/sim/proxima";
 import { kt, matterAt, schedule } from "@/lib/game/plan";
 import { kitOf } from "@/lib/game/reach";
-import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readStrikes } from "./orders";
+import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readSwitches, readWill, readStrikes } from "./orders";
 import { describeBuilds, describeOffers, describeQueue, describeRock } from "@/lib/mind/builds";
 import { FOUND, rockOf } from "@/lib/game/rocks";
 import { describeSky } from "@/lib/game/natural";
 import { WATCHED, watchedAt } from "@/lib/sim/minds";
 import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/hits";
 import { describeSent, readSent, WATCHER } from "@/lib/game/sends";
-import { aimedOf } from "@/lib/game/known-query";
+import { aimedOf, callsOf } from "@/lib/game/known-query";
 import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
 import { earthLeads } from "@/lib/mind/leads";
 import { describeChances } from "@/lib/game/chance";
@@ -122,6 +122,7 @@ export async function mind(req: Request) {
     builds,
     later,
     stops,
+    switches,
     gifts,
     lenses,
     closeReads,
@@ -143,6 +144,7 @@ export async function mind(req: Request) {
     builds?: unknown;
     later?: unknown;
     stops?: unknown;
+    switches?: unknown;
     gifts?: unknown;
     lenses?: unknown;
     closeReads?: unknown;
@@ -167,7 +169,7 @@ export async function mind(req: Request) {
   // Where this Earth's road to Year 0 left the base kit, read beside the kit it changes.
   const road = world ? roadOf(pastOf(world)) : "";
   // Our order, dated as Build dates it with this game's compute.
-  const plan = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops), gifts: readGifts(gifts), lenses: readLenses(lenses), closeReads: readCloseReads(closeReads), sentinels: readSentinels(sentinels), seeds: readSeeds(seeds), colony: readColony(colony), strikes: readStrikes(strikes), flybys: readFlybys(flybys) };
+  const plan = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops), switches: readSwitches(switches), gifts: readGifts(gifts), lenses: readLenses(lenses), closeReads: readCloseReads(closeReads), sentinels: readSentinels(sentinels), seeds: readSeeds(seeds), colony: readColony(colony), strikes: readStrikes(strikes), flybys: readFlybys(flybys) };
   const scale = Number(world?.earth.compute) || 1;
   // Strikes landed by now cut our thought from when each landed. 2026-10-28.
   const at = yearAt(began, Date.now(), away);
@@ -176,7 +178,7 @@ export async function mind(req: Request) {
   // What Earth knows now, the ladder's strike among it, before the strike's harm is dated. 2026-10-30.
   // Our knocks on the watcher, for its maker's answer. 2026-10-31.
   const knocks = readSent(sent).filter((m) => m.to === WATCHER.name).map((m) => m.y);
-  const kit = world ? { ...kitOf(plan, scale), knocks, aimed: aimedOf(readSent(sent)) } : null;
+  const kit = world ? { ...kitOf(plan, scale), knocks, aimed: aimedOf(readSent(sent)), calls: callsOf(readSent(sent)) } : null;
   const view = world && kit ? willKnows(world, year ?? 0, kit, away) : null;
   const hits = inPool(seed) ? hitsAt(plan, seed, { ...base, [FOUND]: rockOf(seed)?.found ?? null }, year ?? 0, view?.minds?.watcher?.struck ?? null) : [];
   // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.

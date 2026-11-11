@@ -21,6 +21,17 @@ export function tenths(years: number): number {
   return Math.floor(years * 10 + 1e-9) / 10;
 }
 
+/** How many times over, as text: 2.5×, 58×, 12,400×, then 4.7×10²³ times, since twenty-four digits read as noise.
+ *  Build said “26×” at Year 554 with a swarm round the Sun, and its card “4.68e+23×”. 2026-11-11. */
+export function timesText(n: number): string {
+  if (!Number.isFinite(n)) return "countless times";
+  if (n < 10) return `${Math.round(n * 10) / 10}×`;
+  if (n < 1e6) return `${Math.round(n).toLocaleString("en-US")}×`;
+  let e = Math.floor(Math.log10(n)), m = Math.round((n / 10 ** e) * 10) / 10;
+  if (m >= 10) [m, e] = [1, e + 1];
+  return `${m}×10${[...String(e)].map((d) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(d)]).join("")} times`;
+}
+
 /** A Year as text, to the tenth below, with its thousands marked: 37,206.3, as distances are. 2026-10-30. */
 export const yearText = (years: number) => tenths(years).toLocaleString("en-US", { maximumFractionDigits: 1 });
 

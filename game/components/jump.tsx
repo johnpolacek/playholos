@@ -56,7 +56,7 @@ export interface Snap {
 
 /** Facts that are news when they first appear: a cold glow keeps our sentinel's word as one, and a rock its strike.
  *  The rock struck Earth on a stop that said "Nothing more reached us". Feature playtest 2026-11-07. */
-const NEWS: Record<string, string> = { "Up close": "Seen up close", Struck: "Struck Earth" };
+const NEWS: Record<string, string> = { "Up close": "Seen up close", Resolved: "Resolved from home", Struck: "Struck Earth" };
 const newsFacts = (l: { slug: string; facts: [string, string][] }) => l.facts.filter(([k]) => k in NEWS).map(([k]) => `${l.slug}:${k}`);
 
 export function useSnap() {
@@ -345,7 +345,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
   }, [plan, done, scale, leads, readings, heard, snap, from, to, minds]);
 
   // The map turns to the first new lead. 2026-11-01.
-  // A new warm glow first: the map pulls back across the Galaxy to show it, and comes home on Go on. 2026-11-03.
+  // A new warm glow first: the map pulls back across the Galaxy to show it, and comes home once the card is put away. 2026-11-03.
   const first = items.find((x) => x.key === "lead:small-dark-body") ?? items.find((x) => x.key.startsWith("lead:warm-glow-")) ?? items.find((x) => x.key.startsWith("lead:")) ?? items.find((x) => x.to.startsWith("/play/lead/") && x.key.startsWith("window:"));
   // Keyed by the row, not the object: opening another row's lead marks its reading seen, which remade the rows and the
   // leads, and this flew the map back to the first lead while the page showed the other. Playtest 2026-11-08.

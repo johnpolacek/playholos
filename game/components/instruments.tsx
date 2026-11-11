@@ -5,17 +5,19 @@ import { BuildMark, buildColor, buildTone } from "@/components/marks";
 import { usePlan, usePoint, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
-import { span, tenths, yearText } from "@/lib/game/clock";
+import { span, tenths, timesText, yearText } from "@/lib/game/clock";
 import { grownSpans } from "@/lib/game/halo";
 import { SWARM } from "@/lib/sim/conflict";
 import { type Reading, starName } from "@/lib/game/leads";
-import { buildOf, buildSlug, computeAt, LAUNCH_LIFT, ordered, PAST } from "@/lib/game/plan";
+import { buildOf, buildSlug, computeAt, isOn, LAUNCH_LIFT, ordered, PAST, SWITCHED } from "@/lib/game/plan";
 import type { Heard, Visit } from "@/lib/sim/types";
+import { CATALOG } from "@/lib/sim/works";
 import { CO_ORBITALS, MOON_SEARCH_YEARS, type MindsSeen, moonSearchEnds, TOUR_EACH, TOUR_FLIGHT, TOUR_MAP, tourEnds } from "@/lib/sim/minds";
 
 // In play, our builds once done stop being a queue and become instruments: each a card that says what it does now in
-// the world, from what it has caught, read or found. What is still building rises under them, a bar a build. Chosen
-// from the Build canvas, (i) “Builds become instruments”, 2026-10-29.
+// the world, from what it has caught, read or found. What is still building rises, a bar a build. Chosen from the
+// Build canvas, (i) “Builds become instruments”, 2026-10-29. What rises leads Build and what works closes it,
+// 2026-11-10.
 
 const A = (move: string) => `${/^[aeiou]/.test(move) ? "an" : "a"} ${move}`;
 
@@ -57,6 +59,16 @@ function found(name: string, k: Known): { line: string; news: boolean } | null {
     const g = m.glows.at(-1)!;
     const i = m.glows.length;
     return { line: `Found ${n(i)} cold glow${i > 1 ? "s" : ""}. The latest, Cold Glow ${i}, at Year ${yearText(g.seen)}.`, news: recent(g.seen) };
+  }
+  // Our Glow Imager: how many glows it has shown us, and what the latest was. 2026-11-11.
+  if (name === "Glow Imager") {
+    const looks = [
+      ...m.glows.flatMap((g, i) => (g.imaged !== undefined ? [{ at: g.imaged, what: `thin panels on orderly orbits at Cold Glow ${i + 1}` }] : [])),
+      ...m.flashes.flatMap((f, i) => (f.imaged ? [{ at: f.imaged.at, what: `${f.imaged.saw === "ring" ? "a made ring" : "a cloud of dust"} at Warm Glow ${i + 1}` }] : [])),
+    ].sort((a, b) => a.at - b.at);
+    if (!looks.length) return null;
+    const l = looks.at(-1)!;
+    return { line: `Has shown us ${looks.length === 1 ? "one glow" : `${looks.length} glows`}. The latest, ${l.what}, at Year ${yearText(l.at)}.`, news: recent(l.at) };
   }
   const w = m.watcher;
   if (name === "Moon Search" && w?.by === "moon search")
@@ -126,6 +138,8 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
       ? { line: `Stacked ${MOON_SEARCH_YEARS} Years of deep images of the Moon’s L4 and L5 points. Nothing small and dark there.`, news: k.now - moonSearchEnds(since) < 0.5 }
       : { line: "Stacking deep images of the Moon’s L4 and L5 points. Nothing small and dark yet", news: false, busy: true };
   if (name === "Warm Sky Watch") return { line: "Mapping the warm sky every 2 Years. No new warm glow yet.", news: false };
+  if (name === "Glow Imager") return { line: "Ready. It turns to each glow our surveys find. None to show yet.", news: false };
+  if (name === "Galaxy Broadcast Array") return { line: "Ready. It sends only what we choose to send, from the Mind’s tab.", news: false };
   const craft = CRAFT[name];
   if (craft) {
     const home = k.visits.filter((v) => v.by === craft && v.home <= k.now).sort((a, b) => a.home - b.home);
@@ -149,8 +163,9 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
   if (name === "Helium-3 Harvest") return { line: "Gathering helium-3 from Uranus’s air, faster each time its craft double.", news: false };
   if (name === "Mercury Works") return { line: "Its seed copies itself from Mercury’s rock.", news: false };
   if (name === "Star Beam") return { line: "Ready. Each lens we send rides it to the Sun’s focus in about two months.", news: false };
+  if (name === "Ship Beam") return { line: `Ready. Each seed ship we send rides it to a tenth of light speed in ${CATALOG.beams.shipDays} days.`, news: false };
   if (name === "Thought Fields")
-    return { line: `Our compute is ${Math.round(k.grown * 10) / 10}× what it was at Year 0. No more campuses fit the grid.`, news: false };
+    return { line: `Our compute is ${timesText(k.grown)} what it was at Year 0. No more campuses fit the grid.`, news: false };
   if (name === "Launch Complex") return { line: `Ready. It lifts ${LAUNCH_LIFT} kt more to orbit each Year.`, news: false };
   return { line: buildOf(name)?.what ?? "", news: false };
 }
@@ -189,18 +204,15 @@ function Card({ name, since, line, news, busy }: { name: string; since: number; 
   );
 }
 
-/** Our builds in play: those done as instruments at work, then those still rising, each with its bar and how long until
- *  it's done. */
-export function Instruments({ catalog }: { catalog?: (idle: boolean) => React.ReactNode }) {
+/** Our builds done, as instruments at work, newest first. Last on Build, under what rises, the Catalog and what it
+ *  all costs: what is done matters least to what we order next. 2026-11-10. */
+export function Working() {
   const { year } = useGame();
   const { plan } = usePlan();
   const { done, scale } = useSchedule();
   const { heard, readings, leads, visits, minds } = useLeads();
-  const point = usePoint();
   const now = year ?? 0;
-  const names = ordered(plan);
-  const working = names.filter((n) => done[n] != null && done[n]! <= now);
-  const rising = names.filter((n) => !working.includes(n));
+  const working = ordered(plan).filter((n) => done[n] != null && done[n]! <= now);
   const read = useMemo(
     () => leads.flatMap((l) => (readings[l.slug] ?? []).map((r) => ({ star: l.star, r }))),
     [leads, readings],
@@ -214,65 +226,60 @@ export function Instruments({ catalog }: { catalog?: (idle: boolean) => React.Re
     return { share: Math.min(1, (SWARM.watts * 2 ** Math.floor(years / SWARM.doubling)) / SWARM.most), growing: spans.at(-1)![1] === null };
   }, [plan, scale, tenth]);
   const known: Known = { now, heard, read, visits, grown, swarm, minds };
-  // Nothing rising: said first, above our instruments, with the Catalog right under, which says it in gold with the
-  // Mind's pick. Below eight instruments it went unseen. Playtest 2026-11-02.
-  if (!rising.length)
-    return (
-      <>
-        {catalog?.(true)}
-        {working.length > 0 && (
-          <>
-            <ListHead left={`Working now · ${working.length}`} right="" className="mt-5" />
-            <ul className="mt-2 flex flex-col gap-2">
-              {[...working].sort((a, b) => done[b]! - done[a]!).map((n) => (
-                <Card key={n} name={n} since={done[n]!} {...doing(n, known, done[n]!)} />
-              ))}
-            </ul>
-          </>
-        )}
-      </>
-    );
+  if (!working.length) return null;
   return (
     <>
-      {/* What rises, with its time, comes before what works: under a tall card, a phone put Asteroid Tour and its time
-          below the fold. Screen critic, 2026-11-09. */}
-      <ListHead left={`Rising · ${rising.length}`} right="Done in" className="mt-1" />
-      {rising.length ? (
-        <ul className="mt-1">
-          {rising.map((n) => {
-            const at = done[n];
-            const from = plan.later?.filter((o) => o.name === n).at(-1)?.y ?? 0;
-            const p = at == null ? 0 : Math.min(1, Math.max(0, (now - from) / Math.max(0.01, at - from)));
-            return (
-              <li key={n} className="border-t border-faint" {...point(n)}>
-                <Link to={`/play/build/${buildSlug(n)}`} className="flex flex-col gap-1.5 py-2.5">
-                  <span className="flex items-baseline gap-3">
-                    <span className={`shrink-0 self-center ${buildTone(n)}`}>
-                      <BuildMark name={n} size={16} />
-                    </span>
-                    <span className="grow text-[15px] leading-snug">{n}</span>
-                    <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{at == null ? PAST : span(at - now)}</span>
-                  </span>
-                  <span className="ml-7 h-1 overflow-hidden rounded-full bg-track">
-                    <span className="block h-full rounded-full transition-[width] duration-700" style={{ width: `${p * 100}%`, background: buildColor(n) }} />
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      ) : null}
-      {working.length > 0 && (
+      <ListHead left={`Working now · ${working.length}`} right="" className="mt-1" />
+      <ul className="mt-2 flex flex-col gap-2">
+        {[...working].sort((a, b) => done[b]! - done[a]!).map((n) => (
+          // One the Will has stood down says so, in place of what it would be doing. 2026-11-11.
+          <Card key={n} name={n} since={done[n]!} {...(SWITCHED[n] && !isOn(plan, n, now) ? { line: SWITCHED[n].whenOff, news: false } : doing(n, known, done[n]!))} />
+        ))}
+      </ul>
+    </>
+  );
+}
+
+/** Our builds still rising, each with its bar and how long until it's done, then the Catalog. Nothing rising, the
+ *  Catalog leads, and says so in gold with the Mind's pick. Playtest 2026-11-02. */
+export function Rising({ catalog }: { catalog?: (idle: boolean) => React.ReactNode }) {
+  const { year } = useGame();
+  const { plan } = usePlan();
+  const { done } = useSchedule();
+  const point = usePoint();
+  const now = year ?? 0;
+  const rising = ordered(plan).filter((n) => done[n] == null || done[n]! > now);
+  return (
+    <>
+      {rising.length > 0 && (
         <>
-          <ListHead left={`Working now · ${working.length}`} right="" className="mt-5" />
-          <ul className="mt-2 flex flex-col gap-2">
-            {[...working].sort((a, b) => done[b]! - done[a]!).map((n) => (
-              <Card key={n} name={n} since={done[n]!} {...doing(n, known, done[n]!)} />
-            ))}
+          <ListHead left={`Rising · ${rising.length}`} right="Done in" className="mt-1" />
+          <ul className="mt-1">
+            {rising.map((n) => {
+              const at = done[n];
+              const from = plan.later?.filter((o) => o.name === n).at(-1)?.y ?? 0;
+              const p = at == null ? 0 : Math.min(1, Math.max(0, (now - from) / Math.max(0.01, at - from)));
+              return (
+                <li key={n} className="border-t border-faint" {...point(n)}>
+                  <Link to={`/play/build/${buildSlug(n)}`} className="flex flex-col gap-1.5 py-2.5">
+                    <span className="flex items-baseline gap-3">
+                      <span className={`shrink-0 self-center ${buildTone(n)}`}>
+                        <BuildMark name={n} size={16} />
+                      </span>
+                      <span className="grow text-[15px] leading-snug">{n}</span>
+                      <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{at == null ? PAST : span(at - now)}</span>
+                    </span>
+                    <span className="ml-7 h-1 overflow-hidden rounded-full bg-track">
+                      <span className="block h-full rounded-full transition-[width] duration-700" style={{ width: `${p * 100}%`, background: buildColor(n) }} />
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </>
       )}
-      {catalog?.(false)}
+      {catalog?.(!rising.length)}
     </>
   );
 }

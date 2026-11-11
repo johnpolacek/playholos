@@ -2,18 +2,24 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { CostLine, previews, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
-import { BuildMark, buildTone } from "@/components/marks";
+import { BuildMark, buildTone, LockMark } from "@/components/marks";
 import { OpensLine } from "@/components/opens";
 import { usePlan, usePoint, useSchedule } from "@/components/picks";
 import { useWorks } from "@/components/works";
 import { Face, ListHead } from "@/components/tab-head";
 import { span, tenths } from "@/lib/game/clock";
 import { SITES } from "@/lib/game/sites";
-import { buildSlug, fits, lacks, LATER, moves, needs, openAt, ordered, orderLater, PAST, takenAt } from "@/lib/game/plan";
+import { buildSlug, fits, lacks, LATER, lockedAt, moves, needs, openAt, ordered, orderLater, PAST, takenAt } from "@/lib/game/plan";
 
 // In play, the Catalog: everything open to us and not in our order, under our instruments, each with when it would be
 // done if ordered now, last in line, what it would take and slow, what it opens, and Add to Queue on the row itself.
-// A tap on the rest of the row opens its page. Replaces “Open to start”, 2026-10-29.
+// A tap on the rest of the row opens its page. Replaces “Open to start”, 2026-10-29. With few open, what opens next
+// fills the list, each row locked and saying what it waits on: with all we could start already rising, Build showed
+// nothing more to come. 2026-11-10.
+
+/** The fewest rows the Catalog shows, where the builds exist: what is open, then what opens next. */
+const FILL = 6;
+
 export function Catalog({ className = "" }: { className?: string }) {
   const { year, orderAt, save } = useGame();
   // Our strategy's builds first, each marked, as advice. 2026-11-02.
@@ -31,6 +37,7 @@ export function Catalog({ className = "" }: { className?: string }) {
     [plan, done, at, strategy],
   );
   const by = useMemo(() => Object.fromEntries(open.map((b) => [b.name, moves(plan, scale, b.name, at)])), [open, plan, scale, at]);
+  const next = useMemo(() => lockedAt(plan, done, at).slice(0, Math.max(0, FILL - open.length)), [plan, done, at, open.length]);
   // Twenty builds and more, and no way to find one by name: a blind first-timer scrolled the list for the 15 m Mirror.
   // 2026-11-07.
   const [find, setFind] = useState("");
@@ -59,12 +66,16 @@ export function Catalog({ className = "" }: { className?: string }) {
     return () => io.disconnect();
   }, [many]);
   const opens = (after: string) => (after === "A rock found" ? "a rock is found coming" : after === "The watcher found" ? "the watcher is found" : `the ${after} is done`);
-  if (!open.length) return null;
+  // Nothing open, nothing to come, nothing rising: every build we can reach stands. Build ended on its compute ring
+  // and a list of what works, and read as a game with nothing left in it. 2026-11-11.
+  const ours = ordered(plan);
+  if (!open.length && !next.length)
+    return year !== null && ours.length > 0 && ours.every((n) => done[n] != null && done[n]! <= at) ? <AllBuilt names={ours} className={className} /> : null;
   return (
     <>
       {/* The note's "See the Catalog" scrolls here: on Build already, its link went nowhere we could see. 2026-11-07. */}
       <div id="catalog" className="scroll-mt-4" />
-      <ListHead left={`Catalog · ${open.length}`} right="Done in" className={className} />
+      {open.length > 0 && <ListHead left={`Catalog · ${open.length}`} right="Done in" className={className} />}
       {many && (
         <input
           ref={box}
@@ -133,6 +144,37 @@ export function Catalog({ className = "" }: { className?: string }) {
           );
         })}
       </ul>
+      {!q && next.length > 0 && (
+        <>
+          <ListHead left={`Opens next · ${next.length}`} right="Opens in" className={open.length ? "mt-5" : className} />
+          <ul className="mt-1">
+            {next.map(({ b, at: opensAt }) => (
+              <li key={b.name} className="border-t border-faint opacity-70 transition-opacity hover:opacity-100" {...point(b.name)}>
+                <Link to={`/play/build/${buildSlug(b.name)}`} className="block py-2.5">
+                  <Face
+                    mark={<BuildMark name={b.name} still />}
+                    tone={buildTone(b.name, false)}
+                    name={
+                      <span className="inline-flex items-center gap-1.5">
+                        {b.name}
+                        <span className="text-muted">
+                          <LockMark size={11} />
+                        </span>
+                      </span>
+                    }
+                    line={
+                      <>
+                        {b.what} <span className="text-muted">Opens once {opens(b.after)}.</span>
+                      </>
+                    }
+                    right={opensAt != null && opensAt > at ? span(opensAt - at) : ""}
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
       {/* Pinned to the panel's bottom left, clear of each row's Add to Queue on the right. */}
       {many && past.box && !past.end && (
         <div className="pointer-events-none sticky bottom-3 z-20 flex">
@@ -148,6 +190,31 @@ export function Catalog({ className = "" }: { className?: string }) {
         </div>
       )}
       <div ref={end} />
+    </>
+  );
+}
+
+/** Every build done: each one's mark in its color, a field of all we made, and the way on, which is Reach. */
+function AllBuilt({ names, className }: { names: string[]; className: string }) {
+  return (
+    <>
+      <div id="catalog" className="scroll-mt-4" />
+      <ListHead left={`All built · ${names.length}`} right="" className={className} />
+      <ul className="mt-3 flex flex-wrap gap-x-3.5 gap-y-3">
+        {names.map((n) => (
+          <li key={n}>
+            <Link to={`/play/build/${buildSlug(n)}`} aria-label={n} title={n} className={`block transition-opacity hover:opacity-70 ${buildTone(n)}`}>
+              <BuildMark name={n} size={18} />
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-3 text-[13.5px] leading-snug text-page-ink2">
+        Every build open to us stands. What is left is what we do with them: where we send our craft, and whom we call.
+      </p>
+      <Link to="/play/reach" className="mt-3 mb-5 inline-flex h-9 items-center self-start rounded-full border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-ink hover:text-paper">
+        Go to Reach ›
+      </Link>
     </>
   );
 }

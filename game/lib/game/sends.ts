@@ -4,7 +4,7 @@
 // Claude login alike.
 import { glowIdOf } from "./glow-names.ts";
 import targets from "../../data/targets.json" with { type: "json" };
-import { aimedYears, SIZES } from "../sim/messages.ts";
+import { aimedYears, callReach, SIZES } from "../sim/messages.ts";
 import { yearText } from "./clock.ts";
 import type { Kind, Sent, Size } from "./types.ts";
 
@@ -106,7 +106,7 @@ export function readSent(list: unknown): Sent[] {
   return list
     .flatMap((x) => {
       const draft = readDraft(x);
-      const { id, y, asked, reach, repeat, stopped } = (x ?? {}) as Record<string, unknown>;
+      const { id, y, asked, reach, repeat, stopped, galaxy } = (x ?? {}) as Record<string, unknown>;
       if (!draft || typeof id !== "string" || typeof y !== "number" || !Number.isFinite(y) || y < 0) return [];
       const { ra, dec, d } = (x ?? {}) as Record<string, unknown>;
       // A lead's star past the census keeps its place in the save. 2026-10-31.
@@ -122,7 +122,7 @@ export function readSent(list: unknown): Sent[] {
         id: id.slice(0, 64),
         y,
         asked: typeof asked === "string" ? asked.slice(0, 600) : "",
-        ...(star ? { to: star.name, d: star.d, ...(star === kept ? { ra: star.ra, dec: star.dec } : {}) } : { reach: Math.min(50, Math.max(1, num(reach) ?? 10)), repeat: repeat === true }),
+        ...(star ? { to: star.name, d: star.d, ...(star === kept ? { ra: star.ra, dec: star.dec } : {}) } : galaxy === true ? { reach: Math.round(callReach(SIZES[draft.size])), repeat: repeat === true, galaxy: true } : { reach: Math.min(50, Math.max(1, num(reach) ?? 10)), repeat: repeat === true }),
         ...(num(stopped) !== undefined ? { stopped: num(stopped) } : {}),
       } satisfies Sent];
     })
@@ -145,6 +145,9 @@ export function describeSent(sent: Sent[], year: number | null, ranges: Record<s
     const lie = s.lie ? ` It carries a lie, which they will take as true: ${s.lie}` : "";
     if (s.to === "everywhere") {
       const run = s.repeat ? (s.stopped !== undefined ? `, repeated until we stopped it at Year ${yearText(s.stopped)}` : ", repeating until the Will stops it") : ", once";
+      // Through our Galaxy Broadcast Array: swept, so read by passes, not by a dial. 2026-11-11.
+      if (s.galaxy)
+        return `- Along the Galaxy's plane, through our Galaxy Broadcast Array, from Year ${yearText(s.y)}${run}: each star gets about a second of it a Year. It is noticed anywhere in the Galaxy, and read on the first pass to ${lyText(s.reach!)} ly, farther each Year it repeats. An awake mind that reads it may answer once, no sooner than twice its distance in Years. It holds: ${s.travels}${lie}`;
       return `- Every way at once, from Year ${yearText(s.y)}${run}, readable to ${s.reach} ly: ${s.travels}${lie}`;
     }
     const range = ranges[s.to] ?? target(s.to)?.range;

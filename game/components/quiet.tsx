@@ -24,7 +24,7 @@ const gy = (y: number) => 90 - y * PX;
 /** A skip at least this long, in Years, is a long quiet. */
 export const LONG_QUIET = 100;
 
-export function Quiet({ from, to, onClose, children }: { from: number; to: number; onClose(): void; children?: React.ReactNode }) {
+export function Quiet({ from, to, children }: { from: number; to: number; children?: React.ReactNode }) {
   // Every jump says what reached us, and a long one says what the quiet held too. 2026-11-01.
   const long = to - from >= LONG_QUIET;
   const { plan } = usePlan();
@@ -61,18 +61,12 @@ export function Quiet({ from, to, onClose, children }: { from: number; to: numbe
   );
   return (
     <div ref={root} className="flex flex-col gap-2.5">
-      {/* Go on sits up top, beside the Year, where it never moves: at the bottom, the Mind's words and the list loaded
-          in late and pushed it down under the cursor. A blind first-timer's clicks missed it twice. Playtest 2026-11-07. */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex flex-col gap-1">
-          <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">
-            {long ? "A long quiet" : "We jumped ahead"} · {span < 10 ? span.toFixed(1) : Math.round(span).toLocaleString("en-US")} Years
-          </span>
-          <b className="text-[17px] leading-snug font-semibold">Year {yearText(to)}</b>
-        </div>
-        <button onClick={onClose} className="h-9 shrink-0 rounded-full border border-ink px-4 text-[13px] font-medium">
-          Go on
-        </button>
+      {/* The note that holds this puts it away, from its top corner, where late words and rows never move it. */}
+      <div className="flex flex-col gap-1">
+        <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">
+          {long ? "A long quiet" : "We jumped ahead"} · {span < 10 ? span.toFixed(1) : Math.round(span).toLocaleString("en-US")} Years
+        </span>
+        <b className="text-[17px] leading-snug font-semibold">Year {yearText(to)}</b>
       </div>
       {children}
       {long && (

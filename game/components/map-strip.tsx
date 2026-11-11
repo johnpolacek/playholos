@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
 import { BeginOnMap } from "@/components/begin";
 import { useTalkSubject } from "@/components/mind-chat";
-import { MindSays } from "@/components/mind-news";
 import { IdleNote } from "@/components/idle-note";
 import { Through } from "@/components/through";
 import { WideLeads } from "@/components/wide-leads";
@@ -272,7 +271,6 @@ export function MapStrip() {
       )}
       {/* Reach's ruler lies along the foot, so there Begin waits at the top. */}
       <BeginOnMap className={reaching ? "top-2" : "bottom-[9%]"} />
-      <MindSays />
       <IdleNote />
       <Through />
       <button

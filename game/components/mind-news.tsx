@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Link, useLocation } from "react-router";
 import { kindOf } from "@/components/arrival";
 import { useGame } from "@/components/game-provider";
@@ -111,10 +111,33 @@ function newsLinks(told: string, leads: { star: string; slug: string }[], colony
   return links.sort((a, b) => a.at - b.at);
 }
 
+// The news a jump landed on. The Mind's words on it belong to the jump's card: they show there, and go with it when it
+// is put away, come or not. Put away before they came, they opened a note of their own a few seconds on, over the
+// map. Then they wait on the Mind tab, marked unread. Playtest 2026-11-10.
+let jumpNews: string | null = null;
+const heedJump = new Set<() => void>();
+function setJumpNews(news: string) {
+  jumpNews = news;
+  heedJump.forEach((f) => f());
+}
+const useJumpNews = () =>
+  useSyncExternalStore(
+    (f) => (heedJump.add(f), () => void heedJump.delete(f)),
+    () => jumpNews,
+    () => null,
+  );
+
 /** Always there: keeps our talk, and hands the Mind news as it lands, once each tenth of a Year, never twice. */
 export function MindNews() {
   useKeepTalk();
   const { save, year, tell: told } = useGame();
+  // Our latest jump in this game, kept once its card is put away, so news it landed on is known as its own.
+  const leap = useLeap();
+  const seed = save?.seed;
+  const jumped = useRef<{ seed?: number; from: number; to: number } | null>(null);
+  useEffect(() => {
+    if (leap) jumped.current = { seed, from: leap.from, to: leap.to };
+  }, [leap, seed]);
   const open = useAccess();
   const { tell, busy } = useMindNews();
   const { done } = useSchedule();
@@ -140,6 +163,8 @@ export function MindNews() {
     if (open === undefined || known !== tenth || busy) return;
     const news = newsBetween(from, tenth, save.plan, done, heard, save.sent ?? [], firstGlow, minds?.watcher, firstCold);
     told(tenth);
+    const jump = jumped.current?.seed === save.seed ? jumped.current : null;
+    if (news && jump && tenth > jump.from && tenth <= jump.to + 1e-6) setJumpNews(news);
     if (news) tell(news);
   }, [save, tenth, from, dark, open, known, busy, done, heard, firstGlow, minds?.watcher, firstCold, told, tell]);
   return null;
@@ -181,18 +206,25 @@ function Gathering() {
 export function YearZero() {
   const { save, year, read } = useGame();
   const open = useAccess();
-  const { tell, last, words, news, busy, error } = useMindNews();
+  const { tell, last, words, news, handed, busy, error } = useMindNews();
   const [on, setOn] = useState(false);
+  /** Year 0's news, not yet handed to the Mind. */
+  const owed = useRef(false);
   const was = useRef(year);
   // Only on the press itself, never on a reload into a game under way.
   useEffect(() => {
     const now = year;
     if (was.current === null && now !== null && save?.beganAt && Date.now() - save.beganAt < 10_000) {
       setOn(true);
-      if (open) tell(BEGUN);
+      owed.current = true;
     }
     was.current = now;
-  }, [year, save?.beganAt, open, tell]);
+    // The Mind finishes what it is saying first, as with all its news. Told over a queue read still on its way, that
+    // read's answer landed after Year 0's news and showed as its words, then the true words never showed. 2026-11-10.
+    if (!owed.current || !open || busy) return;
+    owed.current = false;
+    tell(BEGUN);
+  }, [year, save?.beganAt, open, busy, tell]);
   const root = useRef<HTMLDivElement>(null);
   useGSAP(
     () => {
@@ -214,6 +246,8 @@ export function YearZero() {
   });
   if (!on) return null;
   const ours = news === BEGUN;
+  // A failure of what the Mind was saying before isn't Year 0's: its news is still to come.
+  const failed = !!error && handed === BEGUN && !ours;
   function close() {
     if (ours && last) read(last);
     setOn(false);
@@ -243,13 +277,13 @@ export function YearZero() {
       <div data-z="item" className="mt-6 min-h-[168px] w-full max-w-[440px]">
         <MindNote still={!busy} className="text-[15px] leading-[1.5]">
           <span aria-live="polite">
-            {!open || (error && !ours)
+            {!open || failed
               ? "The clock runs now, a Year every five minutes, even while we’re away, and it pauses when nothing is building. What we queued has started. We will tell you as it lands."
               : ours && said(words)
                 ? said(words)
                 : null}
           </span>
-          {open && !(error && !ours) && !(ours && said(words)) && <Gathering />}
+          {open && !failed && !(ours && said(words)) && <Gathering />}
         </MindNote>
       </div>
       <button data-z="item" onClick={close} className="mt-6 h-[46px] rounded-full bg-ink px-8 text-[15px] font-medium text-paper">
@@ -259,17 +293,20 @@ export function YearZero() {
   );
 }
 
-/** The Mind's words on what a jump brought, said inside its note on the jump, after `since`, its latest before it. Go on
- *  counts them as read, so they don't come again as a note of their own. 2026-11-04. */
+/** The Mind's words on what a jump brought, said inside its note on the jump, after `since`, its latest before it. Putting
+ *  the note away counts them as read, so they don't come again as a note of their own. 2026-11-04. */
 export function useJumpWords(since: string | undefined) {
   const { save, read } = useGame();
-  const { last, words, news, busy } = useMindNews();
+  const { last, words, news, handed, busy } = useMindNews();
+  const jumpNews = useJumpNews();
   const fresh = !!last && news !== null && news !== BEGUN && last !== since && last !== save?.read;
-  return { fresh, busy: fresh && busy, words: fresh ? said(words) : "", read: () => void (fresh && read(last)) };
+  // Handed the jump's news and yet to speak: the card says words are coming, so the Will can wait for them.
+  const coming = !fresh && busy && handed !== null && handed === jumpNews;
+  return { fresh, coming, busy: (fresh || coming) && busy, words: fresh ? said(words) : "", read: () => void (fresh && read(last)) };
 }
 
 /** What the Mind just told us unasked, over the map, until we read it or put it away. Not on the Mind tab, where the
- *  talk shows it. */
+ *  talk shows it. Drawn by IdleNote, in its corner, when that has no word of its own. */
 export function MindSays() {
   const { save, year, read } = useGame();
   const path = useLocation().pathname;
@@ -279,7 +316,9 @@ export function MindSays() {
   const root = useRef<HTMLDivElement>(null);
   // During a jump these words sit in the note that tells it, one voice in one place. 2026-11-04.
   const leap = useLeap();
-  const shown = !leap && year !== null && !!last && news !== null && news !== BEGUN && last !== save?.read && last !== away && path !== "/play/mind";
+  const jumpNews = useJumpNews();
+  // Whole, once the Mind has said it: opened on its first word, the note grew a line at a time as it rose. 2026-11-10.
+  const shown = !leap && !busy && year !== null && !!last && news !== null && news !== BEGUN && news !== jumpNews && last !== save?.read && last !== away && path !== "/play/mind";
   const colony = save?.plan?.colony?.name;
   const links = useMemo(() => (news ? newsLinks(news, leads, colony) : []), [news, leads, colony]);
   // On Scan's map, the first lead the news names is in view while the note shows, and put away it goes back. The map
@@ -306,14 +345,14 @@ export function MindSays() {
     <div
       ref={root}
       role="status"
-      className="absolute bottom-3 left-2.5 z-20 w-[min(420px,calc(100%-20px))] rounded-xl border border-faint bg-paper/90 pt-2 pr-2 backdrop-blur-sm"
+      className="absolute top-10 left-2.5 z-20 max-h-[calc(100%-3.5rem)] w-[min(400px,calc(100%-20px))] overflow-y-auto rounded-xl border border-faint bg-paper/90 pt-2 pr-2 backdrop-blur-sm"
     >
       <button onClick={() => setAway(last)} aria-label="Put away" className="absolute top-0 right-0 z-10 flex size-9 items-center justify-center text-muted hover:text-ink">
         <svg aria-hidden width="10" height="10" viewBox="0 0 12 12">
           <path d="M1.5 1.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.4" />
         </svg>
       </button>
-      <MindNote still={!busy} edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
+      <MindNote still edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
         <p className="mb-1 font-mono text-[10px] leading-snug tracking-[.06em] text-muted">{properGlows(news)}</p>
         {said(words) || "…"}
         <span className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px]">

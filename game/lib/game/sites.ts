@@ -428,6 +428,31 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
         "In 1999 Antoine Labeyrie drew this exo-Earth imager, and in 2018 he still showed it: a picture of an Earth at 10 light years in 30 minutes. On Earth his team hung a small one from a cable across an Alpine valley, which saw first light in 2019.",
     },
   },
+  "Galaxy Broadcast Array": {
+    // The Karoo, where the SKA's dishes stand in a radio quiet zone under a southern sky that holds the Galaxy's
+    // center. 2026-11-11.
+    site: { on: "earth", draw: "dome", places: [{ lat: -30.72, lon: 21.41, name: "The Karoo, South Africa" }] },
+    story: {
+      have: "Arecibo’s radar, about 10¹³ W along its beam, the strongest we ever aimed. Each of our messages went to one star.",
+      where: "In the Karoo, in South Africa’s radio quiet zone, where the Galaxy’s center passes overhead.",
+      why: "Nine in ten of the Galaxy’s stars lie in a thin band of sky. An array 2.9 km wide makes a beam narrow enough to cross that band star field by star field, and strong enough at 218 GW to be noticed across the Galaxy in one second.",
+      takes: "Dishes filling 2.9 km, and 218 GW for each pulse, about a hundredth of all our energy at Year 0.",
+      before:
+        "In 2010 James, Gregory and Dominic Benford worked out what a beacon costs, and what the cheapest one looks like: short pulses, swept, a second a Year for each listener. They noted that searches like ours would miss it.",
+    },
+  },
+  "Glow Imager": {
+    // Beyond L2 beside the Hypertelescope, in Earth's shadow line, where mirrors stay cold. 2026-11-11.
+    site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "Beyond L2, 300 km across" }], km: 1_500_000 },
+    story: {
+      have: "The Halo Array and the Warm Sky Watch, which find glows as points of light and can’t show what makes them.",
+      where: "Beyond L2, 1.5 million km out, 20 cold mirrors flying up to 300 km apart, their light brought to one craft.",
+      why: "Heat shines in long waves, so an eye for it must be wide to see sharp. At 300 km a cold glow 54 light years away shows its parts apart, and a warm glow 20,000 light years off is 18 pixels wide. From here that takes a week. A sentinel takes centuries.",
+      takes: "Twenty mirrors 3 m wide, each on its own craft and kept near 40 K behind a shade, and the craft at their focus. Built in orbit, it takes a quarter less time once the yard is done.",
+      before:
+        "Webb’s mirror is kept under 50 K to see heat at all. In 2010 Jean Schneider’s team asked what picturing far worlds would take, and found the light was never the limit: holding mirrors in step was. The Hypertelescope taught us that.",
+    },
+  },
   // Mercury's builds, 2026-10-29: the map flies out to Mercury for each. calcs/mercury.py.
   "Mercury Works": {
     site: { on: "planet", body: "Mercury", draw: "ring", places: [{ lat: 0, lon: 0, name: "Mercury, 0.39 AU from the Sun" }] },
@@ -457,6 +482,16 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       why: "A beam pushes a sail only while the sail sits in its spot, and a wider beam keeps its spot small for longer. 100 km at 10 TW pushes a 2 t lens to a twentieth of light speed.",
       takes: "Part of the swarm, given lasers and kept in step to a fraction of a wavelength.",
       before: "From 2015 Philip Lubin drew DE-STAR, arrays of lasers in space up to 10 km wide, to push sails and turn aside asteroids.",
+    },
+  },
+  "Ship Beam": {
+    site: { on: "planet", body: "Mercury", draw: "ring", places: [{ lat: 0, lon: 0, name: "A wider part of the swarm, near Mercury" }] },
+    story: {
+      have: "The Star Beam, 10 TW from a patch of the swarm 100 km across.",
+      where: "A patch of the swarm 1,000 km across, near Mercury, its collectors phased as one laser.",
+      why: "A seed ship weighs 1,500 t. The Star Beam’s spot outgrows any sail it could carry. Ten times the width holds the spot on a 1 km sail for 2,600 AU, and 1,000 TW brings the ship to a tenth of light speed in the first 680.",
+      takes: "The swarm grown to a patch that wide, about 20 doublings from its seed, and lasers across all of it.",
+      before: "In 1984 Robert Forward drew a lens 1,000 km wide, to hold a laser’s spot on a sail all the way to another star.",
     },
   },
   "Mind Link": {

@@ -386,7 +386,7 @@ export function LeadList({
         // Said as the odds have it, and that each can wait: a blind first-timer learned only from the Mind that these
         // could be let pass. 2026-11-07, the Will's call.
         line: (latest: Lead) => `Most are odd dust. The rare one could be an old mind. Each can wait, or a sentinel there would tell us. The latest, ${starName(latest.star)}.`,
-        test: (l: Lead) => l.slug.startsWith("cold-glow-") && !has(l, "Up close") && unread(l),
+        test: (l: Lead) => l.slug.startsWith("cold-glow-") && !has(l, "Up close") && !has(l, "Resolved") && unread(l),
       },
       {
         key: "faded-glows",

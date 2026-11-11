@@ -4,6 +4,10 @@
    "years": 6,
    "want": 0.2
   },
+  "Galaxy broadcast array": {
+   "years": 8,
+   "want": 1.0
+  },
   "Deep flash watch": {
    "years": 6,
    "want": 0.1
@@ -215,8 +219,17 @@
    "years": 10,
    "want": 2.0
   },
+  "Ship beam": {
+   "years": 30,
+   "want": 3.0
+  },
   "Hypertelescope": {
    "years": 20,
+   "want": 2.0,
+   "orbit": true
+  },
+  "Glow imager": {
+   "years": 15,
    "want": 2.0,
    "orbit": true
   }
@@ -293,7 +306,9 @@
  "beams": {
   "array": 4.92,
   "beam": 0.16,
-  "look": 0.0185
+  "look": 0.0185,
+  "ship": 0.11,
+  "shipDays": 78
  },
  "swarm": {
   "watts": 9090000000.0,
@@ -308,5 +323,9 @@
   "reach": 135,
   "slew": 0.0192,
   "cities": 50
+ },
+ "imager": {
+  "slew": 0.0192,
+  "km": 300
  }
 }

@@ -9,7 +9,7 @@ import {
 import { useGame } from "@/components/game-provider";
 import { buildColor } from "@/components/marks";
 import { toggleBuild, usePlan, useSchedule } from "@/components/picks";
-import { span, tenths } from "@/lib/game/clock";
+import { span, tenths, timesText } from "@/lib/game/clock";
 import {
   buildOf,
   ceiling,
@@ -379,10 +379,17 @@ function Ceiling({
 }) {
   const { plan } = usePlan();
   const { scale } = useSchedule();
-  const { campuses, step } = useMemo(() => ceiling(plan, scale), [plan, scale]);
+  // Looked at again each decade, so a campus that fits late is counted.
+  const decade = Math.ceil(now / 10) * 10;
+  const { campuses, step } = useMemo(() => ceiling(plan, scale, decade), [plan, scale, decade]);
   const last = campuses.at(-1) ?? 0;
+  // All our compute now, over Year 0's. Past what Earth's grid holds, the rest thinks off Earth, on sunlight of its
+  // own: the Cold Annex, Power from Orbit, the Cold Halo, the Solar Swarm. At Year 554, with a swarm round the Sun,
+  // this panel still read "26× what it was at Year 0". 2026-11-11.
+  const all = useMemo(() => (began ? computeAt(plan, scale, now) / computeAt(plan, scale, 0) : 1), [began, plan, scale, now]);
   const end = Math.max(12, Math.ceil(last) + 2);
   const X = (y: number) => (y / end) * 300;
+  const late = end > 42;
   const Y = (e: number) => 60 - e * 52;
   // The share of the grid as it stands at each campus: Ground Solar or Fusion Plants grow the grid, and more campuses
   // fit. Build said compute drew 192% of the grid after Ground Solar until 2026-11-01.
@@ -398,11 +405,12 @@ function Ceiling({
   climb += `H300`;
   const grown = campuses.filter((y) => y <= now).length;
   const times = Math.round(step ** campuses.length);
+  const beyond = began && all > step ** grown * 1.2;
   const c = queued ? "var(--think)" : "var(--muted)";
   return (
     <div className="mt-4">
       <div className="flex justify-between font-mono text-[10px] tracking-[.1em] text-muted">
-        <span>ENERGY CAPS OUR COMPUTE</span>
+        <span>{beyond ? "ENERGY CAPS OUR COMPUTE ON EARTH" : "ENERGY CAPS OUR COMPUTE"}</span>
         <span>EARTH’S GRID</span>
       </div>
       <div className="relative mt-1.5 h-16">
@@ -449,20 +457,30 @@ function Ceiling({
             }}
           />
         )}
-        <span
-          className={`absolute left-0 pt-1 font-mono text-[10px] whitespace-nowrap ${queued ? "text-think" : "text-muted"}`}
-          style={{ top: `${Y(at(campuses.length)) / 0.64}%` }}
-        >
-          {times}× by Year {Math.round(last)}
-        </span>
+        {/* Past Year 40 the climb and its late steps run under where this sat, so it moves to the axis. 2026-11-11. */}
+        {!late && (
+          <span
+            className={`absolute left-0 pt-1 font-mono text-[10px] whitespace-nowrap ${queued ? "text-think" : "text-muted"}`}
+            style={{ top: `${Y(at(campuses.length)) / 0.64}%` }}
+          >
+            {times}× by Year {Math.round(last)}
+          </span>
+        )}
       </div>
       <div className="mt-1 flex justify-between font-mono text-[9.5px] text-muted">
         <span>Year 0</span>
+        {late && (
+          <span className={`text-[10px] ${queued ? "text-think" : "text-muted"}`}>
+            {times}× by Year {Math.round(last)}
+          </span>
+        )}
         <span>Year {end}</span>
       </div>
       <p className="mt-1.5 text-xs leading-snug text-muted">
         {queued && began && grown === campuses.length
-          ? `Thought Fields filled Earth’s grid at Year ${Math.round(last)}. Our compute draws ${pct(at(campuses.length))} of it, ${times}× what it was at Year 0.`
+          ? beyond
+            ? `Thought Fields filled Earth’s grid at Year ${Math.round(last)}, at ${times}× our Year 0 compute. What thinks off Earth, on sunlight of its own, has taken us to ${timesText(all)} Year 0’s.`
+            : `Thought Fields filled Earth’s grid at Year ${Math.round(last)}. Our compute draws ${pct(at(campuses.length))} of it, ${times}× what it was at Year 0.`
           : queued && began
             ? `${grown ? `Thought Fields is growing our compute, ${Math.round(step ** grown * 10) / 10}× Year 0’s now.` : "Thought Fields is building its first campus."} Each campus adds half again, to ${times}× by Year ${Math.round(last)}, when the grid is full.`
             : queued
