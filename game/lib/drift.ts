@@ -4162,7 +4162,7 @@ void main() {
     }
     /** Line segments in the place's frame. */
     const segments = (pts: number[], kind: Kind) => {
-      const mat = line(kind, 0, false);
+      const mat = line(kind, 0, true);
       const l = new THREE.LineSegments(
         new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(pts, 3)),
         mat,
@@ -4179,6 +4179,160 @@ void main() {
     };
     const additive = (m: THREE.ShaderMaterial) => ((m.blending = THREE.AdditiveBlending), m);
 
+    // ── Faces, 2026-11-10 ──
+    // A build's faces hide the lines and dots behind them, and carry dots of their own, lit by the Sun as the globe's
+    // land is. The faces draw nothing themselves: they only write how far off they are, a thousandth farther than
+    // they stand, so the lines along their own edges and the dots on them still show. Chosen in
+    // explorations/graphics/builds.html, (e), on the plain ground, with the dots at 35%.
+    const DOTS = 0.35;
+    const hideMat = new THREE.ShaderMaterial({
+      colorWrite: false,
+      side: THREE.DoubleSide,
+      vertexShader: /* glsl */ `void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); mv.xyz *= 1.001; gl_Position = projectionMatrix * mv; }`,
+      fragmentShader: /* glsl */ `void main() { gl_FragColor = vec4(0.0); }`,
+    });
+    const hidden = (tris: number[]) => {
+      const o = new THREE.Mesh(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(tris, 3)), hideMat);
+      o.frustumCulled = false;
+      return o;
+    };
+    /** Each triangle's share of the dots, its area as the view first sees it, and the way it faces. */
+    function weigh(tris: number[], look: THREE.Vector3) {
+      const n = tris.length / 9;
+      const [w, nor] = [new Float32Array(n), new Float32Array(n * 3)];
+      let total = 0;
+      for (let t = 0; t < n; t++) {
+        const i = t * 9;
+        const [ux, uy, uz] = [tris[i + 3] - tris[i], tris[i + 4] - tris[i + 1], tris[i + 5] - tris[i + 2]];
+        const [vx, vy, vz] = [tris[i + 6] - tris[i], tris[i + 7] - tris[i + 1], tris[i + 8] - tris[i + 2]];
+        const [nx, ny, nz] = [uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx];
+        const l = Math.hypot(nx, ny, nz) || 1e-30;
+        nor.set([nx / l, ny / l, nz / l], t * 3);
+        total += w[t] = (l / 2) * Math.max(0.2, Math.abs(nx * look.x + ny * look.y + nz * look.z) / l);
+      }
+      return { w, nor, total, n };
+    }
+    type Dots = { pos: number[]; nor: number[]; turn: number[]; ours: number[]; ghost: number[] };
+    /** Dots over faces, as many on each as its share, in the order the faces go up. */
+    function scatter(d: Dots, tris: number[], turns: number[] | null, g: ReturnType<typeof weigh>, count: number, ours: number, ghost: number, seed: number) {
+      if (!g.n || count < 1) return;
+      const rnd = seededRandom(seed);
+      let t = 0;
+      let acc = g.w[0];
+      for (let k = 0; k < count; k++) {
+        const want = ((k + rnd()) / count) * g.total;
+        while (acc < want && t < g.n - 1) acc += g.w[++t];
+        let [u, v] = [rnd(), rnd()];
+        if (u + v > 1) [u, v] = [1 - u, 1 - v];
+        const i = t * 9;
+        for (let j = 0; j < 3; j++) d.pos.push(tris[i + j] + u * (tris[i + 3 + j] - tris[i + j]) + v * (tris[i + 6 + j] - tris[i + j]));
+        d.nor.push(g.nor[t * 3], g.nor[t * 3 + 1], g.nor[t * 3 + 2]);
+        d.turn.push(turns ? turns[t] : 0);
+        d.ours.push(ours);
+        d.ghost.push(ghost);
+      }
+    }
+    /** How far a lamp's light reaches over the faces and ground round it, in its own sizes. */
+    const REACH = 12;
+    /** How much lamp light each dot takes, and the turn of the lamp it takes most from. The lamps are sorted into
+     *  cells as wide as their reach, so each dot asks only the lamps near it. */
+    function lamplight(pos: number[], from: number, to: number, lamps: number[], stride: number, lit: Float32Array, turn: Float32Array) {
+      let reach = 0;
+      for (let i = 0; i < lamps.length; i += stride) reach = Math.max(reach, lamps[i + 3] * REACH);
+      if (!reach) return;
+      const key = (x: number, y: number, z: number) =>
+        (Math.floor(x / reach) * 73856093) ^ (Math.floor(y / reach) * 19349663) ^ (Math.floor(z / reach) * 83492791);
+      const cells = new Map<number, number[]>();
+      for (let i = 0; i < lamps.length; i += stride) {
+        const k = key(lamps[i], lamps[i + 1], lamps[i + 2]);
+        if (!cells.has(k)) cells.set(k, []);
+        cells.get(k)!.push(i);
+      }
+      for (let d = from; d < to; d++) {
+        const [x, y, z] = [pos[d * 3], pos[d * 3 + 1], pos[d * 3 + 2]];
+        let best = 0;
+        for (let dx = -1; dx <= 1; dx++)
+          for (let dy = -1; dy <= 1; dy++)
+            for (let dz = -1; dz <= 1; dz++)
+              for (const i of cells.get(key(x + dx * reach, y + dy * reach, z + dz * reach)) ?? []) {
+                const r = lamps[i + 3] * REACH;
+                const q = ((x - lamps[i]) ** 2 + (y - lamps[i + 1]) ** 2 + (z - lamps[i + 2]) ** 2) / (r * r);
+                if (q > 1.5) continue;
+                const glow = Math.exp(-3 * q);
+                lit[d] = Math.min(1, lit[d] + glow);
+                if (glow > best) [best, turn[d]] = [glow, stride > 4 ? lamps[i + 4] : 0];
+              }
+      }
+    }
+    // A dot on a face: lit by how its face meets the Sun, flaring where the face mirrors the Sun our way, taking
+    // the color of a lamp near it by night, and flashing as it is built.
+    const oursInk = pal[K.ink].clone().lerp(pal[K.mind], 0.3);
+    const dotMat = () =>
+      new THREE.ShaderMaterial({
+        uniforms: {
+          uDpr: shared.uDpr,
+          uSun: { value: new THREE.Vector3(0, 0, 1) },
+          uInk: { value: pal[K.ink] },
+          uOurs: { value: oursInk },
+          uLamp: { value: pal[K.mind] },
+          uOld: { value: pal[K.lamp] },
+          uOpacity: { value: 0 },
+          uDim: { value: DOTS },
+          uLit: { value: 1 },
+          uReveal: { value: 1 },
+          uNight: { value: 0 },
+          uFresh: { value: 0 },
+          uTime: { value: 0 },
+        },
+        vertexShader: /* glsl */ `
+uniform vec3 uSun, uInk, uOurs, uLamp, uOld;
+uniform float uDpr, uOpacity, uDim, uLit, uReveal, uNight, uFresh, uTime;
+attribute float aTurn, aOurs, aGhost, aLamp, aLampTurn;
+varying vec3 vColor;
+varying float vAlpha;
+void main() {
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  gl_Position = projectionMatrix * mv;
+  vec3 n = normalize(normalMatrix * normal);
+  vec3 v = normalize(-mv.xyz);
+  vec3 s = normalize(mat3(modelViewMatrix) * uSun);
+  // A face is lit on whichever side we see.
+  float facing = dot(n, v);
+  if (facing < 0.0) n = -n;
+  // Ours wait for their turn. What stood there already is always there.
+  float up = mix(1.0, clamp((uReveal - aTurn) * 400.0 + 1.0, 0.0, 1.0), aOurs);
+  float lampUp = mix(1.0, clamp((uReveal - aLampTurn) * 400.0 + 1.0, 0.0, 1.0), aOurs);
+  float sun = max(dot(n, s), 0.0) * uLit;
+  // Rock and dust don't mirror the Sun. What we made does.
+  float glint = pow(max(dot(n, normalize(s + v)), 0.0), 48.0) * uLit * (1.0 - aGhost);
+  float lamp = aLamp * lampUp * uNight;
+  // The newest work sparkles, each dot at its own beat, as welding does.
+  float spark = 0.65 + 0.35 * sin(uTime * 7.0 + fract(sin(dot(position, vec3(12.9898, 78.233, 37.719))) * 43758.5453) * 6.2832);
+  float fresh = uFresh * aOurs * clamp(1.0 - (uReveal - aTurn) / 0.03, 0.0, 1.0) * spark;
+  float a = (0.16 + 0.84 * sun) * uDim * mix(0.6, 1.0, aOurs) + 0.35 * glint + 0.45 * lamp + 0.8 * fresh;
+  // Ground we look through shows only the side that faces us.
+  if (aGhost > 0.5) a *= smoothstep(0.0, 0.2, facing);
+  vec3 c = mix(mix(uInk, uOurs, aOurs), mix(uOld, uLamp, aOurs), clamp(0.45 * lamp / max(a, 1e-4), 0.0, 1.0));
+  vColor = mix(c, uLamp, 0.6 * fresh) * (1.0 + 0.8 * glint + fresh);
+  vAlpha = a * up * uOpacity;
+  gl_PointSize = 1.8 * uDpr;
+  if (vAlpha < 0.002 || mv.z > 0.0) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+}`,
+        fragmentShader: /* glsl */ `
+varying vec3 vColor;
+varying float vAlpha;
+void main() {
+  vec2 p = gl_PointCoord * 2.0 - 1.0;
+  float r2 = dot(p, p);
+  if (r2 > 1.0) discard;
+  gl_FragColor = vec4(vColor, min(1.0, vAlpha * (1.0 - 0.5 * r2)));
+}`,
+        transparent: true,
+        depthWrite: false,
+      });
+    /** How many lights follow each craft or flash down its path, the first its head and the rest its trail. */
+    const TRAIL = 10;
+
     // Each build's model, made when first shown: its ground, what stands there already, dim, the build dashed for
     // the plan and drawn in solid as it goes up, its lights coming on with it, and once it is done, the sky it watches
     // and the light that runs from it. On Earth, the towns around show at night.
@@ -4189,7 +4343,7 @@ void main() {
       /** A place by latitude and longitude, in km east and north of this one, flat near enough. */
       const near = (la: number, lo: number) => [(lo - lon) * 111.32 * Math.cos(lat * DEG), (la - lat) * 110.57];
       const g = new THREE.Group();
-      const fieldGlow = glow({ minPx: 0.6, maxPx: 2.2 });
+      const fieldGlow = glow({ minPx: 0.6, maxPx: 2.2, depthTest: true });
       const have = [...m.have];
       let wet: ((x: number, y: number) => boolean) | undefined;
       if (m.shore) {
@@ -4204,10 +4358,65 @@ void main() {
           have.push(...at(-1.5 + k * 0.07), ...at(-1.5 + (k + 1) * 0.07));
         }
       }
-      if (on === "earth" || on === "moon") {
-        const seed = Math.round(Math.abs(lat * 1000 + lon));
-        g.add(field(on === "moon" ? 1737.4 : 6371.0084, on === "moon" ? 25 : 60, seed, wet).points(fieldGlow));
+      // The ground's dots keep out of the sea, and out of a crater or a pit, whose bowl carries dots of its own.
+      const sea = wet;
+      const clear = m.holes.length || sea
+        ? (x: number, y: number) => {
+            if (sea?.(x, y)) return true;
+            for (let i = 0; i < m.holes.length; i += 3) if ((x - m.holes[i]) ** 2 + (y - m.holes[i + 1]) ** 2 < m.holes[i + 2] ** 2) return true;
+            return false;
+          }
+        : undefined;
+      const ground = on === "earth" || on === "moon";
+      const R = on === "moon" ? 1737.4 : 6371.0084;
+      const seed = Math.round(Math.abs(lat * 1000 + lon));
+      if (ground) g.add(field(R, on === "moon" ? 25 : 60, seed, clear).points(fieldGlow));
+
+      // Faces: what hides, and the dots on them. About one dot to every two and a half pixels of face as the view
+      // first frames it, a third as many on ground we look through, and never more than a phone can draw.
+      const [az0, el0] = [m.view.az * DEG, m.view.el * DEG];
+      const look = new THREE.Vector3(Math.sin(az0) * Math.cos(el0), Math.cos(az0) * Math.cos(el0), Math.sin(el0));
+      const [wOurs, wHave, wGhost] = [weigh(m.faces, look), weigh(m.haveFaces, look), weigh(m.ghosts, look)];
+      const perKm2 = (focal / m.view.km) ** 2 / 2.4;
+      const wanted = [wHave.total * perKm2, wGhost.total * perKm2 * 0.3, wOurs.total * perKm2];
+      const fit = 48000 / Math.max(48000, wanted[0] + wanted[1] + wanted[2]);
+      const d: Dots = { pos: [], nor: [], turn: [], ours: [], ghost: [] };
+      scatter(d, m.haveFaces, null, wHave, Math.round(wanted[0] * fit), 0, 0, seed + 11);
+      scatter(d, m.ghosts, null, wGhost, Math.round(wanted[1] * fit), 0, 1, seed + 12);
+      const split = d.turn.length;
+      scatter(d, m.faces, m.faceTurns, wOurs, Math.round(wanted[2] * fit), 1, 0, seed + 13);
+      const [lampLit, lampTurn] = [new Float32Array(d.turn.length), new Float32Array(d.turn.length)];
+      lamplight(d.pos, 0, split, m.haveLights, 4, lampLit, lampTurn);
+      lamplight(d.pos, split, d.turn.length, m.lights, 5, lampLit, lampTurn);
+      const dotGeo = new THREE.BufferGeometry();
+      dotGeo.setAttribute("position", new THREE.Float32BufferAttribute(d.pos, 3));
+      dotGeo.setAttribute("normal", new THREE.Float32BufferAttribute(d.nor, 3));
+      dotGeo.setAttribute("aTurn", new THREE.Float32BufferAttribute(d.turn, 1));
+      dotGeo.setAttribute("aOurs", new THREE.Float32BufferAttribute(d.ours, 1));
+      dotGeo.setAttribute("aGhost", new THREE.Float32BufferAttribute(d.ghost, 1));
+      dotGeo.setAttribute("aLamp", new THREE.BufferAttribute(lampLit, 1));
+      dotGeo.setAttribute("aLampTurn", new THREE.BufferAttribute(lampTurn, 1));
+      const dots = new THREE.Points(dotGeo, dotMat());
+      dots.frustumCulled = false;
+      const [hideHave, hideOurs] = [hidden(m.haveFaces), hidden(m.faces)];
+
+      // By night each of our lamps near the ground lights the ground round it: a pool, in dots.
+      const pool = new Cloud();
+      if (ground) {
+        const rnd = seededRandom(seed + 14);
+        const each = Math.min(16, Math.max(2, Math.round(5000 / (m.lights.length / 5 || 1))));
+        for (let i = 0; i < m.lights.length; i += 5) {
+          const reach = m.lights[i + 3] * REACH;
+          if (m.lights[i + 2] > reach) continue;
+          for (let k = 0; k < each; k++) {
+            const [a, far] = [rnd() * 2 * Math.PI, reach * Math.sqrt(rnd())];
+            const [x, y] = [m.lights[i] + far * Math.cos(a), m.lights[i + 1] + far * Math.sin(a)];
+            if (clear?.(x, y)) continue;
+            pool.add(x, y, -(x * x + y * y) / (2 * R), m.lights[i + 3] * 0.6, 0.9 * Math.exp(-3 * (far / reach) ** 2), K.mind, m.lights[i + 4]);
+          }
+        }
       }
+      const poolGlow = additive(glow({ minPx: 0.6, maxPx: 2.2, depthTest: true }));
       const haveLines = segments(have, "ink");
       const solid = segments(m.build, "mind");
       // The plan: each line cut into dashes, about 18 m long on the ground and finer on the small builds in space.
@@ -4247,21 +4456,26 @@ void main() {
         const at = [0, ...lengths.map((l) => (sum += l) / total)];
         return { ...r, pts, at };
       });
+      // Each leaves a trail: lights behind its head, smaller and fainter the farther back.
       const runCloud = new Cloud();
-      for (const r of runs) runCloud.add(0, 0, 0, r.lands ? 6 : 4, 0, K.mind);
+      for (const r of runs) for (let j = 0; j < TRAIL; j++) runCloud.add(0, 0, 0, (r.lands ? 6 : 4) * (1 - (0.6 * j) / TRAIL), 0, K.mind);
       const runPts = runCloud.points(runGlow);
       g.add(
+        hideHave,
+        hideOurs,
         haveLines.l,
         dashed.l,
         solid.l,
         sky.l,
+        dots,
+        pool.points(poolGlow),
         lamps(m.haveLights, 4, "lamp", haveGlow),
         lamps(m.lights, 5, "mind", lightGlow),
         towns.points(townGlow),
         runPts,
       );
       place.add(g);
-      return { g, on, fieldGlow, haveLines, dashed, solid, sky, haveGlow, lightGlow, townGlow, runGlow, runs, runPts };
+      return { g, on, fieldGlow, haveLines, dashed, solid, sky, haveGlow, lightGlow, townGlow, runGlow, runs, runPts, dots, hideOurs, poolGlow };
     }
     const made = new Map<string, ReturnType<typeof model>>();
     const p0 = new THREE.Vector3();
@@ -4290,7 +4504,31 @@ void main() {
       m.townGlow.uniforms.uOpacity.value = p * (1 - day) * 0.85;
       m.dashed.mat.uniforms.uOpacity.value = p * (built >= 1 ? 0 : w.queued ? 0.8 : 0.45);
       m.solid.l.geometry.setDrawRange(0, 2 * Math.round(m.solid.n * built));
-      m.solid.mat.uniforms.uOpacity.value = 0.9 * p;
+      // The lines give a little to the dots that now carry the faces.
+      m.solid.mat.uniforms.uOpacity.value = 0.75 * p;
+      // Our faces stand once their lines are drawn: as many as have had their turn.
+      let stood = 0;
+      if (built > 0) {
+        let hi = c.faceTurns.length;
+        while (stood < hi) {
+          const mid = (stood + hi) >> 1;
+          if (c.faceTurns[mid] <= built) stood = mid + 1;
+          else hi = mid;
+        }
+      }
+      m.hideOurs.geometry.setDrawRange(0, stood * 3);
+      // The dots take the Sun as it stands over the place now. On the ground it lights them once it clears the
+      // horizon. By night the lamps do, and while the build goes up, its newest dots flash.
+      const u = (m.dots.material as THREE.ShaderMaterial).uniforms;
+      u.uSun.value.set(sunDir.dot(cEast), sunDir.dot(cNorth), sunDir.dot(cUp));
+      u.uLit.value = m.on === "earth" || m.on === "moon" ? smooth((sunDir.dot(cUp) + 0.02) / 0.12) : day;
+      u.uReveal.value = built > 0 ? built : -1;
+      u.uNight.value = 1 - 0.9 * day;
+      u.uFresh.value = built < 1 ? 1 : 0;
+      u.uTime.value = still ? 0 : clock % 3600;
+      u.uOpacity.value = p;
+      m.poolGlow.uniforms.uReveal.value = built;
+      m.poolGlow.uniforms.uOpacity.value = built > 0 ? p * (1 - day) * 0.8 : 0;
       m.lightGlow.uniforms.uReveal.value = built;
       m.lightGlow.uniforms.uOpacity.value = built > 0 ? p * (0.7 + 0.3 * beat) : 0;
       m.sky.mat.uniforms.uOpacity.value = built >= 1 ? p * 0.2 : 0;
@@ -4300,13 +4538,18 @@ void main() {
         const pos = m.runPts.geometry.attributes.position as THREE.BufferAttribute;
         const bright = m.runPts.geometry.attributes.aBright as THREE.BufferAttribute;
         m.runs.forEach((r, i) => {
-          const t = still ? 0.6 : (clock / r.secs + (r.offset ?? 0)) % 1;
-          let k = 1;
-          while (k < r.at.length - 1 && r.at[k] < t) k++;
-          const s = (t - r.at[k - 1]) / (r.at[k] - r.at[k - 1] || 1);
-          p0.lerpVectors(r.pts[k - 1], r.pts[k], s);
-          pos.setXYZ(i, p0.x, p0.y, p0.z);
-          bright.setX(i, r.lands ? t ** 3 : Math.sin(Math.PI * t) * (1 - 0.5 * t));
+          const head = still ? 0.6 : (clock / r.secs + (r.offset ?? 0)) % 1;
+          // A quick run leaves a longer trail, a slow climb a short one.
+          const gap = Math.min(0.012, Math.max(0.004, 0.045 / r.secs));
+          for (let j = 0; j < TRAIL; j++) {
+            const t = head - j * gap;
+            let k = 1;
+            while (k < r.at.length - 1 && r.at[k] < t) k++;
+            const s = Math.max(0, (t - r.at[k - 1]) / (r.at[k] - r.at[k - 1] || 1));
+            p0.lerpVectors(r.pts[k - 1], r.pts[k], s);
+            pos.setXYZ(i * TRAIL + j, p0.x, p0.y, p0.z);
+            bright.setX(i * TRAIL + j, t < 0 ? 0 : (r.lands ? t ** 3 : Math.sin(Math.PI * t) * (1 - 0.5 * t)) * (1 - j / TRAIL) ** 2);
+          }
         });
         pos.needsUpdate = bright.needsUpdate = true;
       }

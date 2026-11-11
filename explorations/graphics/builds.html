@@ -1,0 +1,993 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Builds, drawn</title>
+<!-- A one-off: three of our builds in Close View, each drawn five ways, to pick how all of them should look. The
+     Launch Complex at Kourou, the Infrared Telescope at L2 and the Mass Driver on the Moon, from the same numbers
+     as game/lib/game/close.ts. (a) is what ships. Open the file, or serve the repo root and open
+     /explorations/graphics/builds.html. 2026-11-10. -->
+<style>
+  :root { --paper: #121314; --ink: #e6e3db; --muted: #9c988f; --you: #5bb8d6; --frame: #2a2b2e; }
+  html, body { margin: 0; height: 100%; background: #0b0c0d; color: var(--ink); font: 13.5px/1.4 ui-sans-serif, system-ui, sans-serif; overflow: hidden; }
+  #stage { position: fixed; inset: 0; display: grid; place-items: center; }
+  #frame { width: 100%; height: 100%; overflow: hidden; background: var(--paper); }
+  body.phone #frame { width: 390px; height: 330px; border: 1px solid var(--frame); border-radius: 14px; }
+  canvas { display: block; }
+  .card { background: rgba(18,19,20,.78); border: 1px solid var(--frame); border-radius: 12px; backdrop-filter: blur(8px); }
+  #panel { position: fixed; top: 16px; left: 16px; padding: 12px 14px; display: grid; gap: 5px; width: 232px; }
+  h1, h2 { font: 500 11px/1 ui-monospace, monospace; letter-spacing: .1em; color: var(--muted); margin: 0 0 4px; }
+  h2 { margin-top: 10px; }
+  #panel label, #panel button { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+  #panel button { all: unset; display: flex; gap: 8px; align-items: center; cursor: pointer; padding: 3px 8px; margin: 0 -8px; border-radius: 7px; color: var(--muted); }
+  #panel button:hover { color: var(--ink); }
+  #panel button[aria-pressed="true"] { color: var(--ink); background: rgba(91,184,214,.14); box-shadow: inset 2px 0 0 var(--you); }
+  #panel input[type="checkbox"] { accent-color: var(--you); }
+  #panel input[type="range"] { flex: 1; min-width: 0; accent-color: var(--you); }
+  .k { margin-left: auto; font: 11px ui-monospace, monospace; color: var(--muted); white-space: nowrap; }
+  .w { width: 34px; }
+  #note { position: fixed; top: 16px; right: 16px; width: 280px; padding: 12px 14px; }
+  #note b { display: block; font-weight: 500; margin-bottom: 4px; }
+  #note p { margin: 0 0 6px; color: #c9c5bb; }
+  #note p:last-child { margin: 0; color: var(--muted); }
+  #cap { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); text-align: center; font: 11px/1.6 ui-monospace, monospace; letter-spacing: .1em; color: var(--muted); pointer-events: none; text-shadow: 0 0 6px #121314, 0 0 12px #121314; }
+  #cap b { display: block; font-weight: 500; color: var(--ink); }
+  #cap i { font-style: normal; color: var(--you); }
+  @media (max-width: 860px) { #note { display: none; } }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="stage"><div id="frame"></div></div>
+<div id="panel" class="card">
+  <h1>BUILDS, DRAWN</h1>
+  <div id="ex"></div>
+  <h2>APPROACH</h2>
+  <div id="ap"></div>
+  <h2>STATE</h2>
+  <label>Built <input type="range" id="built" min="0" max="100" value="100" /><span class="k w" id="builtK"></span></label>
+  <label>Sun <input type="range" id="sun" min="-12" max="60" value="12" /><span class="k w" id="sunK"></span></label>
+  <label>Dots <input type="range" id="dots" min="0" max="100" value="45" /><span class="k w" id="dotsK"></span></label>
+  <label><input type="checkbox" id="near" /> Near view <span class="k">n</span></label>
+  <label><input type="checkbox" id="turn" checked /> Turning <span class="k">space</span></label>
+  <label><input type="checkbox" id="phone" /> Phone map size <span class="k">p</span></label>
+  <label><input type="checkbox" id="plain" /> Plain ground and sky <span class="k">g</span></label>
+</div>
+<div id="note" class="card"></div>
+<div id="cap"></div>
+<script type="module">
+import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { LineSegments2 } from "three/addons/lines/LineSegments2.js";
+import { LineSegmentsGeometry } from "three/addons/lines/LineSegmentsGeometry.js";
+import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+import { MeshSurfaceSampler } from "three/addons/math/MeshSurfaceSampler.js";
+
+const DEG = Math.PI / 180;
+const FOV = 45;
+const smooth = (x) => ((x = Math.min(1, Math.max(0, x))), x * x * (3 - 2 * x));
+const ramp = (x, a, b) => Math.min(1, Math.max(0, (x - a) / (b - a)));
+const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+
+// The game's colors, as light.
+const C = {
+  bg: new THREE.Color("#121314"),
+  ink: new THREE.Color("rgb(230,227,219)"),
+  mind: new THREE.Color("rgb(91,184,214)"),
+  lamp: new THREE.Color("rgb(232,180,92)"),
+  warm: new THREE.Color("rgb(255,206,150)"),
+  sun: new THREE.Color("rgb(255,236,190)"),
+};
+
+// ── The drawing kit, as in close.ts: lines in km, x east, y north, z up ──
+const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const unit = (a) => { const l = Math.hypot(...a); return [a[0] / l, a[1] / l, a[2] / l]; };
+function across(n) {
+  const z = unit(n);
+  const u = unit(cross(Math.abs(z[2]) < 0.9 ? [0, 0, 1] : [1, 0, 0], z));
+  return [u, cross(z, u)];
+}
+function on(c, r, t, n = [0, 0, 1]) {
+  const [u, v] = across(n);
+  return [0, 1, 2].map((j) => c[j] + r * (Math.cos(t) * u[j] + Math.sin(t) * v[j]));
+}
+function circle(c, r, n = [0, 0, 1], k = 24) {
+  const out = [];
+  for (let i = 0; i < k; i++) out.push(...on(c, r, (i / k) * 2 * Math.PI, n), ...on(c, r, ((i + 1) / k) * 2 * Math.PI, n));
+  return out;
+}
+const path = (pts) => pts.slice(1).flatMap((q, i) => [...pts[i], ...q]);
+function box(x, y, w, d, h, z = 0) {
+  const [x0, x1, y0, y1] = [x - w / 2, x + w / 2, y - d / 2, y + d / 2];
+  const out = [];
+  for (const zz of [z, z + h]) out.push(x0, y0, zz, x1, y0, zz, x1, y0, zz, x1, y1, zz, x1, y1, zz, x0, y1, zz, x0, y1, zz, x0, y0, zz);
+  for (const [cx, cy] of [[x0, y0], [x1, y0], [x1, y1], [x0, y1]]) out.push(cx, cy, z, cx, cy, z + h);
+  return out;
+}
+const panel = (x, y, w, d, z = 0) => path([[x, y, z], [x + w, y, z], [x + w, y + d, z], [x, y + d, z], [x, y, z]]);
+const square = (x, y, s, z = 0) => panel(x - s / 2, y - s / 2, s, s, z);
+const stack = (x, y, h, z = 0) => [x, y, z, x, y, z + h];
+function hexagon(x, y, z, r) {
+  const pts = [];
+  for (let k = 0; k <= 6; k++) pts.push([x + r * Math.cos((k * Math.PI) / 3), y + r * Math.sin((k * Math.PI) / 3), z]);
+  return path(pts);
+}
+function seeded(seed) { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+
+// ── The same kit, as faces: what each helper would also give once builds are solid ──
+const Y = V3(0, 1, 0), Zc = V3(0, 0, 1);
+const turnTo = (geo, from, n) => geo.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(from, V3(...n).normalize()));
+const mBox = (x, y, w, d, h, z = 0) => new THREE.BoxGeometry(w, d, h).translate(x, y, z + h / 2);
+const mDisc = (c, r, t, n = [0, 0, 1], k = 32) => turnTo(new THREE.CylinderGeometry(r, r, t, k), Y, n).translate(...c);
+function mCyl(a, b, r, k = 8) {
+  const d = V3(...b).sub(V3(...a));
+  return turnTo(new THREE.CylinderGeometry(r, r, d.length(), k), Y, d.toArray()).translate((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2);
+}
+const mCone = (c, r, h) => turnTo(new THREE.ConeGeometry(r, h, 20), Y, [0, 0, 1]).translate(c[0], c[1], c[2] + h / 2);
+const mSphere = (c, r) => new THREE.SphereGeometry(r, 16, 12).translate(...c);
+const mTorus = (c, R, t, n) => turnTo(new THREE.TorusGeometry(R, t, 6, 20), Zc, n).translate(...c);
+const mHex = (x, y, z, r, t) => new THREE.CylinderGeometry(r, r, t, 6).rotateX(Math.PI / 2).rotateZ(Math.PI / 6).translate(x, y, z);
+const mShape = (pts, z, t) =>
+  new THREE.ExtrudeGeometry(new THREE.Shape(pts.map(([x, y]) => new THREE.Vector2(x, y))), { depth: t, bevelEnabled: false }).translate(0, 0, z - t / 2);
+
+/** A build as it goes up: lines in order, lights that come on with them, and the faces each line stands for. */
+class Model {
+  have = []; build = []; lights = []; haveLights = []; parts = []; haveParts = []; sky = []; runs = [];
+  add(...pts) { for (const p of pts) this.build.push(...p); return this; }
+  lit(...pts) { for (const p of pts) this.lights.push([...p, this.build.length / 6]); return this; }
+  /** A face that stands once the lines so far are drawn. */
+  solid(geo, mat) { this.parts.push({ geo, mat, at: this.build.length / 6 }); return this; }
+  old(geo, mat) { this.haveParts.push({ geo, mat }); return this; }
+  done(size) {
+    const n = this.build.length / 6;
+    for (const l of this.lights) l[3] /= n;
+    for (const p of this.parts) p.at /= n;
+    this.size = size;
+    return this;
+  }
+}
+
+// ── Launch Complex, Kourou: two pads that stand in 2040, and four of ours along the shore ──
+function launchComplex() {
+  const m = new Model();
+  const pad = (x, y, s, h) => {
+    m.have.push(...square(x, y, s));
+    m.old(mBox(x, y, s, s, 0.004, -0.002), "concrete");
+    for (const [dx, dy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+      const [px, py] = [x + (dx * s) / 2.4, y + (dy * s) / 2.4];
+      m.have.push(...stack(px, py, h));
+      m.old(mCyl([px, py, 0], [px, py, h], 0.0012), "steel");
+    }
+  };
+  pad(0.11, 0.33, 0.12, 0.08);
+  m.have.push(...box(0.11, 0.33, 0.02, 0.02, 0.01));
+  m.old(mBox(0.11, 0.33, 0.02, 0.02, 0.01), "steel");
+  pad(-2.0, 2.21, 0.15, 0.1);
+  m.have.push(...box(-1.95, 2.21, 0.03, 0.02, 0.09));
+  m.old(mBox(-1.95, 2.21, 0.03, 0.02, 0.09), "steel");
+
+  const [along, out] = [unit([-0.816, 0.578, 0]), unit([0.578, 0.816, 0])];
+  const pads = [0, 1, 2, 3].map((k) => [0.11 + 1.8 * out[0] + (k * 1.2 - 0.6) * along[0], 0.33 + 1.8 * out[1] + (k * 1.2 - 0.6) * along[1]]);
+  for (const [x, y] of pads) {
+    const [lx, ly] = [x + 0.6 * out[0], y + 0.6 * out[1]];
+    const [tx, ty] = [x - 0.15 * out[0], y - 0.15 * out[1]];
+    m.add(square(x, y, 0.12)).solid(mBox(x, y, 0.12, 0.12, 0.004, -0.002), "concrete");
+    m.add(circle([x, y, 0.01], 0.012)).solid(mDisc([x, y, 0.006], 0.012, 0.008), "dark");
+    m.add(box(x - 0.025, y, 0.012, 0.012, 0.145)).solid(mBox(x - 0.025, y, 0.012, 0.012, 0.145), "tower");
+    // Ours for the solid drawings: a rocket on its mount, 9 m wide and 85 m tall.
+    m.solid(mCyl([x, y, 0.01], [x, y, 0.08], 0.0045, 20), "rocket").solid(mCone([x, y, 0.08], 0.0045, 0.015), "rocket");
+    m.add(circle([lx, ly, 0], 0.03, [0, 0, 1], 32)).solid(mDisc([lx, ly, 0.001], 0.03, 0.004), "concrete");
+    for (const dx of [-0.02, 0, 0.02]) m.add(circle([tx + dx, ty, 0], 0.008)).solid(mSphere([tx + dx, ty, 0.008], 0.008), "steel");
+    m.lit(...[0.03, 0.06, 0.09, 0.12, 0.145].map((z) => [x - 0.025, y, z]));
+    for (let k = 0; k < 8; k++) m.lit([lx + 0.03 * Math.cos((k * Math.PI) / 4), ly + 0.03 * Math.sin((k * Math.PI) / 4), 0.001]);
+  }
+  const climbs = pads.map(([x, y]) => [[x, y, 0.15], [x, y, 2], [x + 2.5, y + 0.6, 7], [x + 10, y + 2.3, 22], [x + 30, y + 7, 55]]);
+  m.haveLights = [[0.11, 0.33, 0.012, 0.006], [-1.95, 2.21, 0.09, 0.006]];
+  m.sky = climbs.flatMap(path);
+  m.runs = climbs.map((pts, k) => ({ pts, secs: 16, offset: k * 0.25 }));
+  m.pads = pads;
+  return m.done(0.004);
+}
+
+// ── Infrared Telescope, L2: a five-layer shade, and two rings of mirror segments behind it ──
+function infraredTelescope() {
+  const m = new Model();
+  for (let k = 0; k < 5; k++) {
+    const [w, d, z] = [0.015 * (1 - 0.04 * k), 0.01 * (1 - 0.04 * k), 0.0006 * k];
+    const hex = [[w, 0], [w / 2, d], [-w / 2, d], [-w, 0], [-w / 2, -d], [w / 2, -d]];
+    m.add(path([...hex, hex[0]].map(([x, y]) => [x, y, z]))).solid(mShape(hex, z, 0.00006), k ? "shade" : "shadeHot");
+  }
+  m.add(box(0, 0, 0.004, 0.004, 0.0015, -0.0018)).solid(mBox(0, 0, 0.004, 0.004, 0.0015, -0.0018), "foil");
+  m.add([0, 0, 0.0024, 0, 0.004, 0.009]).solid(mCyl([0, 0, 0.0024], [0, 0.004, 0.0088], 0.0003), "steel");
+  const R = 0.00092;
+  const [mx, my, mz] = [0, 0.004, 0.009];
+  const step = Math.sqrt(3) * R;
+  // Ours for the solid drawings: the frame the segments sit on.
+  m.solid(mDisc([mx, my, mz - 0.0003], 0.0042, 0.0003, [0, 0, 1], 6), "dark");
+  for (let ring = 1; ring <= 2; ring++)
+    for (let k = 0; k < 6 * ring; k++) {
+      const a = (Math.floor(k / ring) * Math.PI) / 3 + Math.PI / 6;
+      const t = k % ring;
+      const [x, y] = [ring * Math.cos(a) + t * Math.cos(a + (2 * Math.PI) / 3), ring * Math.sin(a) + t * Math.sin(a + (2 * Math.PI) / 3)];
+      m.add(hexagon(mx + step * x, my + step * y, mz, R * 0.97)).solid(mHex(mx + step * x, my + step * y, mz, R * 0.97, 0.00016), "gold");
+    }
+  const top = [mx, my, mz + 0.0075];
+  m.add(hexagon(top[0], top[1], top[2], 0.0004)).solid(mHex(top[0], top[1], top[2], 0.0004, 0.00012), "gold");
+  for (let k = 0; k < 3; k++) {
+    const a = (k * 2 * Math.PI) / 3;
+    const foot = [mx + 0.0042 * Math.cos(a), my + 0.0042 * Math.sin(a), mz];
+    m.add([...foot, ...top]).solid(mCyl(foot, top, 0.00007), "dark");
+  }
+  m.lit(top, [mx, my, mz - 0.0008]);
+  m.runs = [{ pts: [[-0.03, 0.06, 0.12], [mx, my, mz], top], secs: 3, lands: true }];
+  return m.done(0.0004);
+}
+
+// ── Mass Driver, the Moon's equator: 5 km of coils, a return track, a power field, and rock thrown east ──
+function massDriver() {
+  const m = new Model();
+  const rnd = seeded(1977);
+  m.craters = [];
+  for (let k = 0; k < 16; k++) {
+    const c = [(rnd() - 0.5) * 9, (rnd() - 0.5) * 7, 0.03 + rnd() * 0.35];
+    m.craters.push(c);
+    m.have.push(...circle([c[0], c[1], 0], c[2], [0, 0, 1], 32));
+  }
+  m.add(box(-2.62, 0.02, 0.12, 0.08, 0.02)).solid(mBox(-2.62, 0.02, 0.12, 0.08, 0.02), "steel");
+  m.lit([-2.62, 0.02, 0.025]);
+  for (let i = 0; i <= 50; i++) {
+    const x = -2.5 + i * 0.1;
+    m.add(circle([x, 0, 0.012], 0.01, [1, 0, 0], 12));
+    m.solid(mTorus([x, 0, 0.012], 0.01, 0.0014, [1, 0, 0]), "coil").solid(mBox(x, 0, 0.005, 0.018, 0.003), "dark");
+    if (i % 5 === 0) m.lit([x, 0, 0.024]);
+  }
+  m.add([-2.5, 0, 0.012, 2.5, 0, 0.012], [-2.5, 0.05, 0.004, 2.5, 0.05, 0.004]);
+  m.solid(mCyl([-2.5, 0, 0.003], [2.5, 0, 0.003], 0.0012), "rail").solid(mCyl([-2.5, 0.05, 0.004], [2.5, 0.05, 0.004], 0.0012), "rail");
+  m.add(path([[2.5, 0.05, 0.004], [2.58, 0.025, 0.008], [2.5, 0, 0.012]]));
+  for (let i = 0; i < 12; i++) {
+    const [x, y] = [-2.2 + (i % 6) * 0.2, -0.5 - Math.floor(i / 6) * 0.15];
+    m.add(panel(x, y, 0.16, 0.1, 0.002)).solid(mBox(x + 0.08, y + 0.05, 0.16, 0.1, 0.002, 0.001), "solar");
+  }
+  const flight = [[-2.5, 0, 0.012], [2.5, 0, 0.012], [10, 0, 0.03], [20, 0, 0.12], [40, 0, 0.46], [60, 0, 1.04]];
+  m.sky = path(flight.slice(1));
+  m.runs = [0, 0.25, 0.5, 0.75].map((offset) => ({ pts: flight, secs: 3, offset }));
+  return m.done(0.008);
+}
+
+const EXAMPLES = {
+  launch: {
+    name: "Launch Complex", place: "Kourou, French Guiana", key: "q", on: "earth", R: 6371.0084, far: 60, lat: 5.236, lon: -52.769,
+    line: "Europe’s spaceport, 5° north of the equator. East of the pads lies open sea.",
+    view: { km: 3.6, el: 9, az: 225, at: [0, 1.6, 0] }, near: { km: 0.62, el: 6, az: 205, at: [0.661, 2.146, 0.06] },
+    sunAz: 150, sun: 12, model: launchComplex, runColor: C.warm, gap: 0.006,
+    towns: [["Kourou", 5.159, -52.65, 26000], ["Sinnamary", 5.377, -52.957, 3000], ["Cayenne", 4.922, -52.313, 60000]],
+    shore: [[5.181, -52.634], [5.399, -52.941]],
+  },
+  scope: {
+    name: "Infrared Telescope", place: "L2, 1.5 million km out", key: "w", on: "l2",
+    line: "Where Webb flies. One shade blocks the Sun, Earth and Moon, and behind it the mirror holds near 40 K.",
+    view: { km: 0.075, el: 18, az: 210, at: [0, 0.002, 0.005] }, near: { km: 0.036, el: 30, az: 160, at: [0, 0.004, 0.009] },
+    model: infraredTelescope, runColor: C.mind, gap: 0.012,
+  },
+  driver: {
+    name: "Mass Driver", place: "Lunar equator, 33° east", key: "e", on: "moon", R: 1737.4, far: 25, lat: 0, lon: 33.1,
+    line: "Where the Sea of Tranquility meets the highlands. Rock leaves at 2.4 km/s, the Moon’s escape speed.",
+    view: { km: 6, el: 10, az: 200, at: [0.4, 0, 0] }, near: { km: 0.42, el: 5, az: 256, at: [2.15, 0, 0.012] },
+    sunAz: 135, sun: 9, model: massDriver, runColor: C.ink, gap: 0.003,
+  },
+};
+
+const APPROACHES = {
+  a: { name: "As now", what: "Thin lines and lights over dotted ground. This is what ships.", takes: "Nothing." },
+  b: {
+    name: "Lines, lit", sky: 1, ground: "slate", pools: true, trail: true, width: 1.3, bloom: 0.7,
+    what: "The same drawing. Heavier lines, real ground and sea under the dots, a sky with a Sun, lamps that pool on the ground, craft that leave trails.",
+    takes: "No new models. Every build gets it at once.",
+  },
+  c: {
+    name: "Drawn solids", sky: 1, ground: "slate", pools: true, trail: true, width: 1.2, solids: "toon", bloom: 0.6,
+    what: "Faces under the lines. They hide what stands behind them, take the Sun and cast shadow. Still our drawing.",
+    takes: "Each drawing helper also gives a face, so most builds come free. A few need hand work.",
+  },
+  d: {
+    name: "Filmed", sky: 2, ground: "real", pools: true, trail: true, solids: "pbr", bloom: 0.5, noLines: true, noDots: true,
+    what: "Real materials, hard Sun, shadow, haze and exhaust. No lines once built.",
+    takes: "A real model for every build. Small parts vanish from far off, so most views must move closer. Try Near view.",
+  },
+  e: {
+    name: "Dotted solids", sky: 1, ground: "slate", trail: true, width: 1, solids: "dots", bloom: 0.55,
+    what: "Surfaces in dots, lit by the Sun, as Earth’s land is drawn. The same faces as (c), sampled into points.",
+    takes: "The same work as (c).",
+  },
+};
+
+// ── The renderer, and what every drawing shares ──
+const frame = document.getElementById("frame");
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+frame.append(renderer.domElement);
+const DPR = renderer.getPixelRatio();
+const camera = new THREE.PerspectiveCamera(FOV, 1, 0.001, 1500);
+camera.up.set(0, 0, 1);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.autoRotateSpeed = 0.35;
+controls.maxPolarAngle = Math.PI * 0.95;
+const SHARED = { px: { value: 1 }, dpr: { value: DPR } };
+
+const GLOW_VERT = /* glsl */ `
+attribute float aSize, aBright, aTurn; attribute vec3 aColor;
+uniform float uUnit, uPx, uDpr, uMinPx, uMaxPx, uReveal, uFixed;
+varying vec3 vC; varying float vA;
+void main() {
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  gl_Position = projectionMatrix * mv;
+  float px = mix(aSize * uUnit * uPx / max(1e-6, -mv.z), aSize, uFixed);
+  gl_PointSize = clamp(px, uMinPx, uMaxPx) * uDpr;
+  vA = aBright * step(aTurn, uReveal + 1e-5);
+  vC = aColor;
+}`;
+const GLOW_FRAG = /* glsl */ `
+uniform float uOpacity, uGain; varying vec3 vC; varying float vA;
+void main() {
+  vec2 p = gl_PointCoord * 2.0 - 1.0; float r2 = dot(p, p); if (r2 > 1.0) discard;
+  gl_FragColor = vec4(vC * uGain, vA * uOpacity * exp(-r2 * 2.5));
+}`;
+const glowMat = ({ minPx = 1, maxPx = 64, gain = 1, additive = false, depth = false, fixed = false, unit = 1 } = {}) =>
+  new THREE.ShaderMaterial({
+    uniforms: { uUnit: { value: unit }, uPx: SHARED.px, uDpr: SHARED.dpr, uMinPx: { value: minPx }, uMaxPx: { value: maxPx }, uReveal: { value: 1 }, uOpacity: { value: 1 }, uGain: { value: gain }, uFixed: { value: fixed ? 1 : 0 } },
+    vertexShader: GLOW_VERT, fragmentShader: GLOW_FRAG, transparent: true, depthWrite: false, depthTest: depth,
+    blending: additive ? THREE.AdditiveBlending : THREE.NormalBlending,
+  });
+class Cloud {
+  p = []; s = []; b = []; c = []; t = [];
+  add(x, y, z, size, bright, color, turn = 0) { this.p.push(x, y, z); this.s.push(size); this.b.push(bright); this.c.push(color.r, color.g, color.b); this.t.push(turn); return this; }
+  points(mat, order = 6) {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(this.p, 3));
+    g.setAttribute("aSize", new THREE.Float32BufferAttribute(this.s, 1));
+    g.setAttribute("aBright", new THREE.Float32BufferAttribute(this.b, 1));
+    g.setAttribute("aColor", new THREE.Float32BufferAttribute(this.c, 3));
+    g.setAttribute("aTurn", new THREE.Float32BufferAttribute(this.t, 1));
+    const pts = new THREE.Points(g, mat);
+    pts.frustumCulled = false;
+    pts.renderOrder = order;
+    return pts;
+  }
+}
+/** Lines of a pixel weight, whole or dashed, drawn up to a share of their length. */
+function lines(pts, { color, width = 1, opacity = 1, dash = 0, depth = false }) {
+  const g = new LineSegmentsGeometry();
+  g.setPositions(pts.length ? pts : [0, 0, 0, 0, 0, 0]);
+  const mat = new LineMaterial({ color, linewidth: width, transparent: true, opacity, dashed: dash > 0, dashSize: dash, gapSize: dash, depthTest: depth, depthWrite: false });
+  const l = new LineSegments2(g, mat);
+  if (dash) l.computeLineDistances();
+  l.frustumCulled = false;
+  l.renderOrder = 5;
+  l.userData.n = pts.length / 6;
+  l.visible = pts.length > 0;
+  return l;
+}
+const drawTo = (l, share) => { l.geometry.instanceCount = Math.round(l.userData.n * share); };
+
+// ── Ground with a real surface: land in patches, a sea past the shore, or the Moon's dust and craters ──
+const GROUND_GLSL = /* glsl */ `
+uniform float uMoon, uRelief, uSeaRough;
+uniform vec3 uLandA, uLandB, uSea, uFoam, uShore;
+uniform vec2 uOut;
+uniform vec3 uCraters[16];
+varying vec3 vP;
+float gh(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float gn(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(gh(i), gh(i + vec2(1, 0)), f.x), mix(gh(i + vec2(0, 1)), gh(i + vec2(1, 1)), f.x), f.y); }
+float gfbm(vec2 p) { float a = 0.5, s = 0.0; for (int i = 0; i < 4; i++) { s += a * gn(p); p = p * 2.03 + 17.0; a *= 0.5; } return s; }
+float bowl(float d, float r) { return r * (-0.2 * max(0.0, 1.0 - d * d) + 0.035 * exp(-(d - 1.0) * (d - 1.0) / 0.03)); }
+float pocks(vec2 p, float s) { vec2 g = floor(p / s); float h = 0.0;
+  for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) { vec2 c = g + vec2(float(i), float(j));
+    if (gh(c + 13.1) < 0.5) continue;
+    vec2 o = (c + vec2(gh(c), gh(c + 7.3))) * s; float rad = s * (0.08 + 0.3 * gh(c + 3.7));
+    h += bowl(length(p - o) / rad, rad); }
+  return h; }
+float gHeight(vec2 p) {
+  if (uMoon < 0.5) return (gfbm(p * 1.7) - 0.5) * 0.012;
+  float h = (gfbm(p * 0.9) - 0.5) * 0.05;
+  for (int i = 0; i < 16; i++) { vec3 c = uCraters[i]; if (c.z > 0.0) h += bowl(length(p - c.xy) / c.z, c.z); }
+  return h + pocks(p, 1.1) + pocks(p + 31.7, 0.33) + pocks(p + 77.7, 0.09) + (gfbm(p * 60.0) - 0.5) * 0.0012;
+}
+float seaAt(vec2 p) { return uShore.z < 0.5 ? -1.0 : dot(p - uShore.xy, uOut) + (gfbm(p * 0.4) - 0.5) * 0.9; }`;
+function groundMat(ex, real, craters, shore) {
+  const hex = (h) => new THREE.Color(h);
+  const lin = (r, g, b) => new THREE.Color().setRGB(r, g, b);
+  const moon = ex.on === "moon";
+  const U = {
+    uMoon: { value: moon ? 1 : 0 }, uRelief: { value: real ? 1 : 0.55 }, uSeaRough: { value: real ? 0.32 : 0.6 },
+    uLandA: { value: real ? (moon ? lin(0.085, 0.085, 0.08) : lin(0.018, 0.03, 0.016)) : hex(moon ? "#1a1b1d" : "#17191b") },
+    uLandB: { value: real ? (moon ? lin(0.15, 0.145, 0.14) : lin(0.055, 0.06, 0.032)) : hex(moon ? "#2a2b2e" : "#24272b") },
+    uSea: { value: real ? lin(0.006, 0.018, 0.032) : hex("#0c1217") },
+    uFoam: { value: real ? lin(0.4, 0.42, 0.42) : hex("#3d444b") },
+    uShore: { value: shore ? V3(shore.a[0], shore.a[1], 1) : V3(0, 0, 0) },
+    uOut: { value: shore ? new THREE.Vector2(...shore.out) : new THREE.Vector2(1, 0) },
+    uCraters: { value: Array.from({ length: 16 }, (_, k) => (craters?.[k] ? V3(...craters[k]) : V3(0, 0, 0))) },
+  };
+  const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, metalness: 0, polygonOffset: true, polygonOffsetFactor: 3, polygonOffsetUnits: 6 });
+  mat.onBeforeCompile = (sh) => {
+    Object.assign(sh.uniforms, U);
+    sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying vec3 vP;").replace("#include <begin_vertex>", "#include <begin_vertex>\nvP = position;");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\n" + GROUND_GLSL)
+      .replace("#include <color_fragment>", /* glsl */ `#include <color_fragment>
+        vec2 gp = vP.xy;
+        float gShore = seaAt(gp);
+        float gSea = smoothstep(0.0, 0.04, gShore);
+        float gPatch = uMoon > 0.5 ? gfbm(gp * 0.13) : 0.5 + 0.5 * sin(gp.x * 2.3 + sin(gp.y * 1.1)) * sin(gp.y * 1.9 + sin(gp.x * 0.8));
+        vec3 gLand = mix(uLandA, uLandB, gPatch) * (0.8 + 0.4 * gfbm(gp * 6.0)) * (0.6 + 0.8 * gfbm(gp * 0.7 + 40.0));
+        float gSurf = exp(-pow(gShore / 0.05, 2.0)) * step(0.5, uShore.z);
+        diffuseColor.rgb = mix(mix(gLand, uSea, gSea), uFoam, gSurf * 0.6);`)
+      .replace("#include <roughnessmap_fragment>", "#include <roughnessmap_fragment>\nroughnessFactor = mix(1.0, uSeaRough, gSea);")
+      .replace("#include <normal_fragment_maps>", /* glsl */ `#include <normal_fragment_maps>
+        { float e = 0.004; float lod = clamp(1.0 - length(fwidth(gp)) * 8.0, 0.0, 1.0);
+          vec2 gr = vec2(gHeight(gp + vec2(e, 0.0)) - gHeight(gp - vec2(e, 0.0)), gHeight(gp + vec2(0.0, e)) - gHeight(gp - vec2(0.0, e))) / (2.0 * e);
+          normal = normalize(mat3(viewMatrix) * normalize(vec3(-gr * uRelief * lod * (1.0 - gSea), 1.0))); }`);
+  };
+  return mat;
+}
+/** A disc of ground out past the horizon, falling away as the body's curve does. */
+function groundGeo(R, far) {
+  const [rings, segs] = [110, 180];
+  const pos = [0, 0, 0], idx = [];
+  for (let i = 0; i < rings; i++) {
+    const r = 0.03 * (far / 0.03) ** (i / (rings - 1));
+    for (let j = 0; j < segs; j++) { const a = (j / segs) * 2 * Math.PI; pos.push(r * Math.cos(a), r * Math.sin(a), -(r * r) / (2 * R)); }
+  }
+  for (let j = 0; j < segs; j++) idx.push(0, 1 + j, 1 + ((j + 1) % segs));
+  for (let i = 0; i < rings - 1; i++)
+    for (let j = 0; j < segs; j++) {
+      const [a, b] = [1 + i * segs + j, 1 + i * segs + ((j + 1) % segs)];
+      idx.push(a, a + segs, b + segs, a, b + segs, b);
+    }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setIndex(idx);
+  g.computeVertexNormals();
+  return g;
+}
+
+// ── A sky: slate with a horizon and a dawn on Earth, the Milky Way's band elsewhere ──
+function skyDome(kind, style) {
+  const mat = new THREE.ShaderMaterial({
+    uniforms: { uSun: { value: V3(0, 0, 1) }, uDay: { value: 1 }, uKind: { value: kind }, uStyle: { value: style }, uBg: { value: C.bg } },
+    side: THREE.BackSide, depthWrite: false, depthTest: false,
+    vertexShader: /* glsl */ `varying vec3 vD; void main() { vD = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+    fragmentShader: /* glsl */ `
+uniform vec3 uSun, uBg; uniform float uDay, uKind, uStyle; varying vec3 vD;
+void main() {
+  vec3 d = normalize(vD); float h = d.z; vec3 c = uBg;
+  if (uKind < 0.5) {
+    float hz = exp(-max(h, 0.0) * mix(10.0, 4.5, uStyle));
+    vec3 night = vec3(0.004, 0.006, 0.010), day = mix(vec3(0.016, 0.026, 0.038), vec3(0.045, 0.08, 0.135), uStyle);
+    c = mix(c, c * 0.55 + vec3(0.004, 0.012, 0.03) * uDay, uStyle);
+    c += mix(night, day, uDay) * hz;
+    float toSun = max(dot(normalize(d.xy + 1e-5), normalize(uSun.xy + 1e-5)), 0.0);
+    float low = exp(-pow(uSun.z / 0.25, 2.0));
+    c += vec3(0.75, 0.33, 0.10) * pow(toSun, 6.0) * hz * low * mix(0.25, 0.9, uStyle);
+  } else {
+    float band = exp(-pow(dot(d, normalize(vec3(0.35, 0.55, 0.76))) / 0.16, 2.0));
+    c += vec3(0.016, 0.015, 0.018) * band * (0.6 + 0.8 * uStyle);
+  }
+  gl_FragColor = vec4(c, 1.0);
+}`,
+  });
+  const m = new THREE.Mesh(new THREE.SphereGeometry(900, 48, 32), mat);
+  m.renderOrder = -10;
+  m.frustumCulled = false;
+  return m;
+}
+function stars(n, gain) {
+  const c = new Cloud();
+  const rnd = seeded(2040);
+  for (let i = 0; i < n; i++) {
+    const [u, a] = [2 * rnd() - 1, 2 * Math.PI * rnd()];
+    const s = Math.sqrt(1 - u * u);
+    c.add(800 * s * Math.cos(a), 800 * s * Math.sin(a), 800 * u, 1 + 1.6 * rnd() ** 6, (0.15 + 0.85 * rnd() ** 4) * gain, C.ink);
+  }
+  return c.points(glowMat({ fixed: true, minPx: 0.8, maxPx: 3, depth: true }), -5);
+}
+
+// ── What the faces are made of, drawn and filmed ──
+const TOON = { concrete: "#343a40", steel: "#56636f", tower: "#465865", dark: "#1f2327", rocket: "#7b8c99", gold: "#8f7d42", shade: "#5a5872", shadeHot: "#6f6288", foil: "#5c5442", solar: "#2a3c63", coil: "#70563f", rail: "#474e56" };
+const PBR = {
+  concrete: [0x85837b, 0.95, 0], steel: [0xcfd0cb, 0.45, 0.6], tower: [0x596068, 0.55, 0.7], dark: [0x202225, 0.7, 0.4], rocket: [0xe9e9e4, 0.35, 0.15],
+  gold: [0xffc45e, 0.14, 1], shade: [0xd3c6e6, 0.42, 0.55], shadeHot: [0xe6cff0, 0.36, 0.6], foil: [0xc9a55e, 0.42, 0.8], solar: [0x121c44, 0.3, 0.6], coil: [0xb87333, 0.45, 0.9], rail: [0x8b8d90, 0.62, 0.6],
+};
+const ramp3 = new THREE.DataTexture(new Uint8Array([70, 70, 70, 255, 150, 150, 150, 255, 255, 255, 255, 255]), 3, 1, THREE.RGBAFormat);
+ramp3.minFilter = ramp3.magFilter = THREE.NearestFilter;
+ramp3.needsUpdate = true;
+const OFFSET = { polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 2 };
+const matOf = (kind, name, dim = 1) => {
+  if (kind === "toon") return new THREE.MeshToonMaterial({ color: new THREE.Color(TOON[name]).multiplyScalar(dim), gradientMap: ramp3, side: THREE.DoubleSide, ...OFFSET });
+  const [color, roughness, metalness] = PBR[name];
+  return new THREE.MeshStandardMaterial({ color: new THREE.Color(color).multiplyScalar(dim), roughness, metalness, side: THREE.DoubleSide });
+};
+const HIDE = new THREE.MeshBasicMaterial({ colorWrite: false, side: THREE.DoubleSide, ...OFFSET });
+
+function areaOf(geo) {
+  const g = geo.index ? geo.toNonIndexed() : geo;
+  const p = g.attributes.position;
+  const [a, b, c] = [V3(), V3(), V3()];
+  let sum = 0;
+  for (let i = 0; i < p.count; i += 3) sum += b.fromBufferAttribute(p, i + 1).sub(a.fromBufferAttribute(p, i)).cross(c.fromBufferAttribute(p, i + 2).sub(a)).length() / 2;
+  return sum;
+}
+/** A build's faces as dots: each lit by how it faces the Sun, as the globe's land is. */
+function surfaceDots(parts, S, color, dim) {
+  const pos = [], nor = [], turn = [];
+  const [p, n] = [V3(), V3()];
+  const pxPerKm = (900 / (2 * Math.tan((FOV * DEG) / 2))) * S;
+  for (const part of parts) {
+    const count = Math.round(Math.min(9000, Math.max(70, (areaOf(part.geo) * pxPerKm * pxPerKm) / 2.0)));
+    const sampler = new MeshSurfaceSampler(new THREE.Mesh(part.geo)).build();
+    for (let i = 0; i < count; i++) {
+      sampler.sample(p, n);
+      pos.push(p.x, p.y, p.z);
+      nor.push(n.x, n.y, n.z);
+      turn.push(part.at ?? 0);
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute("normal", new THREE.Float32BufferAttribute(nor, 3));
+  g.setAttribute("aTurn", new THREE.Float32BufferAttribute(turn, 1));
+  const mat = new THREE.ShaderMaterial({
+    uniforms: { uSun: { value: V3(0, 0, 1) }, uLit: { value: 1 }, uReveal: { value: 1 }, uDpr: SHARED.dpr, uColor: { value: color }, uDim: { value: dim } },
+    transparent: true, depthWrite: false,
+    vertexShader: /* glsl */ `
+attribute float aTurn; uniform vec3 uSun; uniform float uLit, uReveal, uDpr, uDim; varying float vA;
+void main() {
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  gl_PointSize = 1.9 * uDpr;
+  vA = (0.16 + 0.84 * uLit * max(dot(normalize(normal), uSun), 0.0)) * uDim * step(aTurn, uReveal + 1e-5);
+}`,
+    fragmentShader: /* glsl */ `
+uniform vec3 uColor; varying float vA;
+void main() { vec2 p = gl_PointCoord * 2.0 - 1.0; float r2 = dot(p, p); if (r2 > 1.0) discard; gl_FragColor = vec4(uColor, vA * (1.0 - r2 * 0.5)); }`,
+  });
+  const pts = new THREE.Points(g, mat);
+  pts.frustumCulled = false;
+  pts.renderOrder = 4;
+  return pts;
+}
+
+/** What the filmed faces mirror: a dark sky, a horizon, the ground's bounce, the Milky Way and the Sun. */
+function envOf(ex, sunDir) {
+  const s = new THREE.Scene();
+  const space = ex.on !== "earth";
+  s.add(new THREE.Mesh(new THREE.SphereGeometry(50, 48, 24), new THREE.ShaderMaterial({
+    side: THREE.BackSide, uniforms: { uSun: { value: sunDir.clone() }, uSpace: { value: space ? 1 : 0 }, uMoon: { value: ex.on === "moon" ? 1 : 0 } },
+    vertexShader: `varying vec3 vD; void main() { vD = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+    fragmentShader: /* glsl */ `uniform vec3 uSun; uniform float uSpace, uMoon; varying vec3 vD;
+void main() { vec3 d = normalize(vD); float h = d.z;
+  vec3 sky = mix(vec3(0.16, 0.22, 0.3), vec3(0.02, 0.045, 0.1), pow(max(h, 0.0), 0.5));
+  vec3 c = uSpace > 0.5 ? vec3(0.03, 0.032, 0.04) + vec3(1.1, 1.0, 0.95) * exp(-pow(dot(d, normalize(vec3(0.35, 0.55, 0.76))) / 0.3, 2.0)) : sky;
+  if (h < 0.0 && uSpace < 0.5) c = vec3(0.02, 0.025, 0.02);
+  if (h < 0.0 && uMoon > 0.5) c = vec3(0.09);
+  c += vec3(40.0, 36.0, 30.0) * smoothstep(0.992, 0.998, dot(d, uSun));
+  gl_FragColor = vec4(c, 1.0); }`,
+  })));
+  const pm = new THREE.PMREMGenerator(renderer);
+  const tex = pm.fromScene(s, 0, 0.1, 100).texture;
+  pm.dispose();
+  return tex;
+}
+
+// ── One build, one way: everything it draws, and how it changes as the build goes up and the Sun moves ──
+const MODELS = {};
+function makeScene(exKey, apKey, plain) {
+  // Plain: the faces alone, on the flat slate and dots that ship, with no sky, pools or trails.
+  const ex = EXAMPLES[exKey], ap = plain ? { ...APPROACHES[apKey], sky: 0, ground: null, pools: false, trail: false } : APPROACHES[apKey];
+  const m = (MODELS[exKey] ??= ex.model());
+  const S = 1 / ex.view.km;
+  const grounded = ex.on !== "l2";
+  const scene = new THREE.Scene();
+  scene.background = C.bg;
+  const world = new THREE.Group();
+  world.scale.setScalar(S);
+  scene.add(world);
+  const near = (la, lo) => [(lo - ex.lon) * 111.32 * Math.cos(ex.lat * DEG), (la - ex.lat) * 110.57];
+  const zAt = (x, y) => (grounded ? -(x * x + y * y) / (2 * ex.R) : 0);
+  const depth = !!ap.solids;
+  const w = (ap.width ?? 1) * (apKey === "a" ? 1 : DPR);
+  const ticks = [];
+
+  // The shore, and which side is sea.
+  let shore = null;
+  if (ex.shore) {
+    const [a, b] = ex.shore.map(([la, lo]) => near(la, lo));
+    const along = unit([b[0] - a[0], b[1] - a[1], 0]);
+    shore = { a, b, out: [along[1], -along[0]] };
+  }
+  const wet = shore ? (x, y) => (shore.b[0] - shore.a[0]) * (y - shore.a[1]) - (shore.b[1] - shore.a[1]) * (x - shore.a[0]) < 0 : null;
+
+  // Sky, stars, Sun.
+  scene.add(stars(1400, apKey === "a" ? 0.5 : 0.8));
+  const dome = ap.sky ? skyDome(ex.on === "earth" ? 0 : 1, ap.sky - 1) : null;
+  if (dome) scene.add(dome);
+  const sunDot = ap.sky ? new Cloud().add(0, 0, 0, apKey === "d" ? 16 : 10, 1, C.sun).points(glowMat({ fixed: true, minPx: 1, maxPx: 40, gain: 5, additive: true, depth: true }), -4) : null;
+  if (sunDot) scene.add(sunDot);
+  if (ex.on === "earth" && ap.sky) scene.fog = new THREE.FogExp2(0x000000, 0.042 / S);
+
+  // Light, for ground and faces.
+  const sunLight = new THREE.DirectionalLight(0xffffff, 3);
+  const hemi = new THREE.HemisphereLight(0x8fa3c0, 0x1a1b1c, 0.5);
+  hemi.position.set(0, 0, 1);
+  if (ap.sky) scene.add(sunLight, sunLight.target, hemi);
+  // Behind the shade no sunlight falls. A cool fill stands in for the stars, so the cold side reads.
+  if (ex.on === "l2" && ap.sky) {
+    const fill = new THREE.DirectionalLight(0xa9bfe6, apKey === "d" ? 2.2 : 1.6);
+    fill.position.set(-0.5, -0.7, 0.8);
+    scene.add(fill);
+  }
+  if (ap.solids === "toon" || ap.solids === "pbr") {
+    const bounds = new THREE.Box3();
+    for (const p of [...m.parts, ...m.haveParts]) { p.geo.computeBoundingBox(); bounds.union(p.geo.boundingBox); }
+    const mid = bounds.getCenter(V3()).multiplyScalar(S);
+    const R = bounds.getSize(V3()).length() * 0.5 * S * 1.1;
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.set(4096, 4096);
+    Object.assign(sunLight.shadow.camera, { left: -R, right: R, top: R, bottom: -R, near: 0.01, far: R * 8 });
+    sunLight.shadow.bias = -0.0002;
+    sunLight.shadow.normalBias = R * 0.0015;
+    sunLight.userData = { mid, R };
+  }
+
+  // Ground: dots as now, and under them a surface.
+  if (grounded) {
+    if (ap.ground) {
+      const g = new THREE.Mesh(groundGeo(ex.R, 160), groundMat(ex, ap.ground === "real", m.craters, shore));
+      g.receiveShadow = true;
+      world.add(g);
+    }
+    if (!ap.noDots) {
+      const c = new Cloud();
+      const scatter = seeded(Math.round(Math.abs(ex.lat * 1000 + ex.lon)) || 7);
+      for (let i = 0; i < 26000; i++) {
+        const r = 0.06 * (ex.far / 0.06) ** scatter();
+        const a = scatter() * 2 * Math.PI;
+        const [x, y] = [r * Math.cos(a), r * Math.sin(a)];
+        if (wet?.(x, y)) continue;
+        const patch = 0.5 + 0.5 * Math.sin(x * 2.3 + Math.sin(y * 1.1)) * Math.sin(y * 1.9 + Math.sin(x * 0.8));
+        c.add(x, y, zAt(x, y) + (ap.ground ? 0.001 : 0), 0.012 * r, (0.35 + 0.65 * patch) * (1 - ramp(r, ex.far / 2, ex.far)), C.ink);
+      }
+      const mat = glowMat({ minPx: 0.6, maxPx: 2.2, unit: S, depth: !!ap.ground });
+      world.add(c.points(mat, 1));
+      const k = ap.ground ? 0.55 : 1;
+      ticks.push(({ day }) => (mat.uniforms.uOpacity.value = k * (ex.on === "moon" ? 0.18 + 0.6 * day : 0.22 + 0.45 * day)));
+    }
+  }
+  // On the Moon, Earth hangs 57° up in the west, lit by the same Sun.
+  if (ex.on === "moon" && ap.sky) {
+    const e = new THREE.Mesh(new THREE.SphereGeometry(12, 32, 24), new THREE.MeshStandardMaterial({ color: 0x3f74b0, roughness: 1, fog: false }));
+    e.position.set(-700 * Math.cos(57 * DEG), 0, 700 * Math.sin(57 * DEG));
+    scene.add(e);
+  }
+
+  // Towns, lit at night.
+  if (ex.towns) {
+    const c = new Cloud();
+    const spread = seeded(Math.round(Math.abs(ex.lat) * 1000));
+    for (const [, tLat, tLon, people] of ex.towns) {
+      const [tx, ty] = near(tLat, tLon);
+      const r = 0.6 * Math.sqrt(people / 1000);
+      for (let k = 0; k < Math.min(600, people / 60); k++) {
+        const [a, d] = [spread() * 2 * Math.PI, r * Math.sqrt(-Math.log(1 - spread() * 0.95)) * 0.6];
+        const [x, y] = [tx + d * Math.cos(a), ty + d * Math.sin(a)];
+        c.add(x, y, zAt(x, y) + 0.005, 0.02, 0.4 + 0.6 * spread(), C.lamp);
+      }
+    }
+    const mat = glowMat({ minPx: 0.8, maxPx: 3, unit: S, additive: true, depth, gain: apKey === "a" ? 1 : 1.5 });
+    world.add(c.points(mat));
+    ticks.push(({ day }) => (mat.uniforms.uOpacity.value = (1 - day) * 0.85));
+  }
+
+  // What stands there already: lines, dim. As now, the shore is one of them.
+  if (!ap.noLines) {
+    const have = [...m.have];
+    if (shore && !ap.ground)
+      for (let k = 0; k < 60; k++) {
+        const at = (t) => { const [x, y] = [shore.a[0] + (shore.b[0] - shore.a[0]) * t, shore.a[1] + (shore.b[1] - shore.a[1]) * t]; return [x, y, zAt(x, y)]; };
+        have.push(...at(-1.5 + k * 0.07), ...at(-1.5 + (k + 1) * 0.07));
+      }
+    // On a shaded Moon the craters are in the ground itself, so their rings go.
+    const l = lines(ex.on === "moon" && ap.ground ? [] : have, { color: C.ink, width: w, depth });
+    world.add(l);
+    ticks.push(({ day }) => (l.material.opacity = 0.28 + 0.14 * day));
+  }
+  {
+    const c = new Cloud();
+    for (const [x, y, z, size] of m.haveLights) c.add(x, y, z, size, 1, C.lamp);
+    const mat = glowMat({ minPx: 1, maxPx: apKey === "a" ? 3 : 5, unit: S, additive: true, depth, gain: apKey === "a" ? 1 : 1.6 });
+    world.add(c.points(mat));
+    ticks.push(({ day }) => (mat.uniforms.uOpacity.value = 0.9 - 0.6 * day));
+  }
+
+  // The plan in dashes, and the build in lines as it goes up.
+  const dash = Math.min(0.018, ex.view.km / 300);
+  const plan = lines(m.build, { color: C.ink, width: apKey === "a" ? 1 : DPR, dash, depth });
+  world.add(plan);
+  ticks.push(({ built }) => { plan.visible = built < 1; plan.material.opacity = 0.8; });
+  if (!ap.noLines) {
+    const solid = lines(m.build, { color: C.mind, width: w, opacity: ap.solids === "dots" ? 0.4 : 0.9, depth });
+    world.add(solid);
+    // With dots, the lines give way as the dots come up, and take over as they dim.
+    ticks.push(({ built, dots }) => { drawTo(solid, built); solid.visible = built > 0; if (ap.solids === "dots") solid.material.opacity = 0.9 - 0.5 * dots; });
+    const sky = lines(m.sky, { color: C.mind, width: apKey === "a" ? 1 : DPR, opacity: 0.2 });
+    world.add(sky);
+    ticks.push(({ built }) => (sky.visible = built >= 1 && m.sky.length > 0));
+  }
+
+  // Faces: drawn in flat tones, filmed in real ones, or sampled into dots.
+  if (ap.solids) {
+    const cache = {};
+    const mesh = (p, dim) => {
+      const mat = ap.solids === "dots" ? HIDE : (cache[p.mat + dim] ??= matOf(ap.solids, p.mat, dim));
+      const o = new THREE.Mesh(p.geo, mat);
+      o.castShadow = o.receiveShadow = ap.solids !== "dots";
+      world.add(o);
+      return o;
+    };
+    for (const p of m.haveParts) mesh(p, ap.solids === "toon" ? 0.6 : 0.75);
+    const ours = m.parts.map((p) => [mesh(p, 1), p.at]);
+    ticks.push(({ built }) => { for (const [o, at] of ours) o.visible = built > 0 && built >= at; });
+    if (ap.solids === "dots") {
+      const tint = C.ink.clone().lerp(C.mind, 0.3);
+      const [had, got] = [surfaceDots(m.haveParts, S, C.ink, 0.6), surfaceDots(m.parts, S, tint, 1)];
+      world.add(had, got);
+      ticks.push(({ built, sunDir, lit, dots }) => {
+        for (const d of [had, got]) { d.material.uniforms.uSun.value.copy(sunDir); d.material.uniforms.uLit.value = lit; }
+        had.material.uniforms.uDim.value = 0.6 * dots;
+        got.material.uniforms.uDim.value = dots;
+        got.material.uniforms.uReveal.value = built > 0 ? built : -1;
+      });
+    }
+    if (ap.solids === "pbr") {
+      scene.environment = envOf(ex, ex.on === "l2" ? V3(0.28, -0.14, -0.95).normalize() : V3(Math.sin(ex.sunAz * DEG), Math.cos(ex.sunAz * DEG), 0.25).normalize());
+      // Floodlights on each pad, for the night.
+      const floods = (m.pads ?? []).map(([x, y], k) => {
+        const l = new THREE.PointLight(0xfff0d8, 0, 0.45 * S);
+        l.position.set((x + 0.03) * S, (y - 0.04) * S, 0.05 * S);
+        scene.add(l);
+        return [l, (k + 1) / m.pads.length];
+      });
+      ticks.push(({ built, day }) => {
+        scene.environmentIntensity = ex.on === "l2" ? 1 : 0.08 + 0.92 * day;
+        for (const [l, at] of floods) l.intensity = built >= at ? 0.05 * (1 - day) : 0;
+      });
+    }
+  }
+
+  // Our lights, coming on as the build goes up, and the pools they throw on the ground.
+  {
+    const c = new Cloud();
+    for (const [x, y, z, turn] of m.lights) c.add(x, y, z, m.size, 1, apKey === "d" ? C.mind.clone().lerp(C.ink, 0.5) : C.mind, turn);
+    const mat = glowMat({ minPx: 1, maxPx: apKey === "a" ? 4 : 7, unit: S, additive: true, depth, gain: apKey === "a" ? 1 : 1.8 });
+    world.add(c.points(mat));
+    ticks.push(({ built }) => { mat.uniforms.uReveal.value = built; mat.uniforms.uOpacity.value = built > 0 ? 0.85 : 0; });
+    if (ap.pools && grounded) {
+      const all = [...m.lights.map(([x, y, , turn]) => [x, y, turn, 0]), ...m.haveLights.map(([x, y]) => [x, y, 0, 1])];
+      const geo = new THREE.PlaneGeometry(2, 2);
+      geo.setAttribute("aTurn", new THREE.InstancedBufferAttribute(new Float32Array(all.map((l) => l[2])), 1));
+      geo.setAttribute("aOld", new THREE.InstancedBufferAttribute(new Float32Array(all.map((l) => l[3])), 1));
+      const pm = new THREE.ShaderMaterial({
+        uniforms: { uReveal: { value: 1 }, uOpacity: { value: 1 }, uA: { value: C.mind }, uB: { value: C.lamp } },
+        transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+        vertexShader: /* glsl */ `attribute float aTurn, aOld; uniform float uReveal; varying vec2 vUv; varying float vOn, vOld;
+void main() { vUv = uv * 2.0 - 1.0; vOld = aOld; vOn = max(aOld, step(aTurn, uReveal + 1e-5) * step(1e-4, uReveal));
+  gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.0); }`,
+        fragmentShader: /* glsl */ `uniform float uOpacity; uniform vec3 uA, uB; varying vec2 vUv; varying float vOn, vOld;
+void main() { float r2 = dot(vUv, vUv); if (r2 > 1.0) discard; gl_FragColor = vec4(mix(uA, uB, vOld) * exp(-r2 * 3.5) * vOn * uOpacity, 1.0); }`,
+      });
+      const pools = new THREE.InstancedMesh(geo, pm, all.length);
+      const r = m.size * 14;
+      all.forEach(([x, y], i) => pools.setMatrixAt(i, new THREE.Matrix4().compose(V3(x, y, zAt(x, y) + 0.0045), new THREE.Quaternion(), V3(r, r, 1))));
+      pools.frustumCulled = false;
+      pools.renderOrder = 2;
+      world.add(pools);
+      ticks.push(({ built, day }) => { pm.uniforms.uReveal.value = built; pm.uniforms.uOpacity.value = 0.5 * (1 - 0.8 * day); });
+    }
+  }
+
+  // What runs once it is done: craft that climb and fade, light that falls and lands. Past (a), each leaves a trail.
+  if (m.runs.length) {
+    const N = ap.trail ? 26 : 1;
+    const runs = m.runs.map((r) => {
+      const pts = r.pts.map((p) => V3(...p));
+      const lengths = pts.slice(1).map((q, i) => q.distanceTo(pts[i]));
+      const total = lengths.reduce((s, l) => s + l, 0);
+      let sum = 0;
+      return { ...r, pts, at: [0, ...lengths.map((l) => (sum += l) / total)] };
+    });
+    const c = new Cloud();
+    for (const r of runs) for (let j = 0; j < N; j++) c.add(0, 0, 0, (r.lands ? 6 : 4) * (ap.trail ? 1.5 - j / N : 1), 0, ap.trail ? ex.runColor : C.mind);
+    const mat = glowMat({ fixed: true, minPx: 0.5, maxPx: 12, additive: true, depth, gain: ap.trail ? (apKey === "d" ? 3.5 : 2) : 1 });
+    const pts = c.points(mat, 7);
+    world.add(pts);
+    const [pos, bright] = [pts.geometry.attributes.position, pts.geometry.attributes.aBright];
+    const p0 = V3();
+    ticks.push(({ built, t }) => {
+      pts.visible = built >= 1;
+      if (!pts.visible) return;
+      runs.forEach((r, i) => {
+        const head = (t / r.secs + (r.offset ?? 0)) % 1;
+        for (let j = 0; j < N; j++) {
+          const u = head - j * ex.gap;
+          let k = 1;
+          while (k < r.at.length - 1 && r.at[k] < u) k++;
+          const s = Math.max(0, (u - r.at[k - 1]) / (r.at[k] - r.at[k - 1] || 1));
+          p0.lerpVectors(r.pts[k - 1], r.pts[k], s);
+          pos.setXYZ(i * N + j, p0.x, p0.y, p0.z);
+          bright.setX(i * N + j, u < 0 ? 0 : (r.lands ? u ** 3 : Math.sin(Math.PI * u) * (1 - 0.5 * u)) * (1 - j / N) ** 2);
+        }
+      });
+      pos.needsUpdate = bright.needsUpdate = true;
+    });
+  }
+
+  const sunDir = V3();
+  const fogDay = new THREE.Color(), fogNight = new THREE.Color();
+  return {
+    scene,
+    bloom: ap.bloom ?? 0.5,
+    tick(t, built, sunEl, dots) {
+      // At L2 the Sun stays under the shade. On the ground it stands where the slider puts it.
+      if (ex.on === "l2") sunDir.set(0.28, -0.14, -0.95).normalize();
+      else sunDir.set(Math.sin(ex.sunAz * DEG) * Math.cos(sunEl * DEG), Math.cos(ex.sunAz * DEG) * Math.cos(sunEl * DEG), Math.sin(sunEl * DEG));
+      const day = ex.on === "l2" ? 1 : smooth((sunDir.z + 0.1) / 0.35);
+      const lit = ex.on === "l2" ? 1 : smooth((sunDir.z + 0.02) / 0.12);
+      if (dome) { dome.material.uniforms.uSun.value.copy(sunDir); dome.material.uniforms.uDay.value = day; }
+      if (sunDot) sunDot.position.copy(sunDir).multiplyScalar(850);
+      if (scene.fog) {
+        const film = ap.sky - 1;
+        fogNight.setRGB(0.004, 0.006, 0.01).add(C.bg);
+        fogDay.setRGB(0.016 + 0.029 * film, 0.026 + 0.054 * film, 0.038 + 0.097 * film).add(C.bg);
+        scene.fog.color.copy(fogNight).lerp(fogDay, day);
+      }
+      const warm = ex.on === "earth" ? smooth(sunDir.z / 0.45) : 1;
+      const tint = apKey === "d" ? warm : 0.65 + 0.35 * warm;
+      sunLight.color.setRGB(1, 0.62 + 0.36 * tint, 0.38 + 0.56 * tint);
+      sunLight.intensity = 3.0 * lit;
+      const { mid, R } = sunLight.userData;
+      sunLight.target.position.copy(mid ?? V3());
+      sunLight.position.copy(sunLight.target.position).addScaledVector(sunDir, (R ?? 1) * 4);
+      // Off film, enough fill that night ground sits near the slate and shaded faces still read.
+      hemi.intensity = apKey === "d" ? (ex.on === "earth" ? 0.25 + 0.9 * day : ex.on === "moon" ? 0.22 : 0.55) : ex.on === "earth" ? 2.6 : ex.on === "moon" ? 0.9 : 1.6;
+      for (const f of ticks) f({ t, built, day, lit, sunDir, dots });
+    },
+  };
+}
+
+// ── The page: which build, which way, how far along, and where the Sun stands ──
+const state = { ex: "launch", ap: "a", built: 1, sun: 12, dots: 0.45, near: false, turn: true, phone: false, plain: false };
+const [hashEx, hashAp] = location.hash.slice(1).split("-");
+if (EXAMPLES[hashEx]) state.ex = hashEx;
+if (APPROACHES[hashAp]) state.ap = hashAp;
+const $ = (id) => document.getElementById(id);
+const scenes = new Map();
+const current = () => {
+  const plain = state.plain && state.ap !== "a";
+  const key = `${state.ex}:${state.ap}:${plain}`;
+  if (!scenes.has(key)) scenes.set(key, makeScene(state.ex, state.ap, plain));
+  return scenes.get(key);
+};
+function frameView() {
+  const ex = EXAMPLES[state.ex];
+  const v = state.near ? ex.near : ex.view;
+  const S = 1 / ex.view.km;
+  const [az, el] = [v.az * DEG, v.el * DEG];
+  controls.target.set(...v.at).multiplyScalar(S);
+  camera.position.set(Math.sin(az) * Math.cos(el), Math.cos(az) * Math.cos(el), Math.sin(el)).multiplyScalar(v.km * S).add(controls.target);
+  controls.minDistance = 0.02;
+  controls.maxDistance = 6;
+  controls.update();
+}
+function paint() {
+  const ex = EXAMPLES[state.ex], ap = APPROACHES[state.ap];
+  for (const b of document.querySelectorAll("#ex button")) b.setAttribute("aria-pressed", b.dataset.k === state.ex);
+  for (const b of document.querySelectorAll("#ap button")) b.setAttribute("aria-pressed", b.dataset.k === state.ap);
+  $("builtK").textContent = state.built >= 1 ? "done" : state.built <= 0 ? "plan" : `${Math.round(state.built * 100)}%`;
+  $("sunK").textContent = ex.on === "l2" ? "fixed" : `${state.sun}°`;
+  $("sun").disabled = ex.on === "l2";
+  $("sun").value = state.sun;
+  $("dotsK").textContent = `${Math.round(state.dots * 100)}%`;
+  $("dots").disabled = state.ap !== "e";
+  $("plain").checked = state.plain;
+  $("plain").disabled = state.ap === "a";
+  $("near").checked = state.near;
+  $("turn").checked = state.turn;
+  $("phone").checked = state.phone;
+  document.body.classList.toggle("phone", state.phone);
+  $("note").innerHTML = `<b>(${state.ap}) ${ap.name}</b><p>${ap.what}</p><p>What it takes: ${ap.takes}</p>`;
+  const how = state.built >= 1 ? "Built" : state.built <= 0 ? "Planned" : `${Math.round(state.built * 100)}% built`;
+  $("cap").innerHTML = `<b>${ex.name.toUpperCase()}</b><i>${ex.place}</i> · ${how}<br>${ex.line}`;
+  history.replaceState(null, "", `#${state.ex}-${state.ap}`);
+  resize();
+}
+const set = (patch) => {
+  const moved = (patch.ex && patch.ex !== state.ex) || "near" in patch;
+  if (patch.ex && patch.ex !== state.ex) patch.sun = EXAMPLES[patch.ex].sun ?? state.sun;
+  Object.assign(state, patch);
+  if (moved) frameView();
+  paint();
+};
+$("ex").innerHTML = Object.entries(EXAMPLES).map(([k, e]) => `<button data-k="${k}">${e.name}<span class="k">${e.key}</span></button>`).join("");
+$("ap").innerHTML = Object.entries(APPROACHES).map(([k, a], i) => `<button data-k="${k}">(${k}) ${a.name}<span class="k">${i + 1}</span></button>`).join("");
+for (const b of document.querySelectorAll("#ex button")) b.onclick = () => set({ ex: b.dataset.k });
+for (const b of document.querySelectorAll("#ap button")) b.onclick = () => set({ ap: b.dataset.k });
+$("built").oninput = (e) => set({ built: e.target.value / 100 });
+$("sun").oninput = (e) => set({ sun: Number(e.target.value) });
+$("dots").oninput = (e) => set({ dots: e.target.value / 100 });
+$("plain").onchange = (e) => set({ plain: e.target.checked });
+$("near").onchange = (e) => set({ near: e.target.checked });
+$("turn").onchange = (e) => set({ turn: e.target.checked });
+$("phone").onchange = (e) => set({ phone: e.target.checked });
+addEventListener("keydown", (e) => {
+  if (e.target.matches("input[type=range]") && e.key.startsWith("Arrow")) return;
+  const ap = Object.keys(APPROACHES)[Number(e.key) - 1];
+  const ex = Object.keys(EXAMPLES).find((k) => EXAMPLES[k].key === e.key);
+  if (ap) set({ ap });
+  else if (ex) set({ ex });
+  else if (e.key === "n") set({ near: !state.near });
+  else if (e.key === "p") set({ phone: !state.phone });
+  else if (e.key === "g") set({ plain: !state.plain });
+  else if (e.key === " ") { e.preventDefault(); set({ turn: !state.turn }); }
+});
+
+const composer = new EffectComposer(renderer);
+const pass = new RenderPass(new THREE.Scene(), camera);
+const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.5, 0.85);
+composer.addPass(pass);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+function resize() {
+  const [w, h] = [frame.clientWidth, frame.clientHeight];
+  if (!w || !h) return;
+  renderer.setSize(w, h);
+  composer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  SHARED.px.value = h / (2 * Math.tan((FOV * DEG) / 2));
+}
+addEventListener("resize", resize);
+state.sun = EXAMPLES[state.ex].sun ?? 12;
+frameView();
+paint();
+
+const clock = new THREE.Clock();
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+// A way to hold the clock, for stills: ?t=3.
+const held = new URLSearchParams(location.search).get("t");
+renderer.setAnimationLoop(() => {
+  const t = held !== null ? Number(held) : still ? 9.6 : clock.getElapsedTime();
+  const s = current();
+  s.tick(t, state.built, state.sun, state.dots);
+  pass.scene = s.scene;
+  bloom.strength = s.bloom;
+  renderer.toneMapping = state.ap === "d" ? THREE.ACESFilmicToneMapping : THREE.NoToneMapping;
+  renderer.toneMappingExposure = state.ap === "d" ? 0.8 : 1;
+  controls.autoRotate = state.turn && !still && held === null;
+  controls.update();
+  const d = camera.position.distanceTo(controls.target);
+  camera.near = Math.max(0.0002, d * 0.01);
+  camera.updateProjectionMatrix();
+  composer.render();
+});
+</script>
+</body>
+</html>
