@@ -4,7 +4,9 @@
 import { HE3, he3When, STRIKE_BUILD, STRIKE_READY, STRIKE_V } from "./meetings.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 
-/** A bullet, ours or theirs: 1,000 t at a tenth of light speed. A neighbor's is ready about 32.4 Years after it chooses to
+/** A bullet of ours: 1,000 t at a tenth of light speed, on its Fusion Drive. Another mind's lands as hard, the same
+ *  energy in a rod of a few tonnes thrown near nine tenths of light speed, since speed costs a mind with a wide beam
+ *  nothing and gives its target less time (calcs/speeds.py, 2026-11-11). A neighbor's is ready about 32.4 Years after it chooses to
  *  strike, its helium-3 harvest built and filled. Each tonne lands with 108 Mt, so it lands with about 110,000 Mt,
  *  enough to scar the air worldwide and cool the climate. Chicxulub would take over 200,000 t. The fuel to fire it is
  *  61 t of fusion fuel a tonne, 60% helium-3 from a harvest and 40% deuterium from the sea. */

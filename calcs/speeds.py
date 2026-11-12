@@ -121,15 +121,28 @@ def stay(kind, d, n=N_BETWEEN, beamed=False):
     t = trip(d, c['tonnes'], SHIP_BEAM if beamed else FUSION_BETA, n, c['front'], drive=not beamed, beamed=beamed)
     return dict(t, years=t['years'] + start_years(t['beta'], beamed))
 
+# ---------- What another mind throws ----------
+# What an old mind sends to wreck a craft or strike a world never stops, so its stopping binds nothing. Its push binds
+# nothing either: a mind with works hundreds of AU wide commands far more than the 4e17 W that drives a 10 km sail at
+# the most a sail bears, a billionth of a sun's light. So only its shield binds it. It throws a slender rod, as long as
+# our own bullet is, about 45 m of rock: a tenth of that a m2 may go to its front. Near, it flies at the 0.9 past which
+# no study follows a craft. Far, dust wears it, so it flies slower the farther it goes.
+# How hard it strikes is the sender's choice, not physics. Ours, by logic: it keeps the harm it means and sends it as
+# fast as it can, since speed costs it nothing and gives its target less time. So the same energy as a bullet of ours,
+# in a rod of a few tonnes.
+THROWN = dict(tonnes=1000.0, front=10.0)
+def thrown_beta(d): return shield_beta(d, THROWN['tonnes'], THROWN['front'])
+def their_years(d):
+    """Years for what another mind throws to cross d ly."""
+    return d / thrown_beta(d) if d > 0 else 0.0
+
 # ---------- What the game reads ----------
 # Sails of a few grams, pushed from Earth: a fifth of light speed, Starshot's.
 SAIL_BETA = 0.2
 def catalog():
-    """Each speed the game has no other source for, through calcs/export_worlds.py into game/data/works.json: what
-    another mind sends, our own bullets, and our sails. A sentinel's, a probe's and a seed ship's are calcs/seed.py's
-    and calcs/craft.py's. For now each is the fixed speed the game has flown at. The trips above replace them next."""
-    import minds
-    return dict(speeds=dict(theirs=minds.REPLY_C, bullet=FUSION_BETA, sail=SAIL_BETA,
+    """What game/lib/sim/speeds.ts needs to work each trip, through calcs/export_worlds.py into game/data/works.json:
+    our bullets' and our sails' speeds, the rod another mind throws, and what binds a craft that stops."""
+    return dict(speeds=dict(bullet=FUSION_BETA, sail=SAIL_BETA, thrown=THROWN,
                             # What a craft that stops is bound by, for game/lib/sim/speeds.ts to work each trip.
                             gas=dict(cloud=N_CLOUD, between=N_BETWEEN, inCloud=list(IN_CLOUD)),
                             sailing=dict(gros=GROS_T, stop=T_STOP, tenth=T_TENTH, covered=X_TENTH, burnPerC=BURN_PER_C, finishVe=FINISH_VE),
@@ -148,6 +161,10 @@ def golden():
                     t = stay(kind, d, n, beamed)
                     out.append(dict(kind=kind, d=d, n=n, beamed=beamed, beta=t['beta'], years=t['years'], binds=t['binds'], stopLy=t['stop_ly']))
     return out
+
+def golden_thrown():
+    """What another mind throws, near and far, for game/lib/sim/speeds.ts to reproduce."""
+    return [dict(d=d, beta=thrown_beta(d), years=their_years(d)) for d in (4.25, 29.7, 50, 150, 480, 1000, 2700, 30000)]
 
 
 def megatons(tonnes, beta): return (1 / math.sqrt(1 - beta ** 2) - 1) * tonnes * 1000 * C ** 2 / 4.184e15
@@ -180,3 +197,8 @@ if __name__ == '__main__':
             t = trip(d, 1000, push, front_m2=10, stops=False)
             print(f"  {name:48}{d:>5} ly{t['beta']:>7.2f}  bound by {t['binds']:8}{t['years']:>7,.0f} Years{megatons(1000, t['beta']):>14,.0f} Mt")
     print(f'  That wide beam is {FLUX_MAX * math.pi * 1e4 ** 2 / 4 / 3.828e26:.1e} of the Sun\'s light.')
+    print('What another mind throws, a slender rod bound only by its shield:')
+    for d in (30, 50, 150, 480, 1000, 2700):
+        b = thrown_beta(d)
+        print(f'  {d:>6} ly: {b:.2f} of light speed, {their_years(d):>7,.0f} Years, where a tenth took {d * 10:>7,}. '
+              f'For a bullet\'s {megatons(1000, 0.1):,.0f} Mt it weighs {megatons(1000, 0.1) / megatons(1, b):.1f} t.')

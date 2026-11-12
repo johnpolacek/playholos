@@ -777,7 +777,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
             : `- At ${l.star}: its word stopped at Year ${yearText(l.at)}, reaching us at Year ${yearText(l.known)}. Its last word showed nothing coming: whatever hit it came cold and fast.`).join("\n"),
       );
     if (w.struck)
-      out.push(`At Year ${yearText(w.struck.lands)} something struck Earth from beyond our system with about ${Math.round(w.struck.mt).toLocaleString("en-US")} Mt, moving near a tenth of light speed. No rock moves that fast. Nothing saw it come. It came after our seed probes' copies began launching seeds of their own.`);
+      out.push(`At Year ${yearText(w.struck.lands)} something struck Earth from beyond our system with about ${Math.round(w.struck.mt).toLocaleString("en-US")} Mt, moving at most of light’s speed. No rock moves that fast. Nothing saw it come. It came after our seed probes' copies began launching seeds of their own.`);
     if (w.by !== "its warning")
       out.push(`The Will can knock on it, with a message aimed at "the watcher". It lands within seconds, or minutes if it sits out by the Sun–Earth L4 or L5. What it does with a knock, and whether it passes word home, we can't know.`);
   }

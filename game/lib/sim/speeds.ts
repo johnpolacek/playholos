@@ -17,8 +17,6 @@ const { gas: GAS, sailing: SAIL, wear: WEAR, craft: CRAFT } = SPEEDS;
 export const SAIL_C = SPEEDS.sail;
 /** Our bullets, as a share of light speed: thrown by fusion, which holds them to a tenth. */
 export const BULLET_C = SPEEDS.bullet;
-/** What another mind sends, as a share of light speed: calcs/minds.py's REPLY_C. */
-export const THEIR_C = SPEEDS.theirs;
 
 /** The ions a craft brakes on at a star, a cm³: a warm cloud's at the few stars known to sit in one, by the winds they
  *  show, and the thinner gas between the clouds everywhere else. A pair's stars share their cloud. */
@@ -107,5 +105,9 @@ export const shipYears = (ly: number, pushed = false, star?: string) => stay("sh
 export const pushedBy = (start?: number) => start !== undefined && start < catalog.seedShip.burn;
 /** Years for a bullet of ours to land `ly` away. It never brakes. */
 export const bulletYears = (ly: number) => ly / BULLET_C;
-/** Years for what another mind sends to cross `ly`. */
-export const theirYears = (ly: number) => ly / THEIR_C;
+/** How fast another mind throws what it sends `ly`, as a share of light speed. It never stops, and a mind with works
+ *  hundreds of AU wide has push to spare, so only its shield binds it: a slender rod flies near nine tenths of light
+ *  speed close by, and slower the farther dust wears it. calcs/speeds.py's thrown_beta. */
+export const theirBeta = (ly: number) => shieldBeta(ly, SPEEDS.thrown.tonnes, SPEEDS.thrown.front);
+/** Years for what another mind throws to cross `ly`. */
+export const theirYears = (ly: number) => (ly > 0 ? ly / theirBeta(ly) : 0);

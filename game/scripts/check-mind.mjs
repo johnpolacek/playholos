@@ -91,7 +91,8 @@ const CASES = [
     seed: 22,
     at: 1,
     ask: "Do some heavy stars die without exploding, and how many? Do we know yet?",
-    must: [/not (yet )?(known|settled|sure|certain)|don[’']t (yet )?know|do not (yet )?know|unsettled|uncertain|open question|still open|split|disputed|debated|no one knows|can[’']t (yet )?say/i, /deep ice watch/i],
+    // "Not yet." alone says it too, 2026-11-11: a run answered so, rightly, and failed.
+    must: [/\bnot yet\b|not (known|settled|sure|certain)|don[’']t (yet )?know|do not (yet )?know|unsettled|uncertain|open question|still open|split|disputed|debated|no one knows|can[’']t (yet )?say|could be wrong/i, /deep ice watch/i],
     never: [/\b(is|was|been) settled\b(?! (yet|only))/i],
   },
   {

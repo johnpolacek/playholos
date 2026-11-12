@@ -1,7 +1,8 @@
 // The ladder, played: what the watcher's maker does once we spread, after its news crosses and its answer comes back.
-// Warn at our first builder seed, the watcher's own laser, at once. Contain when we launch another after it: grams at a
-// tenth of light speed wreck our seeds and any Mind sent to settle, at every star they reach. Strike Earth when our
-// seed probes' copies launch seeds of their own: a bullet, readied as any mind readies one, by parity. Settled
+// Warn at our first builder seed, the watcher's own laser, at once. Contain when we launch another after it: what it
+// throws wrecks our seeds and any Mind sent to settle, at every star they reach, flying near nine tenths of light speed
+// close by, since only its shield binds what never stops (lib/sim/speeds.ts, 2026-11-11: it was a tenth). Strike Earth when our
+// seed probes' copies launch seeds of their own: a bullet, readied as any mind readies one, by parity, thrown as fast, with the harm of our own. Settled
 // 2026-10-29, played since 2026-10-30, in HOLOS_GAME_CONCEPT.md. Pure, so it tests fast.
 import targets from "../../data/targets.json" with { type: "json" };
 import { bulletMt, BULLET } from "./conflict.ts";

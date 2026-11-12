@@ -20,7 +20,7 @@ import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ICE, deathsIn, iceBetween, iceFirsts } from "../game/natural.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
-import { gasAt, sentinelYears, shipYears, stay } from "./speeds.ts";
+import { gasAt, sentinelYears, shipYears, stay, theirBeta, theirYears } from "./speeds.ts";
 import { proximaField } from "./proxima.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
@@ -429,7 +429,9 @@ test("the realistic premise's minds: old near us, peers across the Galaxy, a wat
     assert.equal(w.maker, maker.id);
     assert.deepEqual(w.ladder.map((r) => r.rung), ["warn", "contain", "strike"]);
     assert.equal(w.ladder[0].delay, 0);
-    assert.ok(w.ladder[1].delay >= maker.d * 10);
+    // Word crosses to the maker at light speed, and what it throws comes back near it: lib/sim/speeds.ts.
+    assert.equal(w.ladder[1].delay, Math.round(maker.d + theirYears(maker.d)));
+    assert.ok(w.ladder[1].delay > 2 * maker.d && w.ladder[1].delay < 4 * maker.d);
   }
   // About 190 old minds within 326 ly a game, and about 785 peers still to shine of the Galaxy's 800 within 20,000
   // years of us, loosely.
@@ -519,7 +521,7 @@ test("the ladder: warned at our first seed, our seeds wrecked after another, and
   const one = ladderOf(world, seedProbes([{ star: "Proxima Centauri", leaves: 50 }]), null);
   assert.equal(one.warned, 50);
   assert.equal(one.lost.length, 0);
-  assert.ok(one.strike && one.strike.lands > 50 + maker.d * 10, `${one.strike?.lands}`);
+  assert.ok(one.strike && one.strike.lands > 50 + maker.d + theirYears(maker.d), `${one.strike?.lands}`);
   // Another after the warning: grams cross to every star we reached, after word reaches the maker.
   const two = ladderOf(world, seedProbes([{ star: "Proxima Centauri", leaves: 50 }, { star: "Barnard’s Star", leaves: 60 }]), null);
   assert.ok(two.lost.length >= 2);
@@ -529,12 +531,17 @@ test("the ladder: warned at our first seed, our seeds wrecked after another, and
   const settle = ladderOf(world, [], { star: "Proxima Centauri", mode: "settle", leaves: 50 });
   assert.equal(settle.warned, 50);
   assert.equal(settle.strike, null);
+  // What the maker throws flies near light speed, 2026-11-11, so from 30 ly its grams wreck our seeds before any copy
+  // leaves: containing us works, and no bullet follows. At a tenth of light speed they came too late to stop the copies.
+  assert.equal(two.strike, null);
+  assert.ok(two.lost.every((l) => l.at < 60 + maker.d + theirYears(2 * maker.d) + 60));
   // Earth learns of the strike once it lands, and of a silent seed once its word is overdue.
-  const year = two.strike!.lands + 1;
-  const w = earthKnows(world, year, { seeds: [{ star: "Proxima Centauri", leaves: 50 }, { star: "Barnard’s Star", leaves: 60 }] }).minds!.watcher!;
-  assert.equal(w.struck?.lands, two.strike!.lands);
+  const struck = one.strike!.lands;
+  assert.equal(earthKnows(world, struck + 1, { seeds: [{ star: "Proxima Centauri", leaves: 50 }] }).minds!.watcher!.struck?.lands, struck);
+  assert.equal(earthKnows(world, struck - 1, { seeds: [{ star: "Proxima Centauri", leaves: 50 }] }).minds!.watcher!.struck, undefined);
+  const w = earthKnows(world, 1000, { seeds: [{ star: "Proxima Centauri", leaves: 50 }, { star: "Barnard’s Star", leaves: 60 }] }).minds!.watcher!;
   assert.ok(w.seedsLost!.length >= 1);
-  assert.equal(earthKnows(world, two.strike!.lands - 1, { seeds: [{ star: "Proxima Centauri", leaves: 50 }] }).minds!.watcher!.struck, undefined);
+  assert.equal(w.struck, undefined);
 });
 
 test("the Solar Swarm thinks with the light it catches, doubling every 2 Years, and stops once it catches all the Sun", () => {
@@ -894,4 +901,16 @@ test("each of our craft that stops takes the Years calcs/speeds.py gives its tri
   assert.equal(stay("ship", 50, gasAt(), false).beta, catalog.speeds.fusion);
   assert.ok(stay("ship", 400, gasAt(), true).beta > 0.18 && stay("ship", 10, gasAt(), true).binds === "stopping");
   assert.equal(stay("ship", 0).years, 0);
+});
+
+test("what another mind throws flies as calcs/speeds.py has it: near nine tenths of light speed close by, slower far off", () => {
+  const thrown = (golden as unknown as { thrown: { d: number; beta: number; years: number }[] }).thrown;
+  assert.ok(thrown.length >= 8);
+  for (const g of thrown) {
+    assert.ok(Math.abs(theirBeta(g.d) - g.beta) <= 1e-9 * g.beta, `${g.d} ly: ${theirBeta(g.d)} against ${g.beta}`);
+    assert.ok(Math.abs(theirYears(g.d) - g.years) <= 1e-9 * g.years);
+  }
+  assert.equal(theirBeta(30), 0.9);
+  assert.ok(theirBeta(480) < theirBeta(150) && theirBeta(2700) < theirBeta(480));
+  assert.equal(theirYears(0), 0);
 });

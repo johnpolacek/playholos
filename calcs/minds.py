@@ -10,6 +10,7 @@ data/gcns-326ly.bin. Times are game Years, Year 0 = 2040. Every draw is keyed on
 adding a draw never moves another.
 """
 import math, random, struct, sys
+import speeds
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,7 +38,8 @@ OLDEST_GYR = 10.5                       # the thin disk's oldest stars, as calcs
 ARCHIVE_LY, ARCHIVE_W = 150, 7e19          # the nearby-star far-infrared surveys' reach and depth at 10 pc (HOLOS_RESEARCH.md)
 ALL_SKY_W = 2.7e26                         # IRAS and AKARI's floor for a 12 K grey glow 400 ly away (HOLOS_RESEARCH.md, the haystack)
 REST_AU = (30, 2000)                    # where a sleeping mind rests from its star, evenly in log (concept, way 4)
-REPLY_C = 0.1                           # what a mind sends travels at a tenth of light's speed, as our own bullets
+# What a mind throws is bound only by its shield, so it crosses the light-years as calcs/speeds.py's their_years has it:
+# near nine tenths of light speed close by, slower the farther dust wears it. 2026-11-11. It was a tenth of light speed.
 
 # The Galaxy's shape: an exponential thin disk through the Sun's neighborhood, and a bulge. This project's model,
 # as HOLOS_RESEARCH.md, star counts. The disk alone holds about 60 billion stars. Peers are counted by PEERS, so the
@@ -246,8 +248,8 @@ def watcher(seed, olds):
     return dict(place=place, rock=None if rock is None else CO_ORBITALS[rock], kg=1, relayAU=relay,
                 arrivedYearsAgo=round(log_between(r, 1e6, min(1e9, maker['age']))), maker=maker['id'],
                 ladder=[dict(rung='warn', on='our first seed launches', by='watcher', delay=0),
-                        dict(rung='contain', on='we launch another seed after the warning', by='maker', delay=round(d + d / REPLY_C)),
-                        dict(rung='strike', on='our colonies launch seeds of their own', by='maker', delay=round(d + d / REPLY_C))])
+                        dict(rung='contain', on='we launch another seed after the warning', by='maker', delay=round(d + speeds.their_years(d))),
+                        dict(rung='strike', on='our colonies launch seeds of their own', by='maker', delay=round(d + speeds.their_years(d)))])
 
 
 def draw(seed):

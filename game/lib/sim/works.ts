@@ -59,7 +59,9 @@ interface Catalog {
   hyper: { kmPerLy: number; reach: number; slew: number; cities: number };
   /** Calcs/speeds.py: each craft's speed with no other source, as a share of light speed. 2026-11-11. */
   speeds: {
-    theirs: number; bullet: number; sail: number;
+    bullet: number; sail: number;
+    /** The rod another mind throws, for its shield: tonnes, and its front in m². */
+    thrown: { tonnes: number; front: number };
     /** What binds a craft that stops, for lib/sim/speeds.ts: the gas it brakes on, in a warm cloud and between, and the
      *  stars known to sit in one. The magnetic sail's relation and its finishing burn. Dust, the range of protons in
      *  graphite by speed, and the share of a craft its shield may weigh. A Fusion Drive's speed, the Ship Beam's, and

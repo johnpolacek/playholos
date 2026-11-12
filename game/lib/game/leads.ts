@@ -1157,7 +1157,7 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       at: tenths(w.struck.lands),
       by: "Earth",
       title: "Struck from beyond",
-      line: `Something struck Earth with about ${Math.round(w.struck.mt).toLocaleString("en-US")} Mt, moving near a tenth of light speed. No rock moves that fast, and nothing saw it come.`,
+      line: `Something struck Earth with about ${Math.round(w.struck.mt).toLocaleString("en-US")} Mt, moving at most of light’s speed. No rock moves that fast, and nothing saw it come.`,
       // Never who sent it: nothing we saw says. Playtest 2026-11-01.
       mind: "It came after our seed probes’ copies began launching seeds of their own. Nothing we saw says who sent it. Its timing reads as an answer to our growth, from far off, long after we started it.",
       now: made,
