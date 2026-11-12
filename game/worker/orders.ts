@@ -63,7 +63,11 @@ export function readLenses(l: unknown): Ordered[] {
 export const readSentinels = readLenses;
 export const readCloseReads = readLenses;
 export const readSeeds = readLenses;
-export const readStrikes = readLenses;
+// Our bullets, with how far each star is, so the Mind can say when each lands. 2026-11-12.
+export function readStrikes(l: unknown): (Ordered & { d?: number })[] {
+  const far = new Map(Array.isArray(l) ? l.filter((o) => !!o && typeof o.name === "string" && typeof o.d === "number" && Number.isFinite(o.d) && o.d > 0).map((o) => [o.name as string, o.d as number]) : []);
+  return readLenses(l).map((o) => (far.has(o.name) ? { ...o, d: far.get(o.name) } : o));
+}
 
 // Sails and flyby probes we sent past a star, from the save. Checked, one of each a star, at most 128, since a probe can
 // go to every warm glow at once. 2026-11-05.

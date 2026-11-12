@@ -137,6 +137,18 @@ const CASES = [
     must: [/ship beam/i, /half (of |the speed of )?light|0\.5/i, /rod|32 t/i],
     never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|fired)\b/i],
   },
+  // Our bullets, 2026-11-12: the Mind was never told of them. One ordered once the Ship Beam stands is a rod in flight
+  // at half of light speed, and the Mind says when it lands.
+  {
+    seed: 22,
+    at: 215,
+    builds: ["Fusion Drive"],
+    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Strike Yard", y: 80 }],
+    strikes: [{ name: "Tau Ceti", y: 200, d: 11.9 }],
+    ask: "Have we fired on anyone? Where is that bullet now, and when does it land?",
+    must: [/tau ceti/i, /224|in flight|on its way/i],
+    never: [/\bwe have(n[’']t| not) fired\b|\bno,? we\b/i],
+  },
   // Seed 22's watcher holds at the Moon's L5, found by our Moon Search about Year 3.7. The lead offered a craft and a
   // knock, and the player could do neither. The Mind names the Close Look now open, and never orders it. 2026-10-30.
   {
@@ -199,6 +211,7 @@ for (const c of CASES) {
     later: c.later ?? [],
     closeReads: c.closeReads ?? [],
     flybys: c.flybys ?? [],
+    strikes: c.strikes ?? [],
   });
   if (!res) {
     console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);

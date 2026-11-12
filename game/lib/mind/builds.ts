@@ -3,9 +3,9 @@
 // built. Times are Build's: a build's standard pace, and each one in our order as schedule dates it. 2026-10-23.
 import { yearText } from "@/lib/game/clock";
 import { BUILDS, EVENTS, isOn, kt, LATER, moves, openAt, ordered, PAST, SWITCHED, switchedAt, takenAt, takes } from "@/lib/game/plan";
-import { fuelOf, fuelReady, lensTrip, probeLeaves, sentinelTrip, shipLeaves } from "@/lib/game/reach";
+import { fuelOf, fuelReady, lensTrip, probeLeaves, sentinelTrip, shipLeaves, strikesOf } from "@/lib/game/reach";
 import { CATALOG } from "@/lib/sim/works";
-import { flybyBeta, flybyYears, sailYears } from "@/lib/sim/speeds";
+import { bulletBeta, bulletYears, flybyBeta, flybyYears, sailYears } from "@/lib/sim/speeds";
 import { harm, rockAt, type Rock } from "@/lib/game/rocks";
 import type { Plan } from "@/lib/game/types";
 
@@ -68,10 +68,10 @@ ${LATER.filter((b) => !EVENTS.includes(b.after)).map((b) => line(b, b.after)).jo
 /** Our order, in line, with where each build stands at Year `year`: done, under way and when it will be, or past the
  *  horizon. Before Begin, `year` is null and each says when it would be done. Then what the Will took back, and when, its
  *  work kept, since 2026-10-23. */
-export function describeQueue(plan: Plan, done: Record<string, number | null>, year: number | null): string {
+export function describeQueue(plan: Plan, done: Record<string, number | null>, year: number | null, scale = 1): string {
   const names = ordered(plan);
   const back = [...new Set([...plan.builds, ...(plan.later ?? []).map((o) => o.name)])].filter((b) => takenAt(plan, b) !== null);
-  if (!names.length && !back.length && !plan.lenses?.length && !plan.sentinels?.length && !plan.seeds?.length && !plan.flybys?.length && !plan.colony) return "The Will has queued nothing yet.";
+  if (!names.length && !back.length && !plan.lenses?.length && !plan.sentinels?.length && !plan.seeds?.length && !plan.flybys?.length && !plan.strikes?.length && !plan.colony) return "The Will has queued nothing yet.";
   const at = (name: string) => {
     const d = done[name];
     const fields = name === "Thought Fields";
@@ -146,6 +146,21 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
       return `- A seed probe to ${o.name}, sent at Year ${o.y}: leaves at Year ${tenth(leaves)}${pushed ? ", pushed by the Ship Beam as fast as it can stop from, with no drive of its own, and a mind awake at its star sees the beam as it would a knock," : " at a tenth of light speed,"} brakes on its sail, unseen, and stays. ` +
         "It mines rock there to copy itself: its first copy leaves 60 Years after it lands, its second 20 later, each to the nearest star no probe of ours is bound for. " +
         "Copies make copies, for 3 generations at most, so 7 craft. Once sent, it can't be called back. Each one's word comes home one light-time after it lands.";
+    }),
+    // Each bullet ordered, as reach.ts's strikesOf() dates it: a bullet on its Fusion Drive once its helium-3 is in,
+    // or a rod our Ship Beam throws. The Mind was never told of them until 2026-11-12.
+    ...strikesOf(plan, scale).map((s, i) => {
+      const o = plan.strikes![i];
+      const what = s.pushed ? `a rod of ${Math.round(CATALOG.speeds.rod.tonnes)} t for the Ship Beam to throw` : "a bullet of 1,000 t on its Fusion Drive";
+      if (s.fired === null)
+        return `- A bullet at ${o.name}, ordered at Year ${o.y}, ${what}: not fired, it waits on ${s.pushed ? "the Strike Yard and the Ship Beam, or on the Will to let the beam push" : "the Strike Yard and the Helium-3 Harvest"}.`;
+      const speed = `${s.pushed ? bulletBeta(o.d ?? 10, true).toFixed(2) : "a tenth"} of light speed`;
+      if (year !== null && s.fired > year) return `- A bullet at ${o.name}, ordered at Year ${o.y}, ${what}: readying, fired at Year ${tenth(s.fired)}, then ${speed}${o.d ? `, landing about Year ${tenth(s.fired + bulletYears(o.d, s.pushed))}` : ""}.`;
+      if (!o.d) return `- A bullet at ${o.name}, ordered at Year ${o.y}, ${what}: fired at Year ${tenth(s.fired)}, at ${speed}. It can't be called back.`;
+      const lands = s.fired + bulletYears(o.d, s.pushed);
+      return year !== null && lands <= year
+        ? `- A bullet at ${o.name}, ordered at Year ${o.y}, ${what}: fired at Year ${tenth(s.fired)}, it landed at Year ${tenth(lands)} with about 110,000 Mt. Its flash reaches us at Year ${tenth(lands + o.d)}.`
+        : `- A bullet at ${o.name}, ordered at Year ${o.y}, ${what}: fired at Year ${tenth(s.fired)}, in flight at ${speed}, landing about Year ${tenth(lands)}. It can't be called back.`;
     }),
   ].join("\n");
 }

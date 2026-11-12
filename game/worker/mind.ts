@@ -209,7 +209,7 @@ export async function mind(req: Request) {
     leads: earthLeads(inPool(seed) ? proximaSeen(seed) : undefined),
     scan: describeLeads(readObserve(observe), at, inPool(seed) ? proximaSeen(seed) : undefined),
     builds: describeBuilds(),
-    queue: describeQueue(plan, done, year),
+    queue: describeQueue(plan, done, year, scale),
     offers: describeOffers(plan, scale, { ...done, [FOUND]: inPool(seed) ? (rockOf(seed)?.found ?? null) : null, [WATCHED]: watched }, year),
     // A far warm glow's range, by Scan's name for it, so the Mind dates a message there by the range we know.
     sent: describeSent(readSent(sent), year, Object.fromEntries((view?.minds?.flashes ?? []).flatMap((f, i) => (f.range ? [[`Warm glow ${i + 1}`, f.range]] : [])))),
