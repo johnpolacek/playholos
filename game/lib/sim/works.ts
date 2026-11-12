@@ -80,6 +80,11 @@ interface Catalog {
     /** Who sees a launch beam: how fast a star crosses our sky, in km/s, and how far an awake old mind's works reach
      *  from its star, in AU, where a plate stays at its glow's 12 K. */
     seen: { kms: number; worksAU: number };
+    /** The Wide Beam, the Ship Beam in stepped colors from a patch ten times as wide: its colors in microns, the most
+     *  its sail's mirror reflects as a share of light speed, its sail in tonnes, how far its last color holds its
+     *  spot in ly, and what it throws: a flyby probe at the most its work gives, and a rod as another mind's, with
+     *  the days and the Years its push costs near us. 2026-11-12. */
+    wide: { colors: number[]; most: number; sail: number; reach: number; probe: { beam: number; days: number; lost: number }; rod: { beam: number; days: number; lost: number } };
   };
   /** Calcs/senses.py: our Far-Side Array hearing worlds' magnetic fields. The shares of worlds with one, among those
    *  that kept their air and those that did not, how far it hears, how bright a world's radio is (Proxima b's `flux0`
@@ -118,7 +123,7 @@ export const giftTimes = (steps: number) => STEP ** steps;
 /** Works a woken backup can still build: what is joined in orbit, and what stands on the Moon or among the rocks. All
  *  else is on Earth, and is lost with it, data centers too. 2026-10-28. */
 const OFF_EARTH = new Set(["Moon vault", "Orbital yard", "Mass driver", "Belt mining", "Far-side array, one fifth", "Power from orbit", "Cold annex", "Cold halo",
-  "Mercury works", "Solar swarm", "Star beam", "Ship beam"]);
+  "Mercury works", "Solar swarm", "Star beam", "Ship beam", "Wide beam"]);
 export const offEarth = (w: string) => OFF_EARTH.has(w) || WORKS[w]?.orbit === true;
 
 /** The most doublings a growing work counts, so its thought stays a number. */

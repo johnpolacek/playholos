@@ -223,6 +223,57 @@ def rod_years(d):
 def their_tonnes(d): return BULLET_TONNES * _energy(FUSION_BETA) / _energy(thrown_beta(d))
 def their_ready(d): return ROD_READY * their_tonnes(d) / ROD_TONNES
 
+# ---------- The Wide Beam: what it throws ----------
+# calcs/mercury.py has the beam. Each color can push from the speed at which the sail sees it inside the mirror's
+# band, and the beam uses the bluest it can, since a bluer beam holds its spot farther. The last color leaves the band
+# at 0.90 of light speed: the mirror's most.
+def _stretch(beta): return math.sqrt((1 + beta) / (1 - beta))
+def _speed(stretch): return (stretch ** 2 - 1) / (stretch ** 2 + 1)
+WIDE_FROM = [0.0] + [_speed(mercury.WIDE_COLORS[0] / c) for c in mercury.WIDE_COLORS[1:]]
+WIDE_MOST = _speed(mercury.WIDE_COLORS[0] * mercury.MIRROR_STRETCH / mercury.WIDE_COLORS[-1])
+WIDE_REACH = [mercury.WIDE_BEAM_M * mercury.SHIP_SAIL_M / (2.44 * c) for c in mercury.WIDE_COLORS]
+# Each color is still inside the band when the next takes over.
+assert all(mercury.WIDE_COLORS[i] * _stretch(WIDE_FROM[i + 1]) < mercury.WIDE_COLORS[0] * mercury.MIRROR_STRETCH for i in range(len(WIDE_FROM) - 1))
+def wide_beta(kg):
+    """The speed the Wide Beam gives a mass: pushed while its spot is whole on the sail, in the bluest color the
+    mirror reflects at each speed, and no faster than the mirror's most."""
+    unit = kg * C ** 3 / (2 * BEAM_W)                        # metres pushed, for each unit of _pushed
+    steps = WIDE_FROM[1:] + [WIDE_MOST]
+    for i, until in enumerate(steps):
+        if _pushed(until) * unit <= WIDE_REACH[i]: continue
+        lo, hi = WIDE_FROM[i], until
+        for _ in range(60):
+            mid = (lo + hi) / 2
+            lo, hi = (mid, hi) if _pushed(mid) * unit < WIDE_REACH[i] else (lo, mid)
+        return lo
+    return WIDE_MOST
+# A flyby probe: the beam's work binds it, under the mirror's most and under its shield's near us.
+_WIDE_PROBE_KG = PROBE['tonnes'] * 1e3 + mercury.WIDE_SAIL_KG
+WIDE_PROBE = wide_beta(_WIDE_PROBE_KG)
+WIDE_PROBE_DAYS, _WIDE_PROBE_M = _push(WIDE_PROBE, _WIDE_PROBE_KG)
+WIDE_PROBE_LOST = WIDE_PROBE_DAYS / 365.25 - _WIDE_PROBE_M / (WIDE_PROBE * C) / YEAR
+def wide_probe_beta(d): return min(WIDE_PROBE, shield_beta(d, PROBE['tonnes'], PROBE['front']))
+def wide_probe_years(d):
+    """Years for a flyby probe the Wide Beam threw to pass a star d ly away."""
+    if d <= 0: return 0.0
+    b = wide_probe_beta(d)
+    return d / b + WIDE_PROBE_LOST * b / WIDE_PROBE
+# A rod: its shield binds it, as it binds what another mind throws, so it is that rod. The same harm, the same speed,
+# the same mass, readied as fast. The beam's work never binds one: checked near and far.
+def wide_rod_beta(d): return min(WIDE_MOST, thrown_beta(d))
+def wide_rod_tonnes(d): return BULLET_TONNES * _energy(FUSION_BETA) / _energy(wide_rod_beta(d))
+assert all(wide_beta(wide_rod_tonnes(d) * 1e3 + mercury.WIDE_SAIL_KG) >= wide_rod_beta(d) for d in (4.25, 50, 400, 2700, 30000))
+_WIDE_ROD_KG = wide_rod_tonnes(10) * 1e3 + mercury.WIDE_SAIL_KG
+WIDE_ROD = wide_rod_beta(10)
+WIDE_ROD_DAYS, _WIDE_ROD_M = _push(WIDE_ROD, _WIDE_ROD_KG)
+WIDE_ROD_LOST = WIDE_ROD_DAYS / 365.25 - _WIDE_ROD_M / (WIDE_ROD * C) / YEAR
+def wide_rod_ready(d): return ROD_READY * wide_rod_tonnes(d) / ROD_TONNES
+def wide_rod_years(d):
+    """Years for a rod our Wide Beam threw to land d ly away."""
+    if d <= 0: return 0.0
+    b = wide_rod_beta(d)
+    return d / b + WIDE_ROD_LOST * b / WIDE_ROD
+
 # ---------- Who sees a launch beam ----------
 # A craft is aimed where its star will be when it lands, and its beam points along its path. The beam's light gets
 # there in d Years and the craft in d / beta, and the star moves on in between. So the beam passes the star as it then
@@ -262,7 +313,14 @@ def catalog():
                             rod=dict(tonnes=ROD_TONNES, beam=ROD_BEAM, days=round(ROD_BEAM_DAYS), lost=ROD_BEAM_LOST, ready=ROD_READY),
                             # Who sees a launch beam: how fast a star crosses our sky, in km/s, and how far an awake
                             # old mind's works reach from its star, in AU.
-                            seen=dict(kms=DRIFT_KMS, worksAU=WORKS_AU)))
+                            seen=dict(kms=DRIFT_KMS, worksAU=WORKS_AU),
+                            # The Wide Beam: its colors in microns, the mirror's most, its sail in tonnes, how far
+                            # its last color holds its spot in ly, and what it throws: a flyby probe at the most its
+                            # work gives, and a rod as another mind's, with its push near us.
+                            wide=dict(colors=[round(c * 1e6, 2) for c in mercury.WIDE_COLORS], most=WIDE_MOST, sail=mercury.WIDE_SAIL_KG / 1e3,
+                                      reach=WIDE_REACH[-1] / LY,
+                                      probe=dict(beam=WIDE_PROBE, days=round(WIDE_PROBE_DAYS), lost=WIDE_PROBE_LOST),
+                                      rod=dict(beam=WIDE_ROD, days=round(WIDE_ROD_DAYS), lost=WIDE_ROD_LOST))))
 
 def golden():
     """Trips for game/lib/sim/speeds.ts to reproduce: each craft, far and near, in a cloud and between, on its drive
@@ -290,6 +348,11 @@ def golden_rods():
     """Rods the Ship Beam throws in place of bullets, near and far, for game/lib/sim/speeds.ts to reproduce."""
     return [dict(d=d, beta=rod_beta(d), years=rod_years(d)) for d in (4.25, 10.5, 50, 400, 1000, 2700, 30000)]
 
+
+def golden_wide():
+    """What the Wide Beam throws, near and far: a flyby probe and a rod, for game/lib/sim/speeds.ts to reproduce."""
+    return [dict(d=d, probe=wide_probe_beta(d), probeYears=wide_probe_years(d), rod=wide_rod_beta(d), rodYears=wide_rod_years(d),
+                 tonnes=wide_rod_tonnes(d), ready=wide_rod_ready(d)) for d in (4.25, 10.5, 50, 120, 400, 1000, 2700, 30000)]
 
 def golden_misses():
     """How far a launch beam passes from its star, and whether an awake old mind there sees it, for each craft a beam
@@ -354,3 +417,10 @@ if __name__ == '__main__':
     for name, b in (('Sails', SAIL_BETA), ('A seed ship', SHIP_BEAM), ('A flyby probe', PROBE_BEAM), ('A rod', ROD_BEAM)):
         print(f'  {name:14} at {b:.2f} of light speed: its beam passes {beam_miss(4.2465, b):>4.0f} AU from Proxima, {beam_miss(2700, b) * AU / LY:.2f} ly from a star 2,700 ly off. '
               f'Seen within {seen_within(b):.0f} ly at a Sun, {seen_within(b, 0.17):.0f} at a star of 0.17 Suns, {seen_within(b, 0.009):.1f} at a red dwarf of 0.009.')
+    print(f'The Wide Beam: {mercury.WIDE_BEAM_M / 1e3:,.0f} km of swarm, {len(mercury.WIDE_COLORS)} colors, a sail of {mercury.WIDE_SAIL_KG / 1e3:.1f} t. Each color pushes from '
+          + ', '.join(f'{b:.2f}' for b in WIDE_FROM) + f' of light speed, and the mirror\'s most is {WIDE_MOST:.3f}. Its spot holds to '
+          + ', '.join(f'{r / 1.495978707e11:,.0f}' for r in WIDE_REACH) + f' AU, the last {WIDE_REACH[-1] / LY:.2f} ly.')
+    print(f'  A flyby probe: {WIDE_PROBE:.3f} of light speed in {WIDE_PROBE_DAYS:.0f} days, ending {_WIDE_PROBE_M / 1.495978707e11:,.0f} AU out. Proxima in {wide_probe_years(4.2465):.1f} Years.')
+    print(f'  A rod near us: {wide_rod_tonnes(10):.2f} t at {WIDE_ROD:.2f} of light speed in {WIDE_ROD_DAYS:.0f} days, ending {_WIDE_ROD_M / 1.495978707e11:,.0f} AU out, '
+          f'at {WIDE_ROD * C / (WIDE_ROD_DAYS * 86400) / 9.81:.1f} g on average, readied in {wide_rod_ready(10) * 365.25:.0f} days. 10 ly in {wide_rod_years(10):.1f} Years.')
+    print(f'  A seed ship of 1,500 t: {wide_beta(1.5e6 + mercury.WIDE_SAIL_KG):.3f} of light speed, were it to ride it. The swarm grows {mercury.WIDE_BEAM_DOUBLINGS:.1f} doublings more, {mercury.WIDE_BEAM_YEARS} Years.')

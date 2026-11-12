@@ -38,7 +38,7 @@ import {
   toward,
   willRoad,
 } from "@/lib/game/reach";
-import { beamMiss, beamSeen, worksAU } from "@/lib/sim/speeds";
+import { beamMiss, beamSeen, rodReady, rodTonnes, worksAU } from "@/lib/sim/speeds";
 import { CATALOG } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -491,7 +491,7 @@ export function DestinationPage({ slug }: { slug: string }) {
               i={k}
               to={to}
               name={road.name}
-              line={k && road.push ? `A probe built in orbit in 12 Years, with no engine and no fuel. The Ship Beam throws it on a sail a kilometer wide: ${CATALOG.speeds.probe.days} days of push to ${road.speed.toFixed(2)} of light speed, and it flies past.${beamLine(ly, road.speed, lead?.lum)}` : `${WHAT[road.build]}${k ? "" : beamLine(ly, road.speed, lead?.lum)}`}
+              line={k && road.push ? `A probe built in orbit in 12 Years, with no engine and no fuel. The ${road.push} throws it on a sail a kilometer wide${road.push === "Wide Beam" ? `, stepping through four colors: up to ${CATALOG.speeds.wide.probe.days}` : `: ${CATALOG.speeds.probe.days}`} days of push to ${road.speed.toFixed(2)} of light speed, and it flies past.${beamLine(ly, road.speed, lead?.lum)}` : `${WHAT[road.build]}${k ? "" : beamLine(ly, road.speed, lead?.lum)}`}
               needs={[road.build]}
               have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
               can={!queues && inOrder(road.build)}
@@ -616,10 +616,14 @@ export function DestinationPage({ slug }: { slug: string }) {
             name="A bullet, fired here"
             line={
               bullet.push
-                ? `A rod of ${Math.round(CATALOG.speeds.rod.tonnes)} t with no engine, readied in about ${Math.round(CATALOG.speeds.rod.ready * 12)} months. The Ship Beam throws it: ${CATALOG.speeds.rod.days} days of push to ${bullet.speed.toFixed(2)} of light speed, with no helium-3. It lands as hard as a bullet, with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled.${beamLine(ly, bullet.speed, lead?.lum)}`
+                ? `${
+                    bullet.push === "Wide Beam"
+                      ? `A rod of ${rodTonnes(ly, "wide").toFixed(1)} t with no engine, readied in about ${Math.round(rodReady(ly, "wide") * 365.25)} days. The Wide Beam throws it, stepping through four colors: ${CATALOG.speeds.wide.rod.days}`
+                      : `A rod of ${Math.round(CATALOG.speeds.rod.tonnes)} t with no engine, readied in about ${Math.round(CATALOG.speeds.rod.ready * 12)} months. The Ship Beam throws it: ${CATALOG.speeds.rod.days}`
+                  } days of push to ${bullet.speed.toFixed(2)} of light speed, with no helium-3. It lands as hard as a bullet, with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled.${beamLine(ly, bullet.speed, lead?.lum)}`
                 : WHAT.strike
             }
-            needs={bullet.push ? ["Strike Yard", "Ship Beam"] : ["Strike Yard", "Helium-3 Harvest"]}
+            needs={bullet.push ? ["Strike Yard", bullet.push] : ["Strike Yard", "Helium-3 Harvest"]}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Ordered only in play, once the Strike Yard is in our order. One a star, and never taken back.
             can={!before && inOrder("Strike Yard")}

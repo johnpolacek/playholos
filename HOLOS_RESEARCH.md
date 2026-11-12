@@ -3216,7 +3216,8 @@ A research agent read these for one question: what lets a beam throw a sail well
 - **Heat.** Kare 2002, page 11: the light a film can take is its emissivity times σT⁴ over the share it absorbs. The agent’s arithmetic at 1.3 GW a m²: a film at 500 K may absorb under 3 parts in a million. A micron of silicon at 1.06 microns absorbs about a thousandth.
 - **Dust during the push.** [Jaffe et al. 2023](https://arxiv.org/abs/2303.14165) · Published, Nano Letters 23, 6852, abstract and introduction read: one absorbing grain “can initiate a thermal-runaway process” in a silicon and glass sail. Not modeled here.
 - Why it matters: our Ship Beam’s light was 1.06 microns on a mirror holding silicon, which the absorption figures contradict.
-- Used, 2026-11-12: the swarm’s beams lase at 1.55 microns, on a mirror of silicon and calcium fluoride. `calcs/mercury.py` `BEAM_LAM` and `MIRROR_N`, [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). A seed ship leaves at 0.145 of light speed, not 0.17, a flyby probe at 0.37, not 0.42, and a rod of 30 t at 0.52. The stepped colors are not yet built.
+- Used, 2026-11-12: the swarm’s beams lase at 1.55 microns, on a mirror of silicon and calcium fluoride. `calcs/mercury.py` `BEAM_LAM` and `MIRROR_N`, [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). A seed ship leaves at 0.145 of light speed, not 0.17, a flyby probe at 0.37, not 0.42, and a rod of 30 t at 0.52.
+- Used, the same day: the Wide Beam, Kare’s chain of fixed colors carried to nine tenths of light speed, from a patch of the swarm ten times as wide. `calcs/mercury.py` `WIDE_COLORS`, `calcs/speeds.py` `wide_beta`. The four colors, and that the chain holds past a tenth of light speed, are this project’s, by logic: each color is one of the efficient kinds above, and each lands inside the mirror’s band when it takes over.
 
 ## Watch list
 

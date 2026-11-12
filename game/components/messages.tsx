@@ -11,7 +11,7 @@ import { dates, target } from "@/lib/game/sends";
 import type { Sent } from "@/lib/game/types";
 import { useSchedule } from "@/components/picks";
 import { strikesOf } from "@/lib/game/reach";
-import { bulletYears } from "@/lib/sim/speeds";
+import { bulletYears, type Push } from "@/lib/sim/speeds";
 
 // Our messages on Scan, under the leads: what we beamed at nearby stars from 1983 to 2018, still on their way. Light
 // crosses the same sky the leads sit in, and a reply would be a lead. Each row is on its whole journey, arriving at its
@@ -62,7 +62,7 @@ function sentRows(sent: Sent[]): Row[] {
 
 /** Our bullets: each from the Year we order it, flown once readied: at a tenth of light speed on its drive, or half thrown by our Ship Beam. The map draws each along
  *  its track. 2026-10-28. Theirs went with the neighbors, 2026-10-29. */
-function bulletRows(fired: { star: string; fired: number | null; pushed?: boolean; d?: number }[]): Row[] {
+function bulletRows(fired: { star: string; fired: number | null; pushed?: Push; d?: number }[]): Row[] {
   return fired.flatMap((b, i): Row[] => {
     if (b.d === undefined || b.fired === null) return [];
     const flies = bulletYears(b.d, b.pushed);

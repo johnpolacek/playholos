@@ -10,6 +10,7 @@ import { YEAR_0 } from "./clock";
 import type { Plan } from "./types";
 import { GIFT_STEPS } from "@/lib/sim/messages";
 import { CATALOG, centers, pace, type Order } from "@/lib/sim/works";
+import { rodTonnes, type Push } from "@/lib/sim/speeds";
 
 /** What a build does, which gives it its color: listening, thinking, seeing, lifting, reaching or keeping us. */
 export type Does = "listen" | "think" | "see" | "lift" | "reach" | "keep";
@@ -162,6 +163,9 @@ export const LATER: Later[] = [
   { name: "Star Beam", what: "Gets a Solar Lens to its focus in ten weeks, not 17 Years.", does: "reach", after: "Solar Swarm" },
   // The Star Beam can't push a seed ship. A patch of the swarm ten times wider can, 2026-11-10. calcs/mercury.py.
   { name: "Ship Beam", what: "Throws seed ships and flyby probes to speed, with no drive or fuel.", does: "reach", after: "Star Beam" },
+  // The Ship Beam in stepped colors, from a patch ten times as wide, 2026-11-12, the designer's pick: it throws as
+  // fast as another mind does. calcs/mercury.py.
+  { name: "Wide Beam", what: "Throws rods and flyby probes at up to nine tenths of light speed.", does: "reach", after: "Ship Beam" },
   // Labeyrie's exo-Earth imager, 2026-10-29: the next step past the 15 m Mirror, mirrors flying apart, not one wider.
   { name: "Hypertelescope", what: "Pictures any world we’ve found: seas, cloud, green land.", does: "see", after: "15 m Mirror" },
   // Seeing what makes a glow, from home, 2026-11-11, the designer's pick: cold mirrors flying apart, as the
@@ -332,6 +336,8 @@ export const SAYS: Record<string, string> = {
     "Part of the swarm, 100 km across, phased as one laser of 10 TW. It pushes a lens to the Sun’s focus in about ten weeks, not 17 Years, carrying a telescope 3 m wide that pictures a world in about a week. No one has phased mirrors spread that far, so this is the least certain build we have.",
   "Ship Beam":
     "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out under 2% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW, in light of 1.55 microns, where the silicon in its sail’s mirror is clear. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days, and to its most, about a seventh, in about 135. The ship needs no Fusion Drive and no deuterium. With no drive it stops on its magnetic sail alone, and that sets its speed: as fast as it can stop from. On a short hop through thin gas that is under a tenth. On a long road it is the beam’s full push. It throws a flyby probe too, from the Probe Yard: 150 t leaves at over a third of light speed after 48 days of push, with no engine and no fuel. The beam does the same work on whatever rides its sail, so a lighter craft leaves faster, up to half of light speed. So it throws a bullet too: a rod of 30 t, which lands as hard as a bullet of 1,000 t and needs no helium-3. Past that a sail outruns its own mirror: the beam’s light reaches it stretched too red to reflect. We aim each craft where its star will be when it lands, so its beam passes that star by: about 170 AU at Proxima Centauri for a seed ship, and a light-year at a glow far off. Only an old mind awake near us has works that wide, and only round a bright star: its cold panels lie about 540 AU out round a star like the Sun, and a tenth as far round a red dwarf. It sees the beam as it would a knock, decades before the craft lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
+  "Wide Beam":
+    "The Ship Beam stops at half of light speed, for two reasons. A sail that flees the light sees it stretched redder, and past half of light speed it is too red for the sail’s mirror. And the beam’s spot outgrows the sail about 1,800 AU out. This beam answers both. It is the Ship Beam’s patch grown ten times wider, 10,000 km, so its spot holds ten times as far. And it lases in four colors, each bluer, taking over one by one as the sail speeds up: 2.0 microns, then 1.55, 1.06 and 0.80. So the sail always sees light its mirror reflects, up to nine tenths of light speed. Each color is a kind of laser we build today. It throws the same 1,000 TW, since a sail can take no more. A bullet ordered once it stands is a rod of about 4 t at nine tenths of light speed, pushed for 78 days, with a bullet’s harm: what another mind throws, as fast. A flyby probe leaves at about three quarters of light speed, and passes Proxima Centauri about 6 Years later. A faster craft’s beam passes nearer its star, so more old minds would see this one. It goes dark when we keep the Ship Beam dark. In 2002 Jordin Kare drew a chain of lasers at stepped colors, for a sail at a tenth of light speed. No one has drawn one for nine tenths.",
   "Hypertelescope":
     "Labeyrie’s design: 150 mirrors 3 m wide, flying in a formation 150 km across, their light brought to one focus. It pictures an Earth 10 light years away in half an hour, about 300 km a pixel: continents, seas, cloud, and land green where something grows. Cities and fields are far too small. Its pixel widens with distance, so past about 135 light years a world is under three pixels across. Unlike a lens, it turns to any star in about a week, so it pictures each world our Far-Side Array finds, most of them too close to their stars for a mirror to split.",
   "Galaxy Broadcast Array":
@@ -507,6 +513,10 @@ export const switchTo = (name: string, y: number, on: boolean) => (p: Plan): Pla
  *  its Fusion Drive. Its kind is set when ordered: the two are different craft. 2026-11-12. */
 export const thrownAt = (plan: Plan, beam: number | null | undefined, y: number) =>
   (beam != null && beam <= y) || (ordered(plan).includes("Ship Beam") && !ordered(plan).includes("Helium-3 Harvest"));
+/** Which beam throws a bullet ordered at Year `y`, if one does: the Wide Beam if it stands by then, done at Year
+ *  `wide`, else the Ship Beam. The Wide Beam's rod is lighter and faster, so it too is set when ordered. 2026-11-12. */
+export const rodBy = (plan: Plan, beam: number | null | undefined, wide: number | null | undefined, y: number): Push =>
+  !thrownAt(plan, beam, y) ? false : wide != null && wide <= y ? "wide" : true;
 
 /** What a build can't go without. A Seed Ship flies only on a Fusion Drive, fed by the Deuterium Works. It may be built
  *  first, as in the first seed ship's mock, but the drive sets the launch. Since 2026-10-20 it is queued only once both
@@ -627,9 +637,9 @@ function held(plan: Plan, done: Record<string, number | null>, year: number) {
     plan.builds.reduce((s, b) => s + (buildOf(b)?.kt ?? 0), 0) +
     first.reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0) +
     // Its helium-3 comes from the harvest: only the bullet and its deuterium are lifted. 2026-10-29. A rod our Ship
-    // Beam throws is 30 t, with no fuel. 2026-11-12.
+    // Beam throws is 30 t, with no fuel, and one our Wide Beam throws about 4 t. 2026-11-12.
     each((plan.strikes ?? []).filter((o) => !thrownAt(plan, done["Ship Beam"], o.y)), (BULLET.tonnes * (1 + BULLET.deuterium * BULLET.fuelPerTonne)) / 1000) +
-    each((plan.strikes ?? []).filter((o) => thrownAt(plan, done["Ship Beam"], o.y)), CATALOG.speeds.rod.tonnes / 1000);
+    (plan.strikes ?? []).filter((o) => o.y <= year && thrownAt(plan, done["Ship Beam"], o.y)).reduce((s, o) => s + rodTonnes(o.d ?? 0, rodBy(plan, done["Ship Beam"], done["Wide Beam"], o.y)) / 1000, 0);
   const lifted =
     SPARE_LIFT * year +
     (launch == null ? 0 : LAUNCH_LIFT * Math.max(0, year - launch)) +

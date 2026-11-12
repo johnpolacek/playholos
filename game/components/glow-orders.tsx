@@ -16,7 +16,7 @@ import { type Fuel, fuelReady, inOrder, probeNeeds, roads, SENTINEL_NEEDS } from
 import type { GlowOrder, Plan } from "@/lib/game/types";
 import type { MindsSeen } from "@/lib/sim/minds";
 import { CATALOG } from "@/lib/sim/works";
-import { flybyYears, sailYears, sentinelYears } from "@/lib/sim/speeds";
+import { flybyYears, sailYears, sentinelYears, type Push } from "@/lib/sim/speeds";
 
 type Kind = "warm" | "cold";
 type By = GlowOrder["by"];
@@ -37,10 +37,11 @@ const PRICE: Record<By, string> = {
 };
 
 /** Years from leaving until its word is home, `d` light-years out. */
-const homeAfter = (by: By, d: number, thrown = false) =>
+const homeAfter = (by: By, d: number, thrown: Push = false) =>
   (by === "sails" ? sailYears(d) : by === "probe" ? flybyYears(d, thrown) : sentinelYears(d)) + d;
-/** A flyby probe our Ship Beam throws, in place of its drive and fuel. 2026-11-12. */
-const THROWN = "No fuel: our Ship Beam throws it, at over a third of light speed. It passes, pictures a world, and reads its air.";
+/** A flyby probe a beam of ours throws, in place of its drive and fuel: the Ship Beam, or the Wide Beam. 2026-11-12. */
+const THROWN = (push: string) =>
+  `No fuel: our ${push} throws it, at ${push === "Wide Beam" ? "about three quarters" : "over a third"} of light speed. It passes, pictures a world, and reads its air.`;
 
 /** Our orders, reading the warm glows' first switch as a probe to each, at any distance. */
 export function ordersOf(plan: Plan): Partial<Record<Kind, GlowOrder>> {
@@ -195,6 +196,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
   const far = Number.isFinite(within) ? within : Number.isFinite(nearest) ? Math.round(nearest) : 100;
   // A probe our Ship Beam throws burns nothing.
   const thrown = (b: By) => b === "probe" && probe.push != null;
+  const push = probe.push ?? "Ship Beam";
   const fuel = by === "sails" || thrown(by) ? 0 : CATALOG[by].fuel;
   const now = unsent(plan, leads, kind, by, within).length;
   const allIn = now && fuel ? fuelReady(plan, stock, "order", now * fuel, Infinity) : null;
@@ -206,7 +208,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
     : by === "sails"
       ? `Set now, it sends sails past the ${glows(now)} we have found within ${lyText(within)}.`
       : thrown(by)
-        ? `Set now, it sends a flyby probe past each of the ${glows(now)} we have found within ${lyText(within)}, thrown by our Ship Beam.`
+        ? `Set now, it sends a flyby probe past each of the ${glows(now)} we have found within ${lyText(within)}, thrown by our ${push}.`
       : `Set now, it sends ${NAME[by].toLowerCase()} to each of the ${glows(now)} we have found within ${lyText(within)}: ${t(now * fuel)} of deuterium${allIn === null ? "" : `, all in by Year ${yearText(Math.max(from, allIn))}`}.`;
   return (
     <div className="mt-2 border-t border-faint pt-2">
@@ -235,7 +237,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
         <>
           <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">
             For each new {kind} glow within {lyText(order.within)}, we send{" "}
-            {NAME[order.by].toLowerCase()}. {thrown(order.by) ? THROWN : PRICE[order.by]}
+            {NAME[order.by].toLowerCase()}. {thrown(order.by) ? THROWN(push) : PRICE[order.by]}
           </p>
           {order.by !== "sails" && <p className="mt-1 text-[12.5px] leading-snug text-muted">{stockLine(plan, stock, from)}</p>}
           <button onClick={() => set(undefined)} className="mt-2 h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
@@ -275,7 +277,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
             ))}
           </div>
           <p className="mt-1.5 text-[12.5px] leading-snug text-muted">
-            Each: {thrown(by) ? THROWN : PRICE[by]} At {far.toLocaleString("en-US")} ly{Number.isFinite(within) ? "" : ", the nearest"}, its word comes home about {Math.round(homeAfter(by, far, thrown(by))).toLocaleString("en-US")} Years after it leaves.
+            Each: {thrown(by) ? THROWN(push) : PRICE[by]} At {far.toLocaleString("en-US")} ly{Number.isFinite(within) ? "" : ", the nearest"}, its word comes home about {Math.round(homeAfter(by, far, thrown(by) && push === "Wide Beam" ? "wide" : thrown(by))).toLocaleString("en-US")} Years after it leaves.
           </p>
           {by !== "sails" && <p className="mt-1 text-[12.5px] leading-snug text-muted">{stockLine(plan, stock, from)}</p>}
           <p className="mt-1 text-[12.5px] leading-snug text-page-ink2">{estimate}</p>

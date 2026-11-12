@@ -1005,6 +1005,38 @@ test("a rod our Ship Beam throws in place of a bullet flies as calcs/speeds.py h
   assert.ok(bulletYears(50, true) < bulletYears(50) / 4.9);
 });
 
+test("our Wide Beam throws as calcs/speeds.py has it: a rod as another mind's, and a flyby probe at three quarters of light speed", async () => {
+  const { rodTonnes, rodReady } = await import("./speeds.ts");
+  const rows = (golden as unknown as { wide: { d: number; probe: number; probeYears: number; rod: number; rodYears: number; tonnes: number; ready: number }[] }).wide;
+  assert.ok(rows.length >= 8);
+  const near = (a: number, b: number) => Math.abs(a - b) <= 1e-9 * Math.abs(b);
+  for (const g of rows) {
+    assert.ok(near(flybyBeta(g.d, "wide"), g.probe) && near(flybyYears(g.d, "wide"), g.probeYears), `probe ${g.d} ly`);
+    assert.ok(near(bulletBeta(g.d, "wide"), g.rod) && near(bulletYears(g.d, "wide"), g.rodYears), `rod ${g.d} ly`);
+    assert.ok(near(rodTonnes(g.d, "wide"), g.tonnes) && near(rodReady(g.d, "wide"), g.ready), `rod's mass ${g.d} ly`);
+  }
+  const wide = catalog.speeds.wide;
+  // Four colors, each bluer, and a mirror that reflects them to just past nine tenths of light speed.
+  assert.ok(wide.colors.length === 4 && wide.colors.every((c, i) => i === 0 || c < wide.colors[i - 1]) && wide.most > 0.9 && wide.most < 0.91);
+  // Its rod is another mind's: the same speed, mass and readying, by parity. Near us, nine tenths and about 4 t.
+  for (const d of [4.25, 50, 400, 2700]) {
+    assert.equal(bulletBeta(d, "wide"), theirBeta(d));
+    assert.ok(Math.abs(rodReady(d, "wide") - theirReady(d)) < 1e-12);
+  }
+  assert.ok(bulletBeta(10, "wide") === 0.9 && rodTonnes(10, "wide") > 3.5 && rodTonnes(10, "wide") < 4.3 && rodReady(10, "wide") < 0.1);
+  // Faster than the Ship Beam's on every road, and as hard: a bullet's harm at its own speed.
+  const { bulletMt, mtPerTonne } = await import("./conflict.ts");
+  for (const d of [4.25, 50, 400]) {
+    assert.ok(bulletBeta(d, "wide") > bulletBeta(d, true) && bulletYears(d, "wide") < bulletYears(d, true) && flybyBeta(d, "wide") > flybyBeta(d, true));
+    assert.ok(Math.abs((rodTonnes(d, "wide") * mtPerTonne(bulletBeta(d, "wide"))) / bulletMt() - 1) < 1e-6);
+  }
+  // The Ship Beam's rod is one mass, whatever the road.
+  assert.equal(rodTonnes(400), catalog.speeds.rod.tonnes);
+  assert.equal(rodReady(400), catalog.speeds.rod.ready);
+  // A probe is bound by its shield near us, under what the beam's work could give.
+  assert.ok(flybyBeta(4.25, "wide") < wide.probe.beam && flybyBeta(4.25, "wide") > 0.72 && flybyYears(4.25, "wide") < 6.2);
+});
+
 test("what another mind throws flies as calcs/speeds.py has it: near nine tenths of light speed close by, slower far off", () => {
   const thrown = (golden as unknown as { thrown: { d: number; beta: number; years: number }[] }).thrown;
   assert.ok(thrown.length >= 8);

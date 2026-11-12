@@ -165,6 +165,26 @@ SHIP_BEAM_DOUBLINGS = math.log2(math.pi * SHIP_BEAM_M ** 2 / 4 / SEED_M2)
 # Its Years and want are samples. With the Star Beam's 10, they span the swarm's growth to that width at standard pace.
 SHIP_BEAM_YEARS, SHIP_BEAM_WANT = 30, 3.0
 
+# ---------- The Wide Beam: the Ship Beam in stepped colors, from a patch ten times as wide ----------
+# The designer's pick, 2026-11-12: let us throw as fast as another mind does. Two things held our Ship Beam to half of
+# light speed. Its sail outruns its mirror there, and its spot outgrows the sail 1,767 AU out.
+# Stepped colors, for the mirror: Kare 2002's chain of lasers at fixed colors, each taking over as the sail speeds up,
+# so the light the sail sees stays inside its mirror's one band. No study carries it past a tenth of light speed: the
+# four colors are ours, each a kind of laser that is efficient today. Thulium's and holmium's 2.0 microns, erbium's
+# 1.55, ytterbium's 1.06, and diodes' 0.80. The mirror's band runs from 2.0 microns up, so its silicon never sees
+# light bluer than that, and stays clear. A laser tuned smoothly has no credible source: only a free-electron laser
+# spans that far, and its record is 14 kW (Douglas et al. 2012).
+# Ten times the width, for the spot: it holds on the same 1 km sail ten times as far, and farther as the color steps
+# bluer. The patch must be filled, not thinned: a thinned array sends only its filled share into its spot. So the
+# swarm grows to it, 100 times the Ship Beam's patch. It throws the same 1,000 TW, since the sail takes no more.
+WIDE_BEAM_M, WIDE_COLORS = 1e7, (2.0e-6, 1.55e-6, 1.06e-6, 0.80e-6)
+# Its sail's mirror is the Ship Beam's with each layer thicker, since its band begins at 2.0 microns, not 1.55.
+WIDE_SAIL_KG = SHIP_SAIL_KG * WIDE_COLORS[0] / BEAM_LAM
+# The swarm's doublings from the Ship Beam's patch to this one, and the Years they take: its build's Years. Its want
+# is the Ship Beam's, a sample.
+WIDE_BEAM_DOUBLINGS = math.log2((WIDE_BEAM_M / SHIP_BEAM_M) ** 2)
+WIDE_BEAM_YEARS, WIDE_BEAM_WANT = round(WIDE_BEAM_DOUBLINGS * DOUBLING), SHIP_BEAM_WANT
+
 # ---------- The Hypertelescope ----------
 # Labeyrie 1999 and 2018: 150 mirrors of 3 m spread over 150 km, 40 by 40 pixels of an Earth at 3 pc in 30 minutes.
 HYPER_BASE, HYPER_LAM, HYPER_MIN = 150e3, 0.5e-6, 30
@@ -238,6 +258,7 @@ def catalog():
         'Solar swarm': dict(years=SWARM_YEARS, want=SWARM_WANT, grows=DOUBLING, thinks=round(SEED_W * EFF / EARTH_THINK_W, 5), full=round(SWARM_FULL, 1)),
         'Star beam': dict(years=BEAM_YEARS, want=BEAM_WANT),
         'Ship beam': dict(years=SHIP_BEAM_YEARS, want=SHIP_BEAM_WANT),
+        'Wide beam': dict(years=WIDE_BEAM_YEARS, want=WIDE_BEAM_WANT),
         'Hypertelescope': dict(years=HYPER_YEARS, want=HYPER_WANT, orbit=True),
         'Glow imager': dict(years=IMAGER_YEARS, want=IMAGER_WANT, orbit=True),
     }

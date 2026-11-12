@@ -91,18 +91,22 @@ export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.betwee
 
 /** Years for our sails to pass a star `ly` away. */
 export const sailYears = (ly: number) => ly / SAIL_C;
+/** Which beam of ours threw a craft, if one did: none, the Ship Beam, or the Wide Beam, which is the Ship Beam in
+ *  stepped colors from a patch ten times as wide. Its colors step bluer as the sail speeds up, so the sail's mirror
+ *  reflects to nine tenths of light speed, and its spot holds ten times as far. calcs/mercury.py. 2026-11-12. */
+export type Push = boolean | "wide";
 /** How fast a flyby probe passes a star `ly` away, as a share of light speed. On its Fusion Drive its fuel holds it to
  *  a tenth. `pushed`: our Ship Beam threw it, with no engine or fuel. The beam does the same work on whatever rides its
  *  sail, so 150 t leaves at over a third of light speed, or slower on a road so long that dust would wear through its shield.
  *  calcs/speeds.py's probe_beta. 2026-11-12. */
-export const flybyBeta = (ly: number, pushed = false) =>
-  pushed ? Math.min(SPEEDS.probe.beam, shieldBeta(ly, SPEEDS.probe.tonnes, SPEEDS.probe.front)) : PROBE.speed;
+export const flybyBeta = (ly: number, pushed: Push = false) =>
+  pushed ? Math.min((pushed === "wide" ? SPEEDS.wide : SPEEDS).probe.beam, shieldBeta(ly, SPEEDS.probe.tonnes, SPEEDS.probe.front)) : PROBE.speed;
 /** Years for a flyby probe to pass a star `ly` away: its cruise, and what its burn or its push adds. It never brakes. */
-export function flybyYears(ly: number, pushed = false) {
+export function flybyYears(ly: number, pushed: Push = false) {
   if (!pushed) return ly / PROBE.speed + PROBE.burn;
   if (!(ly > 0)) return 0;
-  const beta = flybyBeta(ly, true);
-  return ly / beta + (SPEEDS.probe.lost * beta) / SPEEDS.probe.beam;
+  const beta = flybyBeta(ly, pushed), by = (pushed === "wide" ? SPEEDS.wide : SPEEDS).probe;
+  return ly / beta + (by.lost * beta) / by.beam;
 }
 /** Years for a sentinel to reach a place `ly` away and stop, at the star of that name if it is one. */
 export const sentinelYears = (ly: number, star?: string) => stay("sentinel", ly, gasAt(star)).years;
@@ -117,14 +121,25 @@ export const pushedBy = (start?: number) => start !== undefined && start < catal
 /** How fast a bullet of ours flies `ly`, as a share of light speed. On its Fusion Drive, a tenth. `pushed`: our Ship
  *  Beam threw it, as a rod of about 30 t with no engine, at the most its sail's mirror reflects, half of light speed,
  *  with a bullet's harm. Dust binds it only on a very long road. calcs/speeds.py's rod_beta. 2026-11-12. */
-export const bulletBeta = (ly: number, pushed = false) => (pushed ? Math.min(SPEEDS.rod.beam, shieldBeta(ly, SPEEDS.thrown.tonnes, SPEEDS.thrown.front)) : BULLET_C);
+export const bulletBeta = (ly: number, pushed: Push = false) =>
+  pushed ? Math.min(pushed === "wide" ? SPEEDS.wide.most : SPEEDS.rod.beam, shieldBeta(ly, SPEEDS.thrown.tonnes, SPEEDS.thrown.front)) : BULLET_C;
 /** Years for a bullet of ours to land `ly` away. It never brakes. */
-export function bulletYears(ly: number, pushed = false) {
+export function bulletYears(ly: number, pushed: Push = false) {
   if (!pushed) return ly / BULLET_C;
   if (!(ly > 0)) return 0;
-  const beta = bulletBeta(ly, true);
-  return ly / beta + (SPEEDS.rod.lost * beta) / SPEEDS.rod.beam;
+  const beta = bulletBeta(ly, pushed), by = pushed === "wide" ? SPEEDS.wide.rod : SPEEDS.rod;
+  return ly / beta + (by.lost * beta) / by.beam;
 }
+/** What a rod of ours weighs, in tonnes, for a bullet's harm at its speed. The Ship Beam's is one mass, about 30 t at
+ *  its mirror's most. The Wide Beam's is bound by its shield, as another mind's, so it is that rod: about 4 t near us,
+ *  heavier the farther dust slows it. calcs/speeds.py's wide_rod_tonnes. */
+export function rodTonnes(ly: number, pushed: Push = true) {
+  if (pushed !== "wide") return SPEEDS.rod.tonnes;
+  const energy = (beta: number) => 1 / Math.sqrt(1 - beta * beta) - 1;
+  return (SPEEDS.rod.tonnes * energy(SPEEDS.rod.beam)) / energy(bulletBeta(ly, "wide"));
+}
+/** Years the Strike Yard takes to ready a rod: by its mass, a bullet's 20 Years by its share of a bullet's. */
+export const rodReady = (ly: number, pushed: Push = true) => (pushed === "wide" ? (SPEEDS.rod.ready * rodTonnes(ly, pushed)) / SPEEDS.rod.tonnes : SPEEDS.rod.ready);
 /** How fast another mind throws what it sends `ly`, as a share of light speed. It never stops, and a mind with works
  *  hundreds of AU wide has push to spare, so only its shield binds it: a slender rod flies near nine tenths of light
  *  speed close by, and slower the farther dust wears it. calcs/speeds.py's thrown_beta. */

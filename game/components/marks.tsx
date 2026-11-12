@@ -858,6 +858,24 @@ const ShipBeam = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The Wide Beam: the Ship Beam's arc grown wider, a second arc outside it, its beam in steps and a sail far out.
+ *  Ours. 2026-11-12. */
+const WideBeam = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) => {
+      gsap.fromTo(part("beam"), { strokeDashoffset: 0 }, { strokeDashoffset: -6.5, duration: 0.7, ease: "none", repeat: -1, delay: offset() });
+      sway(part("sail"), { x: 0, y: 0 }, { x: 0.9, y: 0 }, 2);
+    }}
+  >
+    <path d="M1.6 0.8Q7.4 8 1.6 15.2" />
+    <path d="M3.6 3.2Q6.6 8 3.6 12.8" opacity={0.55} />
+    <path data-k="beam" d="M6.4 8h6.4" strokeDasharray="3 1 1.5 1" />
+    <path data-k="sail" d="M13.4 5.6Q15.2 8 13.4 10.4" />
+  </Moving>
+);
+
 /** The Hypertelescope: mirrors spread wide in a curve, their light brought to one focus, which drifts as the fleet
  *  turns to a new star. Ours. 2026-10-29. */
 const Hyper = ({ size, still }: MarkProps) => (
@@ -1017,6 +1035,8 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <StarBeam size={size} still={still} />;
     case "Ship Beam":
       return <ShipBeam size={size} still={still} />;
+    case "Wide Beam":
+      return <WideBeam size={size} still={still} />;
     case "Hypertelescope":
       return <Hyper size={size} still={still} />;
     case "Deep Ice Watch":

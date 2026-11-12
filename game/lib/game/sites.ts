@@ -335,7 +335,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "A nuclear weapon’s yield tops out near 50 Mt. Nothing we have flies faster than Parker Solar Probe’s 0.06% of light speed.",
       where: "In the Orbital Foundry’s high orbit, where Moon rock and fusion fuel come in.",
       why: "Any mind could fire one. Whatever another can build, we can. Fired, it coasts dark: only a watcher in our own system sees it leave.",
-      takes: "Per bullet, 1,000 t and 61 kt of fusion fuel, 20 Years to ready, and 37 kt of it helium-3 from the harvest. Once the Ship Beam is done, a rod of 30 t and no fuel, thrown by the beam. The yard itself, 10 Years, a fifth less once the Launch Tunnel is done.",
+      takes: "Per bullet, 1,000 t and 61 kt of fusion fuel, 20 Years to ready, and 37 kt of it helium-3 from the harvest. Once the Ship Beam is done, a rod of 30 t and no fuel, thrown by the beam. Once the Wide Beam is done, a rod of about 4 t. The yard itself, 10 Years, a fifth less once the Launch Tunnel is done.",
       before: "No one has built a weapon that crosses between stars. Its physics is a rocket’s, pointed.",
     },
   },
@@ -503,6 +503,16 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       why: "A seed ship weighs 1,500 t. The Star Beam’s spot outgrows any sail it could carry. Ten times the width holds the spot on a 1 km sail for 1,800 AU, and 1,000 TW brings the ship to a tenth of light speed in the first 680.",
       takes: "The swarm grown to a patch that wide, about 20 doublings from its seed, and lasers across all of it.",
       before: "In 1984 Robert Forward drew a lens 1,000 km wide, to hold a laser’s spot on a sail all the way to another star.",
+    },
+  },
+  "Wide Beam": {
+    site: { on: "planet", body: "Mercury", draw: "ring", places: [{ lat: 0, lon: 0, name: "A patch of the swarm ten times wider, near Mercury" }] },
+    story: {
+      have: "The Ship Beam, 1,000 TW in one color from a patch of the swarm 1,000 km across.",
+      where: "A patch of the swarm 10,000 km across, near Mercury, its collectors phased as one laser in four colors.",
+      why: "Past half of light speed a fleeing sail sees the Ship Beam’s light too red for its mirror. Four colors, each bluer, take over one by one as the sail speeds up, and its mirror reflects to nine tenths. Ten times the width holds the spot on a 1 km sail for half a light-year.",
+      takes: "The swarm grown to a patch that wide, about 7 doublings more, and four kinds of laser across all of it.",
+      before: "In 2002 Jordin Kare drew a chain of lasers, each at its own color, to keep a fleeing sail’s light inside its mirror’s band.",
     },
   },
   "Mind Link": {

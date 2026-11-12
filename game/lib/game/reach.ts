@@ -3,8 +3,8 @@
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { bulletsReady } from "@/lib/sim/conflict";
-import { bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, SAIL_C, sailYears, sentinelYears, shipYears, stay } from "@/lib/sim/speeds";
-import { fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, schedule, searchOf, thrownAt } from "./plan";
+import { bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, rodReady, SAIL_C, sailYears, sentinelYears, shipYears, stay, type Push } from "@/lib/sim/speeds";
+import { fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, rodBy, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
 import { CATALOG, type Order, pace } from "@/lib/sim/works";
@@ -80,9 +80,11 @@ export interface Fuel {
   yard: number | null;
   drive: number | null;
   beam: number | null;
+  /** The Wide Beam's Year done, if it is in our order: from then it throws what the Ship Beam threw. 2026-11-12. */
+  wide?: number | null;
 }
 type Done = (name: string) => number | null | undefined;
-export const fuelOf = (at: Done): Fuel => ({ works: at("Deuterium Works") ?? null, yard: at("Probe Yard") ?? null, drive: at("Fusion Drive") ?? null, beam: at("Ship Beam") ?? null });
+export const fuelOf = (at: Done): Fuel => ({ works: at("Deuterium Works") ?? null, yard: at("Probe Yard") ?? null, drive: at("Fusion Drive") ?? null, beam: at("Ship Beam") ?? null, wide: at("Wide Beam") ?? null });
 
 /** Deuterium for our fusion craft, settled 2026-11-07 (m:235), from calcs/craft.py: a flyby probe burns about 6 kt and a
  *  sentinel about 41, and the Deuterium Works makes 8 kt a Year from the Year it is done. Each draws in the order it
@@ -113,8 +115,10 @@ export function probeLeaves(plan: Plan, f: Fuel, sent: number, fuel: number | nu
   const byDrive = drive === null || fuel === null ? null : Math.max(Math.max(sent, drive) + FLYBY_PROBE.build, fuel);
   const byBeam = beam === null ? null : onFrom(plan, "Ship Beam", Math.max(sent, beam) + FLYBY_PROBE.build);
   const leaves = byDrive === null ? byBeam : byBeam === null ? byDrive : Math.min(byDrive, byBeam);
-  if (leaves === null) return { leaves: null, pushed: false, ready: drive ?? beam };
-  const pushed = beam !== null && beam <= leaves && isOn(plan, "Ship Beam", leaves);
+  if (leaves === null) return { leaves: null, pushed: false as Push, ready: drive ?? beam };
+  // The Wide Beam throws it, once it stands: it is the Ship Beam grown wider, and goes dark with it.
+  const thrown = beam !== null && beam <= leaves && isOn(plan, "Ship Beam", leaves);
+  const pushed: Push = thrown && f.wide != null && f.wide <= leaves ? "wide" : thrown;
   return { leaves, pushed, ready: pushed || drive === null ? beam : drive };
 }
 function draws(plan: Plan, f: Fuel): Draw[] {
@@ -192,14 +196,17 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
   // it, 2026-11-12: then a drive and a Works that aren't in our order aren't begun for it.
   const beamed = probeNeeds(plan) === PROBE_BEAM_NEEDS;
   const ours = (work: string) => (beamed && !inOrder(plan, work) ? null : doneOf(work));
-  const f: Fuel = { yard: doneOf("Probe Yard"), drive: ours("Fusion Drive"), works: ours("Deuterium Works"), beam: inOrder(plan, "Ship Beam") ? doneOf("Ship Beam") : null };
+  const f: Fuel = {
+    yard: doneOf("Probe Yard"), drive: ours("Fusion Drive"), works: ours("Deuterium Works"),
+    beam: inOrder(plan, "Ship Beam") ? doneOf("Ship Beam") : null, wide: inOrder(plan, "Wide Beam") ? doneOf("Wide Beam") : null,
+  };
   const { leaves, pushed, ready } = probeLeaves(plan, f, -Infinity, fuelReady(plan, f, PROXIMA_PROBE, FLYBY_PROBE.fuel, from));
   const arrives = leaves === null ? null : leaves + flybyYears(NEAREST.ly, pushed);
   const probe: Road = {
     name: "Send a flyby probe", n: plan.builds.indexOf("Probe Yard") + 1 || null, build: "Probe Yard", craft: "A flyby probe",
     speed: flybyBeta(NEAREST.ly, pushed), done: ready, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly,
-    extra: pushed ? CATALOG.speeds.probe.lost : FLYBY_PROBE.burn, flies: (ly) => flybyYears(ly, pushed), fast: (ly) => flybyBeta(ly, pushed),
-    works: f.works, fuel: f, push: pushed ? "Ship Beam" : null,
+    extra: pushed === "wide" ? CATALOG.speeds.wide.probe.lost : pushed ? CATALOG.speeds.probe.lost : FLYBY_PROBE.burn, flies: (ly) => flybyYears(ly, pushed), fast: (ly) => flybyBeta(ly, pushed),
+    works: f.works, fuel: f, push: pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null,
   };
   return [sails(), probe];
 }
@@ -219,8 +226,8 @@ export function flybyRoad(plan: Plan, scale: number, from: number, o: Flyby): Ro
   const arrives = leaves === null ? null : leaves + flybyYears(o.d, pushed);
   return {
     ...road, n: 1, done: ready, leaves, arrives, home: arrives === null ? null : arrives + o.d, speed: flybyBeta(o.d, pushed),
-    extra: pushed ? CATALOG.speeds.probe.lost : FLYBY_PROBE.burn, flies: (ly) => flybyYears(ly, pushed), fast: (ly) => flybyBeta(ly, pushed),
-    push: pushed ? "Ship Beam" : null,
+    extra: pushed === "wide" ? CATALOG.speeds.wide.probe.lost : pushed ? CATALOG.speeds.probe.lost : FLYBY_PROBE.burn, flies: (ly) => flybyYears(ly, pushed), fast: (ly) => flybyBeta(ly, pushed),
+    push: pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null,
   };
 }
 export function flybysOf(plan: Plan, scale: number) {
@@ -308,20 +315,21 @@ export const sentinelTrip = sentinelYears;
  *  isn't. 2026-10-28, its helium-3 2026-10-29. */
 export function strikesOf(plan: Plan, scale: number) {
   const done = schedule(plan, scale);
-  const at = firing(plan, plan.strikes ?? [], done["Strike Yard"] ?? null, done["Ship Beam"] ?? null, grownSpans(plan, scale, "Helium-3 Harvest"));
+  const at = firing(plan, plan.strikes ?? [], done["Strike Yard"] ?? null, done["Ship Beam"] ?? null, done["Wide Beam"] ?? null, grownSpans(plan, scale, "Helium-3 Harvest"));
   return (plan.strikes ?? []).map((o, i) => ({ star: o.name, ...at[i] }));
 }
 /** When each bullet ordered is fired, and whether our Ship Beam throws it. One ordered once the Ship Beam stands is a
  *  rod of about 30 t with no engine: readied in about 7 months and thrown at half of light speed, with a bullet's
  *  harm and no helium-3, once the beam is let push. The rest are bullets on their Fusion Drives, and share the
  *  harvest among themselves. plan.ts's thrownAt, lib/sim/speeds.ts. 2026-11-12. */
-function firing(plan: Plan, orders: readonly { y: number }[], yard: number | null, beam: number | null, harvest: readonly [number, number | null][]) {
-  const rod = orders.map((o) => thrownAt(plan, beam, o.y));
+function firing(plan: Plan, orders: readonly { y: number; d?: number }[], yard: number | null, beam: number | null, wide: number | null, harvest: readonly [number, number | null][]) {
+  // Which beam throws each, if one does. One ordered once the Wide Beam stands is a lighter rod, readied sooner.
+  const rod = orders.map((o) => rodBy(plan, beam, wide, o.y));
   const burned = bulletsReady(orders.filter((_, i) => !rod[i]).map((o) => o.y), yard, harvest);
   let k = 0;
-  return orders.map((o, i) =>
+  return orders.map((o, i): { fired: number | null; pushed: Push } =>
     rod[i]
-      ? { fired: yard === null || beam === null ? null : onFrom(plan, "Ship Beam", Math.max(o.y, yard, beam) + CATALOG.speeds.rod.ready), pushed: true }
+      ? { fired: yard === null || beam === null ? null : onFrom(plan, "Ship Beam", Math.max(o.y, yard, beam) + rodReady(o.d ?? 0, rod[i])), pushed: rod[i] }
       : { fired: burned[k++], pushed: false },
   );
 }
@@ -360,11 +368,12 @@ export function strikeRoad(plan: Plan, scale: number, from: number, star: string
   const strikes = plan.strikes ?? [];
   const sent = strikes.find((o) => o.name === star);
   // Its place among our bullets: the helium-3 goes to each in the order ordered, and one not yet sent comes last.
-  const order = sent ? strikes : [...strikes, { y: from }];
+  const order = sent ? strikes.map((o) => (o === sent ? { ...o, d: o.d ?? ly } : o)) : [...strikes, { y: from, d: ly }];
   const beam = inOrder(plan, "Ship Beam") ? yardDone(plan, scale, from, "Ship Beam") : null;
-  const { fired: leaves, pushed } = firing(plan, order, yard, beam, harvest)[sent ? strikes.indexOf(sent) : order.length - 1];
+  const wide = inOrder(plan, "Wide Beam") ? yardDone(plan, scale, from, "Wide Beam") : null;
+  const { fired: leaves, pushed } = firing(plan, order, yard, beam, wide, harvest)[sent ? strikes.indexOf(sent) : order.length - 1];
   const lands = leaves === null ? null : leaves + bulletYears(ly, pushed);
-  return { name: "A bullet", n: sent ? 1 : null, build: "Strike Yard", craft: "A bullet", speed: bulletBeta(ly, pushed), done: yard, leaves, arrives: lands, home: lands, push: pushed ? "Ship Beam" : null };
+  return { name: "A bullet", n: sent ? 1 : null, build: "Strike Yard", craft: "A bullet", speed: bulletBeta(ly, pushed), done: yard, leaves, arrives: lands, home: lands, push: pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null };
 }
 
 /** Our Mind on the Seed Ship to a black hole `ly` away, to stay: it leaves once the Seed Ship, its Fusion Drive and the
