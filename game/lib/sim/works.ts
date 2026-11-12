@@ -67,10 +67,10 @@ interface Catalog {
      *  graphite by speed, and the share of a craft its shield may weigh. A Fusion Drive's speed, the Ship Beam's, and
      *  each craft's mass in tonnes and its front in m². */
     gas: { cloud: number; between: number; inCloud: string[] };
-    /** `hoop`: the weight of the fibre that holds a magnetic sail's loop together over its wire's, for each unit of
+    /** `engine`: the finishing engine's kg for each newton of its thrust. `hoop`: the weight of the fibre that holds a magnetic sail's loop together over its wire's, for each unit of
      *  the craft's gamma beta. `rel`: relativity's factors on a stop's distance and its time, at each twentieth of
      *  light speed. calcs/speeds.py, 2026-11-12. */
-    sailing: { gros: number; stop: number; tenth: number; covered: number; burnPerC: number; finishVe: number; hoop: number; rel: number[][] };
+    sailing: { gros: number; stop: number; tenth: number; covered: number; burnPerC: number; finishVe: number; engine: number; hoop: number; rel: number[][] };
     wear: { dust: number; range: [number, number][]; share: number; most: number };
     fusion: number; beam: number; beamDays: number; beamStart: number;
     craft: Record<"sentinel" | "ship", { tonnes: number; front: number }>;

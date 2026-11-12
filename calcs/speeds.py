@@ -77,6 +77,18 @@ T_TENTH, X_TENTH, BURN_PER_C = 1.84, 0.908, 100.0
 # of light speed the burn is a hundredth, and takes 0.28 t of deuterium a tonne.
 FINISH_VE = 0.04
 def finish_fuel(beta): return math.exp(beta / 10 / FINISH_VE) - 1
+# That engine has weight too, counted since 2026-11-12: until then only its fuel rode with the craft. Firefly's is
+# 2,050 t of engine and radiators for 600 kN (Freeland and Lamontagne 2015, as calcs/craft.py has it). The burn lasts
+# twice the Years it costs over cruising, so its thrust is a share of the craft that barely moves with its speed:
+# the engine is about a fifth of what it stops. The big engine that launched the craft is long dropped: this is a
+# small one of its own. Ours, by the same arithmetic as calcs/craft.py's drive().
+ENGINE_KG_N = 2050e3 / 6e5
+def finish_engine(beta):
+    """The finishing engine's share of the craft it stops, its fuel aside."""
+    return ENGINE_KG_N * finish_fuel(beta) * FINISH_VE * C / (2 * BURN_PER_C * beta / 10 * YEAR)
+def finish_weight(beta):
+    """What a craft weighs with its finishing engine and that burn's fuel aboard, over what it weighs without."""
+    return (1 + finish_fuel(beta)) / (1 - finish_engine(beta))
 def brake_years(beta, n, tonnes, drive=True):
     """The Years stopping adds over cruising the same stretch: on the sail alone, or with a burn for the last tenth."""
     x, (fx, ft) = _stop0(beta, n, tonnes), rel(beta)
@@ -166,17 +178,18 @@ SHIP_BEAM_DAYS = beam_days(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, mer
 def gas_at(star): return N_CLOUD if star in IN_CLOUD else N_BETWEEN
 def trip(d, tonnes, push, n=N_BETWEEN, front_m2=20, stops=True, drive=True, beamed=False):
     """A craft's speed over d ly, what binds it, and its Years. `drive`: it carries one for the last of its braking,
-    with that burn's fuel. The fuel is dead weight until then: a beam pushes it too, so `beamed` craft leave slower,
-    and the sail must stop it too, so the craft brakes as if the gas were that much thinner."""
+    with that burn's fuel. Engine and fuel are dead weight until then: a beam pushes them too, so `beamed` craft leave
+    slower, and the sail must stop them too, so the craft brakes as if the gas were that much thinner."""
     weight = 1.0
     for _ in range(40):
         limits = dict(push=push / math.sqrt(weight) if beamed else push, shield=shield_beta(d, tonnes, front_m2))
         if stops: limits['stopping'] = best_beta(d, n / weight, tonnes, drive)
         binds = min(limits, key=limits.get)
         beta = limits[binds]
-        weight = 1 + finish_fuel(beta) if stops and drive else 1.0
+        weight = finish_weight(beta) if stops and drive else 1.0
     years = d / beta + (brake_years(beta, n / weight, tonnes, drive) if stops else 0)
-    return dict(beta=beta, binds=binds, years=years, stop_ly=braking_ly(beta, n / weight, tonnes, drive) if stops else 0, fuel=weight - 1)
+    return dict(beta=beta, binds=binds, years=years, stop_ly=braking_ly(beta, n / weight, tonnes, drive) if stops else 0,
+                fuel=finish_fuel(beta) / (1 - finish_engine(beta)) if stops and drive else 0.0, weight=weight)
 
 # ---------- Our craft that stop ----------
 # A sentinel is 1,000 t and a seed ship 1,500 t, about half of each its magnetic sail (calcs/craft.py, Gros 2017). Each
@@ -189,13 +202,21 @@ def start_years(beta, beamed=False):
     Beam's, where `beamed` is 'wide'."""
     if beamed == 'wide': return WIDE_SHIP_LOST * beta / WIDE_SHIP
     return mercury.SHIP_PUSH['lost'] * beta / (mercury.SHIP_V / C) if beamed else BURN_PER_C * beta
-def stay(kind, d, n=N_BETWEEN, beamed=False):
+def stay(kind, d, n=N_BETWEEN, beamed=False, drive=None):
     """One of our craft sent d ly to stop there: its speed, what binds it, and its Years from leaving to stopped.
-    `beamed`: the Ship Beam threw it, or the Wide Beam, 'wide'. Either way it carries no drive."""
+    `beamed`: the Ship Beam threw it, or the Wide Beam, 'wide'. `drive`: it carries a small one to end its stop. A
+    craft on its own drive always does. A thrown one may, where a Fusion Drive and the Deuterium Works stand, 2026-11-12:
+    the beam must push that weight too, and it lands far sooner for it."""
     c = CRAFT[kind]
+    drive = (not beamed) if drive is None else drive
     push = WIDE_SHIP if beamed == 'wide' else SHIP_BEAM if beamed else FUSION_BETA
-    t = trip(d, c['tonnes'], push, n, c['front'], drive=not beamed, beamed=bool(beamed))
+    t = trip(d, c['tonnes'], push, n, c['front'], drive=drive, beamed=bool(beamed))
     return dict(t, years=t['years'] + start_years(t['beta'], beamed))
+SHIP_WAYS = ((False, True), (True, False), (True, True), ('wide', False), ('wide', True))
+def soonest(d, n=N_BETWEEN, ways=SHIP_WAYS):
+    """The way a seed ship lands soonest d ly off, of those it may go by: which beam throws it, if one does, and
+    whether it carries a drive. Each as (beamed, drive)."""
+    return min(ways, key=lambda w: stay('ship', d, n, *w)['years'])
 
 # ---------- What another mind throws ----------
 # What an old mind sends to wreck a craft or strike a world never stops, so its stopping binds nothing. Its push binds
@@ -363,6 +384,8 @@ def catalog():
                             # What a craft that stops is bound by, for game/lib/sim/speeds.ts to work each trip.
                             gas=dict(cloud=N_CLOUD, between=N_BETWEEN, inCloud=list(IN_CLOUD)),
                             sailing=dict(gros=GROS_T, stop=T_STOP, tenth=T_TENTH, covered=X_TENTH, burnPerC=BURN_PER_C, finishVe=FINISH_VE,
+                                         # The finishing engine's kg for each newton of its thrust.
+                                         engine=ENGINE_KG_N,
                                          # The loop's fibre for each unit of gamma beta, and relativity's factors on a stop's
                                          # distance and time at each twentieth of light speed.
                                          hoop=HOOP, rel=REL),
@@ -395,9 +418,9 @@ def golden():
     for kind in CRAFT:
         for d in (4.25, 10.5, 10, 20, 50, 120, 400, 2700, 30000):
             for n in (N_CLOUD, N_BETWEEN):
-                for beamed in ((False, True, 'wide') if kind == 'ship' else (False,)):
-                    t = stay(kind, d, n, beamed)
-                    out.append(dict(kind=kind, d=d, n=n, beamed=beamed, beta=t['beta'], years=t['years'], binds=t['binds'], stopLy=t['stop_ly']))
+                for beamed, drive in (SHIP_WAYS if kind == 'ship' else ((False, True),)):
+                    t = stay(kind, d, n, beamed, drive)
+                    out.append(dict(kind=kind, d=d, n=n, beamed=beamed, drive=drive, beta=t['beta'], years=t['years'], binds=t['binds'], stopLy=t['stop_ly']))
     return out
 
 def golden_thrown():

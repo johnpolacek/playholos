@@ -33,12 +33,13 @@ export interface Kit {
   /** Each lens we sent, by the star it looks at as we name it: the Year it begins to look, and its picture is home. */
   lenses?: { star: string; looks: number; home: number }[];
   /** Our Mind sent to a black hole or a star: where, how it lives there, and the Year it leaves. */
-  /** `burn`: the Years its start costs over cruising, where the Ship Beam pushed it. Its own burn's otherwise. */
-  colony?: { star: string; mode: ColonyMode; leaves: number; burn?: number } | null;
+  /** `burn`: the Years its start costs over cruising, where the Ship Beam pushed it. Its own burn's otherwise.
+   *  `drive`: thrown by a beam, it carries a small drive to end its stop. */
+  colony?: { star: string; mode: ColonyMode; leaves: number; burn?: number; drive?: boolean } | null;
   /** Each sentinel we sent, by its star as we name it, and the Year it leaves. */
   sentinels?: { star: string; leaves: number }[];
   /** Each seed probe we sent, by its star as we name it, and the Year it leaves. Its copies follow from spread.ts. */
-  seeds?: { star: string; leaves: number; burn?: number }[];
+  seeds?: { star: string; leaves: number; burn?: number; drive?: boolean }[];
   /** Each sail or flyby probe we sent past a star: the Year it passes, and the Year its word reaches us. 2026-11-05.
    *  `thrown` is its speed as a share of light's, if a beam of ours threw it: sails, or a probe on the Ship Beam. */
   flybys?: { star: string; by: "sails" | "probe"; leaves?: number; passed: number; home: number; thrown?: number }[];
@@ -543,11 +544,11 @@ function fieldAir(f: FieldWorld) {
 /** Our Mind at a black hole, as far as its word has reached us by `year`: on its way, landed, or standing alone as a
  *  Mind, and, once it stands, who was there before it, and how its furnace has grown, a Mind's computing doubling every
  *  10 Years from our 2040 scale, as a neighbor's does. A refuge stays as small and dark as it began. 2026-10-26. */
-function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: ColonyMode; leaves: number; burn?: number }, year: number) {
+function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: ColonyMode; leaves: number; burn?: number; drive?: boolean }, year: number) {
   const { stands } = catalog.seedShip;
   const h = holes.find((x) => x.name === c.star);
   if (!h) return colonyAtStar(world, c, year);
-  const lands = c.leaves + shipYears(h.d, pushedBy(c.burn)), alone = lands + stands;
+  const lands = c.leaves + shipYears(h.d, pushedBy(c.burn), undefined, c.drive || !pushedBy(c.burn)), alone = lands + stands;
   const heard = year - h.d;                                       // what its word home shows of it now
   const truth = world.holes!.find((x) => x.id === h.id)!;
   const watts = c.mode === "furnace" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
@@ -559,12 +560,12 @@ function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star:
 /** Our Mind settled at a star, on its light and its rock, as far as its word has reached us by `year`: on its way,
  *  landed, or standing alone as a Mind, and its works growing as a furnace's do. No slow clock: a star has no
  *  innermost orbit to live on. 2026-10-27. Who was there first went with the neighbors, 2026-10-31. */
-function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number; burn?: number }, year: number) {
+function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number; burn?: number; drive?: boolean }, year: number) {
   const { stands } = catalog.seedShip;
   const id = Object.keys(world.stars).find((k) => world.stars[k].shown === c.star);
   if (!id) return { star: c.star, mode: c.mode, leaves: c.leaves };
   const d = world.stars[id].d;
-  const lands = c.leaves + shipYears(d, pushedBy(c.burn), c.star), alone = lands + stands;
+  const lands = c.leaves + shipYears(d, pushedBy(c.burn), c.star, c.drive || !pushedBy(c.burn)), alone = lands + stands;
   const heard = year - d;
   // Settled, its works grow as a furnace's do. Kept small, it stays as it began. 2026-10-30.
   const watts = c.mode === "settle" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;

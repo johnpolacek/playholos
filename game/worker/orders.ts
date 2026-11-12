@@ -62,7 +62,8 @@ export function readLenses(l: unknown): Ordered[] {
 }
 export const readSentinels = readLenses;
 export const readCloseReads = readLenses;
-export const readSeeds = readLenses;
+// Seed probes, each with how far its star is, so each is sent the way that lands it soonest. 2026-11-12.
+export const readSeeds = (l: unknown) => readStrikes(l);
 // Our bullets, with how far each star is, so the Mind can say when each lands. 2026-11-12.
 export function readStrikes(l: unknown): (Ordered & { d?: number })[] {
   const far = new Map(Array.isArray(l) ? l.filter((o) => !!o && typeof o.name === "string" && typeof o.d === "number" && Number.isFinite(o.d) && o.d > 0).map((o) => [o.name as string, o.d as number]) : []);
@@ -82,12 +83,12 @@ export function readFlybys(l: unknown): (Ordered & { d: number; by: "sails" | "p
 }
 
 // Our colony at a black hole or a star, from the save: one, by its name, the Year we sent it and its mode. Checked.
-export function readColony(c: unknown): (Ordered & { mode: ColonyMode }) | undefined {
+export function readColony(c: unknown): (Ordered & { mode: ColonyMode; d?: number }) | undefined {
   if (!c || typeof c !== "object") return undefined;
   const o = c as Record<string, unknown>;
   if (typeof o.name !== "string" || o.name.length > 80 || typeof o.y !== "number" || !Number.isFinite(o.y) || o.y < 0) return undefined;
   if (o.mode !== "furnace" && o.mode !== "refuge" && o.mode !== "settle" && o.mode !== "quiet") return undefined;
-  return { name: o.name, y: o.y, mode: o.mode };
+  return { name: o.name, y: o.y, mode: o.mode, ...(typeof o.d === "number" && Number.isFinite(o.d) && o.d > 0 ? { d: o.d } : {}) };
 }
 
 /** Where the Will lives, from the browser, if it moved to a hole. 2026-10-26. */

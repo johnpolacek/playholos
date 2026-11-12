@@ -107,7 +107,7 @@ const WHAT: Record<string, string> = {
   seed:
     "A seed ship with no Mind on board, built beside the Seed Ship. It brakes on its sail, unseen, and stays. It mines the moons and asteroids there to build two copies of itself, which go on to the nearest stars no probe of ours is bound for. Copies make copies, for three generations: at most seven craft. Once it leaves, it can’t be called back.",
   sentinel:
-    "A probe built at the Probe Yard burns 52 kt of deuterium to reach a tenth of light speed, then brakes on a magnetic sail 1,800 km across, unseen, and ends its stop with a short burn, to stay. It watches for as long as it lasts, and sees what a pass can’t.",
+    "A probe built at the Probe Yard burns 64 kt of deuterium to reach a tenth of light speed, then brakes on a magnetic sail 1,800 km across, unseen, and ends its stop with a short burn, to stay. It watches for as long as it lasts, and sees what a pass can’t.",
   will: "The Will, sent by laser to our Mind here, to live. The crossing is dark: a Year for each light-year, with no orders and no news, while Earth goes on by our orders and charter. Then orders and news cross the light-years between us and Earth.",
   refuge: "In a refuge, our Mind spreads over small chips on the hole’s innermost orbit, so its clock runs slow and the sky goes by faster.",
   "Solar Lens": "Small sails dive past the Sun to its focus, 3 light-days out, and stay. The Sun’s gravity gathers this world’s light into a picture of its face.",
@@ -547,7 +547,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 2}
             to={to}
             name="Our Mind, to stay"
-            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed)} days, with no drive or fuel.${beamLine(ly, mind.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed)} days, ${mind.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, mind.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
             needs={shipNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // One Seed Ship, one Mind: once sent to one hole, no other. Sent once all three are in our order.
@@ -558,7 +558,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             sentAs={plan.colony?.mode === "furnace" ? "Sent, to feed it" : plan.colony?.mode === "refuge" ? "Sent, to hide" : plan.colony?.mode === "quiet" ? "Sent, to keep small" : "Sent, to settle"}
             choices={(hole ? (["furnace", "refuge"] as const) : (["quiet", "settle"] as const)).map((mode) => ({
               label: mode === "furnace" ? "Feed It" : mode === "refuge" ? "Hide in It" : mode === "quiet" ? "Keep Small" : "Settle Here",
-              send: () => change((p) => ({ ...p, colony: { name: lead.star, y: from, mode } })),
+              send: () => change((p) => ({ ...p, colony: { name: lead.star, y: from, mode, d: ly } })),
             }))}
           />
         )}
@@ -603,12 +603,12 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 4}
             to={to}
             name="A seed probe that copies itself"
-            line={`${WHAT.seed}${seed.push ? ` The ${seed.push} pushes it to speed in ${pushDays(seed.speed)} days, with no drive or fuel.${beamLine(ly, seed.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${WHAT.seed}${seed.push ? ` The ${seed.push} pushes it to speed in ${pushDays(seed.speed)} days, ${seed.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, seed.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
             needs={seedNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Sent once all three are in our order, before Begin too: it is built once they are done.
             can={seedReady(plan)}
-            send={() => change((p) => ({ ...p, seeds: [...(p.seeds ?? []), { name: lead.star, y: from }] }))}
+            send={() => change((p) => ({ ...p, seeds: [...(p.seeds ?? []), { name: lead.star, y: from, d: ly }] }))}
             what="Seed probe"
             {...way("seed")}
             recall={() => change((p) => recall(p, "seed", lead.star))}

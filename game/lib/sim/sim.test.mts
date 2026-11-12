@@ -985,11 +985,11 @@ test("the Far-Side Array finds red dwarfs' worlds that have a field, and tells o
 // Speed by physics, 2026-11-11: calcs/speeds.py's trips, each craft near and far, in a cloud and between, on its drive
 // and pushed.
 test("each of our craft that stops takes the Years calcs/speeds.py gives its trip", () => {
-  type Golden = { kind: "sentinel" | "ship"; d: number; n: number; beamed: boolean; beta: number; years: number; binds: string; stopLy: number };
+  type Golden = { kind: "sentinel" | "ship"; d: number; n: number; beamed: boolean | "wide"; drive: boolean; beta: number; years: number; binds: string; stopLy: number };
   const trips = (golden as unknown as { trips: Golden[] }).trips;
   assert.ok(trips.length >= 50);
   for (const g of trips) {
-    const t = stay(g.kind, g.d, g.n, g.beamed);
+    const t = stay(g.kind, g.d, g.n, g.beamed, g.drive);
     assert.equal(t.binds, g.binds, `${g.kind} ${g.d} ly`);
     for (const k of ["beta", "years", "stopLy"] as const) assert.ok(Math.abs(t[k] - g[k]) <= 1e-9 * g[k], `${g.kind} ${g.d} ly ${k}: ${t[k]} against ${g[k]}`);
   }

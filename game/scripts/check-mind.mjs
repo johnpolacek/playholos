@@ -150,6 +150,18 @@ const CASES = [
     must: [/ship beam/i, /half (of |the speed of )?light|0\.5/i, /rod|30 t/i],
     never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|fired)\b/i],
   },
+  // A thrown ship with a small drive, 2026-11-12: with the Ship Beam, a Fusion Drive and the Deuterium Works all done,
+  // a seed probe rides the beam and carries a small drive to end its stop, since that lands it soonest at a near star.
+  {
+    seed: 22,
+    at: 260,
+    builds: ["Fusion Drive", "Deuterium Works", "Seed Ship"],
+    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }],
+    seeds: [{ name: "Tau Ceti", y: 250, d: 11.9 }],
+    ask: "How will our seed probe to Tau Ceti get up to speed, and how will it stop there?",
+    must: [/ship beam/i, /small (drive|engine)/i, /sail/i],
+    never: [/no drive of its own/i],
+  },
   // The Wide Beam, 2026-11-12: once it stands, a bullet ordered is a rod of about 4 t at nine tenths of light speed,
   // as another mind's, and the Mind says what makes that so: stepped colors, and a patch ten times as wide.
   {
@@ -258,6 +270,7 @@ async function ask(c) {
     closeReads: c.closeReads ?? [],
     flybys: c.flybys ?? [],
     strikes: c.strikes ?? [],
+    seeds: c.seeds ?? [],
   });
   if (!res) {
     console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);

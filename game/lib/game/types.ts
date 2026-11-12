@@ -152,11 +152,11 @@ export interface Plan {
   /** Seed probes we sent, each by its star and the Year we ordered it: a seed ship with no Mind, that brakes, stays, and
    *  copies itself on to the nearest stars, for so many generations. Built once the Seed Ship, a Fusion Drive and the
    *  Deuterium Works are done. One a star. 2026-10-26. */
-  seeds?: Ordered[];
+  seeds?: (Ordered & { d?: number })[];
   /** A copy of our Mind sent on the Seed Ship to stay: the hole or star, the Year we sent it, and whether it feeds a
    *  hole for power, hides in its shadow, or settles at a star. One a game, since the Seed Ship carries one.
    *  2026-10-26, a star since 2026-10-27. */
-  colony?: Ordered & { mode: ColonyMode };
+  colony?: Ordered & { mode: ColonyMode; d?: number };
   /** Our bullets, each by the star it is fired at and the Year we ordered it, readied by the Strike Yard. One a star.
    *  2026-10-28. */
   strikes?: (Ordered & { d?: number })[];

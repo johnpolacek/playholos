@@ -41,6 +41,12 @@ const stop0 = (beta: number, n: number, tonnes: number) => (SAIL.gros * beta ** 
 const stopLy = (beta: number, n: number, tonnes: number) => stop0(beta, n, tonnes) * rel(beta)[0];
 /** Deuterium for the burn that ends a stop, tonnes a tonne: a tenth of the craft's speed on its own engine. */
 const finishFuel = (beta: number) => Math.exp(beta / 10 / SAIL.finishVe) - 1;
+/** That burn's own engine, as a share of the craft it stops, its fuel aside: about a fifth. The burn lasts twice the
+ *  Years it costs over cruising, which sets its thrust, and Firefly's engine weighs so much a newton. The big engine
+ *  that launched the craft is long dropped. calcs/speeds.py's finish_engine. 2026-11-12. */
+const finishEngine = (beta: number) => (SAIL.engine * finishFuel(beta) * SAIL.finishVe * 299_792_458) / (((2 * SAIL.burnPerC * beta) / 10) * 3.15576e7);
+/** What a craft weighs with its finishing engine and that burn's fuel aboard, over what it weighs without. */
+const finishWeight = (beta: number) => (1 + finishFuel(beta)) / (1 - finishEngine(beta));
 /** The Years stopping adds over cruising the same stretch: on the sail alone, or with a burn for the last tenth. */
 function brakeYears(beta: number, n: number, tonnes: number, drive: boolean) {
   const x = stop0(beta, n, tonnes), [fx, ft] = rel(beta);
@@ -98,12 +104,14 @@ export interface Trip {
 }
 
 /** One of our craft sent `d` ly to stop there, through gas of `n` ions a cm³. On its Fusion Drive its fuel holds it to
- *  a tenth of light speed and the same drive ends its stop. Pushed by the Ship Beam it carries no drive, so it stops on
- *  its sail alone. */
-export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.between, beamed: Push = false): Trip {
+ *  a tenth of light speed and a small drive of its own ends its stop. Pushed by a beam it may carry that small drive
+ *  too, or none, and then it stops on its sail alone. */
+export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.between, beamed: Push = false, drive = !beamed): Trip {
   const { tonnes, front } = CRAFT[kind];
-  // The Wide Beam's work could give a ship more than a third of light speed. It must still stop on its sail alone.
-  const push = beamed === "wide" ? SPEEDS.wide.ship.beam : beamed ? SPEEDS.beam : SPEEDS.fusion, drive = !beamed;
+  // The Wide Beam's work could give a ship more than a third of light speed. It must still stop. `drive`: it carries a
+  // small one to end its stop, as a craft on its own drive always does, and a thrown one may: the beam pushes that
+  // weight too, and the sail must stop it.
+  const push = beamed === "wide" ? SPEEDS.wide.ship.beam : beamed ? SPEEDS.beam : SPEEDS.fusion;
   if (!(d > 0)) return { beta: push, binds: "push", years: 0, stopLy: 0 };
   const shield = shieldBeta(d, tonnes, front);
   let weight = 1, beta = push, binds: Trip["binds"] = "push";
@@ -111,7 +119,7 @@ export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.betwee
   for (let i = 0; i < 40; i++) {
     const limits: [Trip["binds"], number][] = [["push", beamed ? push / Math.sqrt(weight) : push], ["shield", shield], ["stopping", bestBeta(d, n / weight, tonnes, drive)]];
     [binds, beta] = limits.reduce((a, b) => (b[1] < a[1] ? b : a));
-    weight = drive ? 1 + finishFuel(beta) : 1;
+    weight = drive ? finishWeight(beta) : 1;
   }
   const start = beamed === "wide" ? (SPEEDS.wide.ship.lost * beta) / SPEEDS.wide.ship.beam : beamed ? SPEEDS.beamStart * beta : SAIL.burnPerC * beta;
   return { beta, binds, years: d / beta + brakeYears(beta, n / weight, tonnes, drive) + start, stopLy: stopLy(beta, n / weight, tonnes) * (drive ? SAIL.covered : 1) };
@@ -139,7 +147,7 @@ export const sentinelYears = (ly: number, star?: string) => stay("sentinel", ly,
 export const sentinelCruise = (ly: number) => ly / SPEEDS.fusion;
 /** Years for a seed ship or a seed probe to land `ly` away, at the star of that name if it is one. `pushed`: our Ship
  *  Beam threw it, in place of its Fusion Drive. */
-export const shipYears = (ly: number, pushed: Push = false, star?: string) => stay("ship", ly, gasAt(star), pushed).years;
+export const shipYears = (ly: number, pushed: Push = false, star?: string, drive = !pushed) => stay("ship", ly, gasAt(star), pushed, drive).years;
 /** Whether our Ship Beam threw a ship, from the Years its start cost over cruising, as our orders keep it: the beam's
  *  push costs a fraction of a Year, and a Fusion Drive's burn 10. */
 export const pushedBy = (start?: number): Push =>

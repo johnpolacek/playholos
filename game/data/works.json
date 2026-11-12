@@ -266,7 +266,7 @@
   "speed": 0.1,
   "burns": 10,
   "brake": 15,
-  "fuel": 52.1
+  "fuel": 63.9
  },
  "probe": {
   "build": 12,
@@ -488,6 +488,7 @@
    "covered": 0.908,
    "burnPerC": 100.0,
    "finishVe": 0.04,
+   "engine": 3.4166666666666665,
    "hoop": 1.3886455982425885,
    "rel": [
     [

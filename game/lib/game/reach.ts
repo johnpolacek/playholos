@@ -60,6 +60,8 @@ export interface Road {
   leaves: number | null;
   arrives: number | null;
   home: number | null;
+  /** Thrown by a beam, it carries a small drive and its fuel to end its stop. 2026-11-12. */
+  carries?: boolean;
   /** Years its burns add over cruising. */
   extra?: number;
   /** Years it flies to a place so many light-years off, as lib/sim/speeds.ts has its kind of craft. 2026-11-11. */
@@ -394,23 +396,31 @@ function shipReadyAt(at: (name: string) => number | null | undefined) {
   const drive = all(SHIP_NEEDS), beam = all(BEAM_NEEDS);
   return drive === null ? beam : beam === null ? drive : Math.min(drive, beam);
 }
-/** When a ship ordered at Year `sent` leaves, `build` Years after all it needs is done, and the Years its start costs
- *  over cruising. It leaves by its drive or by the beam, whichever is sooner. The beam pushes it if the Ship Beam is
- *  done by then and not kept dark: plan.ts's SWITCHED. Kept dark, a ship with no drive waits until the beam is let
- *  push again. `at` is each build's Year done. */
-export function shipLeaves(plan: Plan, at: (name: string) => number | null | undefined, sent: number, build = 0) {
+/** A way a ship may go: the Year it leaves by it, which beam throws it, if one does, and whether it carries a small
+ *  drive to end its stop. A ship on its own drive always does. */
+interface ShipWay { leaves: number; pushed: Push; drive: boolean }
+/** When a ship ordered at Year `sent` leaves, `build` Years after all it needs is done, the way it goes, and the Years
+ *  its start costs over cruising. It may go three ways: on its own drive, thrown by the beam with no drive, or
+ *  thrown with a small drive and its fuel aboard to end its stop, where a Fusion Drive and the Deuterium Works stand
+ *  too. It goes the way that lands it soonest `ly` off, since 2026-11-12: until then it left by whichever was ready
+ *  first, and so was thrown to Proxima where its own drive landed it 10 Years sooner. With no distance, an order from
+ *  before that date, it leaves by the first way ready, as it did. The beam throws it only while not kept dark:
+ *  plan.ts's SWITCHED. The Wide Beam throws it once it stands. `at` is each build's Year done. */
+export function shipLeaves(plan: Plan, at: (name: string) => number | null | undefined, sent: number, build = 0, ly?: number, star?: string) {
   const all = (names: string[]) => (names.every((n) => at(n) != null) ? Math.max(...names.map((n) => at(n)!)) : null);
-  const drive = all(SHIP_NEEDS), beam = all(BEAM_NEEDS);
-  const byDrive = drive === null ? null : Math.max(sent, drive) + build;
-  const byBeam = beam === null ? null : onFrom(plan, "Ship Beam", Math.max(sent, beam) + build);
-  const leaves = byDrive === null ? byBeam : byBeam === null ? byDrive : Math.min(byDrive, byBeam);
-  if (leaves === null) return { leaves: null, start: SHIP.burn, pushed: false as Push };
-  // The Wide Beam throws it, once it stands: it is the Ship Beam grown wider, and goes dark with it. 2026-11-12.
-  const thrown = beam !== null && beam <= leaves && isOn(plan, "Ship Beam", leaves);
+  const own = all(SHIP_NEEDS), beam = all(BEAM_NEEDS), both = all([...BEAM_NEEDS, "Fusion Drive", "Deuterium Works"]);
   const wide = at("Wide Beam");
-  const pushed: Push = thrown && wide != null && wide <= leaves ? "wide" : thrown;
-  // Its start's cost tells the sim which beam threw it: speeds.ts's pushedBy.
-  return { leaves, start: pushed === "wide" ? CATALOG.speeds.wide.ship.lost : pushed ? CATALOG.beams.ship : SHIP.burn, pushed };
+  const thrown = (ready: number | null, drive: boolean): ShipWay[] => {
+    const leaves = ready === null ? null : onFrom(plan, "Ship Beam", Math.max(sent, ready) + build);
+    return leaves === null ? [] : [{ leaves, pushed: wide != null && wide <= leaves ? "wide" : true, drive }];
+  };
+  // In this order, so that with no distance to go by, the beam throws a ship that both it and its drive are ready for.
+  const ways: ShipWay[] = [...thrown(beam, false), ...thrown(both, true), ...(own === null ? [] : [{ leaves: Math.max(sent, own) + build, pushed: false as Push, drive: true }])];
+  if (!ways.length) return { leaves: null, start: SHIP.burn, pushed: false as Push, drive: true };
+  const lands = (w: ShipWay) => w.leaves + (ly ? shipYears(ly, w.pushed, star, w.drive) : 0);
+  const { leaves, pushed, drive } = ways.reduce((a, b) => (lands(b) < lands(a) - 1e-9 ? b : a));
+  // Its start's cost tells the sim which beam threw it: speeds.ts's pushedBy. `drive` tells it of the small drive.
+  return { leaves, start: pushed === "wide" ? CATALOG.speeds.wide.ship.lost : pushed ? CATALOG.beams.ship : SHIP.burn, pushed, drive };
 }
 export function colonyRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road & { stands: number | null; push: string | null } {
   const { orders, ...opts } = ordersOf(plan);
@@ -418,10 +428,10 @@ export function colonyRoad(plan: Plan, scale: number, from: number, star: string
   const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
   const ready = shipReadyAt((n) => at[pacedName(n)]);
   const sent = plan.colony?.name === star ? plan.colony : undefined;
-  const { leaves, pushed } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from);
-  const arrives = leaves === null ? null : leaves + shipYears(ly, pushed, star);
+  const { leaves, pushed, drive } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from, 0, ly, star);
+  const arrives = leaves === null ? null : leaves + shipYears(ly, pushed, star, drive);
   return {
-    name: "Send our Mind", n: sent ? 1 : null, build: "Seed Ship", craft: "A Mind", speed: stay("ship", ly, gasAt(star), pushed).beta, done: ready, leaves, arrives,
+    name: "Send our Mind", n: sent ? 1 : null, build: "Seed Ship", craft: "A Mind", speed: stay("ship", ly, gasAt(star), pushed, drive).beta, done: ready, leaves, arrives, carries: !!pushed && drive,
     home: arrives === null ? null : arrives + ly, stands: arrives === null ? null : arrives + SHIP.stands,
     push: pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null,
   };
@@ -440,8 +450,8 @@ export const seedReady = shipReady;
 export function seedsOf(plan: Plan, scale: number) {
   const done = schedule(plan, scale);
   return (plan.seeds ?? []).map((o) => {
-    const { leaves, start } = shipLeaves(plan, (n) => done[n], o.y, PROBE.build);
-    return { star: o.name, leaves, burn: start };
+    const { leaves, start, pushed, drive } = shipLeaves(plan, (n) => done[n], o.y, PROBE.build, o.d, o.name);
+    return { star: o.name, leaves, burn: start, ...(pushed && drive ? { drive: true } : {}) };
   });
 }
 
@@ -454,10 +464,10 @@ export function seedRoad(plan: Plan, scale: number, from: number, star: string, 
   const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
   const ready = shipReadyAt((n) => at[pacedName(n)]);
   const sent = (plan.seeds ?? []).find((o) => o.name === star);
-  const { leaves, pushed } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from, PROBE.build);
-  const arrives = leaves === null ? null : leaves + shipYears(ly, pushed, star);
+  const { leaves, pushed, drive } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from, PROBE.build, ly, star);
+  const arrives = leaves === null ? null : leaves + shipYears(ly, pushed, star, drive);
   return {
-    name: "Send a seed probe", n: sent ? 1 : null, build: "Seed Ship", craft: "A seed probe", speed: stay("ship", ly, gasAt(star), pushed).beta, done: ready, leaves, arrives,
+    name: "Send a seed probe", n: sent ? 1 : null, build: "Seed Ship", craft: "A seed probe", speed: stay("ship", ly, gasAt(star), pushed, drive).beta, done: ready, leaves, arrives, carries: !!pushed && drive,
     home: arrives === null ? null : arrives + ly, copies: arrives === null ? null : arrives + PROBE.first,
     push: pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null,
   };
@@ -511,11 +521,11 @@ export function kitOf(plan: Plan, scale: number) {
     colony: (() => {
       const c = plan.colony;
       if (!c) return null;
-      const { leaves, start } = shipLeaves(plan, (n) => done[n], c.y);
-      return leaves === null ? null : { star: c.name, mode: c.mode, leaves, burn: start };
+      const { leaves, start, pushed, drive } = shipLeaves(plan, (n) => done[n], c.y, 0, c.d, c.name);
+      return leaves === null ? null : { star: c.name, mode: c.mode, leaves, burn: start, ...(pushed && drive ? { drive: true } : {}) };
     })(),
     sentinels: sentinels(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves }] : [])),
-    seeds: seedsOf(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves, burn: x.burn }] : [])),
+    seeds: seedsOf(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves, burn: x.burn, ...(x.drive ? { drive: true } : {}) }] : [])),
     lenses: lenses(plan, scale).flatMap((l) => (l.looks !== null && l.home !== null ? [{ star: l.star, looks: l.looks, home: l.home }] : [])),
     flybys: flybysOf(plan, scale),
     sails: fly(sails),
