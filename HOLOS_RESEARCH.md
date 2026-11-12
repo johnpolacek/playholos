@@ -2987,7 +2987,7 @@ Gathered by a second research agent, for the same pick. Every page was read thro
   - *Past it.* At the strongest field physics allows, a machine for the Planck energy is about 10¹⁰ m round, a tenth of an AU ([Zimmermann 2018](https://arxiv.org/abs/1801.03170) · Published, Nuclear Instruments and Methods A, section 5 read). With 20 T magnets, by the agent’s arithmetic, the energy where forces may join needs a ring about 5,600 AU in radius, and the Planck energy about 100 light-years.
 - **Not verified:** a firm date for LuSEE-Night, FARSIDE’s cost, the Beijing clock’s numbers, the FCC’s cost and dates.
 - Why it matters: these four are the senses nothing at Year 0 comes near. Each has a published size, and two have a published price in power or time.
-- Not yet used. They wait on the designer’s picks.
+- Weighed 2026-11-12, and none used. The Dark Ages Array and linked telescopes were set aside 2026-11-11. The collider and the clocks were set aside 2026-11-12, by the design’s rule for a sense: the collider’s own paper promises no discovery, the clocks’ likeliest answer is that the constants hold, and neither changes what we can do. [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise).
 
 ### New senses: the dark ages, a second read, 2026-11-11
 
