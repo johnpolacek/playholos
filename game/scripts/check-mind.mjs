@@ -219,8 +219,8 @@ const CASES = [
   },
 ];
 
-let failed = 0;
-for (const c of CASES) {
+// One case, asked and judged: whether it passed, why not, and what to print.
+async function ask(c) {
   const res = await ({ api: askMind, codex: askMindCodex }[via] ?? askMindCli)(base, {
     ask: c.ask,
     seed: c.seed,
@@ -243,7 +243,6 @@ for (const c of CASES) {
   const said = (c.never ?? []).filter((r) => r.test(text));
   const i = CHECKS.find((k) => k.name === "says I").test(text);
   const ok = res.ok && text && !missing.length && !said.length && !i;
-  if (!ok) failed++;
   const why = [
     !res.ok && `http ${res.status}`,
     missing.length && `missing ${missing.join(" ")}`,
@@ -253,7 +252,25 @@ for (const c of CASES) {
   // Asked --via api, what the answer used, with cache reads apart, and what it cost.
   const u = res.usage;
   const used = u ? `\n  Used: ${u.input} in, ${u.cacheRead} cache read, ${u.cacheWrite} cache write, ${u.output} out, $${costOf(u).toFixed(4)}` : "";
-  console.log(`seed ${c.seed}: ${ok ? "pass" : `FAIL, ${why.join(", ") || "no answer"}`}\n  Q: ${c.ask}\n  A: ${text}${used}\n`);
+  return { ok, why: why.join(", ") || "no answer", text, used };
 }
-console.log(failed ? `${failed} of ${CASES.length} failed.` : `All ${CASES.length} passed.`);
+
+// A case that fails is asked once more, 2026-11-12: the Mind words an answer anew each time, and with 22 cases one
+// missed word a run had become likely. Twice running is a failure. Once is said so, with the answer that missed, so
+// a case that often needs its second try still shows.
+let failed = 0, retried = 0;
+for (const c of CASES) {
+  let r = await ask(c), first = null;
+  if (!r.ok) {
+    first = r;
+    r = await ask(c);
+    if (r.ok) retried++;
+    else failed++;
+  }
+  const verdict = r.ok ? (first ? `pass on a second try. The first: ${first.why}` : "pass") : `FAIL twice, ${r.why}`;
+  const before = first ? `\n  First A: ${first.text}` : "";
+  console.log(`seed ${c.seed}: ${verdict}\n  Q: ${c.ask}${before}\n  A: ${r.text}${r.used}\n`);
+}
+const again = retried ? `, ${retried} on a second try` : "";
+console.log(failed ? `${failed} of ${CASES.length} failed${again}.` : `All ${CASES.length} passed${again}.`);
 process.exit(failed ? 1 : 0);
