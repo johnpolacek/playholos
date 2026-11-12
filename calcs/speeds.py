@@ -176,13 +176,33 @@ SHIP_BEAM_DAYS = beam_days(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, mer
 
 # ---------- A trip ----------
 def gas_at(star): return N_CLOUD if star in IN_CLOUD else N_BETWEEN
+# What each beam gives a ship that carries a small drive and its fuel, so weighs more: by the beam's own relation, at
+# each weight from the bare ship's to 4 times it, and the straight line between. A rule of thumb, the bare speed over
+# the root of the weight, reads 2.5% low on the Ship Beam and up to 9% low on the Wide Beam, whose bluer colors hold
+# their spot farther. Worked once, when first asked. 2026-11-12.
+HEAVY_STEP, _HEAVY = 0.05, []
+def heavy():
+    """Rows of weight, the Ship Beam's speed for it, the Wide Beam's."""
+    if not _HEAVY:
+        kg = CRAFT['ship']['tonnes'] * 1e3
+        _HEAVY.extend([round(1 + HEAVY_STEP * i, 2),
+                       beam_beta(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, kg * (1 + HEAVY_STEP * i) + mercury.SHIP_SAIL_KG),
+                       wide_beta(kg * (1 + HEAVY_STEP * i) + mercury.WIDE_SAIL_KG)] for i in range(61))
+    return _HEAVY
+def heavy_beta(weight, wide=False):
+    """The speed a beam gives a ship of `weight` times its own mass."""
+    rows = heavy()
+    i = min(len(rows) - 2, max(0, int((weight - 1) / HEAVY_STEP)))
+    k = 2 if wide else 1
+    return rows[i][k] + (rows[i + 1][k] - rows[i][k]) * (min(weight, rows[-1][0]) - rows[i][0]) / (rows[i + 1][0] - rows[i][0])
 def trip(d, tonnes, push, n=N_BETWEEN, front_m2=20, stops=True, drive=True, beamed=False):
     """A craft's speed over d ly, what binds it, and its Years. `drive`: it carries one for the last of its braking,
     with that burn's fuel. Engine and fuel are dead weight until then: a beam pushes them too, so `beamed` craft leave
-    slower, and the sail must stop them too, so the craft brakes as if the gas were that much thinner."""
+    slower, and the sail must stop them too, so the craft brakes as if the gas were that much thinner. `beamed` is
+    'wide' for the Wide Beam."""
     weight = 1.0
     for _ in range(40):
-        limits = dict(push=push / math.sqrt(weight) if beamed else push, shield=shield_beta(d, tonnes, front_m2))
+        limits = dict(push=(push if weight == 1 else heavy_beta(weight, beamed == 'wide')) if beamed else push, shield=shield_beta(d, tonnes, front_m2))
         if stops: limits['stopping'] = best_beta(d, n / weight, tonnes, drive)
         binds = min(limits, key=limits.get)
         beta = limits[binds]
@@ -197,11 +217,12 @@ def trip(d, tonnes, push, n=N_BETWEEN, front_m2=20, stops=True, drive=True, beam
 # drive ends its stop. Pushed by the Ship Beam it carries no drive, which is the beam's point, so it stops on its sail
 # alone. Not yet: a pushed ship that carries a small drive for the end.
 CRAFT = dict(sentinel=dict(tonnes=1000.0, front=20.0), ship=dict(tonnes=1500.0, front=20.0))
-def start_years(beta, beamed=False):
+def start_years(beta, beamed=False, weight=1.0):
     """The Years getting up to speed adds over cruising: a Fusion Drive's burn, the Ship Beam's push, or the Wide
-    Beam's, where `beamed` is 'wide'."""
-    if beamed == 'wide': return WIDE_SHIP_LOST * beta / WIDE_SHIP
-    return mercury.SHIP_PUSH['lost'] * beta / (mercury.SHIP_V / C) if beamed else BURN_PER_C * beta
+    Beam's, where `beamed` is 'wide'. A beam's push is the same force on a heavier craft, so it takes `weight` times
+    as long to reach a speed: a thrown ship with a small drive aboard, 2026-11-12."""
+    if beamed == 'wide': return WIDE_SHIP_LOST * beta / WIDE_SHIP * weight
+    return mercury.SHIP_PUSH['lost'] * beta / (mercury.SHIP_V / C) * weight if beamed else BURN_PER_C * beta
 def stay(kind, d, n=N_BETWEEN, beamed=False, drive=None):
     """One of our craft sent d ly to stop there: its speed, what binds it, and its Years from leaving to stopped.
     `beamed`: the Ship Beam threw it, or the Wide Beam, 'wide'. `drive`: it carries a small one to end its stop. A
@@ -210,8 +231,8 @@ def stay(kind, d, n=N_BETWEEN, beamed=False, drive=None):
     c = CRAFT[kind]
     drive = (not beamed) if drive is None else drive
     push = WIDE_SHIP if beamed == 'wide' else SHIP_BEAM if beamed else FUSION_BETA
-    t = trip(d, c['tonnes'], push, n, c['front'], drive=drive, beamed=bool(beamed))
-    return dict(t, years=t['years'] + start_years(t['beta'], beamed))
+    t = trip(d, c['tonnes'], push, n, c['front'], drive=drive, beamed=beamed)
+    return dict(t, years=t['years'] + start_years(t['beta'], beamed, t['weight']))
 SHIP_WAYS = ((False, True), (True, False), (True, True), ('wide', False), ('wide', True))
 def soonest(d, n=N_BETWEEN, ways=SHIP_WAYS):
     """The way a seed ship lands soonest d ly off, of those it may go by: which beam throws it, if one does, and
@@ -409,7 +430,10 @@ def catalog():
                                       # `curve`: the days of push that bring a ship to each speed past the Ship Beam's most.
                                       ship=dict(beam=WIDE_SHIP, days=round(WIDE_SHIP_DAYS), lost=WIDE_SHIP_LOST,
                                                 curve=[[b, round(_push(b, _WIDE_SHIP_KG)[0])] for b in (0.15, 0.2, 0.25, 0.3, 0.35)]),
-                                      rod=dict(beam=WIDE_ROD, days=round(WIDE_ROD_DAYS), lost=WIDE_ROD_LOST))))
+                                      rod=dict(beam=WIDE_ROD, days=round(WIDE_ROD_DAYS), lost=WIDE_ROD_LOST)),
+                            # A ship that carries a small drive, so weighs more: rows of weight, the Ship Beam's speed for
+                            # it, the Wide Beam's.
+                            heavy=dict(step=HEAVY_STEP, rows=heavy())))
 
 def golden():
     """Trips for game/lib/sim/speeds.ts to reproduce: each craft, far and near, in a cloud and between, on its drive

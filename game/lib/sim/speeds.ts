@@ -46,7 +46,15 @@ const finishFuel = (beta: number) => Math.exp(beta / 10 / SAIL.finishVe) - 1;
  *  that launched the craft is long dropped. calcs/speeds.py's finish_engine. 2026-11-12. */
 const finishEngine = (beta: number) => (SAIL.engine * finishFuel(beta) * SAIL.finishVe * 299_792_458) / (((2 * SAIL.burnPerC * beta) / 10) * 3.15576e7);
 /** What a craft weighs with its finishing engine and that burn's fuel aboard, over what it weighs without. */
-const finishWeight = (beta: number) => (1 + finishFuel(beta)) / (1 - finishEngine(beta));
+/** The speed a beam gives a ship of `weight` times its own mass, by the beam's own relation: calcs/speeds.py's
+ *  heavy_beta. The bare speed over the root of the weight reads up to 9% low on the Wide Beam. */
+function heavyBeta(weight: number, wide: boolean) {
+  const { step, rows } = SPEEDS.heavy;
+  const i = Math.min(rows.length - 2, Math.max(0, Math.floor((weight - 1) / step)));
+  const k = wide ? 2 : 1;
+  return rows[i][k] + ((rows[i + 1][k] - rows[i][k]) * (Math.min(weight, rows[rows.length - 1][0]) - rows[i][0])) / (rows[i + 1][0] - rows[i][0]);
+}
+export const finishWeight = (beta: number) => (1 + finishFuel(beta)) / (1 - finishEngine(beta));
 /** The Years stopping adds over cruising the same stretch: on the sail alone, or with a burn for the last tenth. */
 function brakeYears(beta: number, n: number, tonnes: number, drive: boolean) {
   const x = stop0(beta, n, tonnes), [fx, ft] = rel(beta);
@@ -117,11 +125,12 @@ export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.betwee
   let weight = 1, beta = push, binds: Trip["binds"] = "push";
   // The finishing burn's fuel is dead weight: it slows a pushed craft's start, and the sail must stop it too.
   for (let i = 0; i < 40; i++) {
-    const limits: [Trip["binds"], number][] = [["push", beamed ? push / Math.sqrt(weight) : push], ["shield", shield], ["stopping", bestBeta(d, n / weight, tonnes, drive)]];
+    const limits: [Trip["binds"], number][] = [["push", beamed && weight !== 1 ? heavyBeta(weight, beamed === "wide") : push], ["shield", shield], ["stopping", bestBeta(d, n / weight, tonnes, drive)]];
     [binds, beta] = limits.reduce((a, b) => (b[1] < a[1] ? b : a));
     weight = drive ? finishWeight(beta) : 1;
   }
-  const start = beamed === "wide" ? (SPEEDS.wide.ship.lost * beta) / SPEEDS.wide.ship.beam : beamed ? SPEEDS.beamStart * beta : SAIL.burnPerC * beta;
+  // A beam's push is the same force on a heavier craft, so it takes `weight` times as long to reach a speed.
+  const start = beamed === "wide" ? ((SPEEDS.wide.ship.lost * beta) / SPEEDS.wide.ship.beam) * weight : beamed ? SPEEDS.beamStart * beta * weight : SAIL.burnPerC * beta;
   return { beta, binds, years: d / beta + brakeYears(beta, n / weight, tonnes, drive) + start, stopLy: stopLy(beta, n / weight, tonnes) * (drive ? SAIL.covered : 1) };
 }
 

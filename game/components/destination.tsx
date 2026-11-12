@@ -38,7 +38,7 @@ import {
   toward,
   willRoad,
 } from "@/lib/game/reach";
-import { beamMiss, beamSeen, rodReady, rodTonnes, worksAU } from "@/lib/sim/speeds";
+import { beamMiss, beamSeen, finishWeight, rodReady, rodTonnes, worksAU } from "@/lib/sim/speeds";
 import { CATALOG } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -65,8 +65,10 @@ function beamLine(ly: number, beta: number, lum?: number, kms?: number) {
 }
 
 /** Days the Ship Beam pushes a seed ship to a speed, as a share of light speed: 78 to a tenth, and to its most as
- *  calcs/speeds.py has it, since a fast ship runs from the light. Between the two, by the straight line. */
-function pushDays(beta: number) {
+ *  calcs/speeds.py has it, since a fast ship runs from the light. Between the two, by the straight line. `carries`: a
+ *  small drive and its fuel ride too, and the same push takes that much longer on the heavier craft. */
+const pushDays = (beta: number, carries = false) => Math.round(bareDays(beta) * (carries ? finishWeight(beta) : 1));
+function bareDays(beta: number) {
   const { shipDays } = CATALOG.beams, { beam, beamDays } = CATALOG.speeds, tenth = CATALOG.seedShip.speed;
   if (beta <= beam + 1e-9) return Math.round(beta <= tenth ? (shipDays * beta) / tenth : shipDays + ((beamDays - shipDays) * (beta - tenth)) / (beam - tenth));
   // Past the Ship Beam's most, the Wide Beam's push: by the straight line between the speeds calcs/speeds.py worked.
@@ -547,7 +549,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 2}
             to={to}
             name="Our Mind, to stay"
-            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed)} days, ${mind.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, mind.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed, mind.carries)} days, ${mind.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, mind.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
             needs={shipNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // One Seed Ship, one Mind: once sent to one hole, no other. Sent once all three are in our order.
@@ -603,7 +605,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 4}
             to={to}
             name="A seed probe that copies itself"
-            line={`${WHAT.seed}${seed.push ? ` The ${seed.push} pushes it to speed in ${pushDays(seed.speed)} days, ${seed.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, seed.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${WHAT.seed}${seed.push ? ` The ${seed.push} pushes it to speed in ${pushDays(seed.speed, seed.carries)} days, ${seed.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, seed.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
             needs={seedNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Sent once all three are in our order, before Begin too: it is built once they are done.

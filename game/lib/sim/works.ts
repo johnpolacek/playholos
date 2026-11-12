@@ -73,6 +73,9 @@ interface Catalog {
     sailing: { gros: number; stop: number; tenth: number; covered: number; burnPerC: number; finishVe: number; engine: number; hoop: number; rel: number[][] };
     wear: { dust: number; range: [number, number][]; share: number; most: number };
     fusion: number; beam: number; beamDays: number; beamStart: number;
+    /** What each beam gives a ship that carries a small drive and its fuel, so weighs more: rows of its weight over the
+     *  bare ship's, the Ship Beam's speed for it, and the Wide Beam's. Between rows, the straight line. 2026-11-12. */
+    heavy: { step: number; rows: number[][] };
     craft: Record<"sentinel" | "ship", { tonnes: number; front: number }>;
     /** A flyby probe the Ship Beam throws: its tonnes and its front in m², the beam's most for it as a share of light
      *  speed, the days of its push, and the Years that push costs over cruising. */
