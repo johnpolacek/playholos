@@ -67,7 +67,10 @@ interface Catalog {
      *  graphite by speed, and the share of a craft its shield may weigh. A Fusion Drive's speed, the Ship Beam's, and
      *  each craft's mass in tonnes and its front in m². */
     gas: { cloud: number; between: number; inCloud: string[] };
-    sailing: { gros: number; stop: number; tenth: number; covered: number; burnPerC: number; finishVe: number };
+    /** `hoop`: the weight of the fibre that holds a magnetic sail's loop together over its wire's, for each unit of
+     *  the craft's gamma beta. `rel`: relativity's factors on a stop's distance and its time, at each twentieth of
+     *  light speed. calcs/speeds.py, 2026-11-12. */
+    sailing: { gros: number; stop: number; tenth: number; covered: number; burnPerC: number; finishVe: number; hoop: number; rel: number[][] };
     wear: { dust: number; range: [number, number][]; share: number; most: number };
     fusion: number; beam: number; beamDays: number; beamStart: number;
     craft: Record<"sentinel" | "ship", { tonnes: number; front: number }>;
@@ -82,9 +85,9 @@ interface Catalog {
     seen: { kms: number; worksAU: number };
     /** The Wide Beam, the Ship Beam in stepped colors from a patch ten times as wide: its colors in microns, the most
      *  its sail's mirror reflects as a share of light speed, its sail in tonnes, how far its last color holds its
-     *  spot in ly, and what it throws: a flyby probe at the most its work gives, and a rod as another mind's, with
+     *  spot in ly, and what it throws: a flyby probe and a seed ship at the most its work gives, and a rod as another mind's, with
      *  the days and the Years its push costs near us. 2026-11-12. */
-    wide: { colors: number[]; most: number; sail: number; reach: number; probe: { beam: number; days: number; lost: number }; rod: { beam: number; days: number; lost: number } };
+    wide: { colors: number[]; most: number; sail: number; reach: number; probe: { beam: number; days: number; lost: number }; ship: { beam: number; days: number; lost: number; curve: number[][] }; rod: { beam: number; days: number; lost: number } };
   };
   /** Calcs/senses.py: our Far-Side Array hearing worlds' magnetic fields. The shares of worlds with one, among those
    *  that kept their air and those that did not, how far it hears, how bright a world's radio is (Proxima b's `flux0`

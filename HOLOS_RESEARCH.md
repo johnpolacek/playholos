@@ -3219,6 +3219,37 @@ A research agent read these for one question: what lets a beam throw a sail well
 - Used, 2026-11-12: the swarm’s beams lase at 1.55 microns, on a mirror of silicon and calcium fluoride. `calcs/mercury.py` `BEAM_LAM` and `MIRROR_N`, [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). A seed ship leaves at 0.145 of light speed, not 0.17, a flyby probe at 0.37, not 0.42, and a rod of 30 t at 0.52.
 - Used, the same day: the Wide Beam, Kare’s chain of fixed colors carried to nine tenths of light speed, from a patch of the swarm ten times as wide. `calcs/mercury.py` `WIDE_COLORS`, `calcs/speeds.py` `wide_beta`. The four colors, and that the chain holds past a tenth of light speed, are this project’s, by logic: each color is one of the efficient kinds above, and each lands inside the mirror’s band when it takes over.
 
+### Stopping from a third of light speed: the loop, relativity and its fibre, 2026-11-12
+
+Two research agents read these, for one question: can a magnetic sail stop a heavy craft from 0.2 to 0.4 of light speed, as a ship thrown by the Wide Beam would need. How much of each was read is marked. The answer reached back to every craft of ours that stops.
+
+- **Gros’s relation, reread.** [Gros 2017](https://arxiv.org/abs/1707.02801) · Published, J. Phys. Commun. 1, 045007. Full text of arXiv v3 read, all 9 pages and both appendices.
+  - His area: A = A_c [ln(I / (β I_c))]³, with A_c = 0.081 π R² and I_c = 1.55 MA. Best current 4.2 MA times β. Stop x = 3.1 m / (m_p n π R²). Wire 0.18 kg a metre for each MA.
+  - All his runs are at 0.1 MA, from about a ten-thousandth of light speed to 0.065. He checked that paths scale with speed over current, whatever the loop’s width. Nothing above a tenth of light speed anywhere in the paper.
+  - Our reduction, tonnes = 5,700 β² / (n x), is faithful: the agent’s rebuild gives 5,640. At fixed mass the stop grows as β² exactly, once the loop is fitted again to the speed.
+  - His force is not relativistic. He says of his own fit that it “cannot be traced back, to our knowledge, to underlying physical arguments”, and that whether a bow shock forms is “not clear”.
+  - Appendix A: “Additional supporting structures besides the tethers are hence not necessary.” No stress is worked.
+- **Relativity.** The agent’s inference, and this project’s own, which agree: paths depend on current over the proton’s momentum, and the craft obeys M γ dv/dt = −2 A n m v². At fixed mass the stop is 1.8% longer at 0.15 of light speed, 5% at 0.25, 12% at 0.37, and takes 1.6%, 4.6% and 11% longer.
+- **Anything above a tenth of light speed.** Nothing found that models magnetic or plasma braking from above 0.1 with relativistic ions.
+  - [Zubrin and Martin 2000](http://www.niac.usra.edu/files/studies/final_report/320Zubrin.pdf) · NIAC report, not reviewed. Theory section, Table 3 and the brake section read. Its figure, 0.95 of light speed to about 4% in about 320 days with a 100 km loop, comes from a fluid law, D = 1.175 π (ρ μ^½ I R² V²)^⅔, used with relativity left out. The agent could not rebuild it from the report’s own equations. Gros has that current “right on the point where protons are not reflected at all” at a tenth of light speed.
+  - [Perakis and Hein 2016](https://arxiv.org/abs/1603.03015) · Published, full text. Speeds to 0.1 only. 15% of the sail’s mass for tethers, with no derivation. A graphite shield over the coil’s front.
+  - Freeland 2015, JBIS 68, 306 · Could not be opened. Secondhand: it finds Zubrin’s thrust about 3 times too high.
+- **The loop holds itself together: the virial limit.**
+  - [Tixador 2008](https://snf.ieeecsc.org/files/ieeecsc/slides/CR5_Final3_012008.pdf) · Review, full text. “The real limit of the energy stored in a SMES is mechanical. The virial theorem gives a relation between the minimum mass of the mechanical structure” and the stored energy: energy over mass is at most working stress over density, for a structure “in pure tension”.
+  - [Hassenzahl 1988](https://escholarship.org/uc/item/0b08n8vh) · Lab report LBL-24993, full text by OCR. Derives it, and concludes that “apparent force cancellation cannot reduce the structural requirement”.
+  - Moon 1982, J. Appl. Phys. 53, 9112 · Abstract only. Over thirty superconducting magnets weigh 2 to 10 times what the limit requires.
+  - A loop’s outward force: [Démoulin and Aulanier 2010](https://arxiv.org/abs/1006.1785), section 2.4, after Shafranov. The pull round it is μ₀ I² / 4π times ln(8R/a) − 1.
+  - The agents’ arithmetic, which this project repeated: for Gros’s own loop, 0.42 MA round 1,600 km, the pull is 390,000 N, 46 GPa on the bare wire, and the loop stores 3.7 × 10¹² J. No source applies the limit to a magnetic sail. Zubrin’s report gives a hoop stress 11 times lower for its sample, on an energy that leaves out the field near the wire, the agent’s reading.
+- **The strongest fibres measured.**
+  - [Bai et al. 2018](https://doi.org/10.1038/s41565-018-0141-z) · Published, Nature Nanotechnology 13, 589. Abstract and full supplement read, main text not. Bundles of 2 to 7 nanotubes over spans of 1.5 mm: 80 GPa on their walls, 43 GPa counting their hollow cores. No density given: at graphite’s 2.26 g a cm³, 35 MJ a kg, the agent’s inference.
+  - [Zhang et al. 2024](https://doi.org/10.1126/science.adj1082) · Published, Science 384, 1318. Full text and supplement. The best yarn found: 8.2 GPa over 10 mm, 5.8 MJ a kg. Tubes “slip between each other”.
+  - Zylon, 5.8 GPa and 3.7 MJ a kg ([Toyobo](https://www.toyobo-global.com/seihin/kc/pbo/zylon-p/bussei-p/technical.pdf), data sheet). Toray T1100G, 7.0 GPa and 3.9 MJ a kg ([Toray](https://www.toraycma.com/wp-content/uploads/T1100G-Data-Sheet.pdf), data sheet).
+  - Graphene, 130 GPa intrinsic (Lee et al. 2008, Science 321, 385 · abstract only).
+- **The wire under fire.** No source found on a sail’s wire at these speeds. The agent’s arithmetic from [Hoang et al. 2017](https://arxiv.org/abs/1608.05284), read in part: neutral hydrogen, which no field turns, holds a bare round wire near 105 K at 0.15 of light speed and 206 K at 0.37, above where it superconducts. The field does turn protons back, tens of km from the wire.
+- Why it matters: every craft of ours that stops rested on a loop with no structure, which the virial limit contradicts.
+- Used, 2026-11-12: `calcs/speeds.py` `loop_weight` and `rel`, [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). The fibre is Bai’s bundles, at break. A sentinel’s stop adds 14 Years in a warm cloud and 75 between, not 11 and 58. Seed ships and seed probes ride the Wide Beam, and stopping sets their speed.
+- Not verified: Freeland 2015, Moon’s and Longmire’s books, and any fibre of nanotubes at length.
+
 ## Watch list
 
 Results the design is waiting on, in date order. Check each when its date comes. Rewritten 2026-11-07 from that day’s sweep.

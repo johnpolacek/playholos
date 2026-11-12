@@ -25,7 +25,47 @@ IN_CLOUD = ('Alpha Centauri', 'Proxima Centauri', 'Epsilon Eridani', '61 Cygni',
 # / (n x), with x in ly. Slowing to a three-hundredth of its speed takes 5.2 x / v, where cruising would take x / v.
 # Fitted to runs at a hundredth of light speed and below, and stretched from there, as he stretches it himself.
 GROS_T, T_STOP = 5700.0, 5.2
-def stop_ly(beta, n, tonnes): return GROS_T * beta ** 2 / (n * tonnes)
+# Two things his relation leaves out, added 2026-11-12. HOLOS_RESEARCH.md, "Stopping from a third of light speed".
+# The loop must hold itself together. A current loop pushes itself outward, and the pull round it is mu0 I^2 / 4 pi
+# times a log of its width over its wire's, about 21 for ours. Gros writes that no structure is needed past the
+# tethers. The virial limit says otherwise: what holds a magnet weighs at least its stored energy over its fibre's
+# strength for its weight. His best current grows with the craft's speed, 4.2 MA for each unit of light speed, so the
+# faster the craft, the more of its loop is fibre and the less is wire. With half the craft still loop, the loop is
+# narrower by that share, and the stop longer by its square.
+# The fibre: the strongest measured where several strands share one load. Bundles of carbon nanotubes, 80 GPa on their
+# walls (Bai et al. 2018), which at graphite's 2.26 g a cm3 is 35 MJ a kg. Taken at break, with no margin, so this is
+# the least the structure can weigh, and each stop the least it can take. Today's best yarn holds a sixth of that
+# (Zhang et al. 2024): what lies between is flaws and alignment, not physics. Ours, by logic.
+# Not modeled: inside a warm cloud, neutral gas strikes the wire unturned and warms it, so the loop flies as a ribbon,
+# edge on.
+MU0, I_BEST, WIRE, LOOP_LOG = 4e-7 * math.pi, math.e * 1.55e6, 0.18e-6, 21.0
+FIBRE_S = 80e9 / 2260
+HOOP = MU0 * I_BEST * LOOP_LOG / (4 * math.pi * WIRE * FIBRE_S)     # the fibre's weight over the wire's, for each unit of gamma beta
+def loop_weight(beta): return (1 + HOOP * beta / math.sqrt(1 - beta ** 2)) ** 2
+# Relativity. A proton's path depends on the current over its momentum, so the best current is higher by gamma and the
+# loop narrower by it. The craft's own momentum is higher too. Worked from M gamma dv/dt = -2 A n m v^2, with his area
+# A = A_c (1 + ln(p0 / p))^3 in the proton's momentum p: ours, and the research agent's, which agree. Its factors on
+# the stop's distance and its time, at each speed, by Simpson's rule. Under 1% at a tenth of light speed, 12% and 11%
+# at 0.37.
+def _simpson(f, a, b, n=400):
+    h = (b - a) / n
+    return h / 3 * (f(a) + f(b) + sum((4 if i % 2 else 2) * f(a + i * h) for i in range(1, n)))
+def _rel(beta, to=1 / 300):
+    if beta <= 0: return 1.0, 1.0
+    g = 1 / math.sqrt(1 - beta ** 2); p0 = g * beta; end = beta * to
+    u, u0 = math.log(p0 / (end / math.sqrt(1 - end ** 2))), math.log(1 / to)
+    x = _simpson(lambda v: 1 / ((1 + v) ** 3 * math.sqrt(1 + (p0 * math.exp(-v)) ** 2)), 0, u) / _simpson(lambda v: 1 / (1 + v) ** 3, 0, u0)
+    t = _simpson(lambda v: math.exp(v) / (1 + v) ** 3, 0, u) / p0 / (_simpson(lambda v: math.exp(v) / (1 + v) ** 3, 0, u0) / beta)
+    return g ** 2 * x, g ** 2 * t
+REL = [[b / 20, *_rel(b / 20)] for b in range(0, 19)]                # each twentieth of light speed, to 0.9
+def rel(beta):
+    """Relativity's factors on a stop's distance and time at a speed, between the worked speeds by a straight line."""
+    k = min(len(REL) - 2, int(beta * 20))
+    (b0, x0, t0), (b1, x1, t1) = REL[k], REL[k + 1]
+    w = (beta - b0) / (b1 - b0)
+    return x0 + (x1 - x0) * w, t0 + (t1 - t0) * w
+def _stop0(beta, n, tonnes): return GROS_T * beta ** 2 * loop_weight(beta) / (n * tonnes)
+def stop_ly(beta, n, tonnes): return _stop0(beta, n, tonnes) * rel(beta)[0]
 # The sail's drag fades as the craft slows, so its last tenth of speed takes two thirds of the time: 1.84 x / v to a
 # tenth of its speed, by Gros, against 5.2 to a three-hundredth. Integrating his drag, ours: by a tenth of its speed it
 # has covered 0.908 of x. So a craft with a drive sheds the last tenth by a burn, as Perakis and Hein 2016 found a
@@ -38,15 +78,20 @@ FINISH_VE = 0.04
 def finish_fuel(beta): return math.exp(beta / 10 / FINISH_VE) - 1
 def brake_years(beta, n, tonnes, drive=True):
     """The Years stopping adds over cruising the same stretch: on the sail alone, or with a burn for the last tenth."""
-    x = stop_ly(beta, n, tonnes)
-    if not drive: return (T_STOP - 1) * x / beta
-    return (T_TENTH - X_TENTH) * x / beta + BURN_PER_C * beta / 10
+    x, (fx, ft) = _stop0(beta, n, tonnes), rel(beta)
+    if not drive: return (T_STOP * ft - fx) * x / beta
+    return (T_TENTH * ft - X_TENTH * fx) * x / beta + BURN_PER_C * beta / 10
 def braking_ly(beta, n, tonnes, drive=True): return stop_ly(beta, n, tonnes) * (X_TENTH if drive else 1)
 def best_beta(d, n, tonnes, drive=True):
-    """The speed that lands a craft soonest. Its trip is d / beta of cruising and K beta of stopping, so the two are
-    equal at the best speed. Ours, from Gros's relation."""
-    k = (T_STOP - 1) * GROS_T / (n * tonnes) if not drive else (T_TENTH - X_TENTH) * GROS_T / (n * tonnes) + BURN_PER_C / 10
-    return math.sqrt(d / k)
+    """The speed that lands a craft soonest: its trip is d / beta of cruising and its stopping, which grows faster
+    than its speed, so one speed is best. Found where a little faster and a little slower take the same Years.
+    Ours, from Gros's relation. Until 2026-11-12 it had a closed form, before the loop's fibre and relativity."""
+    years = lambda b: d / b + brake_years(b, n, tonnes, drive)
+    lo, hi = 1e-4, 0.89
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if years(mid * 1.0001) < years(mid * 0.9999) else (lo, mid)
+    return (lo + hi) / 2
 
 # ---------- Wear and radiation ----------
 # Dust wears a front by 5 kg a m2 over 6 ly at a tenth of light speed (Crawford 2011, on Landgraf's dust). Ulysses
@@ -139,12 +184,16 @@ def trip(d, tonnes, push, n=N_BETWEEN, front_m2=20, stops=True, drive=True, beam
 # alone. Not yet: a pushed ship that carries a small drive for the end.
 CRAFT = dict(sentinel=dict(tonnes=1000.0, front=20.0), ship=dict(tonnes=1500.0, front=20.0))
 def start_years(beta, beamed=False):
-    """The Years getting up to speed adds over cruising: a Fusion Drive's burn, or the Ship Beam's push."""
+    """The Years getting up to speed adds over cruising: a Fusion Drive's burn, the Ship Beam's push, or the Wide
+    Beam's, where `beamed` is 'wide'."""
+    if beamed == 'wide': return WIDE_SHIP_LOST * beta / WIDE_SHIP
     return mercury.SHIP_PUSH['lost'] * beta / (mercury.SHIP_V / C) if beamed else BURN_PER_C * beta
 def stay(kind, d, n=N_BETWEEN, beamed=False):
-    """One of our craft sent d ly to stop there: its speed, what binds it, and its Years from leaving to stopped."""
+    """One of our craft sent d ly to stop there: its speed, what binds it, and its Years from leaving to stopped.
+    `beamed`: the Ship Beam threw it, or the Wide Beam, 'wide'. Either way it carries no drive."""
     c = CRAFT[kind]
-    t = trip(d, c['tonnes'], SHIP_BEAM if beamed else FUSION_BETA, n, c['front'], drive=not beamed, beamed=beamed)
+    push = WIDE_SHIP if beamed == 'wide' else SHIP_BEAM if beamed else FUSION_BETA
+    t = trip(d, c['tonnes'], push, n, c['front'], drive=not beamed, beamed=bool(beamed))
     return dict(t, years=t['years'] + start_years(t['beta'], beamed))
 
 # ---------- What another mind throws ----------
@@ -258,6 +307,12 @@ def wide_probe_years(d):
     if d <= 0: return 0.0
     b = wide_probe_beta(d)
     return d / b + WIDE_PROBE_LOST * b / WIDE_PROBE
+# A seed ship or a seed probe, 1,500 t: the beam's work could give it more than a third of light speed, but it must
+# stop, on its sail alone, so on most roads its stopping sets its speed. 2026-11-12.
+_WIDE_SHIP_KG = CRAFT['ship']['tonnes'] * 1e3 + mercury.WIDE_SAIL_KG
+WIDE_SHIP = wide_beta(_WIDE_SHIP_KG)
+WIDE_SHIP_DAYS, _WIDE_SHIP_M = _push(WIDE_SHIP, _WIDE_SHIP_KG)
+WIDE_SHIP_LOST = WIDE_SHIP_DAYS / 365.25 - _WIDE_SHIP_M / (WIDE_SHIP * C) / YEAR
 # A rod: its shield binds it, as it binds what another mind throws, so it is that rod. The same harm, the same speed,
 # the same mass, readied as fast. The beam's work never binds one: checked near and far.
 def wide_rod_beta(d): return min(WIDE_MOST, thrown_beta(d))
@@ -302,7 +357,10 @@ def catalog():
     return dict(speeds=dict(bullet=FUSION_BETA, sail=SAIL_BETA, thrown=THROWN,
                             # What a craft that stops is bound by, for game/lib/sim/speeds.ts to work each trip.
                             gas=dict(cloud=N_CLOUD, between=N_BETWEEN, inCloud=list(IN_CLOUD)),
-                            sailing=dict(gros=GROS_T, stop=T_STOP, tenth=T_TENTH, covered=X_TENTH, burnPerC=BURN_PER_C, finishVe=FINISH_VE),
+                            sailing=dict(gros=GROS_T, stop=T_STOP, tenth=T_TENTH, covered=X_TENTH, burnPerC=BURN_PER_C, finishVe=FINISH_VE,
+                                         # The loop's fibre for each unit of gamma beta, and relativity's factors on a stop's
+                                         # distance and time at each twentieth of light speed.
+                                         hoop=HOOP, rel=REL),
                             wear=dict(dust=DUST, range=[list(r) for r in RANGE], share=SHIELD_SHARE, most=0.9),
                             fusion=FUSION_BETA, beam=SHIP_BEAM, beamDays=round(SHIP_BEAM_DAYS), beamStart=mercury.SHIP_PUSH['lost'] / (mercury.SHIP_V / C),
                             craft=CRAFT,
@@ -320,6 +378,9 @@ def catalog():
                             wide=dict(colors=[round(c * 1e6, 2) for c in mercury.WIDE_COLORS], most=WIDE_MOST, sail=mercury.WIDE_SAIL_KG / 1e3,
                                       reach=WIDE_REACH[-1] / LY,
                                       probe=dict(beam=WIDE_PROBE, days=round(WIDE_PROBE_DAYS), lost=WIDE_PROBE_LOST),
+                                      # `curve`: the days of push that bring a ship to each speed past the Ship Beam's most.
+                                      ship=dict(beam=WIDE_SHIP, days=round(WIDE_SHIP_DAYS), lost=WIDE_SHIP_LOST,
+                                                curve=[[b, round(_push(b, _WIDE_SHIP_KG)[0])] for b in (0.15, 0.2, 0.25, 0.3, 0.35)]),
                                       rod=dict(beam=WIDE_ROD, days=round(WIDE_ROD_DAYS), lost=WIDE_ROD_LOST))))
 
 def golden():
@@ -329,7 +390,7 @@ def golden():
     for kind in CRAFT:
         for d in (4.25, 10.5, 10, 20, 50, 120, 400, 2700, 30000):
             for n in (N_CLOUD, N_BETWEEN):
-                for beamed in ((False, True) if kind == 'ship' else (False,)):
+                for beamed in ((False, True, 'wide') if kind == 'ship' else (False,)):
                     t = stay(kind, d, n, beamed)
                     out.append(dict(kind=kind, d=d, n=n, beamed=beamed, beta=t['beta'], years=t['years'], binds=t['binds'], stopLy=t['stop_ly']))
     return out

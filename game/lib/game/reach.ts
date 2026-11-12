@@ -404,9 +404,13 @@ export function shipLeaves(plan: Plan, at: (name: string) => number | null | und
   const byDrive = drive === null ? null : Math.max(sent, drive) + build;
   const byBeam = beam === null ? null : onFrom(plan, "Ship Beam", Math.max(sent, beam) + build);
   const leaves = byDrive === null ? byBeam : byBeam === null ? byDrive : Math.min(byDrive, byBeam);
-  if (leaves === null) return { leaves: null, start: SHIP.burn, pushed: false };
-  const pushed = beam !== null && beam <= leaves && isOn(plan, "Ship Beam", leaves);
-  return { leaves, start: pushed ? CATALOG.beams.ship : SHIP.burn, pushed };
+  if (leaves === null) return { leaves: null, start: SHIP.burn, pushed: false as Push };
+  // The Wide Beam throws it, once it stands: it is the Ship Beam grown wider, and goes dark with it. 2026-11-12.
+  const thrown = beam !== null && beam <= leaves && isOn(plan, "Ship Beam", leaves);
+  const wide = at("Wide Beam");
+  const pushed: Push = thrown && wide != null && wide <= leaves ? "wide" : thrown;
+  // Its start's cost tells the sim which beam threw it: speeds.ts's pushedBy.
+  return { leaves, start: pushed === "wide" ? CATALOG.speeds.wide.ship.lost : pushed ? CATALOG.beams.ship : SHIP.burn, pushed };
 }
 export function colonyRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road & { stands: number | null; push: string | null } {
   const { orders, ...opts } = ordersOf(plan);
@@ -419,7 +423,7 @@ export function colonyRoad(plan: Plan, scale: number, from: number, star: string
   return {
     name: "Send our Mind", n: sent ? 1 : null, build: "Seed Ship", craft: "A Mind", speed: stay("ship", ly, gasAt(star), pushed).beta, done: ready, leaves, arrives,
     home: arrives === null ? null : arrives + ly, stands: arrives === null ? null : arrives + SHIP.stands,
-    push: pushed ? "Ship Beam" : null,
+    push: pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null,
   };
 }
 export const shipReady = (plan: Plan) => shipNeeds(plan).every((n) => inOrder(plan, n));
@@ -455,7 +459,7 @@ export function seedRoad(plan: Plan, scale: number, from: number, star: string, 
   return {
     name: "Send a seed probe", n: sent ? 1 : null, build: "Seed Ship", craft: "A seed probe", speed: stay("ship", ly, gasAt(star), pushed).beta, done: ready, leaves, arrives,
     home: arrives === null ? null : arrives + ly, copies: arrives === null ? null : arrives + PROBE.first,
-    push: pushed ? "Ship Beam" : null,
+    push: pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null,
   };
 }
 

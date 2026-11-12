@@ -22,19 +22,41 @@ export const BULLET_C = SPEEDS.bullet;
  *  show, and the thinner gas between the clouds everywhere else. A pair's stars share their cloud. */
 export const gasAt = (star?: string) => (star && GAS.inCloud.some((s) => star === s || star.startsWith(`${s} `)) ? GAS.cloud : GAS.between);
 
-/** How far a craft takes to stop on its sail alone, in ly: its speed squared over the gas and its own mass. */
-const stopLy = (beta: number, n: number, tonnes: number) => (SAIL.gros * beta ** 2) / (n * tonnes);
+/** How much longer a stop is for the fibre that holds the loop together. A current loop pushes itself outward, and
+ *  what holds it weighs at least its stored energy over its fibre's strength: the virial limit. The best current grows
+ *  with the craft's speed, so the faster the craft, the more of its loop is fibre, the narrower the loop, and the
+ *  longer the stop, by the square. The strongest fibre measured, at break: the least it can weigh. 2026-11-12. */
+const loopWeight = (beta: number) => (1 + (SAIL.hoop * beta) / Math.sqrt(1 - beta ** 2)) ** 2;
+/** Relativity's factors on a stop's distance and its time at a speed, between the worked speeds by a straight line. */
+function rel(beta: number): [number, number] {
+  const k = Math.min(SAIL.rel.length - 2, Math.floor(beta * 20));
+  const [b0, x0, t0] = SAIL.rel[k], [b1, x1, t1] = SAIL.rel[k + 1];
+  const w = (beta - b0) / (b1 - b0);
+  return [x0 + (x1 - x0) * w, t0 + (t1 - t0) * w];
+}
+/** A stop's length before relativity, in ly: the craft's speed squared over the gas and its own mass, by its loop's
+ *  fibre. */
+const stop0 = (beta: number, n: number, tonnes: number) => (SAIL.gros * beta ** 2 * loopWeight(beta)) / (n * tonnes);
+/** How far a craft takes to stop on its sail alone, in ly. */
+const stopLy = (beta: number, n: number, tonnes: number) => stop0(beta, n, tonnes) * rel(beta)[0];
 /** Deuterium for the burn that ends a stop, tonnes a tonne: a tenth of the craft's speed on its own engine. */
 const finishFuel = (beta: number) => Math.exp(beta / 10 / SAIL.finishVe) - 1;
 /** The Years stopping adds over cruising the same stretch: on the sail alone, or with a burn for the last tenth. */
 function brakeYears(beta: number, n: number, tonnes: number, drive: boolean) {
-  const x = stopLy(beta, n, tonnes);
-  return drive ? ((SAIL.tenth - SAIL.covered) * x) / beta + (SAIL.burnPerC * beta) / 10 : ((SAIL.stop - 1) * x) / beta;
+  const x = stop0(beta, n, tonnes), [fx, ft] = rel(beta);
+  return drive ? ((SAIL.tenth * ft - SAIL.covered * fx) * x) / beta + (SAIL.burnPerC * beta) / 10 : ((SAIL.stop * ft - fx) * x) / beta;
 }
-/** The speed that lands a craft soonest: where its cruise and its stopping take as long as each other. */
+/** The speed that lands a craft soonest. Its stopping grows faster than its speed, so one speed is best: found where
+ *  a little faster and a little slower take the same Years. calcs/speeds.py's best_beta. */
 function bestBeta(d: number, n: number, tonnes: number, drive: boolean) {
-  const k = drive ? ((SAIL.tenth - SAIL.covered) * SAIL.gros) / (n * tonnes) + SAIL.burnPerC / 10 : ((SAIL.stop - 1) * SAIL.gros) / (n * tonnes);
-  return Math.sqrt(d / k);
+  const years = (b: number) => d / b + brakeYears(b, n, tonnes, drive);
+  let lo = 1e-4, hi = 0.89;
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (years(mid * 1.0001) < years(mid * 0.9999)) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
 }
 /** What dust wears off a front over `d` ly, kg a m². */
 const wear = (beta: number, d: number) => (WEAR.dust * (beta / 0.1) ** 2 * d) / 6;
@@ -59,6 +81,11 @@ function shieldBeta(d: number, tonnes: number, front: number) {
   return lo;
 }
 
+/** Which beam of ours threw a craft, if one did: none, the Ship Beam, or the Wide Beam, which is the Ship Beam in
+ *  stepped colors from a patch ten times as wide. Its colors step bluer as the sail speeds up, so the sail's mirror
+ *  reflects to nine tenths of light speed, and its spot holds ten times as far. calcs/mercury.py. 2026-11-12. */
+export type Push = boolean | "wide";
+
 export interface Trip {
   /** Its cruise, as a share of light speed. */
   beta: number;
@@ -73,10 +100,11 @@ export interface Trip {
 /** One of our craft sent `d` ly to stop there, through gas of `n` ions a cm³. On its Fusion Drive its fuel holds it to
  *  a tenth of light speed and the same drive ends its stop. Pushed by the Ship Beam it carries no drive, so it stops on
  *  its sail alone. */
-export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.between, beamed = false): Trip {
+export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.between, beamed: Push = false): Trip {
   const { tonnes, front } = CRAFT[kind];
-  if (!(d > 0)) return { beta: beamed ? SPEEDS.beam : SPEEDS.fusion, binds: "push", years: 0, stopLy: 0 };
-  const push = beamed ? SPEEDS.beam : SPEEDS.fusion, drive = !beamed;
+  // The Wide Beam's work could give a ship more than a third of light speed. It must still stop on its sail alone.
+  const push = beamed === "wide" ? SPEEDS.wide.ship.beam : beamed ? SPEEDS.beam : SPEEDS.fusion, drive = !beamed;
+  if (!(d > 0)) return { beta: push, binds: "push", years: 0, stopLy: 0 };
   const shield = shieldBeta(d, tonnes, front);
   let weight = 1, beta = push, binds: Trip["binds"] = "push";
   // The finishing burn's fuel is dead weight: it slows a pushed craft's start, and the sail must stop it too.
@@ -85,16 +113,13 @@ export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.betwee
     [binds, beta] = limits.reduce((a, b) => (b[1] < a[1] ? b : a));
     weight = drive ? 1 + finishFuel(beta) : 1;
   }
-  const start = beamed ? SPEEDS.beamStart * beta : SAIL.burnPerC * beta;
+  const start = beamed === "wide" ? (SPEEDS.wide.ship.lost * beta) / SPEEDS.wide.ship.beam : beamed ? SPEEDS.beamStart * beta : SAIL.burnPerC * beta;
   return { beta, binds, years: d / beta + brakeYears(beta, n / weight, tonnes, drive) + start, stopLy: stopLy(beta, n / weight, tonnes) * (drive ? SAIL.covered : 1) };
 }
 
 /** Years for our sails to pass a star `ly` away. */
 export const sailYears = (ly: number) => ly / SAIL_C;
-/** Which beam of ours threw a craft, if one did: none, the Ship Beam, or the Wide Beam, which is the Ship Beam in
- *  stepped colors from a patch ten times as wide. Its colors step bluer as the sail speeds up, so the sail's mirror
- *  reflects to nine tenths of light speed, and its spot holds ten times as far. calcs/mercury.py. 2026-11-12. */
-export type Push = boolean | "wide";
+
 /** How fast a flyby probe passes a star `ly` away, as a share of light speed. On its Fusion Drive its fuel holds it to
  *  a tenth. `pushed`: our Ship Beam threw it, with no engine or fuel. The beam does the same work on whatever rides its
  *  sail, so 150 t leaves at over a third of light speed, or slower on a road so long that dust would wear through its shield.
@@ -114,10 +139,11 @@ export const sentinelYears = (ly: number, star?: string) => stay("sentinel", ly,
 export const sentinelCruise = (ly: number) => ly / SPEEDS.fusion;
 /** Years for a seed ship or a seed probe to land `ly` away, at the star of that name if it is one. `pushed`: our Ship
  *  Beam threw it, in place of its Fusion Drive. */
-export const shipYears = (ly: number, pushed = false, star?: string) => stay("ship", ly, gasAt(star), pushed).years;
+export const shipYears = (ly: number, pushed: Push = false, star?: string) => stay("ship", ly, gasAt(star), pushed).years;
 /** Whether our Ship Beam threw a ship, from the Years its start cost over cruising, as our orders keep it: the beam's
  *  push costs a fraction of a Year, and a Fusion Drive's burn 10. */
-export const pushedBy = (start?: number) => start !== undefined && start < catalog.seedShip.burn;
+export const pushedBy = (start?: number): Push =>
+  start === undefined ? false : Math.abs(start - SPEEDS.wide.ship.lost) < 1e-9 ? "wide" : start < catalog.seedShip.burn;
 /** How fast a bullet of ours flies `ly`, as a share of light speed. On its Fusion Drive, a tenth. `pushed`: our Ship
  *  Beam threw it, as a rod of about 30 t with no engine, at the most its sail's mirror reflects, half of light speed,
  *  with a bullet's harm. Dust binds it only on a very long road. calcs/speeds.py's rod_beta. 2026-11-12. */
