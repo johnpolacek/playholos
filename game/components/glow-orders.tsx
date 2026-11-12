@@ -31,7 +31,7 @@ const t = (kt: number) => `${(kt * 1000).toLocaleString("en-US", { maximumFracti
 
 /** What each costs a glow, in words. */
 const PRICE: Record<By, string> = {
-  sails: "Hours of a small grid’s power, but the laser flashes at the glow. A mind there awake sees where we are.",
+  sails: "Hours of a small grid’s power. We aim where the glow will be, so the laser passes it by, too wide for a mind there to see.",
   probe: `${t(CATALOG.probe.fuel)} of deuterium, under a Year of the Works. It passes, pictures a world, and reads its air.`,
   sentinel: `${t(CATALOG.sentinel.fuel)} of deuterium, about ${Math.round(CATALOG.sentinel.fuel / CATALOG.deuterium.perYear)} Years of the Works. It brakes unseen, stays, and sees what makes the heat.`,
 };

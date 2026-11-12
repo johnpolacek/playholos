@@ -77,6 +77,9 @@ interface Catalog {
     /** A rod the Ship Beam throws in place of a bullet: its tonnes, for a bullet's harm at the most its sail's mirror
      *  reflects, that speed, the days of its push, the Years the push costs, and the Years to ready one. */
     rod: { tonnes: number; beam: number; days: number; lost: number; ready: number };
+    /** Who sees a launch beam: how fast a star crosses our sky, in km/s, and how far an awake old mind's works reach
+     *  from its star, in AU, where a plate stays at its glow's 12 K. */
+    seen: { kms: number; worksAU: number };
   };
   /** Calcs/senses.py: our Far-Side Array hearing worlds' magnetic fields. The shares of worlds with one, among those
    *  that kept their air and those that did not, how far it hears, how bright a world's radio is (Proxima b's `flux0`

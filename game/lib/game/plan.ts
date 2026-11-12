@@ -331,7 +331,7 @@ export const SAYS: Record<string, string> = {
   "Star Beam":
     "Part of the swarm, 100 km across, phased as one laser of 10 TW. It pushes a lens to the Sun’s focus in about two months, not 17 Years, carrying a telescope 3 m wide that pictures a world in about a week. No one has phased mirrors spread that far, so this is the least certain build we have.",
   "Ship Beam":
-    "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out near 3% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days, and to its most, about a sixth, in about 160. The ship needs no Fusion Drive and no deuterium. With no drive it stops on its magnetic sail alone, and that sets its speed: as fast as it can stop from. On a short hop through thin gas that is under a tenth. On a long road it is the beam’s full push. It throws a flyby probe too, from the Probe Yard: 150 t leaves at about four tenths of light speed after 60 days of push, with no engine and no fuel. The beam does the same work on whatever rides its sail, so a lighter craft leaves faster, up to half of light speed. So it throws a bullet too: a rod of 32 t, which lands as hard as a bullet of 1,000 t and needs no helium-3. Past that a sail outruns its own mirror: the beam’s light reaches it stretched too red to reflect. Its beam points at the ship’s star for all of the push. A mind awake there sees it, as it would a knock, and knows something is coming decades before it lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
+    "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out near 3% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days, and to its most, about a sixth, in about 160. The ship needs no Fusion Drive and no deuterium. With no drive it stops on its magnetic sail alone, and that sets its speed: as fast as it can stop from. On a short hop through thin gas that is under a tenth. On a long road it is the beam’s full push. It throws a flyby probe too, from the Probe Yard: 150 t leaves at about four tenths of light speed after 60 days of push, with no engine and no fuel. The beam does the same work on whatever rides its sail, so a lighter craft leaves faster, up to half of light speed. So it throws a bullet too: a rod of 32 t, which lands as hard as a bullet of 1,000 t and needs no helium-3. Past that a sail outruns its own mirror: the beam’s light reaches it stretched too red to reflect. We aim each craft where its star will be when it lands, so its beam passes that star by: about 170 AU at Proxima Centauri for a seed ship, and a light-year at a glow far off. Only an old mind awake near us has works that wide, its cold panels about 540 AU out. It sees the beam as it would a knock, decades before the craft lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
   "Hypertelescope":
     "Labeyrie’s design: 150 mirrors 3 m wide, flying in a formation 150 km across, their light brought to one focus. It pictures an Earth 10 light years away in half an hour, about 300 km a pixel: continents, seas, cloud, and land green where something grows. Cities and fields are far too small. Its pixel widens with distance, so past about 135 light years a world is under three pixels across. Unlike a lens, it turns to any star in about a week.",
   "Galaxy Broadcast Array":
@@ -459,7 +459,8 @@ function doneOf(p: ReturnType<typeof pace>, name: string) {
 
 /** Builds that act on their own once done, where acting has a price: the Will may stand one down, and arm it again,
  *  at any time, from before it is ordered. Each says how it stands either way, what its button asks, and what
- *  standing down means. The Interceptor's catch is an act of war, and the Ship Beam's push is seen at its star.
+ *  standing down means. The Interceptor's catch is an act of war, and the Ship Beam's push is seen by an old mind near enough:
+ *  lib/sim/speeds.ts's beamSeen.
  *  From the designer, 2026-11-11. */
 export const SWITCHED: Record<string, { on: string; off: string; turnOn: string; turnOff: string; whenOn: string; whenOff: string }> = {
   Interceptor: {
@@ -475,7 +476,7 @@ export const SWITCHED: Record<string, { on: string; off: string; turnOn: string;
     off: "Dark",
     turnOn: "Let It Push",
     turnOff: "Keep It Dark",
-    whenOn: "Pushing, each seed ship and flyby probe that leaves rides it, and a mind awake at its star sees the beam.",
+    whenOn: "Pushing, each seed ship and flyby probe that leaves rides it. Its beam passes wide of the star it is bound for, so only an old mind awake near us, with works that wide, sees it.",
     whenOff: "Dark, each craft leaves on its own drive and fuel, unseen. A seed ship takes 10 Years longer.",
   },
 };

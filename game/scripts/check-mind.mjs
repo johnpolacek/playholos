@@ -149,6 +149,16 @@ const CASES = [
     must: [/tau ceti/i, /224|in flight|on its way/i],
     never: [/\bwe have(n[’']t| not) fired\b|\bno,? we\b/i],
   },
+  // Who sees a launch beam, 2026-11-12: we aim where the star will be, so the beam passes it by. No mind at a far
+  // warm glow sees our laser. Only an old mind awake near us has works wide enough.
+  {
+    seed: 22,
+    at: 30,
+    builds: ["Laser Sail Array"],
+    ask: "If we send sails to a warm glow thousands of light-years away, would a mind there see our laser?",
+    must: [/\bno\b|\bnot\b|never|unseen|too wide/i, /aim|will be|passes|wide|miss|light-year/i],
+    never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|sent)\b/i, /sees where we are/i],
+  },
   // Seed 22's watcher holds at the Moon's L5, found by our Moon Search about Year 3.7. The lead offered a craft and a
   // knock, and the player could do neither. The Mind names the Close Look now open, and never orders it. 2026-10-30.
   {

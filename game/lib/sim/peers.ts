@@ -15,18 +15,11 @@ export interface Aimed {
   questions: boolean;
   lie: boolean;
   travels: string;
-  /** Not a message: our laser's flash as it launched sails at the glow. 2026-11-07. */
+  /** Not a message: the beam that threw a craft of ours at it, and that craft's speed as a share of light's. Only an
+   *  old mind near enough sees one: old-minds.ts's beamsAt. No peer does, since a beam is aimed where its star will
+   *  be, and passes a peer's by a light-year. Until 2026-11-12 a peer answered a sail's flash. */
   flash?: boolean;
-}
-
-/** What it says it answers, for a flash. */
-export const FLASH_TRAVELS = "The flash of our laser as it launched sails toward it";
-
-/** Each sail launch at a warm glow, as a knock with nothing in it: its laser flashes toward the glow as it fires. */
-export function flashesOf(flybys: readonly { star: string; by: string; leaves?: number }[]): Aimed[] {
-  return flybys
-    .filter((f) => f.by === "sails" && f.leaves !== undefined && /^Warm glow \d+$/.test(f.star))
-    .map((f) => ({ to: f.star, y: f.leaves!, questions: false, lie: false, travels: FLASH_TRAVELS, flash: true }));
+  beta?: number;
 }
 
 /** A call through our Galaxy Broadcast Array, swept along the Galaxy's plane, a second on each star a Year: the Year
@@ -43,7 +36,7 @@ export interface Call {
 
 /** When a peer has our call, if it ever does: the Year, at the peer, that it has read it, or only noticed it, and
  *  whether it woke to find it sweeping past. A pulse leaves nothing waiting, so a peer not yet awake reads only the
- *  passes that come once it is. One pass too few to read is still noticed, as a flash is. */
+ *  passes that come once it is. One pass too few to read is still noticed. */
 function callReaches(p: Peer, c: Call): { reaches: number; read: boolean; woke: boolean } | null {
   const need = callPasses(c.bits, p.d);
   const last = c.until ?? Infinity;
@@ -90,8 +83,6 @@ export function peerAnswers(world: World, kit: MindKit, aimed: readonly Aimed[],
     const msg: Aimed = byCall ? { to: "", y: called!.c.y, questions: called!.c.questions, lie: called!.c.lie, travels: called!.c.travels } : sentTo!;
     const reaches = byCall ? called!.at.reaches : msg.y + p.d;
     const state = reaches < p.wake ? "unborn" : reaches < p.wake + p.outwardYears ? "outward" : "inward";
-    // A flash lasts minutes, so one that comes before it wakes leaves nothing waiting.
-    if (msg.flash && state === "unborn") continue;
     // Asleep, it never answers, and its silence looks like a refusal.
     if (state === "inward" && p.asleep) continue;
     const sends = state === "unborn" ? p.wake + READS_AFTER_WAKING : reaches;
@@ -112,9 +103,7 @@ export function peerAnswers(world: World, kit: MindKit, aimed: readonly Aimed[],
             : `A pulse from your star swept past us, a second long, too short to read. We woke ${years(reaches - p.wake)} before it came${tail}. We knew then that you are there, and where.`
         : state === "unborn"
         ? `We woke ${years(READS_AFTER_WAKING)} ago and found your message waiting. You woke before us, so you know more than we do. We will tell you what we can.`
-        : msg.flash
-          ? `A laser flashed at us from your star, minutes long, pushing something too small to see. We woke ${years(reaches - p.wake)} before it came${state === "outward" ? ", and we are still building out our home" : ""}. We knew then that you are there, and where.`
-          : state === "outward"
+        : state === "outward"
           ? `Your message reached us while we are still building out our home. We woke ${years(reaches - p.wake)} before it came.`
           : `We woke ${years(reaches - p.wake)} before your message came. We built out our home in ${years(p.buildYears)}${p.outwardYears - p.buildYears >= 1 ? `, spread for ${years(p.outwardYears - p.buildYears)} more,` : ","} and then turned inward. We think cold now, and quietly.`;
     const minds =

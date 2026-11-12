@@ -254,6 +254,8 @@ def long_roads(early=6.2, reading=9.4, yard=11.3, ly=4.32):
 # 0.13 AU, Parkin has under 20% of the beam reaching the sail, so about 85% goes on: what spills past and 30% of the rest.
 # Corrected 2026-11-07 from 30% throughout and 0.096 AU, which had the flash at 150 times the Sun in its nanometre.
 LASER_W, ARRAY_M, SAIL_START_M, PULSE_S, PASSED, PASSED_END, END_M = 200e9, 2700, 6e7, 480, 0.30, 0.85, 0.13 * 1.496e11
+# 2026-11-12: this is how bright the spot is, not who stands in it. We aim where the star will be when the sails
+# arrive, so the spot falls about 107 AU from the star as it is then: calcs/speeds.py beam_miss.
 def launch_glare(ly=4.32, stars_within_ly=50, stars=2000):
     d = ly * 9.4607e15; c = 2.998e8
     end_m = END_M                                             # where the sail is when the beam stops

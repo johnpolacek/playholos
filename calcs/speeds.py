@@ -223,6 +223,22 @@ def rod_years(d):
 def their_tonnes(d): return BULLET_TONNES * _energy(FUSION_BETA) / _energy(thrown_beta(d))
 def their_ready(d): return ROD_READY * their_tonnes(d) / ROD_TONNES
 
+# ---------- Who sees a launch beam ----------
+# A craft is aimed where its star will be when it lands, and its beam points along its path. The beam's light gets
+# there in d Years and the craft in d / beta, and the star moves on in between. So the beam passes the star as it then
+# is by its speed across our sky times that gap: (v / c)(1 / beta - 1) d. The slower the craft, the wider it misses.
+# Benford and Benford 2016: "the beam is generally not observable from the target planetary system".
+# How fast a star crosses our sky: 30 km/s, a sample. Benford takes 20. Proxima's is 24, Tau Ceti's 33, Barnard's 90.
+# Until 2026-11-12 every launch beam was seen at its star, the designer's pick with this doubt beside it. The designer's
+# pick now, (ar): it is seen only where a mind's works reach the beam's line. An awake old mind's panels sit where a
+# plate stays at its glow's 12 K (calcs/minds.py): 538 AU from a Sun. A peer's swarm is 0.4 AU wide, and peers are
+# thousands of ly off, so no peer sees one. Not yet: each star's own motion and its own light, which set both numbers.
+DRIFT_KMS, GLOW_K, AU = 30.0, 12.0, 1.495978707e11
+WORKS_AU = math.sqrt(3.828e26 / (16 * math.pi * 5.670374e-8 * GLOW_K ** 4)) / AU
+def beam_miss(d, beta): return DRIFT_KMS * 1e3 / C * (1 / beta - 1) * d * LY / AU
+def beam_seen(d, beta): return beam_miss(d, beta) <= WORKS_AU
+def seen_within(beta): return WORKS_AU / beam_miss(1, beta)
+
 # ---------- What the game reads ----------
 # Sails of a few grams, pushed from Earth: a fifth of light speed, Starshot's.
 SAIL_BETA = 0.2
@@ -240,7 +256,10 @@ def catalog():
                             probe=dict(PROBE, beam=PROBE_BEAM, days=round(PROBE_BEAM_DAYS), lost=PROBE_BEAM_LOST),
                             # A rod the Ship Beam throws in place of a bullet: its mass for a bullet's harm at the
                             # mirror's most, its push, and the Years the Strike Yard takes to ready one.
-                            rod=dict(tonnes=ROD_TONNES, beam=ROD_BEAM, days=round(ROD_BEAM_DAYS), lost=ROD_BEAM_LOST, ready=ROD_READY)))
+                            rod=dict(tonnes=ROD_TONNES, beam=ROD_BEAM, days=round(ROD_BEAM_DAYS), lost=ROD_BEAM_LOST, ready=ROD_READY),
+                            # Who sees a launch beam: how fast a star crosses our sky, in km/s, and how far an awake
+                            # old mind's works reach from its star, in AU.
+                            seen=dict(kms=DRIFT_KMS, worksAU=WORKS_AU)))
 
 def golden():
     """Trips for game/lib/sim/speeds.ts to reproduce: each craft, far and near, in a cloud and between, on its drive
@@ -267,6 +286,13 @@ def golden_probes():
 def golden_rods():
     """Rods the Ship Beam throws in place of bullets, near and far, for game/lib/sim/speeds.ts to reproduce."""
     return [dict(d=d, beta=rod_beta(d), years=rod_years(d)) for d in (4.25, 10.5, 50, 400, 1000, 2700, 30000)]
+
+
+def golden_misses():
+    """How far a launch beam passes from its star, and whether an awake old mind there sees it, for each craft a beam
+    throws: sails, a seed ship, a flyby probe and a rod. For game/lib/sim/speeds.ts to reproduce."""
+    return [dict(d=d, beta=b, au=beam_miss(d, b), seen=beam_seen(d, b))
+            for d in (4.25, 10.5, 17, 20, 50, 62, 90, 400, 2700) for b in (SAIL_BETA, SHIP_BEAM, probe_beta(d), rod_beta(d))]
 
 
 def megatons(tonnes, beta): return (1 / math.sqrt(1 - beta ** 2) - 1) * tonnes * 1000 * C ** 2 / 4.184e15
@@ -320,3 +346,7 @@ if __name__ == '__main__':
         b = thrown_beta(d)
         print(f'  {d:>6} ly: {b:.2f} of light speed, {their_years(d):>7,.0f} Years, where a tenth took {d * 10:>7,}. '
               f'For a bullet\'s {megatons(1000, 0.1):,.0f} Mt it weighs {their_tonnes(d):.1f} t, readied in {their_ready(d) * 365.25:.0f} days.')
+    print(f'Who sees a launch beam: a star crossing our sky at {DRIFT_KMS:.0f} km/s, and an awake old mind\'s works {WORKS_AU:.0f} AU out, where {GLOW_K:.0f} K lies round a Sun.')
+    for name, b in (('Sails', SAIL_BETA), ('A seed ship', SHIP_BEAM), ('A flyby probe', PROBE_BEAM), ('A rod', ROD_BEAM)):
+        print(f'  {name:14} at {b:.2f} of light speed: its beam passes {beam_miss(4.2465, b):>4.0f} AU from Proxima, {beam_miss(2700, b) * AU / LY:.2f} ly from a star 2,700 ly off. '
+              f'Seen within {seen_within(b):.0f} ly.')

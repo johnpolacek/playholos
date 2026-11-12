@@ -228,8 +228,10 @@ export function flybysOf(plan: Plan, scale: number) {
   const works = probeNeeds(plan).every((n) => inOrder(plan, n));
   return (plan.flybys ?? []).flatMap((o) => {
     if (o.by === "probe" && !works) return [];
-    const { leaves, arrives, home } = flybyRoad(plan, scale, o.y, o);
-    return leaves === null || arrives === null || home === null ? [] : [{ star: o.name, by: o.by, leaves, passed: arrives, home }];
+    const { leaves, arrives, home, speed, push } = flybyRoad(plan, scale, o.y, o);
+    // Thrown by a beam, sails always and a probe on the Ship Beam, it carries its speed: who sees that beam turns on it.
+    const thrown = o.by === "sails" || push ? { thrown: speed } : {};
+    return leaves === null || arrives === null || home === null ? [] : [{ star: o.name, by: o.by, leaves, passed: arrives, home, ...thrown }];
   });
 }
 

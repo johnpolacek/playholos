@@ -6,6 +6,7 @@
 // Every number is a sample: nothing measures what a mind wants. Pure, and the same every time for a seed.
 import { standsBy, type MindKit, type MindsSeen } from "./minds.ts";
 import type { Aimed } from "./peers.ts";
+import { beamMiss, beamSeen } from "./speeds.ts";
 import type { Heard, OldMind, World } from "./types.ts";
 
 /** At or under this, hidden to open, it never answers. */
@@ -41,6 +42,18 @@ export const EARTH_PAST: [number, string][] = [
 /** What it shows of Earth's past: the oldest moment it was already there for. */
 export const pastSeen = (age: number) => EARTH_PAST.find(([ago]) => age >= ago)?.[1] ?? "your first cities";
 
+/** What it says it answers, for a beam. */
+export const BEAM_TRAVELS = "The beam that threw our craft toward it";
+
+/** Each craft a beam of ours threw at a cold glow, as a knock with nothing in it. The beam is aimed where the star
+ *  will be when the craft lands, so it passes the star by: speeds.ts's beamMiss. An awake old mind sees it only if its
+ *  works reach that far, which oldAnswers checks by its distance. The designer's pick, 2026-11-12. */
+export function beamsAt(flybys: readonly { star: string; leaves?: number; thrown?: number }[]): Aimed[] {
+  return flybys
+    .filter((f) => f.thrown !== undefined && f.leaves !== undefined && /^Cold glow \d+$/.test(f.star))
+    .map((f) => ({ to: f.star, y: f.leaves!, questions: false, lie: false, travels: BEAM_TRAVELS, flash: true, beta: f.thrown! }));
+}
+
 const years = (n: number) => (n >= 1e9 ? `${(n / 1e9).toFixed(1)} billion years` : n >= 1e6 ? `${Math.round(n / 1e6).toLocaleString("en-US")} million years` : `${Math.round(n).toLocaleString("en-US")} years`);
 
 /** What its part in the settling has it say. */
@@ -51,7 +64,8 @@ function partWords(m: OldMind): string {
 }
 
 /** Every old mind's answer that has reached us by Year `year`, one to the first knock that reached each: a message
- *  aimed at its cold glow, or at a sleeping one's warm body where a craft of ours stands by. */
+ *  aimed at its cold glow, or at a sleeping one's warm body where a craft of ours stands by. Or, awake, the beam that
+ *  threw a craft at it, if that beam crosses its works. */
 export function oldAnswers(world: World, seen: MindsSeen, craft: MindKit["craft"], aimed: readonly Aimed[], year: number): Heard[] {
   const olds = new Map((world.minds?.old ?? []).map((m) => [m.id, m]));
   const maker = world.minds?.watcher?.maker;
@@ -62,7 +76,8 @@ export function oldAnswers(world: World, seen: MindsSeen, craft: MindKit["craft"
   const out: Heard[] = [];
   for (const [name, id] of named) {
     const m = olds.get(id);
-    const msg = aimed.filter((a) => a.to === name).sort((a, b) => a.y - b.y)[0];
+    // A beam counts only where it is seen: by a mind awake, whose works reach the line the beam passes on.
+    const msg = aimed.filter((a) => a.to === name && (!a.flash || (!m?.asleep && beamSeen(m?.d ?? Infinity, a.beta ?? 0)))).sort((a, b) => a.y - b.y)[0];
     if (!m || !msg || m.open <= SILENT) continue;
     let hears = msg.y + m.d;
     if (m.asleep) {
@@ -75,7 +90,9 @@ export function oldAnswers(world: World, seen: MindsSeen, craft: MindKit["craft"
     const arrived = sends + m.d;
     if (arrived > year) continue;
     const watched = Math.min(m.age, 4.5e9);
-    const proof = `We have watched your world for ${years(watched)}. With this, a picture of it at the hour your word reached us.`;
+    const proof = msg.flash
+      ? `Your beam crossed our outer works, ${Math.round(beamMiss(m.d, msg.beta ?? 1)).toLocaleString("en-US")} AU from our star, aimed where we will be when what it threw arrives. We have watched your world for ${years(watched)}. With this, a picture of it at the hour the beam was lit.`
+      : `We have watched your world for ${years(watched)}. With this, a picture of it at the hour your word reached us.`;
     const woke = m.asleep ? "You woke us. We were waiting for a colder sky, and waking has a cost." : "";
     const rule = "One rule holds among all of us: look, listen and speak as you like, and build at no other star.";
     const gift =

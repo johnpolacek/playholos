@@ -11,8 +11,8 @@ import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB, proximaField, proximaSeen } from "./proxima.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
 import { pushedBy, sentinelYears, shipYears } from "./speeds.ts";
-import { flashesOf, peerAnswers, type Aimed, type Call } from "./peers.ts";
-import { oldAnswers } from "./old-minds.ts";
+import { peerAnswers, type Aimed, type Call } from "./peers.ts";
+import { beamsAt, oldAnswers } from "./old-minds.ts";
 import type { ColonyMode, DarkMass, EarthView, FieldHeard, FieldWorld, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ladderOf } from "./ladder.ts";
@@ -39,8 +39,9 @@ export interface Kit {
   sentinels?: { star: string; leaves: number }[];
   /** Each seed probe we sent, by its star as we name it, and the Year it leaves. Its copies follow from spread.ts. */
   seeds?: { star: string; leaves: number; burn?: number }[];
-  /** Each sail or flyby probe we sent past a star: the Year it passes, and the Year its word reaches us. 2026-11-05. */
-  flybys?: { star: string; by: "sails" | "probe"; leaves?: number; passed: number; home: number }[];
+  /** Each sail or flyby probe we sent past a star: the Year it passes, and the Year its word reaches us. 2026-11-05.
+   *  `thrown` is its speed as a share of light's, if a beam of ours threw it: sails, or a probe on the Ship Beam. */
+  flybys?: { star: string; by: "sails" | "probe"; leaves?: number; passed: number; home: number; thrown?: number }[];
   /** Each road to Proxima b, if our order flies it: the Year it passes, and the Year its word reaches us. */
   sails?: { passed: number; home: number } | null;
   probe?: { passed: number; home: number } | null;
@@ -427,7 +428,9 @@ export function earthKnows(
   if (ours && ladder.colonyLost !== null && ours.d !== undefined && ladder.colonyLost + ours.d <= year) ours.lost = { at: ladder.colonyLost, how: "strike" };
   // An old mind's answer to a knock on its cold glow, or on a sleeping one where our craft stands by. Its glow or body
   // is marked as having answered, which settles it. 2026-11-11.
-  const old = oldAnswers(world, minds, crafts, aimed, year);
+  // Or to the beam that threw a craft at its cold glow, where its works reach that beam: a knock with nothing written
+  // in it. 2026-11-12, calcs/speeds.py beam_miss.
+  const old = oldAnswers(world, minds, crafts, [...aimed, ...beamsAt(flybys)], year);
   for (const h of old) {
     const n = Number(h.star.replace(/\D+/g, "")) - 1;
     const at = h.star.startsWith("Cold glow") ? minds.glows[n] : minds.sleepers[n];
@@ -436,9 +439,8 @@ export function earthKnows(
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     // A peer's answer, once it reaches us. 2026-10-31. lib/sim/peers.ts.
-    // A sail's launch flashes its laser toward its star, 770 times the Sun in its color: a peer there sees it as a
-    // knock with nothing written in it. 2026-11-07 (m:235), calcs/early_game.py launch_glare.
-    year, felt, heard: [...peerAnswers(world, kit0, [...aimed, ...flashesOf(flybys)], year, calls), ...old].sort((a, b) => a.arrived - b.arrived), visits,
+    // No peer sees the beam that throws a craft at its glow: it passes a light-year wide. 2026-11-12.
+    year, felt, heard: [...peerAnswers(world, kit0, aimed, year, calls), ...old].sort((a, b) => a.arrived - b.arrived), visits,
     ...(anyMind ? { minds } : {}),
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
     proximaSeen: proximaSeen(world.seed),

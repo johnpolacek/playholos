@@ -38,6 +38,7 @@ import {
   toward,
   willRoad,
 } from "@/lib/game/reach";
+import { beamMiss, beamSeen } from "@/lib/sim/speeds";
 import { CATALOG } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -49,6 +50,17 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // or probe have passed and their word is home, what they saw is drawn above the ways, 2026-10-22.
 
 /** A build a way needs: its mark in its color, its name, and how it stands, opening its page to start it. */
+/** What the beam that throws a craft shows at its star: how wide it passes, and whether an old mind awake there would
+ *  see it. We aim where the star will be, so the slower the craft, the wider. lib/sim/speeds.ts's beamMiss. 2026-11-12. */
+function beamLine(ly: number, beta: number) {
+  if (!(ly > 0)) return "";
+  const au = beamMiss(ly, beta);
+  const wide = au >= 31620 ? `${(au / 63241).toFixed(1)} ly` : `${Math.round(au).toLocaleString("en-US")} AU`;
+  return beamSeen(ly, beta)
+    ? ` We aim where this star will be, so its beam passes the star by about ${wide}. An old mind’s works reach that far: one awake here sees the beam, as it would a knock.`
+    : ` We aim where this star will be, so its beam passes the star by about ${wide}, too wide for a mind here to see.`;
+}
+
 /** Days the Ship Beam pushes a seed ship to a speed, as a share of light speed: 78 to a tenth, and to its most as
  *  calcs/speeds.py has it, since a fast ship runs from the light. Between the two, by the straight line. */
 function pushDays(beta: number) {
@@ -476,7 +488,7 @@ export function DestinationPage({ slug }: { slug: string }) {
               i={k}
               to={to}
               name={road.name}
-              line={k && road.push ? `A probe built in orbit in 12 Years, with no engine and no fuel. The Ship Beam throws it on a sail a kilometer wide: ${CATALOG.speeds.probe.days} days of push to ${road.speed.toFixed(2)} of light speed, and it flies past.` : WHAT[road.build]}
+              line={k && road.push ? `A probe built in orbit in 12 Years, with no engine and no fuel. The Ship Beam throws it on a sail a kilometer wide: ${CATALOG.speeds.probe.days} days of push to ${road.speed.toFixed(2)} of light speed, and it flies past.${beamLine(ly, road.speed)}` : `${WHAT[road.build]}${k ? "" : beamLine(ly, road.speed)}`}
               needs={[road.build]}
               have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
               can={!queues && inOrder(road.build)}
@@ -526,7 +538,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 2}
             to={to}
             name="Our Mind, to stay"
-            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The Ship Beam pushes it to speed in ${pushDays(mind.speed)} days, with no drive or fuel. Its beam points at the star for all of the push, so a mind awake there sees it, as it would a knock.` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The Ship Beam pushes it to speed in ${pushDays(mind.speed)} days, with no drive or fuel.${beamLine(ly, mind.speed)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
             needs={shipNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // One Seed Ship, one Mind: once sent to one hole, no other. Sent once all three are in our order.
@@ -582,7 +594,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 4}
             to={to}
             name="A seed probe that copies itself"
-            line={`${WHAT.seed}${seed.push ? ` The Ship Beam pushes it to speed in ${pushDays(seed.speed)} days, with no drive or fuel. Its beam points at the star for all of the push, so a mind awake there sees it, as it would a knock.` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${WHAT.seed}${seed.push ? ` The Ship Beam pushes it to speed in ${pushDays(seed.speed)} days, with no drive or fuel.${beamLine(ly, seed.speed)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
             needs={seedNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Sent once all three are in our order, before Begin too: it is built once they are done.
@@ -601,7 +613,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             name="A bullet, fired here"
             line={
               bullet.push
-                ? `A rod of ${Math.round(CATALOG.speeds.rod.tonnes)} t with no engine, readied in about ${Math.round(CATALOG.speeds.rod.ready * 12)} months. The Ship Beam throws it: ${CATALOG.speeds.rod.days} days of push to ${bullet.speed.toFixed(2)} of light speed, with no helium-3. It lands as hard as a bullet, with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. Its beam points at the star for all of the push, so a mind awake there sees it, as it would a knock.`
+                ? `A rod of ${Math.round(CATALOG.speeds.rod.tonnes)} t with no engine, readied in about ${Math.round(CATALOG.speeds.rod.ready * 12)} months. The Ship Beam throws it: ${CATALOG.speeds.rod.days} days of push to ${bullet.speed.toFixed(2)} of light speed, with no helium-3. It lands as hard as a bullet, with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled.${beamLine(ly, bullet.speed)}`
                 : WHAT.strike
             }
             needs={bullet.push ? ["Strike Yard", "Ship Beam"] : ["Strike Yard", "Helium-3 Harvest"]}

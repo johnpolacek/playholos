@@ -139,3 +139,14 @@ export function theirReady(ly: number) {
 }
 /** Years for what another mind throws to cross `ly`. */
 export const theirYears = (ly: number) => (ly > 0 ? ly / theirBeta(ly) : 0);
+
+/** How far a launch beam passes from its star, in AU. A craft is aimed where its star will be when it lands, and its
+ *  beam points along its path. The beam's light is there in `ly` Years, the craft in ly / beta, and the star moves on
+ *  between: its speed across our sky times that gap. The slower the craft, the wider the miss. Benford and Benford
+ *  2016, calcs/speeds.py beam_miss. 2026-11-12. */
+export const beamMiss = (ly: number, beta: number) => (SPEEDS.seen.kms / 299792.458) * (1 / beta - 1) * ly * (9.4607e15 / 1.495978707e11);
+/** Whether a mind awake at that star sees the beam: only an old mind's, whose works reach the beam's line. A peer's
+ *  swarm is under an AU wide, so no peer does. */
+export const beamSeen = (ly: number, beta: number) => beta > 0 && beamMiss(ly, beta) <= SPEEDS.seen.worksAU;
+/** How near a star must be for an awake old mind there to see the beam that throws a craft at this speed, in ly. */
+export const seenWithin = (beta: number) => SPEEDS.seen.worksAU / beamMiss(1, beta);

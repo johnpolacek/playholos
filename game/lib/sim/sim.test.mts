@@ -776,28 +776,50 @@ test("a glow earns its name in the order we read it, and only plain heat or a se
   knowGlowNames({});
 });
 
-test("a sail launched at a warm glow flashes there, and a peer awake when it lands answers it as a knock", async () => {
-  const { glowsFound } = await import("./minds.ts");
-  const { peerAnswers, flashesOf, FLASH_TRAVELS } = await import("./peers.ts");
+test("a launch beam is seen only where an old mind's works reach it: no peer answers one, and a near, awake old mind does", async () => {
+  const { glowsFound, mindsSeen } = await import("./minds.ts");
+  const { peerAnswers } = await import("./peers.ts");
+  const { oldAnswers, beamsAt, BEAM_TRAVELS, SILENT, ANSWERS_IN } = await import("./old-minds.ts");
+  const { beamMiss, beamSeen, seenWithin, SAIL_C } = await import("./speeds.ts");
+  // The miss and who sees it, as calcs/speeds.py has them, for sails, a seed ship, a flyby probe and a rod.
+  const misses = (golden as unknown as { misses: { d: number; beta: number; au: number; seen: boolean }[] }).misses;
+  assert.ok(misses.length >= 36 && misses.some((g) => g.seen) && misses.some((g) => !g.seen));
+  for (const g of misses) {
+    assert.ok(Math.abs(beamMiss(g.d, g.beta) - g.au) <= 1e-6 * g.au, `${g.d} ly at ${g.beta}: ${beamMiss(g.d, g.beta)} against ${g.au}`);
+    assert.equal(beamSeen(g.d, g.beta), g.seen);
+  }
+  // The slower the craft, the wider its beam misses: sails are seen within about 21 ly, a probe within about 61.
+  assert.ok(seenWithin(SAIL_C) > 20 && seenWithin(SAIL_C) < 23 && seenWithin(catalog.speeds.probe.beam) > 58 && seenWithin(catalog.speeds.probe.beam) < 64);
+  assert.ok(seenWithin(catalog.speeds.beam) < seenWithin(SAIL_C) && seenWithin(catalog.speeds.rod.beam) > seenWithin(catalog.speeds.probe.beam));
+  assert.ok(beamMiss(4.2465, catalog.speeds.beam) > 120 && beamMiss(4.2465, catalog.speeds.beam) < 140);
+  // Only a craft a beam threw at a cold glow counts: one on its drive, or one sent at a warm glow, lights nothing.
+  assert.equal(beamsAt([{ star: "Cold glow 1", leaves: 10 }, { star: "Warm glow 1", leaves: 10, thrown: SAIL_C }, { star: "Tau Ceti", leaves: 10, thrown: SAIL_C }]).length, 0);
+  let peers = 0, olds = 0;
   for (const seed of [10, 2, 3, 5, 7]) {
     const world = await loadWorld(seed);
+    // No peer answers sails sent at its warm glow: until 2026-11-12 one awake did.
     const kit = { warmWatch: 0, telescope: 0 };
     const i = glowsFound(world, kit, 5000).findIndex((g) => !("kind" in g.src) && !(g.src as { asleep?: boolean }).asleep);
-    if (i < 0) continue;
-    const p = glowsFound(world, kit, 5000)[i].src as { d: number; wake: number };
-    const star = `Warm glow ${i + 1}`;
-    const leaves = Math.max(0, p.wake - p.d + 1);
-    const flash = flashesOf([{ star, by: "sails", leaves }]);
-    assert.equal(flash.length, 1);
-    const heard = peerAnswers(world, kit, flash, leaves + 2 * p.d + 1);
-    assert.equal(heard.length, 1);
-    assert.equal(heard[0].answers, FLASH_TRAVELS);
-    assert.match(heard[0].text ?? "", /laser flashed/);
-    // One that lands before it wakes leaves nothing waiting.
-    assert.equal(peerAnswers(world, kit, flashesOf([{ star, by: "sails", leaves: p.wake - p.d - 50 }]), leaves + 2 * p.d + 1e5).length, 0);
-    return;
+    if (i >= 0) {
+      peers++;
+      assert.equal(peerAnswers(world, kit, beamsAt([{ star: `Warm glow ${i + 1}`, leaves: 0, thrown: SAIL_C }]), 1e6).length, 0);
+    }
+    // An awake, open old mind answers a beam as it would a knock, if the beam crosses its works. A craft thrown fast
+    // enough misses by little, so its beam is seen. A slow one's passes wide, and draws nothing.
+    const seen = mindsSeen(world, { halo: 3, haloArray: 20 }, 5000);
+    const g = seen.glows.findIndex((x) => world.minds!.old.find((m) => m.id === x.id)!.open > SILENT);
+    if (g < 0) continue;
+    olds++;
+    const m = world.minds!.old.find((x) => x.id === seen.glows[g].id)!;
+    const fast = seenWithin(SAIL_C) > m.d ? SAIL_C : 0.999;
+    assert.ok(beamSeen(m.d, fast) && !beamSeen(m.d, 0.001));
+    const [a] = oldAnswers(world, seen, [], beamsAt([{ star: `Cold glow ${g + 1}`, leaves: 50, thrown: fast }]), 1e6);
+    assert.equal(a.answers, BEAM_TRAVELS);
+    assert.ok(Math.abs(a.arrived - (50 + 2 * m.d + ANSWERS_IN[m.open])) < 1e-6);
+    assert.match(a.text!, /Your beam crossed our outer works/);
+    assert.equal(oldAnswers(world, seen, [], beamsAt([{ star: `Cold glow ${g + 1}`, leaves: 50, thrown: 0.001 }]), 1e6).length, 0);
   }
-  assert.fail("no awake peer in the seeds tried");
+  assert.ok(peers > 0 && olds > 0);
 });
 
 // The Hypertelescope's pictures are a finding, not word from our craft. Playtest 2026-11-07.

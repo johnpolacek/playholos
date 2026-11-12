@@ -3187,7 +3187,7 @@ A research agent read these for two questions the Ship Beam raised. How much of 
   - A caveat: an emitter in orbit pivots the beam about the sail, sweeping tens to hundreds of AU at the star. A chance crossing could show, briefly.
   - Not read: Forward 1984, Lubin 2016.
 - Why it matters: the mirror caps what our beam can throw, and the game says a launch beam is seen at its star, which the one source that treats it denies.
-- Used: the mirror and its cap in `calcs/mercury.py` and `calcs/speeds.py`, and flyby probes thrown by the Ship Beam, built 2026-11-12, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). Bullets thrown by the beam, built the same day, take their speed from the mirror’s cap. Not yet used: that a launch is unseen. The Ship Beam and the Laser Sail Array still carry the price of being seen.
+- Used: the mirror and its cap in `calcs/mercury.py` and `calcs/speeds.py`, and flyby probes thrown by the Ship Beam, built 2026-11-12, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). Bullets thrown by the beam, built the same day, take their speed from the mirror’s cap. That a launch is unseen at its star: used 2026-11-12, the designer’s pick, with one exception this project adds by logic. An awake old mind’s cold panels sit about 538 AU out, where 12 K lies round a Sun, so a beam that passes nearer than that crosses its works: sails within 21 ly, a flyby probe within 61. `calcs/speeds.py` `beam_miss`, [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#how-earth-learns). No source treats a target that wide.
 
 ## Watch list
 
