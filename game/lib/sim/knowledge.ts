@@ -10,7 +10,7 @@ import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB, proximaField, proximaSeen } from "./proxima.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
-import { sentinelYears, shipYears } from "./speeds.ts";
+import { pushedBy, sentinelYears, shipYears } from "./speeds.ts";
 import { flashesOf, peerAnswers, type Aimed, type Call } from "./peers.ts";
 import { oldAnswers } from "./old-minds.ts";
 import type { ColonyMode, DarkMass, EarthView, FieldHeard, FieldWorld, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
@@ -351,7 +351,7 @@ export function earthKnows(
     }
     const d = x.star === PROXIMA.star ? PROXIMA.d : f?.d;
     if (d === undefined) continue;
-    const passed = x.leaves + sentinelYears(d), home = passed + d;
+    const passed = x.leaves + sentinelYears(d, x.star), home = passed + d;
     if (home > year) continue;
     // A hostile old mind in that system, awake or asleep, wrecks a craft that comes to stay, as it arrives: its last
     // pictures show a craft not ours closing on it. 2026-11-11.
@@ -507,7 +507,7 @@ function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star:
   const { stands } = catalog.seedShip;
   const h = holes.find((x) => x.name === c.star);
   if (!h) return colonyAtStar(world, c, year);
-  const lands = c.leaves + shipYears(h.d, c.burn), alone = lands + stands;
+  const lands = c.leaves + shipYears(h.d, pushedBy(c.burn)), alone = lands + stands;
   const heard = year - h.d;                                       // what its word home shows of it now
   const truth = world.holes!.find((x) => x.id === h.id)!;
   const watts = c.mode === "furnace" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
@@ -524,7 +524,7 @@ function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves:
   const id = Object.keys(world.stars).find((k) => world.stars[k].shown === c.star);
   if (!id) return { star: c.star, mode: c.mode, leaves: c.leaves };
   const d = world.stars[id].d;
-  const lands = c.leaves + shipYears(d, c.burn), alone = lands + stands;
+  const lands = c.leaves + shipYears(d, pushedBy(c.burn), c.star), alone = lands + stands;
   const heard = year - d;
   // Settled, its works grow as a furnace's do. Kept small, it stays as it began. 2026-10-30.
   const watts = c.mode === "settle" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;

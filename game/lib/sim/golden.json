@@ -784,5 +784,547 @@
    "flux": 3.0921727985892935,
    "at": null
   }
+ ],
+ "trips": [
+  {
+   "kind": "sentinel",
+   "d": 4.25,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 63.244652319445656,
+   "binds": "push",
+   "stopLy": 0.9493717066584394
+  },
+  {
+   "kind": "sentinel",
+   "d": 4.25,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.08708693323630015,
+   "years": 106.31231402911806,
+   "binds": "stopping",
+   "stopLy": 4.066669596373632
+  },
+  {
+   "kind": "sentinel",
+   "d": 10.5,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 125.74465231944566,
+   "binds": "push",
+   "stopLy": 0.9493717066584394
+  },
+  {
+   "kind": "sentinel",
+   "d": 10.5,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 172.8438051967663,
+   "binds": "push",
+   "stopLy": 5.53800162217423
+  },
+  {
+   "kind": "sentinel",
+   "d": 10,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 120.74465231944566,
+   "binds": "push",
+   "stopLy": 0.9493717066584394
+  },
+  {
+   "kind": "sentinel",
+   "d": 10,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 167.8438051967663,
+   "binds": "push",
+   "stopLy": 5.53800162217423
+  },
+  {
+   "kind": "sentinel",
+   "d": 20,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 220.74465231944566,
+   "binds": "push",
+   "stopLy": 0.9493717066584394
+  },
+  {
+   "kind": "sentinel",
+   "d": 20,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 267.8438051967663,
+   "binds": "push",
+   "stopLy": 5.53800162217423
+  },
+  {
+   "kind": "sentinel",
+   "d": 50,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 520.7446523194457,
+   "binds": "push",
+   "stopLy": 0.9493717066584394
+  },
+  {
+   "kind": "sentinel",
+   "d": 50,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 567.8438051967663,
+   "binds": "push",
+   "stopLy": 5.53800162217423
+  },
+  {
+   "kind": "sentinel",
+   "d": 120,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 1220.7446523194455,
+   "binds": "push",
+   "stopLy": 0.9493717066584394
+  },
+  {
+   "kind": "sentinel",
+   "d": 120,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 1267.8438051967664,
+   "binds": "push",
+   "stopLy": 5.53800162217423
+  },
+  {
+   "kind": "sentinel",
+   "d": 400,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 4020.744652319446,
+   "binds": "push",
+   "stopLy": 0.9493717066584394
+  },
+  {
+   "kind": "sentinel",
+   "d": 400,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 4067.8438051967664,
+   "binds": "push",
+   "stopLy": 5.53800162217423
+  },
+  {
+   "kind": "sentinel",
+   "d": 2700,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 27020.744652319445,
+   "binds": "push",
+   "stopLy": 0.9493717066584394
+  },
+  {
+   "kind": "sentinel",
+   "d": 2700,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 27067.843805196768,
+   "binds": "push",
+   "stopLy": 5.53800162217423
+  },
+  {
+   "kind": "sentinel",
+   "d": 30000,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.0774568206328168,
+   "years": 387328.2211292971,
+   "binds": "shield",
+   "stopLy": 0.5383685376823759
+  },
+  {
+   "kind": "sentinel",
+   "d": 30000,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.0774568206328168,
+   "years": 387362.7034761894,
+   "binds": "shield",
+   "stopLy": 3.140483136480526
+  },
+  {
+   "kind": "ship",
+   "d": 4.25,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 59.996434879630435,
+   "binds": "push",
+   "stopLy": 0.6329144711056263
+  },
+  {
+   "kind": "ship",
+   "d": 4.25,
+   "n": 0.07,
+   "beamed": true,
+   "beta": 0.13652967031818755,
+   "years": 62.40341142121571,
+   "binds": "stopping",
+   "stopLy": 1.0119047619047619
+  },
+  {
+   "kind": "ship",
+   "d": 4.25,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 91.39587013117755,
+   "binds": "push",
+   "stopLy": 3.6920010814494866
+  },
+  {
+   "kind": "ship",
+   "d": 4.25,
+   "n": 0.012,
+   "beamed": true,
+   "beta": 0.056528653988968385,
+   "years": 150.4266203960377,
+   "binds": "stopping",
+   "stopLy": 1.0119047619047619
+  },
+  {
+   "kind": "ship",
+   "d": 10.5,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 122.49643487963044,
+   "binds": "push",
+   "stopLy": 0.6329144711056263
+  },
+  {
+   "kind": "ship",
+   "d": 10.5,
+   "n": 0.07,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 98.67272105842153,
+   "binds": "push",
+   "stopLy": 1.999670554357139
+  },
+  {
+   "kind": "ship",
+   "d": 10.5,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 153.89587013117756,
+   "binds": "push",
+   "stopLy": 3.6920010814494866
+  },
+  {
+   "kind": "ship",
+   "d": 10.5,
+   "n": 0.012,
+   "beamed": true,
+   "beta": 0.08885233166386386,
+   "years": 236.44214081430675,
+   "binds": "stopping",
+   "stopLy": 2.5
+  },
+  {
+   "kind": "ship",
+   "d": 10,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 117.49643487963044,
+   "binds": "push",
+   "stopLy": 0.6329144711056263
+  },
+  {
+   "kind": "ship",
+   "d": 10,
+   "n": 0.07,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 96.06756612409073,
+   "binds": "push",
+   "stopLy": 1.999670554357139
+  },
+  {
+   "kind": "ship",
+   "d": 10,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 148.89587013117756,
+   "binds": "push",
+   "stopLy": 3.6920010814494866
+  },
+  {
+   "kind": "ship",
+   "d": 10,
+   "n": 0.012,
+   "beamed": true,
+   "beta": 0.086710996952412,
+   "years": 230.74390246878934,
+   "binds": "stopping",
+   "stopLy": 2.380952380952381
+  },
+  {
+   "kind": "ship",
+   "d": 20,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 217.49643487963044,
+   "binds": "push",
+   "stopLy": 0.6329144711056263
+  },
+  {
+   "kind": "ship",
+   "d": 20,
+   "n": 0.07,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 148.17066481070665,
+   "binds": "push",
+   "stopLy": 1.999670554357139
+  },
+  {
+   "kind": "ship",
+   "d": 20,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 248.89587013117756,
+   "binds": "push",
+   "stopLy": 3.6920010814494866
+  },
+  {
+   "kind": "ship",
+   "d": 20,
+   "n": 0.012,
+   "beamed": true,
+   "beta": 0.12262786789699316,
+   "years": 326.3211563062566,
+   "binds": "stopping",
+   "stopLy": 4.761904761904763
+  },
+  {
+   "kind": "ship",
+   "d": 50,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 517.4964348796304,
+   "binds": "push",
+   "stopLy": 0.6329144711056263
+  },
+  {
+   "kind": "ship",
+   "d": 50,
+   "n": 0.07,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 304.4799608705544,
+   "binds": "push",
+   "stopLy": 1.999670554357139
+  },
+  {
+   "kind": "ship",
+   "d": 50,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 548.8958701311775,
+   "binds": "push",
+   "stopLy": 3.6920010814494866
+  },
+  {
+   "kind": "ship",
+   "d": 50,
+   "n": 0.012,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 515.9836963063661,
+   "binds": "push",
+   "stopLy": 11.664744900416645
+  },
+  {
+   "kind": "ship",
+   "d": 120,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 1217.4964348796304,
+   "binds": "push",
+   "stopLy": 0.6329144711056263
+  },
+  {
+   "kind": "ship",
+   "d": 120,
+   "n": 0.07,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 669.2016516768658,
+   "binds": "push",
+   "stopLy": 1.999670554357139
+  },
+  {
+   "kind": "ship",
+   "d": 120,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 1248.8958701311776,
+   "binds": "push",
+   "stopLy": 3.6920010814494866
+  },
+  {
+   "kind": "ship",
+   "d": 120,
+   "n": 0.012,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 880.7053871126775,
+   "binds": "push",
+   "stopLy": 11.664744900416645
+  },
+  {
+   "kind": "ship",
+   "d": 400,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 4017.49643487963,
+   "binds": "push",
+   "stopLy": 0.6329144711056263
+  },
+  {
+   "kind": "ship",
+   "d": 400,
+   "n": 0.07,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 2128.0884149021117,
+   "binds": "push",
+   "stopLy": 1.999670554357139
+  },
+  {
+   "kind": "ship",
+   "d": 400,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 4048.8958701311776,
+   "binds": "push",
+   "stopLy": 3.6920010814494866
+  },
+  {
+   "kind": "ship",
+   "d": 400,
+   "n": 0.012,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 2339.592150337923,
+   "binds": "push",
+   "stopLy": 11.664744900416645
+  },
+  {
+   "kind": "ship",
+   "d": 2700,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 27017.49643487963,
+   "binds": "push",
+   "stopLy": 0.6329144711056263
+  },
+  {
+   "kind": "ship",
+   "d": 2700,
+   "n": 0.07,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 14111.801112823772,
+   "binds": "push",
+   "stopLy": 1.999670554357139
+  },
+  {
+   "kind": "ship",
+   "d": 2700,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.1,
+   "years": 27048.89587013118,
+   "binds": "push",
+   "stopLy": 3.6920010814494866
+  },
+  {
+   "kind": "ship",
+   "d": 2700,
+   "n": 0.012,
+   "beamed": true,
+   "beta": 0.19192716464229734,
+   "years": 14323.304848259584,
+   "binds": "push",
+   "stopLy": 11.664744900416645
+  },
+  {
+   "kind": "ship",
+   "d": 30000,
+   "n": 0.07,
+   "beamed": false,
+   "beta": 0.09486331690998649,
+   "years": 316260.9956144704,
+   "binds": "shield",
+   "stopLy": 0.5622954305988981
+  },
+  {
+   "kind": "ship",
+   "d": 30000,
+   "n": 0.07,
+   "beamed": true,
+   "beta": 0.09486331690998649,
+   "years": 316266.206747621,
+   "binds": "shield",
+   "stopLy": 0.4885197971660743
+  },
+  {
+   "kind": "ship",
+   "d": 30000,
+   "n": 0.012,
+   "beamed": false,
+   "beta": 0.09486331690998649,
+   "years": 316290.40209568804,
+   "binds": "shield",
+   "stopLy": 3.280056678493573
+  },
+  {
+   "kind": "ship",
+   "d": 30000,
+   "n": 0.012,
+   "beamed": true,
+   "beta": 0.09486331690998649,
+   "years": 316370.7461228558,
+   "binds": "shield",
+   "stopLy": 2.8496988168021007
+  }
  ]
 }

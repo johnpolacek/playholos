@@ -20,6 +20,7 @@ import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ICE, deathsIn, iceBetween, iceFirsts } from "../game/natural.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
+import { gasAt, sentinelYears, shipYears, stay } from "./speeds.ts";
 import { proximaField } from "./proxima.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
@@ -259,7 +260,7 @@ test("a sentinel stays and reads a felt world up close: its first word comes hom
   const world = await loadWorld(10);
   const f = world.finds[0];
   const star = world.stars[f.star]?.shown ?? f.star;
-  const word = 10 + f.d / 0.1 + 10 + 15 + f.d;
+  const word = 10 + sentinelYears(f.d, star) + f.d;
   const kit = { sentinels: [{ star, leaves: 10 }] };
   assert.equal(earthKnows(world, word - 0.01, kit).visits.length, 0);
   const v = earthKnows(world, word, kit).visits.find((x) => x.by === "sentinel")!;
@@ -291,7 +292,7 @@ test("a sentinel at a warm glow sees what makes its heat", async () => {
   const found = glowsFound(world, { warmWatch: 0, telescope: 0 }, 5000);
   assert.ok(found.length > 0);
   const src = found[0].src;
-  const home = 10 + src.d / 0.1 + 10 + 15 + src.d;
+  const home = 10 + sentinelYears(src.d) + src.d;
   const kit = { warmWatch: 0, telescope: 0, sentinels: [{ star: "Warm glow 1", leaves: 10 }] };
   assert.equal(earthKnows(world, home - 0.01, kit).visits.filter((v) => v.by === "sentinel").length, 0);
   const v = earthKnows(world, home, kit).visits.find((x) => x.by === "sentinel")!;
@@ -311,7 +312,7 @@ test("black holes: Gaia's finds are known at Year 0, the Star Mapper finds more,
   assert.ok(gaia < mapped, `${gaia} by Gaia, ${mapped} by Year 50 with a mapper`);
   const world = await loadWorld(10);
   const h = darkMasses(world, 300, 0)[0];
-  const home = 10 + h.d / 0.1 + 10 + 15 + h.d;
+  const home = 10 + sentinelYears(h.d) + h.d;
   const v = earthKnows(world, home, { mapper: 0, sentinels: [{ star: h.name, leaves: 10 }] }).visits.find((x) => x.sight === "dark")!;
   assert.equal(v.spin, world.holes!.find((x) => x.id === h.id)!.spin);
 });
@@ -325,7 +326,7 @@ test("our Mind at a black hole: word of its landing comes one light-time later, 
   const { darkMasses } = await import("./knowledge.ts");
   const world = await loadWorld(10);
   const h = darkMasses(world, 300, 0)[0];
-  const lands = 10 + h.d / 0.1 + 10 + 15;
+  const lands = 10 + shipYears(h.d);
   const at = (year: number, mode: "furnace" | "refuge") => earthKnows(world, year, { mapper: 0, colony: { star: h.name, mode, leaves: 10 } }).colony!;
   assert.equal(at(lands + h.d - 1, "furnace").stands, lands + 20);
   assert.ok(Math.abs(at(lands + h.d, "furnace").lands! - lands) < 1e-9);
@@ -338,7 +339,7 @@ test("seed probes copy themselves to the nearest free stars, two each, for three
   assert.equal(probes.length, 7);
   assert.deepEqual(probes.map((p) => p.gen).sort(), [1, 2, 2, 3, 3, 3, 3]);
   const [first] = probes;
-  assert.equal(first.lands, 45 + hop(first.d));
+  assert.equal(first.lands, 45 + hop(first.d, undefined, first.star));
   // Alpha Centauri is Proxima's home ground, so its first copy goes on to Barnard's Star, 60 Years after it lands.
   assert.equal(first.copies[0].star, "Barnard’s Star");
   assert.equal(first.copies[0].leaves, first.lands + 60);
@@ -350,12 +351,15 @@ test("seed probes copy themselves to the nearest free stars, two each, for three
   assert.equal(new Set(two.map((p) => p.star)).size, two.length);
 });
 
-test("a seed probe our Ship Beam pushed lands its burn sooner, and its copies still burn their own fuel", () => {
+test("a seed probe our Ship Beam pushed flies as a pushed ship does, and its copies still burn their own fuel", () => {
   const { burn } = catalog.seedShip, { ship } = catalog.beams;
   assert.ok(ship < 0.5 && burn === 10);
   const [own] = seedProbes([{ star: "Proxima Centauri", leaves: 45 }]);
   const pushed = seedProbes([{ star: "Proxima Centauri", leaves: 45, burn: ship }]);
-  assert.ok(Math.abs(pushed[0].lands - (own.lands - burn + ship)) < 1e-9);
+  // Pushed, it carries no drive, so it stops on its sail alone: no burn to start, a longer stop.
+  assert.ok(Math.abs(own.lands - 45 - shipYears(own.d, false, own.star)) < 1e-9);
+  assert.ok(Math.abs(pushed[0].lands - 45 - shipYears(own.d, true, own.star)) < 1e-9);
+  assert.notEqual(pushed[0].lands, own.lands);
   // Each copy is built where no beam stands: its flight is as long as before, only begun sooner.
   const copy = pushed.find((p) => p.gen === 2)!, before = seedProbes([{ star: "Proxima Centauri", leaves: 45 }]).find((p) => p.star === copy.star)!;
   assert.ok(Math.abs(copy.lands - copy.leaves - (before.lands - before.leaves)) < 1e-9);
@@ -379,7 +383,7 @@ test("our Mind settled at a star: word of its landing comes one light-time later
   const world = await loadWorld(10);
   const f = world.finds[0];
   const star = world.stars[f.star].shown, d = world.stars[f.star].d;
-  const lands = 10 + hop(d);
+  const lands = 10 + hop(d, undefined, star);
   const kit = { colony: { star, mode: "settle" as const, leaves: 10 } };
   const at = (year: number) => earthKnows(world, year, kit).colony!;
   const c = at(lands + d);
@@ -870,4 +874,24 @@ test("the Far-Side Array finds red dwarfs' worlds that have a field, and tells o
   // About half of some 32 a game have a field: calcs/senses.py counts 16.1.
   assert.ok(found / POOL.length > 12 && found / POOL.length < 19, `found ${found / POOL.length}`);
   assert.ok(silent > 0);
+});
+
+// Speed by physics, 2026-11-11: calcs/speeds.py's trips, each craft near and far, in a cloud and between, on its drive
+// and pushed.
+test("each of our craft that stops takes the Years calcs/speeds.py gives its trip", () => {
+  type Golden = { kind: "sentinel" | "ship"; d: number; n: number; beamed: boolean; beta: number; years: number; binds: string; stopLy: number };
+  const trips = (golden as unknown as { trips: Golden[] }).trips;
+  assert.ok(trips.length >= 50);
+  for (const g of trips) {
+    const t = stay(g.kind, g.d, g.n, g.beamed);
+    assert.equal(t.binds, g.binds, `${g.kind} ${g.d} ly`);
+    for (const k of ["beta", "years", "stopLy"] as const) assert.ok(Math.abs(t[k] - g[k]) <= 1e-9 * g[k], `${g.kind} ${g.d} ly ${k}: ${t[k]} against ${g[k]}`);
+  }
+  // A star in a warm cloud is the quicker stop, and a pair's stars share their cloud.
+  assert.ok(gasAt("Alpha Centauri A") > gasAt("Tau Ceti") && gasAt("61 Cygni B") === gasAt("Proxima Centauri"));
+  assert.ok(sentinelYears(10.5, "Epsilon Eridani") < sentinelYears(10.5, "Tau Ceti"));
+  // On its drive a ship is held to a tenth of light speed by its fuel. Pushed, it goes as fast as it can stop from.
+  assert.equal(stay("ship", 50, gasAt(), false).beta, catalog.speeds.fusion);
+  assert.ok(stay("ship", 400, gasAt(), true).beta > 0.18 && stay("ship", 10, gasAt(), true).binds === "stopping");
+  assert.equal(stay("ship", 0).years, 0);
 });

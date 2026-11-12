@@ -262,7 +262,7 @@
   "speed": 0.1,
   "burns": 10,
   "brake": 15,
-  "fuel": 40.6
+  "fuel": 52.1
  },
  "probe": {
   "build": 12,
@@ -452,6 +452,61 @@
  "speeds": {
   "theirs": 0.1,
   "bullet": 0.1,
-  "sail": 0.2
+  "sail": 0.2,
+  "gas": {
+   "cloud": 0.07,
+   "between": 0.012,
+   "inCloud": [
+    "Alpha Centauri",
+    "Proxima Centauri",
+    "Epsilon Eridani",
+    "61 Cygni",
+    "Epsilon Indi"
+   ]
+  },
+  "sailing": {
+   "gros": 5700.0,
+   "stop": 5.2,
+   "tenth": 1.84,
+   "covered": 0.908,
+   "burnPerC": 100.0,
+   "finishVe": 0.04
+  },
+  "wear": {
+   "dust": 1.6666666666666667,
+   "range": [
+    [
+     0.2,
+     4.47
+    ],
+    [
+     0.3,
+     20.8
+    ],
+    [
+     0.5,
+     167.0
+    ],
+    [
+     0.7,
+     832.0
+    ]
+   ],
+   "share": 0.1,
+   "most": 0.9
+  },
+  "fusion": 0.1,
+  "beam": 0.19192716464229734,
+  "beamStart": 1.0684985599262111,
+  "craft": {
+   "sentinel": {
+    "tonnes": 1000.0,
+    "front": 20.0
+   },
+   "ship": {
+    "tonnes": 1500.0,
+    "front": 20.0
+   }
+  }
  }
 }

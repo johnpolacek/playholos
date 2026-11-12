@@ -279,7 +279,7 @@ function sentinel(): Model {
     lamps: [12, 0, 0],
     labels: [
       { at: [0, 0, 5], head: "SENTINEL · 1,000 T" },
-      { at: [0, 0, R], head: "MAGNETIC SAIL · 1,600 KM ACROSS", line: `brakes ${CATALOG.sentinel.brake} Years, with no flame`, keep: true },
+      { at: [0, 0, R], head: "MAGNETIC SAIL · 1,600 KM ACROSS", line: "brakes with no flame, then a short burn ends the stop", keep: true },
     ],
     near: 120,
     far: 3.2e6,

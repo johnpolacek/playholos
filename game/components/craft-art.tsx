@@ -17,7 +17,7 @@ const FACTS: Partial<Record<CraftKind, [string, string][]>> = {
     ["Waits on", "A Fusion Drive, never flown"],
   ],
   sentinel: [
-    ["Brakes", `${CATALOG.sentinel.brake} Years, with no flame, unseen`],
+    ["Brakes", "On its sail, unseen, then a short burn"],
     ["Fuel", `${t(CATALOG.sentinel.fuel)}, to speed up`],
     ["Waits on", "A Fusion Drive and the Works"],
   ],

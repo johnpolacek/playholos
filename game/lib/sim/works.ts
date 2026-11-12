@@ -58,7 +58,18 @@ interface Catalog {
   swarm: { watts: number; doubling: number; excess: number; perLy2: number; kelvin: number; spread: number };
   hyper: { kmPerLy: number; reach: number; slew: number; cities: number };
   /** Calcs/speeds.py: each craft's speed with no other source, as a share of light speed. 2026-11-11. */
-  speeds: { theirs: number; bullet: number; sail: number };
+  speeds: {
+    theirs: number; bullet: number; sail: number;
+    /** What binds a craft that stops, for lib/sim/speeds.ts: the gas it brakes on, in a warm cloud and between, and the
+     *  stars known to sit in one. The magnetic sail's relation and its finishing burn. Dust, the range of protons in
+     *  graphite by speed, and the share of a craft its shield may weigh. A Fusion Drive's speed, the Ship Beam's, and
+     *  each craft's mass in tonnes and its front in m². */
+    gas: { cloud: number; between: number; inCloud: string[] };
+    sailing: { gros: number; stop: number; tenth: number; covered: number; burnPerC: number; finishVe: number };
+    wear: { dust: number; range: [number, number][]; share: number; most: number };
+    fusion: number; beam: number; beamStart: number;
+    craft: Record<"sentinel" | "ship", { tonnes: number; front: number }>;
+  };
   /** Calcs/senses.py: our Far-Side Array hearing worlds' magnetic fields. The shares of worlds with one, among those
    *  that kept their air and those that did not, how far it hears, how bright a world's radio is (Proxima b's `flux0`
    *  µJy at `au0` and `ly0`, falling as the orbit to the `fall`), and how faint it hears (`noise0` µJy from `km0` km² in

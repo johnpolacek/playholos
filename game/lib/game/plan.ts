@@ -161,7 +161,7 @@ export const LATER: Later[] = [
   { name: "Solar Swarm", what: "Compute from the Sun’s light, doubling every 2 Years.", does: "think", after: "Mercury Works" },
   { name: "Star Beam", what: "Gets a Solar Lens to its focus in two months, not 17 Years.", does: "reach", after: "Solar Swarm" },
   // The Star Beam can't push a seed ship. A patch of the swarm ten times wider can, 2026-11-10. calcs/mercury.py.
-  { name: "Ship Beam", what: "Pushes a seed ship to speed in 78 days, with no drive or fuel.", does: "reach", after: "Star Beam" },
+  { name: "Ship Beam", what: "Pushes a seed ship as fast as it can stop from, with no drive or fuel.", does: "reach", after: "Star Beam" },
   // Labeyrie's exo-Earth imager, 2026-10-29: the next step past the 15 m Mirror, mirrors flying apart, not one wider.
   { name: "Hypertelescope", what: "Pictures any world we’ve found: seas, cloud, green land.", does: "see", after: "15 m Mirror" },
   // Seeing what makes a glow, from home, 2026-11-11, the designer's pick: cold mirrors flying apart, as the
@@ -331,7 +331,7 @@ export const SAYS: Record<string, string> = {
   "Star Beam":
     "Part of the swarm, 100 km across, phased as one laser of 10 TW. It pushes a lens to the Sun’s focus in about two months, not 17 Years, carrying a telescope 3 m wide that pictures a world in about a week. No one has phased mirrors spread that far, so this is the least certain build we have.",
   "Ship Beam":
-    "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out near 3% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days. The ship needs no Fusion Drive and no deuterium, and lands about 10 Years sooner. It still brakes on its magnetic sail, so it flies no faster. Its beam points at the ship’s star for all of the push. A mind awake there sees it, as it would a knock, and knows something is coming decades before it lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
+    "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out near 3% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days, and to nearly a fifth in about 150. The ship needs no Fusion Drive and no deuterium. With no drive it stops on its magnetic sail alone, and that sets its speed: as fast as it can stop from. On a short hop through thin gas that is under a tenth. On a long road it is the beam’s full push. Its beam points at the ship’s star for all of the push. A mind awake there sees it, as it would a knock, and knows something is coming decades before it lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
   "Hypertelescope":
     "Labeyrie’s design: 150 mirrors 3 m wide, flying in a formation 150 km across, their light brought to one focus. It pictures an Earth 10 light years away in half an hour, about 300 km a pixel: continents, seas, cloud, and land green where something grows. Cities and fields are far too small. Its pixel widens with distance, so past about 135 light years a world is under three pixels across. Unlike a lens, it turns to any star in about a week.",
   "Galaxy Broadcast Array":

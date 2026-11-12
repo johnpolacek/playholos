@@ -3,7 +3,7 @@
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { BULLET, bulletsReady } from "@/lib/sim/conflict";
-import { bulletYears, flybyYears, SAIL_C, sailYears, sentinelYears, shipYears } from "@/lib/sim/speeds";
+import { bulletYears, flybyYears, gasAt, SAIL_C, sailYears, sentinelYears, shipYears, stay } from "@/lib/sim/speeds";
 import { fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
@@ -225,9 +225,10 @@ export function lensRoad(plan: Plan, scale: number, from: number, star: string):
 }
 
 /** A sentinel, v1's and the neighbors' own probe: the Probe Yard builds it in 20 Years once the yard, a Fusion Drive
- *  and the Deuterium Works are done, and it leaves once its deuterium is in. It flies at a tenth of light speed, 10
- *  Years more for speeding up and 15 for braking on its magnetic sail, unseen, as our seed ships do (Gros 2017). Then
- *  it stays. 2026-10-26, its fuel and sail 2026-11-07. */
+ *  and the Deuterium Works are done, and it leaves once its deuterium is in. It flies at a tenth of light speed, held
+ *  there by its fuel, brakes on its magnetic sail, unseen, as our seed ships do (Gros 2017), and ends its stop with a
+ *  short burn. How long that takes depends on the gas at its star: lib/sim/speeds.ts. Then it stays. 2026-10-26, its
+ *  fuel and sail 2026-11-07, its stop by physics 2026-11-11. */
 const SENTINEL = CATALOG.sentinel;
 export const SENTINEL_NEEDS = ["Probe Yard", "Fusion Drive", "Deuterium Works"];
 export const inOrder = (plan: Plan, name: string) => plan.builds.includes(name) || (plan.later ?? []).some((o) => o.name === name);
@@ -264,8 +265,8 @@ export function sentinelRoad(plan: Plan, scale: number, from: number, star: stri
   const sent = (plan.sentinels ?? []).find((o) => o.name === star);
   const fuel = fuelReady(plan, at[pacedName("Deuterium Works")] ?? null, `sentinel:${star}`, SENTINEL.fuel, sent?.y ?? from);
   const leaves = ready === null || fuel === null ? null : Math.max(Math.max(sent?.y ?? from, ready) + SENTINEL.build, fuel);
-  const arrives = leaves === null ? null : leaves + sentinelTrip(ly);
-  return { name: "Send a sentinel", n: sent ? 1 : null, build: "Probe Yard", craft: "A sentinel", speed: SENTINEL.speed, done: ready, leaves, arrives, home: arrives === null ? null : arrives + ly };
+  const arrives = leaves === null ? null : leaves + sentinelTrip(ly, star);
+  return { name: "Send a sentinel", n: sent ? 1 : null, build: "Probe Yard", craft: "A sentinel", speed: stay("sentinel", ly, gasAt(star)).beta, done: ready, leaves, arrives, home: arrives === null ? null : arrives + ly };
 }
 export const sentinelReady = (plan: Plan) => SENTINEL_NEEDS.every((n) => inOrder(plan, n));
 
@@ -299,8 +300,9 @@ export function strikeRoad(plan: Plan, scale: number, from: number, star: string
 const SHIP = CATALOG.seedShip;
 export const SHIP_NEEDS = ["Seed Ship", "Fusion Drive", "Deuterium Works"];
 /** The Ship Beam, done, pushes a seed ship in place of its drive and fuel: 1,000 TW from a patch of the swarm 1,000 km
- *  wide, on a 1 km sail, to a tenth of light speed in about 78 days. It still brakes on its magnetic sail, so its
- *  speed is the same and the trip is the burn's 10 Years shorter. calcs/mercury.py. 2026-11-10. */
+ *  wide, on a 1 km sail, to a tenth of light speed in about 78 days and nearly a fifth in about 150. With no drive it
+ *  stops on its magnetic sail alone, which sets its speed for each trip: lib/sim/speeds.ts. calcs/mercury.py.
+ *  2026-11-10, its speed by physics 2026-11-11. */
 export const BEAM_NEEDS = ["Seed Ship", "Ship Beam"];
 /** What a seed ship needs: its drive and fuel, or, with the Ship Beam in our order and those not, the beam alone. */
 export const shipNeeds = (plan: Plan) => (inOrder(plan, "Ship Beam") && !SHIP_NEEDS.every((n) => inOrder(plan, n)) ? BEAM_NEEDS : SHIP_NEEDS);
@@ -330,10 +332,10 @@ export function colonyRoad(plan: Plan, scale: number, from: number, star: string
   const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
   const ready = shipReadyAt((n) => at[pacedName(n)]);
   const sent = plan.colony?.name === star ? plan.colony : undefined;
-  const { leaves, start, pushed } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from);
-  const arrives = leaves === null ? null : leaves + shipYears(ly, start);
+  const { leaves, pushed } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from);
+  const arrives = leaves === null ? null : leaves + shipYears(ly, pushed, star);
   return {
-    name: "Send our Mind", n: sent ? 1 : null, build: "Seed Ship", craft: "A Mind", speed: SHIP.speed, done: ready, leaves, arrives,
+    name: "Send our Mind", n: sent ? 1 : null, build: "Seed Ship", craft: "A Mind", speed: stay("ship", ly, gasAt(star), pushed).beta, done: ready, leaves, arrives,
     home: arrives === null ? null : arrives + ly, stands: arrives === null ? null : arrives + SHIP.stands,
     push: pushed ? "Ship Beam" : null,
   };
@@ -366,10 +368,10 @@ export function seedRoad(plan: Plan, scale: number, from: number, star: string, 
   const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
   const ready = shipReadyAt((n) => at[pacedName(n)]);
   const sent = (plan.seeds ?? []).find((o) => o.name === star);
-  const { leaves, start, pushed } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from, PROBE.build);
-  const arrives = leaves === null ? null : leaves + shipYears(ly, start);
+  const { leaves, pushed } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from, PROBE.build);
+  const arrives = leaves === null ? null : leaves + shipYears(ly, pushed, star);
   return {
-    name: "Send a seed probe", n: sent ? 1 : null, build: "Seed Ship", craft: "A seed probe", speed: SHIP.speed, done: ready, leaves, arrives,
+    name: "Send a seed probe", n: sent ? 1 : null, build: "Seed Ship", craft: "A seed probe", speed: stay("ship", ly, gasAt(star), pushed).beta, done: ready, leaves, arrives,
     home: arrives === null ? null : arrives + ly, copies: arrives === null ? null : arrives + PROBE.first,
     push: pushed ? "Ship Beam" : null,
   };

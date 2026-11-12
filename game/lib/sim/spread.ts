@@ -6,7 +6,7 @@
 // knowledge.ts. Settled 2026-10-26.
 import targets from "../../data/targets.json" with { type: "json" };
 import catalog from "../../data/works.json" with { type: "json" };
-import { shipYears } from "./speeds.ts";
+import { pushedBy, shipYears } from "./speeds.ts";
 
 const { first, every, copies, generations } = catalog.seedProbe;
 
@@ -18,9 +18,9 @@ export function place(ra: number, dec: number, d: number): [number, number, numb
 const STARS = targets.map((t) => ({ ...t, xyz: place(t.ra, t.dec, t.d) }));
 type Star = (typeof STARS)[number];
 
-/** Years from leaving to landing, `ly` away: cruise at a tenth of light speed, the burn, and braking on the sail.
- *  `start` is the Years its start costs where our Ship Beam pushed it, in place of its burn's. 2026-11-10. */
-export const hop = shipYears;
+/** Years from leaving to landing at a star `ly` away, as lib/sim/speeds.ts works each trip. `start` is the Years its
+ *  start costs where our Ship Beam pushed it, in place of its burn's: it tells a pushed ship from one on its drive. */
+export const hop = (ly: number, start?: number, star?: string) => shipYears(ly, pushedBy(start), star);
 
 /** A companion within a light-year is the same home ground, as Proxima is to Alpha Centauri, as calcs/seed.py has it. */
 const HOME_GROUND = 1;
@@ -51,7 +51,7 @@ export function seedProbes(sent: readonly { star: string; leaves: number; burn?:
   const free = (x: Star) => [...at.values()].every((y) => Math.hypot(x.xyz[0] - y.xyz[0], x.xyz[1] - y.xyz[1], x.xyz[2] - y.xyz[2]) >= HOME_GROUND);
   const launches: { by: Probe; t: number }[] = [];
   const add = (x: Star, gen: number, from: string | null, leaves: number, ly: number, start?: number) => {
-    const p: Probe = { star: x.name, d: x.d, ra: x.ra, dec: x.dec, gen, from, leaves, lands: leaves + hop(ly, start), copies: [] };
+    const p: Probe = { star: x.name, d: x.d, ra: x.ra, dec: x.dec, gen, from, leaves, lands: leaves + hop(ly, start, x.name), copies: [] };
     probes.push(p);
     at.set(p, x);
     if (gen < generations) for (let k = 0; k < copies; k++) launches.push({ by: p, t: p.lands + first + k * every });

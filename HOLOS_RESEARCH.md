@@ -3165,7 +3165,7 @@ Gathered by a research agent, so that each craft’s speed falls out of physics,
 - **Things thrown that never stop.** The agent found no reviewed study of heavy projectiles at such speeds. The nearest: the Galaxy’s magnetic field bends a charged gram craft 0.1 to 0.3 AU over 4 ly, so it must steer ([Hoang and Loeb 2017](https://arxiv.org/abs/1706.07798) · Published, ApJ 848, 31, extract read). Fixing a place by the stars is good to about 3 AU (Bailer-Jones 2021, search summary).
 - **Not verified:** Forward 1984 at its source, how full of cloud space is beyond 15 pc, and any magnetic sail above a tenth of light speed.
 - Why it matters: a craft that stops is bound by its braking, which depends on its speed, its mass and the gas it meets. So its best speed differs by trip, and no one number fits all craft. A craft that never stops is bound only by its push and its shield.
-- Not yet used. `calcs/speeds.py` works it through.
+- Used: speed by physics, built 2026-11-11 for our craft that stop, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). `calcs/speeds.py` works each trip, and `game/lib/sim/speeds.ts` follows it. What never stops, and other minds’ craft, are not yet moved.
 
 ## Watch list
 

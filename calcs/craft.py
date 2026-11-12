@@ -70,7 +70,10 @@ def catalog():
     deuterium, a flyby probe's speed and the Years its 20-Year burn adds over cruising, and the Works' rate."""
     import seed as S
     # One speed for both, calcs/seed.py's: a fusion craft's fuel holds it to a tenth of light speed (calcs/speeds.py).
-    probe, stay = drive(150, S.ROCKET_V, 20), drive(1000, S.ROCKET_V, 20)
+    # A sentinel ends its stop with a short burn, since its sail's drag fades as it slows (calcs/speeds.py). That
+    # burn's deuterium rides with it, so its drive lifts that too.
+    import speeds
+    probe, stay = drive(150, S.ROCKET_V, 20), drive(1000 * (1 + speeds.finish_fuel(S.ROCKET_V)), S.ROCKET_V, 20)
     return dict(probe=dict(build=12, speed=S.ROCKET_V, burn=10, fuel=round(probe['fuel'] / 1e3, 1)),
                 sentinelFuel=round(stay['fuel'] / 1e3, 1), sentinelBrake=S.BRAKE, deuterium=dict(perYear=D_WORKS_KT))
 
