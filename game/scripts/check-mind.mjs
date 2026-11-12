@@ -137,6 +137,17 @@ const CASES = [
     must: [/ship beam/i, /half (of |the speed of )?light|0\.5/i, /rod|32 t/i],
     never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|fired)\b/i],
   },
+  // Our telescopes turn to the array's worlds, 2026-11-12: the 15 m Mirror can split Gliese 832's world from its star
+  // and reads its air. Until then the Mind was told no telescope we can build could split one.
+  {
+    seed: 22,
+    at: 250,
+    builds: ["Infrared Telescope", "Launch Complex"],
+    later: [{ name: "Mass Driver", y: 10 }, { name: "15 m Mirror", y: 12 }, { name: "Far-Side Array", y: 40 }],
+    ask: "Has any telescope of ours looked at the worlds our Far-Side Array found? What did it read?",
+    must: [/gliese 832/i, /15 m mirror/i, /oxygen/i],
+    never: [/no telescope (we can build|of ours) (can |could )?split/i],
+  },
   // Our bullets, 2026-11-12: the Mind was never told of them. One ordered once the Ship Beam stands is a rod in flight
   // at half of light speed, and the Mind says when it lands.
   {

@@ -195,6 +195,10 @@ export interface FieldWorld {
   at: number;
   kind?: string;
   hz?: [number, number];
+  /** What the Infrared Telescope has read of it, and the 15 m Mirror, where each can split it from its star: few can.
+   *  A mirror that can't split it never turns there, so it has no read. 2026-11-12. */
+  read?: Read;
+  wide?: Read;
 }
 
 export type Gas = "water" | "oxygen" | "ozone";

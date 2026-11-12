@@ -270,7 +270,15 @@ function feltLead(f: FeltWorld): Lead {
  *  the star's flares make less likely, and its field is a small sign the other way. 2026-11-11. */
 function fieldLead(f: FieldWorld): Lead {
   const life: Odds = f.hz && f.a < f.hz[0] ? "almost no chance" : "very unlikely";
-  const tell = "It sits too close to its star for any telescope we can build to split. A lens at the Sun’s focus could picture its face, and a craft sent there would see it whole.";
+  // What each telescope could split and read, from where it sits: its radio's beat gives its orbit. Most sit too close
+  // in for either. The Hypertelescope pictures any of them. 2026-11-12.
+  const near = sees(f.a, f.d), wide = sees(f.a, f.d, WIDE);
+  const whole = "Our Hypertelescope or a lens at the Sun’s focus could picture its face, and a craft sent there would see it whole.";
+  const tell = near.split
+    ? `The Infrared Telescope can split it from its star${near.gases.length ? ` and read its ${and(near.gases)}` : ""}. ${whole}`
+    : wide.split
+      ? `It sits too close to its star for the Infrared Telescope to split. The 15 m Mirror could${wide.gases.length ? `, and read its ${and(wide.gases)}` : ""}. ${whole}`
+      : `It sits too close to its star for either telescope we can build to split. ${whole}`;
   return {
     slug: slugOf(f.star),
     star: f.star,
@@ -295,7 +303,11 @@ function fieldLead(f: FieldWorld): Lead {
     ],
     tells: [tell],
     unknown: "Whether it is rock, and whether it kept its air.",
-    builds: [{ name: "Orbital Yard", how: "Opens the Solar Lens, which could picture its face." }],
+    builds: near.split
+      ? [{ name: "Infrared Telescope", how: near.gases.length ? `Reads its ${and(near.gases)}.` : "Sees it beside its star." }]
+      : wide.split
+        ? [{ name: "Infrared Telescope", how: `Opens the 15 m Mirror, which could split it${wide.gases.length ? ` and read its ${and(wide.gases)}` : ""}.` }]
+        : [{ name: "Orbital Yard", how: "Opens the Solar Lens, which could picture its face." }],
     life,
     art: { kind: "orbit", a: f.a, e: 0, hz: f.hz },
     system: {
@@ -341,14 +353,17 @@ export function fieldReading(star: string, f: FieldHeard, found = false): Readin
  *  band, or of its first look: the Infrared Telescope's, or `wide`, the 15 m Mirror's, since 2026-10-23. Each new band
  *  is a new reading. Seen beside its star, it is a world. A gas past a mirror's reach is said so, never read as
  *  missing. Oxygen never says who lives there: a world whose makers died keeps theirs. 2026-10-22. */
-export function airReading(f: FeltWorld, wide = false): Reading | null {
+export function airReading(f: Pick<FeltWorld, "star" | "a" | "d" | "read" | "wide"> & { minMass?: number }, wide = false): Reading | null {
+  // A world our Far-Side Array found has no mass: its radio is all we had, and it is likely rock. 2026-11-12.
+  const all = f.minMass === undefined ? "radio" : "tug";
+  const rock = f.minMass === undefined ? "likely" : rockOdds(f.minMass), gas = f.minMass === undefined ? "unlikely" : gasOdds(f.minMass);
   const read = wide ? f.wide : f.read;
   if (!read) return null;
   const slug = slugOf(f.star);
   const at = Math.floor((read.at ?? 0) * 10 + 1e-9) / 10;
   const by = wide ? "15 m Mirror" : "Infrared Telescope";
   const key = `${slug}-${wide ? "wide" : "air"}`;
-  const seen: Odds[] = [rockOdds(f.minMass), gasOdds(f.minMass), "almost no chance"];
+  const seen: Odds[] = [rock, gas, "almost no chance"];
   // The gases past this mirror's reach there, and what the 15 m Mirror could add to the first telescope's.
   const beyond = read.beyond ?? [];
   const reachable = GASES.filter((g) => !beyond.includes(g));
@@ -364,9 +379,9 @@ export function airReading(f: FeltWorld, wide = false): Reading | null {
       air: read,
       title: "Too close to its star to split",
       line: `Our ${by} can’t split it from its star, so its air stays unread.`,
-      mind: "Its tug is still all we have. A wider mirror could split some worlds this one can’t.",
-      now: [rockOdds(f.minMass), gasOdds(f.minMass), "unlikely"],
-      tells: [sees(f.a, f.d, WIDE).split ? "The 15 m Mirror, which the Infrared Telescope opens, would split it." : "It sits too close for any mirror we can build. Its tug is all we will have from here."],
+      mind: `Its ${all} is still all we have. A wider mirror could split some worlds this one can’t.`,
+      now: [rock, gas, "unlikely"],
+      tells: [sees(f.a, f.d, WIDE).split ? "The 15 m Mirror, which the Infrared Telescope opens, would split it." : `It sits too close for any mirror we can build. Its ${all} is all we will have from here.`],
     };
   const bands = GASES.filter((b) => read[b] !== undefined);
   if (!reachable.length || !read.readable)
@@ -1608,7 +1623,9 @@ export function readingsOf(
     ]),
   );
   // A world our Far-Side Array found comes with its first reading, and Proxima b with what the array heard there.
-  for (const f of k.fields ?? []) air[f.star] = [fieldReading(f.star, { has: true, at: f.at }, true)];
+  // And, where a telescope of ours can split it from its star, with what that telescope read. 2026-11-12.
+  for (const f of k.fields ?? [])
+    air[f.star] = [fieldReading(f.star, { has: true, at: f.at }, true), airReading(f), airReading(f, true)].filter((r): r is Reading => r !== null).sort((a, b) => a.at - b.at);
   air["Proxima Centauri"] = [...(k.proxima ? [nearestReading(k.proxima)] : []), ...(k.proximaField ? [fieldReading("Proxima Centauri", k.proximaField)] : [])];
   const watched = k.watcher && k.year !== null ? watcherReadings(k.watcher, k.knocks, k.year) : [];
   return Object.fromEntries(

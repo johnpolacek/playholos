@@ -879,6 +879,44 @@ test("our Far-Side Array hears a world's magnetic field when calcs/senses.py say
   }
 });
 
+test("our telescopes turn to the worlds the Far-Side Array finds: a mirror only where it can split one, the Hypertelescope to each", async () => {
+  const { observe, WIDE } = await import("./observing.ts");
+  const fifths = [30, 36, 42, 48, 54];
+  let split = 0, read = 0, all = 0;
+  for (const seed of POOL) {
+    const world = await loadWorld(seed);
+    const kit = { farSide: fifths, telescope: 8, mirror: 25, hyper: 60 };
+    const late = earthKnows(world, 500, kit);
+    // Nothing we knew before moves: felt worlds are read as they were with no array.
+    assert.deepEqual(late.felt.map((f) => [f.read, f.wide]), earthKnows(world, 500, { ...kit, farSide: [] }).felt.map((f) => [f.read, f.wide]), `seed ${seed}`);
+    const id = (shown: string) => Object.keys(world.stars).find((k) => (world.stars[k].shown ?? k) === shown) ?? shown;
+    for (const f of late.fields ?? []) {
+      all++;
+      const w = world.worlds.find((x) => x.star === id(f.star))!;
+      const lum = world.stars[w.star]?.lum ?? 1;
+      const near = observe(w.d / 3.2616, w.radius, w.a, lum), wide = observe(w.d / 3.2616, w.radius, w.a, lum, WIDE);
+      // A mirror turns there only where it can split the world from its star, and never before the world is heard.
+      assert.equal(f.read !== undefined, near.seenH !== null, `${f.star} near`);
+      if (wide.seenH === null) assert.equal(f.wide, undefined, `${f.star} wide`);
+      for (const r of [f.read, f.wide]) if (r) assert.ok(r.split && r.at! >= f.at - 1e-9, `${f.star} read at ${r.at}, heard at ${f.at}`);
+      if (f.read || f.wide) split++;
+      if (f.wide?.oxygen !== undefined || f.wide?.ozone !== undefined || f.read?.oxygen !== undefined) read++;
+      // The Hypertelescope pictures every one, a week each, no sooner than it is heard or the telescope is done.
+      const v = late.visits.find((x) => x.by === "hyper" && x.star === f.star);
+      assert.ok(v && v.passed >= Math.max(60, f.at) - 1e-9 && v.km! > 0, `${f.star} pictured`);
+    }
+    // One picture a star, and never two at once.
+    const hyper = late.visits.filter((v) => v.by === "hyper").sort((a, b) => a.passed - b.passed);
+    assert.equal(new Set(hyper.map((v) => v.star)).size, hyper.length);
+    for (let i = 1; i < hyper.length; i++) assert.ok(hyper[i].passed >= hyper[i - 1].home - 1e-9);
+    // Before a world is heard, no mirror has turned to it.
+    const early = earthKnows(world, 40, kit);
+    for (const f of early.fields ?? []) assert.ok(f.at <= 40);
+  }
+  // Most sit too close to their stars: a few in each game can be split, and fewer read.
+  assert.ok(all > 100 && split > 0 && split < all / 2 && read > 0 && read <= split, `${split} split and ${read} read of ${all}`);
+});
+
 test("the Far-Side Array finds red dwarfs' worlds that have a field, and tells of the ones we knew", async () => {
   const fifths = [30, 36, 42, 48, 54];
   let found = 0, silent = 0;

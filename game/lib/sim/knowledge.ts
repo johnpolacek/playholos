@@ -112,27 +112,29 @@ const PROXIMA = { star: "Proxima Centauri", d: 4.24, a: 0.0485, lum: 0.00157 };
  *  observing.ts. The Infrared Telescope's targets are the finds, 2026-10-20. The 15 m Mirror's are Proxima b and the
  *  finds where it reads more than the Infrared Telescope can: one too close for it to split, or a gas past its reach
  *  or too faint for it. It reads each for every gas it can. 2026-10-23. */
-function readings(world: World, from: number, year: number, mirror?: number) {
+function readings(world: World, from: number, year: number, mirror?: number, heard: readonly { find: Find; at: number }[] = []) {
   const out = new Map<string, Read>();
   const wide = mirror === WIDE;
   const { mass, nature } = proximaB(world.seed);
+  const target = (f: Find, since: number) => ({
+    star: f.star, d: f.d, a: f.a, lum: world.stars[f.star]?.lum ?? 1, radius: width(world, f), since,
+    air: f.truth.kind === "natural" ? AIR[f.truth.rung ?? ""] ?? "none" : "oxygen",
+  });
   const targets = [
-    ...world.finds.map((f) => ({
-      star: f.star, d: f.d, a: f.a, lum: world.stars[f.star]?.lum ?? 1, radius: width(world, f),
-      air: f.truth.kind === "natural" ? AIR[f.truth.rung ?? ""] ?? "none" : "oxygen",
-    })),
-    ...(wide ? [{ ...PROXIMA, radius: mass ** (1 / 3.7), air: AIR[nature] ?? "none" }] : []),
-  ].sort((x, y) => x.d - y.d);
+    ...world.finds.map((f) => target(f, -Infinity)),
+    ...(wide ? [{ ...PROXIMA, radius: mass ** (1 / 3.7), air: AIR[nature] ?? "none", since: -Infinity }] : []),
+    // A world our Far-Side Array found, from the Year it was heard, where this mirror can split it from its star: its
+    // radio's beat gives its orbit, so we know beforehand where a mirror can't, and it doesn't turn there. 2026-11-12.
+    ...heard.map((h) => target(h.find, h.at)).filter((w) => observe(w.d / 3.2616, w.radius, w.a, w.lum, mirror).seenH !== null),
+  ];
   const gases = (r: ReturnType<typeof observe>) => GASES.filter((g) => r[g] !== null && r[g] !== Infinity);
-  let t = from;
-  for (const w of targets) {
-    if (t > year) break;
+  for (const [w, t] of inTurn(targets, from, year)) {
     const r = observe(w.d / 3.2616, w.radius, w.a, w.lum, mirror);
     if (wide && w.star !== PROXIMA.star) {
       const near = observe(w.d / 3.2616, w.radius, w.a, w.lum);
       if (!(r.seenH !== null && near.seenH === null) && !gases(r).some((g) => !gases(near).includes(g))) continue;
     }
-    const read: Read = { split: r.seenH !== null, at: t };
+    const read: Read = { split: r.seenH !== null, at: t.now };
     out.set(w.star, read);
     if (r.seenH === null) continue;
     const beyond = GASES.filter((g) => r[g] === null);
@@ -143,15 +145,33 @@ function readings(world: World, from: number, year: number, mirror?: number) {
       const days = r[band];
       if (days === null || days === Infinity) continue;
       read.readable = true;
-      if (t + days / 365.25 <= year) {
+      if (t.now + days / 365.25 <= year) {
         read[band] = shows[band];
-        read.at = Math.max(read.at!, t + days / 365.25);
+        read.at = Math.max(read.at!, t.now + days / 365.25);
       }
       longest = Math.max(longest, days);
     }
-    t += longest / 365.25;
+    t.now += longest / 365.25;
   }
   return out;
+}
+
+/** The order an instrument takes its targets, one at a time from Year `from`: the nearest it knows of when it is free,
+ *  and, with none left that it knows, the next it learns of. Each comes with the clock, which the caller moves on by
+ *  the time it spends there. It stops once the clock passes `year`. With every target known from the start this is
+ *  nearest first, as it was until 2026-11-12, when the Far-Side Array's worlds joined the lists. */
+function* inTurn<T extends { d: number; since: number }>(targets: readonly T[], from: number, year: number): Generator<[T, { now: number }]> {
+  const left = [...targets].sort((x, y) => x.d - y.d);
+  const t = { now: from };
+  while (left.length) {
+    let i = left.findIndex((w) => w.since <= t.now);
+    if (i < 0) {
+      t.now = Math.min(...left.map((w) => w.since));
+      i = left.findIndex((w) => w.since <= t.now);
+    }
+    if (t.now > year) return;
+    yield [left.splice(i, 1)[0], t];
+  }
 }
 
 /** What a flyby of Proxima b sees in its pictures, from its truth: a gas world's haze, bare rock, cloud and sea, which
@@ -226,22 +246,13 @@ export function earthKnows(
   { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, imager = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [], calls = [], farSide = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
-  // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
-  // Once the Infrared Telescope is done, what it has read of each.
-  const read = telescope !== null && year >= telescope ? readings(world, telescope, year) : new Map<string, Read>();
-  const wide = mirror !== null && year >= mirror ? readings(world, mirror, year, WIDE) : new Map<string, Read>();
-  const felt: FeltWorld[] = world.finds.map((f) => ({
-    star: shown(f.star), d: f.d, minMass: f.msini, periodDays: f.periodDays, a: f.a, by: f.by, year: f.year,
-    kind: world.stars[f.star]?.kind, hz: world.stars[f.star]?.hz,
-    ...(read.has(f.star) ? { read: read.get(f.star) } : {}),
-    ...(wide.has(f.star) ? { wide: wide.get(f.star) } : {}),
-  }));
   // What our Far-Side Array has heard, 2026-11-11: the radio a magnetic field makes where a red dwarf's wind strikes
   // it, at each such star's world within its reach, once the array has gathered enough to hear one there. At a world we
   // knew, whether it has a field. At a star where we knew of none, a world with a field shows itself, and one without
   // stays unknown. lib/sim/fields.ts.
-  const fields: FieldWorld[] = [];
   const found = new Map<string, Find>();
+  const heardAt = new Map<string, { has: boolean; at: number }>();
+  const news: { find: Find; at: number; periodDays: number; kind?: string; hz?: [number, number] }[] = [];
   let proximaHeard: FieldHeard | undefined;
   if (farSide.length) {
     const heard = (a: number, d: number) => {
@@ -254,17 +265,34 @@ export function earthKnows(
       if (w.field === undefined || star?.kind !== "M" || w.d > FIELDS.reachLy || shown(w.star) === PROXIMA.star) continue;
       const at = heard(w.a, w.d);
       if (at === null) continue;
-      const known = felt.find((f) => f.star === shown(w.star));
-      if (known) known.field = { has: !!w.field, at };
+      if (world.finds.some((f) => shown(f.star) === shown(w.star))) heardAt.set(shown(w.star), { has: !!w.field, at });
       else if (w.field) {
         const periodDays = 365.25 * Math.sqrt(w.a ** 3 / (star.lum ?? 1) ** 0.25);
-        fields.push({ star: shown(w.star), d: w.d, a: w.a, periodDays, at, kind: star.kind, hz: star.hz });
-        found.set(shown(w.star), { star: w.star, d: w.d, msini: w.mass, a: w.a, periodDays, by: "Far-Side Array", year: at, truth: { kind: "natural", rung: w.rung } });
+        const find: Find = { star: w.star, d: w.d, msini: w.mass, a: w.a, periodDays, by: "Far-Side Array", year: at, truth: { kind: "natural", rung: w.rung } };
+        found.set(shown(w.star), find);
+        news.push({ find, at, periodDays, kind: star.kind, hz: star.hz });
       }
     }
     const at = heard(PROXIMA.a, PROXIMA.d);
     if (at !== null) proximaHeard = { has: proximaField(world.seed), at };
   }
+  // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
+  // Once the Infrared Telescope is done, what it has read of each, and of each world the array found that it can
+  // split, from the Year that world was heard. 2026-11-12.
+  const read = telescope !== null && year >= telescope ? readings(world, telescope, year, undefined, news) : new Map<string, Read>();
+  const wide = mirror !== null && year >= mirror ? readings(world, mirror, year, WIDE, news) : new Map<string, Read>();
+  const felt: FeltWorld[] = world.finds.map((f) => ({
+    star: shown(f.star), d: f.d, minMass: f.msini, periodDays: f.periodDays, a: f.a, by: f.by, year: f.year,
+    kind: world.stars[f.star]?.kind, hz: world.stars[f.star]?.hz,
+    ...(read.has(f.star) ? { read: read.get(f.star) } : {}),
+    ...(wide.has(f.star) ? { wide: wide.get(f.star) } : {}),
+    ...(heardAt.has(shown(f.star)) ? { field: heardAt.get(shown(f.star)) } : {}),
+  }));
+  const fields: FieldWorld[] = news.map(({ find: f, at, periodDays, kind, hz }) => ({
+    star: shown(f.star), d: f.d, a: f.a, periodDays, at, kind, hz,
+    ...(read.has(f.star) ? { read: read.get(f.star) } : {}),
+    ...(wide.has(f.star) ? { wide: wide.get(f.star) } : {}),
+  }));
   /** The world we know at a star, as a craft sent there would find it: one felt, or one the array found. */
   const findAt = (star: string) => world.finds.find((x) => shown(x.star) === star) ?? found.get(star);
   // Signals caught came from the neighbors' messages to us. They are retired, so none comes, 2026-10-29. The list
@@ -295,19 +323,22 @@ export function earthKnows(
   }
   // What the Hypertelescope has pictured: each felt world within its reach, nearest first, a week a star. Its pixel
   // widens with distance, too wide anywhere for fields or cities. It sits at L2, so its picture is home at once.
-  // calcs/mercury.py. 2026-10-29.
+  // calcs/mercury.py. 2026-10-29. And each world our Far-Side Array found, from the Year it was heard: nearly all sit
+  // too close to their stars for a mirror to split, and its 150 km splits them all. 2026-11-12.
   if (hyper !== null) {
     // Proxima b too, whose truth proxima.ts keeps apart from the seed's finds: the nearest, so the first it turns to.
     const near = [
-      { star: "Proxima Centauri", d: 4.24, f: null as Find | null },
-      ...world.finds.filter((f, i, all) => f.d <= HYPER.reach && all.findIndex((x) => x.star === f.star) === i).map((f) => ({ star: shown(f.star), d: f.d, f })),
-    ].sort((a, b) => a.d - b.d);
-    near.forEach(({ star, d, f }, i) => {
-      const passed = hyper + i * HYPER.slew, home = passed + HYPER.slew, km = HYPER.kmPerLy * d;
-      if (home > year) return;
+      { star: "Proxima Centauri", d: 4.24, f: null as Find | null, since: -Infinity },
+      ...world.finds.filter((f, i, all) => f.d <= HYPER.reach && all.findIndex((x) => x.star === f.star) === i).map((f) => ({ star: shown(f.star), d: f.d, f, since: -Infinity })),
+      ...news.filter((n) => n.find.d <= HYPER.reach).map((n) => ({ star: shown(n.find.star), d: n.find.d, f: n.find as Find | null, since: n.at })),
+    ];
+    for (const [{ star, d, f }, t] of inTurn(near, hyper, year)) {
+      const passed = t.now, home = passed + HYPER.slew, km = HYPER.kmPerLy * d;
+      t.now = home;
+      if (home > year) continue;
       if (!f) visits.push({ ...visit(world, "hyper", { passed, home }), km });
       else visits.push({ star, world: `${star}’s world`, by: "hyper", passed, home, sight: pictured(f), km });
-    });
+    }
   }
 
   // What each sentinel has seen, once its first word is home: it arrives at a tenth of light speed and stays, so it
@@ -455,7 +486,7 @@ export function earthKnows(
 /** Where a felt world sits from its star in our sky, from Earth's own measures of it, and what a mirror `m` metres
  *  wide could split it in, and each gas whose band it could read there. Not whether it's bright enough: that needs its
  *  size, which Earth doesn't know. observing.ts's dark patch, so what the Mind says is what the telescope does. */
-function reach(f: FeltWorld, m?: number) {
+function reach(f: { a: number; d: number }, m?: number) {
   const sep = (f.a / (f.d / 3.2616)) * 1000;
   const inside = (microns: number) => iwa(microns, m) < sep && sep < owa(microns, m);
   return { sep, split: iwa(BANDS.green, m) < sep && sep < owa(BANDS.water, m), gases: GASES.filter((g) => inside(BANDS[g])) };
@@ -464,7 +495,7 @@ const gases = (g: readonly string[]) => (g.length > 1 ? `${g.slice(0, -1).join("
 
 /** What our two telescopes could make of a felt world, from where it sits: which could split it, and which gases each
  *  could read. Added 2026-10-23, after the Mind took a world it could read for one beyond it, and back. */
-function scope(f: FeltWorld) {
+function scope(f: { a: number; d: number }) {
   const near = reach(f), wide = reach(f, WIDE);
   const more = wide.gases.filter((g) => !near.gases.includes(g));
   const at = `It sits ${Math.round(near.sep)} thousandths of an arcsecond from its star in our sky.`;
@@ -500,6 +531,13 @@ function air(f: FeltWorld) {
   const could = read?.readable ? GASES.filter((g) => !(read.beyond ?? []).includes(g)) : [];
   const more = reach(f, WIDE).gases.filter((g) => !could.includes(g));
   return `${first}${more.length ? ` The 15 m Mirror could read its ${gases(more)}.` : ""}`;
+}
+
+/** What our telescopes make of a world the Far-Side Array found: each one's read where it can split the world from
+ *  its star, or else where it sits and which mirror could. 2026-11-12. */
+function fieldAir(f: FieldWorld) {
+  const said = [f.read ? told(f.read, "Infrared Telescope") : "", f.wide ? told(f.wide, "15 m Mirror") : ""].filter(Boolean).join(" ");
+  return said || scope(f);
 }
 
 /** Our Mind at a black hole, as far as its word has reached us by `year`: on its way, landed, or standing alone as a
@@ -595,8 +633,8 @@ export function describe(view: EarthView): string {
     (view.proximaField ? `\n- Proxima b’s magnetic field:${fieldWords(view.proximaField)}` : "") +
     // Worlds our Far-Side Array found by their fields' radio, known no other way. 2026-11-11.
     (view.fields?.length
-      ? `\nWorlds our Far-Side Array found by the radio of their magnetic fields, at red dwarfs within ${Math.round(FIELDS.reachLy)} ly. Each has a field, and its radio rises and falls with its year. Radio gives no mass, so each could be rock or a small gas world, though most worlds this close to red dwarfs are rock. No telescope we can build splits one from its star: a lens at the Sun’s focus or a craft sent there would show it. A field is a small sign for air, since a world with one holds its air a little oftener, about 1.2 times:\n` +
-        view.fields.map((f) => `- ${f.star}, ${one(f.d)} ly: heard at Year ${yearText(f.at)}, a year of ${Math.round(f.periodDays)} days, ${lightTime(f.a)} from its star.`).join("\n")
+      ? `\nWorlds our Far-Side Array found by the radio of their magnetic fields, at red dwarfs within ${Math.round(FIELDS.reachLy)} ly. Each has a field, and its radio rises and falls with its year. Radio gives no mass, so each could be rock or a small gas world, though most worlds this close to red dwarfs are rock. Most sit too close to their stars for either of our telescopes to split, and each line says which could. Our Hypertelescope, a lens at the Sun’s focus or a craft sent there shows any of them. A field is a small sign for air, since a world with one holds its air a little oftener, about 1.2 times:\n` +
+        view.fields.map((f) => `- ${f.star}, ${one(f.d)} ly: heard at Year ${yearText(f.at)}, a year of ${Math.round(f.periodDays)} days, ${lightTime(f.a)} from its star. ${fieldAir(f)}`).join("\n")
       : "");
   const heard = view.heard.length
     ? view.heard.map((h) =>
@@ -635,7 +673,7 @@ export function describe(view: EarthView): string {
   const visits = (view.visits ?? []).map(
     (v) =>
       (v.by === "lens" || v.by === "hyper"
-        ? `- ${v.world}, ${one(view.felt.find((f) => f.star === v.star)?.d ?? (v.star === PROXIMA.star ? PROXIMA.d : 0))} ly, pictured by ${v.by === "lens" ? "our lens at the Sun’s focus" : "our Hypertelescope"} from Year ${yearText(v.passed)}, about ${Math.round(v.km ?? 0)} km a pixel, picture home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}. Nothing narrower than a pixel shows.`
+        ? `- ${v.world}, ${one(view.felt.find((f) => f.star === v.star)?.d ?? view.fields?.find((f) => f.star === v.star)?.d ?? (v.star === PROXIMA.star ? PROXIMA.d : 0))} ly, pictured by ${v.by === "lens" ? "our lens at the Sun’s focus" : "our Hypertelescope"} from Year ${yearText(v.passed)}, about ${Math.round(v.km ?? 0)} km a pixel, picture home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}. Nothing narrower than a pixel shows.`
         : v.by === "seed" && v.sent
           ? `- ${v.world}: our seed probe there sent a copy of itself toward ${v.sent} at Year ${yearText(v.passed)}, word home at Year ${yearText(v.home)}.`
         : v.by === "seed"
