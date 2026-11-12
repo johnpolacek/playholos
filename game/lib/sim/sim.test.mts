@@ -930,6 +930,30 @@ test("our telescopes turn to the worlds the Far-Side Array finds: a mirror only 
   assert.ok(all > 100 && split > 0 && split < all / 2 && read > 0 && read <= split, `${split} split and ${read} read of ${all}`);
 });
 
+test("the Far-Side Array hears star storms as calcs/senses.py has them, and their count settles that storms do not follow flares", async () => {
+  const { stormsAYear, stormsHeard, stormFirsts, STORMS, describeSky } = await import("../game/natural.ts");
+  const g = (golden as unknown as { storms: { heard: { fifths: number[]; year: number; heard: number }[]; star: { ly: number; fifths: number; aYear: number }[] } }).storms;
+  assert.ok(g.heard.length >= 18 && g.star.length >= 15);
+  for (const c of g.heard) assert.ok(Math.abs(stormsHeard(c.fifths, c.year) - c.heard) <= 1e-9 * Math.max(1, c.heard), `${c.fifths.length} fifths by ${c.year}: ${stormsHeard(c.fifths, c.year)} against ${c.heard}`);
+  for (const c of g.star) assert.ok(Math.abs(stormsAYear(c.ly, c.fifths) - c.aYear) <= 1e-9 * c.aYear, `${c.ly} ly, ${c.fifths} fifths`);
+  // Nothing before its first fifth, over a hundred a Year after, and more as it grows. A near star gives more.
+  const fifths = [30, 36, 42, 48, 54];
+  assert.equal(stormsHeard(fifths, 29), 0);
+  assert.equal(stormFirsts([]), null);
+  assert.ok(STORMS.perYear > 100 && STORMS.perYear < 140 && STORMS.stars > 600);
+  assert.ok(stormsHeard(fifths, 60) - stormsHeard(fifths, 59) > 3 * (stormsHeard(fifths, 31) - stormsHeard(fifths, 30)));
+  assert.ok(stormsAYear(4.2465) > 2 && stormsAYear(4.2465) < 4 && stormsAYear(4.2465) > stormsAYear(10) && stormsAYear(10, 5) > stormsAYear(10));
+  // Its two firsts: the first storm within days, and the question settled within the Year, once its share of active
+  // stars' storms is known to a third of itself, as the Deep Ice Watch settles its own.
+  const f = stormFirsts(fifths)!;
+  assert.ok(f.first > 30 && f.first < 30.02 && f.settled > f.first && f.settled < 31);
+  assert.ok(Math.abs(stormsHeard(fifths, f.settled) - STORMS.settle) < 1e-6 && STORMS.settle === Math.ceil(((1.645 * 3) ** 2 * (1 - STORMS.active)) / STORMS.active));
+  // The Mind is told once one is heard, and what the count settles once it has: never before the array stands.
+  assert.ok(!/star storms/.test(describeSky(22, 29, null, null, fifths)));
+  assert.match(describeSky(22, 30.2, null, null, fifths), /hears star storms.*Too few yet/);
+  assert.match(describeSky(22, 250, null, null, fifths), /storms do not follow flares/);
+});
+
 test("the Far-Side Array finds red dwarfs' worlds that have a field, and tells of the ones we knew", async () => {
   const fifths = [30, 36, 42, 48, 54];
   let found = 0, silent = 0;

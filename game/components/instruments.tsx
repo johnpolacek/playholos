@@ -7,10 +7,10 @@ import { useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
 import { span, tenths, timesText, yearText } from "@/lib/game/clock";
 import { grownSpans } from "@/lib/game/halo";
-import { iceBetween, iceFirsts, iceRange } from "@/lib/game/natural";
+import { iceBetween, iceFirsts, iceRange, stormFirsts, stormsHeard } from "@/lib/game/natural";
 import { SWARM } from "@/lib/sim/conflict";
 import { type Reading, starName } from "@/lib/game/leads";
-import { buildOf, buildSlug, computeAt, isOn, LAUNCH_LIFT, ordered, PAST, SWITCHED } from "@/lib/game/plan";
+import { buildOf, buildSlug, computeAt, fifthsOf, isOn, LAUNCH_LIFT, ordered, PAST, SWITCHED } from "@/lib/game/plan";
 import type { Heard, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
 import { CO_ORBITALS, MOON_SEARCH_YEARS, type MindsSeen, moonSearchEnds, TOUR_EACH, TOUR_FLIGHT, TOUR_MAP, tourEnds } from "@/lib/sim/minds";
@@ -31,6 +31,8 @@ interface Known {
   seed?: number;
   /** The Years our Far-Side Array found each world it has, by its magnetic field. 2026-11-11. */
   fields: number[];
+  /** The Year each fifth of it was done, for the star storms it hears. 2026-11-12. */
+  fifths: number[];
   heard: Heard[];
   /** Every reading landed by now, with the star of its lead. */
   read: { star: string; r: Reading }[];
@@ -44,6 +46,19 @@ interface Known {
 }
 
 /** Our watch that found the minds' signs: the warm glows, the cold glows, and the watcher. 2026-10-30. */
+/** The star storms our Far-Side Array has heard by now, as a sentence for its card, with what their count settles
+ *  once it has, and the Year of its latest news. lib/game/natural.ts, 2026-11-12. */
+function stormsLine(k: Known): { line: string; at: number } {
+  const f = stormFirsts(k.fifths);
+  const heard = f && k.now >= f.first ? Math.floor(stormsHeard(k.fifths, k.now)) : 0;
+  if (!f || !heard) return { line: "", at: -Infinity };
+  const settled = k.now >= f.settled;
+  return {
+    line: ` It has heard ${heard.toLocaleString("en-US")} star storm${heard === 1 ? "" : "s"} from red dwarfs.${settled ? ` Storms do not follow flares, settled at Year ${yearText(f.settled)}.` : ""}`,
+    at: settled ? f.settled : f.first,
+  };
+}
+
 function found(name: string, k: Known): { line: string; news: boolean } | null {
   const m = k.minds;
   if (!m) return null;
@@ -121,13 +136,15 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
     const { r } = read.at(-1)!;
     const star = starName(read.at(-1)!.star);
     const stars = new Set(read.map((x) => x.star)).size;
+    // Our Far-Side Array hears star storms too, beside the worlds it has read.
+    const storms = name === "Far-Side Array" ? stormsLine(k) : { line: "", at: -Infinity };
     const line =
       name === "Halo Survey"
         ? `Found ${stars > 1 ? `${stars} grey glows. The latest at` : "a grey glow at"} ${star}.`
         : stars > 1
           ? `Has read ${stars} worlds. The latest at ${star}.`
           : `Has read a world at ${star}.`;
-    return { line, news: recent(r.at) };
+    return { line: `${line}${storms.line}`, news: recent(Math.max(r.at, storms.at)) };
   }
   if (name === "Infrared Telescope") return { line: "Reading the air of the nearest worlds. Nothing in yet.", news: false };
   if (name === "Halo Survey") return { line: "Looking at star after star for cold glows, nearest first. None yet.", news: false };
@@ -145,9 +162,11 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
   if (name === "Warm Sky Watch") return { line: "Mapping the warm sky every 2 Years. No new warm glow yet.", news: false };
   if (name === "Far-Side Array") {
     const n = k.fields.length;
+    const storms = stormsLine(k);
+    const latest = Math.max(n ? k.fields.at(-1)! : -Infinity, storms.at);
     return n
-      ? { line: `Has found ${n === 1 ? "a world" : `${n} worlds`} by the radio of ${n === 1 ? "its magnetic field" : "their magnetic fields"}, the latest at Year ${yearText(k.fields.at(-1)!)}.`, news: recent(k.fields.at(-1)!) }
-      : { line: "Listening for the radio of magnetic fields at red dwarfs’ worlds. None new yet.", news: false };
+      ? { line: `Has found ${n === 1 ? "a world" : `${n} worlds`} by the radio of ${n === 1 ? "its magnetic field" : "their magnetic fields"}, the latest at Year ${yearText(k.fields.at(-1)!)}.${storms.line}`, news: recent(latest) }
+      : { line: `Listening for the radio of magnetic fields at red dwarfs’ worlds. None new yet.${storms.line}`, news: storms.line ? recent(latest) : false };
   }
   // What our Deep Ice Watch has heard, and each of its three firsts as it comes. lib/game/natural.ts, 2026-11-11.
   if (name === "Deep Ice Watch" && k.seed !== undefined) {
@@ -254,7 +273,8 @@ export function Working() {
     () => leads.filter((l) => l.facts.some(([k]) => k === "Heard by")).map((l) => (readings[l.slug] ?? []).find((r) => r.field !== undefined)?.at ?? 0).sort((a, b) => a - b),
     [leads, readings],
   );
-  const known: Known = { now, seed: save?.seed, fields, heard, read, visits, grown, swarm, minds };
+  const fifths = useMemo(() => fifthsOf(plan, scale), [plan, scale]);
+  const known: Known = { now, seed: save?.seed, fields, fifths, heard, read, visits, grown, swarm, minds };
   if (!working.length) return null;
   return (
     <>

@@ -323,7 +323,7 @@ export const SAYS: Record<string, string> = {
   "Belt Mining":
     "Survey probes first, then a mining fleet. Nothing like it has flown. It brings 120 kt of rock a Year, and needs no Mass Driver.",
   "Far-Side Array":
-    "The Moon’s far side is the quietest place we can reach. A world with a magnetic field makes radio where its star’s wind strikes it, as our aurora does, too low to pass Earth’s air. An array there hears it at red dwarfs within 33 ly: whether a world we know has a field, and worlds we never felt. A field is a small sign that a world kept its air. It would hear a world’s everyday radio too, if one near us made any. It grows in fifths, and the first already hears the nearest.",
+    "The Moon’s far side is the quietest place we can reach. A world with a magnetic field makes radio where its star’s wind strikes it, as our aurora does, too low to pass Earth’s air. An array there hears it at red dwarfs within 33 ly: whether a world we know has a field, and worlds we never felt. A field is a small sign that a world kept its air. It would hear a world’s everyday radio too, if one near us made any. And it hears star storms: the radio of gas thrown off red dwarfs, over a hundred a Year, enough to settle within a Year whether such storms follow a star’s flares. It grows in fifths, and the first already hears the nearest.",
   "Power from Orbit":
     "A fifth more energy, from sunlight caught above the weather and beamed down. It takes 10 Mt of rock, so it comes only as fast as rock does.",
   "Cold Halo":

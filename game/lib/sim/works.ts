@@ -98,6 +98,11 @@ interface Catalog {
     ifAir: number; ifBare: number; reachLy: number; flux0: number; au0: number; ly0: number; fall: number;
     noise0: number; km0: number; hours0: number; fifthKm2: number; listenH: number;
   };
+  /** Calcs/senses.py: the star storms our Far-Side Array hears. How many a Year from every red dwarf within 50 ly with
+   *  one fifth standing (`perYear`), and from one star 10 ly off (`at10`), growing with the fifths to the `grow` and
+   *  falling with a star's distance to the `fall`. How many red dwarfs those are, the share of them that are active,
+   *  how many storms settle whether storms follow flares, and the faintest burst one fifth hears, in mJy. 2026-11-12. */
+  storms: { perYear: number; at10: number; grow: number; fall: number; stars: number; active: number; settle: number; floor: number };
   /** Calcs/senses.py: what our Deep Ice Watch hears. Stars a Year that explode (`bright`) and die dark (`dark`), those
    *  dark ones near enough to read (`near`), how far each kind is heard in Mpc, the share that die dark, the Years
    *  until a dark death is sure, how many read near settle the share, and the galaxies within `hostsMpc`. 2026-11-11. */

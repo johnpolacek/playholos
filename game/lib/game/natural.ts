@@ -71,8 +71,9 @@ export function skyBetween(seed: number, from: number, to: number, watch: number
   return { supernovae, mergers, betelgeuse: skyOf(seed).betelgeuse > from && skyOf(seed).betelgeuse <= to };
 }
 
-/** The sky so far, in words, for the Mind: counts since Year 0, the latest seen by eye, and Betelgeuse once gone. */
-export function describeSky(seed: number, year: number | null, watch: number | null, ice: number | null = null) {
+/** The sky so far, in words, for the Mind: counts since Year 0, the latest seen by eye, and Betelgeuse once gone.
+ *  `fifths`: the Year each fifth of our Far-Side Array was done, for the star storms it hears. */
+export function describeSky(seed: number, year: number | null, watch: number | null, ice: number | null = null, fifths: readonly number[] = []) {
   if (year === null || year < 1) return "";
   const { supernovae, mergers, betelgeuse } = skyBetween(seed, 0, year, watch);
   const eye = supernovae.filter((e) => e.eye);
@@ -83,6 +84,7 @@ export function describeSky(seed: number, year: number | null, watch: number | n
     watch === null ? "" : `Our Warm Sky Watch has seen ${n(mergers.length)} pairs of stars merge and glow warm in their own dust, and set each aside as natural, as it must before any glow can mean a mind.`,
     betelgeuse ? `Betelgeuse exploded at Year ${n(skyOf(seed).betelgeuse)}, ${BETELGEUSE.ly} ly away: for a season as bright as a half Moon, seen by day for more than a Year, and harmless at that distance.` : "",
     ice === null || year < ice ? "" : describeIce(seed, ice, year),
+    describeStorms(fifths, year),
   ].filter(Boolean).join(" ");
 }
 
@@ -253,4 +255,49 @@ function describeIce(seed: number, since: number, year: number) {
         ? "How large a share die dark isn't settled yet: too few have been read near."
         : "",
   ].filter(Boolean).join(" ");
+}
+
+// ── Star storms, heard by our Far-Side Array ──
+// A star throws off a storm of gas, and its shock makes a radio burst that drifts lower as it climbs. From a red dwarf
+// it falls to and below what Earth's air lets through, so the far side hears it. Each red dwarf gives storms by one
+// law, Konijn et al. 2025's, fewer the farther it is and more as the array grows. The count is the same in every
+// game: what it settles is our universe's answer, that storms do not follow flares. calcs/senses.py. 2026-11-12.
+export const STORMS = CATALOG.storms;
+/** Storms the array hears a Year from one star `ly` away, with so many fifths standing. */
+export const stormsAYear = (ly: number, fifths = 1) => STORMS.at10 * (10 / ly) ** STORMS.fall * fifths ** STORMS.grow;
+/** Storms heard by a Year from every red dwarf within 50 ly, given the Year each fifth was done, in order. */
+export function stormsHeard(fifths: readonly number[], year: number) {
+  let total = 0;
+  fifths.forEach((start, k) => {
+    const end = k + 1 < fifths.length ? Math.min(year, fifths[k + 1]) : year;
+    if (end > start) total += (end - start) * STORMS.perYear * (k + 1) ** STORMS.grow;
+  });
+  return total;
+}
+/** The Year the array has heard so many storms, or null if it never will, with no fifth standing. */
+function stormsReach(fifths: readonly number[], count: number): number | null {
+  let have = 0;
+  for (let k = 0; k < fifths.length; k++) {
+    const rate = STORMS.perYear * (k + 1) ** STORMS.grow, end = k + 1 < fifths.length ? fifths[k + 1] : Infinity;
+    if (have + rate * (end - fifths[k]) >= count) return fifths[k] + (count - have) / rate;
+    have += rate * (end - fifths[k]);
+  }
+  return null;
+}
+/** Its two firsts, each of which stops a skip, once: the first storm heard, and the Year enough are heard to settle
+ *  whether storms follow flares. Null with no fifth standing. */
+export function stormFirsts(fifths: readonly number[]): { first: number; settled: number } | null {
+  const first = stormsReach(fifths, 1), settled = stormsReach(fifths, STORMS.settle);
+  return first === null || settled === null ? null : { first, settled };
+}
+/** What the array has heard of star storms by a Year, in words, for the Mind. */
+function describeStorms(fifths: readonly number[], year: number) {
+  const f = stormFirsts(fifths);
+  if (!f || year < f.first) return "";
+  const n = (x: number) => Math.floor(x).toLocaleString("en-US");
+  const heard = `Our Far-Side Array hears star storms: bursts of radio from the shocks of gas thrown off by red dwarfs, too low for any ear on Earth. It has heard ${n(stormsHeard(fifths, year))} from the ${STORMS.stars} red dwarfs within 50 ly, about ${Math.round(stormsAYear(4.2465, fifths.filter((y) => y <= year).length))} a Year from Proxima Centauri alone.`;
+  const active = Math.round(STORMS.active * 10);
+  return year >= f.settled
+    ? `${heard} At Year ${Math.floor(f.settled * 10) / 10} that settled an open question: storms do not follow flares. About ${active} red dwarfs in 10 are active and flare hundreds of times oftener than the rest, yet they give only ${active} storms in 10. Their strong fields hold all but the strongest storms in. A storm strips a world's air only while it lasts, and steady light strips far more, so this moves no world's odds of air.`
+    : `${heard} Too few yet to say whether storms follow flares, which no one has measured.`;
 }

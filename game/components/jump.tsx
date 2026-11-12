@@ -10,9 +10,9 @@ import { usePlan, useSchedule } from "@/components/picks";
 import { heardId, useLeads } from "@/components/scan";
 import { yearText } from "@/lib/game/clock";
 import { type Lead, starName } from "@/lib/game/leads";
-import { buildSlug, drawAt, ordered } from "@/lib/game/plan";
+import { buildSlug, drawAt, fifthsOf, ordered } from "@/lib/game/plan";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
-import { iceFirsts, iceRange } from "@/lib/game/natural";
+import { iceFirsts, iceRange, stormFirsts, STORMS } from "@/lib/game/natural";
 import { glowNamed } from "@/lib/game/glow-names";
 const properName = (id: string) => id.replace(/\bglow\b/, "Glow");
 import { WINDOWS } from "@/lib/game/leads";
@@ -290,6 +290,29 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
             mark: (
               <span style={{ color: buildColor("Deep Ice Watch") }}>
                 <BuildMark name="Deep Ice Watch" size={16} />
+              </span>
+            ),
+            title,
+            line: `Year ${yearText(at)}, ${line}`,
+          });
+    }
+    // Our Far-Side Array's two firsts for star storms, each of which a jump stops on. lib/game/natural.ts, 2026-11-12.
+    const storms = stormFirsts(fifthsOf(plan, scale));
+    if (storms) {
+      const active = Math.round(STORMS.active * 10);
+      const firsts = [
+        [storms.first, 3, "Our Far-Side Array heard its first star storm", "a burst of radio from gas thrown off a red dwarf"],
+        [storms.settled, 2, "Storms do not follow flares", `the ${active} red dwarfs in 10 that flare most give only ${active} storms in 10`],
+      ] as const;
+      for (const [at, rank, title, line] of firsts)
+        if (at > from + 1e-6 && at <= to + 1e-6)
+          out.push({
+            key: `storms:${title}`,
+            rank,
+            to: `/play/build/${buildSlug("Far-Side Array")}`,
+            mark: (
+              <span style={{ color: buildColor("Far-Side Array") }}>
+                <BuildMark name="Far-Side Array" size={16} />
               </span>
             ),
             title,

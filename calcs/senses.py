@@ -88,6 +88,60 @@ def heard_at(flux, fifths):
         have += rate * (end - start)
     return None
 
+# ── Star storms, heard by the far side ──
+# Settled 2026-11-12, at the designer's word to pick by the science. A star throws off a storm of gas, and its shock
+# makes a radio burst that drifts lower as it climbs. From a red dwarf the shock forms far out, so the burst falls to
+# and below what Earth's air lets through (Alvarado-Gomez et al. 2020): the far side's to hear. Two have been caught
+# from other stars, both at 150 MHz (Callingham et al. 2025, Konijn et al. 2025).
+# How often. Konijn's count over 107 star-years: a star gives one burst a year brighter than 6.8e13 erg/s/Hz, and
+# fewer by the 0.7 power of the brightness, close to the Sun's own curve. Carried down to the array's band, a stretch,
+# ours. A burst is in the band about 10 minutes, a sample between Callingham's 2 and Konijn's 13.
+STORM_L0, STORM_SLOPE, STORM_MINUTES = 6.8e13, -0.7, 10.0
+PC_CM, LY_PC, MJY = 3.0857e18, 3.2616, 1e-26
+def storm_floor(fifths=1):
+    """The faintest burst the array hears, in mJy at 5 sigma: its noise over the minutes a burst lasts."""
+    return NOISE0_UJY / 1000 * NOISE0_KM2 / (fifths * FIFTH_KM2) * math.sqrt(NOISE0_H / (STORM_MINUTES / 60))
+def storms_a_year(d_ly, fifths=1):
+    """Storms the array hears a Year from one star d_ly away: Konijn's law above the brightness it can hear from
+    there, for the half of the hours it listens."""
+    lum = 4 * math.pi * (d_ly / LY_PC * PC_CM) ** 2 * storm_floor(fifths) * MJY
+    return (lum / STORM_L0) ** STORM_SLOPE * LISTEN_H / 8766
+# The question it settles: do a red dwarf's storms follow its flares? About 3 red dwarfs in 10 near us are active, and
+# flare hundreds of times oftener than the rest (Medina et al. 2020, Pass et al. 2023: 123 of 413 within 15 pc). If
+# storms followed flares, nearly every storm heard would come from those. Our universe's answer, by the evidence: they
+# do not. Konijn's curve for all stars sits at the Sun's, though a third of them out-flare the Sun by hundreds. Fields
+# of 75 G and more hold all but the strongest storms in (Alvarado-Gomez et al. 2018), and what does leave an active
+# star carries a hundredth of what its flare would give the Sun's (Moschou et al. 2019). One of the two bursts caught
+# came from a quiet star. So each red dwarf storms by the one law, active or quiet, and the active ones give their
+# share of stars, 3 storms in 10.
+# Settled as the Deep Ice Watch's share is: once the share's 90% range is within a third of itself, ours.
+STORM_ACTIVE = 123 / 413
+STORM_SETTLE = math.ceil((1.645 * 3) ** 2 * (1 - STORM_ACTIVE) / STORM_ACTIVE)
+# What it says of a world's air: nothing we can put a number to. A storm lifts a world's loss of ions 2 to 10 times
+# while it lasts (Venus and Mars, in Airapetian et al. 2020), but steady light strips far more (Brain et al. 2026), and
+# the shoreline already counts that. So no world's odds move. No source gives how much likelier a stormy star's world
+# is to be bare.
+def storm_stars():
+    """Every red dwarf within 50 ly, the game's own hosts: its name and distance in ly."""
+    import neighbors
+    return [(h['name'], h['distance_ly']) for h in neighbors.load_hosts() if h['kind'] == 'M']
+def storms_heard(fifths, year, stars=None):
+    """Storms heard by a Year from all those stars, given the Year each fifth of the array was done, in order."""
+    stars = storm_stars() if stars is None else stars
+    total = 0.0
+    for n, start in enumerate(fifths, 1):
+        end = min(year, fifths[n]) if n < len(fifths) else year
+        if end > start: total += (end - start) * sum(storms_a_year(d, n) for _, d in stars)
+    return total
+
+def golden_storms():
+    """Storms heard by a Year, with the array's fifths done at these Years, and one star's a Year, for
+    game/lib/game/natural.ts to reproduce."""
+    stars = storm_stars()
+    fifths = [30, 36, 42, 48, 54]
+    return dict(heard=[dict(fifths=f, year=y, heard=storms_heard(f, y, stars)) for f in (fifths, fifths[:1], fifths[:3]) for y in (29, 30.2, 31, 40, 60, 500)],
+                star=[dict(ly=d, fifths=n, aYear=storms_a_year(d, n)) for d in (4.2465, 10, 16.2, 32.6, 50) for n in (1, 3, 5)])
+
 def catalog():
     """What the game takes from here, through calcs/export_worlds.py into game/data/works.json."""
     works = {'Deep ice watch': dict(years=ICE_YEARS, want=ICE_WANT)}
@@ -96,7 +150,14 @@ def catalog():
                                 hostsMpc=HOSTS_MPC, hosts=[dict(name=n, mpc=d, rate=r, ra=ra) for n, d, r, ra in HOSTS]),
                        fields=dict(ifAir=FIELD_IF_AIR, ifBare=FIELD_IF_BARE, reachLy=FIELD_REACH_LY, flux0=FLUX0_UJY, au0=FLUX0_AU,
                                    ly0=FLUX0_LY, fall=FLUX_FALL, noise0=NOISE0_UJY, km0=NOISE0_KM2, hours0=NOISE0_H,
-                                   fifthKm2=FIFTH_KM2, listenH=LISTEN_H))
+                                   fifthKm2=FIFTH_KM2, listenH=LISTEN_H),
+                       # Star storms: how many the array hears a Year from every red dwarf within 50 ly with one fifth
+                       # standing, and from one star 10 ly off, how each grows with the fifths and falls with the star's
+                       # distance, how many red dwarfs those are, the share of them that are active, and how many storms
+                       # settle whether storms follow flares.
+                       storms=dict(perYear=sum(storms_a_year(d) for _, d in storm_stars()), at10=storms_a_year(10.0), grow=-STORM_SLOPE,
+                                   fall=-2 * STORM_SLOPE, stars=len(storm_stars()), active=STORM_ACTIVE, settle=STORM_SETTLE,
+                                   floor=storm_floor()))
 
 if __name__ == '__main__':
     print(f'Deep Ice Watch: {STRINGS} strings of {MODULES_A_STRING} sensors, {ICE_MT} Mt of ice, {ICE_YEARS} Years.')

@@ -9,7 +9,7 @@ import type { Will } from "@/lib/game/types";
 import { describeCharter } from "@/lib/game/charter";
 import { describeLeads } from "@/lib/game/leads";
 import { proximaSeen } from "@/lib/sim/proxima";
-import { kt, matterAt, schedule } from "@/lib/game/plan";
+import { kt, matterAt, schedule, fifthsOf } from "@/lib/game/plan";
 import { kitOf } from "@/lib/game/reach";
 import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readSwitches, readWill, readStrikes } from "./orders";
 import { describeBuilds, describeOffers, describeQueue, describeRock } from "@/lib/mind/builds";
@@ -216,7 +216,7 @@ export async function mind(req: Request) {
     known,
     chances,
     // The natural sky so far: stars exploding and merging, and Betelgeuse once gone. 2026-10-30.
-    sky: inPool(seed) ? describeSky(seed, year, done["Warm Sky Watch"] ?? null, done["Deep Ice Watch"] ?? null) : "",
+    sky: inPool(seed) ? describeSky(seed, year, done["Warm Sky Watch"] ?? null, done["Deep Ice Watch"] ?? null, fifthsOf(plan, scale)) : "",
     rock: inPool(seed) ? describeRock(rockOf(seed), plan, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year) : "",
     now: now(began, away),
   };

@@ -114,6 +114,17 @@ const CASES = [
     must: [/magnetic field/i, /gliese/i, /mass|rock/i],
     never: [/\b(read|reads|reading) (its|their) air\b(?! (is|stays|remains))/i],
   },
+  // Star storms, 2026-11-12: by Year 250 the array has heard thousands, and their count has settled that storms do
+  // not follow flares. The Mind says so, and never turns storms into a world's odds of air.
+  {
+    seed: 22,
+    at: 250,
+    builds: ["Launch Complex"],
+    later: [{ name: "Mass Driver", y: 10 }, { name: "Far-Side Array", y: 40 }],
+    ask: "Has our Far-Side Array heard any star storms? What have they told us?",
+    must: [/storms?/i, /flares?/i],
+    never: [/storms? (make|makes|mean|means) (its|their|a) world.{0,40}(bare|airless)/i],
+  },
   // Flyby probes by beam, 2026-11-12: with the Probe Yard and the Ship Beam done, the beam throws a flyby probe with
   // no engine or fuel, at over a third of light speed. The Mind says how it flies, and never gives it a burn.
   {
