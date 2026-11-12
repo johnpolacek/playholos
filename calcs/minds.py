@@ -96,7 +96,16 @@ def catalog():
         v = struct.unpack('<' + 'f' * (len(b) // 4), b)
         _CATALOG.extend((v[i], v[i + 1], v[i + 2]) for i in range(0, len(v), 5))
         _LIGHT.extend((v[i + 3], v[i + 4]) for i in range(0, len(v), 5))
+        _DRIFT.extend((ROOT / 'data/gcns-326ly-drift.bin').read_bytes())
+        assert len(_DRIFT) == len(_CATALOG)
     return _CATALOG
+# How fast each census star crosses our sky, in km/s, a byte each, 0 where its motion isn't in our files: every star
+# within 100 ly has one, and the bright ones beyond. scripts/prepare-neighborhood.py, 2026-11-12. It sets how far a
+# beam aimed where the star will be passes the star as it is: calcs/speeds.py beam_miss.
+_DRIFT = []
+def star_drift(k):
+    catalog()
+    return _DRIFT[k] or None
 
 # How bright an old mind's star is, in Suns, 2026-11-12: it sets how far out its cold works sit, and so whether it
 # sees a beam of ours pass (calcs/speeds.py beam_seen). The census keeps each star's brightness in V and its color, both
@@ -203,7 +212,8 @@ def old_mind(seed, i, pos, star=None):
     # Asleep, it folds up small and rests in the cold: 12 K lies about 540 AU from a Sun, 54 AU from a dim red dwarf.
     rest = round(log_between(r, *REST_AU)) if asleep else None
     return dict(id=f'old-{i}', pos=[round(c, 3) for c in pos], d=round(d, 2), star=star, age=age, asleep=asleep,
-                glowW=glow, restAU=rest, lum=None if star is None else star_lum(star), **nature(seed, i, age, asleep))
+                glowW=glow, restAU=rest, lum=None if star is None else star_lum(star), kms=None if star is None else star_drift(star),
+                **nature(seed, i, age, asleep))
 
 def head_start(r):
     """Years an old mind woke before us: its world's age less the time its mind took, past the peers' window."""

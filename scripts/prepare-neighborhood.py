@@ -50,6 +50,18 @@ def b_minus_v(bp_rp):
         if bp_rp <= x1: return y0 + (y1 - y0) * (bp_rp - x0) / (x1 - x0)
     return points[-1][1]
 
+# How fast each star crosses our sky, in km/s, where a cached file has its motion: 4.74 times its motion in arcseconds
+# a year times its distance in parsecs. The wide census file keeps no motions, so only stars in the 100 ly file have
+# one, and the bright stars HYG adds. The rest are 0: not known here. 2026-11-12, for where a launch beam passes a star.
+def drift_kms(pmra_mas, pmdec_mas, parallax_mas):
+    return 4.74047 * math.hypot(pmra_mas, pmdec_mas) / parallax_mas
+near_drift = {}
+if (root / '.cache/gcns-100ly.csv').exists():
+    for row in csv.DictReader((root / '.cache/gcns-100ly.csv').open()):
+        if row['pmRA'] and row['pmDE'] and row['Plx'] and float(row['Plx']) > 0:
+            near_drift[row['GaiaEDR3']] = drift_kms(float(row['pmRA']), float(row['pmDE']), float(row['Plx']))
+drift = []
+
 # The census itself: every GCNS object whose median position lies inside the radius.
 census, points = [], []
 for row in csv.DictReader((root / CENSUS).open()):
@@ -61,6 +73,7 @@ for row in csv.DictReader((root / CENSUS).open()):
     bp_rp = float(row['BPmag']) - float(row['RPmag']) if row['BPmag'] and row['RPmag'] else (.3 if white_dwarf else 2.5)
     g = float(row['Gmag']) if row['Gmag'] else 20.5
     census.append(dict(source='gaia', white_dwarf=white_dwarf, distance=distance_ly, pos=atlas(*xyz)))
+    drift.append(near_drift.get(row['GaiaEDR3'], 0))
     points.extend([*atlas(*xyz), g - g_minus_v(bp_rp), b_minus_v(bp_rp)])
 gaia_count = len(census)
 
@@ -115,6 +128,7 @@ for star in csv.DictReader((root / '.cache/hygdata_v41.csv').open()):
         gal = [sum(a * b for a, b in zip(r, eq)) for r in rotation]
         pos = [gal[0], gal[2], -gal[1]]
         census.append(dict(source='hyg', white_dwarf=False, distance=d, pos=pos))
+        drift.append(drift_kms(float(star['pmra'] or 0), float(star['pmdec'] or 0), 1000 / float(star['dist'])) if star['pmra'] and star['pmdec'] else 0)
         points.extend([*pos, float(star['mag']), float(star['ci']) if star['ci'] else .65])
     if key in LANDMARKS and (match or added):
         pos = atlas(*match[1]) if match else pos
@@ -122,6 +136,10 @@ for star in csv.DictReader((root / '.cache/hygdata_v41.csv').open()):
             distance=round(math.hypot(*pos), 4), source='Gaia EDR3' if match else 'Hipparcos via HYG'))
 
 (root / f'{OUT}.bin').write_bytes(struct.pack('<' + 'f' * len(points), *points))
+# One byte a star, in the census's own order: its speed across our sky in km/s, at least 1 and at most 255, or 0 where
+# no cached file has its motion.
+assert len(drift) == len(census)
+(root / f'{OUT}-drift.bin').write_bytes(bytes(0 if v <= 0 else max(1, min(255, round(v))) for v in drift))
 within_seed = sum(s['distance'] <= SEED_LY for s in census)
 meta = dict(radiusLy=int(RADIUS_LY) if RADIUS_LY == int(RADIUS_LY) else RADIUS_LY, seedRadiusLy=SEED_LY, count=len(census), withinSeed=within_seed,
     gaia=gaia_count, hipparcosSupplement=len(census) - gaia_count, whiteDwarfs=sum(s['white_dwarf'] for s in census),

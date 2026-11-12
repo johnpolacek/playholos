@@ -80,9 +80,10 @@ interface Catalog {
     /** A rod the Ship Beam throws in place of a bullet: its tonnes, for a bullet's harm at the most its sail's mirror
      *  reflects, that speed, the days of its push, the Years the push costs, and the Years to ready one. */
     rod: { tonnes: number; beam: number; days: number; lost: number; ready: number };
-    /** Who sees a launch beam: how fast a star crosses our sky, in km/s, and how far an awake old mind's works reach
+    /** Who sees a launch beam: how fast a star crosses our sky, in km/s, the middle speed of the stars near us, and
+     *  Proxima's own, and how far an awake old mind's works reach
      *  from its star, in AU, where a plate stays at its glow's 12 K. */
-    seen: { kms: number; worksAU: number };
+    seen: { kms: number; worksAU: number; proxima: number };
     /** The Wide Beam, the Ship Beam in stepped colors from a patch ten times as wide: its colors in microns, the most
      *  its sail's mirror reflects as a share of light speed, its sail in tonnes, how far its last color holds its
      *  spot in ly, and what it throws: a flyby probe and a seed ship at the most its work gives, and a rod as another mind's, with

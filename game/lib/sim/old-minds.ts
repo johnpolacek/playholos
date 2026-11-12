@@ -77,7 +77,7 @@ export function oldAnswers(world: World, seen: MindsSeen, craft: MindKit["craft"
   for (const [name, id] of named) {
     const m = olds.get(id);
     // A beam counts only where it is seen: by a mind awake, whose works reach the line the beam passes on.
-    const msg = aimed.filter((a) => a.to === name && (!a.flash || (!m?.asleep && beamSeen(m?.d ?? Infinity, a.beta ?? 0, m?.lum ?? 1)))).sort((a, b) => a.y - b.y)[0];
+    const msg = aimed.filter((a) => a.to === name && (!a.flash || (!m?.asleep && beamSeen(m?.d ?? Infinity, a.beta ?? 0, m?.lum ?? 1, m?.kms)))).sort((a, b) => a.y - b.y)[0];
     if (!m || !msg || m.open <= SILENT) continue;
     let hears = msg.y + m.d;
     if (m.asleep) {
@@ -91,7 +91,7 @@ export function oldAnswers(world: World, seen: MindsSeen, craft: MindKit["craft"
     if (arrived > year) continue;
     const watched = Math.min(m.age, 4.5e9);
     const proof = msg.flash
-      ? `Your beam crossed our outer works, ${Math.round(beamMiss(m.d, msg.beta ?? 1)).toLocaleString("en-US")} AU from our star, aimed where we will be when what it threw arrives. We have watched your world for ${years(watched)}. With this, a picture of it at the hour the beam was lit.`
+      ? `Your beam crossed our outer works, ${Math.round(beamMiss(m.d, msg.beta ?? 1, m.kms)).toLocaleString("en-US")} AU from our star, aimed where we will be when what it threw arrives. We have watched your world for ${years(watched)}. With this, a picture of it at the hour the beam was lit.`
       : `We have watched your world for ${years(watched)}. With this, a picture of it at the hour your word reached us.`;
     const woke = m.asleep ? "You woke us. We were waiting for a colder sky, and waking has a cost." : "";
     const rule = "One rule holds among all of us: look, listen and speak as you like, and build at no other star.";

@@ -15,6 +15,8 @@ export interface Star {
   lum?: number;
   north?: boolean;
   hz?: [number, number];
+  /** How fast it crosses our sky, in km/s, from Gaia's motion of it. Since 2026-11-12. */
+  kms?: number;
 }
 
 export interface Inbound {
@@ -89,6 +91,9 @@ export interface OldMind {
   /** Its star's light in Suns, read from the census: it sets how far out its cold works sit. Null at a seeded place
    *  beyond the catalog. Missing on a world drawn before 2026-11-12. */
   lum?: number | null;
+  /** How fast its star crosses our sky, in km/s, where our files hold its motion: every star within 100 ly. It sets
+   *  how far a beam aimed where the star will be passes the star as it is. Null where we hold none. */
+  kms?: number | null;
   /** Its part in the settling, when the Galaxy's first groups became one under one rule: it helped set the rule, it
    *  spread and was made to stop, or it was born after. calcs/minds.py's nature, 2026-11-11. */
   part: "founder" | "stopped" | "after";
@@ -173,6 +178,8 @@ export interface FeltWorld {
   kind?: string;
   hz?: [number, number];
   lum?: number;
+  /** How fast its star crosses our sky, in km/s. */
+  kms?: number;
   /** What our Infrared Telescope has made of it so far, once built. */
   read?: Read;
   /** What our 15 m Mirror has made of it, once built, if it can read more of it than the Infrared Telescope can. */
@@ -199,8 +206,9 @@ export interface FieldWorld {
   at: number;
   kind?: string;
   hz?: [number, number];
-  /** Its star's light in Suns, from the catalogs. */
+  /** Its star's light in Suns, from the catalogs, and its speed across our sky in km/s. */
   lum?: number;
+  kms?: number;
   /** What the Infrared Telescope has read of it, and the 15 m Mirror, where each can split it from its star: few can.
    *  A mirror that can't split it never turns there, so it has no read. 2026-11-12. */
   read?: Read;

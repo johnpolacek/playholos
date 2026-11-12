@@ -6,6 +6,7 @@ craft and each trip, so no one speed fits all. Sources in HOLOS_RESEARCH.md, "Wh
 is from a published estimate or marked ours.
 """
 import math
+from pathlib import Path
 import mercury
 
 C, LY, YEAR = 299_792_458.0, 9.4607e15, 3.15576e7
@@ -334,19 +335,23 @@ def wide_rod_years(d):
 # there in d Years and the craft in d / beta, and the star moves on in between. So the beam passes the star as it then
 # is by its speed across our sky times that gap: (v / c)(1 / beta - 1) d. The slower the craft, the wider it misses.
 # Benford and Benford 2016: "the beam is generally not observable from the target planetary system".
-# How fast a star crosses our sky: 30 km/s, a sample. Benford takes 20. Proxima's is 24, Tau Ceti's 33, Barnard's 90.
+# How fast a star crosses our sky: each star's own, where our files hold its motion, which is every star within 100 ly
+# (data/gcns-326ly-drift.bin, from Gaia's census of nearby stars, scripts/prepare-neighborhood.py). Past them, their
+# middle speed: 30 km/s, measured over 10,898 stars. Until 2026-11-12 that 30 was a sample, taken for every star.
+# Benford takes 20. Proxima's is 24, Tau Ceti's 33, Barnard's 90.
 # Until 2026-11-12 every launch beam was seen at its star, the designer's pick with this doubt beside it. The designer's
 # pick now, (ar): it is seen only where a mind's works reach the beam's line. An awake old mind's panels sit where a
 # plate stays at its glow's 12 K (calcs/minds.py): 538 AU from a Sun, and nearer in round a dimmer star, as the root
 # of its light. Each old mind's star has its own, read from the census (calcs/minds.py lum_of): 51 AU round the middle
 # one, a red dwarf of 0.009 Suns. A peer's swarm is 0.4 AU wide, and peers are thousands of ly off, so no peer sees
 # one. Not yet: each star's own motion across our sky.
-DRIFT_KMS, GLOW_K, AU = 30.0, 12.0, 1.495978707e11
+_drifts = sorted(v for v in (Path(__file__).resolve().parents[1] / 'data/gcns-326ly-drift.bin').read_bytes() if v)
+DRIFT_KMS, GLOW_K, AU = float(_drifts[len(_drifts) // 2]), 12.0, 1.495978707e11
 WORKS_AU = math.sqrt(3.828e26 / (16 * math.pi * 5.670374e-8 * GLOW_K ** 4)) / AU
 def works_au(lum=1.0): return WORKS_AU * math.sqrt(lum)
-def beam_miss(d, beta): return DRIFT_KMS * 1e3 / C * (1 / beta - 1) * d * LY / AU
-def beam_seen(d, beta, lum=1.0): return beam_miss(d, beta) <= works_au(lum)
-def seen_within(beta, lum=1.0): return works_au(lum) / beam_miss(1, beta)
+def beam_miss(d, beta, kms=None): return (kms or DRIFT_KMS) * 1e3 / C * (1 / beta - 1) * d * LY / AU
+def beam_seen(d, beta, lum=1.0, kms=None): return beam_miss(d, beta, kms) <= works_au(lum)
+def seen_within(beta, lum=1.0, kms=None): return works_au(lum) / beam_miss(1, beta, kms)
 
 # ---------- What the game reads ----------
 # Sails of a few grams, pushed from Earth: a fifth of light speed, Starshot's.
@@ -418,9 +423,9 @@ def golden_wide():
 def golden_misses():
     """How far a launch beam passes from its star, and whether an awake old mind there sees it, for each craft a beam
     throws: sails, a seed ship, a flyby probe and a rod. For game/lib/sim/speeds.ts to reproduce."""
-    return [dict(d=d, beta=b, lum=lum, au=beam_miss(d, b), seen=beam_seen(d, b, lum))
+    return [dict(d=d, beta=b, lum=lum, kms=kms, au=beam_miss(d, b, kms), seen=beam_seen(d, b, lum, kms))
             for d in (4.25, 10.5, 17, 20, 50, 62, 90, 400, 2700) for b in (SAIL_BETA, SHIP_BEAM, probe_beta(d), rod_beta(d))
-            for lum in (1.0, 0.009, 0.17)]
+            for lum in (1.0, 0.009, 0.17) for kms in (None, 9, 24, 90)]
 
 
 def megatons(tonnes, beta): return (1 / math.sqrt(1 - beta ** 2) - 1) * tonnes * 1000 * C ** 2 / 4.184e15

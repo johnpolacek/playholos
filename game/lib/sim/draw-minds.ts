@@ -87,6 +87,14 @@ export function catalogOf(bytes: ArrayBuffer): Vec[] {
 }
 /** Each census's own rows, kept beside its places: the two more are a star's brightness in V and its color. */
 const LIGHT = new WeakMap<Vec[], Float32Array>();
+/** How fast each census star crosses our sky, in km/s, a byte each, 0 where its motion isn't in our files:
+ *  data/gcns-326ly-drift.bin, every star within 100 ly and the bright ones beyond. Given beside a census, each old mind
+ *  on one of its stars carries that star's own. 2026-11-12. */
+const DRIFT = new WeakMap<Vec[], Uint8Array>();
+export function withDrift(stars: Vec[], bytes: ArrayBuffer): Vec[] {
+  DRIFT.set(stars, new Uint8Array(bytes));
+  return stars;
+}
 
 // How bright a star is, in Suns, as calcs/minds.py's lum_of: undo the census's V and color to Gaia's G, take its
 // distance for absolute G, and read all its light off Mamajek's table of dwarfs (Pecaut and Mamajek 2013). 2026-11-12.
@@ -186,7 +194,7 @@ function nature(seed: number, i: number | string, age: number, asleep: boolean):
 }
 
 // ---------- Old minds ----------
-function oldMind(seed: number, i: number | string, pos: Vec, star: number | null = null, lum: number | null = null): OldMind {
+function oldMind(seed: number, i: number | string, pos: Vec, star: number | null = null, lum: number | null = null, kms: number | null = null): OldMind {
   const r = rng(seed, "old", i);
   const d = hypot(...pos);
   const asleep = r.random() < ASLEEP_SHARE;
@@ -195,7 +203,7 @@ function oldMind(seed: number, i: number | string, pos: Vec, star: number | null
   const age = headStart(r);
   const glow = asleep ? null : Number(logBetween(r, Math.min(1e18, limit / 2), limit).toPrecision(3));
   const rest = asleep ? pyRound(logBetween(r, ...REST_AU)) : null;
-  return { id: `old-${i}`, pos: pos.map((c) => pyRound(c, 3)) as Vec, d: pyRound(d, 2), star, age, asleep, glowW: glow, restAU: rest, lum, ...nature(seed, i, age, asleep) };
+  return { id: `old-${i}`, pos: pos.map((c) => pyRound(c, 3)) as Vec, d: pyRound(d, 2), star, age, asleep, glowW: glow, restAU: rest, lum, kms, ...nature(seed, i, age, asleep) };
 }
 
 function headStart(r: PyRandom): number {
@@ -211,7 +219,7 @@ function oldMinds(seed: number, stars: Vec[], odds: Odds): OldMind[] {
   const n = poisson(r, stars.length / odds.starsPerMind), inside: number[] = [];
   for (let k = 0; k < n; k++) inside.push(Math.floor(r.random() * stars.length));
   const beyond = poisson(r, (diskStars(OLD_MINDS_LY) - diskStars(CATALOG_LY)) / odds.starsPerMind);
-  const out = inside.map((k, i) => oldMind(seed, i, stars[k], k, starLum(stars, k)));
+  const out = inside.map((k, i) => oldMind(seed, i, stars[k], k, starLum(stars, k), DRIFT.get(stars)?.[k] || null));
   for (let j = 0; j < beyond; j++) {
     const i = inside.length + j;
     out.push(oldMind(seed, i, inShell(rng(seed, "old", i, "place"), CATALOG_LY, OLD_MINDS_LY)));

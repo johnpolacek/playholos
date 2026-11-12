@@ -6,7 +6,7 @@ import { describe, earthKnows } from "./knowledge.ts";
 import { observe } from "./observing.ts";
 import { PyRandom } from "./pyrandom.ts";
 import { sha512 } from "./sha512.ts";
-import { catalogOf, drawMinds, fillers, HOLOS_ODDS, safeTop } from "./draw-minds.ts";
+import { catalogOf, drawMinds, fillers, HOLOS_ODDS, safeTop, withDrift } from "./draw-minds.ts";
 import { blake2b } from "./blake2b.ts";
 import { drawWorlds, HOLOS_WORLD_ODDS, keyed, RUNGS, type Host } from "./draw-worlds.ts";
 import hostsJson from "../../data/sim-hosts.json" with { type: "json" };
@@ -39,7 +39,9 @@ test("the browser's SHA-512 is node's", () => {
 
 test("the minds draw at Holos's odds is calcs/minds.py's, in every shipped world", async () => {
   const b = readFileSync(new URL("../../../data/gcns-326ly.bin", import.meta.url));
-  const stars = catalogOf(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength));
+  // Each star's speed across our sky, a byte each, beside the census: an old mind's star carries its own. 2026-11-12.
+  const m = readFileSync(new URL("../../../data/gcns-326ly-drift.bin", import.meta.url));
+  const stars = withDrift(catalogOf(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength)), m.buffer.slice(m.byteOffset, m.byteOffset + m.byteLength));
   for (const seed of POOL) {
     const got = drawMinds(seed, stars);
     const peers = got.peers.map(({ fills, ...p }) => (assert.ok(!fills), p));
@@ -782,12 +784,16 @@ test("a launch beam is seen only where an old mind's works reach it: no peer ans
   const { oldAnswers, beamsAt, BEAM_TRAVELS, SILENT, ANSWERS_IN } = await import("./old-minds.ts");
   const { beamMiss, beamSeen, seenWithin, worksAU, SAIL_C } = await import("./speeds.ts");
   // The miss and who sees it, as calcs/speeds.py has them, for sails, a seed ship, a flyby probe and a rod.
-  const misses = (golden as unknown as { misses: { d: number; beta: number; lum: number; au: number; seen: boolean }[] }).misses;
-  assert.ok(misses.length >= 108 && misses.some((g) => g.seen) && misses.some((g) => !g.seen));
+  const misses = (golden as unknown as { misses: { d: number; beta: number; lum: number; kms: number | null; au: number; seen: boolean }[] }).misses;
+  assert.ok(misses.length >= 432 && misses.some((g) => g.seen) && misses.some((g) => !g.seen));
   for (const g of misses) {
-    assert.ok(Math.abs(beamMiss(g.d, g.beta) - g.au) <= 1e-6 * g.au, `${g.d} ly at ${g.beta}: ${beamMiss(g.d, g.beta)} against ${g.au}`);
-    assert.equal(beamSeen(g.d, g.beta, g.lum), g.seen, `${g.d} ly at ${g.beta}, ${g.lum} Suns`);
+    assert.ok(Math.abs(beamMiss(g.d, g.beta, g.kms) - g.au) <= 1e-6 * g.au, `${g.d} ly at ${g.beta}: ${beamMiss(g.d, g.beta, g.kms)} against ${g.au}`);
+    assert.equal(beamSeen(g.d, g.beta, g.lum, g.kms), g.seen, `${g.d} ly at ${g.beta}, ${g.lum} Suns, ${g.kms} km/s`);
   }
+  // Each star's own speed across our sky sets the miss: Barnard's Star, at 90 km/s, is passed three times as wide as
+  // a star at the middle speed, 30, which stands in where our files hold no motion.
+  assert.equal(catalog.speeds.seen.kms, 30);
+  assert.ok(Math.abs(beamMiss(6, 0.2, 90) / beamMiss(6, 0.2) - 3) < 1e-12 && beamMiss(6, 0.2, null) === beamMiss(6, 0.2) && catalog.speeds.seen.proxima > 23 && catalog.speeds.seen.proxima < 25);
   // A dimmer star's 12 K line lies nearer in, as the root of its light: a red dwarf's mind sees a probe's beam only
   // within about 5 ly, where a Sun's sees it within 49.
   assert.ok(Math.abs(worksAU(0.25) / worksAU() - 0.5) < 1e-12 && seenWithin(catalog.speeds.probe.beam, 0.009) < 5.5 && beamSeen(40, catalog.speeds.probe.beam) && !beamSeen(40, catalog.speeds.probe.beam, 0.009));
@@ -816,8 +822,10 @@ test("a launch beam is seen only where an old mind's works reach it: no peer ans
     const m = world.minds!.old.find((x) => x.id === seen.glows[g].id)!;
     // Every old mind on a census star carries that star's light, which sets how far its works reach.
     assert.ok(world.minds!.old.every((x) => (x.star === null ? x.lum === null : x.lum! > 0)));
-    const fast = seenWithin(SAIL_C, m.lum!) > m.d ? SAIL_C : 0.99999;
-    assert.ok(beamSeen(m.d, fast, m.lum!) && !beamSeen(m.d, 0.001, m.lum!));
+    // And its star's own speed across our sky, where our files hold it: every star within 100 ly.
+    assert.ok(world.minds!.old.every((x) => x.d > 101 || x.kms! >= 1) && world.minds!.old.some((x) => x.kms === null));
+    const fast = seenWithin(SAIL_C, m.lum!, m.kms) > m.d ? SAIL_C : 0.99999;
+    assert.ok(beamSeen(m.d, fast, m.lum!, m.kms) && !beamSeen(m.d, 0.001, m.lum!, m.kms));
     const [a] = oldAnswers(world, seen, [], beamsAt([{ star: `Cold glow ${g + 1}`, leaves: 50, thrown: fast }]), 1e6);
     assert.equal(a.answers, BEAM_TRAVELS);
     assert.ok(Math.abs(a.arrived - (50 + 2 * m.d + ANSWERS_IN[m.open])) < 1e-6);

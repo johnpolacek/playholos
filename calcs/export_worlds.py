@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'calcs'))
-import holes as H, minds as M, neighbors as nb, seed as S
+import holes as H, hosts, minds as M, neighbors as nb, seed as S
 
 GAME = ROOT / 'game'
 POOL = list(range(1, 33)) + [62]          # the mocks' seeds 10, 11 and 62 among them
@@ -48,8 +48,18 @@ def pretty(name):
 def star(h, stars):
     if h['id'] not in stars:
         stars[h['id']] = dict(name=h['name'], shown=pretty(h['name']), kind=h['kind'], d=r4(h['distance_ly']), lum=r4(h['luminosity']),
-                              north=h['north'], hz=[r4(h['hz_in']), r4(h['hz_out'])], age=r4(h['age']), **sky_of(h['id']))
+                              north=h['north'], hz=[r4(h['hz_in']), r4(h['hz_out'])], age=r4(h['age']), **sky_of(h['id']), **drift_of(h['id']))
     return h['id']
+
+def drift_of(sid):
+    """How fast a host star crosses our sky, in km/s, from Gaia's motion of it, or HYG's: 4.74 times its motion in
+    arcseconds a year times its distance in parsecs. It sets how far a beam aimed where the star will be passes the
+    star as it is: calcs/speeds.py beam_miss. 2026-11-12."""
+    if not _DRIFT: _DRIFT.update({s['id']: s for s in hosts.stars()})
+    x = _DRIFT.get(sid)
+    if not x or x.get('pmra') is None or x.get('pmde') is None: return {}
+    return dict(kms=round(4.74047 * math.hypot(x['pmra'], x['pmde']) / x['plx'], 1))
+_DRIFT = {}
 
 def sky_of(sid):
     """Where a star sits in the sky, from the census: right ascension in hours, declination. So the map can place a lead
@@ -211,6 +221,8 @@ def works_catalog():
     # Each craft's speed with no other source, settled 2026-11-11: calcs/speeds.py.
     import speeds
     kit.update(speeds.catalog())
+    # Proxima's own speed across our sky, for its lead: its page stands apart from the seed's finds.
+    kit['speeds']['seen']['proxima'] = next(drift_of(h['id'])['kms'] for h in nb.load_hosts() if h['name'] == 'Proxima Centauri')
     # What the Launch Tunnel speeds: the craft whose hulls and fuel its cheap lift carries. 2026-11-07.
     for w in CRAFT: works[w]['craft'] = True
     return dict(works=works, floor=eg.FLOOR, push=eg.PUSH, flagship=eg.FLAGSHIP_THOUGHT, gridRoom=eg.GRID_ROOM, step=1.5,

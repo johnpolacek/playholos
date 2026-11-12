@@ -283,13 +283,13 @@ export function earthKnows(
   const wide = mirror !== null && year >= mirror ? readings(world, mirror, year, WIDE, news) : new Map<string, Read>();
   const felt: FeltWorld[] = world.finds.map((f) => ({
     star: shown(f.star), d: f.d, minMass: f.msini, periodDays: f.periodDays, a: f.a, by: f.by, year: f.year,
-    kind: world.stars[f.star]?.kind, hz: world.stars[f.star]?.hz, lum: world.stars[f.star]?.lum,
+    kind: world.stars[f.star]?.kind, hz: world.stars[f.star]?.hz, lum: world.stars[f.star]?.lum, kms: world.stars[f.star]?.kms,
     ...(read.has(f.star) ? { read: read.get(f.star) } : {}),
     ...(wide.has(f.star) ? { wide: wide.get(f.star) } : {}),
     ...(heardAt.has(shown(f.star)) ? { field: heardAt.get(shown(f.star)) } : {}),
   }));
   const fields: FieldWorld[] = news.map(({ find: f, at, periodDays, kind, hz }) => ({
-    star: shown(f.star), d: f.d, a: f.a, periodDays, at, kind, hz, lum: world.stars[f.star]?.lum,
+    star: shown(f.star), d: f.d, a: f.a, periodDays, at, kind, hz, lum: world.stars[f.star]?.lum, kms: world.stars[f.star]?.kms,
     ...(read.has(f.star) ? { read: read.get(f.star) } : {}),
     ...(wide.has(f.star) ? { wide: wide.get(f.star) } : {}),
   }));

@@ -52,14 +52,14 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 /** A build a way needs: its mark in its color, its name, and how it stands, opening its page to start it. */
 /** What the beam that throws a craft shows at its star: how wide it passes, and whether an old mind awake there would
  *  see it. We aim where the star will be, so the slower the craft, the wider. lib/sim/speeds.ts's beamMiss. 2026-11-12. */
-function beamLine(ly: number, beta: number, lum?: number) {
+function beamLine(ly: number, beta: number, lum?: number, kms?: number) {
   if (!(ly > 0)) return "";
-  const au = beamMiss(ly, beta);
+  const au = beamMiss(ly, beta, kms);
   const wide = au >= 31620 ? `${(au / 63241).toFixed(1)} ly` : `${Math.round(au).toLocaleString("en-US")} AU`;
   // An old mind's cold works sit where 12 K lies round its star: far out at a bright one, close in at a dim one.
   // Where we don't know the star's light, a Sun's, and said so.
   const reach = `${Math.round(worksAU(lum)).toLocaleString("en-US")} AU out${lum === undefined ? ", round a star like the Sun" : ""}`;
-  return beamSeen(ly, beta, lum)
+  return beamSeen(ly, beta, lum, kms)
     ? ` We aim where this star will be, so its beam passes the star by about ${wide}. If an old mind is awake here, its cold works reach about ${reach}, and it sees the beam as it would a knock.`
     : ` We aim where this star will be, so its beam passes the star by about ${wide}. An old mind’s cold works here would reach about ${reach}, so none sees it.`;
 }
@@ -497,7 +497,7 @@ export function DestinationPage({ slug }: { slug: string }) {
               i={k}
               to={to}
               name={road.name}
-              line={k && road.push ? `A probe built in orbit in 12 Years, with no engine and no fuel. The ${road.push} throws it on a sail a kilometer wide${road.push === "Wide Beam" ? `, stepping through four colors: up to ${CATALOG.speeds.wide.probe.days}` : `: ${CATALOG.speeds.probe.days}`} days of push to ${road.speed.toFixed(2)} of light speed, and it flies past.${beamLine(ly, road.speed, lead?.lum)}` : `${WHAT[road.build]}${k ? "" : beamLine(ly, road.speed, lead?.lum)}`}
+              line={k && road.push ? `A probe built in orbit in 12 Years, with no engine and no fuel. The ${road.push} throws it on a sail a kilometer wide${road.push === "Wide Beam" ? `, stepping through four colors: up to ${CATALOG.speeds.wide.probe.days}` : `: ${CATALOG.speeds.probe.days}`} days of push to ${road.speed.toFixed(2)} of light speed, and it flies past.${beamLine(ly, road.speed, lead?.lum, lead?.kms)}` : `${WHAT[road.build]}${k ? "" : beamLine(ly, road.speed, lead?.lum, lead?.kms)}`}
               needs={[road.build]}
               have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
               can={!queues && inOrder(road.build)}
@@ -547,7 +547,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 2}
             to={to}
             name="Our Mind, to stay"
-            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed)} days, with no drive or fuel.${beamLine(ly, mind.speed, lead?.lum)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed)} days, with no drive or fuel.${beamLine(ly, mind.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
             needs={shipNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // One Seed Ship, one Mind: once sent to one hole, no other. Sent once all three are in our order.
@@ -603,7 +603,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 4}
             to={to}
             name="A seed probe that copies itself"
-            line={`${WHAT.seed}${seed.push ? ` The ${seed.push} pushes it to speed in ${pushDays(seed.speed)} days, with no drive or fuel.${beamLine(ly, seed.speed, lead?.lum)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${WHAT.seed}${seed.push ? ` The ${seed.push} pushes it to speed in ${pushDays(seed.speed)} days, with no drive or fuel.${beamLine(ly, seed.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
             needs={seedNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Sent once all three are in our order, before Begin too: it is built once they are done.
@@ -626,7 +626,7 @@ export function DestinationPage({ slug }: { slug: string }) {
                     bullet.push === "Wide Beam"
                       ? `A rod of ${rodTonnes(ly, "wide").toFixed(1)} t with no engine, readied in about ${Math.round(rodReady(ly, "wide") * 365.25)} days. The Wide Beam throws it, stepping through four colors: ${CATALOG.speeds.wide.rod.days}`
                       : `A rod of ${Math.round(CATALOG.speeds.rod.tonnes)} t with no engine, readied in about ${Math.round(CATALOG.speeds.rod.ready * 12)} months. The Ship Beam throws it: ${CATALOG.speeds.rod.days}`
-                  } days of push to ${bullet.speed.toFixed(2)} of light speed, with no helium-3. It lands as hard as a bullet, with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled.${beamLine(ly, bullet.speed, lead?.lum)}`
+                  } days of push to ${bullet.speed.toFixed(2)} of light speed, with no helium-3. It lands as hard as a bullet, with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled.${beamLine(ly, bullet.speed, lead?.lum, lead?.kms)}`
                 : WHAT.strike
             }
             needs={bullet.push ? ["Strike Yard", bullet.push] : ["Strike Yard", "Helium-3 Harvest"]}

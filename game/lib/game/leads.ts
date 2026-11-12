@@ -98,6 +98,8 @@ export interface Lead {
   /** Its star's light in Suns, where we know it: it sets how far an old mind's cold works would reach there, and so
    *  whether one would see a beam of ours pass. 2026-11-12. */
   lum?: number;
+  /** How fast its star crosses our sky, in km/s, where we hold its motion: how wide a beam aimed ahead passes it. */
+  kms?: number;
   /** Where it is, for a lead the sky file lacks: right ascension in hours, declination, light-years. */
   at?: [number, number, number];
   star: string;
@@ -226,6 +228,7 @@ function feltLead(f: FeltWorld): Lead {
   return {
     slug: slugOf(f.star),
     lum: f.lum,
+    kms: f.kms,
     star: f.star,
     what: "A new world",
     line: `Felt by ${f.by} in ${YEAR_0 + f.year}. At least ${one(m)} Earths.`,
@@ -286,6 +289,7 @@ function fieldLead(f: FieldWorld): Lead {
   return {
     slug: slugOf(f.star),
     lum: f.lum,
+    kms: f.kms,
     star: f.star,
     what: "A new world",
     line: `Heard by our Far-Side Array at Year ${yearText(f.at)}, by the radio of its magnetic field.`,
@@ -942,6 +946,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
     ...m.glows.map((g, i): Lead => ({
       slug: `cold-glow-${i + 1}`,
       lum: g.lum,
+      kms: g.kms,
       at: [g.ra, g.dec, g.d],
       star: `Cold glow ${i + 1}`,
       what: "A cold grey glow",
@@ -1259,6 +1264,7 @@ export function proximaLead(seen?: ProximaSeen): Lead {
     slug: "proxima-centauri",
     // Its light in Suns, as knowledge.ts's PROXIMA has it.
     lum: 0.00157,
+    kms: CATALOG.speeds.seen.proxima,
     star: "Proxima Centauri",
     what: "A world next door",
     line: seen
