@@ -6,8 +6,8 @@
 // knowledge.ts. Settled 2026-10-26.
 import targets from "../../data/targets.json" with { type: "json" };
 import catalog from "../../data/works.json" with { type: "json" };
+import { shipYears } from "./speeds.ts";
 
-const { speed, burn, brake } = catalog.seedShip;
 const { first, every, copies, generations } = catalog.seedProbe;
 
 /** Where a star sits, in light-years from the Sun: right ascension in hours, declination, distance. */
@@ -20,7 +20,7 @@ type Star = (typeof STARS)[number];
 
 /** Years from leaving to landing, `ly` away: cruise at a tenth of light speed, the burn, and braking on the sail.
  *  `start` is the Years its start costs where our Ship Beam pushed it, in place of its burn's. 2026-11-10. */
-export const hop = (ly: number, start = burn) => ly / speed + start + brake;
+export const hop = shipYears;
 
 /** A companion within a light-year is the same home ground, as Proxima is to Alpha Centauri, as calcs/seed.py has it. */
 const HOME_GROUND = 1;

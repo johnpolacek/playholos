@@ -1,3 +1,4 @@
+import { SAIL_C } from "@/lib/sim/speeds";
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
@@ -1007,7 +1008,7 @@ export function Reach() {
           ? `Passed Proxima b in Year ${year(r.arrives!)}. What ${they} saw has reached us: ${visitReading(seen).title.toLowerCase()}.`
           : clock! >= r.arrives!
             ? `Passed Proxima b in Year ${year(r.arrives!)}. What ${they} saw is on its way to us.`
-            : `Bound for Proxima b at ${r.speed === 0.2 ? "a fifth" : "a tenth"} of light speed, passing it in Year ${year(r.arrives!)}.`,
+            : `Bound for Proxima b at ${r.speed === SAIL_C ? "a fifth" : "a tenth"} of light speed, passing it in Year ${year(r.arrives!)}.`,
         at: r.home,
         kind: "flight" as const,
         msg: "to Proxima b",

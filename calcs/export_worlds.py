@@ -207,6 +207,9 @@ def works_catalog():
     sensed, sense_kit = senses.catalog()
     works.update(sensed)
     kit.update(sense_kit)
+    # Each craft's speed with no other source, settled 2026-11-11: calcs/speeds.py.
+    import speeds
+    kit.update(speeds.catalog())
     # What the Launch Tunnel speeds: the craft whose hulls and fuel its cheap lift carries. 2026-11-07.
     for w in CRAFT: works[w]['craft'] = True
     return dict(works=works, floor=eg.FLOOR, push=eg.PUSH, flagship=eg.FLAGSHIP_THOUGHT, gridRoom=eg.GRID_ROOM, step=1.5,

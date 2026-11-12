@@ -7,10 +7,9 @@ import targets from "../../data/targets.json" with { type: "json" };
 import { bulletMt, BULLET } from "./conflict.ts";
 import { skyOf } from "./minds.ts";
 import { place, type Probe } from "./spread.ts";
+import { theirYears } from "./speeds.ts";
 import type { ColonyMode, World } from "./types.ts";
 
-/** What the maker sends travels at a tenth of light speed, as calcs/minds.py's REPLY_C and our own bullets. */
-const REPLY_C = 0.1;
 
 export interface Ladder {
   /** The Year the warning came, at our first builder seed. */
@@ -53,7 +52,7 @@ export function ladderOf(
   // Contain: another builder launched after the warning. Word reaches the maker, and grams fly to every star we reached.
   const again = launches.find((t) => t > warned);
   const sent = again === undefined ? null : again + maker.d;
-  const arrives = (S: readonly number[] | null) => (sent === null || !S ? Infinity : sent + dist(M, S) / REPLY_C);
+  const arrives = (S: readonly number[] | null) => (sent === null || !S ? Infinity : sent + theirYears(dist(M, S)));
   const lost: Ladder["lost"] = [];
   const cancelled = new Set<string>();
   const lostAt = new Map<string, number>();
@@ -82,7 +81,7 @@ export function ladderOf(
       const S = starAt(p.star);
       if (!S) continue;
       const chose = c.leaves + dist(S, M);
-      const lands = chose + BULLET.ready + maker.d / REPLY_C;
+      const lands = chose + BULLET.ready + theirYears(maker.d);
       if (!strike || lands < strike.lands) strike = { chose, lands, mt: bulletMt() };
     }
   return { warned, lost, cancelled, colonyLost, strike };

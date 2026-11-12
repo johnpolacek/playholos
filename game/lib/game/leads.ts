@@ -9,6 +9,7 @@ import type { ProximaSeen } from "@/lib/sim/proxima";
 import { harm, type rockAt } from "./rocks";
 import type { DarkMass, FeltWorld, FieldHeard, FieldWorld, Gas, Read, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
+import { sentinelCruise, sentinelYears } from "@/lib/sim/speeds";
 import { type System, SYSTEMS } from "./systems";
 
 /** How many generations of seed probes we allow, the last making no copies. */
@@ -815,7 +816,7 @@ function darkLead(h: DarkMass, far = false): Lead {
     ly: h.d,
     ask: `What do we know of the black hole ${h.name}?`,
     brief: far
-      ? `Gaia found it in ${YEAR_0 + h.found} by the star that goes round it, pulled by something ${h.mass} times the Sun's mass that gives off no light. It is the nearest black hole we know of, far past the stars around us. At a tenth of light speed a sentinel would take ${Math.round(h.d / 0.1).toLocaleString("en-US")} Years to get there.`
+      ? `Gaia found it in ${YEAR_0 + h.found} by the star that goes round it, pulled by something ${h.mass} times the Sun's mass that gives off no light. It is the nearest black hole we know of, far past the stars around us. At a tenth of light speed a sentinel would take ${Math.round(sentinelCruise(h.d)).toLocaleString("en-US")} Years to get there.`
       : `${h.found < 0 ? `Gaia caught it in ${YEAR_0 + h.found}` : `Our Star Mapper caught it at Year ${Math.floor(h.found * 10) / 10}`}, as it passed in front of a star and shifted where the star seemed to be. Weighed by that shift, it is ${h.mass} times the Sun, and gives off no light we can see. Nothing that heavy shines so little but a black hole. We expected dozens within 100 light years, and had found none.`,
     facts: [
       ["Mass", `About ${h.mass} Suns`],
@@ -953,7 +954,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         // looked for one. 2026-11-07.
         : [
             "A Glow Imager would show what makes it from here, about a week after it turns to it.",
-            `A sentinel that stays there would see what makes it, about ${n(Math.round(g.d / CATALOG.sentinel.speed + CATALOG.sentinel.burns + CATALOG.sentinel.brake + 3 + g.d))} Years after it leaves.`,
+            `A sentinel that stays there would see what makes it, about ${n(Math.round(sentinelYears(g.d) + 3 + g.d))} Years after it leaves.`,
           ],
       art: { kind: "glow", ly: g.d, steady: true, ...(g.imaged !== undefined ? { panels: true } : {}) },
       life: "unlikely",

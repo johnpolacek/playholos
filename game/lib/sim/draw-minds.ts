@@ -3,6 +3,7 @@
 // which sim.test.mts checks against the shipped worlds. Pure: it takes the catalog's bytes, so it runs in the browser
 // as well as in Node. Simulation mode draws with it, 2026-11-01, and gameplay could later.
 import { PyRandom } from "./pyrandom.ts";
+import { theirYears } from "./speeds.ts";
 import type { Minds, OldMind, Peer, Watcher } from "./types.ts";
 
 const PC_LY = 3.261563777;
@@ -26,7 +27,6 @@ const OLDEST_GYR = 10.5;
 const ARCHIVE_LY = 150, ARCHIVE_W = 7e19;
 const ALL_SKY_W = 2.7e26;
 const REST_AU: [number, number] = [30, 2000];
-const REPLY_C = 0.1;
 const N0 = 0.1, HZ = 300.0, HR = 2600.0, R0 = 8200.0;
 const BULGE_SHARE = 0.2, BULGE_PC = 1000.0;
 const WATCHER_PLACES = ["an Earth co-orbital asteroid", "Sun–Earth L4", "Sun–Earth L5", "Earth–Moon L4", "Earth–Moon L5"];
@@ -260,7 +260,7 @@ function watcher(seed: number, olds: OldMind[]): Watcher {
   const place = WATCHER_PLACES[Math.floor(r.random() * WATCHER_PLACES.length)];
   const rock = place === WATCHER_PLACES[0] ? Math.floor(rng(seed, "watcher", "rock").random() * CO_ORBITALS.length) : null;
   const relay = pyRound(rng(seed, "watcher", "relay").uniform(...RELAY_AU));
-  const delay = pyRound(d + d / REPLY_C);
+  const delay = pyRound(d + theirYears(d));
   return {
     place, rock: rock === null ? null : CO_ORBITALS[rock], kg: 1, relayAU: relay,
     arrivedYearsAgo: pyRound(logBetween(r, 1e6, Math.min(1e9, maker.age))), maker: maker.id,

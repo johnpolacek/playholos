@@ -586,7 +586,8 @@ def people_ships(crew=500, t_each=1000, ly=4.37, grid_tw=24):
     print(f'Ships that carry people, to {ly} ly.')
     # Frozen embryos ride a seed ship. Wakayama 2021: sperm took 30 Gy of x-rays and still gave pups. Deep space gives
     # 0.35 to 0.5 mGy a day (MSL RAD, OLTARIS), so 165 to 235 years unshielded, if embryos are like sperm.
-    trip = ly / 0.1 + 10 + 15
+    import seed as S
+    trip = ly / S.SHIP_V + S.BURN + S.BRAKE
     print(f'  Embryos on a seed ship: under a tonne of bank, a {trip:.0f}-Year trip. 30 Gy at 0.35 to 0.5 mGy a day lasts '
           f'{30 / 0.5e-3 / 365.25:.0f} to {30 / 0.35e-3 / 365.25:.0f} years. No womb yet carries a mammal from conception to birth.')
     # Settled 2026-10-15: sleepers work. Packed at about 3 cubic metres each, 500 fill a sphere about 14 m across. To hold

@@ -448,5 +448,10 @@
   "hours0": 2500.0,
   "fifthKm2": 1000.0,
   "listenH": 4383.0
+ },
+ "speeds": {
+  "theirs": 0.1,
+  "bullet": 0.1,
+  "sail": 0.2
  }
 }

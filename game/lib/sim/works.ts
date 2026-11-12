@@ -57,6 +57,8 @@ interface Catalog {
   beams: { array: number; beam: number; look: number; ship: number; shipDays: number };
   swarm: { watts: number; doubling: number; excess: number; perLy2: number; kelvin: number; spread: number };
   hyper: { kmPerLy: number; reach: number; slew: number; cities: number };
+  /** Calcs/speeds.py: each craft's speed with no other source, as a share of light speed. 2026-11-11. */
+  speeds: { theirs: number; bullet: number; sail: number };
   /** Calcs/senses.py: our Far-Side Array hearing worlds' magnetic fields. The shares of worlds with one, among those
    *  that kept their air and those that did not, how far it hears, how bright a world's radio is (Proxima b's `flux0`
    *  µJy at `au0` and `ly0`, falling as the orbit to the `fall`), and how faint it hears (`noise0` µJy from `km0` km² in

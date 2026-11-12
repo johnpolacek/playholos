@@ -3,7 +3,7 @@ import { chancesOf } from "@/lib/game/chance";
 import { Link } from "react-router";
 import { useSchedule } from "@/components/picks";
 import { strikesOf } from "@/lib/game/reach";
-import { BULLET } from "@/lib/sim/conflict";
+import { bulletYears } from "@/lib/sim/speeds";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
@@ -98,7 +98,7 @@ export function LeadsMap({
     const onUs = hits.map((h) => ({ name: "Earth", ra: 0, dec: 0, ly: 0, sent: YEAR_0 + h.lands, flash: true }));
     const ours = (plan ? strikesOf(plan, scale) : []).flatMap((s) => {
       const t = target(s.star);
-      const lands = s.fired === null || !t ? null : s.fired + t.d / BULLET.v;
+      const lands = s.fired === null || !t ? null : s.fired + bulletYears(t.d);
       return lands !== null && tenth !== null && lands + t!.d <= tenth ? [{ name: t!.name, ra: t!.ra, dec: t!.dec, ly: t!.d, sent: YEAR_0 + lands, flash: true }] : [];
     });
     theirs.splice(0, theirs.length, ...onUs, ...ours);

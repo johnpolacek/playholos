@@ -16,6 +16,7 @@ import { fuelReady, inOrder, PROBE_NEEDS, roads, SENTINEL_NEEDS } from "@/lib/ga
 import type { GlowOrder, Plan } from "@/lib/game/types";
 import type { MindsSeen } from "@/lib/sim/minds";
 import { CATALOG } from "@/lib/sim/works";
+import { flybyYears, sailYears, sentinelYears } from "@/lib/sim/speeds";
 
 type Kind = "warm" | "cold";
 type By = GlowOrder["by"];
@@ -37,7 +38,7 @@ const PRICE: Record<By, string> = {
 
 /** Years from leaving until its word is home, `d` light-years out. */
 const homeAfter = (by: By, d: number) =>
-  by === "sails" ? d / 0.2 + d : by === "probe" ? d / CATALOG.probe.speed + CATALOG.probe.burn + d : d / CATALOG.sentinel.speed + CATALOG.sentinel.burns + CATALOG.sentinel.brake + d;
+  (by === "sails" ? sailYears(d) : by === "probe" ? flybyYears(d) : sentinelYears(d)) + d;
 
 /** Our orders, reading the warm glows' first switch as a probe to each, at any distance. */
 export function ordersOf(plan: Plan): Partial<Record<Kind, GlowOrder>> {

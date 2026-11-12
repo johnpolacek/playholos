@@ -115,7 +115,7 @@ GO = {'inward': 0.6, 'D2': 0.4, 'D1': 0.25, 'E1': 0.15, 'E2': 0.1, 'hunter': 0.3
 # Settled 2026-10-26: a hunter watches holes for who comes, not to stay. If minds are drawn to holes, as Smart 2012
 # argues, a hole is where others gather, so a hunter sends a sentinel there, never a colony. Its odds are a sample.
 SETTLE = {'inward': 0.5, 'D2': 0.3}
-MAPPER_YEARS, FIND_YEARS, SENTINEL_BUILD, V, BURNS = 8, 10, 20, 0.1, 10
+MAPPER_YEARS, FIND_YEARS = 8, 10
 # A furnace: its Mind starts at Earth's 2040 scale and doubles as calcs/neighbors.py's glow does. A sample tenth of its
 # light falls in soft X-rays, where eRASS1 reaches about 5e-14 erg/s/cm2 (HOLOS_RESEARCH.md, "Black holes"). At 20 ly
 # that is 2.2e19 W in the band, so 2.2e20 W in all. Corrected 2026-10-31, audit 2.4.
@@ -126,7 +126,6 @@ def xyz(ra, dec, d):
     return (d * math.cos(b) * math.cos(a), d * math.cos(b) * math.sin(a), d * math.sin(b))
 
 Y0 = 2040.0
-S_FIRST_SHIP, S_BURN, S_BRAKE, S_STANDS = 40, 10, 15, 20     # calcs/seed.py's seed-ship timings
 
 # ---------- The Will moving to our Mind at a hole ----------
 # Settled 2026-10-26. The Will goes as a transmission, as HOLOS_GAME_CONCEPT.md's Death and new games has it. Our dishes

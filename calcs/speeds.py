@@ -26,13 +26,23 @@ IN_CLOUD = ('Alpha Centauri', 'Proxima Centauri', 'Epsilon Eridani', '61 Cygni',
 # Fitted to runs at a hundredth of light speed and below, and stretched from there, as he stretches it himself.
 GROS_T, T_STOP = 5700.0, 5.2
 def stop_ly(beta, n, tonnes): return GROS_T * beta ** 2 / (n * tonnes)
-def brake_years(beta, n, tonnes):
-    """The Years braking adds over cruising the same stretch."""
-    return (T_STOP - 1) * stop_ly(beta, n, tonnes) / beta
-def best_beta(d, n, tonnes):
-    """The speed that lands a craft soonest. Its trip is d / beta of cruising and K beta of braking, so the two are
-    equal at the best speed, and braking fills about a quarter of the way. Ours, from Gros's relation."""
-    return math.sqrt(d * n * tonnes / ((T_STOP - 1) * GROS_T))
+# The sail's drag fades as the craft slows, so its last tenth of speed takes two thirds of the time: 1.84 x / v to a
+# tenth of its speed, by Gros, against 5.2 to a three-hundredth. Integrating his drag, ours: by a tenth of its speed it
+# has covered 0.908 of x. So a craft with a drive sheds the last tenth by a burn, as Perakis and Hein 2016 found a
+# second means beats the sail alone at low speed. The burn is a tenth of the craft's speed, at a Fusion Drive's pace:
+# 10 Years over cruising for a tenth of light speed (calcs/seed.py), so a hundredth of light speed costs 1.
+T_TENTH, X_TENTH, BURN_PER_C = 1.84, 0.908, 100.0
+def brake_years(beta, n, tonnes, drive=True):
+    """The Years stopping adds over cruising the same stretch: on the sail alone, or with a burn for the last tenth."""
+    x = stop_ly(beta, n, tonnes)
+    if not drive: return (T_STOP - 1) * x / beta
+    return (T_TENTH - X_TENTH) * x / beta + BURN_PER_C * beta / 10
+def braking_ly(beta, n, tonnes, drive=True): return stop_ly(beta, n, tonnes) * (X_TENTH if drive else 1)
+def best_beta(d, n, tonnes, drive=True):
+    """The speed that lands a craft soonest. Its trip is d / beta of cruising and K beta of stopping, so the two are
+    equal at the best speed. Ours, from Gros's relation."""
+    k = (T_STOP - 1) * GROS_T / (n * tonnes) if not drive else (T_TENTH - X_TENTH) * GROS_T / (n * tonnes) + BURN_PER_C / 10
+    return math.sqrt(d / k)
 
 # ---------- Wear and radiation ----------
 # Dust wears a front by 5 kg a m2 over 6 ly at a tenth of light speed (Crawford 2011, on Landgraf's dust). Ulysses
@@ -78,14 +88,29 @@ SHIP_BEAM = beam_beta(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAI
 
 # ---------- A trip ----------
 def gas_at(star): return N_CLOUD if star in IN_CLOUD else N_BETWEEN
-def trip(d, tonnes, push, n=N_BETWEEN, front_m2=20, stops=True):
-    """A craft's speed over d ly, what binds it, and its Years."""
-    limits = dict(push=push, shield=shield_beta(d, tonnes, front_m2))
-    if stops: limits['stopping'] = best_beta(d, n, tonnes)
-    binds = min(limits, key=limits.get)
-    beta = limits[binds]
-    years = d / beta + (brake_years(beta, n, tonnes) if stops else 0)
-    return dict(beta=beta, binds=binds, years=years, stop_ly=stop_ly(beta, n, tonnes) if stops else 0)
+def trip(d, tonnes, push, n=N_BETWEEN, front_m2=20, stops=True, drive=True, beamed=False):
+    """A craft's speed over d ly, what binds it, and its Years. `drive`: it carries one for the last of its braking,
+    with that burn's fuel. The fuel is dead weight until then: a beam pushes it too, so `beamed` craft leave slower,
+    and the sail must stop it too, so the craft brakes as if the gas were that much thinner."""
+    weight = 1.0
+    for _ in range(40):
+        limits = dict(push=push / math.sqrt(weight) if beamed else push, shield=shield_beta(d, tonnes, front_m2))
+        if stops: limits['stopping'] = best_beta(d, n / weight, tonnes, drive)
+        binds = min(limits, key=limits.get)
+        beta = limits[binds]
+        weight = 1 + fusion_fuel(beta / 10) if stops and drive else 1.0
+    years = d / beta + (brake_years(beta, n / weight, tonnes, drive) if stops else 0)
+    return dict(beta=beta, binds=binds, years=years, stop_ly=braking_ly(beta, n / weight, tonnes, drive) if stops else 0, fuel=weight - 1)
+
+# ---------- What the game reads ----------
+# Sails of a few grams, pushed from Earth: a fifth of light speed, Starshot's.
+SAIL_BETA = 0.2
+def catalog():
+    """Each speed the game has no other source for, through calcs/export_worlds.py into game/data/works.json: what
+    another mind sends, our own bullets, and our sails. A sentinel's, a probe's and a seed ship's are calcs/seed.py's
+    and calcs/craft.py's. For now each is the fixed speed the game has flown at. The trips above replace them next."""
+    import minds
+    return dict(speeds=dict(theirs=minds.REPLY_C, bullet=FUSION_BETA, sail=SAIL_BETA))
 
 def megatons(tonnes, beta): return (1 / math.sqrt(1 - beta ** 2) - 1) * tonnes * 1000 * C ** 2 / 4.184e15
 
@@ -93,19 +118,22 @@ if __name__ == '__main__':
     print('What sets a craft\'s speed.')
     print(f'Gas: {N_CLOUD} ions a cm3 in a warm cloud, {N_BETWEEN} between them, which is most of space near us.')
     for n, where in ((0.1, 'the 0.1 the design took everywhere'), (N_CLOUD, 'a warm cloud'), (N_BETWEEN, 'between clouds')):
-        print(f'  A 1,500 t craft at a tenth of light speed in {where}: stops in {stop_ly(0.1, n, 1500):.2f} ly, '
-              f'{brake_years(0.1, n, 1500):.0f} Years over cruising.')
-    print(f'Fusion: {fusion_fuel(0.1):.0f} t of fuel a tonne at a tenth of light speed, {fusion_fuel(0.2):,.0f} at two tenths.')
+        print(f'  A 1,500 t craft at a tenth of light speed in {where}: on its sail alone it stops in {stop_ly(0.1, n, 1500):.2f} ly, '
+              f'{brake_years(0.1, n, 1500, False):.0f} Years over cruising. With a burn for the last tenth, {brake_years(0.1, n, 1500):.0f}.')
+    print(f'Fusion: {fusion_fuel(0.1):.0f} t of fuel a tonne at a tenth of light speed, {fusion_fuel(0.2):,.0f} at two tenths, '
+          f'{fusion_fuel(0.01):.1f} for the hundredth that ends a stop from a tenth.')
     print(f'The Ship Beam as built pushes a seed ship to {SHIP_BEAM:.2f} of light speed.')
-    print('A seed ship of 1,500 t, pushed by the Ship Beam, braking on its magnetic sail:')
-    print(f"  {'to':28}{'ly':>7}{'speed':>8}{'bound by':>10}{'Years':>9}{'stops in':>10}{'at a tenth, today':>19}")
-    for star, d in (('Proxima Centauri', 4.25), ('Epsilon Eridani', 10.5), ('a star between clouds', 10), ('', 20), ('', 50), ('', 100), ('', 400), ('', 2700)):
-        n = gas_at(star); t = trip(d, 1500, SHIP_BEAM, n)
-        print(f"  {(star or 'a star between clouds'):28}{d:>7}{t['beta']:>8.3f}{t['binds']:>10}{t['years']:>9,.0f}{t['stop_ly']:>8.1f} ly{d / 0.1 + 15.11:>19,.0f}")
-    print('The same ship on its Fusion Drive, held to a tenth by its fuel:')
-    for star, d in (('Proxima Centauri', 4.25), ('a star between clouds', 10), ('', 20), ('', 50)):
-        n = gas_at(star); t = trip(d, 1500, FUSION_BETA, n)
-        print(f"  {(star or 'a star between clouds'):28}{d:>7}{t['beta']:>8.3f}{t['binds']:>10}{t['years'] + 10:>9,.0f}{t['stop_ly']:>8.1f} ly{d / 0.1 + 25:>19,.0f}")
+    head = f"  {'to':24}{'ly':>6}{'speed':>7}{'bound by':>10}{'Years':>8}{'brakes over':>13}{'fuel t/t':>10}{'today':>8}"
+    trips = (('Proxima Centauri', 4.25), ('Epsilon Eridani', 10.5), ('', 10), ('', 20), ('', 50), ('', 100), ('', 400), ('', 2700))
+    def table(title, tonnes, push, drive, today, start=0.0, beamed=False):
+        print(title); print(head)
+        for star, d in trips:
+            t = trip(d, tonnes, push, gas_at(star), drive=drive, beamed=beamed)
+            print(f"  {(star or 'between clouds'):24}{d:>6}{t['beta']:>7.3f}{t['binds']:>10}{t['years'] + start:>8,.0f}{t['stop_ly']:>10.1f} ly{t['fuel']:>10.1f}{today(d):>8,.0f}")
+    table('A seed ship of 1,500 t on its Fusion Drive, fuel holding it to a tenth, a burn ending its stop:', 1500, FUSION_BETA, True, lambda d: d / 0.1 + 25, 10)
+    table('The same ship pushed by the Ship Beam, with a small drive for the end of its stop:', 1500, SHIP_BEAM, True, lambda d: d / 0.1 + 15.11, beamed=True)
+    table('Pushed by the Ship Beam with no drive at all, as the game has it, stopping on its sail alone:', 1500, SHIP_BEAM, False, lambda d: d / 0.1 + 15.11, beamed=True)
+    table('A sentinel of 1,000 t on its Fusion Drive:', 1000, FUSION_BETA, True, lambda d: d / 0.1 + 25, 10)
     print('A slug of 1,000 t that never stops:')
     wide = beam_beta(FLUX_MAX * math.pi * 1e4 ** 2 / 4, 1e7, 1e4, 1e6 + mercury.SWARM_KG_M2 * math.pi * 1e4 ** 2 / 4)
     for name, push in (('on a Fusion Drive', FUSION_BETA), ('pushed by the Ship Beam', beam_beta(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, 1e6 + mercury.SHIP_SAIL_KG)),

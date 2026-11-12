@@ -5,6 +5,7 @@ import { yearText } from "@/lib/game/clock";
 import { BUILDS, EVENTS, isOn, kt, LATER, moves, openAt, ordered, PAST, SWITCHED, switchedAt, takenAt, takes } from "@/lib/game/plan";
 import { fuelReady, lensTrip, sentinelTrip, shipLeaves } from "@/lib/game/reach";
 import { CATALOG } from "@/lib/sim/works";
+import { flybyYears, sailYears } from "@/lib/sim/speeds";
 import { harm, rockAt, type Rock } from "@/lib/game/rocks";
 import type { Plan } from "@/lib/game/types";
 
@@ -105,7 +106,7 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
     // Each sail and flyby probe sent past a star. 2026-11-05.
     ...(plan.flybys ?? []).map((o) => {
       const craft = o.by === "sails" ? "Sails" : "A flyby probe";
-      const [build, wait, speed, burn] = o.by === "sails" ? ["Laser Sail Array", 0, 0.2, 0] as const : ["Probe Yard", CATALOG.probe.build, CATALOG.probe.speed, CATALOG.probe.burn] as const;
+      const [build, wait, flies] = o.by === "sails" ? (["Laser Sail Array", 0, sailYears] as const) : (["Probe Yard", CATALOG.probe.build, flybyYears] as const);
       // A probe's engine is fusion: it waits on a Fusion Drive too. 2026-11-07.
       const ready = o.by === "probe" ? (done[build] == null || done["Fusion Drive"] == null ? null : Math.max(done[build]!, done["Fusion Drive"]!)) : done[build];
       if (ready == null) return `- ${craft} to ${o.name}, sent at Year ${o.y}: waits on the ${o.by === "probe" ? "Probe Yard and a Fusion Drive" : build}.`;
@@ -113,7 +114,7 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
       const fuel = o.by === "probe" ? fuelReady(plan, done["Deuterium Works"] ?? null, `probe:${o.name}`, CATALOG.probe.fuel, o.y) : 0;
       if (fuel === null) return `- ${craft} to ${o.name}, sent at Year ${o.y}: waits on the Deuterium Works for its fuel.`;
       const leaves = Math.max(o.by === "probe" ? Math.max(ready, o.y) + wait : ready + wait < o.y ? o.y + wait : ready + wait, fuel);
-      const passes = leaves + o.d / speed + burn;
+      const passes = leaves + flies(o.d);
       return `- ${craft} to ${o.name}, sent at Year ${o.y}: passes about Year ${tenth(passes)}, its word home about Year ${tenth(passes + o.d)}.`;
     }),
     // Each sentinel sent, as reach.ts's sentinels() dates it: built in 20 Years once all it needs is done.

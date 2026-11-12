@@ -18,6 +18,7 @@ physics, and kept where it holds. Sources are in HOLOS_RESEARCH.md, "Mercury, th
   across. It can point anywhere, so it pictures every world we have felt, but its pixel grows with distance.
 """
 import math
+import seed
 
 C, SIGMA, H, KB = 2.998e8, 5.670e-8, 6.626e-34, 1.381e-23
 AU, LY, PC = 1.496e11, 9.461e15, 3.086e16
@@ -113,7 +114,7 @@ BEAM_LOOK = LOOK / BEAM_SCOPE ** 3
 # 100 times the power: 1,000 TW from 1,000 km, the width of Forward 1984's lens. It pushes the seed ship on a 1 km
 # sail of the swarm's own film, and stops at a tenth of light speed, well inside the beam's reach, so the whole beam
 # stays on the sail. The ship still brakes on its magnetic sail, so its speed stays the seed ship's.
-SHIP_KG, SHIP_V = 1.5e6, 0.1 * C                                # every seed stands alone: about 1,500 t
+SHIP_KG, SHIP_V = 1.5e6, seed.SHIP_V * C                                # every seed stands alone: about 1,500 t
 STAR_BEAM_W, STAR_BEAM_M = 10e12, 1e5
 SHIP_BEAM_M, SHIP_SAIL_M = 1e6, 1e3
 SHIP_BEAM_W = STAR_BEAM_W * (SHIP_BEAM_M / STAR_BEAM_M) ** 2    # the same W/m^2 on its face, 100 times the face

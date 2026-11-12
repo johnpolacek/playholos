@@ -3,6 +3,7 @@
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { BULLET, bulletsReady } from "@/lib/sim/conflict";
+import { bulletYears, flybyYears, SAIL_C, sailYears, sentinelYears, shipYears } from "@/lib/sim/speeds";
 import { fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
@@ -61,6 +62,8 @@ export interface Road {
   home: number | null;
   /** Years its burns add over cruising. */
   extra?: number;
+  /** Years it flies to a place so many light-years off, as lib/sim/speeds.ts has its kind of craft. 2026-11-11. */
+  flies?: (ly: number) => number;
   /** The Year the Deuterium Works is done, for a craft that burns its deuterium. */
   works?: number | null;
 }
@@ -131,9 +134,10 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
     const extra = fuel ? FLYBY_PROBE.burn : 0;
     const ready = fuel ? fuelReady(plan, fuel.works, PROXIMA_PROBE, FLYBY_PROBE.fuel, from) : 0;
     const leaves = done === null || ready === null ? null : Math.max(done + wait, ready);
-    const arrives = leaves === null ? null : leaves + NEAREST.ly / speed + extra;
+    const flies = fuel ? flybyYears : sailYears;
+    const arrives = leaves === null ? null : leaves + flies(NEAREST.ly);
     const n = plan.builds.indexOf(build) + 1 || null;
-    return { name, n, build, craft, speed, done, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly, extra, ...(fuel ?? {}) };
+    return { name, n, build, craft, speed, done, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly, extra, flies, ...(fuel ?? {}) };
   };
   // A flyby probe burns fusion, so it waits on a Fusion Drive as a sentinel does: the engine is the hard part, whatever
   // its size. 2026-11-07, the Will's call. Its yard's Year counts as done once all it needs is.
@@ -141,9 +145,9 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
   const drive = doneOf("Fusion Drive");
   const late = probe.done === null || drive === null ? null : Math.max(probe.done, drive);
   const leaves = late === null || probe.leaves === null ? null : Math.max(probe.leaves, late + FLYBY_PROBE.build);
-  const arrives = leaves === null ? null : leaves + NEAREST.ly / FLYBY_PROBE.speed + FLYBY_PROBE.burn;
+  const arrives = leaves === null ? null : leaves + flybyYears(NEAREST.ly);
   return [
-    road("Send a sail", "Laser Sail Array", "Sails", 0, 0.2),
+    road("Send a sail", "Laser Sail Array", "Sails", 0, SAIL_C),
     { ...probe, done: late, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly },
   ];
 }
@@ -160,7 +164,7 @@ export function flybyRoad(plan: Plan, scale: number, from: number, o: Flyby): Ro
   const built = road.done === null ? null : Math.max(road.done, o.y) + FLYBY_PROBE.build;
   const fuel = fuelReady(plan, road.works ?? null, `probe:${o.name}`, FLYBY_PROBE.fuel, o.y);
   const leaves = built === null || fuel === null ? null : Math.max(built, fuel);
-  const arrives = leaves === null ? null : leaves + o.d / road.speed + FLYBY_PROBE.burn;
+  const arrives = leaves === null ? null : leaves + flybyYears(o.d);
   return { ...road, n: 1, leaves, arrives, home: arrives === null ? null : arrives + o.d };
 }
 export function flybysOf(plan: Plan, scale: number) {
@@ -238,7 +242,7 @@ export function sentinels(plan: Plan, scale: number) {
   });
 }
 /** Years a sentinel takes from leaving to staying, `ly` out: its cruise, its burn, and its braking on its sail. */
-export const sentinelTrip = (ly: number) => ly / SENTINEL.speed + SENTINEL.burns + SENTINEL.brake;
+export const sentinelTrip = sentinelYears;
 
 /** Our bullets, each by its star and the Year it is fired: readied 20 Years after its order once the Strike Yard is
  *  done, and fired once the Helium-3 Harvest has gathered its fuel, after each bullet before it. Null while either
@@ -285,7 +289,7 @@ export function strikeRoad(plan: Plan, scale: number, from: number, star: string
   // Its place among our bullets: the helium-3 goes to each in the order ordered, and one not yet sent comes last.
   const order = sent ? strikes.map((o) => o.y) : [...strikes.map((o) => o.y), from];
   const leaves = bulletsReady(order, yard, harvest)[sent ? strikes.indexOf(sent) : order.length - 1];
-  const lands = leaves === null ? null : leaves + ly / BULLET.v;
+  const lands = leaves === null ? null : leaves + bulletYears(ly);
   return { name: "A bullet", n: sent ? 1 : null, build: "Strike Yard", craft: "A bullet", speed: BULLET.v, done: yard, leaves, arrives: lands, home: lands };
 }
 
@@ -327,7 +331,7 @@ export function colonyRoad(plan: Plan, scale: number, from: number, star: string
   const ready = shipReadyAt((n) => at[pacedName(n)]);
   const sent = plan.colony?.name === star ? plan.colony : undefined;
   const { leaves, start, pushed } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from);
-  const arrives = leaves === null ? null : leaves + ly / SHIP.speed + start + SHIP.brake;
+  const arrives = leaves === null ? null : leaves + shipYears(ly, start);
   return {
     name: "Send our Mind", n: sent ? 1 : null, build: "Seed Ship", craft: "A Mind", speed: SHIP.speed, done: ready, leaves, arrives,
     home: arrives === null ? null : arrives + ly, stands: arrives === null ? null : arrives + SHIP.stands,
@@ -363,7 +367,7 @@ export function seedRoad(plan: Plan, scale: number, from: number, star: string, 
   const ready = shipReadyAt((n) => at[pacedName(n)]);
   const sent = (plan.seeds ?? []).find((o) => o.name === star);
   const { leaves, start, pushed } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from, PROBE.build);
-  const arrives = leaves === null ? null : leaves + ly / SHIP.speed + start + SHIP.brake;
+  const arrives = leaves === null ? null : leaves + shipYears(ly, start);
   return {
     name: "Send a seed probe", n: sent ? 1 : null, build: "Seed Ship", craft: "A seed probe", speed: SHIP.speed, done: ready, leaves, arrives,
     home: arrives === null ? null : arrives + ly, copies: arrives === null ? null : arrives + PROBE.first,
@@ -442,7 +446,7 @@ export function toward(road: Road, ly: number, from?: number): Road {
   // Our Year 0 craft flew to the nearest star. To any other, given `from`, a craft whose leaving is past is a new one
   // built from now: at Year 979, 82 Eridani's flyby still read passes Year 420.4. Playtest 2026-11-01.
   const leaves = road.leaves !== null && from !== undefined && road.leaves < from ? from + (road.leaves - (road.done ?? road.leaves)) : road.leaves;
-  const arrives = leaves === null ? null : leaves + ly / road.speed + (road.extra ?? 0);
+  const arrives = leaves === null ? null : leaves + (road.flies ? road.flies(ly) : ly / road.speed + (road.extra ?? 0));
   return { ...road, leaves, arrives, home: arrives === null ? null : arrives + ly };
 }
 

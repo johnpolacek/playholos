@@ -11,7 +11,7 @@ import { dates, target } from "@/lib/game/sends";
 import type { Sent } from "@/lib/game/types";
 import { useSchedule } from "@/components/picks";
 import { strikesOf } from "@/lib/game/reach";
-import { BULLET } from "@/lib/sim/conflict";
+import { bulletYears } from "@/lib/sim/speeds";
 
 // Our messages on Scan, under the leads: what we beamed at nearby stars from 1983 to 2018, still on their way. Light
 // crosses the same sky the leads sit in, and a reply would be a lead. Each row is on its whole journey, arriving at its
@@ -65,7 +65,7 @@ function sentRows(sent: Sent[]): Row[] {
 function bulletRows(fired: { star: string; fired: number | null; d?: number }[]): Row[] {
   return fired.flatMap((b, i): Row[] => {
     if (b.d === undefined || b.fired === null) return [];
-    const flies = b.d / BULLET.v;
+    const flies = bulletYears(b.d);
     return [{ key: `bullet${i}`, name: b.star, kind: "send", note: "Our bullet lands", at: b.fired + flies, msg: `fired Year ${b.fired.toFixed(1)}`, sent: YEAR_0 + b.fired, ly: flies, bullet: { d: b.d } }];
   });
 }

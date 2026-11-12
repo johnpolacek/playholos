@@ -10,6 +10,7 @@ import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB, proximaField, proximaSeen } from "./proxima.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
+import { sentinelYears, shipYears } from "./speeds.ts";
 import { flashesOf, peerAnswers, type Aimed, type Call } from "./peers.ts";
 import { oldAnswers } from "./old-minds.ts";
 import type { ColonyMode, DarkMass, EarthView, FieldHeard, FieldWorld, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
@@ -311,7 +312,6 @@ export function earthKnows(
   // What each sentinel has seen, once its first word is home: it arrives at a tenth of light speed and stays, so it
   // maps what a pass can't. Its air read from the world's truth, as a probe's.
   // Its burn and its braking on its magnetic sail, 2026-11-07.
-  const { speed } = catalog.sentinel, burns = catalog.sentinel.burns + catalog.sentinel.brake;
   // A warm glow's source, in the order Scan numbers them. A sentinel sent there brakes once it sees the glow up close,
   // so a range is enough to aim by, and sees what makes the heat: a mind's works, or dust. 2026-11-05.
   const warmSrc = sentinels.some((x) => x.star.startsWith("Warm glow ")) ? glowsFound(world, { warmWatch, telescope }, year).map((g) => g.src) : [];
@@ -335,7 +335,7 @@ export function earthKnows(
     // A black hole we found: it weighs it, and measures its spin from how light and matter go round it.
     const dark = holes.find((h) => h.name === x.star);
     if (dark) {
-      const passed = x.leaves + dark.d / speed + burns, home = passed + dark.d;
+      const passed = x.leaves + sentinelYears(dark.d), home = passed + dark.d;
       const truth = world.holes!.find((h) => h.id === dark.id)!;
       if (home <= year) visits.push({ star: x.star, world: x.star, by: "sentinel", sight: "dark", passed, home, spin: truth.spin, clock: iscoClock(truth.spin) });
       continue;
@@ -343,7 +343,7 @@ export function earthKnows(
     const warm = /^Warm glow (\d+)$/.exec(x.star);
     const src = warm ? warmSrc[Number(warm[1]) - 1] : undefined;
     if (src) {
-      const passed = x.leaves + src.d / speed + burns, home = passed + src.d;
+      const passed = x.leaves + sentinelYears(src.d), home = passed + src.d;
       if (home > year) continue;
       const glow = "kind" in src ? (src as { kind: "eruption" | "merger" }).kind : ("mind" as const);
       visits.push({ star: x.star, world: x.star, by: "sentinel", sight: glow === "mind" ? "works" : "dusty", glow, passed, home });
@@ -351,7 +351,7 @@ export function earthKnows(
     }
     const d = x.star === PROXIMA.star ? PROXIMA.d : f?.d;
     if (d === undefined) continue;
-    const passed = x.leaves + d / speed + burns, home = passed + d;
+    const passed = x.leaves + sentinelYears(d), home = passed + d;
     if (home > year) continue;
     // A hostile old mind in that system, awake or asleep, wrecks a craft that comes to stay, as it arrives: its last
     // pictures show a craft not ours closing on it. 2026-11-11.
@@ -407,7 +407,7 @@ export function earthKnows(
   const crafts: NonNullable<MindKit["craft"]> = [...(craft ?? [])];
   for (const x of sentinels) {
     const pos = placeOf(x.star);
-    if (pos) crafts.push({ pos, arrives: x.leaves + Math.hypot(...pos) / speed + burns, stays: true });
+    if (pos) crafts.push({ pos, arrives: x.leaves + sentinelYears(Math.hypot(...pos)), stays: true });
   }
   for (const p of probes) if (!ladder.cancelled.has(p.star)) crafts.push({ pos: atlasOf(p.ra, p.dec, p.d), arrives: p.lands, stays: true });
   const minds = mindsSeen(world, { ...kit0, craft: crafts }, year);
@@ -504,10 +504,10 @@ function air(f: FeltWorld) {
  *  Mind, and, once it stands, who was there before it, and how its furnace has grown, a Mind's computing doubling every
  *  10 Years from our 2040 scale, as a neighbor's does. A refuge stays as small and dark as it began. 2026-10-26. */
 function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: ColonyMode; leaves: number; burn?: number }, year: number) {
-  const { speed, burn, brake, stands } = catalog.seedShip;
+  const { stands } = catalog.seedShip;
   const h = holes.find((x) => x.name === c.star);
   if (!h) return colonyAtStar(world, c, year);
-  const lands = c.leaves + h.d / speed + (c.burn ?? burn) + brake, alone = lands + stands;
+  const lands = c.leaves + shipYears(h.d, c.burn), alone = lands + stands;
   const heard = year - h.d;                                       // what its word home shows of it now
   const truth = world.holes!.find((x) => x.id === h.id)!;
   const watts = c.mode === "furnace" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
@@ -520,11 +520,11 @@ function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star:
  *  landed, or standing alone as a Mind, and its works growing as a furnace's do. No slow clock: a star has no
  *  innermost orbit to live on. 2026-10-27. Who was there first went with the neighbors, 2026-10-31. */
 function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number; burn?: number }, year: number) {
-  const { speed, burn, brake, stands } = catalog.seedShip;
+  const { stands } = catalog.seedShip;
   const id = Object.keys(world.stars).find((k) => world.stars[k].shown === c.star);
   if (!id) return { star: c.star, mode: c.mode, leaves: c.leaves };
   const d = world.stars[id].d;
-  const lands = c.leaves + d / speed + (c.burn ?? burn) + brake, alone = lands + stands;
+  const lands = c.leaves + shipYears(d, c.burn), alone = lands + stands;
   const heard = year - d;
   // Settled, its works grow as a furnace's do. Kept small, it stays as it began. 2026-10-30.
   const watts = c.mode === "settle" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;

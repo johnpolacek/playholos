@@ -1,6 +1,7 @@
 // The helium-3 harvest that fuels a bullet, and the bullet's pace: our Strike Yard waits on both. The neighbors who
 // noticed our craft at holes are retired, and that part went 2026-10-29. Pure, so it tests fast.
 
+import { BULLET_C } from "./speeds.ts";
 /** Helium-3 for a bullet, and where it comes from: 61 t of fusion fuel a tonne, 60% of it helium-3, so 36.6 kt for
  *  1,000 t. A harvest in an ice giant's air gathers about 1.5 kt a Year once built, Palaszewski's craft at about
  *  150 kt, the project audit's. Built in 20 Years, a sample. Its craft copy themselves from the moons' rock and ice,
@@ -53,4 +54,4 @@ export function he3When(spans: readonly [number, number | null][], kt: number) {
  *  starts its harvest then, with none in store, a sample: 20 Years to build it and about 12.4 for its growing harvest
  *  to fill one bullet, so it fires about 32.4 Years on. 2026-10-29. */
 export const STRIKE_BUILD = 20;
-export const STRIKE_READY = Math.max(STRIKE_BUILD, HE3.build + he3When([[0, null]], HE3.bullet)!), STRIKE_V = 0.1;
+export const STRIKE_READY = Math.max(STRIKE_BUILD, HE3.build + he3When([[0, null]], HE3.bullet)!), STRIKE_V = BULLET_C;
