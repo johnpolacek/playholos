@@ -60,12 +60,12 @@ function sentRows(sent: Sent[]): Row[] {
   });
 }
 
-/** Our bullets: each from the Year we order it, flown at a tenth of light speed once readied. The map draws each along
+/** Our bullets: each from the Year we order it, flown once readied: at a tenth of light speed on its drive, or half thrown by our Ship Beam. The map draws each along
  *  its track. 2026-10-28. Theirs went with the neighbors, 2026-10-29. */
-function bulletRows(fired: { star: string; fired: number | null; d?: number }[]): Row[] {
+function bulletRows(fired: { star: string; fired: number | null; pushed?: boolean; d?: number }[]): Row[] {
   return fired.flatMap((b, i): Row[] => {
     if (b.d === undefined || b.fired === null) return [];
-    const flies = bulletYears(b.d);
+    const flies = bulletYears(b.d, b.pushed);
     return [{ key: `bullet${i}`, name: b.star, kind: "send", note: "Our bullet lands", at: b.fired + flies, msg: `fired Year ${b.fired.toFixed(1)}`, sent: YEAR_0 + b.fired, ly: flies, bullet: { d: b.d } }];
   });
 }

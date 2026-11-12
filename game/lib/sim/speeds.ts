@@ -114,8 +114,17 @@ export const shipYears = (ly: number, pushed = false, star?: string) => stay("sh
 /** Whether our Ship Beam threw a ship, from the Years its start cost over cruising, as our orders keep it: the beam's
  *  push costs a fraction of a Year, and a Fusion Drive's burn 10. */
 export const pushedBy = (start?: number) => start !== undefined && start < catalog.seedShip.burn;
+/** How fast a bullet of ours flies `ly`, as a share of light speed. On its Fusion Drive, a tenth. `pushed`: our Ship
+ *  Beam threw it, as a rod of about 32 t with no engine, at the most its sail's mirror reflects, half of light speed,
+ *  with a bullet's harm. Dust binds it only on a very long road. calcs/speeds.py's rod_beta. 2026-11-12. */
+export const bulletBeta = (ly: number, pushed = false) => (pushed ? Math.min(SPEEDS.rod.beam, shieldBeta(ly, SPEEDS.thrown.tonnes, SPEEDS.thrown.front)) : BULLET_C);
 /** Years for a bullet of ours to land `ly` away. It never brakes. */
-export const bulletYears = (ly: number) => ly / BULLET_C;
+export function bulletYears(ly: number, pushed = false) {
+  if (!pushed) return ly / BULLET_C;
+  if (!(ly > 0)) return 0;
+  const beta = bulletBeta(ly, true);
+  return ly / beta + (SPEEDS.rod.lost * beta) / SPEEDS.rod.beam;
+}
 /** How fast another mind throws what it sends `ly`, as a share of light speed. It never stops, and a mind with works
  *  hundreds of AU wide has push to spare, so only its shield binds it: a slender rod flies near nine tenths of light
  *  speed close by, and slower the farther dust wears it. calcs/speeds.py's thrown_beta. */

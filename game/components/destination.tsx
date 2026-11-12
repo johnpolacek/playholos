@@ -599,8 +599,12 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 6}
             to={to}
             name="A bullet, fired here"
-            line={WHAT.strike}
-            needs={["Strike Yard", "Helium-3 Harvest"]}
+            line={
+              bullet.push
+                ? `A rod of ${Math.round(CATALOG.speeds.rod.tonnes)} t with no engine, readied in about ${Math.round(CATALOG.speeds.rod.ready * 12)} months. The Ship Beam throws it: ${CATALOG.speeds.rod.days} days of push to ${bullet.speed.toFixed(2)} of light speed, with no helium-3. It lands as hard as a bullet, with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. Its beam points at the star for all of the push, so a mind awake there sees it, as it would a knock.`
+                : WHAT.strike
+            }
+            needs={bullet.push ? ["Strike Yard", "Ship Beam"] : ["Strike Yard", "Helium-3 Harvest"]}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Ordered only in play, once the Strike Yard is in our order. One a star, and never taken back.
             can={!before && inOrder("Strike Yard")}

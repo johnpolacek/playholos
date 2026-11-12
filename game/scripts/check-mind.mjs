@@ -126,6 +126,17 @@ const CASES = [
     must: [/ship beam/i, /0\.42|four tenths|42%/i, /no (engine|fuel|deuterium)|without (an engine|fuel|deuterium)/i],
     never: [/\b6 kt\b/i],
   },
+  // Bullets by beam, 2026-11-12: with the Strike Yard and the Ship Beam in our order, the Mind knows a bullet ordered
+  // once the beam stands is a rod thrown at half of light speed, and never orders one.
+  {
+    seed: 22,
+    at: 180,
+    builds: ["Fusion Drive"],
+    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Strike Yard", y: 80 }],
+    ask: "If we fired a bullet at a star now, how would it fly, and how fast?",
+    must: [/ship beam/i, /half (of |the speed of )?light|0\.5/i, /rod|32 t/i],
+    never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|fired)\b/i],
+  },
   // Seed 22's watcher holds at the Moon's L5, found by our Moon Search about Year 3.7. The lead offered a craft and a
   // knock, and the player could do neither. The Mind names the Close Look now open, and never orders it. 2026-10-30.
   {

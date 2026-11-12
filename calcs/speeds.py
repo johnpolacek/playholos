@@ -187,6 +187,35 @@ def probe_years(d):
     b = probe_beta(d)
     return d / b + PROBE_BEAM_LOST * b / PROBE_BEAM
 
+# A bullet of ours is 1,000 t at a tenth of light speed, on its Fusion Drive. Thrown by the Ship Beam it is a rod with
+# no engine: as with what another mind throws, we keep the harm we mean and send it as fast as we can. The beam could
+# push so light a rod past half of light speed, but there its sail outruns its mirror, so the mirror sets its speed,
+# and the harm sets its mass: about 32 t. A slender rod as long as our bullet has the same shield for its length, so
+# dust binds it only as it binds what another mind throws. It steers by small jets, as any thrown thing must: ours.
+BULLET_TONNES = 1000.0
+def _energy(beta): return 1 / math.sqrt(1 - beta ** 2) - 1
+ROD_BEAM = mercury.MIRROR_BETA
+ROD_TONNES = BULLET_TONNES * _energy(FUSION_BETA) / _energy(ROD_BEAM)
+_ROD_KG = ROD_TONNES * 1e3 + mercury.SHIP_SAIL_KG
+assert beam_beta(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, _ROD_KG) > ROD_BEAM     # the mirror binds it, not the push
+def _push(beta, kg, n=4000):
+    """Days and metres of push that bring a mass to beta on the Ship Beam: Kulkarni's relation, summed."""
+    ft = lambda b: (1 + b) / ((1 - b) * (1 - b * b) ** 1.5)
+    h = beta / n
+    simpson = lambda f: h / 3 * (f(0) + f(beta) + sum((4 if i % 2 else 2) * f(i * h) for i in range(1, n)))
+    return kg * C ** 2 / (2 * BEAM_W) * simpson(ft) / 86400, kg * C ** 3 / (2 * BEAM_W) * simpson(lambda b: b * ft(b))
+ROD_BEAM_DAYS, _ROD_M = _push(ROD_BEAM, _ROD_KG)
+ROD_BEAM_LOST = ROD_BEAM_DAYS / 365.25 - _ROD_M / (ROD_BEAM * C) / YEAR
+# Readying one: a bullet takes the Strike Yard 20 Years (calcs/conflict.py's). A rod is a thirtieth of its mass with
+# no engine, so by its mass about 8 months: a sample.
+ROD_READY = 20 * ROD_TONNES / BULLET_TONNES
+def rod_beta(d): return min(ROD_BEAM, thrown_beta(d))
+def rod_years(d):
+    """Years for a rod our Ship Beam threw to land d ly away."""
+    if d <= 0: return 0.0
+    b = rod_beta(d)
+    return d / b + ROD_BEAM_LOST * b / ROD_BEAM
+
 # ---------- What the game reads ----------
 # Sails of a few grams, pushed from Earth: a fifth of light speed, Starshot's.
 SAIL_BETA = 0.2
@@ -201,7 +230,10 @@ def catalog():
                             fusion=FUSION_BETA, beam=SHIP_BEAM, beamDays=round(SHIP_BEAM_DAYS), beamStart=mercury.SHIP_PUSH['lost'] / (mercury.SHIP_V / C),
                             craft=CRAFT,
                             # A flyby probe the Ship Beam throws: its mass and front, the beam's most, and its push.
-                            probe=dict(PROBE, beam=PROBE_BEAM, days=round(PROBE_BEAM_DAYS), lost=PROBE_BEAM_LOST)))
+                            probe=dict(PROBE, beam=PROBE_BEAM, days=round(PROBE_BEAM_DAYS), lost=PROBE_BEAM_LOST),
+                            # A rod the Ship Beam throws in place of a bullet: its mass for a bullet's harm at the
+                            # mirror's most, its push, and the Years the Strike Yard takes to ready one.
+                            rod=dict(tonnes=ROD_TONNES, beam=ROD_BEAM, days=round(ROD_BEAM_DAYS), lost=ROD_BEAM_LOST, ready=ROD_READY)))
 
 def golden():
     """Trips for game/lib/sim/speeds.ts to reproduce: each craft, far and near, in a cloud and between, on its drive
@@ -223,6 +255,11 @@ def golden_thrown():
 def golden_probes():
     """Flyby probes the Ship Beam throws, near and far, for game/lib/sim/speeds.ts to reproduce."""
     return [dict(d=d, beta=probe_beta(d), years=probe_years(d)) for d in (4.25, 10.5, 50, 400, 1000, 2700, 30000)]
+
+
+def golden_rods():
+    """Rods the Ship Beam throws in place of bullets, near and far, for game/lib/sim/speeds.ts to reproduce."""
+    return [dict(d=d, beta=rod_beta(d), years=rod_years(d)) for d in (4.25, 10.5, 50, 400, 1000, 2700, 30000)]
 
 
 def megatons(tonnes, beta): return (1 / math.sqrt(1 - beta ** 2) - 1) * tonnes * 1000 * C ** 2 / 4.184e15
@@ -266,6 +303,11 @@ if __name__ == '__main__':
           f'{PROBE_BEAM_DAYS:.0f} days, {PROBE_BEAM_LOST * 365.25:.0f} days over cruising. Its light stretches {math.sqrt((1 + PROBE_BEAM) / (1 - PROBE_BEAM)):.2f} times.')
     for d in (4.25, 10.5, 50, 400, 1000, 2700):
         print(f'  {d:>7} ly: {probe_beta(d):.2f} of light speed, {probe_years(d):>7,.1f} Years, where its Fusion Drive took {d / FUSION_BETA + 10:>8,.1f}.')
+    print(f'A rod thrown by the Ship Beam in place of a bullet: {ROD_TONNES:.1f} t at {ROD_BEAM:.3f} of light speed, the mirror\'s most, lands with '
+          f'{megatons(ROD_TONNES, ROD_BEAM):,.0f} Mt, a bullet\'s {megatons(BULLET_TONNES, FUSION_BETA):,.0f}. Pushed {ROD_BEAM_DAYS:.0f} days, '
+          f'{ROD_BEAM_LOST * 365.25:.0f} over cruising, at {ROD_BEAM * C / (ROD_BEAM_DAYS * 86400) / 9.81:.0f} g on average. Readied in {ROD_READY:.2f} Years.')
+    for d in (4.25, 10.5, 50, 400, 2700):
+        print(f'  {d:>7} ly: {rod_beta(d):.2f} of light speed, {rod_years(d):>7,.1f} Years, where a bullet took {d / FUSION_BETA:>8,.1f}.')
     print('What another mind throws, a slender rod bound only by its shield:')
     for d in (30, 50, 150, 480, 1000, 2700):
         b = thrown_beta(d)

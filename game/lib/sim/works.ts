@@ -74,6 +74,9 @@ interface Catalog {
     /** A flyby probe the Ship Beam throws: its tonnes and its front in m², the beam's most for it as a share of light
      *  speed, the days of its push, and the Years that push costs over cruising. */
     probe: { tonnes: number; front: number; beam: number; days: number; lost: number };
+    /** A rod the Ship Beam throws in place of a bullet: its tonnes, for a bullet's harm at the most its sail's mirror
+     *  reflects, that speed, the days of its push, the Years the push costs, and the Years to ready one. */
+    rod: { tonnes: number; beam: number; days: number; lost: number; ready: number };
   };
   /** Calcs/senses.py: our Far-Side Array hearing worlds' magnetic fields. The shares of worlds with one, among those
    *  that kept their air and those that did not, how far it hears, how bright a world's radio is (Proxima b's `flux0`

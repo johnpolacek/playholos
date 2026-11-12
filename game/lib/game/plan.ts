@@ -331,7 +331,7 @@ export const SAYS: Record<string, string> = {
   "Star Beam":
     "Part of the swarm, 100 km across, phased as one laser of 10 TW. It pushes a lens to the Sun’s focus in about two months, not 17 Years, carrying a telescope 3 m wide that pictures a world in about a week. No one has phased mirrors spread that far, so this is the least certain build we have.",
   "Ship Beam":
-    "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out near 3% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days, and to its most, about a sixth, in about 160. The ship needs no Fusion Drive and no deuterium. With no drive it stops on its magnetic sail alone, and that sets its speed: as fast as it can stop from. On a short hop through thin gas that is under a tenth. On a long road it is the beam’s full push. It throws a flyby probe too, from the Probe Yard: 150 t leaves at about four tenths of light speed after 60 days of push, with no engine and no fuel. The beam does the same work on whatever rides its sail, so a lighter craft leaves faster, up to half of light speed. Past that a sail outruns its own mirror: the beam’s light reaches it stretched too red to reflect. Its beam points at the ship’s star for all of the push. A mind awake there sees it, as it would a knock, and knows something is coming decades before it lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
+    "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out near 3% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days, and to its most, about a sixth, in about 160. The ship needs no Fusion Drive and no deuterium. With no drive it stops on its magnetic sail alone, and that sets its speed: as fast as it can stop from. On a short hop through thin gas that is under a tenth. On a long road it is the beam’s full push. It throws a flyby probe too, from the Probe Yard: 150 t leaves at about four tenths of light speed after 60 days of push, with no engine and no fuel. The beam does the same work on whatever rides its sail, so a lighter craft leaves faster, up to half of light speed. So it throws a bullet too: a rod of 32 t, which lands as hard as a bullet of 1,000 t and needs no helium-3. Past that a sail outruns its own mirror: the beam’s light reaches it stretched too red to reflect. Its beam points at the ship’s star for all of the push. A mind awake there sees it, as it would a knock, and knows something is coming decades before it lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
   "Hypertelescope":
     "Labeyrie’s design: 150 mirrors 3 m wide, flying in a formation 150 km across, their light brought to one focus. It pictures an Earth 10 light years away in half an hour, about 300 km a pixel: continents, seas, cloud, and land green where something grows. Cities and fields are far too small. Its pixel widens with distance, so past about 135 light years a world is under three pixels across. Unlike a lens, it turns to any star in about a week.",
   "Galaxy Broadcast Array":
@@ -501,6 +501,12 @@ export const switchedAt = (plan: Plan, name: string, y: number) =>
 /** Stands a build down, or arms it again, at Year `y`. */
 export const switchTo = (name: string, y: number, on: boolean) => (p: Plan): Plan => ({ ...p, switches: [...(p.switches ?? []), { name, y, on }] });
 
+/** Whether a bullet ordered at Year `y` is a rod our Ship Beam throws, with the beam done at Year `beam`: the beam
+ *  stands by then, or it is in our order and no Helium-3 Harvest is, so the rod waits for it. Else it is a bullet on
+ *  its Fusion Drive. Its kind is set when ordered: the two are different craft. 2026-11-12. */
+export const thrownAt = (plan: Plan, beam: number | null | undefined, y: number) =>
+  (beam != null && beam <= y) || (ordered(plan).includes("Ship Beam") && !ordered(plan).includes("Helium-3 Harvest"));
+
 /** What a build can't go without. A Seed Ship flies only on a Fusion Drive, fed by the Deuterium Works. It may be built
  *  first, as in the first seed ship's mock, but the drive sets the launch. Since 2026-10-20 it is queued only once both
  *  are in our order. */
@@ -619,8 +625,10 @@ function held(plan: Plan, done: Record<string, number | null>, year: number) {
   const spent =
     plan.builds.reduce((s, b) => s + (buildOf(b)?.kt ?? 0), 0) +
     first.reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0) +
-    // Its helium-3 comes from the harvest: only the bullet and its deuterium are lifted. 2026-10-29.
-    each(plan.strikes, (BULLET.tonnes * (1 + BULLET.deuterium * BULLET.fuelPerTonne)) / 1000);
+    // Its helium-3 comes from the harvest: only the bullet and its deuterium are lifted. 2026-10-29. A rod our Ship
+    // Beam throws is 32 t, with no fuel. 2026-11-12.
+    each((plan.strikes ?? []).filter((o) => !thrownAt(plan, done["Ship Beam"], o.y)), (BULLET.tonnes * (1 + BULLET.deuterium * BULLET.fuelPerTonne)) / 1000) +
+    each((plan.strikes ?? []).filter((o) => thrownAt(plan, done["Ship Beam"], o.y)), CATALOG.speeds.rod.tonnes / 1000);
   const lifted =
     SPARE_LIFT * year +
     (launch == null ? 0 : LAUNCH_LIFT * Math.max(0, year - launch)) +

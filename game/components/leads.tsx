@@ -98,7 +98,7 @@ export function LeadsMap({
     const onUs = hits.map((h) => ({ name: "Earth", ra: 0, dec: 0, ly: 0, sent: YEAR_0 + h.lands, flash: true }));
     const ours = (plan ? strikesOf(plan, scale) : []).flatMap((s) => {
       const t = target(s.star);
-      const lands = s.fired === null || !t ? null : s.fired + bulletYears(t.d);
+      const lands = s.fired === null || !t ? null : s.fired + bulletYears(t.d, s.pushed);
       return lands !== null && tenth !== null && lands + t!.d <= tenth ? [{ name: t!.name, ra: t!.ra, dec: t!.dec, ly: t!.d, sent: YEAR_0 + lands, flash: true }] : [];
     });
     theirs.splice(0, theirs.length, ...onUs, ...ours);

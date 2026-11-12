@@ -20,7 +20,7 @@ import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ICE, deathsIn, iceBetween, iceFirsts } from "../game/natural.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
-import { flybyBeta, flybyYears, gasAt, sentinelYears, shipYears, stay, theirBeta, theirYears } from "./speeds.ts";
+import { bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, sentinelYears, shipYears, stay, theirBeta, theirYears } from "./speeds.ts";
 import { proximaField } from "./proxima.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
@@ -917,6 +917,25 @@ test("a flyby probe our Ship Beam throws flies as calcs/speeds.py has it: about 
   assert.equal(flybyYears(50), 50 / catalog.probe.speed + catalog.probe.burn);
   assert.ok(flybyYears(4.25, true) < flybyYears(4.25) / 5);
   assert.equal(flybyYears(0, true), 0);
+});
+
+test("a rod our Ship Beam throws in place of a bullet flies as calcs/speeds.py has it: half of light speed, with a bullet's harm", async () => {
+  const { bulletMt, mtPerTonne } = await import("./conflict.ts");
+  const rods = (golden as unknown as { rods: { d: number; beta: number; years: number }[] }).rods;
+  assert.ok(rods.length >= 7);
+  for (const g of rods) {
+    assert.ok(Math.abs(bulletBeta(g.d, true) - g.beta) <= 1e-9 * g.beta, `${g.d} ly: ${bulletBeta(g.d, true)} against ${g.beta}`);
+    assert.ok(Math.abs(bulletYears(g.d, true) - g.years) <= 1e-9 * g.years);
+  }
+  const rod = catalog.speeds.rod;
+  // The mirror's most, under what the beam could push it to, and as hard as a bullet on its drive.
+  assert.ok(bulletBeta(50, true) === rod.beam && rod.beam > 0.49 && rod.beam < 0.52);
+  assert.ok(Math.abs((rod.tonnes * mtPerTonne(rod.beam)) / bulletMt() - 1) < 1e-6);
+  assert.ok(rod.tonnes > 30 && rod.tonnes < 34 && rod.ready < 1);
+  // Far off, dust binds it as it binds what another mind throws.
+  assert.equal(bulletBeta(2700, true), theirBeta(2700));
+  assert.equal(bulletYears(50), 50 / catalog.speeds.bullet);
+  assert.ok(bulletYears(50, true) < bulletYears(50) / 4.9);
 });
 
 test("what another mind throws flies as calcs/speeds.py has it: near nine tenths of light speed close by, slower far off", () => {

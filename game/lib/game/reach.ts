@@ -2,9 +2,9 @@
 // we have gone and the two roads to the nearest star. Each can be queued before Begin, last in line. One queued is
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
-import { BULLET, bulletsReady } from "@/lib/sim/conflict";
-import { bulletYears, flybyBeta, flybyYears, gasAt, SAIL_C, sailYears, sentinelYears, shipYears, stay } from "@/lib/sim/speeds";
-import { fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, schedule, searchOf } from "./plan";
+import { bulletsReady } from "@/lib/sim/conflict";
+import { bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, SAIL_C, sailYears, sentinelYears, shipYears, stay } from "@/lib/sim/speeds";
+import { fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, schedule, searchOf, thrownAt } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
 import { CATALOG, type Order, pace } from "@/lib/sim/works";
@@ -306,8 +306,22 @@ export const sentinelTrip = sentinelYears;
  *  isn't. 2026-10-28, its helium-3 2026-10-29. */
 export function strikesOf(plan: Plan, scale: number) {
   const done = schedule(plan, scale);
-  const ready = bulletsReady((plan.strikes ?? []).map((o) => o.y), done["Strike Yard"] ?? null, grownSpans(plan, scale, "Helium-3 Harvest"));
-  return (plan.strikes ?? []).map((o, i) => ({ star: o.name, fired: ready[i] }));
+  const at = firing(plan, plan.strikes ?? [], done["Strike Yard"] ?? null, done["Ship Beam"] ?? null, grownSpans(plan, scale, "Helium-3 Harvest"));
+  return (plan.strikes ?? []).map((o, i) => ({ star: o.name, ...at[i] }));
+}
+/** When each bullet ordered is fired, and whether our Ship Beam throws it. One ordered once the Ship Beam stands is a
+ *  rod of about 32 t with no engine: readied in about 8 months and thrown at half of light speed, with a bullet's
+ *  harm and no helium-3, once the beam is let push. The rest are bullets on their Fusion Drives, and share the
+ *  harvest among themselves. plan.ts's thrownAt, lib/sim/speeds.ts. 2026-11-12. */
+function firing(plan: Plan, orders: readonly { y: number }[], yard: number | null, beam: number | null, harvest: readonly [number, number | null][]) {
+  const rod = orders.map((o) => thrownAt(plan, beam, o.y));
+  const burned = bulletsReady(orders.filter((_, i) => !rod[i]).map((o) => o.y), yard, harvest);
+  let k = 0;
+  return orders.map((o, i) =>
+    rod[i]
+      ? { fired: yard === null || beam === null ? null : onFrom(plan, "Ship Beam", Math.max(o.y, yard, beam) + CATALOG.speeds.rod.ready), pushed: true }
+      : { fired: burned[k++], pushed: false },
+  );
 }
 
 /** A sentinel to a star `ly` away as a road: what it needs built, the sentinel built and flying, arriving to stay, and
@@ -344,10 +358,11 @@ export function strikeRoad(plan: Plan, scale: number, from: number, star: string
   const strikes = plan.strikes ?? [];
   const sent = strikes.find((o) => o.name === star);
   // Its place among our bullets: the helium-3 goes to each in the order ordered, and one not yet sent comes last.
-  const order = sent ? strikes.map((o) => o.y) : [...strikes.map((o) => o.y), from];
-  const leaves = bulletsReady(order, yard, harvest)[sent ? strikes.indexOf(sent) : order.length - 1];
-  const lands = leaves === null ? null : leaves + bulletYears(ly);
-  return { name: "A bullet", n: sent ? 1 : null, build: "Strike Yard", craft: "A bullet", speed: BULLET.v, done: yard, leaves, arrives: lands, home: lands };
+  const order = sent ? strikes : [...strikes, { y: from }];
+  const beam = inOrder(plan, "Ship Beam") ? yardDone(plan, scale, from, "Ship Beam") : null;
+  const { fired: leaves, pushed } = firing(plan, order, yard, beam, harvest)[sent ? strikes.indexOf(sent) : order.length - 1];
+  const lands = leaves === null ? null : leaves + bulletYears(ly, pushed);
+  return { name: "A bullet", n: sent ? 1 : null, build: "Strike Yard", craft: "A bullet", speed: bulletBeta(ly, pushed), done: yard, leaves, arrives: lands, home: lands, push: pushed ? "Ship Beam" : null };
 }
 
 /** Our Mind on the Seed Ship to a black hole `ly` away, to stay: it leaves once the Seed Ship, its Fusion Drive and the

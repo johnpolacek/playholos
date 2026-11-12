@@ -335,7 +335,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "A nuclear weapon’s yield tops out near 50 Mt. Nothing we have flies faster than Parker Solar Probe’s 0.06% of light speed.",
       where: "In the Orbital Foundry’s high orbit, where Moon rock and fusion fuel come in.",
       why: "Any mind could fire one. Whatever another can build, we can. Fired, it coasts dark: only a watcher in our own system sees it leave.",
-      takes: "Per bullet, 1,000 t and 61 kt of fusion fuel, 20 Years to ready, and 37 kt of it helium-3 from the harvest. The yard itself, 10 Years, a fifth less once the Launch Tunnel is done.",
+      takes: "Per bullet, 1,000 t and 61 kt of fusion fuel, 20 Years to ready, and 37 kt of it helium-3 from the harvest. Once the Ship Beam is done, a rod of 32 t and no fuel, thrown by the beam. The yard itself, 10 Years, a fifth less once the Launch Tunnel is done.",
       before: "No one has built a weapon that crosses between stars. Its physics is a rocket’s, pointed.",
     },
   },
