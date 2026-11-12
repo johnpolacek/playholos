@@ -36,6 +36,9 @@ export const BUILDS: Build[] = [
   { name: "Star Mapper", what: "Finds black holes near us, places we could send our Mind.", does: "see" },
   // A cooled all-sky mid-infrared telescope, ten times deeper than WISE, 2026-10-29: it catches a young mind’s warm flash.
   { name: "Warm Sky Watch", what: "Watches the galaxy for the warm glow of a young mind.", does: "see" },
+  // A neutrino detector of about 10 Mt in the South Pole's ice, after MICA, 2026-11-11: it hears stars die in the
+  // galaxies round us, those that explode and those that fall dark to a black hole. lib/game/natural.ts.
+  { name: "Deep Ice Watch", what: "Hears stars die in the galaxies round us, even those with no flash.", does: "see" },
   // A shift-and-stack search of the Earth–Moon L4 and L5 points, on telescopes we have, 2026-10-29.
   // One probe mapping each Earth co-orbital asteroid in turn, as Tianwen-2 maps Kamoʻoalewa, 2026-10-29.
   { name: "Asteroid Tour", what: "Searches the asteroids sharing Earth’s orbit for a watcher.", does: "see" },
@@ -115,7 +118,7 @@ export const LATER: Later[] = [
   { name: "Belt Mining", what: "Asteroid rock for our biggest builds, 120 kt a Year.", does: "lift", after: "Probe Yard" },
   {
     name: "Far-Side Array",
-    what: "Hears the faint hum of a world’s everyday radio, from the Moon’s far side.",
+    what: "Hears the magnetic fields of worlds at red dwarfs, and finds new worlds.",
     does: "listen",
     after: "Mass Driver",
   },
@@ -259,6 +262,8 @@ export const SAYS: Record<string, string> = {
     "Sixty degrees ahead of the Moon and behind it, its pull and Earth’s balance, and a small thing can sit there for ages. Something left to watch us could. Stacked over 3 Years, Rubin-class images reach magnitude 28, enough to see a dark object about 10 cm wide there. Anything farther out it can’t see.",
   "Warm Sky Watch":
     "A young mind building out its home glows warm for centuries, and its light takes tens of thousands of Years to reach us. This maps the whole sky every 2 Years, ten times deeper than WISE, so a new warm glow anywhere in our galaxy shows. One that rises and fades before it runs, we never see.",
+  "Deep Ice Watch":
+    "When a heavy star’s core falls in, nearly all its energy leaves as neutrinos, which pass through almost anything. Our detectors catch those from our own galaxy. Ten megatonnes of clear ice, strung with light sensors, would catch a few from each death out to about 30 million ly, about 2 a Year. Some stars may fall straight to a black hole with no flash at all. Those run hotter, so it would hear them to about 83 million ly, and count how many die that way. It can’t tell where a death lies: the count gives how far, and our telescopes find the galaxy.",
   "Star Mapper":
     "Dozens of black holes should lie within 100 light years, and we have found almost none, since they give off no light. Passing in front of a star, one shifts where the star seems to be. A sharper Gaia, seeing through dust in the infrared, would catch them as they pass, a few each decade.",
   "Halo Survey":
@@ -314,7 +319,7 @@ export const SAYS: Record<string, string> = {
   "Belt Mining":
     "Survey probes first, then a mining fleet. Nothing like it has flown. It brings 120 kt of rock a Year, and needs no Mass Driver.",
   "Far-Side Array":
-    "The Moon’s far side is the quietest place we can reach. An array there hears the hum of everyday radio that no telescope on Earth can. It grows in fifths, and the first already hears the nearest worlds.",
+    "The Moon’s far side is the quietest place we can reach. A world with a magnetic field makes radio where its star’s wind strikes it, as our aurora does, too low to pass Earth’s air. An array there hears it at red dwarfs within 33 ly: whether a world we know has a field, and worlds we never felt. A field is a small sign that a world kept its air. It would hear a world’s everyday radio too, if one near us made any. It grows in fifths, and the first already hears the nearest.",
   "Power from Orbit":
     "A fifth more energy, from sunlight caught above the weather and beamed down. It takes 10 Mt of rock, so it comes only as fast as rock does.",
   "Cold Halo":
@@ -539,6 +544,23 @@ export function schedule(plan: Plan, scale: number, harm: readonly Order[] = [])
     done[b] = all == null ? instead : instead == null ? all : Math.min(all, instead);
   }
   return done;
+}
+
+/** The Year each fifth of our Far-Side Array is done, in order, as far as our order has them: it hears from its first.
+ *  2026-11-11. */
+export function fifthsOf(plan: Plan, scale: number): number[] {
+  if (!ordered(plan).includes("Far-Side Array")) return [];
+  const { orders, ...opts } = ordersOf(plan);
+  const { done } = pace(orders, horizonOf(orders), { scale, ...opts });
+  const copies = CATALOG.works[pacedName("Far-Side Array")]?.copies;
+  if (!copies) return [];
+  const out: number[] = [];
+  for (let n = 1; n <= copies[0]; n++) {
+    const at = done[`${copies[1]} ${n}`];
+    if (at == null) break;
+    out.push(at);
+  }
+  return out;
 }
 
 /** How our idle thought has grown as it combs old recordings: each Year the line changed, and the flagship-Years spent

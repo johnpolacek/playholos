@@ -139,6 +139,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const visits = useMemo(() => view?.visits ?? [], [view]);
   const colony = view?.colony;
   const proxima = view?.proxima;
+  // What our Far-Side Array found and heard. 2026-11-11.
+  const fields = view?.fields;
+  const proximaField = view?.proximaField;
   const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0, close: 0, calm: 0 }));
   // Keyed by the stars felt, so a reading landing never rebuilds the leads the map lights.
   // Black holes found join them, after the worlds, 2026-10-26.
@@ -171,11 +174,13 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     ...(minds ? [JSON.stringify([minds.flashes.map((f) => [f.range ?? f.seen, f.faded, f.read?.at]), minds.glows.length, minds.sleepers.length, minds.watcher?.seen])] : []),
     // What ground telescopes saw of Proxima b, 2026-10-31.
     view?.proximaSeen ? `proxima ${view.proximaSeen.albedo}` : "",
+    // Worlds our Far-Side Array found by their fields. 2026-11-11.
+    ...(view?.fields ?? []).map((f) => `field ${f.star}`),
   ].join("|");
   const leads = useMemo(
     () =>
       felt
-        ? [...(rockKey ? [rockLead(rock!)] : []), ...(blown !== null ? [betelgeuseLead(blown)] : []), ...leadsOf(felt, holes ?? [], seeds, kept, minds, view?.proximaSeen)]
+        ? [...(rockKey ? [rockLead(rock!)] : []), ...(blown !== null ? [betelgeuseLead(blown)] : []), ...leadsOf(felt, holes ?? [], seeds, kept, minds, view?.proximaSeen, view?.fields)]
         : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [stars],
@@ -215,7 +220,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(() => {
     // What each lead has had read of it, as the Mind judges from too. Our knocks on the watcher, for its readings.
     const knocks = (save?.sent ?? []).filter((m) => target(m.to) === WATCHER).map((m) => m.y);
-    const readings = readingsOf(leads, { felt, proxima, visits, watcher: minds?.watcher ?? undefined, flashes: minds?.flashes, knocks, observe, year: tenth });
+    const readings = readingsOf(leads, { felt, fields, proximaField, proxima, visits, watcher: minds?.watcher ?? undefined, flashes: minds?.flashes, knocks, observe, year: tenth });
     const opened = new Set(seen);
     // New until opened, or for 50 Years: a badge from Year 10 still read NEW at Year 9,104 until 2026-10-30.
     const recent = (at: number) => tenth === null || tenth - at < 50;
@@ -251,7 +256,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       }),
     );
     return { known: view?.year, leads, ids, dials, readings, fresh, standing, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
-  }, [view?.year, leads, felt, proxima, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
+  }, [view?.year, leads, felt, fields, proximaField, proxima, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 

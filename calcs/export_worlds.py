@@ -64,7 +64,7 @@ _SKY = {}
 def world(w, stars):
     return dict(star=star(w['host'], stars), d=r4(w['d']), a=r4(w['a']), radius=r4(w['radius']), mass=r4(w['mass']), pole=r4(w['pole']),
                 tug=r4(w['tug']), felt=w['felt'], swept=w['swept'], split=w['split'], sep=r4(w['sep']), seenH=r4(w['seen_h']),
-                rung=w['rung'], age=r4(w['age']), ageBy=w['age_by'], thaw=r4(w['thaw']))
+                rung=w['rung'], age=r4(w['age']), ageBy=w['age_by'], thaw=r4(w['thaw']), field=w['field'])
 
 def find(src, stars):
     """One of Earth's finds at Year 0, as the mocks' kit.find_of makes it: what the planet hunters measured, and apart
@@ -110,7 +110,11 @@ def golden():
     # And on the 15 m Mirror, Proxima b among them. Added 2026-10-23.
     cases += [c + (observing.WIDE,) for c in cases[:4]] + [(4.24 / 3.2616, 1.07 ** (1 / 3.7), 0.0485, 0.00157, observing.WIDE)]
     seen = [dict(args=c, out={k: 'inf' if v == math.inf else v for k, v in observing.observe(*c).items()}) for c in cases]   # JSON has no infinity
-    return dict(random=seqs, observe=seen, works=works_golden())
+    # The Far-Side Array hearing a world's magnetic field: its radio, and the Year heard. calcs/senses.py, 2026-11-11.
+    import senses
+    heard = [dict(a=a, d=d, fifths=f, flux=senses.field_flux(a, d), at=senses.heard_at(senses.field_flux(a, d), f))
+             for a, d, f in ((0.0485, 4.2465, [30.0]), (0.1, 32.6, [30.0, 36.0, 42.0, 48.0, 54.0]), (0.05, 12.0, [10.5, 17.25]), (0.3, 30.0, [0.0, 6.0, 12.0, 18.0, 24.0]), (0.1, 20.0, []))]
+    return dict(random=seqs, observe=seen, works=works_golden(), fields=heard)
 
 # ---------- Works and their pacing ----------
 # calcs/early_game.py paces the mocks in two loops, each for one fixed order: first_hour() to Year 12, then replay().
@@ -198,6 +202,11 @@ def works_catalog():
     import craft as craft_mod
     craft = craft_mod.catalog()
     works.update(more)
+    # The Deep Ice Watch, settled 2026-11-11: a neutrino detector of megatonnes in the South Pole's ice. calcs/senses.py.
+    import senses
+    sensed, sense_kit = senses.catalog()
+    works.update(sensed)
+    kit.update(sense_kit)
     # What the Launch Tunnel speeds: the craft whose hulls and fuel its cheap lift carries. 2026-11-07.
     for w in CRAFT: works[w]['craft'] = True
     return dict(works=works, floor=eg.FLOOR, push=eg.PUSH, flagship=eg.FLAGSHIP_THOUGHT, gridRoom=eg.GRID_ROOM, step=1.5,

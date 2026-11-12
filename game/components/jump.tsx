@@ -12,6 +12,7 @@ import { yearText } from "@/lib/game/clock";
 import { type Lead, starName } from "@/lib/game/leads";
 import { buildSlug, drawAt, ordered } from "@/lib/game/plan";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
+import { iceFirsts, iceRange } from "@/lib/game/natural";
 import { glowNamed } from "@/lib/game/glow-names";
 const properName = (id: string) => id.replace(/\bglow\b/, "Glow");
 import { WINDOWS } from "@/lib/game/leads";
@@ -213,6 +214,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
   useEffect(() => void (lookNow.current = look));
   const { plan } = usePlan();
   const { done, scale } = useSchedule();
+  const seed = useGame().save?.seed;
   const [listening, setListening] = useState(true);
   useEffect(() => {
     const t = setTimeout(() => setListening(false), LISTEN_MS);
@@ -269,6 +271,30 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
           title: `The ${n} ended`,
           line: minds?.watcher?.by === by ? `Year ${yearText(at)}, and it found something` : `Year ${yearText(at)}, finding nothing out of place`,
         });
+    }
+    // Our Deep Ice Watch's three firsts, each of which a jump stops on. lib/game/natural.ts, 2026-11-11.
+    const iceAt = ordered(plan).includes("Deep Ice Watch") ? done["Deep Ice Watch"] : null;
+    if (seed !== undefined && iceAt != null) {
+      const f = iceFirsts(seed, iceAt);
+      const firsts = [
+        [f.first, 3, "Our Deep Ice Watch heard its first star die", "in another galaxy, by a handful of neutrinos"],
+        [f.sure, 2, "A star died dark, and we are sure", "its neutrinos ran hot and stopped short, and a telescope found the star gone"],
+        [f.settled, 2, `About 1 heavy star in ${iceRange().mid} dies dark`, "settled by our Deep Ice Watch’s count"],
+      ] as const;
+      for (const [at, rank, title, line] of firsts)
+        if (at > from + 1e-6 && at <= to + 1e-6)
+          out.push({
+            key: `ice:${title}`,
+            rank,
+            to: `/play/build/${buildSlug("Deep Ice Watch")}`,
+            mark: (
+              <span style={{ color: buildColor("Deep Ice Watch") }}>
+                <BuildMark name="Deep Ice Watch" size={16} />
+              </span>
+            ),
+            title,
+            line: `Year ${yearText(at)}, ${line}`,
+          });
     }
     // New warm glows not yet ranged have no page, so no row of their own: the jump said only "Warm Sky Watch done", and a
     // blind first-timer found the glow only in our talk. 2026-11-07.
@@ -342,7 +368,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
         });
     // The watcher first: word of a mind beside us leads the report, above any glow. Playtest 2026-11-05.
     return out.sort((x, y) => x.rank - y.rank);
-  }, [plan, done, scale, leads, readings, heard, snap, from, to, minds]);
+  }, [plan, done, scale, leads, readings, heard, snap, from, to, minds, seed]);
 
   // The map turns to the first new lead. 2026-11-01.
   // A new warm glow first: the map pulls back across the Galaxy to show it, and comes home once the card is put away. 2026-11-03.

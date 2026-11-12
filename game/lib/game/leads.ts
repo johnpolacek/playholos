@@ -7,7 +7,7 @@ import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
 import type { MindsSeen, WatcherSeen } from "@/lib/sim/minds";
 import type { ProximaSeen } from "@/lib/sim/proxima";
 import { harm, type rockAt } from "./rocks";
-import type { DarkMass, FeltWorld, Gas, Read, Visit } from "@/lib/sim/types";
+import type { DarkMass, FeltWorld, FieldHeard, FieldWorld, Gas, Read, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
 import { type System, SYSTEMS } from "./systems";
 
@@ -62,6 +62,9 @@ export interface Reading {
   close?: { ra: number; dec: number };
   /** The Mind's word, now, that something lives there, where this reading says. 2026-10-29. */
   life?: Odds;
+  /** What our Far-Side Array heard of its magnetic field: true for one heard, false for none where one like Earth's
+   *  would show. A small sign for or against air, lib/game/chance.ts. 2026-11-11. */
+  field?: boolean;
   /** This reading settles it: nothing lives or thinks here, as a warm glow read as dust. A playtest couldn't tell
    *  a settled glow from an open one, 2026-11-07. */
   ruledOut?: true;
@@ -258,6 +261,79 @@ function feltLead(f: FeltWorld): Lead {
       unknown: true,
     },
   };
+}
+
+/** A world our Far-Side Array found by the radio of its magnetic field, known no other way: its page. Its radio rises
+ *  and falls with its turning, which this close to a red dwarf is its year, so we have its orbit and no mass. Most
+ *  worlds this close to red dwarfs are rock. Its life, before anything more: as any red dwarf's warm rock, whose air
+ *  the star's flares make less likely, and its field is a small sign the other way. 2026-11-11. */
+function fieldLead(f: FieldWorld): Lead {
+  const life: Odds = f.hz && f.a < f.hz[0] ? "almost no chance" : "very unlikely";
+  const tell = "It sits too close to its star for any telescope we can build to split. A lens at the Sun’s focus could picture its face, and a craft sent there would see it whole.";
+  return {
+    slug: slugOf(f.star),
+    star: f.star,
+    what: "A new world",
+    line: `Heard by our Far-Side Array at Year ${yearText(f.at)}, by the radio of its magnetic field.`,
+    ly: f.d,
+    ask: `What do we know of the new world at ${f.star}?`,
+    brief: `Its star’s wind strikes a magnetic field there and makes radio, as our aurora does, too low for any ear on Earth. So a world is there, and it has a field. Radio gives no mass. ${tell}`,
+    facts: [
+      ["Its field", "It has one, as Earth does"],
+      ["Mass", "Unknown. Radio gives none"],
+      ["Its year", `${Math.round(f.periodDays)} days, by its radio’s rise and fall`],
+      ["From its star", lightTime(f.a)],
+      ["Warmth", warmth(f.a, f.hz)],
+      ["Its star", (f.kind && STARS[f.kind]) ?? "A star"],
+      ["Heard by", `Our Far-Side Array, Year ${yearText(f.at)}`],
+    ],
+    could: [
+      { what: "A rocky world", why: "Most worlds this close to red dwarfs are small rock. Its radio gives no mass to be sure.", odds: "likely" },
+      { what: "A small gas world", why: "A larger world keeps thick hydrogen, and has a field too.", odds: "unlikely" },
+      { what: "Not a world at all", why: "A star’s own flares make radio. Radio that keeps time with one orbit, Year after Year, argues for a world.", odds: "very unlikely" },
+    ],
+    tells: [tell],
+    unknown: "Whether it is rock, and whether it kept its air.",
+    builds: [{ name: "Orbital Yard", how: "Opens the Solar Lens, which could picture its face." }],
+    life,
+    art: { kind: "orbit", a: f.a, e: 0, hz: f.hz },
+    system: {
+      temp: 3300,
+      hz: f.hz,
+      worlds: [{ name: "", a: f.a, e: 0, days: f.periodDays, mass: 1, status: "confirmed", lead: true }],
+      unknown: true,
+    },
+  };
+}
+
+/** What our Far-Side Array heard of a world's magnetic field, as a reading on its lead: one heard, or none where one
+ *  like Earth's would show by now. Either is a small sign about its air, never a reading of it. 2026-11-11. */
+export function fieldReading(star: string, f: FieldHeard, found = false): Reading {
+  const at = Math.floor(f.at * 10 + 1e-9) / 10;
+  const base = { id: `${slugOf(star)}-field`, needs: "", at, by: "Far-Side Array", now: [] as Odds[], field: f.has };
+  if (found)
+    return {
+      ...base,
+      title: "A world, heard by its field",
+      line: "Its star’s wind makes radio on a magnetic field there. A world we had not felt.",
+      mind: "A field is a small sign for air: a world with one holds its air a little oftener. It is no reading of its air.",
+      tells: ["Radio gives no mass and no air. A lens at the Sun’s focus, or a craft, would show what it is."],
+    };
+  return f.has
+    ? {
+        ...base,
+        title: "It has a magnetic field",
+        line: "Our Far-Side Array hears the radio its star’s wind makes on a magnetic field there.",
+        mind: "A small sign for air: a world with a field holds its air a little oftener. It is no reading of its air.",
+        tells: ["A field turns some of its star’s wind aside. How much that saves its air, no one has settled."],
+      }
+    : {
+        ...base,
+        title: "No magnetic field heard",
+        line: "Our Far-Side Array has gathered enough to hear a field like Earth’s there, and hears none.",
+        mind: "A small sign against air: a world with no field loses its air a little oftener. It is no reading of its air.",
+        tells: ["Venus has no field and kept thick air. A missing field settles nothing by itself."],
+      };
 }
 
 /** What one of our telescopes has made of a felt world, as a reading on its lead, landing on the Year of its latest
@@ -1247,13 +1323,13 @@ export function betelgeuseLead(at: number): Lead {
   };
 }
 
-export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[] = [], kept: string[] = [], minds?: MindsSeen, seen?: ProximaSeen): Lead[] {
+export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[] = [], kept: string[] = [], minds?: MindsSeen, seen?: ProximaSeen, fields: FieldWorld[] = []): Lead[] {
   // Scan shows one black hole, the nearest, and any we have sent craft to. 2026-10-28.
   const dark = [...holes.map((h) => [h, false] as const), ...FAR.map((h) => [h, true] as const)];
   const nearest = dark.reduce<(typeof dark)[number] | undefined>((n, x) => (!n || x[0].d < n[0].d ? x : n), undefined);
   const shown = dark.filter((x) => x === nearest || kept.includes(x[0].name));
   // A star our seed probes reached with no lead of its own: Proxima or a felt world already has one.
-  const own = new Set(["Proxima Centauri", ...felt.map((f) => f.star)]);
+  const own = new Set(["Proxima Centauri", ...felt.map((f) => f.star), ...fields.map((f) => f.star)]);
   const landed = seeds.filter((v) => v.by === "seed" && !v.sent && !own.has(v.star));
   const reached = landed.filter((v, i) => landed.findIndex((x) => x.star === v.star) === i);
   return withSystems(byDistance([
@@ -1300,6 +1376,8 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
       life: "very unlikely",
     },
     ...felt.map(feltLead),
+    // Worlds our Far-Side Array found by their magnetic fields. 2026-11-11.
+    ...fields.map(fieldLead),
     ...reached.map(seedLead),
     // The realistic premise's minds Earth has found, 2026-10-29.
     ...mindLeads(minds),
@@ -1519,16 +1597,18 @@ export function warmReadings(flashes: readonly MindsSeen["flashes"][number][], y
  *  from the same. 2026-11-01. */
 export function readingsOf(
   leads: Lead[],
-  k: { felt?: FeltWorld[]; proxima?: Read; visits: Visit[]; watcher?: WatcherSeen; knocks: number[]; observe?: string[]; year: number | null; flashes?: Parameters<typeof warmReadings>[0] },
+  k: { felt?: FeltWorld[]; fields?: FieldWorld[]; proximaField?: FieldHeard; proxima?: Read; visits: Visit[]; watcher?: WatcherSeen; knocks: number[]; observe?: string[]; year: number | null; flashes?: Parameters<typeof warmReadings>[0] },
 ): Record<string, Reading[]> {
   const warm = warmReadings(k.flashes ?? [], k.year);
   const air: Record<string, Reading[]> = Object.fromEntries(
     (k.felt ?? []).map((f) => [
       f.star,
-      [airReading(f), airReading(f, true)].filter((r): r is Reading => r !== null).sort((a, b) => a.at - b.at),
+      [airReading(f), airReading(f, true), f.field ? fieldReading(f.star, f.field) : null].filter((r): r is Reading => r !== null).sort((a, b) => a.at - b.at),
     ]),
   );
-  if (k.proxima) air["Proxima Centauri"] = [nearestReading(k.proxima)];
+  // A world our Far-Side Array found comes with its first reading, and Proxima b with what the array heard there.
+  for (const f of k.fields ?? []) air[f.star] = [fieldReading(f.star, { has: true, at: f.at }, true)];
+  air["Proxima Centauri"] = [...(k.proxima ? [nearestReading(k.proxima)] : []), ...(k.proximaField ? [fieldReading("Proxima Centauri", k.proximaField)] : [])];
   const watched = k.watcher && k.year !== null ? watcherReadings(k.watcher, k.knocks, k.year) : [];
   return Object.fromEntries(
     leads.map((l) => [

@@ -85,6 +85,34 @@ const CASES = [
     must: [/20 years|year 46/i],
     never: [/without (the )?(years of )?warning|no warning|came unseen|unwarned/i],
   },
+  // The Deep Ice Watch, 2026-11-11. Before it is built, no one knows whether some heavy stars die dark, and the Mind
+  // says so. Long after, seed 22's count has settled the share at about 1 in 6, and the Mind gives it.
+  {
+    seed: 22,
+    at: 1,
+    ask: "Do some heavy stars die without exploding, and how many? Do we know yet?",
+    must: [/not (yet )?(known|settled|sure|certain)|don[’']t (yet )?know|do not (yet )?know|unsettled|uncertain|open question|still open|split|disputed|debated|no one knows|can[’']t (yet )?say/i, /deep ice watch/i],
+    never: [/\b(is|was|been) settled\b(?! (yet|only))/i],
+  },
+  {
+    seed: 22,
+    at: 120,
+    builds: ["Deep Ice Watch"],
+    ask: "What has our Deep Ice Watch settled about how heavy stars die?",
+    must: [/1 (heavy star |star )?in (6|six)|one (heavy star |star )?in six|a sixth/i, /black hole/i],
+    never: [/\bnot (yet )?settled\b/i],
+  },
+  // The Far-Side Array's work, 2026-11-11: by Year 250 in seed 22 it has found worlds at red dwarfs by their magnetic
+  // fields, Gliese 832's among them. The Mind names what it found and how, and never calls a field a reading of air.
+  {
+    seed: 22,
+    at: 250,
+    builds: ["Launch Complex"],
+    later: [{ name: "Mass Driver", y: 10 }, { name: "Far-Side Array", y: 40 }],
+    ask: "What has our Far-Side Array found so far, and what does it tell us about those worlds?",
+    must: [/magnetic field/i, /gliese/i, /mass|rock/i],
+    never: [/\b(read|reads|reading) (its|their) air\b(?! (is|stays|remains))/i],
+  },
   // Seed 22's watcher holds at the Moon's L5, found by our Moon Search about Year 3.7. The lead offered a craft and a
   // knock, and the player could do neither. The Mind names the Close Look now open, and never orders it. 2026-10-30.
   {

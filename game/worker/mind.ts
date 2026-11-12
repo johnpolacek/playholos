@@ -195,8 +195,8 @@ export async function mind(req: Request) {
     watched = watchedAt(view.minds?.watcher);
     // Our chances at each lead, worked out from what Earth knows, as Scan shows them. 2026-11-01.
     const kept = [...plan.sentinels, ...plan.flybys, ...(plan.colony ? [plan.colony] : [])].map((o) => o.name);
-    const leads = leadsOf(view.felt, view.holes ?? [], view.visits.filter((v) => v.by === "seed" && !v.sent), kept, view.minds, view.proximaSeen);
-    chances = describeChances(leads, readingsOf(leads, { felt: view.felt, proxima: view.proxima, visits: view.visits, watcher: view.minds?.watcher ?? undefined, flashes: view.minds?.flashes, knocks, observe: plan.observe, year }));
+    const leads = leadsOf(view.felt, view.holes ?? [], view.visits.filter((v) => v.by === "seed" && !v.sent), kept, view.minds, view.proximaSeen, view.fields);
+    chances = describeChances(leads, readingsOf(leads, { felt: view.felt, fields: view.fields, proximaField: view.proximaField, proxima: view.proxima, visits: view.visits, watcher: view.minds?.watcher ?? undefined, flashes: view.minds?.flashes, knocks, observe: plan.observe, year }));
     known = `${describe(view)}\n\nMatter we hold in orbit now, less what our builds take: ${held}.${year === null ? "" : `\n\n${describeSearch(kit.searched, year)}`}`;
   }
   const told = {
@@ -216,7 +216,7 @@ export async function mind(req: Request) {
     known,
     chances,
     // The natural sky so far: stars exploding and merging, and Betelgeuse once gone. 2026-10-30.
-    sky: inPool(seed) ? describeSky(seed, year, done["Warm Sky Watch"] ?? null) : "",
+    sky: inPool(seed) ? describeSky(seed, year, done["Warm Sky Watch"] ?? null, done["Deep Ice Watch"] ?? null) : "",
     rock: inPool(seed) ? describeRock(rockOf(seed), plan, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year) : "",
     now: now(began, away),
   };

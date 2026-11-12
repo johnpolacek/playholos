@@ -1,7 +1,7 @@
 import { WINDOWS } from "@/lib/game/leads";
 import { schedule } from "@/lib/game/plan";
 import { rockAt, rockOf } from "@/lib/game/rocks";
-import { skyOf } from "@/lib/game/natural";
+import { iceFirsts, skyOf } from "@/lib/game/natural";
 import { kitOf } from "@/lib/game/reach";
 import { nextStopWhy } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
@@ -126,6 +126,9 @@ export async function next(req: Request) {
     // playtests, though both players were waiting for it. 2026-11-07.
     ...WINDOWS.map((w) => ({ at: w.at, why: `${w.star}’s reply window` })),
     { at: skyOf(seed).betelgeuse, why: "our next finding" },
+    // Our Deep Ice Watch's three firsts: its first catch, the first dark death made sure, and the share settled. The
+    // hundreds of thousands of deaths it hears after stop nothing. 2026-11-11.
+    ...(done["Deep Ice Watch"] == null ? [] : Object.values(iceFirsts(seed, done["Deep Ice Watch"])).map((at) => ({ at, why: "our next finding" }))),
   ]);
   return Response.json({ next: stop?.at ?? null, why: stop?.why ?? null, ahead: AHEAD });
 }

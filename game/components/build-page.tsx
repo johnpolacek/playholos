@@ -5,6 +5,7 @@ import { Lens } from "@/components/icons";
 import { BuildMark, buildColor, buildTone, LockMark } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { BackBar } from "@/components/back-bar";
+import { IceHeard } from "@/components/ice-sky";
 import { Opens } from "@/components/opens";
 import { buildStory, Story, toggleBuild, usePlan, useSchedule } from "@/components/picks";
 import { placedOf, useWorks } from "@/components/works";
@@ -466,7 +467,7 @@ function Switch({ name }: { name: string }) {
 }
 
 export function BuildPage({ slug }: { slug: string }) {
-  const { year } = useGame();
+  const { year, save } = useGame();
   const { plan } = usePlan();
   const { scale, done } = useSchedule();
   const { set: place, pick, close, setClose } = useWorks();
@@ -545,6 +546,12 @@ export function BuildPage({ slug }: { slug: string }) {
       {SITES[build.name] && (
         <div data-m>
           <Story lines={buildStory(build.name)} tone="you" open />
+        </div>
+      )}
+      {/* Once the Deep Ice Watch is done, what it has heard, drawn. 2026-11-11. */}
+      {build.name === "Deep Ice Watch" && save?.seed !== undefined && year !== null && done[build.name] != null && done[build.name]! <= year && (
+        <div data-m className="mt-4">
+          <IceHeard seed={save.seed} since={done[build.name]!} now={year} />
         </div>
       )}
       <div data-m>

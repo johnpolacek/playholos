@@ -8,10 +8,11 @@ import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
 import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
-import { proximaB, proximaSeen } from "./proxima.ts";
+import { proximaB, proximaField, proximaSeen } from "./proxima.ts";
+import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
 import { flashesOf, peerAnswers, type Aimed, type Call } from "./peers.ts";
 import { oldAnswers } from "./old-minds.ts";
-import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
+import type { ColonyMode, DarkMass, EarthView, FieldHeard, FieldWorld, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ladderOf } from "./ladder.ts";
 import { seedProbes } from "./spread.ts";
@@ -52,6 +53,8 @@ export interface Kit {
   haloArray?: number | null;
   /** The Glow Imager's Year done: it shows what makes each glow we have found, from home. 2026-11-11. */
   imager?: number | null;
+  /** The Year each fifth of our Far-Side Array was done, in order: it hears worlds' magnetic fields. 2026-11-11. */
+  farSide?: number[];
   moonSearch?: number | null;
   /** Our Close Look, built once the watcher is found. 2026-10-30. */
   closeLook?: number | null;
@@ -218,7 +221,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, imager = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [], calls = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, imager = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [], calls = [], farSide = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -231,6 +234,37 @@ export function earthKnows(
     ...(read.has(f.star) ? { read: read.get(f.star) } : {}),
     ...(wide.has(f.star) ? { wide: wide.get(f.star) } : {}),
   }));
+  // What our Far-Side Array has heard, 2026-11-11: the radio a magnetic field makes where a red dwarf's wind strikes
+  // it, at each such star's world within its reach, once the array has gathered enough to hear one there. At a world we
+  // knew, whether it has a field. At a star where we knew of none, a world with a field shows itself, and one without
+  // stays unknown. lib/sim/fields.ts.
+  const fields: FieldWorld[] = [];
+  const found = new Map<string, Find>();
+  let proximaHeard: FieldHeard | undefined;
+  if (farSide.length) {
+    const heard = (a: number, d: number) => {
+      const at = fieldHeardAt(fieldFlux(a, d), farSide);
+      return at !== null && at <= year ? at : null;
+    };
+    for (const w of world.worlds) {
+      const star = world.stars[w.star];
+      // A world drawn before fields were, 2026-11-11, has none to hear either way: no reading, never a false "none".
+      if (w.field === undefined || star?.kind !== "M" || w.d > FIELDS.reachLy || shown(w.star) === PROXIMA.star) continue;
+      const at = heard(w.a, w.d);
+      if (at === null) continue;
+      const known = felt.find((f) => f.star === shown(w.star));
+      if (known) known.field = { has: !!w.field, at };
+      else if (w.field) {
+        const periodDays = 365.25 * Math.sqrt(w.a ** 3 / (star.lum ?? 1) ** 0.25);
+        fields.push({ star: shown(w.star), d: w.d, a: w.a, periodDays, at, kind: star.kind, hz: star.hz });
+        found.set(shown(w.star), { star: w.star, d: w.d, msini: w.mass, a: w.a, periodDays, by: "Far-Side Array", year: at, truth: { kind: "natural", rung: w.rung } });
+      }
+    }
+    const at = heard(PROXIMA.a, PROXIMA.d);
+    if (at !== null) proximaHeard = { has: proximaField(world.seed), at };
+  }
+  /** The world we know at a star, as a craft sent there would find it: one felt, or one the array found. */
+  const findAt = (star: string) => world.finds.find((x) => shown(x.star) === star) ?? found.get(star);
   // Signals caught came from the neighbors' messages to us. They are retired, so none comes, 2026-10-29. The list
   // stays for Scan and the Mind.
 
@@ -252,7 +286,7 @@ export function earthKnows(
       visits.push({ ...visit(world, "lens", { passed: l.looks, home: l.home }), km: (LENS_KM_30PC * PROXIMA.d) / (30 * 3.2616) });
       continue;
     }
-    const f = world.finds.find((x) => shown(x.star) === l.star);
+    const f = findAt(l.star);
     if (!f) continue;
     const km = (LENS_KM_30PC * f.d) / (30 * 3.2616);
     visits.push({ star: l.star, world: `${l.star}’s world`, by: "lens", passed: l.looks, home: l.home, sight: pictured(f), km });
@@ -287,7 +321,7 @@ export function earthKnows(
   for (const { star, by, passed, home } of flybys) {
     if (home > year || visits.some((v) => v.star === star && v.by === by)) continue;
     if (star === PROXIMA.star) { visits.push(visit(world, by, { passed, home })); continue; }
-    const f = world.finds.find((x) => shown(x.star) === star);
+    const f = findAt(star);
     if (!f) { visits.push({ star, world: star, by, passed, home, sight: "far", ...(holes.some((h) => h.name === star) || /^Gaia BH/.test(star) ? { hole: true } : {}) }); continue; }
     const sight = pictured(f);
     const air = AIR[f.truth.rung ?? ""] ?? "water";
@@ -297,7 +331,7 @@ export function earthKnows(
     });
   }
   for (const x of sentinels) {
-    const f = world.finds.find((y) => shown(y.star) === x.star);
+    const f = findAt(x.star);
     // A black hole we found: it weighs it, and measures its spin from how light and matter go round it.
     const dark = holes.find((h) => h.name === x.star);
     if (dark) {
@@ -408,6 +442,8 @@ export function earthKnows(
     ...(anyMind ? { minds } : {}),
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
     proximaSeen: proximaSeen(world.seed),
+    ...(fields.length ? { fields: fields.sort((a, b) => a.at - b.at) } : {}),
+    ...(proximaHeard ? { proximaField: proximaHeard } : {}),
     ...(ours ? { colony: ours } : {}),
     ...(holes.length ? { holes: holes.map((h) => ({ name: h.name, d: h.d, ra: h.ra, dec: h.dec, mass: h.mass, found: h.found, by: h.by })) } : {}),
   };
@@ -532,18 +568,34 @@ export function brightness(p: { mass: number; albedo: number }): string {
   return p.albedo < 0.17 ? "That is dim, as the Moon and Mercury are." : p.albedo > 0.28 ? "That is bright, as cloud and air are." : "That is between the Moon’s dimness and cloud’s brightness, nearer the Moon’s.";
 }
 
+/** What our Far-Side Array heard of a world's magnetic field, in words. */
+function fieldWords(f?: FieldHeard): string {
+  if (!f) return "";
+  return f.has
+    ? ` Our Far-Side Array heard the radio of a magnetic field there at Year ${yearText(f.at)}: a small sign for air, since a world with a field holds its air a little oftener, about 1.2 times.`
+    : ` Our Far-Side Array had gathered enough by Year ${yearText(f.at)} to hear a magnetic field like Earth’s there, and heard none: a small sign against air.`;
+}
+
 /** The view in words, for the Mind's prompt. It takes the view and nothing else, so the truth can't reach it. */
 export function describe(view: EarthView): string {
   const one = (x: number) => x.toFixed(1);
   const felt = view.felt.length
     ? view.felt.map((f) =>
         `- ${f.star}, ${one(f.d)} ly: at least ${one(f.minMass)} Earth masses, a year of ${Math.round(f.periodDays)} days, ` +
-        `${lightTime(f.a)} from its star. Felt by ${f.by} in ${2040 + f.year}. ${air(f)}`).join("\n")
+        `${lightTime(f.a)} from its star. Felt by ${f.by} in ${2040 + f.year}. ${air(f)}${fieldWords(f.field)}`).join("\n")
     : "- None. The planet hunters felt no new world by 2040.";
   const seen = view.proximaSeen
     ? `\n- Proxima b, 4.2 ly, the nearest world: ground telescopes caught its reflected light in the 2030s. About ${view.proximaSeen.mass.toFixed(2)} Earth masses, tilted ${Math.round(view.proximaSeen.tilt)}° from face on, reflecting about ${Math.round(view.proximaSeen.albedo * 100)}% of its starlight. ${brightness(view.proximaSeen)} No one has read its air.`
     : "";
-  const nearest = seen + (view.proxima ? `\n- Proxima b, 4.2 ly, the nearest world: ${told(view.proxima, "15 m Mirror")}` : "");
+  const nearest =
+    seen +
+    (view.proxima ? `\n- Proxima b, 4.2 ly, the nearest world: ${told(view.proxima, "15 m Mirror")}` : "") +
+    (view.proximaField ? `\n- Proxima b’s magnetic field:${fieldWords(view.proximaField)}` : "") +
+    // Worlds our Far-Side Array found by their fields' radio, known no other way. 2026-11-11.
+    (view.fields?.length
+      ? `\nWorlds our Far-Side Array found by the radio of their magnetic fields, at red dwarfs within ${Math.round(FIELDS.reachLy)} ly. Each has a field, and its radio rises and falls with its year. Radio gives no mass, so each could be rock or a small gas world, though most worlds this close to red dwarfs are rock. No telescope we can build splits one from its star: a lens at the Sun’s focus or a craft sent there would show it. A field is a small sign for air, since a world with one holds its air a little oftener, about 1.2 times:\n` +
+        view.fields.map((f) => `- ${f.star}, ${one(f.d)} ly: heard at Year ${yearText(f.at)}, a year of ${Math.round(f.periodDays)} days, ${lightTime(f.a)} from its star.`).join("\n")
+      : "");
   const heard = view.heard.length
     ? view.heard.map((h) =>
         // Word from our colony, on its own choice. 2026-10-28.

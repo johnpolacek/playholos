@@ -232,6 +232,10 @@
    "years": 15,
    "want": 2.0,
    "orbit": true
+  },
+  "Deep ice watch": {
+   "years": 5,
+   "want": 0.2
   }
  },
  "floor": 0.6666666666666666,
@@ -327,5 +331,122 @@
  "imager": {
   "slew": 0.0192,
   "km": 300
+ },
+ "ice": {
+  "bright": 2.0,
+  "dark": 4.33,
+  "near": 0.4,
+  "brightMpc": 9.3,
+  "darkMpc": 25.5,
+  "share": 0.1667,
+  "confirm": 1,
+  "settle": 21,
+  "hostsMpc": 5.0,
+  "hosts": [
+   {
+    "name": "LMC",
+    "mpc": 0.05,
+    "rate": 0.28,
+    "ra": 5.39
+   },
+   {
+    "name": "SMC",
+    "mpc": 0.06,
+    "rate": 0.035,
+    "ra": 0.88
+   },
+   {
+    "name": "IC 10",
+    "mpc": 0.66,
+    "rate": 0.021,
+    "ra": 0.34
+   },
+   {
+    "name": "M31",
+    "mpc": 0.79,
+    "rate": 0.37,
+    "ra": 0.71
+   },
+   {
+    "name": "M33",
+    "mpc": 0.84,
+    "rate": 0.32,
+    "ra": 1.56
+   },
+   {
+    "name": "Circinus",
+    "mpc": 2.8,
+    "rate": 0.13,
+    "ra": 14.22
+   },
+   {
+    "name": "IC 342",
+    "mpc": 3.03,
+    "rate": 0.65,
+    "ra": 3.78
+   },
+   {
+    "name": "NGC 2403",
+    "mpc": 3.22,
+    "rate": 0.63,
+    "ra": 7.61
+   },
+   {
+    "name": "Maffei 2",
+    "mpc": 3.3,
+    "rate": 0.78,
+    "ra": 2.7
+   },
+   {
+    "name": "M82",
+    "mpc": 3.53,
+    "rate": 1.2,
+    "ra": 9.93
+   },
+   {
+    "name": "NGC 4945",
+    "mpc": 3.6,
+    "rate": 0.64,
+    "ra": 13.09
+   },
+   {
+    "name": "M81",
+    "mpc": 3.63,
+    "rate": 0.79,
+    "ra": 9.93
+   },
+   {
+    "name": "Centaurus A",
+    "mpc": 3.66,
+    "rate": 0.92,
+    "ra": 13.42
+   },
+   {
+    "name": "NGC 253",
+    "mpc": 3.94,
+    "rate": 1.2,
+    "ra": 0.79
+   },
+   {
+    "name": "M83",
+    "mpc": 4.47,
+    "rate": 2.4,
+    "ra": 13.62
+   }
+  ]
+ },
+ "fields": {
+  "ifAir": 0.55,
+  "ifBare": 0.48,
+  "reachLy": 32.616,
+  "flux0": 180.0,
+  "au0": 0.0485,
+  "ly0": 4.2465,
+  "fall": 1.3333333333333333,
+  "noise0": 120.0,
+  "km0": 200.0,
+  "hours0": 2500.0,
+  "fifthKm2": 1000.0,
+  "listenH": 4383.0
  }
 }

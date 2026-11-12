@@ -58,6 +58,8 @@ export interface NaturalWorld {
   planets: number;
   /** Whether the star's age was published, not drawn. */
   agePublished: boolean;
+  /** Whether it has a magnetic field: a little oftener on a world that kept its air. 2026-11-11. */
+  field: boolean;
 }
 
 /** The chain's steps a natural world turns on, as shares. Holos's own: the dials' marks. */
@@ -76,6 +78,9 @@ const OXYGEN_AT = 2.3, RICH_AT = 4.0, OLDEST = 10.5;
 const OUTER_LIGHT = 1 / 1.67 ** 2, THAW_LIGHT = 0.62;
 const M_EARTH = 5.972e24, M_SUN = 1.989e30, R_SUN = 6.957e8;
 const DEG = Math.PI / 180;
+/** calcs/senses.py's shares of worlds with a magnetic field, among those that kept their air and those that did not:
+ *  the designer's pick, 2026-11-11, that a world with a field keeps its air about 1.2 times as often. */
+const FIELD_IF_AIR = 0.55, FIELD_IF_BARE = 0.48;
 
 /** calcs/seed.py's keyed(): a number between 0 and 1 that depends only on its parts. */
 export function keyed(...parts: (string | number)[]): number {
@@ -190,10 +195,13 @@ export function drawWorlds(seed: number, hosts: Host[], odds: WorldOdds = HOLOS_
     return t < OXYGEN_AT * pace ? RUNGS[2] : t < RICH_AT * pace ? RUNGS[3] : RUNGS[4];
   };
   return drawn
-    .map((w) => ({
+    .map((w) => ({ w, rung: rungOf(w) }))
+    .map(({ w, rung }) => ({
       star: w.h.id, name: w.h.name, d: w.h.d, ra: w.h.ra, dec: w.h.dec, a: w.a, radius: w.radius, mass: w.mass, pole: w.pole,
-      tug: w.k, rung: rungOf(w), age: w.age, ageBy: w.h.ageBy ?? "drawn", thaw: w.thaw,
+      tug: w.k, rung, age: w.age, ageBy: w.h.ageBy ?? "drawn", thaw: w.thaw,
       kind: w.h.kind, lum: w.h.lum, planets: w.h.planets.length, agePublished: !!w.h.age,
+      // Drawn after the rung, on its own key, so no other draw moves.
+      field: keyed(seed, "field", w.h.id) < (rung === RUNGS[0] ? FIELD_IF_BARE : FIELD_IF_AIR),
     }))
     .sort((p, q) => p.d - q.d);
 }

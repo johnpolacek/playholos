@@ -1,6 +1,6 @@
 # Holos · Research
 
-Last updated: November 7, 2026.
+Last updated: November 11, 2026.
 
 Every source the game rests on, grouped by the question it answers. Each entry says what it found, why it matters to Holos, and where the design uses it. The rules are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md). The atlas’s own data sources (ephemeris, star catalogs, galaxies) are in the [README’s scientific scope](README.md#scientific-scope) and the `data/*/README.md` files.
 
@@ -2871,8 +2871,301 @@ Gathered by a research agent, for whether old minds share a past. The designer�
   - So an era hundreds of millions of years gone would leave nothing to see. That a wrecked swarm clears as natural dust does is the agent’s step, not published.
 - **How the settling stands.** A close cousin of published ideas, and each part has a source: a first era then an interdict (Fogg), one civilization imposing its rule (Crawford and Schulze-Makuch), a ban on spreading kept by machines left on watch (Sandberg et al.), striking a spreader early (Baum et al.), one culture imposed between cliques (Forgan). No paper found joins an old era of conflict, one rule against spreading, and a ladder of warn, contain, strike. That joining is ours.
 - **The strongest objection:** one defector breaks it, and light’s speed means civilizations arise beyond each other’s reach, so the Galaxy starts as cliques (Forgan). The only repair in print is enforcement, which the settling supplies.
-- **Earth’s past, as an old mind shows it.** Dates written from general knowledge on 2026-11-11, not read from a source that day, so listed under To check: seas by about 4.4 billion years ago, the oldest fossil mats about 3.5, oxygen filling the air about 2.4, the last world-wide freeze ending about 650 million years ago, animals with shells and eyes about 540, the end-Permian dying about 252, the Chicxulub impact about 66.
+- **Earth’s past, as an old mind shows it.** Checked 2026-11-11 by a research agent. Six of the seven dates held, and one was wrong.
+  - *Seas:* one Jack Hills zircon, 4,404 ± 8 million years old, read as having met liquid water ([Wilde et al. 2001](https://doi.org/10.1038/35051550), Nature 409, 175, abstract). The same grain redated to 4.374 billion ([Valley et al. 2014](https://doi.org/10.1038/ngeo2075), Nature Geoscience 7, 219, through a summary). One grain and an inference, so the game uses 4.3.
+  - *The first mats of life:* the Dresser Formation, 3.48 billion ([Djokic et al. 2017](https://doi.org/10.1038/ncomms15263), abstract), and Strelley Pool, 3.43 ([Allwood et al. 2006](https://doi.org/10.1038/nature04764), Nature 441, 714, abstract). Isua’s 3.7 is heavily contested (Nutman et al. 2016 against Allwood et al. 2018), and the authors of Nuvvuagittuq’s older claim call it putative.
+  - *Oxygen:* its first rise began between 2,460 and 2,426 million years ago ([Gumsley et al. 2017](https://doi.org/10.1073/pnas.1608824114), PNAS 114, 1811, abstract). It wavered for about 200 million years and held for good only near 2.22 billion ([Poulton et al. 2021](https://doi.org/10.1038/s41586-021-03393-7), abstract). So “first filling” is right, and “for good” would not be.
+  - *The world frozen:* **wrong as first written.** The Sturtian ran from about 717 to 659 million years ago, and the Marinoan began between 649.9 and 639.0 and ended between 636.0 and 634.7 ([Hoffman et al. 2017](https://doi.org/10.1126/sciadv.1600983), Science Advances 3, e1600983, full text read). The last world-wide freeze ended about 635, not 650. Corrected in the game the same day.
+  - *Shells and eyes:* the Cambrian begins 538.8 ± 0.6 million years ago ([the ICS chart](http://www.stratigraphy.org/ICSchart/ChronostratChart2026-06.pdf), read), and its explosion runs from about 540 to 520 ([Wood et al. 2019](https://doi.org/10.1038/s41559-019-0821-6), abstract). The oldest known eye is a trilobite’s, “more than half a billion years old” ([Schoenemann et al. 2017](https://doi.org/10.1073/pnas.1716824114), full text read). That trilobites begin near 521 is the agent’s general knowledge, not checked.
+  - *The great dying:* between 251.941 and 251.880 million years ago ([Burgess, Bowring and Shen 2014](https://doi.org/10.1073/pnas.1317692111), PNAS 111, 3316, abstract). About 81% of marine species lost, by [Stanley 2016](https://doi.org/10.1073/pnas.1613094113), against the 90 to 96% often quoted. The game says “most”.
+  - *The rock:* 66.04 million years ago ([Renne et al. 2013](https://doi.org/10.1126/science.1230492), Science 339, 684, abstract, the figure from a search summary). The ICS chart gives 66.00.
+  - *“A Moon still close”* holds: it formed at 3 to 5 Earth radii and stands at 60 today. Models put it at about 20 to 25 at 4.4 billion years ago, well under half today’s distance ([Farhat et al. 2022](https://arxiv.org/abs/2207.00438), A&A 665, L1, mostly read. Korenaga 2023 and Zahnle et al. 2015 differ on how fast it left).
+  - *“Your great reptiles”* holds: dinosaurs are reptiles ([Natural History Museum](https://www.nhm.ac.uk/discover/what-are-dinosaurs.html)), and Owen’s 1842 name meant fearfully great reptiles.
+  - A mind shows the oldest moment it was there for, so the game dates each at its end: `game/lib/sim/old-minds.ts` `EARTH_PAST`.
 - Used: the settling, built 2026-11-11, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). Forgan 2017 for the groups, Korhonen 2013 and Jebari and Asker 2024 for how rare the fighting was, Sandberg et al. 2017 for machines that keep watch while their makers sleep.
+
+### New senses: neutrinos, 2026-11-11
+
+Gathered by a research agent, for great instruments that each settle one open question, the designer’s pick of 2026-11-11. It read through a fetch that returns extracts, so “text read” means a page’s text, not every figure.
+
+- **What stands by Year 0.** Today’s detectors catch every collapse in our galaxy, as [the natural sky](#the-natural-sky-2026-10-30) assumes.
+  - [Al Kharusi et al. 2021, SNEWS 2.0](https://arxiv.org/abs/2011.00035) · Published, text read. Events from a collapse 10 kpc away: Super-Kamiokande 4,000 to 7,800, Hyper-Kamiokande 28,000 to 53,000, DUNE’s full 40 kt about 2,700 to 6,000, IceCube 320,000 to 820,000 photon hits. KM3NeT sees one out to 13 to 26 kpc.
+  - [JUNO 2024](https://arxiv.org/abs/2309.07109) · Published, JCAP, text read. 1,400 to 4,100 events at 10 kpc, and an alert out to 230 to 370 kpc. It has run since August 26, 2025 (press, search summary).
+  - Hyper-Kamiokande: 260 kt, its start moved from 2027 to 2028 (a 2026 status talk, search summary). Its [2018 design report](https://arxiv.org/abs/1805.04163) gives 54,000 to 90,000 events at 10 kpc and about 10 from Andromeda (search summary). The two counts at 10 kpc disagree.
+  - DUNE: its far detector from early 2030, its beam 2031 or 2032 (a May 2026 talk, search summary). IceCube-Gen2, 8 km³, is still a proposal.
+  - Ours: so past Andromeda, nothing standing at Year 0 sees a collapse.
+- **A detector of megatonnes.**
+  - [Kistler, Yüksel, Ando, Beacom and Suzuki 2011](https://arxiv.org/abs/0810.1959) · Published, Physical Review D 83, 123008, text read. 5 Mt of water in modules under 1,000 m of sea, after Deep-TITAND. It counts 5 × (3.9 Mpc / D)² events: about a million at 10 kpc, a hundred from Andromeda, ten at 3 Mpc. Three or more in 10 seconds is a “mini-burst”, 0.3 to 0.9 a year, out to about 5 Mpc. No cost given.
+  - [Böser et al. 2015, MICA](https://arxiv.org/abs/1304.2553) · Published, Astroparticle Physics, text read. 10 Mt in the South Pole’s ice: 127 strings 25 m apart, 38,100 modules, about 5 years to build, half a million dollars a hole. It reaches 6.6 to 9.3 Mpc for a collapse that explodes and 25.5 Mpc for one that fails. 10 to 41 supernovae a decade, and 17 to 35 failed ones.
+  - The agent found no published gigatonne detector for these energies.
+- **Warning before the light.**
+  - Neutrinos lead the light by hours for a supergiant, by minutes or less for a stripped star (SNEWS 2.0). [Kistler, Haxton and Yüksel 2013](https://arxiv.org/abs/1211.6770), text read, journal not checked: about a day for a red supergiant.
+  - A star’s last burning shows first. [KamLAND 2016](https://arxiv.org/abs/1506.01175) · Published, ApJ 818, 91, abstract: seen within 690 pc for a star of 25 Suns. [KamLAND and Super-Kamiokande 2024](https://arxiv.org/abs/2404.09920) · Published, ApJ 973, 140, text read: Betelgeuse, modelled at 150 pc, gives 2 to 12 hours’ warning before it collapses. JUNO gives 2.6 to 141 hours, and its text and table disagree in places.
+  - Where it is: before the collapse, to about 60°, or 15° with lithium in the scintillator ([Mukhopadhyay et al. 2020](https://arxiv.org/abs/2004.02045) · Published, ApJ 899, 153, abstract). From the burst at 10 kpc, Hyper-Kamiokande points to 1 to 1.3° and Super-Kamiokande to 3.3 to 5.9° (SNEWS 2.0).
+- **What a burst would settle.**
+  - *Whether some stars die without exploding.* A failed collapse’s neutrinos rise, then cut off as the black hole forms. Kistler assumes up to 1 in 5 fail. Super-Kamiokande saw nothing from the candidate M31-2014-DS1, which rules out some models ([Suwa et al. 2025](https://arxiv.org/abs/2504.19510) · Published, Open Journal of Astrophysics 8, abstract). Papers of 2026 dispute that candidate and reanalyse N6946-BH1 (arXiv 2604.05019), not opened. **The evidence is split.**
+  - *How a star explodes.* An 80 Hz ripple from the sloshing shock would show in IceCube and Hyper-Kamiokande for a collapse in our galaxy ([Tamborra et al. 2013](https://arxiv.org/abs/1307.7936), search summary).
+  - *Which neutrino is heaviest.* A burst’s first flash gives 6 sigma or more in DUNE (a 2026 preprint, arXiv 2606.06580, search summary). JUNO expects 3 sigma in about 6.5 years of running. Ours: so this is likely known before Year 0.
+  - *The glow of every past collapse.* Not yet detected. Super-Kamiokande reported a 2.6 sigma excess in June 2026 ([Kavli IPMU](https://www.ipmu.jp/en/node/9297), press, read). Its gadolinium-only paper saw 1.2 sigma ([arXiv 2511.02222](https://arxiv.org/abs/2511.02222), search summary).
+  - *The 2023 KM3NeT neutrino,* about 220 PeV ([KM3NeT 2025](https://doi.org/10.1038/s41586-024-08543-1) · Published, Nature 638, 376, abstract). A new kind of source, or the first made by cosmic rays striking the oldest light. It sits 2 to 3.5 sigma in tension with IceCube’s seeing none ([Brdar and Chattopadhyay 2025](https://arxiv.org/abs/2502.21299), search summary).
+- **Seeing inside bodies.**
+  - *The Sun.* Borexino caught the neutrinos of its carbon, nitrogen and oxygen burning in 2020. Its final count disfavors a metal-poor Sun at 3.2 sigma ([Basilico et al. 2023](https://arxiv.org/abs/2307.14636) · Published, Physical Review D 108, 102005, search summary).
+  - *Earth’s heat.* KamLAND favors 10 to 20 TW from radioactive decay. Borexino’s mantle signal implies about 38 TW in all. The two pull apart (search summaries). JUNO expects about 400 of these neutrinos a year.
+  - *An Ocean Bottom Detector,* 1.5 kt on the seafloor, would show the mantle’s share at 3.4 sigma in 3 years (reviews, arXiv 2109.01482 and 2209.13746, search summary).
+  - *Earth’s core.* IceCube has weighed the Earth by how it stops neutrinos ([Donini et al. 2019](https://arxiv.org/abs/1803.05901) · Published, Nature Physics 15, search summary). A next detector could find 1% hydrogen in the core in under 15 years ([Maderer et al. 2023](https://arxiv.org/abs/2208.00532) · Published, search summary).
+- **A channel, or a sign of minds.**
+  - [Stancil et al. 2012](https://arxiv.org/abs/1203.2847) · Published, Modern Physics Letters A 27, 1250077, abstract. A message sent 1 km, 240 m of it rock, at 0.1 bit a second.
+  - [Learned, Pakvasa and Zee 2009](https://arxiv.org/abs/0805.2429) · Published, Physics Letters B 671, 15, text read. A beacon at 6.3 PeV, where nothing natural shines. One scheme needs a star’s output a pulse, the other about 1 GW. About one bit a second. Cubic-kilometer detectors could see it.
+  - [Hippke 2018](https://arxiv.org/abs/1711.07962), search summary: light carries far more than neutrinos for the same energy.
+  - [Lacki and DiKerby 2025](https://arxiv.org/abs/2506.16351) · White paper, abstract and search summary. Reactors show by their neutrinos only inside the Solar System.
+  - The agent found no IceCube paper that searches for made sources or limits them.
+- **Not verified:** IceCube-Gen2’s funding, a paper behind the 2.6 sigma result, Hyper-Kamiokande’s reach past Andromeda, and any megatonne detector’s cost beyond MICA’s holes.
+- Why it matters: every neutrino sense standing at Year 0 stops at Andromeda. A detector of 5 to 10 Mt would catch a dying star about once a year in the galaxies round us, and count those that go dark with no flash.
+- Used: the Deep Ice Watch, built 2026-11-11, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise), after MICA. Its warning before the light, seeing inside bodies and neutrinos as a channel are not used.
+
+### New senses: stars that die dark, and the collapses near us, 2026-11-11
+
+Gathered by a research agent, for a detector of about 10 Mt in South Pole ice, the designer’s pick of 2026-11-11. Full texts were read through an extracting fetch, and some tables came through garbled.
+
+- **What share of massive stars die dark. The evidence is split, from about none to about 4 in 10.**
+  - *Stars seen to vanish.* The Large Binocular Telescope has watched 27 galaxies within 10 Mpc since 2008. Over 11 years: 8 supernovae and 1 candidate, N6946-BH1, so 0.16, +0.23 and −0.12 at 90%. If that candidate is not real, under 0.23. If a second, M101-OC1, is real too, 0.24 ([Neustadt et al. 2021](https://arxiv.org/abs/2104.03318) · Published, read. Earlier counts: [Gerke et al. 2015](https://arxiv.org/abs/1411.1761) and [Adams et al. 2017](https://arxiv.org/abs/1610.02402), abstracts). The agent found no newer count.
+  - A search of 231 galaxies over 10 years found no candidate, which limits only those that flare a little, not the silent ([Byrne and Fraser 2022](https://arxiv.org/abs/2201.12187) · Published, abstract).
+  - *N6946-BH1.* JWST shows at least three sources blended, the remnant at 13 to 25% of the star’s old light. It fits two stars merging, and a failed collapse is not ruled out ([Beasor et al. 2024](https://arxiv.org/abs/2309.16121) · Published, abstract). Against: 10 to 15%, with silicate dust, a failed collapse ([Kochanek et al. 2024](https://arxiv.org/abs/2310.01514) · Published, abstract). Merged stars end 10 to 100 times brighter than before, and both candidates are about 10 times fainter ([Forés-Toribio and Kochanek 2026](https://arxiv.org/abs/2604.05019) · Published, partly read).
+  - *M31-2014-DS1.* It faded at least 10,000 times in visible light from 2017 to 2022 ([De et al. 2026](https://arxiv.org/abs/2410.14778) · Published, Science, abstract). Now 7 to 8% of its old light and still fading, no X-rays, about a 5 solar mass black hole from a star of 12 to 13 ([De et al. 2026](https://arxiv.org/abs/2601.05774) · Published, ApJ Letters, abstract). Against: a surviving star shrouded in dust fits ([Beasor et al. 2026](https://arxiv.org/abs/2601.05317) · Published, MNRAS, abstract), and the failed reading needs fine tuning ([Soker 2026](https://arxiv.org/abs/2601.14497), abstract).
+  - *The missing heavy supergiants.* Of 45 stars seen before they exploded, 13 heavy ones were expected and 1 seen ([Smartt 2015](https://arxiv.org/abs/1504.02635) · Published, abstract). Against: the cutoff is 19 solar masses or higher, the gap only 1 to 2 sigma ([Davies and Beasor 2018](https://arxiv.org/abs/1709.06116), [2020](https://arxiv.org/abs/2001.06020) · Published, abstracts), and the stars’ light was underestimated by half, so no gap ([Beasor et al. 2025](https://arxiv.org/abs/2410.14027) · Published, abstract).
+  - *Theory.* Models that explode stars in one dimension give 18 to 29% ([Kresse, Ertl and Janka 2021](https://arxiv.org/abs/2010.04728) · Published, partly read, tabulating Sukhbold et al. 2016’s engines). 27%, or far more with one treatment of neutrinos, which its authors call in tension with what is seen ([Gogilashvili and Tamborra 2026](https://arxiv.org/abs/2605.16504) · Published, read). In three dimensions, black holes form four ways, three of them with an explosion, and the silent way “may not be dominant” ([Burrows et al. 2025](https://arxiv.org/abs/2412.07831) · Published, abstract).
+  - *Black hole masses* give 0.18, between 0.09 and 0.39 at 90% ([Kochanek 2015](https://arxiv.org/abs/1407.5622) · Published, read).
+  - **The agent’s plain statement.** Lowest: about none, if both candidates are mergers and the supergiant gap isn’t real. Central: 15 to 20%, on Neustadt 2021, Kochanek 2015 and Kresse 2021. Highest: about 40%, with a ceiling near half.
+- **How many collapse near us.**
+  - Within 10 or 11 Mpc, 1 to 2 a year are seen: 14 in 13 years ([Botticella et al. 2012](https://arxiv.org/abs/1111.1692) · Published, partly read), and 1.8, +0.7 and −0.5, a year against 1.1 ± 0.2 expected from star formation ([Horiuchi et al. 2013](https://arxiv.org/abs/1302.0287) · Published, partly read). More are seen than star formation predicts, part of it a chance run near 4 Mpc.
+  - *By galaxy,* collapses a century and distance, from Hα light ([Nakamura et al. 2016](https://arxiv.org/abs/1602.03028) · Published, its [online table](http://th.nao.ac.jp/MEMBER/nakamura/2016multi/) read): LMC 0.28 at 0.05 Mpc. SMC 0.035 at 0.06. IC 10 0.021 at 0.66. M31 0.37 at 0.79. M33 0.32 at 0.84. Circinus 0.13 at 2.80. IC 342 0.65 at 3.03. NGC 2403 0.63 at 3.22. Maffei 2 0.78 at 3.30. M82 1.2 at 3.53. NGC 4945 0.64 at 3.60. M81 0.79 at 3.63. Centaurus A 0.92 at 3.66. NGC 253 1.2 at 3.94. M83 2.4 at 4.47.
+  - That table sums to 0.15 a year within 5 Mpc, the agent’s sum, far under what is seen. Dust hides star formation from Hα, and M82 and NGC 253 may each reach one a decade ([Kistler et al. 2011](https://arxiv.org/abs/0810.1959)).
+  - *Seen since 1980,* a check: 1987A in the LMC, 1993J in M81, 2004dj in NGC 2403, 2008bk in NGC 7793, 2023ixf in M101 at 6.85 Mpc, 2024ggi in NGC 3621 at 7.2 Mpc, and about twenty more ([Xiao and Eldridge 2015](https://arxiv.org/abs/1506.07908) · Published, read. Those after 2012 from search summaries). NGC 6946 alone has shown about 10 in a century.
+- **What one catch tells us.**
+  - *How many it counts,* from [Böser et al. 2015](https://arxiv.org/abs/1304.2553), read: 2.76 neutrinos in 10 seconds from an ordinary collapse at 10 Mpc. By the agent’s scaling, about 17 at 4 Mpc and 276 at 1 Mpc. Three or more in 10 seconds is a catch, at one false alarm a year.
+  - *A dark death shows farther.* Its neutrinos run hotter, 20 to 24 MeV against 11 to 15, and carry about twice the energy. They last a second or less, then stop as the black hole forms, in 0.4 to 1.6 seconds for a star of 40 Suns ([Yang and Lunardini 2011](https://arxiv.org/abs/1103.4628) · Published, read). The paper gives no counts. The agent scales about 20 at 10 Mpc and 3 at 25.
+  - *It can’t say where.* The count gives a distance, and so a ranked list of galaxies ([Kistler, Haxton and Yüksel 2013](https://arxiv.org/abs/1211.6770) · Published, read). An ordinary collapse is then found by its light, hours to days later for a red supergiant. A dark one is found only by “establishing the disappearance of the star” (Yang and Lunardini 2011).
+  - *The 17 to 35 dark deaths a decade* assume 1 star in 10 dies dark. By the agent’s scaling, 28 to 56 at 16%, 70 to 140 at 40%.
+  - *The build.* 127 strings in a filled hexagon, each 300 m long with 300 modules, 2,150 to 2,450 m down inside IceCube, which shields it from muons. Its mass that counts is 13.1, 10.5 or 5.4 Mt as its modules’ noise runs 10, 50 or 500 Hz. About $64 million for the holes alone, the agent’s sum. No total cost, no power figure. It needs new, cheaper sensors. One background, from spallation, is “not quantified”.
+- **Not verified:** a rate within 25 Mpc, rates for NGC 6946 and M101, MICA’s counts for a dark death, its total cost, and any count of vanished stars newer than 2021.
+- Why it matters: the share that die dark is the one number this sense would settle, and today it runs from about none to about 4 in 10. The designer picks our universe’s.
+- **What it would cost.** MICA gives no price. IceCube’s 5,160 sensors on 86 strings cost $279 million to build ([IceCube](https://icecube.wisc.edu/science/icecube/detector), read through a search summary, and [testimony to the House](https://democrats-science.house.gov/imo/media/doc/Testimony_Yeck.pdf), $279.5 million, search summary). By the sensor, MICA’s 38,100 come to about $2.1 billion, ours, a ceiling since MICA wants cheaper sensors.
+- Used: the Deep Ice Watch, built 2026-11-11. The share that die dark is 1 in 6, the designer’s pick of 2026-11-11. `calcs/senses.py` holds the rates, the share, the price and the 15 galaxies, and `game/lib/game/natural.ts` draws from them.
+
+### New senses: the dark ages, nuclear clocks, linked telescopes, a Moon collider, 2026-11-11
+
+Gathered by a second research agent, for the same pick. Every page was read through a fetch that returns an extract. Not yet used.
+
+- **The dark ages by radio.** Hydrogen’s 21 cm line from before the first stars. By the agent’s arithmetic it arrives at 46 MHz from redshift 30 and 14 MHz from redshift 100.
+  - *What stands by Year 0: little.* LuSEE-Night has not flown. Its lander, Blue Ghost Mission 2, slipped to 2027 ([Wikipedia](https://en.wikipedia.org/wiki/Blue_Ghost_Mission_2), revised October 29, 2026, read). The Lunar Crater Radio Telescope, a 1 km mesh dish, ended as a study at “several billion dollars” ([NewSpace Economy 2026](https://newspaceeconomy.ca/2026/09/30/what-is-nasas-lunar-crater-radio-telescope-and-will-it-ever-be-built/), press, read). ESA’s Dark Ages Explorer study found the antenna count not yet feasible, and a real experiment “a decade or so” out ([Brinkerink et al. 2025](https://arxiv.org/abs/2504.03418) · Preprint, abstract). The agent found no launch of China’s Hongmeng, nine satellites round the Moon.
+  - *FARSIDE:* 128 dipoles across 10 km, a pathfinder ([Burns et al. 2019](https://arxiv.org/abs/1911.08649) · Study, abstract).
+  - *FarView:* 100,000 crossed dipoles over about 200 km², 1 to 50 MHz, made from the Moon’s own regolith in 4 to 8 years. It would find the dark ages’ pattern at redshift 30 at 10 sigma in 5 years ([Burns et al. 2026](https://arxiv.org/abs/2601.16170) · Study and preprint, abstract. [Polidan et al. 2024](https://arxiv.org/abs/2404.03840) · Published, Advances in Space Research, abstract). No cost given.
+  - *How big for cosmology.* 10 km² of collecting area, about 400,000 stations, rivals the microwave sky. Ten times that weighs helium 5 times better than Planck ([Mondal and Barkana 2023](https://arxiv.org/abs/2305.08593) · Published, Nature Astronomy 7, 1025, abstract).
+  - *How the universe began.* The dark ages hold up to 10¹² patterns to measure, against the microwave sky’s 10⁶, enough to reach the floor that every simple inflation predicts ([Silk 2020](https://arxiv.org/abs/2011.04671) · Proceedings preprint, read). The sky’s own limit on that number, f_NL, is about 0.03, at 0.1 arcminute of detail ([Muñoz, Ali-Haïmoud and Kamionkowski 2015](https://arxiv.org/abs/1506.04152) · Published, Physical Review D 92, 083508, abstract). Best case 0.01, or 0.03 to 0.7 if foregrounds cost part of the data ([Bull, Guandalin and Addis 2024](https://arxiv.org/abs/2403.16955) · Published, Philosophical Transactions A 382, 20230072, abstract).
+  - *Dark matter too:* whether it decays, annihilates, or runs warm ([Loeb and Zaldarriaga 2004](https://arxiv.org/abs/astro-ph/0312134) · Published, Physical Review Letters 92, 211301, abstract).
+  - The agent’s arithmetic: simple inflation’s floor is about 0.015. Detail of 0.1 arcminute at redshift 50 needs antennas about 370 km apart. *Whether that floor can be seen is disputed: see the second read below.*
+  - Ours: Daedalus crater is 94 km across, so the Far-Side Array as drawn can’t reach that floor. It would need arms past the crater, or a second array.
+- **Nuclear clocks.**
+  - *2024:* thorium-229’s nucleus driven by laser at 148.3821 nm ([Tiedau et al. 2024](https://doi.org/10.1103/PhysRevLett.132.182501) · Published, Physical Review Letters 132, 182501, search summary. [Elwell et al. 2024](https://arxiv.org/abs/2404.12311), abstract. [Zhang et al. 2024](https://arxiv.org/abs/2406.18719) · Published, Nature 633, 63, abstract).
+  - *2026: the first running clocks.* Vienna locked a steady 148 nm laser to thorium in a crystal at room temperature ([Toscani De Col et al. 2026](https://arxiv.org/abs/2606.04997) · Published, Nature, abstract). Its instability is 3×10⁻¹² over the square root of the seconds. A Beijing group reported the same step ([ANS Nuclear Newswire](https://www.ans.org/news/2026-10-09/article-8477/researchers-in-vienna-and-beijing-report-nuclear-clock-milestone/), press, read, the only source for it). The press’s “approaching 10⁻¹⁵” in a day doesn’t match that formula, which gives 10⁻¹⁴, by the agent’s arithmetic.
+  - Still far behind the best optical clocks. Beating them is “years away” ([NIST](https://www.nist.gov/atomic-clocks/nuclear-clocks-clock-rule-them-all), read). The aim is about 10⁻¹⁹ with one trapped ion ([Campbell et al. 2012](https://arxiv.org/abs/1110.2490) · Published, Physical Review Letters 108, 120802, abstract).
+  - *What it settles.* Whether nature’s constants drift: the nuclear line is about 5,900 ± 2,300 times more sensitive to the fine structure constant ([Beeks et al. 2024](https://arxiv.org/abs/2407.17300), abstract). The Vienna clock already sets limits on dark matter.
+  - *As a sense in space.* Two satellites comparing clocks hear gravitational waves from 3 mHz to 10 Hz ([Kolkowitz et al. 2016](https://arxiv.org/abs/1606.01859) · Published, Physical Review D 94, 124043, abstract). A network feels clumps of dark matter pass ([Derevianko and Pospelov 2014](https://arxiv.org/abs/1311.1244) · Published, Nature Physics 10, 933, abstract). A clock sent toward the Sun finds dark matter bound to it ([Tsai, Eby and Safronova 2023](https://arxiv.org/abs/2112.07674) · Published, Nature Astronomy 7, 113, abstract).
+  - *Height by time:* a clock good to 10⁻¹⁸ reads height to centimeters ([Mehlstäubler et al. 2018](https://arxiv.org/abs/1803.01585) · Published, Reports on Progress in Physics, abstract).
+- **Telescopes linked by entanglement.**
+  - [Gottesman, Jennewein and Croke 2012](https://arxiv.org/abs/1107.2939) · Published, Physical Review Letters 109, 070503, read. Joining light directly stops at a few hundred meters. Shared entanglement allows any distance in principle. Their case: 30 km, about 1.5×10¹¹ entangled pairs a second, stars to magnitude 7.5.
+  - [Khabiboulline et al. 2019](https://arxiv.org/abs/1809.01659), read, journal not confirmed. Memories cut that to about 200,000 pairs a second and 20 qubits a site, for a magnitude 10 star. Satellites give about 10,000 km.
+  - *Shown in the lab, 2025 to 2026.* Harvard: memories 1.55 km of fiber apart, stations 6 m apart, 2 to 13 pairs a second, a weak laser for a star ([Stas et al. 2026](https://arxiv.org/abs/2509.09464) · Published, Nature 651, 326, main text read). USTC: cold atoms over 20 km of fiber, made thermal light ([Wang et al. 2025](https://arxiv.org/abs/2511.10988) · Preprint, abstract).
+  - *What stands in the way.* The pair rate is about five orders short. A planet gives 10⁻¹⁶ to 10⁻¹⁸ photons in each time bin ([Huang et al. 2025](https://arxiv.org/abs/2505.04765) · Preprint, most read).
+  - **No source read draws one across the solar system.** The widest stated is 10,000 km. By the agent’s arithmetic that gives 0.011 microarcseconds in green light.
+- **A collider round the Moon.**
+  - [Beacham and Zimmermann 2022](https://arxiv.org/abs/2106.02048) · Published, New Journal of Physics 24, 023029, read. About 11,000 km round, protons meeting at 14 PeV, a thousand times the LHC. 20 T magnets, about 550,000 of them, in a tunnel tens to hundreds of meters down.
+  - Its beams lose 8.5 TW as light, so it draws about 10 TW: 0.07% of the sunlight on the Moon, or 6,700 km² of perfect panels.
+  - It takes 13,200 t of rare earths, or about a million tonnes of iron-based superconductor. About 15 years to build. They place its start in the 2070s or 2080s.
+  - *What stands by Year 0: nothing past the LHC,* the agent’s inference. CERN named the FCC-ee its preferred project on May 22, 2026, not yet approved, a decision “by 2028” ([CERN](https://home.cern/the-cern-council-decided-to-update-the-european-strategy-for-particle-physics/), press, read). China’s CEPC is out of the 2026 to 2030 plan ([CERN Courier 2025](https://cerncourier.com/a/cepc-matures-but-approval-is-on-hold/), press, read). The muon collider is research only.
+  - *It may find nothing.* “Absolutely no guarantee we will produce new particles” at 100 TeV, Arkani-Hamed ([CERN Courier 2019](https://cerncourier.com/a/in-it-for-the-long-haul/), press, read). The paper itself promises no discovery.
+  - *Past it.* At the strongest field physics allows, a machine for the Planck energy is about 10¹⁰ m round, a tenth of an AU ([Zimmermann 2018](https://arxiv.org/abs/1801.03170) · Published, Nuclear Instruments and Methods A, section 5 read). With 20 T magnets, by the agent’s arithmetic, the energy where forces may join needs a ring about 5,600 AU in radius, and the Planck energy about 100 light-years.
+- **Not verified:** a firm date for LuSEE-Night, FARSIDE’s cost, the Beijing clock’s numbers, the FCC’s cost and dates.
+- Why it matters: these four are the senses nothing at Year 0 comes near. Each has a published size, and two have a published price in power or time.
+- Not yet used. They wait on the designer’s picks.
+
+### New senses: the dark ages, a second read, 2026-11-11
+
+Gathered by the same agent on a second pass, for what a dark ages array would settle and how big it must be. Pages were read through an extracting fetch that stops at 100,000 characters. Not yet used. It corrects the first read above on one point: the floor that simple inflation predicts is itself disputed.
+
+- **What is known by Year 0 without it. Nothing is detected.**
+  - The number that tells one beginning from another, f_NL, is −0.9 ± 5.1 from Planck 2018 (search summary), −0.1 ± 5.0 from its last maps ([Jung et al. 2025](https://arxiv.org/abs/2504.00884) · Published, A&A 702, A204, abstract), and −3.6 ± 9 from DESI ([Chaussidon et al. 2024](https://arxiv.org/abs/2411.17623) · Preprint, abstract).
+  - SPHEREx, launched March 11, 2025, maps the sky four times in two years and promises “at least f_NL = 1 (2 sigma)”, so about ± 0.5 ([its team](https://spherex.caltech.edu/page/the-origin-of-the-universe), press, read). No result yet. CMB-S4 lost its funding in July 2025 (search summary).
+  - The agent’s inference: by 2040 we know it to about ± 0.5 to 1, and nothing shows unless it is above about 2.
+  - The working line: a beginning with several fields often gives more than 1, and one with a single field under 0.01 (SPHEREx’s team. [Alvarez et al. 2014](https://arxiv.org/abs/1412.4671) · Preprint, abstract).
+- **Whether the single-field floor can be seen at all. Disputed.**
+  - To an observer inside the universe the predicted 0.015 leaves no mark ([Pajer, Schmidt and Zaldarriaga 2013](https://arxiv.org/abs/1305.0824) · Published, Physical Review D 88, 083502, abstract).
+  - A smaller floor survives, about 0.004, with a different shape ([Cabass, Pajer and Schmidt 2017](https://arxiv.org/abs/1612.00033) · Published, JCAP, half read).
+  - Against: the 0.015 “cannot be gauged away”, so it is real ([Matarrese, Pilo and Rollo 2021](https://arxiv.org/abs/2007.08877) · Published, JCAP, abstract).
+  - Muñoz, Floss and Bull still aim at 0.015.
+- **How big for each goal.** No paper gives sizes with the receivers’ own noise counted.
+  - [Muñoz, Ali-Haïmoud and Kamionkowski 2015](https://arxiv.org/abs/1506.04152), read: with the sky’s limit alone, one slice at 1 arcminute gives 1.3. Every slice at 0.1 arcminute gives 0.12, or 0.03 with channels of 0.1 MHz. That detail needs antennas 350 km apart or more. To truly reach the limit at 1 arcminute takes a filled array 3,500 km across for 2 years.
+  - [Bull, Guandalin and Addis 2024](https://arxiv.org/abs/2403.16955), read: three stages, 500 antennas over 1 km, 10,000 over 5 km, 100,000 over 10 km, 5 years each at half time. Best case 0.01. Receiver noise is left out.
+  - [Floss et al. 2022](https://arxiv.org/abs/2201.08843), read: under 10 km could reach 0.01 with no noise. 100 to 1,000 km shows which particles were there.
+  - With noise counted, [Mondal and Barkana 2023](https://arxiv.org/abs/2305.08593), read: 10 km² is about 400,000 stations of 25 m², and finds the pattern at redshift 30 in 1,000 hours. 100 km² over 10,000 hours weighs the neutrinos to 0.010 eV. It gives no f_NL.
+  - [Koopmans et al. 2021](https://pmc.ncbi.nlm.nih.gov/articles/PMC8416573/) · Published, Experimental Astronomy 51, 1641, two thirds read: 10 km² for redshift 30, 100 km² for 50, over 5 years, a core 10 km across and arms to 100 km.
+  - The agent’s summary: ± 1 takes tens of km. ± 0.1 takes 170 to 350 km and every slice. ± 0.01 takes gravity’s own pattern known almost perfectly.
+- **Particles too heavy for any machine.**
+  - Particles as heavy as the young universe’s growth rate would leave a mark in this pattern, and its angle gives their spin ([Arkani-Hamed and Maldacena 2015](https://arxiv.org/abs/1503.08043) · Preprint, abstract).
+  - That rate is at most 4.7×10¹³ GeV (search summary), about 3 billion times the LHC by the agent’s arithmetic. It is a ceiling, and could be far lower.
+  - Particles joined to the rest only by gravity are “unlikely to ever be detected”. Stronger ties show with about 10 to 100 km ([Meerburg et al. 2017](https://arxiv.org/abs/1610.06559), most read).
+  - A search of Planck’s maps in 2025 found nothing (search summary).
+  - The agent’s safer wording: “the sky before the stars may hold traces of particles too heavy for any machine.”
+- **What stands in the way.**
+  - Our galaxy’s own radio glow is about 300,000 times the dark ages’ dip and over 10 million times its ripples. Removing it must be good to 1 part in a million (Mondal and Barkana 2023).
+  - Gravity’s own pattern is 100 times the first one at f_NL of 1. A 1% error in modelling it shifts the answer by 10 (Muñoz et al. 2015).
+  - The Moon: +90 °C to −170 °C, no workable power through the night, dust “yet to be quantified”, and a fully quiet far side “unrealistic” once satellites orbit it ([Brinkerink et al. 2025](https://arxiv.org/abs/2504.03418) · Preprint, read).
+- **The EDGES dip.** A dip at 78 MHz twice as deep as any prediction ([Bowman et al. 2018](https://arxiv.org/abs/1810.05912) · Published, Nature 555, 67, abstract). SARAS 3 rejects it at 95.3% ([Singh et al. 2022](https://arxiv.org/abs/2112.06778) · Published, Nature Astronomy, abstract). Nothing since confirms it (search summaries). Not formally settled, the weight against.
+  - If real, it would mean dark matter lighter than a few protons that cools the gas ([Barkana 2018](https://arxiv.org/abs/1803.06698) · Published, Nature 555, 71, abstract).
+- **Toward Year 0:** at best one antenna’s reading of the whole sky and a pathfinder of about 1,000 antennas, the agent’s inference.
+- **Not verified:** any SPHEREx result, Silk’s “millions of antennas over 100 km” at its source, and any forecast of f_NL with receiver noise counted.
+- Why it matters: the array’s finest answer may not be there to find, and its game holds no lead or danger. What it would surely give is the first map of the time before stars.
+- Set aside 2026-11-11, the designer’s pick: the Dark Ages Array is not built. Kept here in case a use in play is found.
+
+### New senses: gravitational waves and the oldest backgrounds, 2026-11-11
+
+Gathered by a third research agent, for the same pick. Full texts were read through a summarizing fetch, often cut at 100,000 characters. Not yet used.
+
+- **What stands by Year 0.**
+  - *LISA.* Adopted January 25, 2024, launch about 2035. Three craft 2.5 million km apart, hearing 0.1 mHz to 1 Hz, 4.5 years of science in a 6.25 year life ([Colpi et al. 2024](https://arxiv.org/abs/2402.07571) · Study, abstract. [Wikipedia](https://en.wikipedia.org/wiki/Laser_Interferometer_Space_Antenna), partly read). So Year 0 falls mid-mission, the agent’s inference. NASA’s share was cut then partly funded for 2026, and ESA took over its telescopes in May 2026.
+  - *The Einstein Telescope.* No site yet: a triangle under the Meuse-Rhine border, or two detectors in Sardinia and Lusatia. A decision in 2027, building from 2028 at the earliest, about 7 years, about 2 to 2.3 billion euros ([Physics World 2025](https://physicsworld.com/a/physicists-set-to-decide-location-for-next-generation-einstein-telescope/), press, read. [EMR](https://www.einsteintelescope-emr.eu/en/faq/), press, read). So 2035 at the earliest.
+  - *Cosmic Explorer.* Arms of 40 and 20 km, still in design, with no site and no construction money ([Datrier et al. 2025](https://arxiv.org/abs/2509.05430) · Preprint, abstract).
+  - *On the ground now.* LIGO, Virgo and KAGRA’s fourth run ended November 18, 2025 with about 250 candidates ([LVK](https://ligo.org/ligo-virgo-kagra-collaboration-successfully-wraps-up-its-fourth-observing-run/), press, read). LIGO-India broke ground April 23, 2026, aiming at 2030 ([LIGO Lab](https://www.ligo.caltech.edu/news/ligo20260423), press, read).
+  - *Pulsar timing.* A hum at waves years long, at 3 to 4 sigma, its source unsettled ([Agazie et al. 2023](https://arxiv.org/abs/2306.16213) · Published, ApJ Letters, abstract. [Agarwal et al. 2026](https://arxiv.org/abs/2606.28554) · Preprint, abstract: 3.32 sigma). The agent found no 5 sigma result.
+- **Drawn past those.**
+  - *DECIGO.* Four clusters of three craft, arms of 1,000 km, 0.1 to 10 Hz ([Kawamura et al. 2020](https://arxiv.org/abs/2006.13545) · Published, PTEP 2021, abstract). No cost.
+  - *The Big Bang Observer.* Twelve craft in four triangles 50,000 km on a side, 300 W lasers, 3.5 m mirrors. It must subtract 10⁵ to 10⁶ mergers to hear what lies under them, and a loss of 2 to 4 times in sensitivity ends its main goal ([Cutler and Harms 2006](https://arxiv.org/abs/gr-qc/0511092) · Published, Physical Review D 73, 042001, partly read). No cost or date.
+  - *μAres.* Three craft trailing Mars, 395 million km apart, and a second triangle tilted 90°. It hears down to about 10⁻⁷ Hz: about 10⁵ pairs of white dwarfs and about 10³ pairs of giant black holes spiralling in ([Sesana et al. 2021](https://arxiv.org/abs/1908.11391) · Published, Experimental Astronomy 51, partly read). No cost or mass.
+  - *The outer Solar System.* Arms of 10 to 30 AU, 10 W lasers, small mirrors ([McQuinn and McGrath 2025](https://arxiv.org/abs/2411.15072) · Published, ApJ 991, 106, abstract).
+  - *On the Moon.* LGWA, four seismometers in a shadowed polar crater, the Moon itself the antenna ([Ajith et al. 2025](https://arxiv.org/abs/2404.09181) · Published, JCAP, partly read). LILA, a 40 km triangle ([Jani et al. 2025](https://arxiv.org/abs/2508.11631) · Preprint, read). No dates or costs.
+- **How fast the universe grows.** Still open: 73.50 ± 0.81 near us against 67.24 ± 0.35 from the early universe, 7.1 sigma apart ([Casertano et al. 2026](https://arxiv.org/abs/2510.23823) · Published, A&A, search summary).
+  - Mergers with a seen flash measure it on their own: about 50 for 2%, about 100 for 1% ([Chen, Fishbach and Holz 2018](https://arxiv.org/abs/1712.06531) · Published, Nature, read). Its forecast of 2% by about 2023 was not met. All events to 2025 give 75.4, +12.8 and −9.1 ([LVK 2026](https://arxiv.org/abs/2509.04348) · Published, ApJ Letters, abstract).
+  - The Einstein Telescope and Cosmic Explorer together reach under 1% in a few years and 0.2% in a decade ([Menote and Marra 2026](https://arxiv.org/abs/2510.18752) · Published, JCAP, abstract).
+  - Ours: so if they stand, this is settled within a decade of Year 0 with no new build.
+- **Waves from the first instant.**
+  - By the microwave sky: r under 0.036 today ([BICEP/Keck 2021](https://doi.org/10.1103/PhysRevLett.127.151301) · Published, Physical Review Letters 127, 151301, abstract). LiteBIRD reaches about 0.001, and now aims at Japan’s fiscal 2036, not 2032 ([ISAS/JAXA](https://www.isas.jaxa.jp/en/missions/spacecraft/future/litebird.html), press, read).
+  - Heard directly: the Big Bang Observer hears r of 0.01 and misses 0.001. DECIGO as drawn misses 0.01. LISA falls far short ([Campeti et al. 2021](https://arxiv.org/abs/2007.04241) · Published, JCAP, read).
+  - The agent’s inference: if r is under 0.001, nothing yet drawn hears it directly.
+- **Neutrinos from the first second.**
+  - PTOLEMY would catch them on tritium bound to graphene, 4 to 8 a year from 100 g (search summary). A demonstrator is being built at Gran Sasso.
+  - Binding the tritium smears the electron’s energy by 0.17 to 0.75 eV, where 0.02 is needed ([Cheipesh, Cheianov and Boyarsky 2021](https://arxiv.org/abs/2101.10069) · Published, Physical Review D 104, 116004, read). PTOLEMY agrees and proposes nanotubes ([Apponi et al. 2022](https://doi.org/10.1103/PhysRevD.106.053002) · Published, Physical Review D 106, 053002, read).
+  - **Not forbidden, but no working design exists.**
+- **Made things, and dark things near us.**
+  - LIGO could hear a craft of Jupiter’s mass pushed to 0.3 c within 10 to 100 kpc, or of the Moon’s mass within 1 to 10 pc ([Sellers et al. 2022](https://arxiv.org/abs/2212.02065) · Preprint, abstract).
+  - Dark bodies of 10⁷ to 10¹¹ g crossing the Solar System would tug DECIGO’s masses ([Thoss and Loeb 2025](https://arxiv.org/abs/2507.19577) · Preprint, abstract).
+  - A quiet black hole alone sends no waves. The agent found no paper that says otherwise.
+- **Not verified:** costs for LISA, Cosmic Explorer, DECIGO, LGWA and LILA, and the date of the next LIGO run.
+- Why it matters: Year 0 already has a wave sense in space, so a build must be far wider to earn its place. μAres and the outer Solar System arrays are the drawn ones. The first second’s neutrinos have no design, and the first instant’s waves may be too faint for any.
+- Not yet used. They wait on the designer’s picks.
+
+### New senses: a wave array as a watch for dark craft, 2026-11-11
+
+Gathered by a research agent, to test whether a gravitational wave array could feel a dark craft cross our system by its pull. Full texts were read through a summarizing fetch, with no figures. The arithmetic for our own craft is the agent’s, checked against two published cases. **It can’t, for any craft we draw.**
+
+- **The physics.** A mass passing a free-floating mirror tugs it. For a fast pass only the kick survives, 2GM over the miss distance and the speed, so a signal falls as the craft speeds up ([Thoss and Loeb 2025](https://arxiv.org/abs/2507.19577) · Preprint, read). 1,000 t at a tenth of light speed tugs like 10 t at 300 km/s, the agent’s arithmetic.
+  - Thoss and Loeb write of natural bodies at 300 km/s, 10 to 100,000 t, passing DECIGO or the Big Bang Observer. They name asteroids, comets and 3I/ATLAS, and no craft. “Several million km” is the most any array reaches.
+  - Earlier work agrees: [Seto and Cooray 2004](https://arxiv.org/abs/astro-ph/0405216), [Adams and Bloom 2004](https://arxiv.org/abs/astro-ph/0405266), [Hall et al. 2018](https://arxiv.org/abs/1605.01103), [Jaeckel, Schenk and Spannowsky 2021](https://arxiv.org/abs/2004.13724), each read. LISA feels 10¹⁷ g within 5 million km, about once a decade at best.
+- **Our craft, how close each must pass a mirror,** at a signal 6 times the noise, the agent’s arithmetic:
+  - *A bullet, 1,000 t at a tenth of light speed:* 190 km for DECIGO, 10 km for the Big Bang Observer, 13 m for LISA, 11 m for μAres. A typical miss is 100 million km. The chance on a line toward Earth is about 5 in a million million for all twelve of DECIGO’s craft.
+  - *A fuelled craft of 40,000 t braking in,* on its slow last leg: 5,000 to 10,000 km of a DECIGO mirror, and its engine shows it anyway.
+  - *A probe of 1 to 100 t at 30 km/s:* 100 to 1,100 km of a DECIGO mirror.
+  - *A watcher of 1 kg:* 3 km.
+  - A fence of mirrors at 1 AU that no bullet could pass unseen would take about 2.5 million million of them, for 75 minutes’ warning.
+- **Hearing a bullet thrown at its home star.** The wave from a mass pushed in a line goes as its mass times its speed squared ([Sellers et al. 2022](https://arxiv.org/abs/2212.02065) · Preprint, read). LIGO could hear Jupiter’s mass pushed to 0.3 c across our galaxy. 1,000 t to a tenth of light speed, 50 ly off, falls short by 10¹⁴ or more for the best array drawn, the agent’s arithmetic.
+- **Other ways.** Pulsar timing feels only bodies of 10²⁰ kg within 1 AU ([Jennings, Cordes and Chatterjee 2020](https://arxiv.org/abs/1910.08608), read). LISA Pathfinder felt 54 dust grains strike it in 4,348 hours ([Thorpe et al. 2019](https://arxiv.org/abs/1905.02765), search summary). The agent found nothing published on arrays as craft detectors.
+- **False alarms.** Asteroids pass LISA’s mirrors about 0.08 to 2 times a year, sources disagreeing. One fast kick can’t tell a body’s mass from its speed or its distance.
+- **Not verified:** any figure, DECIGO’s noise below 0.1 Hz, and whether Thoss and Loeb or Sellers are in journals yet.
+- Why it matters: a bullet coasting dark stays dark to every sense we know how to build. The X-Ray Watch’s limit stands.
+- Set aside 2026-11-11: a wave array as a watch for craft. A wave array for wonder alone is still open.
+
+### New senses: the far side as a reader of worlds, 2026-11-11
+
+Gathered by a research agent, to test whether our Far-Side Array could tell if a near world has a magnetic field, and whether that should change its odds of air and life. Read through an extracting fetch, many sources as search summaries only. **It holds in part:** for rocky worlds of red dwarfs within about 33 ly, with long antennas, and on one untested scaling law.
+
+- **What the studies claim.**
+  - A world’s field makes radio at 2.8 MHz a gauss. Earth’s air blocks all below about 10 MHz, which is 3.6 G, and Earth’s own field tops out near 1.8 MHz (the agent’s arithmetic). So only space or the Moon hears an Earth-strength field.
+  - [Burns et al. 2019, FARSIDE](https://arxiv.org/abs/1911.08649) · Study, passages read. 128 antennas of 100 m across 10 km, 0.1 to 40 MHz. Its aim is this: field strength, day length and a “convective interior” for rocky worlds of red dwarfs out to 10 pc, and star storms that far. Its noise is 230 µJy in 1,000 hours at 200 kHz.
+  - [Vidotto, Feeney and Groh 2019](https://arxiv.org/abs/1906.07089) · Published, MNRAS 488, 633, extracts. A world gives back as radio about 1 part in 100,000 of the star wind’s power on its field. Proxima b at 0.1 G: 180 µJy, or 1.6 to 2.6 mJy if its star’s wind is denser. GJ 674 b: 200 µJy to 4.6 mJy. YZ Ceti b, GJ 1214 b and GJ 436 b: about 83 µJy.
+  - The agent’s arithmetic: quiet winds fall under FARSIDE’s reach, so it needs dense winds or storms. An Earth twin of a Sun-like star gives 0.02 to 2 µJy at 10 pc, hundreds of times too faint.
+  - [Burns et al. 2026, FarView](https://arxiv.org/abs/2601.16170) · Study, passages read. It claims every known red dwarf world within 5 pc at 5 sigma, taking fields of 10 G. Its 10 m antennas lose reach below 7 MHz, so it would miss an Earth-strength field.
+  - The agent’s arithmetic: below 1 MHz the ground an array covers sets its reach, not its metal. 200 km² gives about 120 µJy at 5 sigma.
+- **Seen so far: no world’s own field, for sure.** “No current, unambiguous detection” ([Lazio 2024](https://arxiv.org/abs/2404.12348) · Published chapter, most read).
+  - YZ Ceti’s bursts come from the star, perhaps driven by its world ([Pineda and Villadsen 2023](https://arxiv.org/abs/2304.00031) · Published, Nature Astronomy, abstract). GJ 1151’s known world can’t be the source. Tau Boötis b was not confirmed ([Turner et al. 2024](https://arxiv.org/abs/2403.16392) · Published, A&A 688, A66, abstract).
+  - New, September 2026: radio placed on a planet itself, Beta Pictoris b, a giant 63 ly off, with a field of at least 1.25 kG ([Ortiz Ceballos et al. 2026](https://arxiv.org/abs/2609.16720) · Preprint, abstract). It says nothing of rocky worlds.
+- **Star storms.** The first seen from another star: a burst from the red dwarf StKM 1-1262 ([Callingham et al. 2025](https://arxiv.org/abs/2511.09289) · Published, Nature 647, 603, abstract). Two more in 107 star-years of data ([Konijn et al. 2025](https://arxiv.org/abs/2511.09296) · Published, A&A 703, A198, abstract). A far-side array hears the brightest out to 10 pc.
+  - Red dwarf worlds may take 0.5 to 5 storm hits a day, and shielding against them needs tens to hundreds of gauss (Kay et al. 2016, arXiv 1605.02683, search summary).
+- **Whether a field helps a world keep its air. The evidence is split.**
+  - *No, or the other way.* Venus, Earth and Mars all lose 0.5 to 2 kg a second, field or none (Gunell et al. 2018, A&A 614, L3, search summary). The shield idea “should be changed” ([Gronoff et al. 2020](https://arxiv.org/abs/2003.03231) · Published, abstract).
+  - *Yes, round red dwarfs.* Proxima b loses about 100 times what our worlds do with no field, and less with one (Dong et al. 2017, arXiv 1702.04089, search summary).
+  - *It depends.* Its influence “is uncertain and depends both on its strength and configuration” ([Kubyshkina et al. 2026](https://arxiv.org/abs/2602.15507) · Accepted, Space Science Reviews, two sections read). Earth’s field was 30 times weaker for millions of years with no clear loss of air.
+  - **The agent’s plain statement,** for how much oftener a red dwarf’s world with a field keeps its air. Lowest: no oftener. Central: 1.1 to 1.3 times. Highest: twice or more.
+- **What else the radio tells.** Field strength, from its top frequency: shown for brown dwarfs. Day length: shown for brown dwarfs, only proposed for planets. A molten, turning core and moons: proposed only.
+- **Told from made radio.** Natural radio is bursty and turns one way, near 100% circularly polarized. Made radio is steady and unpolarized ([Garrett 2026](https://arxiv.org/abs/2605.10212) · Preprint, most read). Below 1 MHz a living world’s own aurora outshines its broadcasts, the agent’s inference.
+- **Not verified:** any count of worlds in reach, and whether a red dwarf’s dense wind lets radio that low escape at all, the agent’s own worry.
+- Why it matters: our Far-Side Array reads nothing in the game since the neighbors were retired. This would be its work, for the red dwarf worlds within 33 ly, which are the ones our telescopes find hardest to split from their stars.
+- Used: the Far-Side Array’s work, built 2026-11-11, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). The designer’s picks: it finds worlds too, and a world with a field keeps its air about 1.2 times as often. `calcs/senses.py` holds the shares, the brightness and the reach. Star storms and what else the radio tells are not used.
+
+### Tools that change play: antimatter by the tonne, and faster craft, 2026-11-11
+
+Gathered by a research agent, for what antimatter made with a Solar Swarm’s power would give. It updates the two entries above that set antimatter aside as absurd in cost. Read through OCR and summarizing fetches. Every drive here is a concept study, most by one author. Not yet used.
+
+- **Making it.** With the swarm, energy stops being the bar.
+  - Today about 4×10⁻¹⁰ of the energy in comes out as antimatter, nanograms a year ([Schmidt et al. 1999](https://ntrs.nasa.gov/citations/19990110316) · Study, Journal of Propulsion and Power 16, most read). All ever made is about 18 ng ([LaPointe 2020](https://ntrs.nasa.gov/citations/20200001904) · Study, NASA slides, read).
+  - A plant built for it: 3.9×10⁻⁵ with known technology (Schmidt). 10⁻⁴ “maximum predicted”, Forward as Frisbee quotes him. Each antiproton comes with an ordinary partner, so never more than half.
+  - Joules a kilogram: 1.1×10¹⁹ at best, 9×10²⁰ central, 2.3×10²¹ at worst, against 2.3×10²⁶ today.
+  - The agent’s arithmetic: a thousandth of the full swarm makes about 4 million tonnes a year on the central figure.
+- **Keeping it. Not shown.** About a million antiprotons in one trap. 92 carried by truck for half an hour on March 24, 2026 ([Physics World](https://physicsworld.com/a/researchers-at-cern-transport-antiprotons-by-truck-in-world-first-experiment/), press, summary read). Pellets of frozen antihydrogen held by magnets are proposed and never made. Frisbee calls storage “a potential show-stopper”. 92 antiprotons is 22 orders short of a gram, the agent’s arithmetic.
+- **The drives.**
+  - [Frisbee 2003](https://hdl.handle.net/2014/38278) · Study, AIAA paper, read by OCR. Its number reads 2003-4696 in the paper, 4676 as usually cited. Exhaust at a third of light speed, since only 22% of the fuel’s mass leaves as charged pions and 38% as gamma rays. One stage gives a quarter of light speed. To 40 ly at half of light speed, stopping there: four stages, 100 t carried, about 39 million tonnes of antimatter, 128 years at a hundredth of a g.
+  - Its waste heat is the limit on thrust: 207,000 TW of gamma rays, a radiator hundreds of km long.
+  - [Keane and Zhang 2012](https://arxiv.org/abs/1205.2281) · Preprint, read. A better nozzle gives exhaust at 0.69 c. An engine only, with no ship round it.
+  - The agent’s arithmetic, braking by a second burn: 0.16 to 0.29 c on Frisbee’s exhaust, 0.33 to 0.57 c on Keane and Zhang’s, for fuel 5 to 20 times the ship.
+- **What stops a faster ship.**
+  - Dust wears a ship’s front by 5 kg a square meter over 6 ly at a tenth of light speed, 20 at a fifth ([Crawford 2011](https://arxiv.org/abs/1010.4823) · Published, Acta Astronautica, two sections read). [Hoang et al. 2017](https://arxiv.org/abs/1608.05284) gives about 8 times less. It grows as speed squared times distance.
+  - Gas strikes as protons of 4.7 MeV at a tenth of light speed, 45 at three tenths, 145 at half (the agent’s arithmetic). Above three tenths bare electronics fail in minutes ([Semyonov 2018](https://arxiv.org/abs/1807.08608) · Published, Acta Astronautica, read).
+  - No one has published a ceiling as one number. Semyonov says under 0.7 c.
+- **Stopping.** A magnetic sail stops 1,500 t from a tenth of light speed in 0.37 ly ([Gros 2017](https://arxiv.org/abs/1707.02801) · Published, summary read). No one has studied one above that. By the agent’s stretch of his formulas, 3.4 ly and 21 years from three tenths, 9.5 ly and 35 years from half.
+- **Being seen.** Its gamma rays don’t show at interstellar range. Its radiator’s light shows to Hubble at several hundred ly if aimed at us (Zubrin 1995, abstract through a blog). A search of the gamma-ray sky found none ([Harris 2002](https://arxiv.org/abs/astro-ph/0112490) · Published, JBIS 55, 383, summary read).
+- **The agent’s verdict.** A craft of a thousand tonnes that stops: two to three tenths of light speed is defensible. Half has one published design, at 80 million tonnes for 100 t carried. Confidence is low.
+- **Not verified:** Forward 1985 at its source, any magnetic sail above a tenth of light speed, and any ship drawn round the better nozzle.
+- Why it matters: every craft in the game cruises at a tenth of light speed, ours and theirs. Antimatter would at most double or triple that, at a price in fuel and heat that only a swarm pays, and only if it can be kept at all.
+- Not yet used. It waits on the designer’s picks.
+
+### What sets a craft’s speed: gas, the magnetic sail, beams, wear, 2026-11-11
+
+Gathered by a research agent, so that each craft’s speed falls out of physics, not a round figure: the designer’s word of 2026-11-11. It read through extracting fetches, and each source says how much. It corrects one figure the design has used since October: the gas a magnetic sail brakes on is far thinner between the local clouds than the 0.1 a cm³ we took everywhere.
+
+- **The gas near the Sun.** Only ions brake a magnetic sail.
+  - At the Sun, inside the Local Interstellar Cloud: 0.07 ± 0.01 electrons a cm³, hydrogen 19 to 26% ionized ([Slavin and Frisch 2008](https://arxiv.org/abs/0704.0657) · Published, A&A 491, 53, extract read). Sight lines through the local clouds give 0.06 to 0.21 (Redfield and Falcon 2008, as [Crawford 2011](https://arxiv.org/abs/1010.4823) quotes it).
+  - 15 warm clouds lie within 15 pc, half within 5 pc, filling 5.5 to 19% of that space ([Redfield and Linsky 2008](https://arxiv.org/abs/0709.4480) · Published, ApJ 673, 283, extract read). The Sun leaves its own in about 3,000 years ([Linsky, Redfield and Tilipman 2019](https://arxiv.org/abs/1910.01243) · Published, ApJ 886, 41, extract read).
+  - Between the clouds, three pictures. Hot gas at 0.004 to 0.005 ([Welsh and Shelton 2009](https://arxiv.org/abs/0906.2827) · Published, extract read). Warm gas lit by stars, 0.04. And 0.012 from pulsars’ dispersion, the only direct count ([Linsky and Redfield 2021](https://doi.org/10.3847/1538-4357/ac1feb) · Published, ApJ 920, 75, search summary).
+  - Which stars sit in a cloud: Alpha Centauri, Epsilon Eridani, 61 Cygni and Epsilon Indi show astrospheres, which need a cloud’s neutral gas. Tau Ceti does not (Crawford 2011).
+  - Crawford’s rule: take the lowest plausible gas for braking and the highest for wear.
+- **The magnetic sail.** [Gros 2017](https://arxiv.org/abs/1707.02801) · Published, Journal of Physics Communications 1, 045007, read twice by extract.
+  - Drag on the whole craft goes as the gas density, the speed squared and the loop’s reach. At the best current, a craft of mass m stops in 3.1 m over the protons’ mass density and the loop’s area. Reaching a tenth of its speed takes 1.84 times that distance over the starting speed, and a three-hundredth takes 5.2 times.
+  - The loop weighs 0.18 kg a meter a million amps, and the craft is taken as twice its loop. The agent’s reduction: the craft’s mass in tonnes is 5,700 times the speed squared, in units of light speed, over the gas density and the stopping distance in ly. It gives back his own 1,500 t.
+  - His cases: Proxima at a tenth of light speed in gas of 0.1, a 1,600 km loop, 1,500 t, stopping in 0.37 ly, 58 years in all. TRAPPIST-1 in gas of 0.005: 12,000 years.
+  - It was fitted to his own runs at a hundredth of light speed and below, so a tenth is already a stretch along one scaling. No one has studied a magnetic sail above a tenth.
+  - [Perakis and Hein 2016](https://arxiv.org/abs/1603.03015) · Published, Acta Astronautica 128, 13, extract read: magnetic drag fades at low speed, where an electric sail does better, and the two together beat either.
+  - Starlight alone brakes at most 4.6% of light speed at Alpha Centauri A and 14.9% at Sirius ([Heller and Hippke 2017](https://arxiv.org/abs/1701.08803) · Published, ApJ Letters 835, L32, extract read).
+- **A beam’s push.** [Kulkarni, Lubin and Zhang 2018](https://arxiv.org/abs/1710.10732) · Published, AJ 155, 155, extract read.
+  - Light pushes with twice its power over light’s speed, 6.7 N a GW. A beam stays whole on a sail out to the sail’s width times the emitter’s over twice the wavelength. The speed reached there is the root of 4 times the power times that distance over the mass and light’s speed.
+  - The share of the light’s energy that ends as motion peaks at 0.41 of light speed.
+  - What limits it is the sail’s heat. Starshot’s takes 8.7 GW a m² at 0.2 g a m² and 625 K ([Parkin 2018](https://arxiv.org/abs/1805.01306) · Published, Acta Astronautica 152, 370, extract read). Silicon sails risk runaway above about 5 (search summary). No general speed limit is published.
+- **Braking by the home beam.** Forward 1984 drew sails in stages, the outer ring turning the beam back on the inner: half of light speed to Epsilon Eridani on 75,000 TW, through a lens 1,000 km wide (not read, through secondary sources). It asks pointing to a millionth of a millionth of a radian, and its lens and laser held to 3 m ([Landis 1989](http://www.geoffreylandis.com/lightsail/Lightsail89.html) · Study, most read).
+- **Wear.**
+  - Dust between the stars, measured by Ulysses over 16 years: 2.1 ± 0.6 × 10⁻²⁴ kg a m³, a third of the figure Crawford used, with grains to a micron ([Krüger et al. 2015](https://arxiv.org/abs/1510.06180) · Published, ApJ 812, 139, extract read). So Crawford’s wear, scaled down by 3.
+  - Why Crawford and Hoang differ: Hoang’s path holds 5 to 7 times less dust, and cuts grains at a micron. Hoang is the more careful on damage. Crawford’s density rests on measurement.
+- **Radiation.** A proton’s range in graphite, from [NIST PSTAR](https://physics.nist.gov/PhysRefData/Star/Text/PSTAR.html), queried: 0.45 g a cm² at 19 MeV, a fifth of light speed. 2.1 at 45 MeV, three tenths. 16.7 at 145 MeV, half. 83 at 376 MeV, seven tenths. 1 to 2 cm of titanium is enough to three tenths, and meters at eight to nine tenths ([Semyonov 2009](https://arxiv.org/abs/physics/0610030) · Published, Acta Astronautica 64, 644, read).
+- **Things thrown that never stop.** The agent found no reviewed study of heavy projectiles at such speeds. The nearest: the Galaxy’s magnetic field bends a charged gram craft 0.1 to 0.3 AU over 4 ly, so it must steer ([Hoang and Loeb 2017](https://arxiv.org/abs/1706.07798) · Published, ApJ 848, 31, extract read). Fixing a place by the stars is good to about 3 AU (Bailer-Jones 2021, search summary).
+- **Not verified:** Forward 1984 at its source, how full of cloud space is beyond 15 pc, and any magnetic sail above a tenth of light speed.
+- Why it matters: a craft that stops is bound by its braking, which depends on its speed, its mass and the gas it meets. So its best speed differs by trip, and no one number fits all craft. A craft that never stops is bound only by its push and its shield.
+- Not yet used. `calcs/speeds.py` works it through.
 
 ## Watch list
 
@@ -2918,7 +3211,8 @@ Results the design is waiting on, in date order. Check each when its date comes.
 
 ## To check
 
-- Open 2026-11-11: the seven dates of Earth’s past an old mind may show, in game/lib/sim/old-minds.ts. Written from general knowledge. Each wants a source read. See A settled Galaxy.
+- Closed 2026-11-11: the seven dates of Earth’s past an old mind may show. Six held, and the last world-wide freeze moved from 650 to 635 million years ago. See A settled Galaxy.
+- Open 2026-11-11: when our kind first kept fire, which the youngest old minds show, in game/lib/sim/old-minds.ts as 300,000 years. Not yet read from a source. And that trilobites, with the first eyes, begin near 521 million years ago.
 
 - Added 2026-11-07, the nine sources missing from the alpha-1 list. All read through search summaries only. Read the primary texts: Curtis et al. 2608.12458, Huang et al. 2601.07297, Lazio 2606.13797, the Project Silica Nature paper, NASA’s post-flight O2O release (484 GB or half a terabyte), and SPHEREx’s release calendar at IRSA.
 

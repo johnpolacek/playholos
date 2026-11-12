@@ -22,15 +22,20 @@ export const WITHHOLDS = 3;
 const STEP = 1.5;
 
 /** Earth's past, as far back as a mind that old could have watched it: years ago, and what it saw. Real moments, each
- *  dated in HOLOS_RESEARCH.md, "A settled Galaxy". The oldest it was there for is the one it shows. */
+ *  dated from a source in HOLOS_RESEARCH.md, "A settled Galaxy", checked 2026-11-11. A mind shows the oldest it was
+ *  there for, so each is dated at its own end: a mind 250 million years old missed the great dying by 2 million.
+ *  Seas by the safer 4.3 billion (Valley et al. 2014). The Dresser Formation's mats, 3.48 (Djokic et al. 2017). Oxygen's
+ *  first rise done by 2.43 (Gumsley et al. 2017). The last world-wide freeze, the Marinoan, under way by 639 million and
+ *  over by 635 (Hoffman et al. 2017): this read 650, which is near its start. Eyes by 521, in the Cambrian's third
+ *  stage. The end-Permian, 251.9 (Burgess et al. 2014). Chicxulub, 66.04 (Renne et al. 2013). Fire is not yet checked. */
 export const EARTH_PAST: [number, string][] = [
-  [4.4e9, "your first seas, under a Moon still close"],
-  [3.5e9, "the first mats of life in your shallows"],
-  [2.4e9, "your air first filling with oxygen"],
-  [6.5e8, "your world frozen white from pole to pole"],
-  [5.4e8, "the first animals with shells and eyes"],
-  [2.5e8, "the great dying, when most of your life was lost"],
-  [6.6e7, "the rock that ended your great reptiles"],
+  [4.3e9, "your first seas, under a Moon still close"],
+  [3.48e9, "the first mats of life in your shallows"],
+  [2.43e9, "your air first filling with oxygen"],
+  [6.39e8, "your world frozen white from pole to pole"],
+  [5.21e8, "the first animals with shells and eyes"],
+  [2.519e8, "the great dying, when most of your life was lost"],
+  [6.604e7, "the rock that ended your great reptiles"],
   [3e5, "your kind learning fire"],
 ];
 /** What it shows of Earth's past: the oldest moment it was already there for. */

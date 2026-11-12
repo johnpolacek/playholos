@@ -75,7 +75,11 @@ export function nextKnownWhy(ahead: EarthView, year: number): { at: number; why:
   // 2026-11-11.
   const rings = (ahead.minds?.flashes ?? []).flatMap((f) => (f.imaged?.saw === "ring" ? [f.imaged.at] : []));
   const ring = rings.length ? { ring: { at: Math.min(...rings) } } : {};
-  walk({ ...ahead, holes, minds: ahead.minds && { ...ahead.minds, ...ring, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near, lost: g.lost, answered: g.answered })) } });
+  // Our Far-Side Array finds a dozen worlds in its first decades, by their magnetic fields. Only the first stops the
+  // skip, as only the first cold glow does: the rest gather on Scan. What it hears at a world we knew still stops it.
+  // 2026-11-11.
+  const fields = (ahead.fields ?? []).slice(0, 1);
+  walk({ ...ahead, fields, holes, minds: ahead.minds && { ...ahead.minds, ...ring, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near, lost: g.lost, answered: g.answered })) } });
   return best === null ? null : { at: best, why: whyOf(where, whose) };
 }
 

@@ -163,6 +163,17 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       before: "WISE, 0.4 m, mapped the whole sky at 12 µm to about 0.7 mJy. NEO Surveyor, 0.5 m, cost $1.2 billion to build.",
     },
   },
+  "Deep Ice Watch": {
+    // The South Pole, inside IceCube, where MICA was drawn: the clearest deep ice we have drilled.
+    site: { on: "earth", draw: "ring", places: [{ lat: -90, lon: 0, name: "Amundsen-Scott Station, South Pole" }] },
+    story: {
+      have: "IceCube has watched a cubic kilometer of South Pole ice since 2010, and catches any star that dies in our own galaxy. Hyper-Kamiokande would catch about ten neutrinos from one in Andromeda, and none from beyond.",
+      where: "Inside IceCube at the South Pole, 2,150 to 2,450 m down, where the ice is clearest. IceCube round it flags the cosmic rays that could pass for a catch.",
+      why: "A star dying 30 million ly away sends only a few neutrinos through each megatonne. Deep polar ice is the one clear, dark, still thing we have by the megatonne, and we know how to drill it.",
+      takes: "127 strings of 300 light sensors each, 25 m apart, watching about 10 Mt of ice. About $2 billion at what IceCube’s sensors cost, and 5 Years of drilling.",
+      before: "IceCube’s 5,160 sensors on 86 strings cost $279 million and took seven summers to drill. In 2015 Böser and colleagues drew this denser array inside it and named it MICA.",
+    },
+  },
   "Star Mapper": {
     // At L2, where Gaia flew, and where GaiaNIR would.
     site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "L2, 1.5 million km out" }], km: 1_500_000 },
@@ -580,10 +591,10 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
     story: {
       have: "Small receivers have listened from the far side since Chang’e 4 landed in 2019. Every big radio telescope we have is on Earth, under our own noise.",
       where: "Inside Daedalus crater, 94 km across, near the middle of the Moon’s far side, where Earth never rises.",
-      why: "The Moon’s bulk dims our radio there more than ten billion times, and radio rules bar emissions that would harm radio astronomy. Only from there can we hear a world’s faint everyday hum.",
+      why: "The Moon’s bulk dims our radio there more than ten billion times. Only from there can we hear the radio of a world’s magnetic field, which is too low to pass Earth’s air, or a world’s faint everyday hum.",
       takes: "About 1 Mt of metal, made in place from the far side’s own rock, as NASA’s FarView study plans on a smaller scale. It grows in fifths, each hearing farther.",
       before:
-        "In 2026 a team searched Chang’e 4’s far-side recordings for a repeating signal, the first such search from there. It found none.",
+        "NASA’s FARSIDE study drew 128 antennas there to hear the magnetic fields of worlds at red dwarfs within 33 ly. No rocky world’s field has been caught yet.",
     },
   },
   "Power from Orbit": {

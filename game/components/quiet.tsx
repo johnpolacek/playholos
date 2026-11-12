@@ -1,9 +1,10 @@
 import { useMemo, useRef } from "react";
+import { IceKey, IceSky } from "@/components/ice-sky";
 import { BuildMark, buildColor } from "@/components/marks";
 import { useGame } from "@/components/game-provider";
 import { usePlan, useSchedule } from "@/components/picks";
 import { yearText } from "@/lib/game/clock";
-import { skyBetween } from "@/lib/game/natural";
+import { iceBetween, skyBetween } from "@/lib/game/natural";
 import { buildOf, ordered } from "@/lib/game/plan";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
@@ -34,6 +35,9 @@ export function Quiet({ from, to, children }: { from: number; to: number; childr
   const watch = ordered(plan).includes("Warm Sky Watch") ? (done["Warm Sky Watch"] ?? null) : null;
   const sky = useMemo(() => (seed === undefined ? null : skyBetween(seed, from, to, watch)), [seed, from, to, watch]);
   const eye = sky?.supernovae.filter((e) => e.eye).length ?? 0;
+  // What our Deep Ice Watch heard meanwhile, in the galaxies round us, if it stood by the quiet's end. 2026-11-11.
+  const iceAt = ordered(plan).includes("Deep Ice Watch") ? (done["Deep Ice Watch"] ?? null) : null;
+  const ice = useMemo(() => (seed === undefined || iceAt === null || iceAt >= to ? null : iceBetween(seed, iceAt, from, to)), [seed, iceAt, from, to]);
   const root = useRef<HTMLDivElement>(null);
   const span = to - from;
   // Our watches standing through the quiet: each listening or seeing build done by its start, less the searches that
@@ -142,6 +146,17 @@ export function Quiet({ from, to, children }: { from: number; to: number; childr
               </>
             )}
             {sky.betelgeuse && " Betelgeuse exploded, as bright as a half Moon for a season."}
+          </p>
+        </>
+      )}
+      {ice && seed !== undefined && iceAt !== null && ice.bright + ice.dark > 0 && (
+        <>
+          <IceSky seed={seed} since={iceAt} from={from} to={to} />
+          <IceKey />
+          <p data-q className="text-[13px] leading-snug text-page-ink2">
+            In the galaxies round us, our Deep Ice Watch heard {ice.bright.toLocaleString("en-US")} star{ice.bright === 1 ? "" : "s"} explode
+            and <span className="text-other">{ice.dark.toLocaleString("en-US")}</span> die dark, with no flash.
+            {to - Math.max(from, iceAt) > 20 && " The latest 20 Years of them are drawn."}
           </p>
         </>
       )}

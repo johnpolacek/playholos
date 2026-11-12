@@ -6,7 +6,7 @@ The rules are HOLOS_GAME_CONCEPT.md's: Year 0 and Earth's road to it, The neighb
 neighbors play. Every placement passes calcs/neighbors.py. The same seed always gives the same game.
 """
 import hashlib, math, random, sys
-import branches, neighbors as nb, observing
+import branches, neighbors as nb, observing, senses
 
 Y0 = nb.EARTH_WAKES
 # Earth's branches, odds read from Metaculus on 2026-10-10. Taiwan's three outcomes share one roll:
@@ -202,7 +202,9 @@ def rung(seed, w):
     elif u_start >= STARTED: r = RUNGS[1]
     elif u_died < DIED: r = RUNGS[5]
     else: r = RUNGS[2] if age - thaw < OXYGEN_AT * pace else RUNGS[3] if age - thaw < RICH_AT * pace else RUNGS[4]
-    return dict(age=age, age_by=host['age_by'] or 'drawn', shore=shore, thaw=thaw, rung=r)
+    # Its magnetic field, 2026-11-11: a little oftener on a world that kept its air, on its own key. calcs/senses.py.
+    field = keyed(seed, 'field', host['id']) < (senses.FIELD_IF_BARE if r == RUNGS[0] else senses.FIELD_IF_AIR)
+    return dict(age=age, age_by=host['age_by'] or 'drawn', shore=shore, thaw=thaw, rung=r, field=field)
 
 # The infrared telescope's search. Its first pass gives a star up to a day, a sample: enough to see an Earth twin of a
 # Sun twin out to about 50 ly. A fainter world waits for a deeper pass.

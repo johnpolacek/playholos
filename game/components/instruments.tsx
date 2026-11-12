@@ -7,6 +7,7 @@ import { useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
 import { span, tenths, timesText, yearText } from "@/lib/game/clock";
 import { grownSpans } from "@/lib/game/halo";
+import { iceBetween, iceFirsts, iceRange } from "@/lib/game/natural";
 import { SWARM } from "@/lib/sim/conflict";
 import { type Reading, starName } from "@/lib/game/leads";
 import { buildOf, buildSlug, computeAt, isOn, LAUNCH_LIFT, ordered, PAST, SWITCHED } from "@/lib/game/plan";
@@ -26,6 +27,10 @@ const CRAFT: Record<string, Visit["by"]> = { "Laser Sail Array": "sails", "Probe
 
 interface Known {
   now: number;
+  /** This game's seed, for the natural sky our Deep Ice Watch hears. 2026-11-11. */
+  seed?: number;
+  /** The Years our Far-Side Array found each world it has, by its magnetic field. 2026-11-11. */
+  fields: number[];
   heard: Heard[];
   /** Every reading landed by now, with the star of its lead. */
   read: { star: string; r: Reading }[];
@@ -138,6 +143,24 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
       ? { line: `Stacked ${MOON_SEARCH_YEARS} Years of deep images of the Moon’s L4 and L5 points. Nothing small and dark there.`, news: k.now - moonSearchEnds(since) < 0.5 }
       : { line: "Stacking deep images of the Moon’s L4 and L5 points. Nothing small and dark yet", news: false, busy: true };
   if (name === "Warm Sky Watch") return { line: "Mapping the warm sky every 2 Years. No new warm glow yet.", news: false };
+  if (name === "Far-Side Array") {
+    const n = k.fields.length;
+    return n
+      ? { line: `Has found ${n === 1 ? "a world" : `${n} worlds`} by the radio of ${n === 1 ? "its magnetic field" : "their magnetic fields"}, the latest at Year ${yearText(k.fields.at(-1)!)}.`, news: recent(k.fields.at(-1)!) }
+      : { line: "Listening for the radio of magnetic fields at red dwarfs’ worlds. None new yet.", news: false };
+  }
+  // What our Deep Ice Watch has heard, and each of its three firsts as it comes. lib/game/natural.ts, 2026-11-11.
+  if (name === "Deep Ice Watch" && k.seed !== undefined) {
+    const { bright, dark } = iceBetween(k.seed, since, since, k.now);
+    const f = iceFirsts(k.seed, since);
+    const n = (x: number) => x.toLocaleString("en-US");
+    const range = iceRange();
+    if (!bright && !dark) return { line: "Listening through the ice. No star’s death heard yet.", news: false };
+    const heard = `Has heard ${n(bright)} star${bright === 1 ? "" : "s"} explode and ${n(dark)} burst${dark === 1 ? "" : "s"} no flash followed.`;
+    if (k.now >= f.settled) return { line: `${heard} About 1 heavy star in ${range.mid} dies dark, settled at Year ${yearText(f.settled)}.`, news: recent(f.settled) };
+    if (k.now >= f.sure) return { line: `${heard} One is sure: a telescope found the star gone, at Year ${yearText(f.sure)}.`, news: recent(f.sure) };
+    return { line: `${heard} None read near and made sure yet.`, news: recent(f.first) };
+  }
   if (name === "Glow Imager") return { line: "Ready. It turns to each glow our surveys find. None to show yet.", news: false };
   if (name === "Galaxy Broadcast Array") return { line: "Ready. It sends only what we choose to send, from the Mind’s tab.", news: false };
   const craft = CRAFT[name];
@@ -207,7 +230,7 @@ function Card({ name, since, line, news, busy }: { name: string; since: number; 
 /** Our builds done, as instruments at work, newest first. Last on Build, under what rises, the Catalog and what it
  *  all costs: what is done matters least to what we order next. 2026-11-10. */
 export function Working() {
-  const { year } = useGame();
+  const { year, save } = useGame();
   const { plan } = usePlan();
   const { done, scale } = useSchedule();
   const { heard, readings, leads, visits, minds } = useLeads();
@@ -225,7 +248,12 @@ export function Working() {
     const years = spans.reduce((y, [a, b]) => y + Math.max(0, Math.min(b ?? tenth, tenth) - a), 0);
     return { share: Math.min(1, (SWARM.watts * 2 ** Math.floor(years / SWARM.doubling)) / SWARM.most), growing: spans.at(-1)![1] === null };
   }, [plan, scale, tenth]);
-  const known: Known = { now, heard, read, visits, grown, swarm, minds };
+  // The worlds our Far-Side Array found, by the Year of the reading each came with.
+  const fields = useMemo(
+    () => leads.filter((l) => l.facts.some(([k]) => k === "Heard by")).map((l) => (readings[l.slug] ?? []).find((r) => r.field !== undefined)?.at ?? 0).sort((a, b) => a - b),
+    [leads, readings],
+  );
+  const known: Known = { now, seed: save?.seed, fields, heard, read, visits, grown, swarm, minds };
   if (!working.length) return null;
   return (
     <>

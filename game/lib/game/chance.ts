@@ -1,4 +1,5 @@
 import { type Lead, lifeOf, type Odds, type Reading, starName } from "@/lib/game/leads";
+import { FIELD_ODDS } from "@/lib/sim/fields";
 
 // The chance that something lives at a lead, and that a mind arose there, as the Mind works them out from what Earth
 // knows by this Year, never from the seed's truth: the Mind's word, read as a percent, widened by how little we have to
@@ -19,6 +20,8 @@ const MIDDLE: Record<Odds, number> = {
 /** What the chance rests on, from least to most, and how far either way it may be, in log-odds. */
 const BASES = {
   tug: { say: "from its gravity", spread: 1.1 },
+  // A world our Far-Side Array found by its magnetic field: its radio and its orbit are all we have. 2026-11-11.
+  radio: { say: "from its radio", spread: 1.1 },
   glow: { say: "from its glow", spread: 0.9 },
   moves: { say: "from how it moves", spread: 0.8 },
   pull: { say: "from its pull", spread: 0.6 },
@@ -66,6 +69,7 @@ function basisOf(lead: Lead, readings: readonly Reading[]) {
   if (readings.some((r) => r.air?.split)) return BASES.light;
   switch (lead.art.kind) {
     case "orbit":
+      if (lead.facts.some(([label]) => label === "Heard by")) return BASES.radio;
       return lead.facts.some(([label]) => label === "It reflects") ? BASES.light : BASES.tug;
     case "glow":
     case "warm":
@@ -109,7 +113,11 @@ export function chancesOf(lead: Lead, readings: readonly Reading[]): Chances | n
   const word = lifeOf(lead, readings);
   const sure = 1 - (basis.spread - BASES.close.spread) / (BASES.tug.spread - BASES.close.spread);
   if (word) {
-    const life = MIDDLE[word];
+    // What our Far-Side Array heard of its magnetic field, until its air is read: a world with a field holds its air a
+    // little oftener, so life's odds move by as much, a small step either way. Once its air is read or it is seen up
+    // close, the field says nothing more about air. Ours, taking life's odds to move as air's do. 2026-11-11.
+    const heard = basis === BASES.air || basis === BASES.close ? undefined : readings.find((r) => r.field !== undefined)?.field;
+    const life = heard === undefined ? MIDDLE[word] : logistic(logit(MIDDLE[word]) + Math.log(heard ? FIELD_ODDS.has : FIELD_ODDS.none));
     const chain = life * ANIMALS * MINDS;
     // Hard evidence of something made, seen up close or read in what it did, outranks the steps up from life: the
     // watcher spoke to us in eleven languages and still showed a mind at 0.03 to 0.7%. Playtest 2026-11-07, the Will's

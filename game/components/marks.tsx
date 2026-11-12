@@ -894,6 +894,18 @@ const GlowImager = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The Deep Ice Watch: the ice's surface, strings of sensors hung below it, and a faint flash among them where a
+ *  neutrino struck. Ours. 2026-11-11. */
+const DeepIce = ({ size, still }: MarkProps) => (
+  <Moving size={size} still={still} move={(_, part) => void sway(part("flash"), { opacity: 0.15 }, { opacity: 1 }, 1.8)}>
+    <path d="M1.2 3.2h13.6" />
+    {[4, 8, 12].map((x) => (
+      <path key={x} d={`M${x} 3.2V14.4`} strokeDasharray="0.2 2.2" />
+    ))}
+    <circle data-k="flash" cx="9.6" cy="9.4" r="1.2" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
 /** The Helium-3 Harvest: an ice giant, and a craft dipping into its air and climbing out again. Ours. 2026-10-29. */
 const Harvest = ({ size, still }: MarkProps) => (
   <Moving size={size} still={still} move={(_, part) => void sway(part("craft"), { x: 0, y: 0 }, { x: -1.8, y: 2.2 }, 1.8)}>
@@ -1007,6 +1019,8 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <ShipBeam size={size} still={still} />;
     case "Hypertelescope":
       return <Hyper size={size} still={still} />;
+    case "Deep Ice Watch":
+      return <DeepIce size={size} still={still} />;
     case "Glow Imager":
       return <GlowImager size={size} still={still} />;
     case "Galaxy Broadcast Array":

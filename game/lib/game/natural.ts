@@ -3,6 +3,7 @@
 // every few decades. A long skip says what passed instead. The same sky every time for a seed. Settled 2026-10-30,
 // sources in HOLOS_RESEARCH.md, "The natural sky".
 import { stream } from "./rocks.ts";
+import { CATALOG } from "../sim/works.ts";
 
 /** Core-collapse supernovae in our galaxy, a Year: 1.63 a century, Rozwadowska, Vissani and Cappellaro 2021. */
 const SN_RATE = 0.0163;
@@ -71,7 +72,7 @@ export function skyBetween(seed: number, from: number, to: number, watch: number
 }
 
 /** The sky so far, in words, for the Mind: counts since Year 0, the latest seen by eye, and Betelgeuse once gone. */
-export function describeSky(seed: number, year: number | null, watch: number | null) {
+export function describeSky(seed: number, year: number | null, watch: number | null, ice: number | null = null) {
   if (year === null || year < 1) return "";
   const { supernovae, mergers, betelgeuse } = skyBetween(seed, 0, year, watch);
   const eye = supernovae.filter((e) => e.eye);
@@ -81,5 +82,175 @@ export function describeSky(seed: number, year: number | null, watch: number | n
     `The natural sky since Year 0. ${n(supernovae.length)} stars have exploded in our galaxy, about 1.6 a century as expected. Our neutrino detectors caught every one. ${n(eye.length)} shone bright enough to see by eye${last ? `, the latest at Year ${n(Math.floor(last.at))}, about ${n(Math.round(last.ly / 100) * 100)} ly away` : ""}. None is a mind's doing.`,
     watch === null ? "" : `Our Warm Sky Watch has seen ${n(mergers.length)} pairs of stars merge and glow warm in their own dust, and set each aside as natural, as it must before any glow can mean a mind.`,
     betelgeuse ? `Betelgeuse exploded at Year ${n(skyOf(seed).betelgeuse)}, ${BETELGEUSE.ly} ly away: for a season as bright as a half Moon, seen by day for more than a Year, and harmless at that distance.` : "",
+    ice === null || year < ice ? "" : describeIce(seed, ice, year),
+  ].filter(Boolean).join(" ");
+}
+
+// ── Stars dying in the galaxies round us, heard by our Deep Ice Watch ──
+// A detector of about 10 Mt in the South Pole's ice, after MICA, Böser et al. 2015. It hears a star explode out to about
+// 9 Mpc and one die dark, straight to a black hole with no flash, out to about 25, since those run hotter. About 2 and 4
+// a Year, so none stops a skip, save three firsts: its first catch, the first dark death made sure, and the Year the
+// share that die dark is settled. That share is 1 in 6, the designer's pick, 2026-11-11. It can't tell where a death
+// lies: the count of neutrinos gives how far, and a telescope finds which galaxy. Numbers in calcs/senses.py, sources
+// in HOLOS_RESEARCH.md, "New senses". The same sky every time for a seed.
+export const ICE = CATALOG.ice;
+/** Light-years in a megaparsec, in millions: the game speaks in light-years. */
+export const MLY = 3.2616;
+
+export interface Death {
+  /** The Year its neutrinos reach us. */
+  at: number;
+  /** A star that died dark. */
+  dark: boolean;
+  /** How far, in Mpc. */
+  mpc: number;
+  /** Its galaxy, when it lies within the few Mpc where a galaxy can be named. */
+  host?: string;
+  /** Its direction for the drawing, right ascension in hours: a named galaxy's own, else drawn. */
+  ra: number;
+}
+
+/** One Year's own numbers, the same every time: a seed and a Year mixed to a start, then the stream rocks.ts runs. */
+function yearStream(seed: number, y: number) {
+  let s = (Math.imul(seed | 0, 0x9e3779b1) ^ Math.imul((y | 0) + 0x7f4a7c15, 0x85ebca6b)) >>> 0;
+  return () => {
+    s = (s + 0x6d2b79f5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** How many came in a Year, when so many come on average. */
+function poisson(mean: number, r: () => number) {
+  const limit = Math.exp(-mean);
+  let k = 0;
+  for (let p = r(); p > limit; p *= r()) k++;
+  return k;
+}
+
+/** A Year's counts: stars heard exploding, dark deaths near enough to read, and dark deaths farther off. */
+function countsIn(r: () => number) {
+  return [poisson(ICE.bright, r), poisson(ICE.near, r), poisson(ICE.dark - ICE.near, r)] as const;
+}
+
+const HOST_SUM = ICE.hosts.reduce((s, h) => s + h.rate, 0);
+
+/** The deaths whose neutrinos reach us in the Year from `y` to `y` + 1, in turn. */
+export function deathsIn(seed: number, y: number): Death[] {
+  const r = yearStream(seed, y);
+  const [bright, near, far] = countsIn(r);
+  const out: Death[] = [];
+  const add = (dark: boolean, from: number, to: number) => {
+    // As many again in each equal volume of space.
+    const mpc = Math.cbrt(from ** 3 + r() * (to ** 3 - from ** 3));
+    const at = y + r();
+    const ra = 24 * r();
+    let pick = r() * HOST_SUM;
+    const host = mpc <= ICE.hostsMpc ? (ICE.hosts.find((h) => (pick -= h.rate) <= 0) ?? ICE.hosts.at(-1)!) : null;
+    out.push(host ? { at, dark, mpc: host.mpc, host: host.name, ra: host.ra } : { at, dark, mpc, ra });
+  };
+  for (let i = 0; i < bright; i++) add(false, 0, ICE.brightMpc);
+  for (let i = 0; i < near; i++) add(true, 0, ICE.brightMpc);
+  for (let i = 0; i < far; i++) add(true, ICE.brightMpc, ICE.darkMpc);
+  return out.sort((a, b) => a.at - b.at);
+}
+
+export interface IceFirsts {
+  /** The Year of its first catch. */
+  first: number;
+  /** The Year the first dark death is sure: read near, then a telescope finds the star gone. */
+  sure: number;
+  /** The Year the share that die dark is settled, by enough dark deaths read near. */
+  settled: number;
+}
+
+const firsts = new Map<string, IceFirsts>();
+
+/** The three firsts of a Deep Ice Watch done at `since`: each stops a skip, once. */
+export function iceFirsts(seed: number, since: number): IceFirsts {
+  const key = `${seed}:${since}`;
+  const had = firsts.get(key);
+  if (had) return had;
+  let first: number | null = null;
+  let sure: number | null = null;
+  let settled: number | null = null;
+  let read = 0;
+  // Far past any likely wait: the share settles in about 50 Years.
+  for (let y = Math.floor(since); settled === null && y < since + 5000; y++)
+    for (const d of deathsIn(seed, y)) {
+      if (d.at < since) continue;
+      first ??= d.at;
+      if (!d.dark || d.mpc > ICE.brightMpc) continue;
+      sure ??= d.at + ICE.confirm;
+      if (++read === ICE.settle) settled = Math.max(d.at, sure);
+    }
+  const out = { first: first ?? since, sure: sure ?? since + 5000, settled: settled ?? since + 5000 };
+  firsts.set(key, out);
+  return out;
+}
+
+/** What a Deep Ice Watch done at `since` heard after Year `from` and by `to`: stars that exploded, stars that died
+ *  dark, and those dark ones read near. Whole Years between are counted, not drawn, since a long game holds hundreds
+ *  of thousands. */
+export function iceBetween(seed: number, since: number, from: number, to: number) {
+  const start = Math.max(from, since);
+  let bright = 0, dark = 0, near = 0;
+  if (to <= start) return { bright, dark, near };
+  const tally = (y: number) => {
+    for (const d of deathsIn(seed, y)) {
+      if (d.at <= start || d.at > to) continue;
+      if (!d.dark) bright++;
+      else {
+        dark++;
+        if (d.mpc <= ICE.brightMpc) near++;
+      }
+    }
+  };
+  const y0 = Math.floor(start), y1 = Math.floor(to);
+  tally(y0);
+  for (let y = y0 + 1; y < y1; y++) {
+    const [b, n, f] = countsIn(yearStream(seed, y));
+    bright += b;
+    near += n;
+    dark += n + f;
+  }
+  if (y1 > y0) tally(y1);
+  return { bright, dark, near };
+}
+
+/** The latest deaths heard by `to`, back at most `years` Years and to Year `from`, for the drawing: a handful, however
+ *  long the span. */
+export function iceLatest(seed: number, since: number, from: number, to: number, years = 20): Death[] {
+  const start = Math.max(from, since, to - years);
+  const out: Death[] = [];
+  for (let y = Math.floor(start); y <= Math.floor(to); y++) out.push(...deathsIn(seed, y).filter((d) => d.at > start && d.at <= to));
+  return out;
+}
+
+/** The share that die dark as one star in so many, and as our count brackets it once settled: 6, between 9 and 4.5. */
+export function iceRange() {
+  const part = (x: number) => (Math.abs(x - Math.round(x)) < 0.05 ? String(Math.round(x)) : x.toFixed(1));
+  return { low: part(1 / (ICE.share * (2 / 3))), high: part(1 / (ICE.share * (4 / 3))), mid: part(1 / ICE.share) };
+}
+
+/** What our Deep Ice Watch has heard by a Year, in words, for the Mind. */
+function describeIce(seed: number, since: number, year: number) {
+  const { bright, dark } = iceBetween(seed, since, since, year);
+  const f = iceFirsts(seed, since);
+  const n = (x: number) => x.toLocaleString("en-US");
+  const mly = (mpc: number) => Math.round(mpc * MLY);
+  const range = iceRange();
+  return [
+    `Our Deep Ice Watch, done at Year ${n(since)}, hears stars die in the galaxies round us by their neutrinos. It has heard ${n(bright)} explode, each followed by its flash, out to about ${mly(ICE.brightMpc)} million ly, and ${n(dark)} bursts that no flash followed, out to about ${mly(ICE.darkMpc)} million ly: a star falling straight to a black hole would sound so, hotter and cut short, and be heard that far. It can't tell where one lies: the count gives how far, and our telescopes find which galaxy, by the flash or by a star gone missing.`,
+    year >= f.sure
+      ? `At Year ${n(Math.round(f.sure * 10) / 10)} we were sure of the first dark death: a telescope found the star gone, with no flash. Some heavy stars do end as black holes in silence.`
+      : "No dark death is sure yet: that needs one near enough to read, and then a telescope to find the star gone.",
+    year >= f.settled
+      ? `By Year ${n(Math.round(f.settled * 10) / 10)}, with ${ICE.settle} dark deaths read near, the share was settled: about 1 heavy star in ${range.mid} dies dark, between 1 in ${range.low} and 1 in ${range.high}.`
+      : year >= f.sure
+        ? "How large a share die dark isn't settled yet: too few have been read near."
+        : "",
   ].filter(Boolean).join(" ");
 }

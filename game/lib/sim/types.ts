@@ -54,7 +54,7 @@ export interface World {
   v: 1;
   seed: number;
   earth: Record<string, unknown>;
-  worlds: { star: string; d: number; a: number; radius: number; mass: number; felt: boolean; swept: boolean; rung: string }[];
+  worlds: { star: string; d: number; a: number; radius: number; mass: number; felt: boolean; swept: boolean; rung: string; field?: boolean }[];
   finds: Find[];
   stars: Record<string, Star>;
   /** Lone black holes in the region, from calcs/holes.py: where, how heavy, how fast it spins, its speed across the
@@ -173,6 +173,28 @@ export interface FeltWorld {
   read?: Read;
   /** What our 15 m Mirror has made of it, once built, if it can read more of it than the Infrared Telescope can. */
   wide?: Read;
+  /** What our Far-Side Array has heard there, once it has gathered enough to hear a magnetic field at a red dwarf's
+   *  world this far: whether it has one, and the Year. 2026-11-11. */
+  field?: FieldHeard;
+}
+
+/** Whether a world has a magnetic field, as our Far-Side Array heard, and the Year it could tell. */
+export interface FieldHeard {
+  has: boolean;
+  at: number;
+}
+
+/** A world our Far-Side Array found by the radio of its magnetic field, known no other way. The radio rises and falls
+ *  with its turning, which this close to a red dwarf is its year, so we have its orbit and no mass. 2026-11-11. */
+export interface FieldWorld {
+  star: string;
+  d: number;
+  a: number;
+  periodDays: number;
+  /** The Year it was heard. */
+  at: number;
+  kind?: string;
+  hz?: [number, number];
 }
 
 export type Gas = "water" | "oxygen" | "ozone";
@@ -279,6 +301,9 @@ export interface EarthView {
   minds?: import("./minds.ts").MindsSeen;
   /** What our 15 m Mirror has read of Proxima b, once built. */
   proxima?: Read;
+  /** Worlds our Far-Side Array found by their magnetic fields, and what it heard of Proxima b's. 2026-11-11. */
+  fields?: FieldWorld[];
+  proximaField?: FieldHeard;
   /** What ground telescopes saw of Proxima b by Year 0: its true mass, tilt and brightness. 2026-10-31. */
   proximaSeen?: import("./proxima.ts").ProximaSeen;
 }

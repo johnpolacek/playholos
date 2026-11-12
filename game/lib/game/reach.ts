@@ -3,7 +3,7 @@
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { BULLET, bulletsReady } from "@/lib/sim/conflict";
-import { horizonOf, isOn, onFrom, ordersOf, pacedName, schedule, searchOf } from "./plan";
+import { fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
 import { CATALOG, type Order, pace } from "@/lib/sim/works";
@@ -406,6 +406,7 @@ export function kitOf(plan: Plan, scale: number) {
     halo: done["Halo Survey"] ?? null,
     haloArray: done["Halo Array"] ?? null,
     imager: done["Glow Imager"] ?? null,
+    farSide: fifthsOf(plan, scale),
     warmWatch: done["Warm Sky Watch"] ?? null,
     closeReads: plan.closeReads ?? [],
     moonSearch: done["Moon Search"] ?? null,

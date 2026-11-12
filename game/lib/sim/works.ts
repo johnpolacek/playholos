@@ -57,6 +57,21 @@ interface Catalog {
   beams: { array: number; beam: number; look: number; ship: number; shipDays: number };
   swarm: { watts: number; doubling: number; excess: number; perLy2: number; kelvin: number; spread: number };
   hyper: { kmPerLy: number; reach: number; slew: number; cities: number };
+  /** Calcs/senses.py: our Far-Side Array hearing worlds' magnetic fields. The shares of worlds with one, among those
+   *  that kept their air and those that did not, how far it hears, how bright a world's radio is (Proxima b's `flux0`
+   *  µJy at `au0` and `ly0`, falling as the orbit to the `fall`), and how faint it hears (`noise0` µJy from `km0` km² in
+   *  `hours0` hours), each fifth's ground and its listening hours a Year. 2026-11-11. */
+  fields: {
+    ifAir: number; ifBare: number; reachLy: number; flux0: number; au0: number; ly0: number; fall: number;
+    noise0: number; km0: number; hours0: number; fifthKm2: number; listenH: number;
+  };
+  /** Calcs/senses.py: what our Deep Ice Watch hears. Stars a Year that explode (`bright`) and die dark (`dark`), those
+   *  dark ones near enough to read (`near`), how far each kind is heard in Mpc, the share that die dark, the Years
+   *  until a dark death is sure, how many read near settle the share, and the galaxies within `hostsMpc`. 2026-11-11. */
+  ice: {
+    bright: number; dark: number; near: number; brightMpc: number; darkMpc: number; share: number; confirm: number; settle: number;
+    hostsMpc: number; hosts: { name: string; mpc: number; rate: number; ra: number }[];
+  };
   /** A sentinel speeds up on deuterium and brakes on a magnetic sail: `burns` and `brake` are the Years each adds over
    *  cruising, `fuel` its kt of deuterium. Calcs/craft.py, 2026-11-07. */
   sentinel: { build: number; speed: number; burns: number; brake: number; fuel: number };

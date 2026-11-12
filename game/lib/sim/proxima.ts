@@ -39,6 +39,15 @@ function stream(key: string) {
   };
 }
 
+/** calcs/senses.py's shares of worlds with a magnetic field, among those that kept their air and those that did not. */
+const FIELD_IF_AIR = 0.55, FIELD_IF_BARE = 0.48;
+
+/** Whether Proxima b has a magnetic field: drawn as any world's, a little oftener if it kept its air, on its own key.
+ *  2026-11-11. */
+export function proximaField(seed: number): boolean {
+  return stream(`${seed}:proxima-b:field`)() < (proximaB(seed).nature === RUNGS[0] ? FIELD_IF_BARE : FIELD_IF_AIR);
+}
+
 export function proximaB(seed: number): { mass: number; nature: Nature } {
   const rand = stream(`${seed}:proxima-b`);
   const gauss = (sd: number) => sd * Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());

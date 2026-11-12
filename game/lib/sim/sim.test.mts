@@ -18,6 +18,9 @@ import { loadWorld } from "./world.ts";
 import { rangedAt, glowsFound } from "./minds.ts";
 import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
+import { ICE, deathsIn, iceBetween, iceFirsts } from "../game/natural.ts";
+import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
+import { proximaField } from "./proxima.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
   for (const [key, want] of Object.entries(golden.random)) {
@@ -55,9 +58,9 @@ test("the browser's BLAKE2b is Python's, as calcs/seed.py's keyed() reads it", (
 test("natural warm worlds at Holos's odds are calcs/seed.py's, in every shipped world", async () => {
   const r4 = (x: number | null) => (x === null ? null : Math.round(x * 1e4) / 1e4);
   for (const seed of POOL) {
-    const got = drawWorlds(seed, hosts).map((w) => [w.star, r4(w.d), r4(w.a), r4(w.radius), r4(w.mass), r4(w.pole), r4(w.tug), w.rung, r4(w.age), w.ageBy, r4(w.thaw)]);
+    const got = drawWorlds(seed, hosts).map((w) => [w.star, r4(w.d), r4(w.a), r4(w.radius), r4(w.mass), r4(w.pole), r4(w.tug), w.rung, r4(w.age), w.ageBy, r4(w.thaw), w.field]);
     const want = ((await loadWorld(seed)).worlds as unknown as Record<string, unknown>[]).map((w) =>
-      ["star", "d", "a", "radius", "mass", "pole", "tug", "rung", "age", "ageBy", "thaw"].map((k) => w[k]));
+      ["star", "d", "a", "radius", "mass", "pole", "tug", "rung", "age", "ageBy", "thaw", "field"].map((k) => w[k]));
     assert.deepEqual(got, want, `seed ${seed}`);
   }
 });
@@ -803,4 +806,68 @@ test("each build's line fits 45 to 75 characters", () => {
   assert.ok(lines.length >= 45, `read ${lines.length} lines`);
   const out = lines.filter((b) => b.what.length < 45 || b.what.length > 75);
   assert.deepEqual(out.map((b) => `${b.name}: ${b.what.length}`), []);
+});
+
+// The Deep Ice Watch, 2026-11-11: calcs/senses.py's rates, drawn a Year at a time, the same every time for a seed.
+test("our Deep Ice Watch hears stars die at the calcs' rates, and its three firsts come in turn", () => {
+  const since = 5.3;
+  const century = iceBetween(22, since, since, since + 1000);
+  assert.ok(Math.abs(century.bright / 1000 - ICE.bright) < 0.15, `bright ${century.bright}`);
+  assert.ok(Math.abs(century.dark / 1000 - ICE.dark) < 0.25, `dark ${century.dark}`);
+  assert.ok(Math.abs(century.near / 1000 - ICE.near) < 0.08, `near ${century.near}`);
+  // Counted or drawn, a span holds the same deaths, and two halves hold the whole.
+  const drawn = Array.from({ length: 1001 }, (_, i) => deathsIn(22, 5 + i)).flat().filter((d) => d.at > since && d.at <= since + 1000);
+  assert.equal(drawn.length, century.bright + century.dark);
+  const [a, b] = [iceBetween(22, since, since, 400.7), iceBetween(22, since, 400.7, since + 1000)];
+  assert.equal(a.dark + b.dark, century.dark);
+  assert.deepEqual(iceBetween(22, since, 0, 3), { bright: 0, dark: 0, near: 0 });
+  // A dark death is read near only within the reach of a star that explodes, and a galaxy is named only close by.
+  assert.ok(drawn.every((d) => d.mpc <= (d.dark ? ICE.darkMpc : ICE.brightMpc)));
+  assert.ok(drawn.every((d) => (d.host === undefined) === d.mpc > ICE.hostsMpc));
+  for (const seed of [10, 22, 62]) {
+    const f = iceFirsts(seed, since);
+    assert.ok(since <= f.first && f.first < f.sure && f.sure <= f.settled, JSON.stringify(f));
+    assert.equal(iceBetween(seed, since, since, f.settled).near, ICE.settle);
+    assert.deepEqual(iceFirsts(seed, since), f);
+  }
+});
+
+// The far side as a reader of worlds, 2026-11-11: calcs/senses.py's field_flux() and heard_at(), and what Earth learns.
+test("our Far-Side Array hears a world's magnetic field when calcs/senses.py says", () => {
+  const cases = (golden as unknown as { fields: { a: number; d: number; fifths: number[]; flux: number; at: number | null }[] }).fields;
+  assert.ok(cases.length >= 5);
+  for (const c of cases) {
+    assert.ok(Math.abs(fieldFlux(c.a, c.d) - c.flux) < 1e-9 * c.flux, `flux ${c.a} ${c.d}`);
+    const at = fieldHeardAt(c.flux, c.fifths);
+    if (c.at === null) assert.equal(at, null);
+    else assert.ok(at !== null && Math.abs(at - c.at) < 1e-9, `heard ${c.a} ${c.d}: ${at} against ${c.at}`);
+  }
+});
+
+test("the Far-Side Array finds red dwarfs' worlds that have a field, and tells of the ones we knew", async () => {
+  const fifths = [30, 36, 42, 48, 54];
+  let found = 0, silent = 0;
+  for (const seed of POOL) {
+    const world = await loadWorld(seed);
+    assert.equal(earthKnows(world, 500).fields, undefined, "nothing heard with no array");
+    const early = earthKnows(world, 31, { farSide: fifths }), late = earthKnows(world, 500, { farSide: fifths });
+    const red = world.worlds.filter((w) => world.stars[w.star]?.kind === "M" && w.d <= FIELDS.reachLy && world.stars[w.star].shown !== "Proxima Centauri");
+    const known = new Set(world.finds.map((f) => world.stars[f.star]?.shown ?? f.star));
+    const fresh = red.filter((w) => w.field && !known.has(world.stars[w.star].shown));
+    // By Year 500 every one with a field is found, none without, and each comes no sooner than the first fifth.
+    assert.deepEqual((late.fields ?? []).map((f) => f.star).sort(), fresh.map((w) => world.stars[w.star].shown).sort(), `seed ${seed}`);
+    assert.ok((late.fields ?? []).every((f) => f.at >= 30 && f.periodDays > 0));
+    assert.ok((early.fields ?? []).length <= (late.fields ?? []).length);
+    // A world we knew at a red dwarf in reach gets a reading either way, as its truth has it.
+    for (const f of late.felt) {
+      const w = red.find((x) => world.stars[x.star].shown === f.star);
+      if (w) assert.deepEqual(f.field?.has, !!w.field); else assert.equal(f.field, undefined);
+    }
+    // Proxima b, 180 µJy, is heard within the first fifth's first Year.
+    assert.equal(early.proximaField?.has, proximaField(seed));
+    found += fresh.length; silent += red.filter((w) => !w.field).length;
+  }
+  // About half of some 32 a game have a field: calcs/senses.py counts 16.1.
+  assert.ok(found / POOL.length > 12 && found / POOL.length < 19, `found ${found / POOL.length}`);
+  assert.ok(silent > 0);
 });
