@@ -40,7 +40,7 @@ const PRICE: Record<By, string> = {
 const homeAfter = (by: By, d: number, thrown = false) =>
   (by === "sails" ? sailYears(d) : by === "probe" ? flybyYears(d, thrown) : sentinelYears(d)) + d;
 /** A flyby probe our Ship Beam throws, in place of its drive and fuel. 2026-11-12. */
-const THROWN = "No fuel: our Ship Beam throws it, at about four tenths of light speed. It passes, pictures a world, and reads its air.";
+const THROWN = "No fuel: our Ship Beam throws it, at over a third of light speed. It passes, pictures a world, and reads its air.";
 
 /** Our orders, reading the warm glows' first switch as a probe to each, at any distance. */
 export function ordersOf(plan: Plan): Partial<Record<Kind, GlowOrder>> {

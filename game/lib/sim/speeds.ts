@@ -93,7 +93,7 @@ export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.betwee
 export const sailYears = (ly: number) => ly / SAIL_C;
 /** How fast a flyby probe passes a star `ly` away, as a share of light speed. On its Fusion Drive its fuel holds it to
  *  a tenth. `pushed`: our Ship Beam threw it, with no engine or fuel. The beam does the same work on whatever rides its
- *  sail, so 150 t leaves at about four tenths, or slower on a road so long that dust would wear through its shield.
+ *  sail, so 150 t leaves at over a third of light speed, or slower on a road so long that dust would wear through its shield.
  *  calcs/speeds.py's probe_beta. 2026-11-12. */
 export const flybyBeta = (ly: number, pushed = false) =>
   pushed ? Math.min(SPEEDS.probe.beam, shieldBeta(ly, SPEEDS.probe.tonnes, SPEEDS.probe.front)) : PROBE.speed;
@@ -115,7 +115,7 @@ export const shipYears = (ly: number, pushed = false, star?: string) => stay("sh
  *  push costs a fraction of a Year, and a Fusion Drive's burn 10. */
 export const pushedBy = (start?: number) => start !== undefined && start < catalog.seedShip.burn;
 /** How fast a bullet of ours flies `ly`, as a share of light speed. On its Fusion Drive, a tenth. `pushed`: our Ship
- *  Beam threw it, as a rod of about 32 t with no engine, at the most its sail's mirror reflects, half of light speed,
+ *  Beam threw it, as a rod of about 30 t with no engine, at the most its sail's mirror reflects, half of light speed,
  *  with a bullet's harm. Dust binds it only on a very long road. calcs/speeds.py's rod_beta. 2026-11-12. */
 export const bulletBeta = (ly: number, pushed = false) => (pushed ? Math.min(SPEEDS.rod.beam, shieldBeta(ly, SPEEDS.thrown.tonnes, SPEEDS.thrown.front)) : BULLET_C);
 /** Years for a bullet of ours to land `ly` away. It never brakes. */

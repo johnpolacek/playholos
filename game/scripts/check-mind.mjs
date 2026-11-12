@@ -115,7 +115,7 @@ const CASES = [
     never: [/\b(read|reads|reading) (its|their) air\b(?! (is|stays|remains))/i],
   },
   // Flyby probes by beam, 2026-11-12: with the Probe Yard and the Ship Beam done, the beam throws a flyby probe with
-  // no engine or fuel, at about four tenths of light speed. The Mind says how it flies, and never gives it a burn.
+  // no engine or fuel, at over a third of light speed. The Mind says how it flies, and never gives it a burn.
   {
     seed: 22,
     at: 180,
@@ -123,7 +123,7 @@ const CASES = [
     later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }],
     flybys: [{ name: "Tau Ceti", y: 150, d: 11.9, by: "probe" }],
     ask: "How is our flyby probe to Tau Ceti flying, how fast, and what fuel did it take?",
-    must: [/ship beam/i, /0\.42|four tenths|42%/i, /no (engine|fuel|deuterium)|without (an engine|fuel|deuterium)/i],
+    must: [/ship beam/i, /0\.37|a third|37%/i, /no (engine|fuel|deuterium)|without (an engine|fuel|deuterium)/i],
     never: [/\b6 kt\b/i],
   },
   // Bullets by beam, 2026-11-12: with the Strike Yard and the Ship Beam in our order, the Mind knows a bullet ordered
@@ -134,7 +134,7 @@ const CASES = [
     builds: ["Fusion Drive"],
     later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Strike Yard", y: 80 }],
     ask: "If we fired a bullet at a star now, how would it fly, and how fast?",
-    must: [/ship beam/i, /half (of |the speed of )?light|0\.5/i, /rod|32 t/i],
+    must: [/ship beam/i, /half (of |the speed of )?light|0\.5/i, /rod|30 t/i],
     never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|fired)\b/i],
   },
   // Our telescopes turn to the array's worlds, 2026-11-12: the 15 m Mirror can split Gliese 832's world from its star
@@ -157,7 +157,8 @@ const CASES = [
     later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Strike Yard", y: 80 }],
     strikes: [{ name: "Tau Ceti", y: 200, d: 11.9 }],
     ask: "Have we fired on anyone? Where is that bullet now, and when does it land?",
-    must: [/tau ceti/i, /224|in flight|on its way/i],
+    // Year 223.5 since the beam's light went to 1.55 microns, 2026-11-12: it was 224.3, and two right answers failed.
+    must: [/tau ceti/i, /223|in flight|on its way/i],
     never: [/\bwe have(n[’']t| not) fired\b|\bno,? we\b/i],
   },
   // Who sees a launch beam, 2026-11-12: we aim where the star will be, so the beam passes it by. No mind at a far

@@ -3192,6 +3192,32 @@ A research agent read these for two questions the Ship Beam raised. How much of 
   - Used: 23 rows, A0 to L5, as absolute G against log L, in `calcs/minds.py` `lum_of` and `game/lib/sim/draw-minds.ts`. It gives each old mind’s star its light, and so how far out its 12 K works sit. G − V is Riello et al. 2021’s cubic, which `scripts/prepare-neighborhood.py` already used. A white dwarf or a giant is read as the dwarf that bright in G, this project’s shortcut.
   - This project’s check: Proxima 0.0017 Suns against 0.0016, Alpha Centauri A 1.5 and B 0.48.
 
+### Past half of light speed: a beam in stepped colors, 2026-11-12
+
+A research agent read these for one question: what lets a beam throw a sail well past half of light speed, toward the 0.9 another mind throws at. How much of each was read is marked. It found a flaw in our own Ship Beam on the way.
+
+- **No study designs a sail for past a fifth of light speed.** Every design found stops at 0.2. So the choice is this project’s, by logic.
+- **A laser that changes color, or a wider mirror.**
+  - [Kare 2002](http://www.niac.usra.edu/files/studies/final_report/597Kare.pdf) · NIAC report, these passages read in full. Page 10: varying the wavelength is “potentially feasible with, e.g., free-electron lasers, but makes design of other optics (notably low-loss mirrors and large diffractive optics) much more difficult.” With a chain of lasers at fixed colors, the color the sail sees “can be kept within a narrow range, e.g., +/- 0.6% for a 0.12 c sail accelerated by 10 lasers.” Page 32: each laser in the chain “can be set to a different wavelength.” It names no laser technology.
+  - [Santi et al. 2022](https://doi.org/10.1038/s43246-022-00240-8) · Published, Communications Materials 3, 16. Introduction, thermal section and conclusions read. It names both ways and takes the wider mirror, for 0.2 of light speed. TiO₂ sails survive 10 GW a m² only if they absorb under a ten-millionth. A single silicon layer at 1,064 nm is “thermally unstable even for very low k values”.
+  - [Lubin 2016](https://arxiv.org/abs/1604.01356) · Published, JBIS 69, 40. Keyword search of the full text, six sections read. No tuned drive laser anywhere. Its reflector’s band is “about 20%”, and “higher bandwidth is possible with additional layers.”
+  - [Kulkarni, Lubin and Zhang 2018](https://arxiv.org/abs/1710.10732) · Preprint as read, pages 1 to 7. It takes a mirror perfect at all colors. Diffraction “limits the maximum speed”: past where the spot outgrows the sail, the push falls as the square of the distance.
+  - Forward 1984 · Could not be opened. Secondhand through Parkin 2018: metal sails, which absorb too much for more than 10 kW a m².
+  - An unreviewed preprint, arXiv 2609.06156, sweeps a laser from 1,064 to 869 nm for 0.2 of light speed. Three sections read. It contradicts Kulkarni on how the push falls. Not used.
+- **Lasers that tune.** Only a free-electron laser tunes across the 4.36 times a climb to 0.9 needs. Its record is 14 kW at about 2 microns ([Douglas et al. 2012](https://proceedings.jacow.org/IPAC2012/papers/weyb03.pdf), conference paper, first page and efficiency passages read), with under 1% of its beam’s energy drawn off as light. No measured wall-plug figure found.
+- **Lasers that don’t, and are efficient.** Islands, not a span. All through search summaries, except Lubin: diodes near 0.98 microns at 67 to 70%, ytterbium fiber near 1.06 at 42 to 50% (Lubin 2016), thulium and holmium fiber near 2.0 at 50 to 73% slope efficiency. Erbium’s 1.55 is the band Holdman’s sail is designed for.
+- **Whether many lasers stay in step while their color changes.** Nothing found that shows it.
+- **Wide mirrors.** A stack’s band is the textbook relation, Δf/f = (4/π) asin((n₂ − n₁)/(n₂ + n₁)). Mirrors made cover 2.4 to 3.1 times (Lee and Nam 2006, J. Appl. Phys. 100, 083501, 16 pairs of silicon and glass, 1,050 to 2,500 nm, and sputtered commercial mirrors, 350 to 1,100 nm: both through search summaries). None found reaches 4.36. The agent’s arithmetic: three stacks of silicon and glass to cover it weigh 13 to 19 g a m².
+- **What a sail’s film absorbs.** Coefficients are the agent’s conversion from tabulated values, unless a source is named.
+  - *Silicon:* 11 a cm at 1.06 microns, 0.022 at 1.20, 0.000045 at 1.30 (Green 2008, through refractiveindex.info). 0.01 a cm at 3 microns, clear from 1.2 to 15 (Crystran’s data sheet for silicon, read).
+  - *Silicon, hot or driven hard:* [Holdman et al. 2022](https://arxiv.org/abs/2110.06185) · Published, Advanced Optical Materials 10, 2102835, main text read in full. At 1 GW a m² and 1.55 microns with the best glass, a silicon and glass sail has a steady temperature of 177 K and an unsteady one of 516 K. It runs away “if the sail temperature reaches the 400–500 K range”, and melts above 5.4 GW a m².
+  - *Glass:* 0.25 a cm at 2.5 microns, 27 at 2.73, 0.38 at 3.5, 6.9 at 4.6 (Franta et al. 2016, through refractiveindex.info).
+  - *Calcium fluoride:* 0.00078 a cm at 2.7 microns, clear from 0.13 to 10, index 1.399 at 5 microns, 3.18 g a cm³ (Crystran’s data sheet for calcium fluoride, read). Whether it serves as a film in a sail is unsourced.
+- **Heat.** Kare 2002, page 11: the light a film can take is its emissivity times σT⁴ over the share it absorbs. The agent’s arithmetic at 1.3 GW a m²: a film at 500 K may absorb under 3 parts in a million. A micron of silicon at 1.06 microns absorbs about a thousandth.
+- **Dust during the push.** [Jaffe et al. 2023](https://arxiv.org/abs/2303.14165) · Published, Nano Letters 23, 6852, abstract and introduction read: one absorbing grain “can initiate a thermal-runaway process” in a silicon and glass sail. Not modeled here.
+- Why it matters: our Ship Beam’s light was 1.06 microns on a mirror holding silicon, which the absorption figures contradict.
+- Used, 2026-11-12: the swarm’s beams lase at 1.55 microns, on a mirror of silicon and calcium fluoride. `calcs/mercury.py` `BEAM_LAM` and `MIRROR_N`, [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). A seed ship leaves at 0.145 of light speed, not 0.17, a flyby probe at 0.37, not 0.42, and a rod of 30 t at 0.52. The stepped colors are not yet built.
+
 ## Watch list
 
 Results the design is waiting on, in date order. Check each when its date comes. Rewritten 2026-11-07 from that day’s sweep.

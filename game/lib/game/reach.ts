@@ -100,7 +100,7 @@ export const PROXIMA_PROBE = "probe:Proxima";
 /** What a flyby probe needs built: its yard, a Fusion Drive and the Deuterium Works, as a sentinel. 2026-11-07. */
 export const PROBE_NEEDS = ["Probe Yard", "Fusion Drive", "Deuterium Works"];
 /** Or its yard and the Ship Beam, which throws it with no engine and no fuel. The beam does the same work on whatever
- *  rides its sail, so a probe of 150 t leaves at about four tenths of light speed: lib/sim/speeds.ts. 2026-11-12. */
+ *  rides its sail, so a probe of 150 t leaves at over a third of light speed: lib/sim/speeds.ts. 2026-11-12. */
 export const PROBE_BEAM_NEEDS = ["Probe Yard", "Ship Beam"];
 /** What a flyby probe needs: its drive and fuel, or, with the Ship Beam in our order and those not, the beam alone. */
 export const probeNeeds = (plan: Plan) => (inOrder(plan, "Ship Beam") && !PROBE_NEEDS.every((n) => inOrder(plan, n)) ? PROBE_BEAM_NEEDS : PROBE_NEEDS);
@@ -242,7 +242,7 @@ export const LENS_HOME = LENS.flight + LENS.look + LENS.au / LY_AU;
 /** A lens's pixel, in km across a world `ly` away. */
 export const lensKm = (ly: number) => (LENS.km30pc * ly) / (30 * 3.2616);
 
-/** How a lens flies, by the strongest beam done when it leaves. The Star Beam pushes it out in about two months, with a
+/** How a lens flies, by the strongest beam done when it leaves. The Star Beam pushes it out in about ten weeks, with a
  *  telescope 3 m wide that looks for a week. The Laser Sail Array, Starshot's 200 GW, pushes a 100 kg lens to about
  *  530 km/s, 5 Years out. Without either, a dive past the Sun, 17 Years. calcs/mercury.py. 2026-10-29. */
 export function lensTrip(done: Record<string, number | null>, leaves: number) {
@@ -312,7 +312,7 @@ export function strikesOf(plan: Plan, scale: number) {
   return (plan.strikes ?? []).map((o, i) => ({ star: o.name, ...at[i] }));
 }
 /** When each bullet ordered is fired, and whether our Ship Beam throws it. One ordered once the Ship Beam stands is a
- *  rod of about 32 t with no engine: readied in about 8 months and thrown at half of light speed, with a bullet's
+ *  rod of about 30 t with no engine: readied in about 7 months and thrown at half of light speed, with a bullet's
  *  harm and no helium-3, once the beam is let push. The rest are bullets on their Fusion Drives, and share the
  *  harvest among themselves. plan.ts's thrownAt, lib/sim/speeds.ts. 2026-11-12. */
 function firing(plan: Plan, orders: readonly { y: number }[], yard: number | null, beam: number | null, harvest: readonly [number, number | null][]) {
@@ -373,7 +373,7 @@ export function strikeRoad(plan: Plan, scale: number, from: number, star: string
 const SHIP = CATALOG.seedShip;
 export const SHIP_NEEDS = ["Seed Ship", "Fusion Drive", "Deuterium Works"];
 /** The Ship Beam, done, pushes a seed ship in place of its drive and fuel: 1,000 TW from a patch of the swarm 1,000 km
- *  wide, on a 1 km sail, to a tenth of light speed in about 78 days and its most, about a sixth, in about 160. With no drive it
+ *  wide, on a 1 km sail, to a tenth of light speed in about 78 days and its most, about a seventh, in about 135. With no drive it
  *  stops on its magnetic sail alone, which sets its speed for each trip: lib/sim/speeds.ts. calcs/mercury.py.
  *  2026-11-10, its speed by physics 2026-11-11. */
 export const BEAM_NEEDS = ["Seed Ship", "Ship Beam"];

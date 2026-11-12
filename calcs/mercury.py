@@ -89,7 +89,13 @@ def seen_after(d_ly):
     return DOUBLING * math.log2(seen_w(d_ly) / SEED_W)
 
 # ---------- Beams that push a lens ----------
-def push_speed(p, aperture, sail, kg, lam=1.06e-6):
+# The color of the swarm's beams, 2026-11-12: 1.55 microns, erbium's. Until then 1.06, Starshot's. But their sails'
+# mirror holds silicon, and silicon soaks up 1.06 micron light: 11 a cm, about a thousandth of the beam in a micron of
+# it, hundreds of times what a film sheds at 1.3 GW a m2 (Green 2008, through the research agent's arithmetic). Past
+# 1.3 microns it is clear, 0.00005 a cm. At 1.55 microns and 1 GW a m2 a silicon and glass sail sits steady at 177 K
+# (Holdman et al. 2022). A redder beam spreads sooner, so it reaches two thirds as far. HOLOS_RESEARCH.md.
+BEAM_LAM, STARSHOT_LAM = 1.55e-6, 1.06e-6
+def push_speed(p, aperture, sail, kg, lam=BEAM_LAM):
     """Top speed of a sail pushed while it stays inside the beam's spot: Lubin 2016's limit, pushed at 2P/c."""
     reach = aperture * sail / (2.44 * lam)
     return math.sqrt(2 * (2 * p / C) * reach / kg)
@@ -98,7 +104,7 @@ def flight(v):
     return LENS_AU * AU / v / YEAR
 # The Solar Lens's craft: about 100 kg with a 1 m telescope, Turyshev et al. 2020. Starshot's array, Parkin 2018:
 # 200 GW from 2.7 km. Its sail, 10 m, a sample.
-ARRAY_V = push_speed(200e9, 2700, 10, 100)
+ARRAY_V = push_speed(200e9, 2700, 10, 100, lam=STARSHOT_LAM)
 # The Star Beam: a 100 km patch of the swarm phased as one, at 10 TW, Lubin's DE-STAR grown. A 3 m telescope, about
 # 2 t with its 100 m sail, samples.
 BEAM_V = push_speed(10e12, 1e5, 100, 2000)
@@ -122,20 +128,24 @@ SHIP_BEAM_W = STAR_BEAM_W * (SHIP_BEAM_M / STAR_BEAM_M) ** 2    # the same W/m^2
 # light speed and 1.57 at 0.42, so its mirror must reflect that whole band. Sail studies plan for a fifth of light
 # speed and gram craft, where a film of one layer, reflecting 50 to 75%, wins by its lightness (Parkin 2018, Jin et
 # al. 2020, Santi et al. 2022). Ours carries tonnes, so its mirror's weight is nothing beside its load, and it can be
-# a true mirror: layers of silicon and glass, each a quarter of a wave thick. Such a stack reflects one band, whose
-# width its two materials set. Silicon on glass: edges 1.75 times apart, so a sail outruns its mirror at half of light
-# speed. Four pairs reflect 99.6% and weigh 3 g a m2. A fifth pair would gain a probe less push than it costs in
-# weight. The band's width is the textbook relation, checked by the research agent. The design is ours.
-MIRROR_N, MIRROR_RHO, MIRROR_PAIRS = (3.48, 1.45), (2330.0, 2200.0), 4
+# a true mirror: layers of silicon and a clear salt, each a quarter of a wave thick. Such a stack reflects one band,
+# whose width its two materials set. Edges 1.76 times apart, so a sail outruns its mirror at half of light speed. Four
+# pairs reflect 99.7% and weigh 6 g a m2. The band's width is the textbook relation, checked by the research agent.
+# The design is ours.
+# The salt is calcium fluoride, since 2026-11-12, where it was glass. The band runs from the beam's 1.55 microns to
+# 2.7, and glass soaks up light near 2.7 microns, 27 a cm, and past 3.5 (Franta et al. 2016). Calcium fluoride is
+# clear from 0.13 to 10 microns, 0.0008 a cm at 2.7, with an index of 1.40 and 3.18 g a cm3 (Crystran's data sheet).
+# No sail study uses it: ours, by logic, as the clear low-index film the band needs.
+MIRROR_N, MIRROR_RHO, MIRROR_PAIRS = (3.48, 1.40), (2330.0, 3180.0), 4
 _band = 4 / math.pi * math.asin((MIRROR_N[0] - MIRROR_N[1]) / (MIRROR_N[0] + MIRROR_N[1]))
 MIRROR_STRETCH = (1 + _band / 2) / (1 - _band / 2)                  # how far apart the band's edges are
 MIRROR_BETA = (MIRROR_STRETCH ** 2 - 1) / (MIRROR_STRETCH ** 2 + 1)   # the speed at which a sail outruns it
-_center = 1.06e-6 * (1 + _band / 2)                                  # the band begins at the beam's own color
+_center = BEAM_LAM * (1 + _band / 2)                                 # the band begins at the beam's own color
 MIRROR_KG_M2 = MIRROR_PAIRS * _center / 4 * sum(rho / n for rho, n in zip(MIRROR_RHO, MIRROR_N))
 _r = (MIRROR_N[0] / MIRROR_N[1]) ** (2 * MIRROR_PAIRS)
 MIRROR_R = ((_r - 1) / (_r + 1)) ** 2
 SHIP_SAIL_KG = MIRROR_KG_M2 * math.pi * SHIP_SAIL_M ** 2 / 4
-def ship_push(p, aperture, sail, payload, v=SHIP_V, lam=1.06e-6, film=SWARM_KG_M2, mirror=1.0):
+def ship_push(p, aperture, sail, payload, v=SHIP_V, lam=BEAM_LAM, film=SWARM_KG_M2, mirror=1.0):
     """Pushing a ship to speed v: its top speed, the Years of pushing, how far out it ends in AU, the Years that costs
     over cruising, and the light on its sail in W/m^2. The sail's own film rides with the ship, and gives back
     `mirror` of the light."""
@@ -148,8 +158,8 @@ def ship_push(p, aperture, sail, payload, v=SHIP_V, lam=1.06e-6, film=SWARM_KG_M
                 flux=p / (math.pi * sail ** 2 / 4), g=a / 9.81)
 SHIP_PUSH = ship_push(SHIP_BEAM_W, SHIP_BEAM_M, SHIP_SAIL_M, SHIP_KG, film=MIRROR_KG_M2, mirror=MIRROR_R)
 # The best the Star Beam could do: top speed is highest when the sail weighs as much as the ship (Lubin 2016).
-STAR_SAIL_M = math.sqrt(4 * SHIP_KG / (math.pi * SWARM_KG_M2))
-STAR_PUSH = ship_push(STAR_BEAM_W, STAR_BEAM_M, STAR_SAIL_M, SHIP_KG)
+STAR_SAIL_M = math.sqrt(4 * SHIP_KG / (math.pi * MIRROR_KG_M2))
+STAR_PUSH = ship_push(STAR_BEAM_W, STAR_BEAM_M, STAR_SAIL_M, SHIP_KG, film=MIRROR_KG_M2, mirror=MIRROR_R)
 # The swarm must grow to a patch that wide first: doublings from its 1 km^2 seed, and the Years they take.
 SHIP_BEAM_DOUBLINGS = math.log2(math.pi * SHIP_BEAM_M ** 2 / 4 / SEED_M2)
 # Its Years and want are samples. With the Star Beam's 10, they span the swarm's growth to that width at standard pace.

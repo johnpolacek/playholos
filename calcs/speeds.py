@@ -89,7 +89,7 @@ FLUX_MAX = 5e9
 # runs from the light, which pushes it less, by (1 - beta) / (1 + beta), and its mass grows as gamma cubed along its
 # path (Kulkarni, Lubin and Zhang 2018). Until 2026-11-12 this took a shortcut that ran high: 0.19 of light speed for
 # a seed ship on the Ship Beam, where the formula gives 0.17.
-LAMBDA = 1.06e-6
+LAMBDA = mercury.BEAM_LAM
 def beam_reach(emitter_m, sail_m): return emitter_m * sail_m / (2.44 * LAMBDA)
 def _pushed(beta, n=2000):
     """The distance a beam must push to bring a mirror to beta, in units of m c^3 / 2P: Simpson's rule on Kulkarni's

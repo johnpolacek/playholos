@@ -789,12 +789,12 @@ test("a launch beam is seen only where an old mind's works reach it: no peer ans
     assert.equal(beamSeen(g.d, g.beta, g.lum), g.seen, `${g.d} ly at ${g.beta}, ${g.lum} Suns`);
   }
   // A dimmer star's 12 K line lies nearer in, as the root of its light: a red dwarf's mind sees a probe's beam only
-  // within about 6 ly, where a Sun's sees it within 61.
-  assert.ok(Math.abs(worksAU(0.25) / worksAU() - 0.5) < 1e-12 && seenWithin(catalog.speeds.probe.beam, 0.009) < 6.5 && beamSeen(50, catalog.speeds.probe.beam) && !beamSeen(50, catalog.speeds.probe.beam, 0.009));
-  // The slower the craft, the wider its beam misses: sails are seen within about 21 ly, a probe within about 61.
-  assert.ok(seenWithin(SAIL_C) > 20 && seenWithin(SAIL_C) < 23 && seenWithin(catalog.speeds.probe.beam) > 58 && seenWithin(catalog.speeds.probe.beam) < 64);
+  // within about 5 ly, where a Sun's sees it within 49.
+  assert.ok(Math.abs(worksAU(0.25) / worksAU() - 0.5) < 1e-12 && seenWithin(catalog.speeds.probe.beam, 0.009) < 5.5 && beamSeen(40, catalog.speeds.probe.beam) && !beamSeen(40, catalog.speeds.probe.beam, 0.009));
+  // The slower the craft, the wider its beam misses: sails are seen within about 21 ly, a probe within about 49.
+  assert.ok(seenWithin(SAIL_C) > 20 && seenWithin(SAIL_C) < 23 && seenWithin(catalog.speeds.probe.beam) > 46 && seenWithin(catalog.speeds.probe.beam) < 52);
   assert.ok(seenWithin(catalog.speeds.beam) < seenWithin(SAIL_C) && seenWithin(catalog.speeds.rod.beam) > seenWithin(catalog.speeds.probe.beam));
-  assert.ok(beamMiss(4.2465, catalog.speeds.beam) > 120 && beamMiss(4.2465, catalog.speeds.beam) < 140);
+  assert.ok(beamMiss(4.2465, catalog.speeds.beam) > 150 && beamMiss(4.2465, catalog.speeds.beam) < 165);
   // Only a craft a beam threw at a cold glow counts: one on its drive, or one sent at a warm glow, lights nothing.
   assert.equal(beamsAt([{ star: "Cold glow 1", leaves: 10 }, { star: "Warm glow 1", leaves: 10, thrown: SAIL_C }, { star: "Tau Ceti", leaves: 10, thrown: SAIL_C }]).length, 0);
   let peers = 0, olds = 0;
@@ -966,11 +966,11 @@ test("each of our craft that stops takes the Years calcs/speeds.py gives its tri
   assert.ok(sentinelYears(10.5, "Epsilon Eridani") < sentinelYears(10.5, "Tau Ceti"));
   // On its drive a ship is held to a tenth of light speed by its fuel. Pushed, it goes as fast as it can stop from.
   assert.equal(stay("ship", 50, gasAt(), false).beta, catalog.speeds.fusion);
-  assert.ok(stay("ship", 400, gasAt(), true).beta === catalog.speeds.beam && catalog.speeds.beam > 0.16 && catalog.speeds.beam < 0.18 && stay("ship", 10, gasAt(), true).binds === "stopping");
+  assert.ok(stay("ship", 400, gasAt(), true).beta === catalog.speeds.beam && catalog.speeds.beam > 0.14 && catalog.speeds.beam < 0.15 && stay("ship", 10, gasAt(), true).binds === "stopping");
   assert.equal(stay("ship", 0).years, 0);
 });
 
-test("a flyby probe our Ship Beam throws flies as calcs/speeds.py has it: about four tenths of light speed, slower on a very long road", () => {
+test("a flyby probe our Ship Beam throws flies as calcs/speeds.py has it: over a third of light speed, slower on a very long road", () => {
   const probes = (golden as unknown as { probes: { d: number; beta: number; years: number }[] }).probes;
   assert.ok(probes.length >= 7);
   for (const g of probes) {
@@ -978,11 +978,11 @@ test("a flyby probe our Ship Beam throws flies as calcs/speeds.py has it: about 
     assert.ok(Math.abs(flybyYears(g.d, true) - g.years) <= 1e-9 * g.years);
   }
   // The beam's most near us, and its shield's most far off. On its drive, a tenth, with its burn's 10 Years.
-  assert.ok(flybyBeta(4.25, true) === catalog.speeds.probe.beam && catalog.speeds.probe.beam > 0.41 && catalog.speeds.probe.beam < 0.43);
+  assert.ok(flybyBeta(4.25, true) === catalog.speeds.probe.beam && catalog.speeds.probe.beam > 0.36 && catalog.speeds.probe.beam < 0.375);
   assert.ok(flybyBeta(2700, true) < flybyBeta(1000, true) && flybyBeta(1000, true) < catalog.speeds.probe.beam);
   assert.equal(flybyBeta(50), catalog.probe.speed);
   assert.equal(flybyYears(50), 50 / catalog.probe.speed + catalog.probe.burn);
-  assert.ok(flybyYears(4.25, true) < flybyYears(4.25) / 5);
+  assert.ok(flybyYears(4.25, true) < flybyYears(4.25) / 4.4);
   assert.equal(flybyYears(0, true), 0);
 });
 
@@ -996,9 +996,9 @@ test("a rod our Ship Beam throws in place of a bullet flies as calcs/speeds.py h
   }
   const rod = catalog.speeds.rod;
   // The mirror's most, under what the beam could push it to, and as hard as a bullet on its drive.
-  assert.ok(bulletBeta(50, true) === rod.beam && rod.beam > 0.49 && rod.beam < 0.52);
+  assert.ok(bulletBeta(50, true) === rod.beam && rod.beam > 0.51 && rod.beam < 0.53);
   assert.ok(Math.abs((rod.tonnes * mtPerTonne(rod.beam)) / bulletMt() - 1) < 1e-6);
-  assert.ok(rod.tonnes > 30 && rod.tonnes < 34 && rod.ready < 1);
+  assert.ok(rod.tonnes > 28 && rod.tonnes < 31 && rod.ready < 1);
   // Far off, dust binds it as it binds what another mind throws.
   assert.equal(bulletBeta(2700, true), theirBeta(2700));
   assert.equal(bulletYears(50), 50 / catalog.speeds.bullet);
