@@ -115,7 +115,7 @@ def golden():
     heard = [dict(a=a, d=d, fifths=f, flux=senses.field_flux(a, d), at=senses.heard_at(senses.field_flux(a, d), f))
              for a, d, f in ((0.0485, 4.2465, [30.0]), (0.1, 32.6, [30.0, 36.0, 42.0, 48.0, 54.0]), (0.05, 12.0, [10.5, 17.25]), (0.3, 30.0, [0.0, 6.0, 12.0, 18.0, 24.0]), (0.1, 20.0, []))]
     import speeds
-    return dict(random=seqs, observe=seen, works=works_golden(), fields=heard, trips=speeds.golden(), thrown=speeds.golden_thrown())
+    return dict(random=seqs, observe=seen, works=works_golden(), fields=heard, trips=speeds.golden(), thrown=speeds.golden_thrown(), probes=speeds.golden_probes())
 
 # ---------- Works and their pacing ----------
 # calcs/early_game.py paces the mocks in two loops, each for one fixed order: first_hour() to Year 12, then replay().

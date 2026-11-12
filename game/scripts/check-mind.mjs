@@ -114,6 +114,18 @@ const CASES = [
     must: [/magnetic field/i, /gliese/i, /mass|rock/i],
     never: [/\b(read|reads|reading) (its|their) air\b(?! (is|stays|remains))/i],
   },
+  // Flyby probes by beam, 2026-11-12: with the Probe Yard and the Ship Beam done, the beam throws a flyby probe with
+  // no engine or fuel, at about four tenths of light speed. The Mind says how it flies, and never gives it a burn.
+  {
+    seed: 22,
+    at: 180,
+    builds: ["Probe Yard"],
+    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }],
+    flybys: [{ name: "Tau Ceti", y: 150, d: 11.9, by: "probe" }],
+    ask: "How is our flyby probe to Tau Ceti flying, how fast, and what fuel did it take?",
+    must: [/ship beam/i, /0\.42|four tenths|42%/i, /no (engine|fuel|deuterium)|without (an engine|fuel|deuterium)/i],
+    never: [/\b6 kt\b/i],
+  },
   // Seed 22's watcher holds at the Moon's L5, found by our Moon Search about Year 3.7. The lead offered a craft and a
   // knock, and the player could do neither. The Mind names the Close Look now open, and never orders it. 2026-10-30.
   {
@@ -175,6 +187,7 @@ for (const c of CASES) {
     builds: c.builds ?? [],
     later: c.later ?? [],
     closeReads: c.closeReads ?? [],
+    flybys: c.flybys ?? [],
   });
   if (!res) {
     console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);

@@ -3,7 +3,7 @@
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { BULLET, bulletsReady } from "@/lib/sim/conflict";
-import { bulletYears, flybyYears, gasAt, SAIL_C, sailYears, sentinelYears, shipYears, stay } from "@/lib/sim/speeds";
+import { bulletYears, flybyBeta, flybyYears, gasAt, SAIL_C, sailYears, sentinelYears, shipYears, stay } from "@/lib/sim/speeds";
 import { fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
@@ -64,9 +64,25 @@ export interface Road {
   extra?: number;
   /** Years it flies to a place so many light-years off, as lib/sim/speeds.ts has its kind of craft. 2026-11-11. */
   flies?: (ly: number) => number;
+  /** Its speed to a place so many light-years off, where the road itself sets it. */
+  fast?: (ly: number) => number;
   /** The Year the Deuterium Works is done, for a craft that burns its deuterium. */
   works?: number | null;
+  /** The Year each thing a flyby probe waits on is done. */
+  fuel?: Fuel;
+  /** The beam that throws it, in place of a drive. */
+  push?: string | null;
 }
+
+/** The Year each thing our fusion craft and flyby probes wait on is done. Null while it isn't, or isn't ours to build. */
+export interface Fuel {
+  works: number | null;
+  yard: number | null;
+  drive: number | null;
+  beam: number | null;
+}
+type Done = (name: string) => number | null | undefined;
+export const fuelOf = (at: Done): Fuel => ({ works: at("Deuterium Works") ?? null, yard: at("Probe Yard") ?? null, drive: at("Fusion Drive") ?? null, beam: at("Ship Beam") ?? null });
 
 /** Deuterium for our fusion craft, settled 2026-11-07 (m:235), from calcs/craft.py: a flyby probe burns about 6 kt and a
  *  sentinel about 41, and the Deuterium Works makes 8 kt a Year from the Year it is done. Each draws in the order it
@@ -77,20 +93,51 @@ interface Draw {
   key: string;
   y: number;
   kt: number;
+  /** A flyby probe, by the Year it was sent: the Ship Beam may throw it, and then it draws nothing. */
+  probe?: number;
 }
 export const PROXIMA_PROBE = "probe:Proxima";
 /** What a flyby probe needs built: its yard, a Fusion Drive and the Deuterium Works, as a sentinel. 2026-11-07. */
 export const PROBE_NEEDS = ["Probe Yard", "Fusion Drive", "Deuterium Works"];
-function draws(plan: Plan): Draw[] {
-  const out: Draw[] = plan.builds.includes("Probe Yard") ? [{ key: PROXIMA_PROBE, y: -Infinity, kt: FLYBY_PROBE.fuel }] : [];
-  for (const o of plan.flybys ?? []) if (o.by === "probe") out.push({ key: `probe:${o.name}`, y: o.y, kt: FLYBY_PROBE.fuel });
-  for (const o of plan.sentinels ?? []) out.push({ key: `sentinel:${o.name}`, y: o.y, kt: CATALOG.sentinel.fuel });
-  return out.sort((a, b) => a.y - b.y);
+/** Or its yard and the Ship Beam, which throws it with no engine and no fuel. The beam does the same work on whatever
+ *  rides its sail, so a probe of 150 t leaves at about four tenths of light speed: lib/sim/speeds.ts. 2026-11-12. */
+export const PROBE_BEAM_NEEDS = ["Probe Yard", "Ship Beam"];
+/** What a flyby probe needs: its drive and fuel, or, with the Ship Beam in our order and those not, the beam alone. */
+export const probeNeeds = (plan: Plan) => (inOrder(plan, "Ship Beam") && !PROBE_NEEDS.every((n) => inOrder(plan, n)) ? PROBE_BEAM_NEEDS : PROBE_NEEDS);
+/** When a flyby probe sent at Year `sent` leaves: built 12 Years after its yard and its drive or beam are done, by its
+ *  drive once its deuterium is in at Year `fuel`, or by the Ship Beam, whichever is sooner. The beam throws it if the
+ *  Ship Beam is done by then and not kept dark, as it does a seed ship: shipLeaves. */
+export function probeLeaves(plan: Plan, f: Fuel, sent: number, fuel: number | null) {
+  const both = (a: number | null, b: number | null) => (a === null || b === null ? null : Math.max(a, b));
+  const drive = both(f.yard, f.drive), beam = both(f.yard, f.beam);
+  const byDrive = drive === null || fuel === null ? null : Math.max(Math.max(sent, drive) + FLYBY_PROBE.build, fuel);
+  const byBeam = beam === null ? null : onFrom(plan, "Ship Beam", Math.max(sent, beam) + FLYBY_PROBE.build);
+  const leaves = byDrive === null ? byBeam : byBeam === null ? byDrive : Math.min(byDrive, byBeam);
+  if (leaves === null) return { leaves: null, pushed: false, ready: drive ?? beam };
+  const pushed = beam !== null && beam <= leaves && isOn(plan, "Ship Beam", leaves);
+  return { leaves, pushed, ready: pushed || drive === null ? beam : drive };
 }
-/** The Year a craft's deuterium is in, with the Works done at `works`. */
-export function fuelReady(plan: Plan, works: number | null, key: string, kt: number, y: number): number | null {
+function draws(plan: Plan, f: Fuel): Draw[] {
+  const all: Draw[] = plan.builds.includes("Probe Yard") ? [{ key: PROXIMA_PROBE, y: -Infinity, kt: FLYBY_PROBE.fuel, probe: -Infinity }] : [];
+  for (const o of plan.flybys ?? []) if (o.by === "probe") all.push({ key: `probe:${o.name}`, y: o.y, kt: FLYBY_PROBE.fuel, probe: o.y });
+  for (const o of plan.sentinels ?? []) all.push({ key: `sentinel:${o.name}`, y: o.y, kt: CATALOG.sentinel.fuel });
+  all.sort((a, b) => a.y - b.y);
+  // A probe the Ship Beam throws burns nothing, so it draws nothing. Each is settled in the order sent, by the
+  // deuterium that would be left to it then.
+  const out: Draw[] = [];
+  let sum = 0;
+  for (const d of all) {
+    if (d.probe !== undefined && probeLeaves(plan, f, d.probe, f.works === null ? null : f.works + (sum + d.kt) / D_PER_YEAR).pushed) continue;
+    sum += d.kt;
+    out.push(d);
+  }
+  return out;
+}
+/** The Year a craft's deuterium is in, with the Works done at `f.works`. */
+export function fuelReady(plan: Plan, f: Fuel, key: string, kt: number, y: number): number | null {
+  const works = f.works;
   if (works === null) return null;
-  const list = draws(plan);
+  const list = draws(plan, f);
   if (!list.some((d) => d.key === key)) list.push({ key, y, kt });
   let sum = 0;
   for (const d of list) {
@@ -102,10 +149,11 @@ export function fuelReady(plan: Plan, works: number | null, key: string, kt: num
 
 /** Our deuterium at Year `now`, for the top's meter: what the Works holds free, the Year all we have sent for is in,
  *  and how full the craft now waiting is, or how far toward a sentinel's fuel the stock is. 2026-11-07, the Will's (a). */
-export function deuteriumAt(plan: Plan, works: number | null, now: number) {
+export function deuteriumAt(plan: Plan, f: Fuel, now: number) {
+  const works = f.works;
   if (works === null) return null;
   const made = Math.max(0, now - works) * D_PER_YEAR;
-  const owed = draws(plan).filter((d) => d.y <= now);
+  const owed = draws(plan, f).filter((d) => d.y <= now);
   const sum = owed.reduce((n, d) => n + d.kt, 0);
   const until = works + sum / D_PER_YEAR;
   if (until <= now) return { stock: made - sum, until: null, fill: Math.min(1, (made - sum) / CATALOG.sentinel.fuel) };
@@ -124,32 +172,36 @@ export function deuteriumAt(plan: Plan, works: number | null, now: number) {
  *  engine heavier than the probe. 2026-11-07. Its word comes home at light speed. */
 export function roads(plan: Plan, scale: number, from = 0): Road[] {
   const { orders, ...opts } = ordersOf(plan);
+  const memo = new Map<string, number | null>();
   const doneOf = (work: string) => {
+    if (memo.has(work)) return memo.get(work)!;
     // Ordered in play counts too: it dated a build we had finished as if begun again now until 2026-11-05.
     const more: Order[] = inOrder(plan, work) ? [] : [{ y: from, begin: pacedName(work) }];
-    return pace([...orders, ...more], horizonOf([...orders, ...more], 200), { scale, ...opts }).done[pacedName(work)] ?? null;
+    const at = pace([...orders, ...more], horizonOf([...orders, ...more], 200), { scale, ...opts }).done[pacedName(work)] ?? null;
+    memo.set(work, at);
+    return at;
   };
-  const road = (name: string, build: string, craft: string, wait: number, speed: number, fuel?: { works: number | null }): Road => {
-    const done = doneOf(build);
-    const extra = fuel ? FLYBY_PROBE.burn : 0;
-    const ready = fuel ? fuelReady(plan, fuel.works, PROXIMA_PROBE, FLYBY_PROBE.fuel, from) : 0;
-    const leaves = done === null || ready === null ? null : Math.max(done + wait, ready);
-    const flies = fuel ? flybyYears : sailYears;
-    const arrives = leaves === null ? null : leaves + flies(NEAREST.ly);
-    const n = plan.builds.indexOf(build) + 1 || null;
-    return { name, n, build, craft, speed, done, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly, extra, flies, ...(fuel ?? {}) };
+  const sails = (): Road => {
+    const done = doneOf("Laser Sail Array");
+    const arrives = done === null ? null : done + sailYears(NEAREST.ly);
+    const n = plan.builds.indexOf("Laser Sail Array") + 1 || null;
+    return { name: "Send a sail", n, build: "Laser Sail Array", craft: "Sails", speed: SAIL_C, done, leaves: done, arrives, home: arrives === null ? null : arrives + NEAREST.ly, extra: 0, flies: sailYears };
   };
   // A flyby probe burns fusion, so it waits on a Fusion Drive as a sentinel does: the engine is the hard part, whatever
-  // its size. 2026-11-07, the Will's call. Its yard's Year counts as done once all it needs is.
-  const probe = road("Send a flyby probe", "Probe Yard", "A flyby probe", FLYBY_PROBE.build, FLYBY_PROBE.speed, { works: doneOf("Deuterium Works") });
-  const drive = doneOf("Fusion Drive");
-  const late = probe.done === null || drive === null ? null : Math.max(probe.done, drive);
-  const leaves = late === null || probe.leaves === null ? null : Math.max(probe.leaves, late + FLYBY_PROBE.build);
-  const arrives = leaves === null ? null : leaves + flybyYears(NEAREST.ly);
-  return [
-    road("Send a sail", "Laser Sail Array", "Sails", 0, SAIL_C),
-    { ...probe, done: late, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly },
-  ];
+  // its size. 2026-11-07, the Will's call. Its yard's Year counts as done once all it needs is. Or the Ship Beam throws
+  // it, 2026-11-12: then a drive and a Works that aren't in our order aren't begun for it.
+  const beamed = probeNeeds(plan) === PROBE_BEAM_NEEDS;
+  const ours = (work: string) => (beamed && !inOrder(plan, work) ? null : doneOf(work));
+  const f: Fuel = { yard: doneOf("Probe Yard"), drive: ours("Fusion Drive"), works: ours("Deuterium Works"), beam: inOrder(plan, "Ship Beam") ? doneOf("Ship Beam") : null };
+  const { leaves, pushed, ready } = probeLeaves(plan, f, -Infinity, fuelReady(plan, f, PROXIMA_PROBE, FLYBY_PROBE.fuel, from));
+  const arrives = leaves === null ? null : leaves + flybyYears(NEAREST.ly, pushed);
+  const probe: Road = {
+    name: "Send a flyby probe", n: plan.builds.indexOf("Probe Yard") + 1 || null, build: "Probe Yard", craft: "A flyby probe",
+    speed: flybyBeta(NEAREST.ly, pushed), done: ready, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly,
+    extra: pushed ? CATALOG.speeds.probe.lost : FLYBY_PROBE.burn, flies: (ly) => flybyYears(ly, pushed), fast: (ly) => flybyBeta(ly, pushed),
+    works: f.works, fuel: f, push: pushed ? "Ship Beam" : null,
+  };
+  return [sails(), probe];
 }
 
 /** A sail or flyby probe sent past any star, from its destination's page. Each leaves as `toward` dates it: when its
@@ -161,15 +213,19 @@ export function flybyRoad(plan: Plan, scale: number, from: number, o: Flyby): Ro
   if (o.by !== "probe") return { ...toward(road, o.d, o.y), n: 1 };
   // Built 12 Years after the yard, or after its order once the yard stands, and flown once its own deuterium is in,
   // in its place among our draws.
-  const built = road.done === null ? null : Math.max(road.done, o.y) + FLYBY_PROBE.build;
-  const fuel = fuelReady(plan, road.works ?? null, `probe:${o.name}`, FLYBY_PROBE.fuel, o.y);
-  const leaves = built === null || fuel === null ? null : Math.max(built, fuel);
-  const arrives = leaves === null ? null : leaves + flybyYears(o.d);
-  return { ...road, n: 1, leaves, arrives, home: arrives === null ? null : arrives + o.d };
+  // Or thrown by the Ship Beam, if the beam is done and lit when the probe is ready: then it waits on no deuterium.
+  const f = road.fuel!;
+  const { leaves, pushed, ready } = probeLeaves(plan, f, o.y, fuelReady(plan, f, `probe:${o.name}`, FLYBY_PROBE.fuel, o.y));
+  const arrives = leaves === null ? null : leaves + flybyYears(o.d, pushed);
+  return {
+    ...road, n: 1, done: ready, leaves, arrives, home: arrives === null ? null : arrives + o.d, speed: flybyBeta(o.d, pushed),
+    extra: pushed ? CATALOG.speeds.probe.lost : FLYBY_PROBE.burn, flies: (ly) => flybyYears(ly, pushed), fast: (ly) => flybyBeta(ly, pushed),
+    push: pushed ? "Ship Beam" : null,
+  };
 }
 export function flybysOf(plan: Plan, scale: number) {
   // A probe flies only once all it needs is in our order. 2026-11-07.
-  const works = PROBE_NEEDS.every((n) => inOrder(plan, n));
+  const works = probeNeeds(plan).every((n) => inOrder(plan, n));
   return (plan.flybys ?? []).flatMap((o) => {
     if (o.by === "probe" && !works) return [];
     const { leaves, arrives, home } = flybyRoad(plan, scale, o.y, o);
@@ -238,7 +294,7 @@ export function sentinels(plan: Plan, scale: number) {
   const done = schedule(plan, scale);
   const ready = SENTINEL_NEEDS.every((n) => done[n] != null) ? Math.max(...SENTINEL_NEEDS.map((n) => done[n]!)) : null;
   return (plan.sentinels ?? []).map((o) => {
-    const fuel = fuelReady(plan, done["Deuterium Works"] ?? null, `sentinel:${o.name}`, SENTINEL.fuel, o.y);
+    const fuel = fuelReady(plan, fuelOf((n) => done[n]), `sentinel:${o.name}`, SENTINEL.fuel, o.y);
     return { star: o.name, leaves: ready === null || fuel === null ? null : Math.max(Math.max(o.y, ready) + SENTINEL.build, fuel) };
   });
 }
@@ -263,7 +319,7 @@ export function sentinelRoad(plan: Plan, scale: number, from: number, star: stri
   const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
   const ready = SENTINEL_NEEDS.every((n) => at[pacedName(n)] !== undefined) ? Math.max(...SENTINEL_NEEDS.map((n) => at[pacedName(n)])) : null;
   const sent = (plan.sentinels ?? []).find((o) => o.name === star);
-  const fuel = fuelReady(plan, at[pacedName("Deuterium Works")] ?? null, `sentinel:${star}`, SENTINEL.fuel, sent?.y ?? from);
+  const fuel = fuelReady(plan, fuelOf((n) => at[pacedName(n)]), `sentinel:${star}`, SENTINEL.fuel, sent?.y ?? from);
   const leaves = ready === null || fuel === null ? null : Math.max(Math.max(sent?.y ?? from, ready) + SENTINEL.build, fuel);
   const arrives = leaves === null ? null : leaves + sentinelTrip(ly, star);
   return { name: "Send a sentinel", n: sent ? 1 : null, build: "Probe Yard", craft: "A sentinel", speed: stay("sentinel", ly, gasAt(star)).beta, done: ready, leaves, arrives, home: arrives === null ? null : arrives + ly };
@@ -433,7 +489,7 @@ export function kitOf(plan: Plan, scale: number) {
     lenses: lenses(plan, scale).flatMap((l) => (l.looks !== null && l.home !== null ? [{ star: l.star, looks: l.looks, home: l.home }] : [])),
     flybys: flybysOf(plan, scale),
     sails: fly(sails),
-    probe: PROBE_NEEDS.every((n) => inOrder(plan, n)) ? fly(probe) : null,
+    probe: probeNeeds(plan).every((n) => inOrder(plan, n)) ? fly(probe) : null,
     xray: done["X-Ray Watch"] ?? null,
     // Nothing in the simulation reads this yet: no probe comes for it to catch. When one does, it must catch only
     // while armed: plan.ts's isOn. 2026-11-11.
@@ -449,7 +505,7 @@ export function toward(road: Road, ly: number, from?: number): Road {
   // built from now: at Year 979, 82 Eridani's flyby still read passes Year 420.4. Playtest 2026-11-01.
   const leaves = road.leaves !== null && from !== undefined && road.leaves < from ? from + (road.leaves - (road.done ?? road.leaves)) : road.leaves;
   const arrives = leaves === null ? null : leaves + (road.flies ? road.flies(ly) : ly / road.speed + (road.extra ?? 0));
-  return { ...road, leaves, arrives, home: arrives === null ? null : arrives + ly };
+  return { ...road, leaves, arrives, home: arrives === null ? null : arrives + ly, speed: road.fast ? road.fast(ly) : road.speed };
 }
 
 /** A way to go that waits on builds beyond the two roads: what it is, and the builds it needs, by name, each a link to

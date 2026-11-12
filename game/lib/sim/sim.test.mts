@@ -20,7 +20,7 @@ import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ICE, deathsIn, iceBetween, iceFirsts } from "../game/natural.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
-import { gasAt, sentinelYears, shipYears, stay, theirBeta, theirYears } from "./speeds.ts";
+import { flybyBeta, flybyYears, gasAt, sentinelYears, shipYears, stay, theirBeta, theirYears } from "./speeds.ts";
 import { proximaField } from "./proxima.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
@@ -901,6 +901,22 @@ test("each of our craft that stops takes the Years calcs/speeds.py gives its tri
   assert.equal(stay("ship", 50, gasAt(), false).beta, catalog.speeds.fusion);
   assert.ok(stay("ship", 400, gasAt(), true).beta === catalog.speeds.beam && catalog.speeds.beam > 0.16 && catalog.speeds.beam < 0.18 && stay("ship", 10, gasAt(), true).binds === "stopping");
   assert.equal(stay("ship", 0).years, 0);
+});
+
+test("a flyby probe our Ship Beam throws flies as calcs/speeds.py has it: about four tenths of light speed, slower on a very long road", () => {
+  const probes = (golden as unknown as { probes: { d: number; beta: number; years: number }[] }).probes;
+  assert.ok(probes.length >= 7);
+  for (const g of probes) {
+    assert.ok(Math.abs(flybyBeta(g.d, true) - g.beta) <= 1e-9 * g.beta, `${g.d} ly: ${flybyBeta(g.d, true)} against ${g.beta}`);
+    assert.ok(Math.abs(flybyYears(g.d, true) - g.years) <= 1e-9 * g.years);
+  }
+  // The beam's most near us, and its shield's most far off. On its drive, a tenth, with its burn's 10 Years.
+  assert.ok(flybyBeta(4.25, true) === catalog.speeds.probe.beam && catalog.speeds.probe.beam > 0.41 && catalog.speeds.probe.beam < 0.43);
+  assert.ok(flybyBeta(2700, true) < flybyBeta(1000, true) && flybyBeta(1000, true) < catalog.speeds.probe.beam);
+  assert.equal(flybyBeta(50), catalog.probe.speed);
+  assert.equal(flybyYears(50), 50 / catalog.probe.speed + catalog.probe.burn);
+  assert.ok(flybyYears(4.25, true) < flybyYears(4.25) / 5);
+  assert.equal(flybyYears(0, true), 0);
 });
 
 test("what another mind throws flies as calcs/speeds.py has it: near nine tenths of light speed close by, slower far off", () => {

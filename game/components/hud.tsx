@@ -20,7 +20,7 @@ import {
   Warp,
 } from "@/components/jump";
 import { tenths, yearText } from "@/lib/game/clock";
-import { deuteriumAt, inOrder } from "@/lib/game/reach";
+import { deuteriumAt, fuelOf, inOrder } from "@/lib/game/reach";
 import { CATALOG } from "@/lib/sim/works";
 import {
   ceiling,
@@ -373,7 +373,7 @@ export function Hud() {
   const short = shortAt(plan, done, now);
   // Our deuterium, once the Works is ordered: free stock, or the Year all we have sent for is in. 2026-11-07.
   const works = done["Deuterium Works"] ?? null;
-  const fuel = inOrder(plan, "Deuterium Works") ? { d: deuteriumAt(plan, works, now) } : null;
+  const fuel = inOrder(plan, "Deuterium Works") ? { d: deuteriumAt(plan, fuelOf((n) => done[n]), now) } : null;
   const { energy, compute } = useMemo(
     () => drawAt(plan, scale, now),
     [plan, scale, now],
@@ -459,7 +459,7 @@ export function Hud() {
                     : `+${Math.round(CATALOG.deuterium.perYear)} kt a Year`
             }
             late={fuel.d?.until != null && !hint}
-            tip={`The Deuterium Works makes ${Math.round(CATALOG.deuterium.perYear)} kt a Year. Each flyby probe draws ${CATALOG.probe.fuel} kt and each sentinel ${CATALOG.sentinel.fuel} kt, in the order sent.`}
+            tip={`The Deuterium Works makes ${Math.round(CATALOG.deuterium.perYear)} kt a Year. Each flyby probe draws ${CATALOG.probe.fuel} kt and each sentinel ${CATALOG.sentinel.fuel} kt, in the order sent. A probe our Ship Beam throws draws none.`}
             go={fuel.d?.until != null && !hint ? "/play/reach" : undefined}
           />
         )}

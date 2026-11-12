@@ -91,8 +91,19 @@ export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.betwee
 
 /** Years for our sails to pass a star `ly` away. */
 export const sailYears = (ly: number) => ly / SAIL_C;
-/** Years for a flyby probe to pass a star `ly` away: its cruise, and what its burn adds. It never brakes. */
-export const flybyYears = (ly: number) => ly / PROBE.speed + PROBE.burn;
+/** How fast a flyby probe passes a star `ly` away, as a share of light speed. On its Fusion Drive its fuel holds it to
+ *  a tenth. `pushed`: our Ship Beam threw it, with no engine or fuel. The beam does the same work on whatever rides its
+ *  sail, so 150 t leaves at about four tenths, or slower on a road so long that dust would wear through its shield.
+ *  calcs/speeds.py's probe_beta. 2026-11-12. */
+export const flybyBeta = (ly: number, pushed = false) =>
+  pushed ? Math.min(SPEEDS.probe.beam, shieldBeta(ly, SPEEDS.probe.tonnes, SPEEDS.probe.front)) : PROBE.speed;
+/** Years for a flyby probe to pass a star `ly` away: its cruise, and what its burn or its push adds. It never brakes. */
+export function flybyYears(ly: number, pushed = false) {
+  if (!pushed) return ly / PROBE.speed + PROBE.burn;
+  if (!(ly > 0)) return 0;
+  const beta = flybyBeta(ly, true);
+  return ly / beta + (SPEEDS.probe.lost * beta) / SPEEDS.probe.beam;
+}
 /** Years for a sentinel to reach a place `ly` away and stop, at the star of that name if it is one. */
 export const sentinelYears = (ly: number, star?: string) => stay("sentinel", ly, gasAt(star)).years;
 /** A sentinel's cruise alone, with no burn or braking counted. */

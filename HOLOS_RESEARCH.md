@@ -1,6 +1,6 @@
 # Holos · Research
 
-Last updated: November 11, 2026.
+Last updated: November 12, 2026.
 
 Every source the game rests on, grouped by the question it answers. Each entry says what it found, why it matters to Holos, and where the design uses it. The rules are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md). The atlas’s own data sources (ephemeris, star catalogs, galaxies) are in the [README’s scientific scope](README.md#scientific-scope) and the `data/*/README.md` files.
 
@@ -3166,6 +3166,28 @@ Gathered by a research agent, so that each craft’s speed falls out of physics,
 - **Not verified:** Forward 1984 at its source, how full of cloud space is beyond 15 pc, and any magnetic sail above a tenth of light speed.
 - Why it matters: a craft that stops is bound by its braking, which depends on its speed, its mass and the gas it meets. So its best speed differs by trip, and no one number fits all craft. A craft that never stops is bound only by its push and its shield.
 - Used: speed by physics, built 2026-11-11 for our craft that stop, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). `calcs/speeds.py` works each trip, and `game/lib/sim/speeds.ts` follows it. What other minds throw follows it since the same day. Our own bullets and flybys by beam are not yet moved.
+
+### A beam’s sail: its mirror’s band, and whether the launch is seen, 2026-11-12
+
+A research agent read these for two questions the Ship Beam raised. How much of each was read is marked.
+
+- **The mirror’s band.** A sail fleeing a beam sees its light stretched by √((1+β)/(1−β)): 1.19 times at 0.17 of light speed, 1.57 at 0.42, 3.4 at 0.84.
+  - Every sail study designs for a fifth of light speed only, a band 1.22 times wide. None goes further.
+  - For gram craft, thin wins. [Parkin 2018](https://arxiv.org/abs/1805.01306) (full text) assumes 70% reflectance and says the band’s average “will likely be lower”. [Jin et al. 2020](https://arxiv.org/abs/2005.04840) (full text): the best is a silicon grating 107 nm thick, about 75% over the band. Santi et al. 2022 ([doi](https://doi.org/10.1038/s43246-022-00240-8), secondary summary only): a single layer is best for thrust. [Brewer et al. 2022](https://arxiv.org/abs/2106.03558) (full text) on multilayer sails and their cooling.
+  - A quarter-wave stack of silicon on glass has a band of fractional width (4/π) asin((3.48 − 1.45)/(3.48 + 1.45)) = 0.54, edges 1.75 times apart: the textbook relation, which the agent checked. One pair weighs about 0.74 g a m², so a 1 g film holds one pair and has no true band.
+  - A laser tuned through the push removes the problem: free-electron lasers, or a chain at stepped colors ([Kare 2002](http://www.niac.usra.edu/files/studies/final_report/597Kare.pdf), key passages read). [Lin et al. 2025](https://arxiv.org/abs/2502.17828) (first 40% read) call tuning ideal but “unrealistic with current and emerging laser technology”.
+  - No source gives a hard top speed. From [Kulkarni, Lubin and Zhang 2018](https://arxiv.org/abs/1710.10732) (full text), push a watt falls as (1−β)/(1+β): 0.71, 0.41 and 0.09 at 0.17, 0.42 and 0.84 of light speed.
+  - Abstract only: Atwater et al. 2018, Ilic, Went and Atwater 2018, Salary and Mosallaei 2020.
+- **Ours, by logic.** The studies’ “thin wins” holds where the sail outweighs its load. Our Ship Beam’s sail carries 150 to 1,500 t, so a mirror of a few tonnes costs nothing. Four pairs, 2.94 g a m², reflect 99.6% across one band, and a sail outruns that band at 0.50 of light speed. A fifth pair gains a 150 t probe less push than it costs in weight. Until this date the calcs took a perfect mirror of 1 g a m², which no source supports.
+- **Is the launch seen at its star?** No.
+  - [Benford and Benford 2016](https://arxiv.org/abs/1602.05485) (full text): a craft is launched “toward where the stellar system will be when the starship arrives”. At 20 km/s the star drifts 10⁴ to 10⁷ beam widths, so “the beam is generally not observable from the target planetary system.”
+  - The miss is (v/c)(1/β − 1) times the distance. For a star moving 30 km/s: 130 AU at 4.2 ly and 0.17 of light speed, 1,500 AU at 50 ly. The light that spills past the sail is about 0.0007 AU wide at 4.2 ly, the agent’s arithmetic, so the miss is 10⁴ to 10⁵ beam widths. Slow craft miss widest.
+  - [Guillochon and Loeb 2015](https://arxiv.org/abs/1508.03043) and [Lingam and Loeb 2017](https://arxiv.org/abs/1701.01109) (both full text) treat only a third party on the beam’s line, as a brief burst. About a tenth of the light leaks past the sail near the start, and over 80% by the end (Parkin).
+  - Off the beam, light scattered by the sail is far too faint: about 3 × 10⁻⁵ photons a m² a second at the star, the agent’s estimate.
+  - A caveat: an emitter in orbit pivots the beam about the sail, sweeping tens to hundreds of AU at the star. A chance crossing could show, briefly.
+  - Not read: Forward 1984, Lubin 2016.
+- Why it matters: the mirror caps what our beam can throw, and the game says a launch beam is seen at its star, which the one source that treats it denies.
+- Used: the mirror and its cap in `calcs/mercury.py` and `calcs/speeds.py`, and flyby probes thrown by the Ship Beam, built 2026-11-12, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-realistic-premise). Not yet used: that a launch is unseen. The Ship Beam and the Laser Sail Array still carry the price of being seen.
 
 ## Watch list
 

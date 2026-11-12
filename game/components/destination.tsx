@@ -476,7 +476,7 @@ export function DestinationPage({ slug }: { slug: string }) {
               i={k}
               to={to}
               name={road.name}
-              line={WHAT[road.build]}
+              line={k && road.push ? `A probe built in orbit in 12 Years, with no engine and no fuel. The Ship Beam throws it on a sail a kilometer wide: ${CATALOG.speeds.probe.days} days of push to ${road.speed.toFixed(2)} of light speed, and it flies past.` : WHAT[road.build]}
               needs={[road.build]}
               have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
               can={!queues && inOrder(road.build)}

@@ -111,8 +111,10 @@ def beam_days(watts, emitter_m, sail_m, kg, n=4000):
     f = lambda b: (1 + b) / ((1 - b) * (1 - b * b) ** 1.5)
     h = top / n
     return kg * C ** 2 / (2 * watts) * h / 3 * (f(0) + f(top) + sum((4 if i % 2 else 2) * f(i * h) for i in range(1, n))) / 86400
-SHIP_BEAM = beam_beta(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, mercury.SHIP_KG + mercury.SHIP_SAIL_KG)
-SHIP_BEAM_DAYS = beam_days(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, mercury.SHIP_KG + mercury.SHIP_SAIL_KG)
+# The light that pushes: the Ship Beam's, less what its sail's mirror lets through (calcs/mercury.py's MIRROR_R).
+BEAM_W = mercury.SHIP_BEAM_W * mercury.MIRROR_R
+SHIP_BEAM = beam_beta(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, mercury.SHIP_KG + mercury.SHIP_SAIL_KG)
+SHIP_BEAM_DAYS = beam_days(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, mercury.SHIP_KG + mercury.SHIP_SAIL_KG)
 
 # ---------- A trip ----------
 def gas_at(star): return N_CLOUD if star in IN_CLOUD else N_BETWEEN
@@ -160,6 +162,31 @@ def their_years(d):
     """Years for what another mind throws to cross d ly."""
     return d / thrown_beta(d) if d > 0 else 0.0
 
+# ---------- What our own beam throws ----------
+# The Ship Beam does the same work on whatever rides its sail, so a light craft leaves fast. A flyby probe is 150 t of
+# instruments (calcs/craft.py, Icarus Firefly's payload). Thrown by the beam it carries no engine and no fuel, and it
+# never stops, so only the beam's push and its own shield bind it. Its front is a seed ship's, shrunk in shape with its
+# mass: 4.3 m2, ours. The sail sees the beam's light stretched 1.57 times at its top speed, inside the band its mirror
+# of silicon and glass reflects, 1.75 times wide (calcs/mercury.py's MIRROR_STRETCH). A lighter craft could not pass
+# half of light speed on this sail: there it outruns its mirror.
+PROBE = dict(tonnes=150.0, front=CRAFT['ship']['front'] * (150.0 / CRAFT['ship']['tonnes']) ** (2 / 3))
+_PROBE_KG = PROBE['tonnes'] * 1e3 + mercury.SHIP_SAIL_KG
+PROBE_BEAM = beam_beta(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, _PROBE_KG)
+PROBE_BEAM_DAYS = beam_days(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, _PROBE_KG)
+assert PROBE_BEAM < mercury.MIRROR_BETA
+# The Years its push costs over cruising the same stretch: the push's time, less the time to cross the beam's reach at
+# its top speed.
+PROBE_BEAM_LOST = PROBE_BEAM_DAYS / 365.25 - beam_reach(mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M) / (PROBE_BEAM * C) / YEAR
+def probe_beta(d):
+    """How fast the Ship Beam throws a flyby probe d ly: the beam's most, or less on a road so long that dust would
+    wear through its shield."""
+    return min(PROBE_BEAM, shield_beta(d, PROBE['tonnes'], PROBE['front']))
+def probe_years(d):
+    """Years for a flyby probe the Ship Beam threw to pass a star d ly away."""
+    if d <= 0: return 0.0
+    b = probe_beta(d)
+    return d / b + PROBE_BEAM_LOST * b / PROBE_BEAM
+
 # ---------- What the game reads ----------
 # Sails of a few grams, pushed from Earth: a fifth of light speed, Starshot's.
 SAIL_BETA = 0.2
@@ -172,7 +199,9 @@ def catalog():
                             sailing=dict(gros=GROS_T, stop=T_STOP, tenth=T_TENTH, covered=X_TENTH, burnPerC=BURN_PER_C, finishVe=FINISH_VE),
                             wear=dict(dust=DUST, range=[list(r) for r in RANGE], share=SHIELD_SHARE, most=0.9),
                             fusion=FUSION_BETA, beam=SHIP_BEAM, beamDays=round(SHIP_BEAM_DAYS), beamStart=mercury.SHIP_PUSH['lost'] / (mercury.SHIP_V / C),
-                            craft=CRAFT))
+                            craft=CRAFT,
+                            # A flyby probe the Ship Beam throws: its mass and front, the beam's most, and its push.
+                            probe=dict(PROBE, beam=PROBE_BEAM, days=round(PROBE_BEAM_DAYS), lost=PROBE_BEAM_LOST)))
 
 def golden():
     """Trips for game/lib/sim/speeds.ts to reproduce: each craft, far and near, in a cloud and between, on its drive
@@ -191,6 +220,11 @@ def golden_thrown():
     return [dict(d=d, beta=thrown_beta(d), years=their_years(d)) for d in (4.25, 29.7, 50, 150, 480, 1000, 2700, 30000)]
 
 
+def golden_probes():
+    """Flyby probes the Ship Beam throws, near and far, for game/lib/sim/speeds.ts to reproduce."""
+    return [dict(d=d, beta=probe_beta(d), years=probe_years(d)) for d in (4.25, 10.5, 50, 400, 1000, 2700, 30000)]
+
+
 def megatons(tonnes, beta): return (1 / math.sqrt(1 - beta ** 2) - 1) * tonnes * 1000 * C ** 2 / 4.184e15
 
 if __name__ == '__main__':
@@ -202,11 +236,13 @@ if __name__ == '__main__':
     print(f'Fusion: {fusion_fuel(0.1):.0f} t of fuel a tonne at a tenth of light speed, {fusion_fuel(0.2):,.0f} at two tenths, '
           f'on Daedalus\'s staged design. On a craft\'s own engine, {finish_fuel(0.1):.2f} for the hundredth that ends a stop from a tenth.')
     print(f'The Ship Beam as built pushes a seed ship to {SHIP_BEAM:.2f} of light speed in {SHIP_BEAM_DAYS:.0f} days.')
-    print('  What it gives by mass, sail and all:')
+    print(f'  Its sail\'s mirror: {mercury.MIRROR_PAIRS} pairs of silicon and glass, {mercury.MIRROR_KG_M2 * 1e3:.2f} g a m2, {mercury.SHIP_SAIL_KG / 1e3:.1f} t in all, reflecting '
+          f'{mercury.MIRROR_R:.1%} over a band {mercury.MIRROR_STRETCH:.2f} times wide. A sail outruns it at {mercury.MIRROR_BETA:.2f} of light speed.')
+    print('  What it gives by mass, sail and all, never past what its mirror reflects:')
     for tonnes in (1500, 1000, 150, 10, 5, 2):
         kg = tonnes * 1e3 + mercury.SHIP_SAIL_KG
-        b = beam_beta(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, kg)
-        print(f'  {tonnes:>7,} t: {b:.2f} of light speed, {megatons(tonnes, b):>9,.0f} Mt, pushed {beam_days(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, kg):.0f} days.')
+        b = min(beam_beta(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, kg), mercury.MIRROR_BETA)
+        print(f'  {tonnes:>7,} t: {b:.2f} of light speed, {megatons(tonnes, b):>9,.0f} Mt, pushed at most {beam_days(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, kg):.0f} days.')
     head = f"  {'to':24}{'ly':>6}{'speed':>7}{'bound by':>10}{'Years':>8}{'brakes over':>13}{'fuel t/t':>10}{'today':>8}"
     trips = (('Proxima Centauri', 4.25), ('Epsilon Eridani', 10.5), ('', 10), ('', 20), ('', 50), ('', 100), ('', 400), ('', 2700))
     def table(title, tonnes, push, drive, today, start=0.0, beamed=False):
@@ -220,12 +256,16 @@ if __name__ == '__main__':
     table('A sentinel of 1,000 t on its Fusion Drive:', 1000, FUSION_BETA, True, lambda d: d / 0.1 + 25, 10)
     print('A slug of 1,000 t that never stops:')
     wide = beam_beta(FLUX_MAX * math.pi * 1e4 ** 2 / 4, 1e7, 1e4, 1e6 + mercury.SWARM_KG_M2 * math.pi * 1e4 ** 2 / 4)
-    for name, push in (('on a Fusion Drive', FUSION_BETA), ('pushed by the Ship Beam', beam_beta(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, 1e6 + mercury.SHIP_SAIL_KG)),
+    for name, push in (('on a Fusion Drive', FUSION_BETA), ('pushed by the Ship Beam', beam_beta(BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, 1e6 + mercury.SHIP_SAIL_KG)),
                        ('pushed from 10,000 km of swarm on a 10 km sail', wide)):
         for d in (50, 480):
             t = trip(d, 1000, push, front_m2=10, stops=False)
             print(f"  {name:48}{d:>5} ly{t['beta']:>7.2f}  bound by {t['binds']:8}{t['years']:>7,.0f} Years{megatons(1000, t['beta']):>14,.0f} Mt")
     print(f'  That wide beam is {FLUX_MAX * math.pi * 1e4 ** 2 / 4 / 3.828e26:.1e} of the Sun\'s light.')
+    print(f'A flyby probe of {PROBE["tonnes"]:.0f} t, {PROBE["front"]:.1f} m2 of front, thrown by the Ship Beam: {PROBE_BEAM:.3f} of light speed in '
+          f'{PROBE_BEAM_DAYS:.0f} days, {PROBE_BEAM_LOST * 365.25:.0f} days over cruising. Its light stretches {math.sqrt((1 + PROBE_BEAM) / (1 - PROBE_BEAM)):.2f} times.')
+    for d in (4.25, 10.5, 50, 400, 1000, 2700):
+        print(f'  {d:>7} ly: {probe_beta(d):.2f} of light speed, {probe_years(d):>7,.1f} Years, where its Fusion Drive took {d / FUSION_BETA + 10:>8,.1f}.')
     print('What another mind throws, a slender rod bound only by its shield:')
     for d in (30, 50, 150, 480, 1000, 2700):
         b = thrown_beta(d)

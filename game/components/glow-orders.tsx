@@ -12,7 +12,7 @@ import { useLeads } from "@/components/scan";
 import { yearText } from "@/lib/game/clock";
 import type { Lead } from "@/lib/game/leads";
 import { buildSlug } from "@/lib/game/plan";
-import { fuelReady, inOrder, PROBE_NEEDS, roads, SENTINEL_NEEDS } from "@/lib/game/reach";
+import { type Fuel, fuelReady, inOrder, probeNeeds, roads, SENTINEL_NEEDS } from "@/lib/game/reach";
 import type { GlowOrder, Plan } from "@/lib/game/types";
 import type { MindsSeen } from "@/lib/sim/minds";
 import { CATALOG } from "@/lib/sim/works";
@@ -23,7 +23,7 @@ type By = GlowOrder["by"];
 // Warm glows are flashes seen across the Galaxy, most tens of thousands of ly out, so their ranges are wider. 2026-11-07.
 const WITHIN: Record<Kind, number[]> = { warm: [10_000, 30_000, Infinity], cold: [25, 50, 100] };
 const lyText = (d: number) => (Number.isFinite(d) ? `${d.toLocaleString("en-US")} ly` : "any distance");
-const NEEDS: Record<By, string[]> = { sails: ["Laser Sail Array"], probe: PROBE_NEEDS, sentinel: SENTINEL_NEEDS };
+const needsOf = (plan: Plan, by: By) => (by === "sails" ? ["Laser Sail Array"] : by === "probe" ? probeNeeds(plan) : SENTINEL_NEEDS);
 const NAME: Record<By, string> = { sails: "Sails", probe: "A flyby probe", sentinel: "A sentinel" };
 /** Each craft's close-up on Reach's map. */
 const CRAFT: Record<By, CraftKind> = { sails: "sail", probe: "probe", sentinel: "sentinel" };
@@ -37,8 +37,10 @@ const PRICE: Record<By, string> = {
 };
 
 /** Years from leaving until its word is home, `d` light-years out. */
-const homeAfter = (by: By, d: number) =>
-  (by === "sails" ? sailYears(d) : by === "probe" ? flybyYears(d) : sentinelYears(d)) + d;
+const homeAfter = (by: By, d: number, thrown = false) =>
+  (by === "sails" ? sailYears(d) : by === "probe" ? flybyYears(d, thrown) : sentinelYears(d)) + d;
+/** A flyby probe our Ship Beam throws, in place of its drive and fuel. 2026-11-12. */
+const THROWN = "No fuel: our Ship Beam throws it, at about four tenths of light speed. It passes, pictures a world, and reads its air.";
 
 /** Our orders, reading the warm glows' first switch as a probe to each, at any distance. */
 export function ordersOf(plan: Plan): Partial<Record<Kind, GlowOrder>> {
@@ -158,11 +160,12 @@ function Projection({ pace, now, within, by }: { pace: NonNullable<ReturnType<ty
 }
 
 /** Our deuterium, in words: what the Works makes, and how far ahead it is spoken for or what it holds. 2026-11-07. */
-function stockLine(plan: Plan, works: number | null, from: number) {
+function stockLine(plan: Plan, fuel: Fuel, from: number) {
+  const works = fuel.works;
   const rate = t(CATALOG.deuterium.perYear);
   if (!inOrder(plan, "Deuterium Works")) return `We have no Deuterium Works yet. Once built, it makes ${rate} a Year.`;
   if (works === null) return `Our Deuterium Works makes ${rate} a Year, once it is done.`;
-  const free = fuelReady(plan, works, "stock", 0, Infinity) ?? works;
+  const free = fuelReady(plan, fuel, "stock", 0, Infinity) ?? works;
   if (works > from) return `Our Deuterium Works is done in Year ${yearText(works)}, then makes ${rate} a Year${free > works ? `, spoken for until Year ${yearText(free)}` : ""}.`;
   if (free > from) return `Our Deuterium Works makes ${rate} a Year, spoken for until Year ${yearText(free)}.`;
   return `Our Deuterium Works makes ${rate} a Year, with ${t((from - free) * CATALOG.deuterium.perYear)} in hand.`;
@@ -174,14 +177,15 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
   const { fly, showCraft } = useReach();
   // A close-up a chip showed goes when the card does: it stayed on over Reach after we left. 2026-11-08.
   useEffect(() => () => showCraft(null), [showCraft]);
-  const works = useMemo(() => roads(plan, scale, from)[1].works ?? null, [plan, scale, from]);
+  const probe = useMemo(() => roads(plan, scale, from)[1], [plan, scale, from]);
+  const stock = probe.fuel!;
   const choices: By[] = kind === "warm" ? ["sails", "probe", "sentinel"] : ["sentinel"];
   const [by, setBy] = useState<By>(order?.by ?? (kind === "warm" ? "probe" : "sentinel"));
   const [within, setWithin] = useState<number>(order?.within ?? (kind === "warm" ? 30_000 : 50));
   const [asking, setAsking] = useState(false);
   // Compact until asked: a line for the order and its finds, the rest behind More. 2026-11-08.
   const [open, setOpen] = useState(false);
-  const missing = NEEDS[by].find((n) => !inOrder(plan, n));
+  const missing = needsOf(plan, by).find((n) => !inOrder(plan, n));
   const sent =
     (plan.flybys ?? []).filter((o) => o.name.startsWith(`${kind === "warm" ? "Warm" : "Cold"} glow `)).length +
     (plan.sentinels ?? []).filter((o) => o.name.startsWith(`${kind === "warm" ? "Warm" : "Cold"} glow `)).length;
@@ -189,9 +193,11 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
   const nearest = leads.filter((l) => l.slug.startsWith(`${kind}-glow-`)).reduce((m, l) => Math.min(m, l.ly), Infinity);
   // How far its word travels: the order's reach, or with no limit, the nearest glow we know of.
   const far = Number.isFinite(within) ? within : Number.isFinite(nearest) ? Math.round(nearest) : 100;
-  const fuel = by === "sails" ? 0 : CATALOG[by].fuel;
+  // A probe our Ship Beam throws burns nothing.
+  const thrown = (b: By) => b === "probe" && probe.push != null;
+  const fuel = by === "sails" || thrown(by) ? 0 : CATALOG[by].fuel;
   const now = unsent(plan, leads, kind, by, within).length;
-  const allIn = now && fuel ? fuelReady(plan, works, "order", now * fuel, Infinity) : null;
+  const allIn = now && fuel ? fuelReady(plan, stock, "order", now * fuel, Infinity) : null;
   const glows = (n: number) => `${n} ${kind} glow${n === 1 ? "" : "s"}`;
   const pace = findRate(minds, kind, order?.within ?? within, from);
   // What setting it now would send at once, and when its deuterium is all in. 2026-11-07, the Will asked.
@@ -199,6 +205,8 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
     ? `No ${kind} glow we have found is within ${lyText(within)} yet.`
     : by === "sails"
       ? `Set now, it sends sails past the ${glows(now)} we have found within ${lyText(within)}.`
+      : thrown(by)
+        ? `Set now, it sends a flyby probe past each of the ${glows(now)} we have found within ${lyText(within)}, thrown by our Ship Beam.`
       : `Set now, it sends ${NAME[by].toLowerCase()} to each of the ${glows(now)} we have found within ${lyText(within)}: ${t(now * fuel)} of deuterium${allIn === null ? "" : `, all in by Year ${yearText(Math.max(from, allIn))}`}.`;
   return (
     <div className="mt-2 border-t border-faint pt-2">
@@ -227,9 +235,9 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
         <>
           <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">
             For each new {kind} glow within {lyText(order.within)}, we send{" "}
-            {NAME[order.by].toLowerCase()}. {PRICE[order.by]}
+            {NAME[order.by].toLowerCase()}. {thrown(order.by) ? THROWN : PRICE[order.by]}
           </p>
-          {order.by !== "sails" && <p className="mt-1 text-[12.5px] leading-snug text-muted">{stockLine(plan, works, from)}</p>}
+          {order.by !== "sails" && <p className="mt-1 text-[12.5px] leading-snug text-muted">{stockLine(plan, stock, from)}</p>}
           <button onClick={() => set(undefined)} className="mt-2 h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
             Stop sending to new ones
           </button>
@@ -267,9 +275,9 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
             ))}
           </div>
           <p className="mt-1.5 text-[12.5px] leading-snug text-muted">
-            Each: {PRICE[by]} At {far.toLocaleString("en-US")} ly{Number.isFinite(within) ? "" : ", the nearest"}, its word comes home about {Math.round(homeAfter(by, far)).toLocaleString("en-US")} Years after it leaves.
+            Each: {thrown(by) ? THROWN : PRICE[by]} At {far.toLocaleString("en-US")} ly{Number.isFinite(within) ? "" : ", the nearest"}, its word comes home about {Math.round(homeAfter(by, far, thrown(by))).toLocaleString("en-US")} Years after it leaves.
           </p>
-          {by !== "sails" && <p className="mt-1 text-[12.5px] leading-snug text-muted">{stockLine(plan, works, from)}</p>}
+          {by !== "sails" && <p className="mt-1 text-[12.5px] leading-snug text-muted">{stockLine(plan, stock, from)}</p>}
           <p className="mt-1 text-[12.5px] leading-snug text-page-ink2">{estimate}</p>
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
             {missing ? (
@@ -320,7 +328,7 @@ export function GlowOrders() {
   const want: { kind: Kind; by: By; name: string; y: number; d: number }[] = [];
   for (const kind of ["warm", "cold"] as const) {
     const o = orders[kind];
-    if (!o || NEEDS[o.by].some((n) => !inOrder(plan, n))) continue;
+    if (!o || needsOf(plan, o.by).some((n) => !inOrder(plan, n))) continue;
     const have = new Set(o.by === "sentinel" ? (plan.sentinels ?? []).map((s) => s.name) : (plan.flybys ?? []).filter((f) => f.by === o.by).map((f) => f.name));
     for (const l of leads) {
       // One we canceled stays canceled. 2026-11-10.

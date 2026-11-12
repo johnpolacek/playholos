@@ -118,18 +118,35 @@ SHIP_KG, SHIP_V = 1.5e6, seed.SHIP_V * C                                # every 
 STAR_BEAM_W, STAR_BEAM_M = 10e12, 1e5
 SHIP_BEAM_M, SHIP_SAIL_M = 1e6, 1e3
 SHIP_BEAM_W = STAR_BEAM_W * (SHIP_BEAM_M / STAR_BEAM_M) ** 2    # the same W/m^2 on its face, 100 times the face
-SHIP_SAIL_KG = SWARM_KG_M2 * math.pi * SHIP_SAIL_M ** 2 / 4
-def ship_push(p, aperture, sail, payload, v=SHIP_V, lam=1.06e-6):
+# The sail's mirror, 2026-11-12. A sail that flees the beam sees its light stretched redder, by 1.19 times at 0.17 of
+# light speed and 1.57 at 0.42, so its mirror must reflect that whole band. Sail studies plan for a fifth of light
+# speed and gram craft, where a film of one layer, reflecting 50 to 75%, wins by its lightness (Parkin 2018, Jin et
+# al. 2020, Santi et al. 2022). Ours carries tonnes, so its mirror's weight is nothing beside its load, and it can be
+# a true mirror: layers of silicon and glass, each a quarter of a wave thick. Such a stack reflects one band, whose
+# width its two materials set. Silicon on glass: edges 1.75 times apart, so a sail outruns its mirror at half of light
+# speed. Four pairs reflect 99.6% and weigh 3 g a m2. A fifth pair would gain a probe less push than it costs in
+# weight. The band's width is the textbook relation, checked by the research agent. The design is ours.
+MIRROR_N, MIRROR_RHO, MIRROR_PAIRS = (3.48, 1.45), (2330.0, 2200.0), 4
+_band = 4 / math.pi * math.asin((MIRROR_N[0] - MIRROR_N[1]) / (MIRROR_N[0] + MIRROR_N[1]))
+MIRROR_STRETCH = (1 + _band / 2) / (1 - _band / 2)                  # how far apart the band's edges are
+MIRROR_BETA = (MIRROR_STRETCH ** 2 - 1) / (MIRROR_STRETCH ** 2 + 1)   # the speed at which a sail outruns it
+_center = 1.06e-6 * (1 + _band / 2)                                  # the band begins at the beam's own color
+MIRROR_KG_M2 = MIRROR_PAIRS * _center / 4 * sum(rho / n for rho, n in zip(MIRROR_RHO, MIRROR_N))
+_r = (MIRROR_N[0] / MIRROR_N[1]) ** (2 * MIRROR_PAIRS)
+MIRROR_R = ((_r - 1) / (_r + 1)) ** 2
+SHIP_SAIL_KG = MIRROR_KG_M2 * math.pi * SHIP_SAIL_M ** 2 / 4
+def ship_push(p, aperture, sail, payload, v=SHIP_V, lam=1.06e-6, film=SWARM_KG_M2, mirror=1.0):
     """Pushing a ship to speed v: its top speed, the Years of pushing, how far out it ends in AU, the Years that costs
-    over cruising, and the light on its sail in W/m^2. The sail's own film rides with the ship."""
-    kg = payload + SWARM_KG_M2 * math.pi * sail ** 2 / 4
-    a = 2 * p / C / kg
+    over cruising, and the light on its sail in W/m^2. The sail's own film rides with the ship, and gives back
+    `mirror` of the light."""
+    kg = payload + film * math.pi * sail ** 2 / 4
+    a = 2 * p * mirror / C / kg
     reach = aperture * sail / (2.44 * lam)
     top = math.sqrt(2 * a * reach)
     t = min(v, top) / a
     return dict(top=top, years=t / YEAR, au=a * t ** 2 / 2 / AU, reach=reach / AU, lost=t / 2 / YEAR,
                 flux=p / (math.pi * sail ** 2 / 4), g=a / 9.81)
-SHIP_PUSH = ship_push(SHIP_BEAM_W, SHIP_BEAM_M, SHIP_SAIL_M, SHIP_KG)
+SHIP_PUSH = ship_push(SHIP_BEAM_W, SHIP_BEAM_M, SHIP_SAIL_M, SHIP_KG, film=MIRROR_KG_M2, mirror=MIRROR_R)
 # The best the Star Beam could do: top speed is highest when the sail weighs as much as the ship (Lubin 2016).
 STAR_SAIL_M = math.sqrt(4 * SHIP_KG / (math.pi * SWARM_KG_M2))
 STAR_PUSH = ship_push(STAR_BEAM_W, STAR_BEAM_M, STAR_SAIL_M, SHIP_KG)
