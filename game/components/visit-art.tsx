@@ -45,6 +45,34 @@ function Works({ asleep }: { asleep: boolean }) {
   );
 }
 
+/** Our bullet's flash, as a telescope that splits the world from its star caught it: the star masked dark, the world a
+ *  faint disk beside it, and a point on it that flares to `ratio` times the world's light and fades, as it did over
+ *  three minutes. 2026-11-12. */
+export function FlashArt({ ratio, size = 132 }: { ratio: number; size?: number }) {
+  const r = 5 + 5 * Math.min(3, Math.sqrt(ratio));
+  return (
+    <svg width={size} height={size} viewBox="0 0 132 132" aria-hidden className="shrink-0 overflow-visible">
+      <defs>
+        <radialGradient id="flash-glow">
+          <stop offset="0" stopColor="#fff6dc" stopOpacity="1" />
+          <stop offset=".35" stopColor="#ffd28a" stopOpacity=".55" />
+          <stop offset="1" stopColor="#ffd28a" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      {/* The star behind its mask, a thin ring of leaked light. */}
+      <circle cx="34" cy="66" r="15" fill="#05070c" stroke="#f4f6ff" strokeWidth=".6" opacity=".45" strokeDasharray="1.5 3" />
+      {/* The world, lit from the star's side. */}
+      <circle cx="92" cy="66" r="13" fill="#3a4a66" opacity=".8" />
+      <path d="M92 53 a13 13 0 0 0 0 26 a8 13 0 0 1 0 -26" fill="#7f95bb" opacity=".8" />
+      <circle cx="87" cy="61" r={r} fill="url(#flash-glow)" className="motion-reduce:hidden">
+        <animate attributeName="r" values={`0;${r};${r * 0.7};0;0`} keyTimes="0;.06;.3;.6;1" dur="5s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0;1;.7;0;0" keyTimes="0;.06;.3;.6;1" dur="5s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="87" cy="61" r={r * 0.6} fill="url(#flash-glow)" className="hidden motion-reduce:block" />
+    </svg>
+  );
+}
+
 export function VisitArt({ sight, elder, size = 132 }: { sight: Visit["sight"]; elder?: "awake" | "asleep"; size?: number }) {
   // At a black hole: its dark disk, and the sky behind it bent into a ring of light. 2026-10-26.
   if (sight === "dark")

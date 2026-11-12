@@ -2669,6 +2669,38 @@ Three research passes by agents, from abstracts and summaries, not full papers. 
   - Used: the X-Ray Watch and the Interceptor.
 - Used: [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#parity-what-a-neighbor-can-do-we-can-build), lib/sim/conflict.ts, lib/game/hits.ts.
 
+### A strike seen from home, 2026-11-12
+
+One research pass by an agent, 2026-11-12. Each entry says how much was read. Arithmetic marked ours is ours. What it settles: what a bullet of ours does to a world, and what we could see of it.
+
+- **Where the energy goes.** Nothing is published for bodies of tonnes at 0.1 to 0.9 of light speed entering air. Two searches found none.
+  - [Siraj and Loeb 2020, sub-relativistic meteors](https://arxiv.org/abs/2002.01476) · Preprint, full page read through an extraction tool. Bodies of 1 mm to 10 cm at a tenth of light speed slow and disperse where the air swept equals their mass. For 10 cm: 96% to shock, 4% to light, peaking in ultraviolet the air absorbs. The flash lasts a ten-thousandth of a second.
+  - *Ours:* a 1,000 t ball is 4.3 m in radius, 17 t a m² against 10 t a m² of air. A rod end on is 100 to 200 t a m². So each reaches low air or the ground. The air a rod sweeps gives it 5 to 10% of its energy in its own frame, far more than it takes to vaporize. Whether it stays a narrow jet is not published.
+  - [NIST PSTAR](https://physics.nist.gov/PhysRefData/Star/Text/PSTAR.html) · Reference data, queried. A proton’s range in air: 0.042 g a cm² at 5 MeV, 18.9 at 155 MeV, 471 at 1.2 GeV, against 1,030 of air. So a single nucleon stops in the air at all three speeds.
+  - [Particle Data Group, dry air](https://pdg.lbl.gov/2024/AtomicNuclearProperties/HTML/air_dry_1_atm.html) · Reference data, page read. Nuclear interaction length 90.1 g a cm², radiation length 36.6.
+  - [Glasstone and Dolan 1977, The Effects of Nuclear Weapons](https://archive.org/stream/effectsofnuclear1977unit/effectsofnuclear1977unit_djvu.txt) · Government reference, sections 2.150, 7.04, 7.80, 7.85 and 7.90 read. X-rays are absorbed within a few feet of sea-level air and escape only above about 30 km. An airburst below 100,000 ft gives 35 to 45% of its energy as heat and light. Peak power 3.18 W^0.56 kt a second at 0.0417 W^0.44 seconds, W in kt. 10³² molecules of nitric oxide a megaton.
+- **The flash.**
+  - [Collins, Melosh and Marcus 2005](https://articles.adsabs.harvard.edu/pdf/2005M%26PS...40..817C) · Published, Meteoritics and Planetary Science 40, 817. PDF text read, cited passages. A ground impact’s fireball radiates 10⁻⁴ to 10⁻² of its energy, 3×10⁻³ adopted, at 3,000 K, with a radius of 0.002 E^(1/3) m.
+  - [Popova et al. 2013](https://doi.org/10.1126/science.1242642) · Published, Science. PDF read, cited passages. Chelyabinsk: 90 kt radiated of 590 kt, 7 ± 3% by video.
+  - [Hueso et al. 2018](https://arxiv.org/abs/1804.03006) · Published, A&A 617, A68. Page read through an extraction tool. Flashes on Jupiter last 1 to 2 s, with 15 to 20% of the energy as light.
+  - [Chapman 1996, Galileo’s view of the comet’s impacts](https://doi.org/10.1017/S0252921100115489) · Edited proceedings, PDF read. Fireballs lasted about a minute, cooling from about 8,000 K to 1,000 K.
+  - [Madiedo et al. 2015](https://arxiv.org/abs/1503.05227) · Published, A&A. PDF read. Flashes on the Moon: 0.15 to 0.2% as light.
+  - *Ours:* for 4.5×10²⁰ J the airburst rule gives 4×10¹⁷ W at 140 s, three orders past its data. Collins gives a 15 km fireball and 7×10¹⁵ W for 200 s. We take 3% over 200 s, 6.8×10¹⁶ W. Earth reflects 5.0×10¹⁶ W of sunlight.
+  - Not opened: Brown et al. 2013 beyond its abstract, Melosh et al. 1990 beyond its abstract, Goldin and Melosh 2009.
+- **Seeing one from afar.** No paper was found on one strike’s flash at a rocky world of another star.
+  - [Flagg, Weinberger and Matthews 2016](https://arxiv.org/abs/1509.00872) · Published, Icarus. Page read through an extraction tool. The comet’s strikes on Jupiter as a model: flashes last seconds and are unlikely to be seen. Cool planets need giant telescopes or coronagraphs to a part in a billion.
+  - [Stevens, Forgan and O’Malley-James 2016](https://arxiv.org/abs/1507.08530) · Published, Int. J. Astrobiology. PDF read, the nuclear section and its table. All Earth’s arsenal, 10¹⁹ J, is not seen as a flash past our own system. *Ours:* our bullet is 45 of those.
+  - [Miller-Ricci et al. 2009](https://arxiv.org/abs/0907.2931) and [Lupu et al. 2014](https://arxiv.org/abs/1401.1499) · Published, ApJ. Pages read through an extraction tool. Collisions that build planets glow for 10⁵ to 10⁶ years. Far more energy than ours, so not used.
+  - [Kenworthy et al. 2023](https://arxiv.org/abs/2310.08360) · Published, Nature 622, 251. Abstract and opening pages. A collision of worlds seen in infrared for about 1,000 days. Not used, for the same reason.
+  - *Ours:* a mirror’s time by Stark et al. 2014’s equation 7, already used in `calcs/observing.py`, with the flash as the signal and the world’s own light joining the noise. The Hypertelescope’s by Labeyrie’s 30 minute picture, already in `calcs/mercury.py`.
+- **What it leaves.**
+  - [Pierazzo et al. 2010](https://acomstaff.acom.ucar.edu/dkin/Documents/Pierasso_esl10558_prn.pdf) · Published, EPSL 299, 263. PDF read: abstract, Table 1, sections 3.2 and 3.3. A 1 km rock into the sea, 2.23×10²⁰ J, half our energy. Ozone down over 70% at mid and high latitudes for over 2 years, over 50% worldwide for over a year, over 40% for about 3.5. Seawater’s halogens drive it. The agent notes Table 1’s ozone columns look swapped, so the text’s figures are used.
+  - *Ours:* the burst’s nitric oxide, by Glasstone’s figure, is 1.1×10³⁷ molecules, about 45 times what Pierazzo took. So a strike on land thins ozone too.
+  - [Toon et al. 1997](https://ntrs.nasa.gov/citations/19970030230) · Abstract only, the full text refused. At 10⁴ to 10⁵ Mt, water vapor and ozone loss become global.
+  - Not used: Bardeen et al. 2017, abstract only, at Chicxulub’s scale.
+- Used: [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md), “Where our bullet lands”. `calcs/strikes.py`, `game/lib/sim/strikes.ts`.
+- Changed: a line of 2026-10-28 above, that an impact is news only to its target or a craft standing there. A telescope that splits the world from its star sees it too.
+
 ### Combing old recordings, 2026-10-28
 
 - **[Ma et al. 2023, a deep-learning search of 820 nearby stars](https://arxiv.org/abs/2301.12670)** · Published, Nature Astronomy. Abstract read.

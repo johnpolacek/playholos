@@ -24,6 +24,14 @@ export function ratio(dPc: number, radius: number, aAu: number, lum: number, mir
   return ((1 + (2 * K_LEAK * aAu ** 2) / radius ** 2) / f / area + (2 * K_DUST) / f ** 2 / area ** 2) / (1 + 2 * K_LEAK + 2 * K_DUST);
 }
 
+/** The world's own light as a share of all a mirror's noise there: the rest is leaked starlight and dust.
+ *  calcs/strikes.py's planet_share, for a strike's flash. 2026-11-12. */
+export function planetShare(dPc: number, radius: number, aAu: number, lum: number, mirror = MIRROR): number {
+  const f = radius ** 2 * (lum / aAu ** 2) * (10 / dPc) ** 2;
+  const area = (mirror / MIRROR) ** 2;
+  return 1 / f / area / ((1 + (2 * K_LEAK * aAu ** 2) / radius ** 2) / f / area + (2 * K_DUST) / f ** 2 / area ** 2);
+}
+
 export interface Reading {
   /** The world's distance from its star in our sky, thousandths of an arcsecond. */
   sep: number;

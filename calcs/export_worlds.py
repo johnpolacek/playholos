@@ -124,8 +124,8 @@ def golden():
     import senses
     heard = [dict(a=a, d=d, fifths=f, flux=senses.field_flux(a, d), at=senses.heard_at(senses.field_flux(a, d), f))
              for a, d, f in ((0.0485, 4.2465, [30.0]), (0.1, 32.6, [30.0, 36.0, 42.0, 48.0, 54.0]), (0.05, 12.0, [10.5, 17.25]), (0.3, 30.0, [0.0, 6.0, 12.0, 18.0, 24.0]), (0.1, 20.0, []))]
-    import speeds
-    return dict(random=seqs, observe=seen, works=works_golden(), fields=heard, trips=speeds.golden(), thrown=speeds.golden_thrown(), probes=speeds.golden_probes(), rods=speeds.golden_rods(), misses=speeds.golden_misses(), wide=speeds.golden_wide(), storms=senses.golden_storms())
+    import speeds, strikes
+    return dict(flashes=strikes.golden(), random=seqs, observe=seen, works=works_golden(), fields=heard, trips=speeds.golden(), thrown=speeds.golden_thrown(), probes=speeds.golden_probes(), rods=speeds.golden_rods(), misses=speeds.golden_misses(), wide=speeds.golden_wide(), storms=senses.golden_storms())
 
 # ---------- Works and their pacing ----------
 # calcs/early_game.py paces the mocks in two loops, each for one fixed order: first_hour() to Year 12, then replay().
@@ -221,6 +221,9 @@ def works_catalog():
     # Each craft's speed with no other source, settled 2026-11-11: calcs/speeds.py.
     import speeds
     kit.update(speeds.catalog())
+    # What a bullet of ours does where it lands, and its flash, settled 2026-11-12: calcs/strikes.py.
+    import strikes
+    kit.update(strikes.catalog())
     # Proxima's own speed across our sky, for its lead: its page stands apart from the seed's finds.
     kit['speeds']['seen']['proxima'] = next(drift_of(h['id'])['kms'] for h in nb.load_hosts() if h['name'] == 'Proxima Centauri')
     # What the Launch Tunnel speeds: the craft whose hulls and fuel its cheap lift carries. 2026-11-07.

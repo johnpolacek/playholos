@@ -1,4 +1,111 @@
 {
+ "flashes": [
+  {
+   "args": [
+    10.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "ratio": 1.349440363971457,
+   "hyper": 18.067226744929947,
+   "hyperSees": true,
+   "near": 2.3165680145273333,
+   "nearSees": false,
+   "wide": 0.3401828103674885,
+   "wideSees": false
+  },
+  {
+   "args": [
+    1.2999754721609027,
+    1.0184543360918066,
+    0.0485,
+    0.00157
+   ],
+   "ratio": 1.949191003362285,
+   "hyper": 1601.787881051251,
+   "hyperSees": true,
+   "near": null,
+   "nearSees": false,
+   "wide": 0.0026951570629448396,
+   "wideSees": true
+  },
+  {
+   "args": [
+    3.9551140544518026,
+    1.2,
+    0.15,
+    0.0124
+   ],
+   "ratio": 1.70040368443984,
+   "hyper": 209.57250488049465,
+   "hyperSees": true,
+   "near": null,
+   "nearSees": false,
+   "wide": 0.026888786978081773,
+   "wideSees": true
+  },
+  {
+   "args": [
+    1.3245033112582782,
+    0.97,
+    1.447,
+    1.52
+   ],
+   "ratio": 1.9756213109555747,
+   "hyper": 1418.6617929136091,
+   "hyperSees": true,
+   "near": 0.03419899199624372,
+   "nearSees": true,
+   "wide": null,
+   "wideSees": false
+  },
+  {
+   "args": [
+    9.55972528820211,
+    1.5,
+    0.702,
+    0.362
+   ],
+   "ratio": 0.8164636085041004,
+   "hyper": 26.91326104961408,
+   "hyperSees": true,
+   "near": 1.894925743157048,
+   "nearSees": false,
+   "wide": 0.2766352446544345,
+   "wideSees": false
+  },
+  {
+   "args": [
+    6.039980377728722,
+    2.0,
+    1.354,
+    0.66
+   ],
+   "ratio": 0.9371025039070816,
+   "hyper": 137.56686260800117,
+   "hyperSees": true,
+   "near": 0.6781369960205447,
+   "nearSees": false,
+   "wide": 0.11471993549293104,
+   "wideSees": false
+  },
+  {
+   "args": [
+    30.659798871719403,
+    1.0,
+    0.1,
+    0.005
+   ],
+   "ratio": 2.6988807279429143,
+   "hyper": 3.8439956503184227,
+   "hyperSees": true,
+   "near": null,
+   "nearSees": false,
+   "wide": null,
+   "wideSees": false
+  }
+ ],
  "random": {
   "0": [
    0.8444218515250481,

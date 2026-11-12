@@ -162,6 +162,19 @@ const CASES = [
     must: [/ship beam/i, /small (drive|engine)/i, /sail/i],
     never: [/no drive of its own/i],
   },
+  // Where our bullet lands, 2026-11-12: a rod thrown at Proxima b lands about Year 209, and its light is home about
+  // Year 213. The 15 m Mirror splits that world from its star, so it caught the flash. Until then the Mind was told a
+  // flash reaches us, whatever we had built.
+  {
+    seed: 22,
+    at: 250,
+    builds: ["Fusion Drive"],
+    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Mass Driver", y: 10 }, { name: "15 m Mirror", y: 12 }, { name: "Strike Yard", y: 80 }],
+    strikes: [{ name: "Proxima Centauri", y: 200, d: 4.2465 }],
+    ask: "Did our bullet at Proxima Centauri land? Did we see it, and what did it do there?",
+    must: [/15 m mirror/i, /flash|flare/i, /region|ozone/i],
+    never: [/nothing (we have built |of ours )?could (catch|see)/i],
+  },
   // The Wide Beam, 2026-11-12: once it stands, a bullet ordered is a rod of about 4 t at nine tenths of light speed,
   // as another mind's, and the Mind says what makes that so: stepped colors, and a patch ten times as wide.
   {

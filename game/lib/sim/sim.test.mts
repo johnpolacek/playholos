@@ -1083,3 +1083,53 @@ test("what another mind throws flies as calcs/speeds.py has it: near nine tenths
   assert.ok(theirBeta(480) < theirBeta(150) && theirBeta(2700) < theirBeta(480));
   assert.equal(theirYears(0), 0);
 });
+
+// A bullet of ours where it lands, 2026-11-12: calcs/strikes.py's flash, and who sees it. Until then a bullet was
+// dated and nothing happened when it landed.
+test("a bullet's flash is seen only by what splits its world from its star, and seeing it changes nothing there", async () => {
+  const { flashHours, flashRatio, hyperFlash, hyperSees, mirrorSees } = await import("./strikes.ts");
+  const { WIDE } = await import("./observing.ts");
+  type Flash = { args: [number, number, number, number]; ratio: number; hyper: number; hyperSees: boolean; near: number | null; nearSees: boolean; wide: number | null; wideSees: boolean };
+  const flashes = (golden as unknown as { flashes: Flash[] }).flashes;
+  const close = (a: number | null, b: number | null) => (a === null || b === null ? a === b : Math.abs(a - b) <= 1e-9 * Math.abs(b));
+  assert.ok(flashes.length >= 7 && flashes.some((g) => g.wideSees) && flashes.some((g) => g.near !== null && !g.nearSees));
+  for (const g of flashes) {
+    const [dPc, radius, a, lum] = g.args;
+    assert.ok(close(flashRatio(radius, a, lum), g.ratio) && close(hyperFlash(dPc * 3.2616, radius, a, lum), g.hyper), `${g.args}`);
+    assert.ok(close(flashHours(dPc, radius, a, lum), g.near) && close(flashHours(dPc, radius, a, lum, WIDE), g.wide), `${g.args}`);
+    assert.deepEqual([hyperSees(dPc * 3.2616, radius, a, lum), mirrorSees(dPc, radius, a, lum), mirrorSees(dPc, radius, a, lum, WIDE)], [g.hyperSees, g.nearSees, g.wideSees]);
+  }
+  // An Earth twin's flash is a little more than its own light. The 15 m Mirror catches Proxima b's. No mirror we build
+  // catches an Earth twin's at 10 pc, and the Hypertelescope catches both.
+  assert.ok(flashes[0].ratio > 1.2 && flashes[0].ratio < 1.5 && !flashes[0].wideSees && flashes[0].hyperSees && flashes[1].wideSees && flashes[1].near === null);
+
+  // Fired at Proxima b at Year 10, landing at Year 52: its light is home at Year 56.24.
+  const world = await loadWorld(22);
+  const b = { star: "Proxima Centauri", fired: 10, lands: 52, d: 4.24 };
+  const at = (year: number, kit = {}) => earthKnows(world, year, { strikes: [b], ...kit });
+  assert.equal(at(51.9).strikes, undefined);
+  // Landed, by reckoning, and its light not yet home: nothing seen, whatever we have built.
+  const flying = at(55, { hyper: 20, mirror: 20 }).strikes![0];
+  assert.ok(flying.world && flying.seen === undefined && Math.abs(flying.home - 56.24) < 1e-9 && flying.ratio! > 1.9 && flying.ratio! < 2);
+  // Its light home: unseen with nothing built, or with a telescope done too late. Seen by one done in time.
+  assert.equal(at(60).strikes![0].seen, undefined);
+  assert.equal(at(60, { telescope: 20 }).strikes![0].seen, undefined);
+  assert.equal(at(60, { mirror: 57 }).strikes![0].seen, undefined);
+  assert.equal(at(60, { mirror: 56 }).strikes![0].seen, "wide");
+  assert.equal(at(60, { mirror: 20, hyper: 20 }).strikes![0].seen, "hyper");
+  // A sentinel of ours that stays there sees it land, if it was there first.
+  const stays = sentinelYears(4.24, "Proxima Centauri");
+  assert.equal(at(60, { sentinels: [{ star: "Proxima Centauri", leaves: 51 - stays }] }).strikes![0].seen, "sentinel");
+  assert.equal(at(60, { sentinels: [{ star: "Proxima Centauri", leaves: 53 - stays }] }).strikes![0].seen, undefined);
+  // What we built changes what we see, never what happened: the rest of what Earth knows is the same.
+  const { strikes: _seen, ...withBullet } = at(60, { mirror: 20 });
+  assert.deepEqual(withBullet, earthKnows(world, 60, { mirror: 20 }));
+  // At a star where we know no world, it has nothing to aim at.
+  const through = earthKnows(world, 500, { strikes: [{ star: "Cold glow 1", fired: 10, lands: 300, d: 40 }] }).strikes![0];
+  assert.ok(!through.world && through.seen === undefined && through.ratio === undefined);
+  // The Mind is told each, and never that a flash was seen where nothing could see it.
+  const told = describe(at(60));
+  assert.ok(/Bullets of ours that have landed/.test(told) && /nothing we have built could catch it/.test(told) && !/caught its flash/.test(told));
+  assert.ok(/Our 15 m Mirror caught its flash at Year 56\.2/.test(describe(at(60, { mirror: 20 }))));
+  assert.ok(!/Bullets of ours/.test(describe(earthKnows(world, 60))));
+});

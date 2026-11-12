@@ -290,6 +290,24 @@ export interface Visit {
   sent?: string;
 }
 
+/** A bullet of ours that has landed, by our reckoning, and what we saw of it. Nothing comes home from a bullet: we
+ *  know it landed only by its light, and only where something of ours could catch that. lib/sim/strikes.ts. 2026-11-12. */
+export interface StrikeSeen {
+  star: string;
+  d: number;
+  fired: number;
+  lands: number;
+  /** The Year its light reaches us. */
+  home: number;
+  /** We knew a world there when it was fired, so it had something to aim at. Without one it flies on through. */
+  world: boolean;
+  /** Its flash over the world's own light. */
+  ratio?: number;
+  /** What caught its flash, once its light is home: a sentinel of ours that stays there, or a telescope that splits
+   *  the world from its star. Absent with its light home: nothing of ours could. */
+  seen?: "sentinel" | "hyper" | "wide" | "near";
+}
+
 export interface EarthView {
   year: number;
   felt: FeltWorld[];
@@ -322,6 +340,8 @@ export interface EarthView {
   /** Worlds our Far-Side Array found by their magnetic fields, and what it heard of Proxima b's. 2026-11-11. */
   fields?: FieldWorld[];
   proximaField?: FieldHeard;
+  /** Each bullet of ours that has landed, oldest first. 2026-11-12. */
+  strikes?: StrikeSeen[];
   /** What ground telescopes saw of Proxima b by Year 0: its true mass, tilt and brightness. 2026-10-31. */
   proximaSeen?: import("./proxima.ts").ProximaSeen;
 }

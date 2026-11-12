@@ -57,6 +57,10 @@ interface Catalog {
   beams: { array: number; beam: number; look: number; ship: number; shipDays: number };
   swarm: { watts: number; doubling: number; excess: number; perLy2: number; kelvin: number; spread: number };
   hyper: { kmPerLy: number; reach: number; slew: number; cities: number };
+  /** A bullet of ours where it lands, calcs/strikes.py: the share of its energy that leaves as light and for how many
+   *  seconds, the sunlight Earth reflects in W, a megaton in J, a bullet's megatons, the Years its world's ozone stays
+   *  under half, Earth's width in km, and the minutes of a Hypertelescope's picture. 2026-11-12. */
+  strike: { share: number; seconds: number; earthW: number; mtJ: number; mt: number; ozone: [number, number]; earthKm: number; hyperMin: number };
   /** Calcs/speeds.py: each craft's speed with no other source, as a share of light speed. 2026-11-11. */
   speeds: {
     bullet: number; sail: number;

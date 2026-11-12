@@ -8,12 +8,13 @@ import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
 import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
+import { flashRatio, hyperSees, mirrorSees, OZONE_YEARS, STRIKE_MT } from "./strikes.ts";
 import { proximaB, proximaField, proximaSeen } from "./proxima.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
 import { pushedBy, sentinelYears, shipYears } from "./speeds.ts";
 import { peerAnswers, type Aimed, type Call } from "./peers.ts";
 import { beamsAt, oldAnswers } from "./old-minds.ts";
-import type { ColonyMode, DarkMass, EarthView, FieldHeard, FieldWorld, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
+import type { ColonyMode, DarkMass, EarthView, FieldHeard, FieldWorld, Find, FeltWorld, Gas, Hole, Read, StrikeSeen, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ladderOf } from "./ladder.ts";
 import { seedProbes } from "./spread.ts";
@@ -73,6 +74,8 @@ export interface Kit {
   relaySearch?: { built: number; perAU: number } | null;
   asteroidTour?: number | null;
   craft?: MindKit["craft"];
+  /** Each bullet we fired, by its star as we name it: the Year fired, the Year it lands, and how far. 2026-11-12. */
+  strikes?: { star: string; fired: number; lands: number; d: number }[];
 }
 
 /** Our search of old recordings, for the Mind: how far it has combed by Year `year`, and how fast. */
@@ -244,7 +247,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, imager = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [], calls = [], farSide = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, strikes = [], lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, imager = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [], calls = [], farSide = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // What our Far-Side Array has heard, 2026-11-11: the radio a magnetic field makes where a red dwarf's wind strikes
@@ -468,6 +471,28 @@ export function earthKnows(
     const at = h.star.startsWith("Cold glow") ? minds.glows[n] : minds.sleepers[n];
     if (at) at.answered = h.arrived;
   }
+  // Each bullet of ours that has landed, by our reckoning: nothing comes home from one. It strikes the world we knew
+  // there when it was fired, and with none it flies on through. Its flash is caught only by a sentinel of ours that
+  // stays there, or by a telescope that splits the world from its star and is done when the light arrives: the
+  // Hypertelescope, the 15 m Mirror, the Infrared Telescope. What we built changes what we see, never what happened.
+  // lib/sim/strikes.ts, 2026-11-12.
+  const landed: StrikeSeen[] = [];
+  for (const b of strikes) {
+    if (b.lands > year) continue;
+    const home = b.lands + b.d;
+    const heardOf = news.find((n) => shown(n.find.star) === b.star);
+    const f = b.star === PROXIMA.star ? null : heardOf && heardOf.at > b.fired ? undefined : findAt(b.star);
+    const w = b.star === PROXIMA.star ? { ...PROXIMA, radius: proximaB(world.seed).mass ** (1 / 3.7) } : f ? { d: f.d, a: f.a, lum: world.stars[f.star]?.lum ?? 1, radius: width(world, f) } : null;
+    if (!w) { landed.push({ star: b.star, d: b.d, fired: b.fired, lands: b.lands, home, world: false }); continue; }
+    const by: StrikeSeen["seen"] | null =
+      home > year ? null
+      : visits.some((v) => v.star === b.star && v.by === "sentinel" && !v.lost && v.passed <= b.lands) ? "sentinel"
+      : hyper !== null && hyper <= home && hyperSees(w.d, w.radius, w.a, w.lum) ? "hyper"
+      : mirror !== null && mirror <= home && mirrorSees(w.d / 3.2616, w.radius, w.a, w.lum, WIDE) ? "wide"
+      : telescope !== null && telescope <= home && mirrorSees(w.d / 3.2616, w.radius, w.a, w.lum) ? "near"
+      : null;
+    landed.push({ star: b.star, d: b.d, fired: b.fired, lands: b.lands, home, world: true, ratio: flashRatio(w.radius, w.a, w.lum), ...(by ? { seen: by } : {}) });
+  }
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     // A peer's answer, once it reaches us. 2026-10-31. lib/sim/peers.ts.
@@ -479,6 +504,7 @@ export function earthKnows(
     ...(fields.length ? { fields: fields.sort((a, b) => a.at - b.at) } : {}),
     ...(proximaHeard ? { proximaField: proximaHeard } : {}),
     ...(ours ? { colony: ours } : {}),
+    ...(landed.length ? { strikes: landed.sort((x, y) => x.lands - y.lands) } : {}),
     ...(holes.length ? { holes: holes.map((h) => ({ name: h.name, d: h.d, ra: h.ra, dec: h.dec, mass: h.mass, found: h.found, by: h.by })) } : {}),
   };
 }
@@ -689,6 +715,22 @@ export function describe(view: EarthView): string {
           : `- ${v.world}, passed by our ${v.by} at Year ${yearText(v.passed)}, word home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}.`) +
       (v.air && !v.sent ? ` The ${v.by === "seed" ? "probe" : v.by} read its air: ${v.air.water ? "water" : "no water"}, ${v.air.oxygen ? "oxygen" : "no oxygen"}.` : ""),
   );
+  // Each bullet of ours that has landed, and what we saw of it. Until 2026-11-12 the Mind was told a flash reaches us,
+  // whether or not anything of ours could see one.
+  const CAUGHT = { hyper: "Hypertelescope", wide: "15 m Mirror", near: "Infrared Telescope" } as const;
+  const struck = (view.strikes ?? []).map((b) => {
+    const at = `fired at Year ${yearText(b.fired)}`;
+    if (!b.world) return `- Our bullet at ${b.star}, ${at}, crossed that system at Year ${yearText(b.lands)}. We knew no world there to aim it at, so it struck nothing we know of and flew on.`;
+    const k = b.ratio!.toFixed(1);
+    const head = `- Our bullet at ${b.star}’s world, ${at}, landed at Year ${yearText(b.lands)} by our reckoning.`;
+    if (b.home > view.year) return `${head} Its light reaches us at Year ${yearText(b.home)}.`;
+    if (b.seen === "sentinel") return `${head} Our sentinel there saw it land, a fireball in that world’s air, and its word reached us at Year ${yearText(b.home)}.`;
+    if (b.seen) return `${head} Our ${CAUGHT[b.seen]} caught its flash at Year ${yearText(b.home)}: the world shone at about ${(1 + b.ratio!).toFixed(1)} times its usual light for about three minutes.`;
+    return `${head} Its light reached us at Year ${yearText(b.home)}, and nothing we have built could catch it: a flash about ${k} times the world’s own light for three minutes, lost in its star’s glare. We know it landed only by reckoning.`;
+  });
+  const strikesText = struck.length
+    ? `\n\nBullets of ours that have landed. Nothing comes home from one. Each lands with about ${(Math.round(STRIKE_MT / 10000) * 10000).toLocaleString("en-US")} Mt: a region gone, and where that world’s air holds ozone, under half of it left for ${OZONE_YEARS[0]} to ${OZONE_YEARS[1]} Years. It ends no world’s life: the rock that ended our great reptiles hit a thousand times as hard. Only a telescope that splits the world from its star, watching as the light arrives, sees the flash, or a sentinel of ours that stays there. No mind has acted on one: the rule is against building at another star.\n${struck.join("\n")}`
+    : "";
   // Black holes found. Each is dark: we know it by the stars it shifted. 2026-10-26.
   const dark = (view.holes ?? []).map(
     (h) =>
@@ -716,7 +758,7 @@ export function describe(view: EarthView): string {
 ${felt}${nearest}
 
 Signals Earth's watch has caught:
-${heard}${visits.length ? `\n\nWhat our craft have seen up close:\n${visits.join("\n")}` : ""}${holesText}${colonyText}${mindsText}`;
+${heard}${visits.length ? `\n\nWhat our craft have seen up close:\n${visits.join("\n")}` : ""}${strikesText}${holesText}${colonyText}${mindsText}`;
 }
 
 /** What Earth has found of the realistic premise's minds, as measured and never as who: each with what it could be,

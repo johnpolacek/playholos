@@ -142,6 +142,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   // What our Far-Side Array found and heard. 2026-11-11.
   const fields = view?.fields;
   const proximaField = view?.proximaField;
+  const strikes = view?.strikes;
   const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0, close: 0, calm: 0 }));
   // Keyed by the stars felt, so a reading landing never rebuilds the leads the map lights.
   // Black holes found join them, after the worlds, 2026-10-26.
@@ -220,7 +221,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(() => {
     // What each lead has had read of it, as the Mind judges from too. Our knocks on the watcher, for its readings.
     const knocks = (save?.sent ?? []).filter((m) => target(m.to) === WATCHER).map((m) => m.y);
-    const readings = readingsOf(leads, { felt, fields, proximaField, proxima, visits, watcher: minds?.watcher ?? undefined, flashes: minds?.flashes, knocks, observe, year: tenth });
+    const readings = readingsOf(leads, { felt, fields, proximaField, proxima, visits, strikes, watcher: minds?.watcher ?? undefined, flashes: minds?.flashes, knocks, observe, year: tenth });
     const opened = new Set(seen);
     // New until opened, or for 50 Years: a badge from Year 10 still read NEW at Year 9,104 until 2026-10-30.
     const recent = (at: number) => tenth === null || tenth - at < 50;
@@ -256,7 +257,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       }),
     );
     return { known: view?.year, leads, ids, dials, readings, fresh, standing, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
-  }, [view?.year, leads, felt, fields, proximaField, proxima, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
+  }, [view?.year, leads, felt, fields, proximaField, proxima, strikes, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 

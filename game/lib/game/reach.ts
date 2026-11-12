@@ -535,7 +535,12 @@ export function kitOf(plan: Plan, scale: number) {
     // while armed: plan.ts's isOn. 2026-11-11.
     interceptor: done["Interceptor"] ?? null,
     quiet: done["Quiet Radars"] ?? null,
-    strikes: strikesOf(plan, scale).flatMap((x) => (x.fired !== null ? [{ star: x.star, fired: x.fired }] : [])),
+    // Each bullet fired, with the Year it lands: nothing comes home from one, so the simulation works out what our
+    // telescopes and sentinels saw of it. An order from before 2026-11-12 carries no distance, and is left out.
+    strikes: strikesOf(plan, scale).flatMap((x, i) => {
+      const d = plan.strikes![i].d;
+      return x.fired !== null && d ? [{ star: x.star, fired: x.fired, lands: x.fired + bulletYears(d, x.pushed), d }] : [];
+    }),
   };
 }
 
