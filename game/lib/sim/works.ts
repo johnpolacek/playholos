@@ -69,7 +69,7 @@ interface Catalog {
     gas: { cloud: number; between: number; inCloud: string[] };
     sailing: { gros: number; stop: number; tenth: number; covered: number; burnPerC: number; finishVe: number };
     wear: { dust: number; range: [number, number][]; share: number; most: number };
-    fusion: number; beam: number; beamStart: number;
+    fusion: number; beam: number; beamDays: number; beamStart: number;
     craft: Record<"sentinel" | "ship", { tonnes: number; front: number }>;
   };
   /** Calcs/senses.py: our Far-Side Array hearing worlds' magnetic fields. The shares of worlds with one, among those

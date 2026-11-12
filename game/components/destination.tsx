@@ -49,6 +49,13 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // or probe have passed and their word is home, what they saw is drawn above the ways, 2026-10-22.
 
 /** A build a way needs: its mark in its color, its name, and how it stands, opening its page to start it. */
+/** Days the Ship Beam pushes a seed ship to a speed, as a share of light speed: 78 to a tenth, and to its most as
+ *  calcs/speeds.py has it, since a fast ship runs from the light. Between the two, by the straight line. */
+function pushDays(beta: number) {
+  const { shipDays } = CATALOG.beams, { beam, beamDays } = CATALOG.speeds, tenth = CATALOG.seedShip.speed;
+  return Math.round(beta <= tenth ? (shipDays * beta) / tenth : shipDays + ((beamDays - shipDays) * (beta - tenth)) / (beam - tenth));
+}
+
 function Need({ name, queued, done }: { name: string; queued: boolean; done: boolean }) {
   return (
     <Link
@@ -519,7 +526,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 2}
             to={to}
             name="Our Mind, to stay"
-            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The Ship Beam pushes it to speed in ${Math.round(CATALOG.beams.shipDays * (mind.speed / CATALOG.seedShip.speed))} days, with no drive or fuel. Its beam points at the star for all of the push, so a mind awake there sees it, as it would a knock.` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The Ship Beam pushes it to speed in ${pushDays(mind.speed)} days, with no drive or fuel. Its beam points at the star for all of the push, so a mind awake there sees it, as it would a knock.` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
             needs={shipNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // One Seed Ship, one Mind: once sent to one hole, no other. Sent once all three are in our order.
@@ -575,7 +582,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 4}
             to={to}
             name="A seed probe that copies itself"
-            line={`${WHAT.seed}${seed.push ? ` The Ship Beam pushes it to speed in ${Math.round(CATALOG.beams.shipDays * (seed.speed / CATALOG.seedShip.speed))} days, with no drive or fuel. Its beam points at the star for all of the push, so a mind awake there sees it, as it would a knock.` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${WHAT.seed}${seed.push ? ` The Ship Beam pushes it to speed in ${pushDays(seed.speed)} days, with no drive or fuel. Its beam points at the star for all of the push, so a mind awake there sees it, as it would a knock.` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
             needs={seedNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Sent once all three are in our order, before Begin too: it is built once they are done.

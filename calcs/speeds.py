@@ -84,11 +84,35 @@ def fusion_fuel(beta): return FUSION_REAL * (math.exp(beta / FUSION_VE) - 1)
 # A beam on a sail, calcs/mercury.py's: the push holds while the sail stays inside the beam's spot. What a sail can
 # take is its heat: 5 GW a m2 before silicon runs away, where Starshot plans 8.7 (Parkin 2018).
 FLUX_MAX = 5e9
+# A beam does a fixed amount of work on what it pushes: its push times the distance it stays whole on the sail. So a
+# heavy thing leaves slow and a light one fast, on one curve the beam sets. Relativity bends the curve: a fast mirror
+# runs from the light, which pushes it less, by (1 - beta) / (1 + beta), and its mass grows as gamma cubed along its
+# path (Kulkarni, Lubin and Zhang 2018). Until 2026-11-12 this took a shortcut that ran high: 0.19 of light speed for
+# a seed ship on the Ship Beam, where the formula gives 0.17.
+LAMBDA = 1.06e-6
+def beam_reach(emitter_m, sail_m): return emitter_m * sail_m / (2.44 * LAMBDA)
+def _pushed(beta, n=2000):
+    """The distance a beam must push to bring a mirror to beta, in units of m c^3 / 2P: Simpson's rule on Kulkarni's
+    relation, d(beta)/dx = 2P (1 - beta) / (m c^3 gamma^3 beta (1 + beta))."""
+    f = lambda b: b * (1 + b) / ((1 - b) * (1 - b * b) ** 1.5)
+    h = beta / n
+    return h / 3 * (f(0) + f(beta) + sum((4 if i % 2 else 2) * f(i * h) for i in range(1, n)))
 def beam_beta(watts, emitter_m, sail_m, kg):
-    """Speed from a beam's push. Its momentum, so it holds near light speed too: ours."""
-    x = mercury.push_speed(watts, emitter_m, sail_m, kg) / C
-    return x / math.sqrt(1 + x * x)
+    """The speed a beam gives a mass, pushed out to where the beam stops being whole on its sail."""
+    want = 2 * watts * beam_reach(emitter_m, sail_m) / (kg * C ** 3)
+    lo, hi = 0.0, 0.999
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if _pushed(mid) < want else (lo, mid)
+    return lo
+def beam_days(watts, emitter_m, sail_m, kg, n=4000):
+    """How long that push lasts, in days: the same relation, summed over time."""
+    top = beam_beta(watts, emitter_m, sail_m, kg)
+    f = lambda b: (1 + b) / ((1 - b) * (1 - b * b) ** 1.5)
+    h = top / n
+    return kg * C ** 2 / (2 * watts) * h / 3 * (f(0) + f(top) + sum((4 if i % 2 else 2) * f(i * h) for i in range(1, n))) / 86400
 SHIP_BEAM = beam_beta(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, mercury.SHIP_KG + mercury.SHIP_SAIL_KG)
+SHIP_BEAM_DAYS = beam_days(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, mercury.SHIP_KG + mercury.SHIP_SAIL_KG)
 
 # ---------- A trip ----------
 def gas_at(star): return N_CLOUD if star in IN_CLOUD else N_BETWEEN
@@ -147,7 +171,7 @@ def catalog():
                             gas=dict(cloud=N_CLOUD, between=N_BETWEEN, inCloud=list(IN_CLOUD)),
                             sailing=dict(gros=GROS_T, stop=T_STOP, tenth=T_TENTH, covered=X_TENTH, burnPerC=BURN_PER_C, finishVe=FINISH_VE),
                             wear=dict(dust=DUST, range=[list(r) for r in RANGE], share=SHIELD_SHARE, most=0.9),
-                            fusion=FUSION_BETA, beam=SHIP_BEAM, beamStart=mercury.SHIP_PUSH['lost'] / (mercury.SHIP_V / C),
+                            fusion=FUSION_BETA, beam=SHIP_BEAM, beamDays=round(SHIP_BEAM_DAYS), beamStart=mercury.SHIP_PUSH['lost'] / (mercury.SHIP_V / C),
                             craft=CRAFT))
 
 def golden():
@@ -177,7 +201,12 @@ if __name__ == '__main__':
               f'{brake_years(0.1, n, 1500, False):.0f} Years over cruising. With a burn for the last tenth, {brake_years(0.1, n, 1500):.0f}.')
     print(f'Fusion: {fusion_fuel(0.1):.0f} t of fuel a tonne at a tenth of light speed, {fusion_fuel(0.2):,.0f} at two tenths, '
           f'on Daedalus\'s staged design. On a craft\'s own engine, {finish_fuel(0.1):.2f} for the hundredth that ends a stop from a tenth.')
-    print(f'The Ship Beam as built pushes a seed ship to {SHIP_BEAM:.2f} of light speed.')
+    print(f'The Ship Beam as built pushes a seed ship to {SHIP_BEAM:.2f} of light speed in {SHIP_BEAM_DAYS:.0f} days.')
+    print('  What it gives by mass, sail and all:')
+    for tonnes in (1500, 1000, 150, 10, 5, 2):
+        kg = tonnes * 1e3 + mercury.SHIP_SAIL_KG
+        b = beam_beta(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, kg)
+        print(f'  {tonnes:>7,} t: {b:.2f} of light speed, {megatons(tonnes, b):>9,.0f} Mt, pushed {beam_days(mercury.SHIP_BEAM_W, mercury.SHIP_BEAM_M, mercury.SHIP_SAIL_M, kg):.0f} days.')
     head = f"  {'to':24}{'ly':>6}{'speed':>7}{'bound by':>10}{'Years':>8}{'brakes over':>13}{'fuel t/t':>10}{'today':>8}"
     trips = (('Proxima Centauri', 4.25), ('Epsilon Eridani', 10.5), ('', 10), ('', 20), ('', 50), ('', 100), ('', 400), ('', 2700))
     def table(title, tonnes, push, drive, today, start=0.0, beamed=False):

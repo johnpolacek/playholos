@@ -300,7 +300,7 @@ export function strikeRoad(plan: Plan, scale: number, from: number, star: string
 const SHIP = CATALOG.seedShip;
 export const SHIP_NEEDS = ["Seed Ship", "Fusion Drive", "Deuterium Works"];
 /** The Ship Beam, done, pushes a seed ship in place of its drive and fuel: 1,000 TW from a patch of the swarm 1,000 km
- *  wide, on a 1 km sail, to a tenth of light speed in about 78 days and nearly a fifth in about 150. With no drive it
+ *  wide, on a 1 km sail, to a tenth of light speed in about 78 days and its most, about a sixth, in about 160. With no drive it
  *  stops on its magnetic sail alone, which sets its speed for each trip: lib/sim/speeds.ts. calcs/mercury.py.
  *  2026-11-10, its speed by physics 2026-11-11. */
 export const BEAM_NEEDS = ["Seed Ship", "Ship Beam"];

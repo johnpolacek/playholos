@@ -899,7 +899,7 @@ test("each of our craft that stops takes the Years calcs/speeds.py gives its tri
   assert.ok(sentinelYears(10.5, "Epsilon Eridani") < sentinelYears(10.5, "Tau Ceti"));
   // On its drive a ship is held to a tenth of light speed by its fuel. Pushed, it goes as fast as it can stop from.
   assert.equal(stay("ship", 50, gasAt(), false).beta, catalog.speeds.fusion);
-  assert.ok(stay("ship", 400, gasAt(), true).beta > 0.18 && stay("ship", 10, gasAt(), true).binds === "stopping");
+  assert.ok(stay("ship", 400, gasAt(), true).beta === catalog.speeds.beam && catalog.speeds.beam > 0.16 && catalog.speeds.beam < 0.18 && stay("ship", 10, gasAt(), true).binds === "stopping");
   assert.equal(stay("ship", 0).years, 0);
 });
 
