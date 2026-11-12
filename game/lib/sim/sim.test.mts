@@ -20,7 +20,7 @@ import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ICE, deathsIn, iceBetween, iceFirsts } from "../game/natural.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
-import { bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, sentinelYears, shipYears, stay, theirBeta, theirYears } from "./speeds.ts";
+import { bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, sentinelYears, shipYears, stay, theirBeta, theirReady, theirYears } from "./speeds.ts";
 import { proximaField } from "./proxima.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
@@ -522,6 +522,8 @@ test("the ladder: warned at our first seed, our seeds wrecked after another, and
   assert.equal(one.warned, 50);
   assert.equal(one.lost.length, 0);
   assert.ok(one.strike && one.strike.lands > 50 + maker.d + theirYears(maker.d), `${one.strike?.lands}`);
+  // The maker's beam stands, so it throws within months of choosing to: no 32 Years of readying. 2026-11-12.
+  assert.ok(Math.abs(one.strike!.lands - one.strike!.chose - theirReady(maker.d) - theirYears(maker.d)) < 1e-9 && theirReady(maker.d) < 1);
   // Another after the warning: grams cross to every star we reached, after word reaches the maker.
   const two = ladderOf(world, seedProbes([{ star: "Proxima Centauri", leaves: 50 }, { star: "Barnard’s Star", leaves: 60 }]), null);
   assert.ok(two.lost.length >= 2);
@@ -944,7 +946,10 @@ test("what another mind throws flies as calcs/speeds.py has it: near nine tenths
   for (const g of thrown) {
     assert.ok(Math.abs(theirBeta(g.d) - g.beta) <= 1e-9 * g.beta, `${g.d} ly: ${theirBeta(g.d)} against ${g.beta}`);
     assert.ok(Math.abs(theirYears(g.d) - g.years) <= 1e-9 * g.years);
+    assert.ok(Math.abs(theirReady(g.d) - (g as unknown as { ready: number }).ready) <= 1e-9 * theirReady(g.d));
   }
+  // Its beam stands, so near us it is ready in about a month, and later the farther and slower its rod must fly.
+  assert.ok(theirReady(30) > 0.05 && theirReady(30) < 0.12 && theirReady(2700) > theirReady(30));
   assert.equal(theirBeta(30), 0.9);
   assert.ok(theirBeta(480) < theirBeta(150) && theirBeta(2700) < theirBeta(480));
   assert.equal(theirYears(0), 0);

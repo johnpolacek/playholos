@@ -129,5 +129,13 @@ export function bulletYears(ly: number, pushed = false) {
  *  hundreds of AU wide has push to spare, so only its shield binds it: a slender rod flies near nine tenths of light
  *  speed close by, and slower the farther dust wears it. calcs/speeds.py's thrown_beta. */
 export const theirBeta = (ly: number) => shieldBeta(ly, SPEEDS.thrown.tonnes, SPEEDS.thrown.front);
+/** Years another mind takes to ready what it throws `ly`. It throws a rod by a beam that already stands, as we can
+ *  with our Ship Beam, so by parity it readies one as we do: by the rod's mass, which is what gives a bullet's harm at
+ *  its speed. About a month near us, where its rod is lightest. Until 2026-11-12 it took a bullet's 32 Years.
+ *  calcs/speeds.py's their_ready. */
+export function theirReady(ly: number) {
+  const energy = (beta: number) => 1 / Math.sqrt(1 - beta * beta) - 1;
+  return (SPEEDS.rod.ready * energy(SPEEDS.rod.beam)) / energy(theirBeta(ly));
+}
 /** Years for what another mind throws to cross `ly`. */
 export const theirYears = (ly: number) => (ly > 0 ? ly / theirBeta(ly) : 0);

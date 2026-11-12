@@ -5,10 +5,10 @@
 // seed probes' copies launch seeds of their own: a bullet, readied as any mind readies one, by parity, thrown as fast, with the harm of our own. Settled
 // 2026-10-29, played since 2026-10-30, in HOLOS_GAME_CONCEPT.md. Pure, so it tests fast.
 import targets from "../../data/targets.json" with { type: "json" };
-import { bulletMt, BULLET } from "./conflict.ts";
+import { bulletMt } from "./conflict.ts";
 import { skyOf } from "./minds.ts";
 import { place, type Probe } from "./spread.ts";
-import { theirYears } from "./speeds.ts";
+import { theirReady, theirYears } from "./speeds.ts";
 import type { ColonyMode, World } from "./types.ts";
 
 
@@ -74,7 +74,7 @@ export function ladderOf(
     return at === Infinity ? null : Math.max(at, builder.leaves);
   })() : null;
   // Strike: our colonies launch seeds of their own. The first copy to leave, seen by a watcher at its star, whose word
-  // crosses to the maker. It readies a bullet as any mind does, then fires it at Earth.
+  // crosses to the maker. It readies a rod, in about a month since its beam stands, then throws it at Earth.
   let strike: Ladder["strike"] = null;
   for (const p of probes)
     for (const c of p.copies) {
@@ -82,7 +82,7 @@ export function ladderOf(
       const S = starAt(p.star);
       if (!S) continue;
       const chose = c.leaves + dist(S, M);
-      const lands = chose + BULLET.ready + theirYears(maker.d);
+      const lands = chose + theirReady(maker.d) + theirYears(maker.d);
       if (!strike || lands < strike.lands) strike = { chose, lands, mt: bulletMt() };
     }
   return { warned, lost, cancelled, colonyLost, strike };

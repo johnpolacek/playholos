@@ -6,8 +6,9 @@ import catalog from "../../data/works.json" with { type: "json" };
 
 /** A bullet of ours: 1,000 t at a tenth of light speed, on its Fusion Drive. Another mind's lands as hard, the same
  *  energy in a rod of a few tonnes thrown near nine tenths of light speed, since speed costs a mind with a wide beam
- *  nothing and gives its target less time (calcs/speeds.py, 2026-11-11). A neighbor's is ready about 32.4 Years after it chooses to
- *  strike, its helium-3 harvest built and filled. Each tonne lands with 108 Mt, so it lands with about 110,000 Mt,
+ *  nothing and gives its target less time (calcs/speeds.py, 2026-11-11). A neighbor's was ready about 32.4 Years after
+ *  it chose to strike, its helium-3 harvest built and filled, until 2026-11-12: its beam stands, so it readies a rod in
+ *  about a month, lib/sim/speeds.ts's theirReady. Each tonne lands with 108 Mt, so it lands with about 110,000 Mt,
  *  enough to scar the air worldwide and cool the climate. Chicxulub would take over 200,000 t. The fuel to fire it is
  *  61 t of fusion fuel a tonne, 60% helium-3 from a harvest and 40% deuterium from the sea. */
 export const BULLET = { tonnes: 1000, v: STRIKE_V, ready: STRIKE_READY, build: STRIKE_BUILD, fuelPerTonne: 61, deuterium: 0.4 };

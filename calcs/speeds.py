@@ -216,6 +216,13 @@ def rod_years(d):
     b = rod_beta(d)
     return d / b + ROD_BEAM_LOST * b / ROD_BEAM
 
+# How soon another mind is ready to throw. Until 2026-11-12 it took a bullet's 32 Years: 20 to build it, and a helium-3
+# harvest built and filled. But it throws a rod by a beam that already stands, as we now can, so by parity it readies
+# one as we do: a bullet's 20 Years by the rod's share of a bullet's mass. Near us its rod flies fastest and is
+# lightest, about 4 t, so about a month. Far off it flies slower and must weigh more for the same harm.
+def their_tonnes(d): return BULLET_TONNES * _energy(FUSION_BETA) / _energy(thrown_beta(d))
+def their_ready(d): return ROD_READY * their_tonnes(d) / ROD_TONNES
+
 # ---------- What the game reads ----------
 # Sails of a few grams, pushed from Earth: a fifth of light speed, Starshot's.
 SAIL_BETA = 0.2
@@ -249,7 +256,7 @@ def golden():
 
 def golden_thrown():
     """What another mind throws, near and far, for game/lib/sim/speeds.ts to reproduce."""
-    return [dict(d=d, beta=thrown_beta(d), years=their_years(d)) for d in (4.25, 29.7, 50, 150, 480, 1000, 2700, 30000)]
+    return [dict(d=d, beta=thrown_beta(d), years=their_years(d), ready=their_ready(d)) for d in (4.25, 29.7, 50, 150, 480, 1000, 2700, 30000)]
 
 
 def golden_probes():
@@ -312,4 +319,4 @@ if __name__ == '__main__':
     for d in (30, 50, 150, 480, 1000, 2700):
         b = thrown_beta(d)
         print(f'  {d:>6} ly: {b:.2f} of light speed, {their_years(d):>7,.0f} Years, where a tenth took {d * 10:>7,}. '
-              f'For a bullet\'s {megatons(1000, 0.1):,.0f} Mt it weighs {megatons(1000, 0.1) / megatons(1, b):.1f} t.')
+              f'For a bullet\'s {megatons(1000, 0.1):,.0f} Mt it weighs {their_tonnes(d):.1f} t, readied in {their_ready(d) * 365.25:.0f} days.')
