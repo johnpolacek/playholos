@@ -88,7 +88,7 @@ export function catalogOf(bytes: ArrayBuffer): Vec[] {
 /** Each census's own rows, kept beside its places: the two more are a star's brightness in V and its color. */
 const LIGHT = new WeakMap<Vec[], Float32Array>();
 /** How fast each census star crosses our sky, in km/s, a byte each, 0 where its motion isn't in our files:
- *  data/gcns-326ly-drift.bin, every star within 100 ly and the bright ones beyond. Given beside a census, each old mind
+ *  data/gcns-326ly-drift.bin, which holds one for every star of the census. Given beside a census, each old mind
  *  on one of its stars carries that star's own. 2026-11-12. */
 const DRIFT = new WeakMap<Vec[], Uint8Array>();
 export function withDrift(stars: Vec[], bytes: ArrayBuffer): Vec[] {

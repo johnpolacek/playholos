@@ -100,7 +100,7 @@ def catalog():
         assert len(_DRIFT) == len(_CATALOG)
     return _CATALOG
 # How fast each census star crosses our sky, in km/s, a byte each, 0 where its motion isn't in our files: every star
-# within 100 ly has one, and the bright ones beyond. scripts/prepare-neighborhood.py, 2026-11-12. It sets how far a
+# of the census has one. scripts/prepare-neighborhood.py, 2026-11-12. It sets how far a
 # beam aimed where the star will be passes the star as it is: calcs/speeds.py beam_miss.
 _DRIFT = []
 def star_drift(k):

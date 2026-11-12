@@ -335,9 +335,9 @@ def wide_rod_years(d):
 # there in d Years and the craft in d / beta, and the star moves on in between. So the beam passes the star as it then
 # is by its speed across our sky times that gap: (v / c)(1 / beta - 1) d. The slower the craft, the wider it misses.
 # Benford and Benford 2016: "the beam is generally not observable from the target planetary system".
-# How fast a star crosses our sky: each star's own, where our files hold its motion, which is every star within 100 ly
-# (data/gcns-326ly-drift.bin, from Gaia's census of nearby stars, scripts/prepare-neighborhood.py). Past them, their
-# middle speed: 30 km/s, measured over 10,898 stars. Until 2026-11-12 that 30 was a sample, taken for every star.
+# How fast a star crosses our sky: each star's own, which our files hold for every star of the census, 301,387 within
+# 326 ly (data/gcns-326ly-drift.bin, from Gaia's catalogue of nearby stars, scripts/prepare-neighborhood.py). Where no
+# star is named, their middle speed: 31 km/s. Until 2026-11-12 the game took 30 for every star, a sample.
 # Benford takes 20. Proxima's is 24, Tau Ceti's 33, Barnard's 90.
 # Until 2026-11-12 every launch beam was seen at its star, the designer's pick with this doubt beside it. The designer's
 # pick now, (ar): it is seen only where a mind's works reach the beam's line. An awake old mind's panels sit where a

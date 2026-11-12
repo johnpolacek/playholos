@@ -4,6 +4,8 @@ Retrieved September 26, 2026 from VizieR's TAP service. `query-url.txt` preserve
 
 **The game’s 326 ly census,** added 2026-10-29: every GCNS object within 100 pc, 301,387 objects (300,098 Gaia, 1,289 Hipparcos supplement), in `data/gcns-326ly.bin` and `data/gcns-326ly-meta.json`. CDS was unreachable that day, so the full GCNS (331,312 rows, matching the paper) came from ESA’s Gaia archive, `external.gaiaedr3_gcns_main_1`, as `.cache/gcns-all.csv`. The query is in `esa-query-adql.txt`, and the Hipparcos parallaxes query in `esa-hip-query-adql.txt`, saved as `.cache/hip-gaia-parallax.csv`. Build: `python3 scripts/prepare-neighborhood.py 326 .cache/gcns-all.csv data/gcns-326ly`.
 
+**Each star’s motion,** added 2026-11-12: the proper motion and parallax of every GCNS object, 331,312 rows, from ESA’s Gaia archive, since CDS was unreachable again. Saved as `.cache/gcns-all-motions.csv`, with the query in `esa-motions-query-adql.txt`. The same build writes `data/gcns-326ly-drift.bin`, a byte a star in the census’s own order: its speed across our sky in km/s.
+
 ## Sources
 
 - **Gaia Catalogue of Nearby Stars** (GCNS): Gaia Collaboration, Smart et al. (2021), *Gaia Early Data Release 3: The Gaia Catalogue of Nearby Stars*, A&A 649, A6, [doi:10.1051/0004-6361/202039498](https://doi.org/10.1051/0004-6361/202039498); VizieR J/A+A/649/A6, table `table1c`. Credit: ESA, Gaia DPAC.

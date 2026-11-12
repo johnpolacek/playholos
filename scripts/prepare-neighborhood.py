@@ -7,6 +7,7 @@ data/neighborhood-sources/):
   .cache/gcns-all.csv            the full GCNS with colors, for wider radii
   .cache/hygdata_v41.csv         HYG 4.1, for bright stars Gaia does not measure
   .cache/hip-gaia-parallax.csv   Gaia EDR3 parallaxes of Hipparcos stars, for the region's edge
+  .cache/gcns-all-motions.csv    the full GCNS's motions and parallaxes, for each star's speed across our sky
 
 The game's census, every object within 326 ly (100 pc):
   python3 scripts/prepare-neighborhood.py 326 .cache/gcns-all.csv data/gcns-326ly
@@ -51,13 +52,15 @@ def b_minus_v(bp_rp):
     return points[-1][1]
 
 # How fast each star crosses our sky, in km/s, where a cached file has its motion: 4.74 times its motion in arcseconds
-# a year times its distance in parsecs. The wide census file keeps no motions, so only stars in the 100 ly file have
-# one, and the bright stars HYG adds. The rest are 0: not known here. 2026-11-12, for where a launch beam passes a star.
+# a year times its distance in parsecs. The wide census file keeps no motions, so they come from a file of their own,
+# the full GCNS's, with the 100 ly file's for any star it lacks and HYG's for the bright stars it adds. A star with
+# none is 0: not known here. 2026-11-12, for where a launch beam passes a star.
 def drift_kms(pmra_mas, pmdec_mas, parallax_mas):
     return 4.74047 * math.hypot(pmra_mas, pmdec_mas) / parallax_mas
 near_drift = {}
-if (root / '.cache/gcns-100ly.csv').exists():
-    for row in csv.DictReader((root / '.cache/gcns-100ly.csv').open()):
+for name in ('.cache/gcns-100ly.csv', '.cache/gcns-all-motions.csv'):
+    if not (root / name).exists(): continue
+    for row in csv.DictReader((root / name).open()):
         if row['pmRA'] and row['pmDE'] and row['Plx'] and float(row['Plx']) > 0:
             near_drift[row['GaiaEDR3']] = drift_kms(float(row['pmRA']), float(row['pmDE']), float(row['Plx']))
 drift = []

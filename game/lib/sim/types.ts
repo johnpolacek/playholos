@@ -91,7 +91,7 @@ export interface OldMind {
   /** Its star's light in Suns, read from the census: it sets how far out its cold works sit. Null at a seeded place
    *  beyond the catalog. Missing on a world drawn before 2026-11-12. */
   lum?: number | null;
-  /** How fast its star crosses our sky, in km/s, where our files hold its motion: every star within 100 ly. It sets
+  /** How fast its star crosses our sky, in km/s, from Gaia's motion of it, which we hold for every census star. It sets
    *  how far a beam aimed where the star will be passes the star as it is. Null where we hold none. */
   kms?: number | null;
   /** Its part in the settling, when the Galaxy's first groups became one under one rule: it helped set the rule, it

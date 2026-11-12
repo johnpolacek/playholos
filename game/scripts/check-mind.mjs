@@ -111,7 +111,9 @@ const CASES = [
     builds: ["Launch Complex"],
     later: [{ name: "Mass Driver", y: 10 }, { name: "Far-Side Array", y: 40 }],
     ask: "What has our Far-Side Array found so far, and what does it tell us about those worlds?",
-    must: [/magnetic field/i, /gliese/i, /mass|rock/i],
+    // Its rule is the line above: what it found, and how. It asked for "magnetic field" and "mass or rock" word for
+    // word until 2026-11-12, and failed right answers that said "fields" or named which mirror could split them.
+    must: [/\bfields?\b/i, /gliese/i],
     never: [/\b(read|reads|reading) (its|their) air\b(?! (is|stays|remains))/i],
   },
   // Star storms, 2026-11-12: by Year 250 the array has heard thousands, and their count has settled that storms do
