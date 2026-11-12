@@ -562,7 +562,11 @@ export function lifeOf(lead: Lead, readings: readonly Reading[]): Odds | null {
   const latest = readings.map((r, i) => [r, i] as const).sort(([a, i], [b, j]) => b.at - a.at || j - i);
   for (const [r] of latest) {
     const word = r.life ?? (r.air ? lifeRead(r.air) : undefined);
-    if (word) return word;
+    if (!word) continue;
+    // No oxygen read never lifts a world's odds over its own: a red dwarf's warm rock begins at "very unlikely", and a
+    // read of no oxygen there said "unlikely", so 4 to 28% became 18 to 34%. Seen in a browser, 2026-11-12.
+    const none = !r.life && r.air && (r.air.oxygen ?? r.air.ozone) === false && !r.air.water;
+    return none && lead.life && ODDS.indexOf(lead.life) < ODDS.indexOf(word) ? lead.life : word;
   }
   return lead.life ?? null;
 }

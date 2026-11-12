@@ -57,7 +57,7 @@ function beamLine(ly: number, beta: number) {
   const au = beamMiss(ly, beta);
   const wide = au >= 31620 ? `${(au / 63241).toFixed(1)} ly` : `${Math.round(au).toLocaleString("en-US")} AU`;
   return beamSeen(ly, beta)
-    ? ` We aim where this star will be, so its beam passes the star by about ${wide}. An old mind’s works reach that far: one awake here sees the beam, as it would a knock.`
+    ? ` We aim where this star will be, so its beam passes the star by about ${wide}. If an old mind is awake here, its works reach that far, and it sees the beam as it would a knock.`
     : ` We aim where this star will be, so its beam passes the star by about ${wide}, too wide for a mind here to see.`;
 }
 

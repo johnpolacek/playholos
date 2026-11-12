@@ -816,7 +816,8 @@ export function Brings({ road }: { road: Road }) {
       <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[10.5px]">
         {item("pass", "lands with 110,000 Mt")}
         {item("pictures", "sends nothing home")}
-        {item("air", "its flame seen only here")}
+        {/* A rod the Ship Beam throws has no engine, so no flame: said it had one until 2026-11-12. */}
+        {item("air", road.push ? "no flame, thrown by our beam" : "its flame seen only here")}
       </div>
     );
   if (road.craft === "A seed probe")
