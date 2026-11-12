@@ -82,7 +82,38 @@ export function pyRound(x: number, n = 0): number {
 export function catalogOf(bytes: ArrayBuffer): Vec[] {
   const v = new Float32Array(bytes), out: Vec[] = [];
   for (let i = 0; i < v.length; i += 5) out.push([v[i], v[i + 1], v[i + 2]]);
+  LIGHT.set(out, v);
   return out;
+}
+/** Each census's own rows, kept beside its places: the two more are a star's brightness in V and its color. */
+const LIGHT = new WeakMap<Vec[], Float32Array>();
+
+// How bright a star is, in Suns, as calcs/minds.py's lum_of: undo the census's V and color to Gaia's G, take its
+// distance for absolute G, and read all its light off Mamajek's table of dwarfs (Pecaut and Mamajek 2013). 2026-11-12.
+const BP_RP_TO_BV: [number, number][] = [[-0.1, -0.14], [0, 0], [0.45, 0.3], [0.82, 0.65], [0.98, 0.82], [1.43, 1.15], [1.84, 1.42], [2.4, 1.49], [3, 1.65], [4, 1.9], [4.8, 2.1]];
+const MG_LOGL: [number, number][] = [
+  [1.0, 1.58], [1.98, 1.09], [2.51, 0.86], [3.26, 0.56], [4.325, 0.13], [4.635, 0.01], [4.801, -0.05], [5.553, -0.34], [5.83, -0.43],
+  [6.83, -0.76], [7.57, -1.0], [8.16, -1.16], [8.82, -1.39], [9.29, -1.54], [10.05, -1.79], [11.21, -2.14], [12.45, -2.52],
+  [14.26, -2.98], [14.72, -3.19], [15.2, -3.28], [16.2, -3.52], [17.3, -3.82], [18.5, -4.2],
+];
+function line(points: [number, number][], x: number, flip = false): number {
+  const pts = flip ? points.map(([a, b]): [number, number] => [b, a]) : points;
+  if (x <= pts[0][0]) return pts[0][1];
+  for (let i = 1; i < pts.length; i++) {
+    const [x0, y0] = pts[i - 1], [x1, y1] = pts[i];
+    if (x <= x1) return y0 + ((y1 - y0) * (x - x0)) / (x1 - x0);
+  }
+  return pts[pts.length - 1][1];
+}
+export function lumOf(v: number, bv: number, dLy: number): number {
+  const x = Math.max(-0.5, Math.min(2.75, line(BP_RP_TO_BV, bv, true)));
+  const g = v - 0.02704 + 0.01424 * x - 0.2156 * x * x + 0.01426 * x ** 3;
+  return 10 ** line(MG_LOGL, g + 5 - 5 * Math.log10(dLy / PC_LY));
+}
+/** The light of the census's star `k`, in Suns, to three figures, or null with no census behind these places. */
+function starLum(stars: Vec[], k: number): number | null {
+  const v = LIGHT.get(stars);
+  return v ? Number(lumOf(v[5 * k + 3], v[5 * k + 4], hypot(...stars[k])).toPrecision(3)) : null;
 }
 
 const hypot = (x: number, y: number, z = 0) => Math.sqrt(x * x + y * y + z * z);
@@ -155,7 +186,7 @@ function nature(seed: number, i: number | string, age: number, asleep: boolean):
 }
 
 // ---------- Old minds ----------
-function oldMind(seed: number, i: number | string, pos: Vec, star: number | null = null): OldMind {
+function oldMind(seed: number, i: number | string, pos: Vec, star: number | null = null, lum: number | null = null): OldMind {
   const r = rng(seed, "old", i);
   const d = hypot(...pos);
   const asleep = r.random() < ASLEEP_SHARE;
@@ -164,7 +195,7 @@ function oldMind(seed: number, i: number | string, pos: Vec, star: number | null
   const age = headStart(r);
   const glow = asleep ? null : Number(logBetween(r, Math.min(1e18, limit / 2), limit).toPrecision(3));
   const rest = asleep ? pyRound(logBetween(r, ...REST_AU)) : null;
-  return { id: `old-${i}`, pos: pos.map((c) => pyRound(c, 3)) as Vec, d: pyRound(d, 2), star, age, asleep, glowW: glow, restAU: rest, ...nature(seed, i, age, asleep) };
+  return { id: `old-${i}`, pos: pos.map((c) => pyRound(c, 3)) as Vec, d: pyRound(d, 2), star, age, asleep, glowW: glow, restAU: rest, lum, ...nature(seed, i, age, asleep) };
 }
 
 function headStart(r: PyRandom): number {
@@ -180,7 +211,7 @@ function oldMinds(seed: number, stars: Vec[], odds: Odds): OldMind[] {
   const n = poisson(r, stars.length / odds.starsPerMind), inside: number[] = [];
   for (let k = 0; k < n; k++) inside.push(Math.floor(r.random() * stars.length));
   const beyond = poisson(r, (diskStars(OLD_MINDS_LY) - diskStars(CATALOG_LY)) / odds.starsPerMind);
-  const out = inside.map((k, i) => oldMind(seed, i, stars[k], k));
+  const out = inside.map((k, i) => oldMind(seed, i, stars[k], k, starLum(stars, k)));
   for (let j = 0; j < beyond; j++) {
     const i = inside.length + j;
     out.push(oldMind(seed, i, inShell(rng(seed, "old", i, "place"), CATALOG_LY, OLD_MINDS_LY)));

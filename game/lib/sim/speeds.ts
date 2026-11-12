@@ -145,8 +145,11 @@ export const theirYears = (ly: number) => (ly > 0 ? ly / theirBeta(ly) : 0);
  *  between: its speed across our sky times that gap. The slower the craft, the wider the miss. Benford and Benford
  *  2016, calcs/speeds.py beam_miss. 2026-11-12. */
 export const beamMiss = (ly: number, beta: number) => (SPEEDS.seen.kms / 299792.458) * (1 / beta - 1) * ly * (9.4607e15 / 1.495978707e11);
-/** Whether a mind awake at that star sees the beam: only an old mind's, whose works reach the beam's line. A peer's
- *  swarm is under an AU wide, so no peer does. */
-export const beamSeen = (ly: number, beta: number) => beta > 0 && beamMiss(ly, beta) <= SPEEDS.seen.worksAU;
+/** How far an awake old mind's works reach from its star, in AU: where a plate stays at its glow's 12 K, by the root
+ *  of the star's light in Suns. 538 AU at a Sun, about 50 at a red dwarf. */
+export const worksAU = (lum = 1) => SPEEDS.seen.worksAU * Math.sqrt(lum);
+/** Whether a mind awake at that star sees the beam: only an old mind's, whose works reach the beam's line, by its
+ *  star's light in Suns. A peer's swarm is under an AU wide, so no peer does. */
+export const beamSeen = (ly: number, beta: number, lum = 1) => beta > 0 && beamMiss(ly, beta) <= worksAU(lum);
 /** How near a star must be for an awake old mind there to see the beam that throws a craft at this speed, in ly. */
-export const seenWithin = (beta: number) => SPEEDS.seen.worksAU / beamMiss(1, beta);
+export const seenWithin = (beta: number, lum = 1) => worksAU(lum) / beamMiss(1, beta);

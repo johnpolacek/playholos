@@ -86,6 +86,9 @@ export interface OldMind {
   glowW: number | null;
   /** Asleep, how far from its star it rests, folded up small, in AU. Null awake. */
   restAU: number | null;
+  /** Its star's light in Suns, read from the census: it sets how far out its cold works sit. Null at a seeded place
+   *  beyond the catalog. Missing on a world drawn before 2026-11-12. */
+  lum?: number | null;
   /** Its part in the settling, when the Galaxy's first groups became one under one rule: it helped set the rule, it
    *  spread and was made to stop, or it was born after. calcs/minds.py's nature, 2026-11-11. */
   part: "founder" | "stopped" | "after";
@@ -166,9 +169,10 @@ export interface FeltWorld {
   a: number;
   by: string;
   year: number;
-  /** Its star, from the catalogs: its kind, and its warm zone in AU. */
+  /** Its star, from the catalogs: its kind, its warm zone in AU, and its light in Suns. */
   kind?: string;
   hz?: [number, number];
+  lum?: number;
   /** What our Infrared Telescope has made of it so far, once built. */
   read?: Read;
   /** What our 15 m Mirror has made of it, once built, if it can read more of it than the Infrared Telescope can. */
@@ -195,6 +199,8 @@ export interface FieldWorld {
   at: number;
   kind?: string;
   hz?: [number, number];
+  /** Its star's light in Suns, from the catalogs. */
+  lum?: number;
   /** What the Infrared Telescope has read of it, and the 15 m Mirror, where each can split it from its star: few can.
    *  A mirror that can't split it never turns there, so it has no read. 2026-11-12. */
   read?: Read;

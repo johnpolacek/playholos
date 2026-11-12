@@ -47,7 +47,7 @@ export const BEAM_TRAVELS = "The beam that threw our craft toward it";
 
 /** Each craft a beam of ours threw at a cold glow, as a knock with nothing in it. The beam is aimed where the star
  *  will be when the craft lands, so it passes the star by: speeds.ts's beamMiss. An awake old mind sees it only if its
- *  works reach that far, which oldAnswers checks by its distance. The designer's pick, 2026-11-12. */
+ *  works reach that far, which oldAnswers checks by its distance and its star's light. The designer's pick, 2026-11-12. */
 export function beamsAt(flybys: readonly { star: string; leaves?: number; thrown?: number }[]): Aimed[] {
   return flybys
     .filter((f) => f.thrown !== undefined && f.leaves !== undefined && /^Cold glow \d+$/.test(f.star))
@@ -77,7 +77,7 @@ export function oldAnswers(world: World, seen: MindsSeen, craft: MindKit["craft"
   for (const [name, id] of named) {
     const m = olds.get(id);
     // A beam counts only where it is seen: by a mind awake, whose works reach the line the beam passes on.
-    const msg = aimed.filter((a) => a.to === name && (!a.flash || (!m?.asleep && beamSeen(m?.d ?? Infinity, a.beta ?? 0)))).sort((a, b) => a.y - b.y)[0];
+    const msg = aimed.filter((a) => a.to === name && (!a.flash || (!m?.asleep && beamSeen(m?.d ?? Infinity, a.beta ?? 0, m?.lum ?? 1)))).sort((a, b) => a.y - b.y)[0];
     if (!m || !msg || m.open <= SILENT) continue;
     let hears = msg.y + m.d;
     if (m.asleep) {

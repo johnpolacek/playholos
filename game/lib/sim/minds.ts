@@ -65,6 +65,8 @@ export interface ColdGlowSeen {
   d: number;
   seen: number;
   watts: number;
+  /** Its star's light in Suns, from the census: it sets how far out what glows can sit. 2026-11-12. */
+  lum?: number;
   /** The Year word comes home from a craft of ours that stayed in its system and saw its source up close. 2026-10-31. */
   near?: number;
   /** The Year our Glow Imager showed its source from home: thin panels on orderly orbits, as a craft up close sees.
@@ -317,11 +319,11 @@ export function coldGlowOf(m: OldMind, halo: number | null | undefined, year: nu
   // A hostile mind wrecks a craft that comes to stay, as it arrives: we know once its word is overdue. 2026-11-11.
   if (hostile(m, maker)) {
     const came = arrival(m, craft);
-    return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW, id: m.id, ...(came !== null && came + m.d <= year ? { lost: came + m.d } : {}) };
+    return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW, id: m.id, ...(m.lum != null ? { lum: m.lum } : {}), ...(came !== null && came + m.d <= year ? { lost: came + m.d } : {}) };
   }
   // A craft that stays in its system maps it in a few Years and sees what glows, up close. 2026-10-31.
   const near = closest(m, craft, true);
-  return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW, id: m.id, ...(near !== null && near <= year ? { near } : {}) };
+  return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW, id: m.id, ...(m.lum != null ? { lum: m.lum } : {}), ...(near !== null && near <= year ? { near } : {}) };
 }
 
 /** At or under this score, hostile to peaceful, a mind is hostile: it wrecks a craft of ours that comes to stay in its

@@ -95,6 +95,9 @@ export const isHole = (art: Art) => art.kind === "dark" || art.kind === "pair";
 export interface Lead {
   /** Its page's address. */
   slug: string;
+  /** Its star's light in Suns, where we know it: it sets how far an old mind's cold works would reach there, and so
+   *  whether one would see a beam of ours pass. 2026-11-12. */
+  lum?: number;
   /** Where it is, for a lead the sky file lacks: right ascension in hours, declination, light-years. */
   at?: [number, number, number];
   star: string;
@@ -222,6 +225,7 @@ function feltLead(f: FeltWorld): Lead {
             : "very unlikely";
   return {
     slug: slugOf(f.star),
+    lum: f.lum,
     star: f.star,
     what: "A new world",
     line: `Felt by ${f.by} in ${YEAR_0 + f.year}. At least ${one(m)} Earths.`,
@@ -281,6 +285,7 @@ function fieldLead(f: FieldWorld): Lead {
       : `It sits too close to its star for either telescope we can build to split. ${whole}`;
   return {
     slug: slugOf(f.star),
+    lum: f.lum,
     star: f.star,
     what: "A new world",
     line: `Heard by our Far-Side Array at Year ${yearText(f.at)}, by the radio of its magnetic field.`,
@@ -936,6 +941,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
     }),
     ...m.glows.map((g, i): Lead => ({
       slug: `cold-glow-${i + 1}`,
+      lum: g.lum,
       at: [g.ra, g.dec, g.d],
       star: `Cold glow ${i + 1}`,
       what: "A cold grey glow",
@@ -1251,6 +1257,8 @@ export function proximaLead(seen?: ProximaSeen): Lead {
   const tone = gas ? "as a world of thick gas may" : read === "dim" ? "dim, as the Moon and Mercury are" : read === "bright" ? "bright, as cloud and air are" : "between the Moon’s dimness and cloud’s brightness";
   return {
     slug: "proxima-centauri",
+    // Its light in Suns, as knowledge.ts's PROXIMA has it.
+    lum: 0.00157,
     star: "Proxima Centauri",
     what: "A world next door",
     line: seen

@@ -780,14 +780,17 @@ test("a launch beam is seen only where an old mind's works reach it: no peer ans
   const { glowsFound, mindsSeen } = await import("./minds.ts");
   const { peerAnswers } = await import("./peers.ts");
   const { oldAnswers, beamsAt, BEAM_TRAVELS, SILENT, ANSWERS_IN } = await import("./old-minds.ts");
-  const { beamMiss, beamSeen, seenWithin, SAIL_C } = await import("./speeds.ts");
+  const { beamMiss, beamSeen, seenWithin, worksAU, SAIL_C } = await import("./speeds.ts");
   // The miss and who sees it, as calcs/speeds.py has them, for sails, a seed ship, a flyby probe and a rod.
-  const misses = (golden as unknown as { misses: { d: number; beta: number; au: number; seen: boolean }[] }).misses;
-  assert.ok(misses.length >= 36 && misses.some((g) => g.seen) && misses.some((g) => !g.seen));
+  const misses = (golden as unknown as { misses: { d: number; beta: number; lum: number; au: number; seen: boolean }[] }).misses;
+  assert.ok(misses.length >= 108 && misses.some((g) => g.seen) && misses.some((g) => !g.seen));
   for (const g of misses) {
     assert.ok(Math.abs(beamMiss(g.d, g.beta) - g.au) <= 1e-6 * g.au, `${g.d} ly at ${g.beta}: ${beamMiss(g.d, g.beta)} against ${g.au}`);
-    assert.equal(beamSeen(g.d, g.beta), g.seen);
+    assert.equal(beamSeen(g.d, g.beta, g.lum), g.seen, `${g.d} ly at ${g.beta}, ${g.lum} Suns`);
   }
+  // A dimmer star's 12 K line lies nearer in, as the root of its light: a red dwarf's mind sees a probe's beam only
+  // within about 6 ly, where a Sun's sees it within 61.
+  assert.ok(Math.abs(worksAU(0.25) / worksAU() - 0.5) < 1e-12 && seenWithin(catalog.speeds.probe.beam, 0.009) < 6.5 && beamSeen(50, catalog.speeds.probe.beam) && !beamSeen(50, catalog.speeds.probe.beam, 0.009));
   // The slower the craft, the wider its beam misses: sails are seen within about 21 ly, a probe within about 61.
   assert.ok(seenWithin(SAIL_C) > 20 && seenWithin(SAIL_C) < 23 && seenWithin(catalog.speeds.probe.beam) > 58 && seenWithin(catalog.speeds.probe.beam) < 64);
   assert.ok(seenWithin(catalog.speeds.beam) < seenWithin(SAIL_C) && seenWithin(catalog.speeds.rod.beam) > seenWithin(catalog.speeds.probe.beam));
@@ -811,8 +814,10 @@ test("a launch beam is seen only where an old mind's works reach it: no peer ans
     if (g < 0) continue;
     olds++;
     const m = world.minds!.old.find((x) => x.id === seen.glows[g].id)!;
-    const fast = seenWithin(SAIL_C) > m.d ? SAIL_C : 0.999;
-    assert.ok(beamSeen(m.d, fast) && !beamSeen(m.d, 0.001));
+    // Every old mind on a census star carries that star's light, which sets how far its works reach.
+    assert.ok(world.minds!.old.every((x) => (x.star === null ? x.lum === null : x.lum! > 0)));
+    const fast = seenWithin(SAIL_C, m.lum!) > m.d ? SAIL_C : 0.99999;
+    assert.ok(beamSeen(m.d, fast, m.lum!) && !beamSeen(m.d, 0.001, m.lum!));
     const [a] = oldAnswers(world, seen, [], beamsAt([{ star: `Cold glow ${g + 1}`, leaves: 50, thrown: fast }]), 1e6);
     assert.equal(a.answers, BEAM_TRAVELS);
     assert.ok(Math.abs(a.arrived - (50 + 2 * m.d + ANSWERS_IN[m.open])) < 1e-6);

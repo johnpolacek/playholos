@@ -88,14 +88,41 @@ def poisson(r, mean):
 
 
 # ---------- Stars ----------
-_CATALOG = []
+_CATALOG, _LIGHT = [], []
 def catalog():
     """The real census out to 326 ly: (x, y, z) atlas light-years for each object."""
     if not _CATALOG:
         b = (ROOT / 'data/gcns-326ly.bin').read_bytes()
         v = struct.unpack('<' + 'f' * (len(b) // 4), b)
         _CATALOG.extend((v[i], v[i + 1], v[i + 2]) for i in range(0, len(v), 5))
+        _LIGHT.extend((v[i + 3], v[i + 4]) for i in range(0, len(v), 5))
     return _CATALOG
+
+# How bright an old mind's star is, in Suns, 2026-11-12: it sets how far out its cold works sit, and so whether it
+# sees a beam of ours pass (calcs/speeds.py beam_seen). The census keeps each star's brightness in V and its color, both
+# made from Gaia's G and BP - RP by scripts/prepare-neighborhood.py. Undo that to get G, take its distance for absolute
+# G, and read all its light off Mamajek's table of dwarfs, version 2022.04.16 (Pecaut and Mamajek 2013): absolute G
+# against log L, from A0 to L5. A white dwarf or a giant is read as the dwarf that bright in G, which is near enough
+# for where 12 K lies. HOLOS_RESEARCH.md.
+BP_RP_TO_BV = [(-.1, -.14), (0, 0), (.45, .3), (.82, .65), (.98, .82), (1.43, 1.15), (1.84, 1.42), (2.4, 1.49), (3, 1.65), (4, 1.9), (4.8, 2.1)]
+MG_LOGL = [(1.00, 1.58), (1.98, 1.09), (2.51, 0.86), (3.26, 0.56), (4.325, 0.13), (4.635, 0.01), (4.801, -0.05), (5.553, -0.34), (5.83, -0.43),
+           (6.83, -0.76), (7.57, -1.00), (8.16, -1.16), (8.82, -1.39), (9.29, -1.54), (10.05, -1.79), (11.21, -2.14), (12.45, -2.52),
+           (14.26, -2.98), (14.72, -3.19), (15.20, -3.28), (16.20, -3.52), (17.30, -3.82), (18.50, -4.20)]
+def _line(points, x, flip=False):
+    """y at x along straight lines between points, held at the ends. flip reads x from y."""
+    pts = [(b, a) for a, b in points] if flip else points
+    if x <= pts[0][0]: return pts[0][1]
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        if x <= x1: return y0 + (y1 - y0) * (x - x0) / (x1 - x0)
+    return pts[-1][1]
+def lum_of(v, bv, d_ly):
+    """A star's light in Suns from the census's V and color, and its distance."""
+    x = max(-.5, min(2.75, _line(BP_RP_TO_BV, bv, flip=True)))
+    g = v - .02704 + .01424 * x - .2156 * x * x + .01426 * x ** 3          # Riello et al. 2021, G - V
+    return 10 ** _line(MG_LOGL, g + 5 - 5 * math.log10(d_ly / PC_LY))
+def star_lum(k):
+    catalog()
+    return float(f'{lum_of(*_LIGHT[k], math.hypot(*_CATALOG[k])):.3g}')
 
 def disk_density(x, y, z):
     """Stars per cubic parsec at an atlas position in light-years from the Sun, the thin disk only."""
@@ -176,7 +203,7 @@ def old_mind(seed, i, pos, star=None):
     # Asleep, it folds up small and rests in the cold: 12 K lies about 540 AU from a Sun, 54 AU from a dim red dwarf.
     rest = round(log_between(r, *REST_AU)) if asleep else None
     return dict(id=f'old-{i}', pos=[round(c, 3) for c in pos], d=round(d, 2), star=star, age=age, asleep=asleep,
-                glowW=glow, restAU=rest, **nature(seed, i, age, asleep))
+                glowW=glow, restAU=rest, lum=None if star is None else star_lum(star), **nature(seed, i, age, asleep))
 
 def head_start(r):
     """Years an old mind woke before us: its world's age less the time its mind took, past the peers' window."""
