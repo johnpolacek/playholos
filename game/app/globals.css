@@ -27,6 +27,9 @@
   --lift: #c2d766;
   --reach: #e48ebf;
   --keep: #c1ccd7;
+  /* Attack, 2026-11-12: a weapon reads as one. As light as the rest and a little stronger, at 29° of hue, midway
+     between reach's pink and the other minds' orange, so 44° from each, a degree under the 45° the rest keep. */
+  --attack: #f58c7e;
   /* A thing that is set and working, as a key that opens the Mind. The same green as see. */
   --ok: #70d1a9;
   --shadow: rgba(0, 0, 0, 0.5);
@@ -53,6 +56,7 @@
   --color-lift: var(--lift);
   --color-reach: var(--reach);
   --color-keep: var(--keep);
+  --color-attack: var(--attack);
   --color-ok: var(--ok);
   --color-shadow: var(--shadow);
   --font-sans: var(--font-suse);

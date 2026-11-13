@@ -12,8 +12,18 @@ import { GIFT_STEPS } from "@/lib/sim/messages";
 import { CATALOG, centers, pace, type Order } from "@/lib/sim/works";
 import { rodTonnes, type Push } from "@/lib/sim/speeds";
 
-/** What a build does, which gives it its color: listening, thinking, seeing, lifting, reaching or keeping us. */
-export type Does = "listen" | "think" | "see" | "lift" | "reach" | "keep";
+/** What a build does, which gives it its color: listening, thinking, seeing, lifting, reaching, keeping us, or
+ *  attacking. Attack has its own since 2026-11-12: the designer took a bullet for another kind of probe. */
+export type Does = "listen" | "think" | "see" | "lift" | "reach" | "keep" | "attack";
+
+/** The word each build wears, so its kind reads at a glance and not by color alone. The designer's word, 2026-11-12,
+ *  with search, travel and attack as his examples. Listening and seeing are one word, Search, as the strategy of that
+ *  name already joins them. Reaching splits three ways: Travel, Speak and Attack. */
+export type Kind = "Search" | "Think" | "Build" | "Travel" | "Speak" | "Attack" | "Protect";
+const KIND: Record<Does, Kind> = { listen: "Search", see: "Search", think: "Think", lift: "Build", reach: "Travel", keep: "Protect", attack: "Attack" };
+/** What sends our words or our Will, not a craft. */
+const SPEAKS = new Set(["Galaxy Broadcast Array", "Mind Link"]);
+export const kindOf = (b: Pick<Build, "name" | "does">): Kind => (SPEAKS.has(b.name) ? "Speak" : KIND[b.does]);
 
 export interface Build {
   name: string;
@@ -131,9 +141,9 @@ export const LATER: Later[] = [
   },
   // Parity, 2026-10-28: catch what the watch sees, and strike a star. Screens retired 2026-10-31, audit 2.1.
   { name: "Interceptor", what: "A weapon, for defense: it wrecks a probe that stops in our system.", does: "keep", after: "X-Ray Watch" },
-  { name: "Strike Yard", what: "A weapon, not a probe: its bullets fly to a star only to destroy.", does: "reach", after: "Fusion Drive" },
+  { name: "Strike Yard", what: "A weapon, not a probe: its bullets fly to a star only to destroy.", does: "attack", after: "Fusion Drive" },
   // The audit's helium-3 harvest, 2026-10-29: every bullet's fuel, ours and every neighbor's, comes from one.
-  { name: "Helium-3 Harvest", what: "Helium-3 from Uranus’s air, a bullet’s fuel, doubling every 5 Years.", does: "reach", after: "Probe Yard" },
+  { name: "Helium-3 Harvest", what: "Helium-3 from Uranus’s air, a bullet’s fuel, doubling every 5 Years.", does: "attack", after: "Probe Yard" },
   // A rock coming, 2026-10-28: the deflector opens only once a survey finds one, in games whose seed sends one.
   {
     name: "Rock Deflector",

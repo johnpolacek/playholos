@@ -2,14 +2,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { CostLine, previews, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
-import { BuildMark, buildTone, LockMark } from "@/components/marks";
+import { BuildMark, buildTone, KindTag, LockMark } from "@/components/marks";
 import { OpensLine } from "@/components/opens";
 import { usePlan, usePoint, useSchedule } from "@/components/picks";
 import { useWorks } from "@/components/works";
 import { Face, ListHead } from "@/components/tab-head";
 import { span, tenths } from "@/lib/game/clock";
 import { SITES } from "@/lib/game/sites";
-import { buildSlug, fits, lacks, LATER, lockedAt, moves, needs, openAt, ordered, orderLater, PAST, takenAt } from "@/lib/game/plan";
+import { kindOf, buildSlug, fits, lacks, LATER, lockedAt, moves, needs, openAt, ordered, orderLater, PAST, takenAt } from "@/lib/game/plan";
 
 // In play, the Catalog: everything open to us and not in our order, under our instruments, each with when it would be
 // done if ordered now, last in line, what it would take and slow, what it opens, and Add to Queue on the row itself.
@@ -106,7 +106,9 @@ export function Catalog({ className = "" }: { className?: string }) {
                   name={
                     <>
                       <b className="font-semibold">{b.name}</b>
-                      {fits(strategy, b) && (
+                      {/* Its kind, as a word. Where our strategy bears the same word, the one tag says both. */}
+                      <KindTag name={b.name} className={`ml-2 align-[2px] ${fits(strategy, b) && strategy === kindOf(b) ? "rounded-full border border-current/50 px-1.5 py-px" : ""}`} />
+                      {fits(strategy, b) && strategy !== kindOf(b) && (
                         <span className="ml-2 rounded-full border border-other/50 px-1.5 py-px align-[2px] font-mono text-[9px] tracking-[.08em] text-other uppercase">
                           {strategy}
                         </span>
@@ -160,6 +162,7 @@ export function Catalog({ className = "" }: { className?: string }) {
                         <span className="text-muted">
                           <LockMark size={11} />
                         </span>
+                        <KindTag name={b.name} className="ml-0.5 opacity-70" />
                       </span>
                     }
                     line={

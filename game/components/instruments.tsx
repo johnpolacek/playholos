@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
-import { BuildMark, buildColor, buildTone } from "@/components/marks";
+import { BuildMark, buildColor, buildTone, KindTag } from "@/components/marks";
 import { usePlan, usePoint, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
@@ -228,7 +228,10 @@ function Card({ name, since, line, news, busy }: { name: string; since: number; 
           <BuildMark name={name} size={24} />
         </span>
         <span className="flex min-w-0 grow flex-col gap-0.5">
-          <span className="text-[15px] leading-snug font-medium">{name}</span>
+          <span className="text-[15px] leading-snug font-medium">
+            {name}
+            <KindTag name={name} className="ml-2 align-[2px]" />
+          </span>
           <span className={`text-[13px] leading-snug ${news ? "text-(--c)" : "text-page-ink2"}`}>
             {line}
             {/* A search still at work breathes: three dots in turn. 2026-11-07. */}

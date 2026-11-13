@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router";
-import { BuildMark, buildTone } from "@/components/marks";
+import { BuildMark, buildTone, KindTag } from "@/components/marks";
 import { Face, ListHead } from "@/components/tab-head";
 import { buildSlug, opens, takes } from "@/lib/game/plan";
 
@@ -54,7 +54,12 @@ export function Opens({ name, className = "mt-6" }: { name: string; className?: 
               <Face
                 mark={<BuildMark name={b.name} />}
                 tone={buildTone(b.name, false)}
-                name={<b className="font-semibold">{b.name}</b>}
+                name={
+                  <>
+                    <b className="font-semibold">{b.name}</b>
+                    <KindTag name={b.name} className="ml-2 align-[2px]" />
+                  </>
+                }
                 line={b.what}
                 right={took(b.name)}
               />

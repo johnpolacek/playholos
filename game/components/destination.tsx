@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BackBar } from "@/components/back-bar";
 import { useGame } from "@/components/game-provider";
-import { BuildMark, buildBlue, buildTone, LeadMark, LockMark } from "@/components/marks";
+import { BuildMark, buildBlue, buildTone, KindTag, LeadMark, LockMark } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { toggleBuild, usePlan, useSchedule, WASH } from "@/components/picks";
 import { Lens } from "@/components/icons";
@@ -158,7 +158,13 @@ function Sent(props: {
         <Face
           mark={<BuildMark name={needs[0]} />}
           tone={buildTone(needs[0], sent)}
-          name={<b className="font-semibold">{name}</b>}
+          name={
+            <>
+              <b className="font-semibold">{name}</b>
+              {/* The kind of the build behind this craft, as a word: a bullet reads Attack. 2026-11-12. */}
+              <KindTag name={needs[0]} className="ml-2 align-[2px]" />
+            </>
+          }
           line={line}
           right={right ?? ((road.home ?? (road.craft === "The Will" ? road.arrives : null)) === null ? "Not yet" : `Year ${year((road.home ?? road.arrives)!)}`)}
           more={false}

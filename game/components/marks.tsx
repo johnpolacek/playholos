@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import type { Art } from "@/lib/game/leads";
-import { buildOf, type Does } from "@/lib/game/plan";
+import { buildOf, kindOf, type Does } from "@/lib/game/plan";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 // Each row's mark on Scan, Build and Reach, in place of a dot, and beside the name on its page. Plain things are
@@ -673,7 +673,16 @@ const TONE: Record<Does, string> = {
   lift: "text-lift",
   reach: "text-reach",
   keep: "text-keep",
+  attack: "text-attack",
 };
+
+/** The word a build wears for its kind, in its color: Search, Think, Build, Travel, Speak, Attack or Protect. So a
+ *  weapon reads as a weapon, and no kind is told by color alone. plan.ts's kindOf. 2026-11-12. */
+export function KindTag({ name, className = "" }: { name: string; className?: string }) {
+  const b = buildOf(name);
+  if (!b) return null;
+  return <span className={`font-mono text-[9px] font-normal tracking-[.1em] whitespace-nowrap uppercase ${TONE[b.does]} ${className}`}>{kindOf(b)}</span>;
+}
 
 const does = (name: string): Does => buildOf(name)?.does ?? "listen";
 
