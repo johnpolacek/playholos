@@ -3,28 +3,27 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { useNext } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
 import { CraftFacts } from "@/components/craft-art";
-import { CRAFT_SHOT_SECS, type CraftKind } from "@/components/craft-view";
+import type { CraftKind } from "@/components/craft-view";
 import { BuildCard } from "@/components/build-card";
 import { BuildMark, buildTone } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
-import { axis, farZoom, Thread, useReach, useTripLoop, VOYAGER, year } from "@/components/reach";
+import { axis, farZoom, Thread, useReach, useTripLoop, year } from "@/components/reach";
+import { ReachScale } from "@/components/reach-scale";
 import { Thread as Stops } from "@/components/review";
 import { useStepTap } from "@/components/scan";
 import { tenths } from "@/lib/game/clock";
 import { buildNamed, buildSlug, lacks, LATER, needs, openAt, ordered } from "@/lib/game/plan";
 import type { Plan } from "@/lib/game/types";
-import { LY_AU, NEAREST, PROBE_NEEDS, roads, sentinelRoad, zoomFor } from "@/lib/game/reach";
+import { NEAREST, PROBE_NEEDS, roads, sentinelRoad } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // How we reach, the third of the four things we would do before Begin, 2026-10-23. Scan's review shows what is out
 // there, and this shows how we would get there: how far we have gone against the gap to the nearest star, the two roads
 // open at Year 0, and the roads our builds open later. Each road's stop shows the builds it needs, ready to queue,
-// since 2026-11-08. The map flies with each stop, out from Earth, then on to Proxima Centauri. Voyager 1
-// and the gap were one stop, and the roads to come a stop of their own, 2026-10-27. Reaching the last stop counts as
-// done, and the way on is the next of the four.
-
-const GAP_AU = NEAREST.ly * LY_AU;
+// since 2026-11-08. The roads to come are a stop of their own, 2026-10-27. Reaching the last stop counts as done, and
+// the way on is the next of the four. The first stop was Voyager 1 against the gap to the nearest star until
+// 2026-11-13, and is now how far the galaxy is: components/reach-scale.tsx.
 
 // How we reach and Voyager 1 were two stops, one stop since 2026-11-07.
 // "Roads to come" said they came later, but the Fusion Drive and the Seed Ship are open at Year 0. Playtest 2026-11-07.
@@ -140,30 +139,9 @@ function More() {
   );
 }
 
-/** The gap to the nearest star at true scale: Voyager 1 is a mark at Earth's end, all of our reach so far. */
-function Gap() {
-  return (
-    <svg viewBox="0 0 360 54" className="mt-4 w-full overflow-visible" aria-hidden>
-      <line x1={8} x2={352} y1={26} y2={26} strokeDasharray="2 4" className="stroke-muted/60" />
-      <line x1={8} x2={8 + Math.max(1.5, (VOYAGER.au / GAP_AU) * 344)} y1={26} y2={26} strokeWidth={3} className="stroke-you" />
-      <circle cx={8} cy={26} r={3} className="fill-you" />
-      <text x={8} y={14} className="fill-you font-mono text-[8.5px]">
-        Earth · Voyager 1
-      </text>
-      <circle cx={352} cy={26} r={3.5} className="fill-ink" />
-      <text x={352} y={14} textAnchor="end" className="fill-ink font-mono text-[8.5px]">
-        {NEAREST.name}
-      </text>
-      <text x={352} y={44} textAnchor="end" className="fill-muted font-mono text-[8px]">
-        {NEAREST.ly} ly, to scale
-      </text>
-    </svg>
-  );
-}
-
 export function ReachTour({ onClose }: { onClose(): void }) {
   const { orderAt: clock, did } = useGame();
-  const { fly, hold, flyLater, aim, showCraft, craft } = useReach();
+  const { fly, aim, showCraft, craft } = useReach();
   // A replay of the close-up runs the map's part again too.
   const shot = craft?.shot ?? 0;
   const { plan } = usePlan();
@@ -185,23 +163,17 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   // 2026-11-08.
   const stays = useMemo(() => sentinelRoad(plan, scale, from, NEAREST.name, NEAREST.ly), [plan, scale, from]);
 
-  // The map follows the stops: out from Earth past Voyager 1 to the nearest star on the first, then each road's craft
-  // flies there on the map, its Years counted, and its word comes home. The craft themselves are drawn on the page.
-  // Playtest 2026-11-07: Voyager 1 and New Horizons had stops and name tags where the sail and probe should be.
-  useEffect(() => aim(null), [aim]);
+  // The map follows the stops: on the first it flies place to place, far and farther (ReachScale aims it), then each
+  // road's craft flies to the nearest star on the map, its Years counted, and its word comes home. The craft
+  // themselves are drawn on the page. Playtest 2026-11-07: Voyager 1 and New Horizons had stops and name tags where the
+  // sail and probe should be.
   useEffect(() => {
-    if (at !== 0) {
-      fly(farZoom(NEAREST.ly));
-      return;
-    }
-    // Voyager 1 up close, then pulled back to where it is at Year 0, with New Horizons and their dotted roads from the
-    // Sun, held there, then out until the nearest star shows, the two still marked by the Sun. Asked 2026-11-07.
-    // A press on the ruler calls the flight out off, so it never takes the map from where we put it. 2026-11-08.
-    hold(zoomFor(VOYAGER.au));
-    return flyLater(CRAFT_SHOT_SECS + 2.5, farZoom(NEAREST.ly), 4.5);
-  }, [at, fly, hold, flyLater, shot]);
+    if (at === 0) return;
+    aim(null);
+    fly(farZoom(NEAREST.ly));
+  }, [at, aim, fly, shot]);
   // Each craft opens up close on the map, then pulls back into its flight. 2026-11-07.
-  const kind: CraftKind | null = at === 0 ? "voyager" : at === 1 ? "sail" : at === 2 ? "probe" : at === last ? "sentinel" : null;
+  const kind: CraftKind | null = at === 1 ? "sail" : at === 2 ? "probe" : at === last ? "sentinel" : null;
   useEffect(() => {
     showCraft(kind);
     return () => showCraft(null);
@@ -245,8 +217,8 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   const words = [
     {
       head: "How we reach",
-      sub: `${NEAREST.name}, ${NEAREST.ly} light-years out`,
-      mind: "Voyager 1, launched in 1977 for Jupiter and Saturn, flies at 17 km/s. New Horizons, launched in 2006 for Pluto, at 14. At those speeds the nearest star is at least 75,000 years away. Here is what could go a thousand times faster.",
+      sub: "How far the galaxy is, and how long to cross it",
+      mind: "Nothing goes faster than light. A sail rides a laser’s push at a fifth of its speed, and a flyby probe burns fusion at a tenth. Neither can stop. Each passes its place and sends home what it saw, and that word comes back no faster than light.",
     },
     {
       head: "Send a sail",
@@ -315,7 +287,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
         )}
         {at === 0 && (
           <div data-r>
-            <Gap />
+            <ReachScale />
           </div>
         )}
         {at === last && <More />}
