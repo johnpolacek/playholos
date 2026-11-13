@@ -16,7 +16,7 @@ import { type Fuel, fuelReady, inOrder, probeNeeds, roads, sentinelNeeds } from 
 import type { GlowOrder, Plan } from "@/lib/game/types";
 import type { MindsSeen } from "@/lib/sim/minds";
 import { CATALOG } from "@/lib/sim/works";
-import { flybyYears, sailYears, sentinelYears, type Push } from "@/lib/sim/speeds";
+import { flybyYears, SAIL_REACH, sailYears, sentinelYears, type Push } from "@/lib/sim/speeds";
 
 type Kind = "warm" | "cold";
 type By = GlowOrder["by"];
@@ -73,7 +73,8 @@ export function GlowOrderCard({ from }: { from: number }) {
 /** The glows of a kind within `within` that have no craft of that kind from us yet. */
 function unsent(plan: Plan, leads: Lead[], kind: Kind, by: By, within: number) {
   const have = new Set(by === "sentinel" ? (plan.sentinels ?? []).map((s) => s.name) : (plan.flybys ?? []).filter((f) => f.by === by).map((f) => f.name));
-  return leads.filter((l) => l.slug.startsWith(`${kind}-glow-`) && !have.has(l.star) && l.ly <= within);
+  // Dust wears a sail away past its reach, so none is sent farther. 2026-11-13.
+  return leads.filter((l) => l.slug.startsWith(`${kind}-glow-`) && !have.has(l.star) && l.ly <= within && (by !== "sails" || l.ly <= SAIL_REACH));
 }
 
 /** How often we have found glows of a kind within `within`, a Year, over the Years since our first, and the nearest. */
@@ -180,7 +181,10 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
   useEffect(() => () => showCraft(null), [showCraft]);
   const probe = useMemo(() => roads(plan, scale, from)[1], [plan, scale, from]);
   const stock = probe.fuel!;
-  const choices: By[] = kind === "warm" ? ["sails", "probe", "sentinel"] : ["sentinel"];
+  // Sails only while a warm glow lies within their reach, which none yet has: dust wears a sail away 16 ly out, and
+  // warm glows are thousands of ly off. An order for sails made before 2026-11-13 keeps its chip, to be changed.
+  const sailsReach = order?.by === "sails" || leads.some((l) => l.slug.startsWith("warm-glow-") && l.ly <= SAIL_REACH);
+  const choices: By[] = kind === "warm" ? [...(sailsReach ? (["sails"] as const) : []), "probe", "sentinel"] : ["sentinel"];
   const [by, setBy] = useState<By>(order?.by ?? (kind === "warm" ? "probe" : "sentinel"));
   const [within, setWithin] = useState<number>(order?.within ?? (kind === "warm" ? 30_000 : 50));
   const [asking, setAsking] = useState(false);
@@ -335,6 +339,7 @@ export function GlowOrders() {
     for (const l of leads) {
       // One we canceled stays canceled. 2026-11-10.
       if (!l.slug.startsWith(`${kind}-glow-`) || have.has(l.star) || plan.recalls?.includes(`${o.by}:${l.star}`) || l.ly > o.within) continue;
+      if (o.by === "sails" && l.ly > SAIL_REACH) continue;
       const ranged = kind === "warm" ? minds?.flashes[Number(l.slug.slice("warm-glow-".length)) - 1]?.ranged : undefined;
       want.push({ kind, by: o.by, name: l.star, y: Math.max(o.since, Math.floor((ranged ?? o.since) * 10) / 10), d: Math.round(l.ly) });
     }

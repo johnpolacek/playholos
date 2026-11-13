@@ -38,7 +38,7 @@ import {
   toward,
   willRoad,
 } from "@/lib/game/reach";
-import { beamMiss, beamSeen, finishWeight, rodReady, rodTonnes, worksAU } from "@/lib/sim/speeds";
+import { beamMiss, beamSeen, finishWeight, rodReady, rodTonnes, SAIL_REACH, sailArrives, worksAU } from "@/lib/sim/speeds";
 import { CATALOG } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -506,6 +506,8 @@ export function DestinationPage({ slug }: { slug: string }) {
           const by = k ? "probe" : "sails";
           // Before Begin, Proxima's roads and any build not yet ordered queue here. Once ordered, a craft is sent.
           const queues = before && (nearest || !inOrder(road.build));
+          // Past a sail's reach, dust wears it away before it passes. 2026-11-13.
+          const worn = !k && !sailArrives(ly);
           return (
             <Sent
               key={road.name}
@@ -513,16 +515,16 @@ export function DestinationPage({ slug }: { slug: string }) {
               i={k}
               to={to}
               name={road.name}
-              line={k && road.push ? `A probe built in orbit in 12 Years, with no engine and no fuel. The ${road.push} throws it on a sail a kilometer wide${road.push === "Wide Beam" ? `, stepping through four colors: up to ${CATALOG.speeds.wide.probe.days}` : `: ${CATALOG.speeds.probe.days}`} days of push to ${road.speed.toFixed(2)} of light speed, and it flies past.${beamLine(ly, road.speed, lead?.lum, lead?.kms)}` : `${WHAT[road.build]}${k ? "" : beamLine(ly, road.speed, lead?.lum, lead?.kms)}`}
+              line={k && road.push ? `A probe built in orbit in 12 Years, with no engine and no fuel. The ${road.push} throws it on a sail a kilometer wide${road.push === "Wide Beam" ? `, stepping through four colors: up to ${CATALOG.speeds.wide.probe.days}` : `: ${CATALOG.speeds.probe.days}`} days of push to ${road.speed.toFixed(2)} of light speed, and it flies past.${beamLine(ly, road.speed, lead?.lum, lead?.kms)}` : worn ? `${WHAT[road.build]} But dust wears through a sail’s shield about ${Math.round(SAIL_REACH)} ly out, so one sent here never passes.` : `${WHAT[road.build]}${k ? "" : beamLine(ly, road.speed, lead?.lum, lead?.kms)}`}
               needs={[road.build]}
               have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
-              can={!queues && inOrder(road.build)}
+              can={!queues && !worn && inOrder(road.build)}
               send={() => change((p) => ({ ...p, flybys: [...(p.flybys ?? []), { name: lead.star, y: from, d: ly, by }] }))}
               what={k ? "Probe" : "Sail"}
               {...way(by)}
               // Only one we sent from here: Proxima's first flies by itself with its build.
               recall={plan.flybys?.some((o) => o.name === lead.star && o.by === by) ? () => change((p) => recall(p, by, lead.star)) : undefined}
-              right={road.arrives === null ? "Not yet" : `Year ${year(road.arrives)}`}
+              right={worn ? "Too far" : road.arrives === null ? "Not yet" : `Year ${year(road.arrives)}`}
               extra={
                 queues && (
                   <button

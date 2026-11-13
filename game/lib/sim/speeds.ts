@@ -137,6 +137,10 @@ export function stay(kind: keyof typeof CRAFT, d: number, n: number = GAS.betwee
 
 /** Years for our sails to pass a star `ly` away. */
 export const sailYears = (ly: number) => ly / SAIL_C;
+/** How far our sails go before dust wears through their shield: 16 ly, past which a sail never passes its star.
+ *  calcs/speeds.py's SAIL_REACH, 2026-11-13. */
+export const SAIL_REACH = SPEEDS.sailReach;
+export const sailArrives = (ly: number) => ly <= SAIL_REACH;
 
 /** How fast a flyby probe passes a star `ly` away, as a share of light speed. On its Fusion Drive its fuel holds it to
  *  a tenth. `pushed`: our Ship Beam threw it, with no engine or fuel. The beam does the same work on whatever rides its

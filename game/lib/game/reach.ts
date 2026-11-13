@@ -3,7 +3,7 @@
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { bulletsReady } from "@/lib/sim/conflict";
-import { amBeta, amTonnes, amYears, bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, rodReady, SAIL_C, sailYears, sentinelYears, shipYears, stay, type Push } from "@/lib/sim/speeds";
+import { amBeta, amTonnes, amYears, bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, rodReady, SAIL_C, sailArrives, sailYears, sentinelYears, shipYears, stay, type Push } from "@/lib/sim/speeds";
 import { amWhen } from "@/lib/sim/antimatter";
 import { clearOf, fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, rodBy, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
@@ -245,6 +245,8 @@ export function flybysOf(plan: Plan, scale: number) {
   const works = probeNeeds(plan).every((n) => inOrder(plan, n));
   return (plan.flybys ?? []).flatMap((o) => {
     if (o.by === "probe" && !works) return [];
+    // A sail sent past its reach wears away on the road, and never passes its star. 2026-11-13.
+    if (o.by === "sails" && !sailArrives(o.d)) return [];
     const { leaves, arrives, home, speed, push } = flybyRoad(plan, scale, o.y, o);
     // Thrown by a beam, sails always and a probe on the Ship Beam, it carries its speed: who sees that beam turns on it.
     const thrown = o.by === "sails" || push ? { thrown: speed } : {};

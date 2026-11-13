@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useReach, type Target } from "@/components/reach";
 import { placeLeads } from "@/lib/game/places";
-import { flybyYears, sailYears } from "@/lib/sim/speeds";
+import { flybyBeta, flybyYears, SAIL_REACH, sailArrives, sailYears } from "@/lib/sim/speeds";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 // How we reach's first stop, 2026-11-13: how far the galaxy is, in place of Voyager 1. Four places, each far past the
 // last: the nearest star, the nearest black hole we know, the galaxy's center, and the nearest big galaxy. The map
 // flies to each in turn and the times count up, light's and a Seed Ship's. A ladder of the four on the right steps
-// through them, and plays on by itself. The times are light's, a sail's and a flyby probe's, 2026-11-13.
+// through them, and plays on by itself. The times are light's, a sail's and a flyby probe's, 2026-11-13. Past 16 ly
+// dust wears a sail away, and past about 12,500 ly it holds a probe under a tenth of light speed.
 //
 // Distances: Proxima from the sky file, Gaia BH1 from El-Badry et al. 2023, the center from GRAVITY 2022 (8.28 kpc),
 // Andromeda from the atlas's Local Volume Database (776 kpc). The craft's Years are speeds.ts's.
@@ -49,7 +50,7 @@ const PLACES = [
     at: [0.712261, 41.265667] as const,
     line: "About a trillion stars. The light we see from it left before our kind walked the Earth.",
   },
-].map((p) => ({ ...p, sail: sailYears(p.ly), probe: flybyYears(p.ly) }));
+].map((p) => ({ ...p, sail: sailArrives(p.ly) ? sailYears(p.ly) : null, probe: flybyYears(p.ly), probeBeta: flybyBeta(p.ly) }));
 
 // The map finds the far three as it finds a black hole found in play.
 placeLeads(Object.fromEntries(PLACES.flatMap((p) => (p.at ? [[p.id, [p.at[0], p.at[1], p.ly] as [number, number, number]]] : []))));
@@ -62,7 +63,7 @@ const DWELL = 7.5;
 /** Years in words: a tenth under ten, three figures to a million, then millions. */
 function yearsText(y: number) {
   if (y < 10) return y.toFixed(1);
-  if (y >= 1e6) return `${(y / 1e6).toPrecision(2).replace(/\.0$/, "")} million`;
+  if (y >= 1e6) return `${Number((y / 1e6).toPrecision(2)).toLocaleString("en-US")} million`;
   return Number(y.toPrecision(3)).toLocaleString("en-US");
 }
 
@@ -120,15 +121,19 @@ export function ReachScale() {
         <div className="mt-3 grid grid-cols-3 gap-2">
           {[
             { label: "BY LIGHT", years: place.ly, note: "nothing is faster", tone: "text-ink" },
-            { label: "BY SAIL", years: place.sail, note: "a fifth of light", tone: "text-you" },
-            { label: "BY FLYBY PROBE", years: place.probe, note: "a tenth of light", tone: "text-you" },
+            { label: "BY SAIL", years: place.sail, note: place.sail === null ? `dust wears it away past ${Math.round(SAIL_REACH)} ly` : "a fifth of light", tone: "text-you" },
+            { label: "BY FLYBY PROBE", years: place.probe, note: place.probeBeta < 0.1 ? "slowed so dust spares its shield" : "a tenth of light", tone: "text-you" },
           ].map((t) => (
             <div key={t.label}>
               <div className="font-mono text-[9px] tracking-[.06em] whitespace-nowrap text-muted">{t.label}</div>
-              <div className={`text-[19px] leading-tight font-medium tabular-nums ${t.tone}`}>
-                <Count years={t.years} />
-              </div>
-              <div className="text-[11px] leading-snug text-muted">years, {t.note}</div>
+              {t.years === null ? (
+                <div className="text-[19px] leading-tight font-medium text-muted">Worn away</div>
+              ) : (
+                <div className={`text-[19px] leading-tight font-medium tabular-nums ${t.tone}`}>
+                  <Count years={t.years} />
+                </div>
+              )}
+              <div className="text-[11px] leading-snug text-muted">{t.years === null ? t.note : `years, ${t.note}`}</div>
             </div>
           ))}
         </div>

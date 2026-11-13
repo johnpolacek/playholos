@@ -409,10 +409,20 @@ def seen_within(beta, lum=1.0, kms=None): return works_au(lum) / beam_miss(1, be
 # ---------- What the game reads ----------
 # Sails of a few grams, pushed from Earth: a fifth of light speed, Starshot's.
 SAIL_BETA = 0.2
+# How far a sail goes before dust wears through its shield, 2026-11-13. Starshot's craft is 3.6 g with its 1 g chip
+# (Parkin 2018). It flies with its chip edge on, so it shows the least front: 0.2 cm2, a gram wafer of silicon 2 cm
+# wide and 1 mm thick, a sample. Its shield is a tenth of its mass, as every craft's. Dust wears it as any front, by
+# the wear above. Gas only scars its face, about 0.1 mm of quartz and less of graphite on the road to Alpha Centauri
+# (Hoang et al. 2017), and a sail carries nothing a proton could harm that it cannot do without, so unlike a craft
+# that carries a Mind it needs no shield against gas. Hoang et al. find dust wears 0.5 mm at a fifth of light speed
+# over a column of 3e17 hydrogen a cm2: about 0.8 mm a light-year in the gas they take toward Alpha Centauri, 2e18 a
+# cm2 over its 4.4 ly. Ours is 0.5 mm of graphite a light-year, the same within a factor of two.
+SAIL_GRAMS, SAIL_FRONT_CM2 = 3.6, 0.2
+SAIL_REACH = (SHIELD_SHARE * SAIL_GRAMS / 1e3 / (SAIL_FRONT_CM2 * 1e-4)) / wear(SAIL_BETA, 1)
 def catalog():
     """What game/lib/sim/speeds.ts needs to work each trip, through calcs/export_worlds.py into game/data/works.json:
     our bullets' and our sails' speeds, the rod another mind throws, and what binds a craft that stops."""
-    return dict(speeds=dict(bullet=FUSION_BETA, sail=SAIL_BETA, thrown=THROWN,
+    return dict(speeds=dict(bullet=FUSION_BETA, sail=SAIL_BETA, sailReach=SAIL_REACH, thrown=THROWN,
                             # What a craft that stops is bound by, for game/lib/sim/speeds.ts to work each trip.
                             gas=dict(cloud=N_CLOUD, between=N_BETWEEN, inCloud=list(IN_CLOUD)),
                             sailing=dict(gros=GROS_T, stop=T_STOP, tenth=T_TENTH, covered=X_TENTH, burnPerC=BURN_PER_C, finishVe=FINISH_VE,
@@ -491,6 +501,7 @@ def megatons(tonnes, beta): return (1 / math.sqrt(1 - beta ** 2) - 1) * tonnes *
 
 if __name__ == '__main__':
     print('What sets a craft\'s speed.')
+    print(f'A sail of {SAIL_GRAMS} g, its chip edge on, {SAIL_FRONT_CM2} cm2 of front: dust wears through its shield {SAIL_REACH:.1f} ly out.')
     print(f'Gas: {N_CLOUD} ions a cm3 in a warm cloud, {N_BETWEEN} between them, which is most of space near us.')
     for n, where in ((0.1, 'the 0.1 the design took everywhere'), (N_CLOUD, 'a warm cloud'), (N_BETWEEN, 'between clouds')):
         print(f'  A 1,500 t craft at a tenth of light speed in {where}: on its sail alone it stops in {stop_ly(0.1, n, 1500):.2f} ly, '

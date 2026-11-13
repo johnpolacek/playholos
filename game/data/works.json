@@ -479,6 +479,7 @@
  "speeds": {
   "bullet": 0.1,
   "sail": 0.2,
+  "sailReach": 16.2,
   "thrown": {
    "tonnes": 1000.0,
    "front": 10.0

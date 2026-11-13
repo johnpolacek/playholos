@@ -20,7 +20,7 @@ import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ICE, deathsIn, iceBetween, iceFirsts } from "../game/natural.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
-import { amBeta, amTonnes, amYears, bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, sentinelYears, sentinelYearsBy, shipYears, stay, theirBeta, theirReady, theirYears } from "./speeds.ts";
+import { amBeta, amTonnes, amYears, bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, SAIL_REACH, sailArrives, sentinelYears, sentinelYearsBy, shipYears, stay, theirBeta, theirReady, theirYears } from "./speeds.ts";
 import { amMade, amWhen } from "./antimatter.ts";
 import { proximaField } from "./proxima.ts";
 
@@ -1014,6 +1014,9 @@ test("a flyby probe our Ship Beam throws flies as calcs/speeds.py has it: over a
     assert.ok(Math.abs(flybyYears(g.d) - g.driveYears) <= 1e-9 * g.driveYears);
   }
   assert.ok(flybyBeta(30000) < catalog.probe.speed && flybyBeta(10000) === catalog.probe.speed);
+  // Dust wears a sail of a few grams away past calcs/speeds.py's SAIL_REACH: beyond Tau Ceti, short of 20 ly. 2026-11-13.
+  assert.equal(SAIL_REACH, catalog.speeds.sailReach);
+  assert.ok(sailArrives(11.9) && !sailArrives(20) && !sailArrives(1560));
   // The beam's most near us, and its shield's most far off. On its drive, a tenth, with its burn's 10 Years.
   assert.ok(flybyBeta(4.25, true) === catalog.speeds.probe.beam && catalog.speeds.probe.beam > 0.36 && catalog.speeds.probe.beam < 0.375);
   assert.ok(flybyBeta(2700, true) < flybyBeta(1000, true) && flybyBeta(1000, true) < catalog.speeds.probe.beam);

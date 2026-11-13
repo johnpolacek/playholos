@@ -17,6 +17,7 @@ import { buildNamed, buildSlug, lacks, LATER, needs, openAt, ordered } from "@/l
 import type { Plan } from "@/lib/game/types";
 import { NEAREST, PROBE_NEEDS, roads, sentinelRoad } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
+import { SAIL_REACH } from "@/lib/sim/speeds";
 
 // How we reach, the third of the four things we would do before Begin, 2026-10-23. Scan's review shows what is out
 // there, and this shows how we would get there: how far we have gone against the gap to the nearest star, the two roads
@@ -218,7 +219,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     {
       head: "How we reach",
       sub: "How far the galaxy is, and how long to cross it",
-      mind: "Nothing goes faster than light. A sail rides a laser’s push at a fifth of its speed, and a flyby probe burns fusion at a tenth. Neither can stop. Each passes its place and sends home what it saw, and that word comes back no faster than light.",
+      mind: `Nothing goes faster than light. A sail rides a laser’s push at a fifth of its speed, and a flyby probe burns fusion at a tenth. Neither can stop. Dust wears at each as it flies: a sail of a few grams is worn away about ${Math.round(SAIL_REACH)} light-years out, and on the longest roads a probe must go slower to last.`,
     },
     {
       head: "Send a sail",
