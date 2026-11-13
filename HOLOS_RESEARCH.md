@@ -3268,6 +3268,25 @@ Read for the tool the designer named “thought near its limits”. Each source 
 - **Used before:** Bennett and Landauer on dissipation, and Vaire Computing’s test chip of 2025, above.
 - **This project’s arithmetic.** The wall is 7.2 times past us, 4.9 steps of a data center’s 1.5. At GPUs’ pace, 8 Years. An operation at the wall costs about 75,000 times Landauer’s floor at 300 K.
 
+### Building atom by atom, weighed, 2026-11-12
+
+Read for the last tool the designer named: machines that build atom by atom. Weighed, and set aside. Read by a reading agent. Each source says how much.
+
+- **[Freitas and Merkle 2004, Kinematic Self-Replicating Machines](http://www.molecularassembler.com/KSRM.htm)** · Book, online. The contents, sections 4.11, 4.11.3 and 5.2 read whole. Appendix A’s table and Figure 5.6 are images, unread.
+  - Their own assembler “remains, at present, only theoretical”, and would need “at least 3 orders of magnitude” more speed.
+  - A target, not a measure: replicators of “on the order of 1000 seconds” would grow a millionfold in 200,000 seconds. At 20 doublings that is 20,000 seconds, so one figure is off tenfold, the agent’s arithmetic.
+  - The only replicator built is a macroscale one of LEGO.
+- **The Drexler and Smalley debate, 2001 to 2003.** Through Wikipedia’s quotes only. Neither the C&EN pages nor Scientific American was read.
+  - Smalley: no room for the “fat fingers” of many manipulators, and atoms stick to the hands that move them.
+  - Drexler: the ribosome has neither problem, and placement could run at megahertz.
+- **[Mechanosynthesis](https://en.wikipedia.org/wiki/Mechanosynthesis)** and **[Molecular assembler](https://en.wikipedia.org/wiki/Molecular_assembler)** · Encyclopedia. About four fifths of each read.
+  - Shown: single atoms moved by a microscope’s tip, mostly near absolute zero. Xenon by IBM in 1990, silicon by Oyabu et al. in 2003. Not read at their sources.
+  - “Synthetic molecular assemblers have never been constructed.” Nanofactory proposals “do not include self-replicating nanorobots”.
+  - The US National Academies, 2006, as cited there: the speed and error rates of building from the bottom up “cannot be reliably predicted at this time”.
+  - Two preprints from CBN Nano Technologies, 2025 and 2026, claim carbon placed by a tip at 4 K. Not verified.
+- **Why it matters.** It could only change play by speeding the Solar Swarm’s doublings, now Metzger et al.’s 2 Years. No source gives a measured copying time, and the only figures are targets that disagree with themselves. So any faster pace would be our invention.
+- Used: the set-aside in HOLOS_GAME_CONCEPT.md, Science goes on.
+
 ### What sets a craft’s speed: gas, the magnetic sail, beams, wear, 2026-11-11
 
 Gathered by a research agent, so that each craft’s speed falls out of physics, not a round figure: the designer’s word of 2026-11-11. It read through extracting fetches, and each source says how much. It corrects one figure the design has used since October: the gas a magnetic sail brakes on is far thinner between the local clouds than the 0.1 a cm³ we took everywhere.
