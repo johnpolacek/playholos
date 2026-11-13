@@ -3210,6 +3210,25 @@ Read for the first tool made from science, at the designer’s word: antimatter 
   - Its flame at the stop is about 3×10¹⁵ W of gamma rays, neutrinos and heat, pointed at the star it stops at.
 - **Not verified:** Frisbee’s mass breakdown, at its source. Whether his radiators hold through the better nozzle. Any storage past a few antiprotons.
 
+### Room-temperature superconductors, weighed, 2026-11-12
+
+Read for the second tool the designer named: superconductors that work at room temperature. Weighed by the rule for senses and tools, and set aside. Each source says how much was read.
+
+- **[Deng et al. 2026](https://arxiv.org/abs/2603.12437)** · Published, PNAS, doi 10.1073/pnas.2536178123. Read through its text layer: the abstract, the introduction, the results and the stability tests, about 60%.
+  - The record at everyday pressure, 133 K in the cuprate Hg1223, stood from 1993 to 2026.
+  - Squeezed to 10 to 30 GPa at 4.2 K, then released fast, it keeps up to 151 K at everyday pressure. Crystals 100 to 130 µm.
+  - It lasts at least three days held at 77 K, and fades when warmed: 147 K fell to 143 K after a trip to room temperature. The authors call its stability “limited, both thermal and temporal”.
+  - A transition at 172 K was seen once and never again.
+  - Matters: the best everyday superconductor in 2026 is still 150 K short of a room, and holds only while kept cold.
+- **[Trachenko, Monserrat, Hutcheon and Pickard 2025](https://arxiv.org/abs/2406.08129)** · Preprint, arXiv 2406.08129 v3. Read whole, by a reading agent.
+  - Fundamental constants bound how fast a solid’s atoms can ring, about 3,680 K, and so the highest transition by phonons: 370 to 740 K, about 600 K at best.
+  - An order of magnitude, for one mechanism. Nothing in it rules out room temperature.
+  - Matters: physics allows it, so its existence is an open question, not a closed one.
+- **Hydrides under pressure.** LaH10 superconducts up to 260 K at 190 GPa, as Deng et al. cite it. Not read at its source.
+- **Not read:** Dolui et al. 2024, PRL 132, 166001, a predicted hydride at everyday pressure. Its publisher refused the fetch.
+- **Where the game leans on superconductors.** Only our magnetic sails’ loops, Gros 2017’s, in a cold place: space. A loop out of a star’s light sits far below 150 K, where today’s cuprates already work. What sets a sail’s stop is its fibre’s strength and the gas, not its wire’s temperature (`calcs/speeds.py` `loop_weight`). Our grid’s losses are a few percent of its 5 TW.
+- Used: the set-aside in HOLOS_GAME_CONCEPT.md, Science goes on.
+
 ### What sets a craft’s speed: gas, the magnetic sail, beams, wear, 2026-11-11
 
 Gathered by a research agent, so that each craft’s speed falls out of physics, not a round figure: the designer’s word of 2026-11-11. It read through extracting fetches, and each source says how much. It corrects one figure the design has used since October: the gas a magnetic sail brakes on is far thinner between the local clouds than the 0.1 a cm³ we took everywhere.
