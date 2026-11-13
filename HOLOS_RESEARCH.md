@@ -3229,6 +3229,28 @@ Read for the second tool the designer named: superconductors that work at room t
 - **Where the game leans on superconductors.** Only our magnetic sails’ loops, Gros 2017’s, in a cold place: space. A loop out of a star’s light sits far below 150 K, where today’s cuprates already work. What sets a sail’s stop is its fibre’s strength and the gas, not its wire’s temperature (`calcs/speeds.py` `loop_weight`). Our grid’s losses are a few percent of its 5 TW.
 - Used: the set-aside in HOLOS_GAME_CONCEPT.md, Science goes on.
 
+### Earth’s air and the next ice age, 2026-11-12
+
+Read for the Climate Hold, the designer’s picks (f) and (j): a small build for lore. Each source says how much was read. Numbers from `python3 calcs/climate.py`.
+
+- **[Talento and Ganopolski 2021](https://esd.copernicus.org/articles/12/1275/2021/)** · Published, Earth System Dynamics 12, 1275. Read by a reading agent, sections 1 to 6, the tables and figures unread.
+  - With none of our carbon, the next ice age “is expected to occur ~50 kyr after present”, full ice about 90,000 years on.
+  - With 500 GtC burned, it is “highly unlikely in the next 120 kyr”. With 1,000, full ice first in about 550,000 or 600,000 to 700,000 years. With 3,000, not before 670,000.
+  - The critical summer sunlight at 65° N for an ice age to start falls as the log of CO2: 466 W/m² at 280 ppm, by 77 W/m² for each unit of its log. They call that relation “not constrained by paleoclimate data”.
+  - Matters: our carbon has put off the ice past any game. Used: `calcs/climate.py` `INCEPTION`.
+- **Ganopolski, Winkelmann and Schellnhuber 2016,** Nature 529, 200. Not read: its publisher asked for a login. Its relation is taken as Talento and Ganopolski give it.
+- **[Global Carbon Budget 2024](https://essd.copernicus.org/articles/17/965/2025/)** · Published, Friedlingstein et al. 2025, ESSD 17, 965. Read in part by a reading agent: the abstract and sections 3.2 to 3.7.
+  - 710 ± 70 GtC from fossil fuels and land use, 1850 to 2023. About 11.4 GtC in 2024.
+  - 419.31 ppm in 2023, rising 2.79 ppm that year, from about 278 ppm in 1750. About 44% of what we emit stays in the air.
+  - Matters: by Year 0, at 2024’s rate, a sample, about 900 GtC burned and the air near 460 ppm.
+- **[Realmonte et al. 2019](https://doi.org/10.1038/s41467-019-10842-5)** · Published, Nature Communications 10, 3277. Read through its text layer: the abstract, the energy table and the methods on each kind of plant, about half.
+  - Taking CO2 from the air on solid sorbents: 0.668 to 1.122 GJ of electricity and 4.468 to 7.222 GJ of low heat a tonne. On liquid hydroxides, more.
+  - The fastest growth they model is 30% a year. “The key factor limiting DACCS deployment is the rate at which it can be scaled up.”
+  - The first plant design for it was the American Physical Society’s, 2011, a megatonne a year.
+  - Matters: holding the air takes about 8% of Year 0’s electricity. Used: `ELEC_GJ`, `HEAT_GJ`, `GROWTH`.
+- **Not read:** Keith et al. 2018 and Zickfeld et al. 2021, both refused. So how much the sea gives back as we draw carbon down is unmodeled: the Hold only stops the rise.
+- **This project’s arithmetic.** The air gains about 5 GtC a Year at Year 0, 18 Gt of CO2. Taking it back takes 0.39 TW of electricity and 2.6 TW of low heat. Grown at 30% a year from one plant of a megatonne: 37 Years.
+
 ### What sets a craft’s speed: gas, the magnetic sail, beams, wear, 2026-11-11
 
 Gathered by a research agent, so that each craft’s speed falls out of physics, not a round figure: the designer’s word of 2026-11-11. It read through extracting fetches, and each source says how much. It corrects one figure the design has used since October: the gas a magnetic sail brakes on is far thinner between the local clouds than the 0.1 a cm³ we took everywhere.

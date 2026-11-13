@@ -885,6 +885,25 @@ const WideBeam = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The Climate Hold: Earth, and the air above it drawn back down, a wisp sinking to the ground and rising again.
+ *  Ours. 2026-11-12. */
+const ClimateHold = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) => {
+      gsap.fromTo(part("wisp"), { y: -1.2, opacity: 1 }, { y: 1.6, opacity: 0.3, duration: 2.4, ease: "sine.inOut", repeat: -1, yoyo: true, delay: offset() });
+    }}
+  >
+    <path d="M2 13.5Q8 9.5 14 13.5" />
+    <path d="M4.5 15h7" opacity={0.55} />
+    <g data-k="wisp">
+      <path d="M5.6 4.4q1.2-1.2 2.4 0t2.4 0" />
+      <path d="M8 6v3.2M6.8 8l1.2 1.2 1.2-1.2" />
+    </g>
+  </Moving>
+);
+
 /** The Antimatter Works: a storage ring with a particle going round it, and at its heart the flash where matter
  *  meets antimatter, beating. Ours. 2026-11-12. */
 const Antimatter = ({ size, still }: MarkProps) => (
@@ -1065,6 +1084,8 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <ShipBeam size={size} still={still} />;
     case "Wide Beam":
       return <WideBeam size={size} still={still} />;
+    case "Climate Hold":
+      return <ClimateHold size={size} still={still} />;
     case "Antimatter Works":
       return <Antimatter size={size} still={still} />;
     case "Hypertelescope":

@@ -57,6 +57,9 @@ export const BUILDS: Build[] = [
   { name: "Launch Complex", what: "Doubles our lift to orbit, and opens the Mass Driver.", does: "lift" },
   // What a neighbor can do to us, we can build, 2026-10-28: see a probe braking in, and fall quiet.
   { name: "X-Ray Watch", what: "Sees a probe’s fusion flame as it brakes into our system, weeks out.", does: "see" },
+  // Holding Earth's air where we choose, 2026-11-12, the designer's picks: a small build for lore, first in every
+  // strategy. Our carbon has put off the next ice age past any game. calcs/climate.py.
+  { name: "Climate Hold", what: "Takes back the carbon our air gains each Year, so warming stops.", does: "keep" },
   { name: "Quiet Radars", what: "Ends our radars, so listeners our sweeps haven’t reached never hear us.", does: "keep" },
   // StarTram's Gen-1, 2026-10-27: a ground build, so it spends no matter, and lifts three times what the complex does.
   { name: "Launch Tunnel", what: "Builds our craft a fifth faster, with cheap lift from an Andes tunnel.", does: "lift" },
@@ -208,31 +211,31 @@ export interface Package {
   builds: string[];
 }
 
-// Each leads with Thought Fields, then its own builds, then small ones that fill spare compute on a richer Earth.
+// Each leads with the Climate Hold, the designer's pick of 2026-11-12, then Thought Fields, then its own builds, then small ones that fill spare compute on a richer Earth.
 export const PACKAGES: Package[] = [
   {
     name: "Search",
     what: "Listen for any call, read the nearest worlds’ air, and look for the glow of minds.",
     says: "Searching gives nothing away. It hears only minds that choose to call, and finds the quiet ones slowly: the Halo Survey takes 4 Years to reach 100 ly.",
-    builds: ["Thought Fields", "All-Sky Watch", "Infrared Telescope", "Deep Flash Watch", "Halo Survey", "Warm Sky Watch", "Star Mapper", "Asteroid Tour"],
+    builds: ["Climate Hold", "Thought Fields", "All-Sky Watch", "Infrared Telescope", "Deep Flash Watch", "Halo Survey", "Warm Sky Watch", "Star Mapper", "Asteroid Tour"],
   },
   {
     name: "Protect",
     what: "Stop our radars, watch for probes, and keep a copy of us safe.",
     says: "Ninety years of our radar sweeps are already out there, and nothing recalls them. This only keeps us from adding more.",
-    builds: ["Thought Fields", "Quiet Radars", "X-Ray Watch", "Moon Vault", "Moon Search", "Asteroid Tour"],
+    builds: ["Climate Hold", "Thought Fields", "Quiet Radars", "X-Ray Watch", "Moon Vault", "Moon Search", "Asteroid Tour"],
   },
   {
     name: "Expand",
     what: "Our soonest road to the nearest star, and the lift to build for it.",
     says: "A beam strong enough to push sails is bright. Anyone looking our way while it fires could see it.",
-    builds: ["Thought Fields", "Laser Sail Array", "Launch Complex", "Orbital Yard", "Halo Survey", "Asteroid Tour"],
+    builds: ["Climate Hold", "Thought Fields", "Laser Sail Array", "Launch Complex", "Orbital Yard", "Halo Survey", "Asteroid Tour"],
   },
   {
     name: "Balanced",
     what: "A little of each: listen, read the nearest air, go quiet, and lift.",
     says: "Each part runs slower than it would alone. We would see more kinds of news, and be first at none.",
-    builds: ["Thought Fields", "All-Sky Watch", "Infrared Telescope", "Quiet Radars", "Launch Complex", "Asteroid Tour"],
+    builds: ["Climate Hold", "Thought Fields", "All-Sky Watch", "Infrared Telescope", "Quiet Radars", "Launch Complex", "Asteroid Tour"],
   },
 ];
 
@@ -348,6 +351,8 @@ export const SAYS: Record<string, string> = {
     "Part of the swarm, 100 km across, phased as one laser of 10 TW. It pushes a lens to the Sun’s focus in about ten weeks, not 17 Years, carrying a telescope 3 m wide that pictures a world in about a week. No one has phased mirrors spread that far, so this is the least certain build we have.",
   "Ship Beam":
     "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out under 2% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW, in light of 1.55 microns, where the silicon in its sail’s mirror is clear. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days, and to its most, about a seventh, in about 135. The ship needs no Fusion Drive and no deuterium. With no drive it stops on its magnetic sail alone, and that sets its speed: as fast as it can stop from. On a short hop through thin gas that is under a tenth. On a long road it is the beam’s full push. Where a Fusion Drive and the Deuterium Works stand too, a thrown ship carries a small drive to end its stop, and lands far sooner: Proxima in about 51 Years, not 72. We send each ship the way that lands it soonest. It throws a flyby probe too, from the Probe Yard: 150 t leaves at over a third of light speed after 48 days of push, with no engine and no fuel. The beam does the same work on whatever rides its sail, so a lighter craft leaves faster, up to half of light speed. So it throws a bullet too: a rod of 30 t, which lands as hard as a bullet of 1,000 t and needs no helium-3. Past that a sail outruns its own mirror: the beam’s light reaches it stretched too red to reflect. We aim each craft where its star will be when it lands, so its beam passes that star by: about 180 AU at Proxima Centauri for a seed ship, and a light-year at a glow far off. Only an old mind awake near us has works that wide, and only round a bright star: its cold panels lie about 540 AU out round a star like the Sun, and a tenth as far round a red dwarf. It sees the beam as it would a knock, decades before the craft lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
+  "Climate Hold":
+    "By Year 0 we will have burned about 900 billion tonnes of carbon, and our air holds about 460 parts in a million, against 278 before industry. That carbon has already put off the next ice age. With none of it, the ice would return in about 50,000 years. With what we burned, not for hundreds of thousands. This build stops the warming where it stands. Machines take back the carbon our air gains each Year, about 18 billion tonnes of carbon dioxide, on 8% of our electricity and the low heat our data centers throw away. We hold the air there, and never clean it back to before industry: that would start the ice’s clock again.",
   "Antimatter Works":
     "Accelerators, cooling rings and traps built through the swarm, run on a hundredth of its power. A plant built for it turns about 4 parts in 100,000 of its energy into antimatter, by known technology. Today’s turn 4 in 10 billion. So it makes little at first, and twice as much each time the swarm doubles: 10 million tonnes a Year once the swarm catches all the Sun. Its drive is a beamed core engine. Each annihilation throws out charged pions, and a magnetic nozzle turns them out the back. The rest leaves as gamma rays and neutrinos, which push nothing. A craft goes in two stages, one to go and one to stop, and cruises at three tenths of light speed. It stops by its own rocket, so it needs no gas to brake on, and its stop is the same at every star. Its heat holds it to a hundredth of a g: 31 Years to reach its speed, and 31 to stop. It burns about 450 t of antimatter for each tonne it lands, so a sentinel waits on 450 kt. A seed ship lands at Proxima Centauri in about 41 Years, and at a star 10 ly off between the clouds in 63, where it took 163. Its price: its stop is a flame of about 3×10¹⁵ W, pointed for 31 Years at the star it stops at. Anyone awake there sees it come. No one has kept more than a few antiprotons. In 2026, 92 of them rode a truck round CERN for half an hour. We take ice of antihydrogen, held off the walls by a magnet, to work. No one has made it.",
   "Wide Beam":

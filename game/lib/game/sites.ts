@@ -485,6 +485,17 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       before: "In 1960 Freeman Dyson argued that a growing people would come to use all its star’s light, and that its heat would show us where it lives.",
     },
   },
+  "Climate Hold": {
+    // Beside Thought Fields' first campus: its waste heat drives the sorbents. 2026-11-12.
+    site: { on: "earth", draw: "ring", places: [{ lat: 32.48, lon: -91.63, name: "Beside our data centers, Richland Parish, Louisiana" }] },
+    story: {
+      have: "About 900 billion tonnes of carbon burned since 1850, and air at about 460 parts in a million.",
+      where: "Across Earth, beside our data centers, whose waste heat drives it, and where rock can hold what it takes.",
+      why: "Our carbon put off the next ice age past any game. Holding the air where it stands stops the warming without starting the ice’s clock again.",
+      takes: "About 18 billion tonnes of carbon dioxide taken back each Year, on 8% of our electricity and our data centers’ waste heat.",
+      before: "In 2011 the American Physical Society drew a plant to take a million tonnes of carbon dioxide a year from the air.",
+    },
+  },
   "Antimatter Works": {
     site: { on: "planet", body: "Mercury", view: "orbit", draw: "ring", places: [{ lat: 0, lon: 0, name: "Through the swarm, round the Sun" }] },
     story: {

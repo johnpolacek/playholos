@@ -221,6 +221,9 @@ def works_catalog():
     # Each craft's speed with no other source, settled 2026-11-11: calcs/speeds.py.
     import speeds
     kit.update(speeds.catalog())
+    # The Climate Hold, settled 2026-11-12: holding Earth's air, for lore. calcs/climate.py.
+    import climate
+    works['Climate hold'] = climate.catalog()
     # Antimatter by the tonne, settled 2026-11-12: the Antimatter Works, and the drive that stops by its rocket.
     # calcs/antimatter.py.
     import antimatter

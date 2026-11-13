@@ -241,6 +241,10 @@
    "years": 5,
    "want": 0.2
   },
+  "Climate hold": {
+   "years": 37,
+   "want": 0.01
+  },
   "Antimatter works": {
    "years": 10,
    "want": 3.0
