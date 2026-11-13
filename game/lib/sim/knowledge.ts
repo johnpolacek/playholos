@@ -1,7 +1,7 @@
 // The knowledge wall: what Earth knows at a moment, from the seed's truth. Settled 2026-10-13: the Mind judges from
 // what Earth knows, never the seed. So nothing here passes on who lives where, a world's rung, or anything not yet
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
-import { atlasOf, glowsFound, guardAt, mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
+import { atlasOf, glowsFound, guardAt, mindsSeen, watchedAt, watcherOf, WRECK_FLIGHT, type MindKit, type MindsSeen } from "./minds.ts";
 import targets from "../../data/targets.json" with { type: "json" };
 import { glowNames } from "../game/glow-names.ts";
 import { giftWords } from "../game/sends.ts";
@@ -63,6 +63,8 @@ export interface Kit {
   closeLook?: number | null;
   /** The Years we knocked on the watcher. 2026-10-31. */
   knocks?: number[];
+  /** Our order to wreck the watcher: the Year we gave it, and the Year our Interceptor is done, or null. 2026-11-13. */
+  wreck?: { y: number; interceptor: number | null } | null;
   /** Our messages aimed at peers' warm glows, for their answers. 2026-10-31. */
   aimed?: Aimed[];
   /** Our calls through the Galaxy Broadcast Array, for the answers of minds we never found. 2026-11-11. */
@@ -244,7 +246,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, imager = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [], calls = [], farSide = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, imager = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [], calls = [], farSide = [], wreck = null }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // What our Far-Side Array has heard, 2026-11-11: the radio a magnetic field makes where a red dwarf's wind strikes
@@ -407,7 +409,16 @@ export function earthKnows(
   // The ladder, played, 2026-10-30: grams from the watcher's maker wreck our builder seeds once we launch another after
   // its warning, and a bullet strikes Earth once our probes' copies launch seeds of their own. lib/sim/ladder.ts.
   const probes = seedProbes(seeds);
-  const ladder = ladderOf(world, probes, colony);
+  // Our order to wreck the watcher, 2026-11-13: once the Interceptor stands, a kill vehicle flies to it, if we found it
+  // where a craft can reach it by the Year we ordered. Found only by its warning, it sits where nothing finds it.
+  const wrecked = (() => {
+    if (!wreck || wreck.interceptor === null) return null;
+    const flies = Math.max(wreck.y, wreck.interceptor);
+    const w = watcherOf(world, { moonSearch, asteroidTour }, wreck.y);
+    const from = watchedAt(w);
+    return from === null || !w ? null : Math.max(flies, from) + (w.by === "moon search" ? WRECK_FLIGHT.moon : WRECK_FLIGHT.rock);
+  })();
+  const ladder = ladderOf(world, probes, colony, wrecked);
   const lostOf = new Map(ladder.lost.map((l) => [l.star, l]));
   for (const p of probes) {
     if (ladder.cancelled.has(p.star)) continue;
@@ -428,7 +439,7 @@ export function earthKnows(
   const firstSeed = builds.length ? Math.min(...builds) : null;
   // Our craft in other systems, for finding minds there: sentinels and seed probes stay, and a sentinel can go to a cold
   // glow's star, named as Scan names it. Until 2026-10-31 this list was never filled, so no game could find a sleeper.
-  const kit0 = { telescope, warmWatch, halo, haloArray, imager, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, knocks, closeReads };
+  const kit0 = { telescope, warmWatch, halo, haloArray, imager, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, knocks, closeReads, wrecked };
   const glows = mindsSeen(world, kit0, year).glows;
   const placeOf = (star: string): [number, number, number] | null => {
     const t = targets.find((x) => x.name === star);
@@ -455,6 +466,7 @@ export function earthKnows(
     // Found by it too: the warning's words are a reading of their own, kept once later ones come. Playtest 2026-11-01.
     if (ladder.warned !== null && ladder.warned <= year) minds.watcher.warned = ladder.warned;
     if (ladder.strike && ladder.strike.lands <= year) minds.watcher.struck = { lands: ladder.strike.lands, mt: ladder.strike.mt };
+    if (seedsLost.length && ladder.blinded) minds.watcher.blinded = true;
   }
   const ours: EarthView["colony"] | null = colony ? colonyAt(world, holes, colony, year) : null;
   if (ours && ladder.colonyLost !== null && ours.d !== undefined && ladder.colonyLost + ours.d <= year) ours.lost = { at: ladder.colonyLost, how: "strike" };

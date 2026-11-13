@@ -34,6 +34,9 @@ export interface MindKit {
   relaySearch?: { built: number; perAU: number } | null;
   /** The Year our first seed ship leaves: the watcher warns us, and so shows itself. */
   firstSeed?: number | null;
+  /** The Year our Interceptor's kill vehicle wrecked the watcher, if we ordered it: from then it sees nothing, answers
+   *  no knock, and no Close Look finds it whole. lib/sim/knowledge.ts works it out. 2026-11-13. */
+  wrecked?: number | null;
   /** Our craft at other stars: where, in atlas light-years, the Year it arrives, and whether it brakes and stays. */
   craft?: { pos: [number, number, number]; arrives: number; stays: boolean }[];
 }
@@ -102,6 +105,11 @@ export interface WatcherSeen {
    *  came. */
   warned?: number;
   struck?: { lands: number; mt: number };
+  /** The Year our Interceptor's kill vehicle wrecked it, which we knew within seconds, as its signal stopped on the hit.
+   *  A warning after this Year comes from a second watcher its maker sent, never found. 2026-11-13. */
+  wrecked?: number;
+  /** Our seeds its maker's grams wrecked came after we wrecked its watcher, not after a second seed. 2026-11-13. */
+  blinded?: boolean;
   /** Its maker's answer to our first knock, settled 2026-10-31: the knock reaches the watcher in seconds, its word
    *  crosses to the maker at light speed, and the maker beams back, so the answer comes one round trip later, and its
    *  timing tells us how far the maker is. It holds a picture of Earth at the hour we knocked, the rule, and Earth's
@@ -151,6 +159,12 @@ export const tourEnds = (built: number) => built + TOUR_FLIGHT + (CO_ORBITALS.le
 /** Years our Close Look flies to the watcher: about 4 months to the Moon's L5 on a low-energy path, as CAPSTONE took
  *  to its lunar orbit, and a Year to a co-orbital rock, as Tianwen-2 to Kamoʻoalewa. */
 export const CLOSE_FLIGHT = { moon: 0.3, rock: 1 } as const;
+/** Years our Interceptor's kill vehicle flies to wreck the watcher, 2026-11-13. It needs only to hit, never to stop, so
+ *  it leaves Earth orbit on the 3.1 km/s burn that sends a craft to the Moon's distance, and the Moon's L4 and L5 sit at
+ *  that distance: about 3 days, as Apollo's crews took. Its tonne burns about 0.63 t of storable fuel for that, at an
+ *  exhaust of 3.1 km/s, so 0.37 t hits, at about a km/s. A rock beside us orbits the Sun, tenths of an AU off, and
+ *  the burn to reach it is the burn a probe needs: a Year, as our Close Look and Tianwen-2. */
+export const WRECK_FLIGHT = { moon: 3 / 365.25, rock: 1 } as const;
 /** The event that opens our Close Look: the watcher found where a craft can reach it. */
 export const WATCHED = "The watcher found";
 /** The Year a found watcher opens our Close Look, or null: one known only by its warning sits where no craft finds it. */
@@ -398,17 +412,20 @@ export function watcherOf(world: World, kit: MindKit, year: number): WatcherSeen
   // Up close, its mirror shows which way its reports go: to its relay on our Sun's focal line, opposite its maker, the
   // nearest old mind. 2026-10-30.
   const maker = world.minds?.old.find((o) => o.id === w.maker);
-  // Its maker answers our first knock once, one round trip later. 2026-10-31.
-  const knock = (kit.knocks ?? []).filter((k) => k >= first.seen).sort((a, b) => a - b)[0];
+  // Its maker answers our first knock once, one round trip later. 2026-10-31. A knock after we wrecked it reaches
+  // nothing. 2026-11-13.
+  const wrecked = kit.wrecked != null && kit.wrecked <= year ? { wrecked: kit.wrecked } : {};
+  const knock = (kit.knocks ?? []).filter((k) => k >= first.seen && k < (kit.wrecked ?? Infinity)).sort((a, b) => a - b)[0];
   const answered = maker && knock !== undefined && knock + 2 * maker.d <= year ? { answer: { knock, at: knock + 2 * maker.d, ly: maker.d, ...skyOf(maker.pos) } } : {};
-  if (kit.closeLook == null || watchedAt(first) === null || !maker) return { ...first, ...answered };
+  if (kit.closeLook == null || watchedAt(first) === null || !maker) return { ...first, ...answered, ...wrecked };
   const home = Math.max(kit.closeLook, first.seen) + (first.by === "moon search" ? CLOSE_FLIGHT.moon : CLOSE_FLIGHT.rock);
-  if (home > year) return { ...first, ...answered };
+  // Wrecked before our Close Look reached it, it finds only what is left. 2026-11-13.
+  if (home > year || home > (kit.wrecked ?? Infinity)) return { ...first, ...answered, ...wrecked };
   const looked = { at: home, ...skyOf([-maker.pos[0], -maker.pos[1], -maker.pos[2]]) };
   // Our Relay Search flies out along that line once its mirror is seen, and finds the relay at its distance. 2026-10-30.
   const s = kit.relaySearch;
   const found = s ? Math.max(s.built, home) + s.perAU * w.relayAU + w.relayAU / LY_AU : Infinity;
-  return { ...first, looked, ...(found <= year ? { relay: { at: found, au: w.relayAU } } : {}), ...answered };
+  return { ...first, looked, ...(found <= year ? { relay: { at: found, au: w.relayAU } } : {}), ...answered, ...wrecked };
 }
 
 /** A sleeping old mind, found only by our craft in its system: one that stays always finds it, a flyby only if the

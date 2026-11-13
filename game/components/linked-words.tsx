@@ -37,7 +37,7 @@ function spans(words: string, names: Name[], done: boolean) {
   return found.sort((a, b) => a.at - b.at);
 }
 
-export const WORD_LINK = "cursor-pointer underline decoration-dashed decoration-1 decoration-you/50 underline-offset-[3px] transition-colors hover:decoration-you";
+export const WORD_LINK = "cursor-pointer underline decoration-dashed decoration-1 decoration-you underline-offset-[3px] transition-colors duration-300 hover:text-you";
 
 /** `onFollow` runs as a link is taken, as a note marking itself read. */
 export function LinkedWords({ words, done = true, onFollow }: { words: string; done?: boolean; onFollow?: () => void }) {
