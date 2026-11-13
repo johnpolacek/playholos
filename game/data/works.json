@@ -1014,6 +1014,11 @@
    3.5
   ],
   "earthKm": 12742,
-  "hyperMin": 30
+  "hyperMin": 30,
+  "sunW": 3.828e+26,
+  "panelW": 0.00235161750528,
+  "earthFace": 510064471909788.25,
+  "panelTakes": 1e-08,
+  "endMt": 100382409.17782028
  }
 }

@@ -303,6 +303,10 @@ export interface StrikeSeen {
   world: boolean;
   /** Its flash over the world's own light. */
   ratio?: number;
+  /** At a cold glow's star: what we could aim at, with what we knew when it was fired. A panel, if our Glow Imager or
+   *  a sentinel had shown us what glows there. Else only its star. Either way it harms nothing. Its star's light in
+   *  Suns, and the glow's watts, which give its panels' size. 2026-11-12. */
+  glow?: { aim: "panel" | "star"; lum?: number; watts: number };
   /** What caught its flash, once its light is home: a sentinel of ours that stays there, or a telescope that splits
    *  the world from its star. Absent with its light home: nothing of ours could. */
   seen?: "sentinel" | "hyper" | "wide" | "near";
@@ -342,6 +346,10 @@ export interface EarthView {
   proximaField?: FieldHeard;
   /** Each bullet of ours that has landed, oldest first. 2026-11-12. */
   strikes?: StrikeSeen[];
+  /** What an old mind did about a bullet of ours, once it has landed here: a strike on Earth that ends it as our home,
+   *  one in kind, or the wreck of what threw the bullet. By its star as we name it, the Year our bullet landed there,
+   *  and the Year its answer landed here. lib/sim/reprisals.ts. 2026-11-12. */
+  reprisals?: { star: string; after: number; lands: number; how: "end" | "kind" | "disarm"; mt: number }[];
   /** What ground telescopes saw of Proxima b by Year 0: its true mass, tilt and brightness. 2026-10-31. */
   proximaSeen?: import("./proxima.ts").ProximaSeen;
 }

@@ -28,6 +28,19 @@ HOLOS_RESEARCH.md, "A strike seen from home".
   by over 40% for about 3.5 years (Pierazzo et al. 2010). The burst's own nitric oxide is about 45 times what that
   study took, by Glasstone's 1e32 molecules a megaton. A region is gone. The world's life is not: Chicxulub was a
   thousand times this.
+
+At an old mind's star, settled 2026-11-12, the designer's word: a weapon must prove utterly useless against an old
+mind. Physics agrees.
+- With no picture of what glows there, we can aim only at its star. A star sheds a bullet's whole energy as light in
+  about a millionth of a second, for a Sun, and in a ten-thousandth for the middle old mind's red dwarf of 0.011 Suns.
+- With a picture, from our Glow Imager or a sentinel that stays, we can aim at a panel. Its panels are thin, and cold
+  as the glow: they shed its watts from both faces at 12 K, so the middle awake old mind's cover 3 billion times
+  Earth's whole surface. At a gram a m2, the weight this project already takes for thin film, a bullet's 10 m2 of
+  front meets 10 g of panel: it leaves a hundred-millionth of its energy there, a hole in one sheet, and flies on.
+  A sample: nothing says how thick an old mind's panels are. One a thousand times heavier takes a hundred-thousandth.
+  Ours.
+- What it draws is by the mind's nature, the designer's pick: game/lib/sim/reprisals.ts. The hardest answer is a
+  strike of Chicxulub's class, 4.2e23 J: about 930 rods as the one it would throw in kind.
 """
 import math
 import mercury, observing
@@ -41,6 +54,22 @@ EARTH_W = 0.29 * 1361 * math.pi * 6.371e6 ** 2
 OZONE_YEARS = (1.0, 3.5)
 # The Hypertelescope's pixel and reach, as the game's catalog rounds them, so the game's sum is this one.
 HYPER_KM, HYPER_REACH = round(mercury.hyper_km(1), 2), round(mercury.HYPER_REACH)
+
+# ---------- At an old mind's star ----------
+L_SUN, SIGMA = 3.828e26, 5.670374e-8
+PANEL_K, PANEL_KG_M2 = 12.0, 1e-3            # as cold as the glow, and a gram a m2, as our own thin film: a sample
+BULLET_KG, BULLET_FRONT = 1e6, 10.0          # our bullet, and its front as calcs/speeds.py has a thrown rod's
+EARTH_FACE = 4 * math.pi * 6.371e6 ** 2      # Earth's whole surface, m2
+CHICXULUB_J = 4.2e23                         # HOLOS_RESEARCH.md, "Strikes, screens and harm"
+END_MT = CHICXULUB_J / MT_J
+def star_seconds(lum, mt=BULLET_MT):
+    """Seconds a star of `lum` Suns takes to shed a bullet's energy as light."""
+    return mt * MT_J / (lum * L_SUN)
+def panel_m2(watts):
+    """The area of panels that shed a cold glow's watts from both faces at 12 K."""
+    return watts / (2 * SIGMA * PANEL_K ** 4)
+# The share of its energy a bullet leaves in a panel it passes through: the panel it meets over its own mass.
+PANEL_TAKES = PANEL_KG_M2 * BULLET_FRONT / BULLET_KG
 
 def flash_w(mt=BULLET_MT): return FLASH_SHARE * mt * MT_J / FLASH_S
 def flash_ratio(radius, a_au, lum, mt=BULLET_MT):
@@ -76,7 +105,11 @@ def catalog():
     """For game/data/works.json: the flash's share of the energy and its seconds, Earth's reflected light, a megaton,
     and the Years the ozone stays under half."""
     return dict(strike=dict(share=FLASH_SHARE, seconds=FLASH_S, earthW=EARTH_W, mtJ=MT_J, mt=BULLET_MT, ozone=list(OZONE_YEARS),
-                            earthKm=mercury.EARTH_KM, hyperMin=mercury.HYPER_MIN))
+                            earthKm=mercury.EARTH_KM, hyperMin=mercury.HYPER_MIN,
+                            # At an old mind's star: the Sun's light in W, what a m2 of panel sheds from both faces at
+                            # 12 K, Earth's whole surface in m2, the share of its energy a bullet leaves in a panel,
+                            # and the megatons of a strike that ends Earth as our home, Chicxulub's.
+                            sunW=L_SUN, panelW=2 * SIGMA * PANEL_K ** 4, earthFace=EARTH_FACE, panelTakes=PANEL_TAKES, endMt=END_MT))
 
 CASES = [(10.0, 1.0, 1.0, 1.0), (4.24 / 3.2616, 1.07 ** (1 / 3.7), 0.0485, 0.00157), (12.9 / 3.2616, 1.2, 0.15, 0.0124),
          (4.32 / 3.2616, 0.97, 1.447, 1.52), (31.18 / 3.2616, 1.5, 0.702, 0.362), (19.7 / 3.2616, 2.0, 1.354, 0.66), (100 / 3.2616, 1.0, 0.1, 0.005)]
@@ -98,4 +131,5 @@ if __name__ == '__main__':
     for n, g in zip(names, golden()):
         t = lambda h: 'no split' if h is None else f'{h * 3600:,.0f} s'
         print(f'{n:28} {g["ratio"]:9.2f} {t(g["near"]):>10} {t(g["wide"]):>10} {g["hyper"]:8.1f}')
+    print(f'At an old mind: a Sun sheds a bullet in {star_seconds(1):.1e} s, a red dwarf of 0.011 Suns in {star_seconds(0.0107):.1e} s. Panels shedding 4.1e21 W cover {panel_m2(4.135e21) / EARTH_FACE:.1e} Earths. A bullet leaves {PANEL_TAKES:.0e} of its energy in one. Earth\'s end: {END_MT:.3e} Mt, {END_MT / BULLET_MT:.0f} rods.')
     print(f'A mirror sees it where that time is under {FLASH_S:.0f} s. The Hypertelescope where its figure is 1 or more, within {HYPER_REACH} ly.')

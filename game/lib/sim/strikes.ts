@@ -41,3 +41,15 @@ export function hyperFlash(dLy: number, radius: number, aAu: number, lum: number
   return ((flashRatio(radius, aAu, lum, mt) * S.seconds) / (S.hyperMin * 60)) * pixels;
 }
 export const hyperSees = (dLy: number, radius: number, aAu: number, lum: number, mt = S.mt) => dLy <= HYPER.reach && hyperFlash(dLy, radius, aAu, lum, mt) >= 1;
+
+// At an old mind's star, 2026-11-12: a weapon is useless there. With no picture of what glows we can aim only at its
+// star, which sheds a bullet's whole energy as light in a millionth of a second. With one, at a panel: thin, so the
+// bullet passes through, leaves a hundred-millionth of its energy and a hole in one sheet, and flies on.
+/** Seconds a star of `lum` Suns takes to shed a bullet's energy as light. */
+export const starSeconds = (lum: number, mt = S.mt) => (mt * S.mtJ) / (lum * S.sunW);
+/** The panels that shed a cold glow's watts from both faces at 12 K, in Earth's whole surfaces. */
+export const panelEarths = (watts: number) => watts / S.panelW / S.earthFace;
+/** The share of its energy a bullet leaves in a panel it passes through. */
+export const PANEL_TAKES = S.panelTakes;
+/** A strike that ends Earth as our home: Chicxulub's, in megatons. */
+export const END_MT = S.endMt;

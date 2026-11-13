@@ -87,10 +87,13 @@ export function setWatched(at: number | null) {
 }
 const hear = (f: () => void) => (hearing.add(f), () => void hearing.delete(f));
 // And the ladder's strike once it has landed, as Scan hears it: only the server's world knows who fires. 2026-10-30.
-let struck: { lands: number; mt: number } | null = null;
-export function setStruck(at: { lands: number; mt: number } | null) {
-  if (at?.lands === struck?.lands) return;
-  struck = at;
+// And each strike an old mind throws back for a bullet of ours, once it has landed. 2026-11-12.
+type Struck = { lands: number; mt: number };
+const NONE: readonly Struck[] = [];
+let struck: readonly Struck[] = NONE;
+export function setStruck(at: readonly Struck[]) {
+  if (at.length === struck.length && at.every((s, i) => s.lands === struck[i].lands)) return;
+  struck = at.length ? at : NONE;
   hearing.forEach((f) => f());
 }
 

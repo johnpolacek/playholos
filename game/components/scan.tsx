@@ -153,7 +153,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const watchedYear = watchedAt(minds?.watcher);
   useEffect(() => setWatched(watchedYear), [watchedYear]);
   // And the maker's bullet, once it has landed, cuts our thought from then. 2026-10-30.
-  const struck = minds?.watcher?.struck ?? null;
+  // And each strike an old mind threw back for a bullet of ours. 2026-11-12.
+  const maker = minds?.watcher?.struck, back = view?.reprisals;
+  const struck = useMemo(() => [...(maker ? [maker] : []), ...(back ?? []).filter((r) => r.mt > 0)], [maker, back]);
   useEffect(() => setStruck(struck), [struck]);
   // And stars our seed probes reached with no lead of their own, 2026-10-26.
   const seeds = useMemo(() => visits.filter((v) => v.by === "seed" && !v.sent), [visits]);
@@ -221,7 +223,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(() => {
     // What each lead has had read of it, as the Mind judges from too. Our knocks on the watcher, for its readings.
     const knocks = (save?.sent ?? []).filter((m) => target(m.to) === WATCHER).map((m) => m.y);
-    const readings = readingsOf(leads, { felt, fields, proximaField, proxima, visits, strikes, watcher: minds?.watcher ?? undefined, flashes: minds?.flashes, knocks, observe, year: tenth });
+    const readings = readingsOf(leads, { felt, fields, proximaField, proxima, visits, strikes, reprisals: back, watcher: minds?.watcher ?? undefined, flashes: minds?.flashes, knocks, observe, year: tenth });
     const opened = new Set(seen);
     // New until opened, or for 50 Years: a badge from Year 10 still read NEW at Year 9,104 until 2026-10-30.
     const recent = (at: number) => tenth === null || tenth - at < 50;
@@ -257,7 +259,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       }),
     );
     return { known: view?.year, leads, ids, dials, readings, fresh, standing, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
-  }, [view?.year, leads, felt, fields, proximaField, proxima, strikes, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
+  }, [view?.year, leads, felt, fields, proximaField, proxima, strikes, back, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 

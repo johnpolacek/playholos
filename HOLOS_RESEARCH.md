@@ -2698,7 +2698,13 @@ One research pass by an agent, 2026-11-12. Each entry says how much was read. Ar
   - *Ours:* the burst’s nitric oxide, by Glasstone’s figure, is 1.1×10³⁷ molecules, about 45 times what Pierazzo took. So a strike on land thins ozone too.
   - [Toon et al. 1997](https://ntrs.nasa.gov/citations/19970030230) · Abstract only, the full text refused. At 10⁴ to 10⁵ Mt, water vapor and ozone loss become global.
   - Not used: Bardeen et al. 2017, abstract only, at Chicxulub’s scale.
-- Used: [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md), “Where our bullet lands”. `calcs/strikes.py`, `game/lib/sim/strikes.ts`.
+- **At an old mind’s star, 2026-11-12.** No new source: this project’s arithmetic on figures already logged. `calcs/strikes.py`.
+  - A Sun’s 3.828×10²⁶ W sheds a bullet’s 4.5×10²⁰ J in 1.2×10⁻⁶ s. A red dwarf of 0.0107 Suns, the middle old mind’s star in the pool, in 1.1×10⁻⁴ s.
+  - Panels shedding a cold glow’s watts from both faces at 12 K give 2.4×10⁻³ W a m². The pool’s middle awake glow, 4.1×10²¹ W, needs 1.8×10²⁴ m², 3.4 billion times Earth’s surface.
+  - A panel of a gram a m², the weight this project already takes for thin film, puts 10 g in the path of a bullet’s 10 m² front. Against its 1,000 t that is a hundred-millionth of its mass, so of its energy. No source gives the weight of an old mind’s panels: a sample. One a thousand times heavier takes a hundred-thousandth, so the answer holds.
+  - A strike of Chicxulub’s class, 4.2×10²³ J as logged above, is 1.004×10⁸ Mt: 928 rods of a bullet’s harm.
+  - What a mind does about an attack rests on no evidence. The grades are the designer’s picks, and their shares are samples.
+- Used: [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md), “Where our bullet lands” and “A bullet at an old mind’s star”. `calcs/strikes.py`, `game/lib/sim/strikes.ts`, `game/lib/sim/reprisals.ts`.
 - Changed: a line of 2026-10-28 above, that an impact is news only to its target or a craft standing there. A telescope that splits the world from its star sees it too.
 
 ### Combing old recordings, 2026-10-28

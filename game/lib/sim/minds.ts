@@ -79,6 +79,8 @@ export interface ColdGlowSeen {
   lost?: number;
   /** The Year its answer to our knock reached us. Nothing settles a glow like its own voice. 2026-11-11. */
   answered?: number;
+  /** The Year its answer to a bullet of ours landed here: on Earth, or on what threw the bullet. 2026-11-12. */
+  reprised?: number;
   /** The old mind it is, for its answer to a knock. Earth learns nothing from it. */
   id: string;
 }

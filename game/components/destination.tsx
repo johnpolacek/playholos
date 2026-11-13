@@ -634,7 +634,9 @@ export function DestinationPage({ slug }: { slug: string }) {
                 : WHAT.strike) +
               (settles
                 ? " Nothing comes home from a bullet. Its flash would about double this world’s light for three minutes: only a telescope that splits the world from its star sees that, or a sentinel of ours here."
-                : " We know no world here to aim it at, so it would strike nothing we know of and fly on.")
+                : lead?.slug.startsWith("cold-glow-")
+                  ? " Against an old mind it is useless. With no picture of what glows here it can be aimed only at the star, which would not notice. With one, at a panel, which it passes through. If a mind keeps this star it is not harmed, and knows who threw it. Most would do nothing. One might strike us in kind, or end Earth as our home."
+                  : " We know no world here to aim it at, so it would strike nothing we know of and fly on.")
             }
             needs={bullet.push ? ["Strike Yard", bullet.push] : ["Strike Yard", "Helium-3 Harvest"]}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}

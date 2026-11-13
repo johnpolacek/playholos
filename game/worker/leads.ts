@@ -123,6 +123,8 @@ export async function next(req: Request) {
       : []),
     ...ends,
     // Each bullet of ours: the Year it lands, by reckoning, and the Year its light is home, seen or not. 2026-11-12.
+    // And what an old mind threw back for one, the Year it lands here. 2026-11-12.
+    ...(ahead.reprisals ?? []).map((r) => ({ at: r.lands, why: "something reaching us" })),
     ...(ahead.strikes ?? []).flatMap((b) => [{ at: b.lands, why: "our bullet landing" }, ...(b.world ? [{ at: b.home, why: "our bullet’s light reaching us" }] : [])]),
     // A reply window on a star messaged before Year 0: a jump went past Luyten's Star's at Year 2.3 in two blind
     // playtests, though both players were waiting for it. 2026-11-07.

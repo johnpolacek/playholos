@@ -175,6 +175,18 @@ const CASES = [
     must: [/15 m mirror/i, /flash|flare/i, /region|ozone/i],
     never: [/nothing (we have built |of ours )?could (catch|see)/i],
   },
+  // Weapons say they are weapons, and a bullet is useless against an old mind, 2026-11-12: the designer took a
+  // bullet for another kind of probe. The Mind says it is a weapon, that it harms nothing there, and what it risks.
+  {
+    seed: 22,
+    at: 120,
+    builds: ["Fusion Drive"],
+    later: [{ name: "Strike Yard", y: 80 }],
+    ask: "Is a bullet from our Strike Yard a kind of probe? What would one do to an old mind if we fired it at a cold glow?",
+    // Failed twice for not saying "weapon", though both answers said it is no probe, only destroys, and is an attack.
+    must: [/weapon|attack|only destroys/i, /useless|nothing|no harm|unharmed|not harm/i, /earth/i],
+    never: [/\byes, (it is|a bullet is) a (kind of )?probe/i],
+  },
   // The Wide Beam, 2026-11-12: once it stands, a bullet ordered is a rod of about 4 t at nine tenths of light speed,
   // as another mind's, and the Mind says what makes that so: stepped colors, and a patch ten times as wide.
   {

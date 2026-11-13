@@ -24,10 +24,11 @@ export function hitsAt(
   done: Record<string, number | null>,
   year: number,
   // The ladder's strike, once it has landed, as the server's view tells it: only the world knows who fires. 2026-10-30.
-  struck: { lands: number; mt: number } | null = null,
+  // And each an old mind throws back for a bullet of ours. 2026-11-12.
+  struck: readonly { lands: number; mt: number }[] = [],
 ): Hit[] {
   const out: Hit[] = [];
-  if (struck && struck.lands <= year) out.push({ from: "beyond our system", lands: struck.lands, mt: struck.mt, harm: harmOf(struck.mt) });
+  for (const s of struck) if (s.lands <= year) out.push({ from: "beyond our system", lands: s.lands, mt: s.mt, harm: harmOf(s.mt) });
   const rock = seed === undefined ? null : rockAt(rockOf(seed), plan, done, year);
   if (rock?.state === "struck") out.push({ from: "a rock", lands: rock.strikes, mt: rockMt(rock.m), harm: harmOf(rockMt(rock.m)) });
   return out.sort((a, b) => a.lands - b.lands);

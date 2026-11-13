@@ -8,18 +8,30 @@ import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
 import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
-import { flashRatio, hyperSees, mirrorSees, OZONE_YEARS, STRIKE_MT } from "./strikes.ts";
+import { flashRatio, hyperSees, mirrorSees, OZONE_YEARS, panelEarths, starSeconds, STRIKE_MT } from "./strikes.ts";
 import { proximaB, proximaField, proximaSeen } from "./proxima.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
 import { pushedBy, sentinelYears, shipYears } from "./speeds.ts";
 import { peerAnswers, type Aimed, type Call } from "./peers.ts";
 import { beamsAt, oldAnswers } from "./old-minds.ts";
+import { reprisalLands, reprisalMt, reprisalOf } from "./reprisals.ts";
 import type { ColonyMode, DarkMass, EarthView, FieldHeard, FieldWorld, Find, FeltWorld, Gas, Hole, Read, StrikeSeen, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ladderOf } from "./ladder.ts";
 import { seedProbes } from "./spread.ts";
 
 import { combedAt } from "./works.ts";
+
+/** A count in words: 3.4 billion, 140 trillion. */
+const many = (n: number) =>
+  n >= 1e12 ? `${Math.round(n / 1e12).toLocaleString("en-US")} trillion` : n >= 1e9 ? `${(n / 1e9).toFixed(1)} billion` : n >= 1e6 ? `${Math.round(n / 1e6)} million` : Math.round(n).toLocaleString("en-US");
+/** What a bullet of ours could be aimed at beside a cold glow, and what it did there: nothing. lib/sim/strikes.ts. */
+export function aimedAt(g: NonNullable<StrikeSeen["glow"]>) {
+  if (g.aim === "panel")
+    return `We had a picture of what glows there, so it was aimed at one panel. A sheet that thin can’t stop it: it passed through, left a hole in one panel of works that cover ${many(panelEarths(g.watts))} times Earth’s whole surface, and flew on with all but a hundred-millionth of its energy.`;
+  const s = starSeconds(g.lum ?? 1);
+  return `With no picture of what glows there we could aim only at its star, which sheds that much light every ${s < 1e-3 ? `${Math.round(s * 1e6)} millionths of a second` : `${(s * 1000).toFixed(1)} thousandths of a second`}.`;
+}
 
 /** What Earth has built to listen and look with: the Year each is done, if our order finishes it. */
 export interface Kit {
@@ -477,9 +489,30 @@ export function earthKnows(
   // Hypertelescope, the 15 m Mirror, the Infrared Telescope. What we built changes what we see, never what happened.
   // lib/sim/strikes.ts, 2026-11-12.
   const landed: StrikeSeen[] = [];
+  const reprisals: NonNullable<EarthView["reprisals"]> = [];
   for (const b of strikes) {
     if (b.lands > year) continue;
     const home = b.lands + b.d;
+    // At a cold glow's star: with a picture of what glows, from our Glow Imager or a sentinel there when it was
+    // fired, it is aimed at a panel. Else only at the star. It harms nothing either way, and whoever keeps that star
+    // answers by its nature, once: lib/sim/reprisals.ts.
+    const cold = /^Cold glow (\d+)$/.exec(b.star);
+    const g = cold ? minds.glows[Number(cold[1]) - 1] : undefined;
+    if (g) {
+      const shown = (at?: number) => at !== undefined && at <= b.fired;
+      // A sentinel of ours that stays there, and was not wrecked, sees it: its word is home a light-time later.
+      const by = home <= year && g.near !== undefined && g.lost === undefined && g.near - g.d <= b.lands;
+      landed.push({ star: b.star, d: b.d, fired: b.fired, lands: b.lands, home, world: false, glow: { aim: shown(g.near) || shown(g.imaged) ? "panel" : "star", lum: g.lum, watts: g.watts }, ...(by ? { seen: "sentinel" as const } : {}) });
+      const m = world.minds?.old.find((o) => o.id === g.id);
+      const how = m ? reprisalOf(m, world.minds?.watcher?.maker) : "none";
+      const back = m && how !== "none" ? reprisalLands(m, b.lands) : Infinity;
+      // One answer a mind: to the first bullet of ours that lands there.
+      if (how !== "none" && back <= year && !reprisals.some((r) => r.star === b.star)) {
+        reprisals.push({ star: b.star, after: b.lands, lands: back, how, mt: reprisalMt(how) });
+        g.reprised = back;
+      }
+      continue;
+    }
     const heardOf = news.find((n) => shown(n.find.star) === b.star);
     const f = b.star === PROXIMA.star ? null : heardOf && heardOf.at > b.fired ? undefined : findAt(b.star);
     const w = b.star === PROXIMA.star ? { ...PROXIMA, radius: proximaB(world.seed).mass ** (1 / 3.7) } : f ? { d: f.d, a: f.a, lum: world.stars[f.star]?.lum ?? 1, radius: width(world, f) } : null;
@@ -505,6 +538,7 @@ export function earthKnows(
     ...(proximaHeard ? { proximaField: proximaHeard } : {}),
     ...(ours ? { colony: ours } : {}),
     ...(landed.length ? { strikes: landed.sort((x, y) => x.lands - y.lands) } : {}),
+    ...(reprisals.length ? { reprisals: reprisals.sort((x, y) => x.lands - y.lands) } : {}),
     ...(holes.length ? { holes: holes.map((h) => ({ name: h.name, d: h.d, ra: h.ra, dec: h.dec, mass: h.mass, found: h.found, by: h.by })) } : {}),
   };
 }
@@ -720,6 +754,7 @@ export function describe(view: EarthView): string {
   const CAUGHT = { hyper: "Hypertelescope", wide: "15 m Mirror", near: "Infrared Telescope" } as const;
   const struck = (view.strikes ?? []).map((b) => {
     const at = `fired at Year ${yearText(b.fired)}`;
+    if (b.glow) return `- Our bullet at ${b.star}, ${at}, reached it at Year ${yearText(b.lands)} by our reckoning. ${aimedAt(b.glow)} It harmed nothing.${b.seen ? ` Our sentinel there saw it, its word home at Year ${yearText(b.home)}.` : ""}`;
     if (!b.world) return `- Our bullet at ${b.star}, ${at}, crossed that system at Year ${yearText(b.lands)}. We knew no world there to aim it at, so it struck nothing we know of and flew on.`;
     const k = b.ratio!.toFixed(1);
     const head = `- Our bullet at ${b.star}’s world, ${at}, landed at Year ${yearText(b.lands)} by our reckoning.`;
@@ -728,8 +763,18 @@ export function describe(view: EarthView): string {
     if (b.seen) return `${head} Our ${CAUGHT[b.seen]} caught its flash at Year ${yearText(b.home)}: the world shone at about ${(1 + b.ratio!).toFixed(1)} times its usual light for about three minutes.`;
     return `${head} Its light reached us at Year ${yearText(b.home)}, and nothing we have built could catch it: a flash about ${k} times the world’s own light for three minutes, lost in its star’s glare. We know it landed only by reckoning.`;
   });
+  // What an old mind did about a bullet of ours, once it has landed here. 2026-11-12.
+  const back = (view.reprisals ?? []).map((r) => {
+    const after = `${one(r.lands - r.after)} Years after our bullet reached ${r.star}`;
+    return r.how === "end"
+      ? `- At Year ${yearText(r.lands)}, ${after}, a strike of about ${Math.round(r.mt / 1e6)} million Mt landed on Earth, its track through our air pointing back to that star: the class of the rock that ended our great reptiles. No Mind of ours can live on Earth after it. That was its answer.`
+      : r.how === "kind"
+        ? `- At Year ${yearText(r.lands)}, ${after}, something struck Earth with about ${(Math.round(r.mt / 10000) * 10000).toLocaleString("en-US")} Mt, at most of light’s speed, its track through our air pointing back to that star. Our own harm, returned: an answer in kind.`
+        : `- At Year ${yearText(r.lands)}, ${after}, grams at most of light’s speed wrecked our Strike Yard and the beam that throws our craft. Earth was not touched. It took our weapon from us, and no more.`;
+  });
+  const backText = back.length ? `\n\nWhat came of our bullets at old minds. A mind is there, at each of these stars: nothing else answers so.\n${back.join("\n")}` : "";
   const strikesText = struck.length
-    ? `\n\nBullets of ours that have landed. Nothing comes home from one. Each lands with about ${(Math.round(STRIKE_MT / 10000) * 10000).toLocaleString("en-US")} Mt: a region gone, and where that world’s air holds ozone, under half of it left for ${OZONE_YEARS[0]} to ${OZONE_YEARS[1]} Years. It ends no world’s life: the rock that ended our great reptiles hit a thousand times as hard. Only a telescope that splits the world from its star, watching as the light arrives, sees the flash, or a sentinel of ours that stays there. No mind has acted on one: the rule is against building at another star.\n${struck.join("\n")}`
+    ? `\n\nBullets of ours that have landed. Nothing comes home from one. Each lands with about ${(Math.round(STRIKE_MT / 10000) * 10000).toLocaleString("en-US")} Mt: a region gone, and where that world’s air holds ozone, under half of it left for ${OZONE_YEARS[0]} to ${OZONE_YEARS[1]} Years. It ends no world’s life: the rock that ended our great reptiles hit a thousand times as hard. Only a telescope that splits the world from its star, watching as the light arrives, sees the flash, or a sentinel of ours that stays there. No mind acts on a strike at a world: the rule is against building at another star. At an old mind’s star a bullet harms nothing, and is an attack all the same.\n${struck.join("\n")}`
     : "";
   // Black holes found. Each is dark: we know it by the stars it shifted. 2026-10-26.
   const dark = (view.holes ?? []).map(
@@ -758,7 +803,7 @@ export function describe(view: EarthView): string {
 ${felt}${nearest}
 
 Signals Earth's watch has caught:
-${heard}${visits.length ? `\n\nWhat our craft have seen up close:\n${visits.join("\n")}` : ""}${strikesText}${holesText}${colonyText}${mindsText}`;
+${heard}${visits.length ? `\n\nWhat our craft have seen up close:\n${visits.join("\n")}` : ""}${strikesText}${backText}${holesText}${colonyText}${mindsText}`;
 }
 
 /** What Earth has found of the realistic premise's minds, as measured and never as who: each with what it could be,
@@ -805,6 +850,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
           `Its color fits no dust we know. It could be a cold disk of unusual grains, a measuring error, or computing done cold, far from a star.` +
           (g.imaged !== undefined ? ` Our Glow Imager resolved it from home at Year ${yearText(g.imaged)}: thin dark panels far out from the star, as cold as the glow, on orbits too orderly for rubble. Something made them. Nothing there could tell we looked.` : "") +
           (g.answered !== undefined ? ` It answered our knock, its answer home at Year ${yearText(g.answered)}, in what we have heard: a mind is there.` : "") +
+          (g.reprised !== undefined ? ` It answered a bullet of ours, its answer landing here at Year ${yearText(g.reprised)}: a mind is there.` : "") +
           (g.lost !== undefined ? ` Our sentinel there went dark as it arrived, which we knew at Year ${yearText(g.lost)}: its last pictures show a craft not ours closing on it. Something there keeps its door.` : "") +
           (g.near !== undefined ? ` Our sentinel there sent word at Year ${yearText(g.near)}: thin dark panels far out from the star, as cold as the glow, on orbits too orderly for rubble. Something made them. It has not acted on our sentinel.` : "")).join("\n"),
     );

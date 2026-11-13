@@ -1134,3 +1134,62 @@ test("a bullet's flash is seen only by what splits its world from its star, and 
   assert.ok(/Our 15 m Mirror caught its flash at Year 56\.2/.test(describe(at(60, { mirror: 20 }))));
   assert.ok(!/Bullets of ours/.test(describe(earthKnows(world, 60))));
 });
+
+// A bullet at an old mind, 2026-11-12, the designer's picks: it is utterly useless there, and the mind's answer is
+// graded by its nature. lib/sim/reprisals.ts.
+test("a bullet is useless against an old mind, and what comes back is by its nature: nothing, our weapon, a strike in kind, or Earth's end", async () => {
+  const { REPRISAL, reprisalLands, reprisalMt, reprisalOf } = await import("./reprisals.ts");
+  const { END_MT, PANEL_TAKES, panelEarths, starSeconds } = await import("./strikes.ts");
+  const { bulletMt, harmOf } = await import("./conflict.ts");
+  const { mindsSeen } = await import("./minds.ts");
+  // The physics of useless: a star sheds a bullet's energy in a blink, and a panel takes a hundred-millionth of it.
+  assert.ok(starSeconds(1) < 2e-6 && starSeconds(0.0107) < 2e-4 && PANEL_TAKES === 1e-8 && panelEarths(4.135e21) > 3e9);
+  // Earth's end is Chicxulub's class, which ends Earth as our home. A strike in kind does not.
+  assert.ok(harmOf(END_MT).ends && !harmOf(bulletMt()).ends && reprisalMt("end") === END_MT && reprisalMt("kind") === bulletMt() && reprisalMt("disarm") === 0);
+  assert.deepEqual(REPRISAL, { 1: "end", 2: "kind" });
+  const kit = { halo: 3, haloArray: 20 };
+  const year = 3000;
+  const count: Record<string, number> = { end: 0, kind: 0, disarm: 0, none: 0 };
+  let panels = 0;
+  for (const seed of POOL) {
+    const world = await loadWorld(seed);
+    const olds = world.minds!.old, maker = world.minds!.watcher.maker;
+    assert.equal(reprisalOf(olds.find((m) => m.id === maker)!, maker), "none");
+    assert.ok(olds.filter((m) => m.asleep).every((m) => reprisalOf(m, maker) === "none"));
+    const glows = mindsSeen(world, kit, year).glows;
+    // A bullet at each cold glow we have found, fired at Year 100 at half of light speed.
+    const strikes = glows.map((g, i) => ({ star: `Cold glow ${i + 1}`, fired: 100, lands: 100 + g.d / 0.5, d: g.d }));
+    const view = earthKnows(world, year, { ...kit, strikes });
+    const blind = earthKnows(world, year, { ...kit, imager: 40, strikes });
+    for (const [i, g] of glows.entries()) {
+      const m = olds.find((o) => o.id === g.id)!, b = strikes[i];
+      const seen = view.strikes!.find((s) => s.star === b.star)!;
+      // Aimed at its star with no picture of what glows, at a panel with one. It strikes no world either way.
+      assert.ok(!seen.world && seen.glow!.aim === "star" && seen.ratio === undefined && seen.seen === undefined);
+      const pictured = blind.minds!.glows[i].imaged;
+      assert.equal(blind.strikes!.find((s) => s.star === b.star)!.glow!.aim, pictured !== undefined && pictured <= 100 ? "panel" : "star");
+      if (pictured !== undefined && pictured <= 100) panels++;
+      const how = reprisalOf(m, maker), back = view.reprisals?.find((r) => r.star === b.star);
+      count[how]++;
+      assert.equal(how, m.id !== maker ? (REPRISAL[m.peaceful] ?? "none") : "none");
+      if (how === "none") { assert.equal(back, undefined); assert.equal(view.minds!.glows[i].reprised, undefined); continue; }
+      // Its answer lands once it has readied what it throws and that has flown: never before.
+      const lands = reprisalLands(m, b.lands);
+      assert.ok(lands > b.lands + m.d && Math.abs(lands - b.lands - theirReady(m.d) - theirYears(m.d)) < 1e-9);
+      assert.deepEqual(back, { star: b.star, after: b.lands, lands, how, mt: reprisalMt(how) });
+      assert.equal(view.minds!.glows[i].reprised, lands);
+      assert.equal(earthKnows(world, lands - 0.01, { ...kit, strikes }).reprisals?.some((r) => r.star === b.star) ?? false, false);
+      // On Earth: a strike in kind harms and Earth's end ends, each from the Year it lands. Disarming us touches no one.
+      assert.equal(back!.mt > 0 && harmOf(back!.mt).ends, how === "end");
+      assert.equal(back!.mt > 0, how !== "disarm");
+    }
+  }
+  // Over the pool every answer is drawn, the hardest the rarest, and most minds do nothing.
+  assert.ok(count.end >= 1 && count.kind >= 1 && panels >= 10);
+  assert.ok(count.none > 8 * (count.end + count.kind));
+  // The Mind is told a bullet did nothing there, and what came back.
+  const world = await loadWorld(22);
+  const glows = mindsSeen(world, kit, year).glows;
+  const told = describe(earthKnows(world, year, { ...kit, strikes: glows.map((g, i) => ({ star: `Cold glow ${i + 1}`, fired: 100, lands: 100 + g.d / 0.5, d: g.d })) }));
+  assert.ok(/It harmed nothing\./.test(told) && /could aim only at its star/.test(told));
+});
