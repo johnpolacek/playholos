@@ -287,7 +287,8 @@ const halls = (cx: number, cy: number) =>
     return [cx + ((i % 4) - (row < 2 ? 1.5 : 1)) * 0.55, cy + (1 - row) * 0.36] as const;
   });
 
-function thoughtFields(): Sketch {
+/** Hyperion as it stands in 2040: its halls, the gas plants and substation south of it, and the power lines. */
+function hyperion() {
   const have: number[] = [];
   const haveLights: number[] = [];
   for (const [x, y] of halls(-1.4, 0)) {
@@ -303,6 +304,16 @@ function thoughtFields(): Sketch {
     for (let y = -9.8; y <= 9.8; y += 0.35) have.push(...stack(x, y, 0.05));
     have.push(x, -9.8, 0.05, x, 9.8, 0.05);
   }
+  return { have, haveLights };
+}
+const HYPERION_TOWNS: Close["towns"] = [
+  ["Rayville", 32.4744, -91.7553, 3500],
+  ["Delhi", 32.4575, -91.4931, 2800],
+  ["Monroe", 32.5094, -92.1194, 60000],
+];
+
+function thoughtFields(): Sketch {
+  const { have, haveLights } = hyperion();
   // Its own substation on the power lines first, then the halls one by one, each lit once its last line is drawn,
   // the chillers on its roof in two rows of twelve.
   const b = new Rising().add(box(0.35, -0.55, 0.2, 0.14, 0.008));
@@ -317,11 +328,45 @@ function thoughtFields(): Sketch {
     ...b.done(0.012),
     haveLights,
     beat: 0.9,
-    towns: [
-      ["Rayville", 32.4744, -91.7553, 3500],
-      ["Delhi", 32.4575, -91.4931, 2800],
-      ["Monroe", 32.5094, -92.1194, 60000],
-    ],
+    towns: HYPERION_TOWNS,
+  };
+}
+
+// ── Climate Hold ──
+// Beside Hyperion, whose waste heat drives it. Solid sorbents, Climeworks' kind, take 4.468 GJ of low heat a tonne
+// (Realmonte et al. 2019, calcs/climate.py), so Hyperion's 5 GW, all thrown off as heat, frees about 35 Mt a year.
+// WRI puts a sorbent plant at about 0.5 km² for each megatonne a year, so this one is about 18 km²: a field 3.8 by 4.6
+// km north of the halls. Mammoth's collectors stand three to a stack, and each takes about 500 t a year, so the field
+// holds about 70,000, in 70 rows 66 m apart, each row a wall of stacks 8 m tall, broken in six for roads. The layout
+// is ours. Two heat mains run from the halls to it, the compressor hall stands where they meet it, and the carbon
+// leaves south in a pipe for the rock under the Gulf coast.
+function climateHold(): Sketch {
+  const { have, haveLights } = hyperion();
+  const [x0, x1, y0, y1] = [-4.0, -0.2, 0.9, 5.5];
+  const ROWS = 70;
+  const ROW = { d: 0.0025, h: 0.008 };
+  const b = new Rising();
+  // The heat mains up from the halls, the compressor hall, and the pipe south past the gas plants.
+  for (const x of [-1.42, -1.38]) b.add(path([[x, 0.4, 0.002], [x, y0 - 0.1, 0.002]]));
+  b.add(box(-1.4, y0 - 0.2, 0.2, 0.1, 0.015));
+  b.add(path([[-1.3, y0 - 0.2, 0.001], [-0.3, y0 - 0.2, 0.001], [-0.3, -9.8, 0.001]]));
+  // The rows, nearest the halls first, each lit along its fans once it stands.
+  const gap = 0.04;
+  const seg = (x1 - x0 - 5 * gap) / 6;
+  for (let r = 0; r < ROWS; r++) {
+    const y = y0 + ((r + 0.5) * (y1 - y0)) / ROWS;
+    for (let k = 0; k < 6; k++) {
+      const x = x0 + k * (seg + gap) + seg / 2;
+      b.add(box(x, y, seg, ROW.d, ROW.h));
+      b.lit([x - seg / 4, y, ROW.h + 0.001], [x + seg / 4, y, ROW.h + 0.001]);
+    }
+  }
+  return {
+    view: { km: 11, el: 18, az: 195, at: [-2.0, 2.0] },
+    have,
+    ...b.done(0.01),
+    haveLights,
+    towns: HYPERION_TOWNS,
   };
 }
 
@@ -1405,6 +1450,7 @@ function seedShip(): Sketch {
 /** Each build with a close view, by name. */
 export const CLOSE: Record<string, Close> = {
   "Thought Fields": drawn(thoughtFields),
+  "Climate Hold": drawn(climateHold),
   "All-Sky Watch": drawn(allSkyWatch),
   "Deep Flash Watch": drawn(deepFlashWatch),
   "Launch Complex": drawn(launchComplex),
