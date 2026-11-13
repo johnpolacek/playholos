@@ -1,6 +1,7 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { tenths, yearText } from "@/lib/game/clock";
-import { ICE, iceBetween, iceFirsts, iceLatest, iceRange, MLY } from "@/lib/game/natural";
+import { type Death, ICE, iceBetween, iceFirsts, iceLatest, iceRange, MLY } from "@/lib/game/natural";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 // What our Deep Ice Watch hears, drawn: us at the middle, the galaxies round us out to 83 million ly, and each star's
@@ -22,16 +23,17 @@ const NAMED = new Set(["M31", "M83", "NGC 253", "M82", "IC 342"]);
 const BACK = 20;
 
 /** The galaxies round us, with the deaths our Deep Ice Watch heard after `from` and by `to`, at most the latest 20
- *  Years of them. */
-export function IceSky({ seed, since, from, to }: { seed: number; since: number; from: number; to: number }) {
+ *  Years of them. `mark`, the first dark death made sure, is drawn however long ago it came, ringed. 2026-11-13. */
+export function IceSky({ seed, since, from, to, mark }: { seed: number; since: number; from: number; to: number; mark?: Death }) {
   const root = useRef<SVGSVGElement>(null);
   const deaths = useMemo(() => iceLatest(seed, since, from, to, BACK), [seed, since, from, to]);
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
       gsap.fromTo("[data-death]", { autoAlpha: 0, scale: 3.5, transformOrigin: "50% 50%" }, { autoAlpha: 1, scale: 1, duration: 0.5, stagger: { amount: 1.8 }, ease: "power2.out" });
+      gsap.fromTo("[data-mark-pulse]", { scale: 1, autoAlpha: 0.8, transformOrigin: "50% 50%" }, { scale: 3.2, autoAlpha: 0, duration: 2.4, repeat: -1, ease: "power1.out" });
     },
-    { scope: root, dependencies: [seed, since, from, to] },
+    { scope: root, dependencies: [seed, since, from, to, mark] },
   );
   const bright = deaths.filter((d) => !d.dark).length;
   return (
@@ -64,6 +66,17 @@ export function IceSky({ seed, since, from, to }: { seed: number; since: number;
           <circle key={i} data-death cx={x} cy={y} r="1.3" fill="var(--ink)" fillOpacity=".85" />
         );
       })}
+      {mark &&
+        (() => {
+          const [x, y] = at(mark.mpc, mark.ra);
+          return (
+            <g>
+              <circle data-mark-pulse cx={x} cy={y} r="3" fill="none" stroke="var(--other)" strokeWidth=".8" />
+              <circle cx={x} cy={y} r="3" fill="none" stroke="var(--other)" strokeWidth="1.4" />
+              <circle cx={x} cy={y} r="5.5" fill="none" stroke="var(--other)" strokeOpacity=".5" strokeWidth=".6" strokeDasharray="1 1.6" />
+            </g>
+          );
+        })()}
       {/* Words last and outlined in the page's own dark, so the deaths drawn under them never hide them. */}
       <g stroke="var(--panel)" strokeWidth="2.4" paintOrder="stroke" strokeLinejoin="round">
         {[ICE.brightMpc, ICE.darkMpc].map((mpc) => (
@@ -82,6 +95,16 @@ export function IceSky({ seed, since, from, to }: { seed: number; since: number;
         <text x={CX + 5} y={CY + 3} className="fill-muted font-mono" fontSize="8">
           us
         </text>
+        {mark &&
+          (() => {
+            const [x, y] = at(mark.mpc, mark.ra);
+            const left = x > CX;
+            return (
+              <text x={left ? x - 8 : x + 8} y={y - 6} textAnchor={left ? "end" : "start"} className="fill-other font-mono" fontSize="6.5">
+                the first sure
+              </text>
+            );
+          })()}
       </g>
       <circle cx={CX} cy={CY} r="2.4" fill="var(--you)" />
     </svg>
@@ -120,7 +143,7 @@ export function IceHeard({ seed, since, now }: { seed: number; since: number; no
       <h2 className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">
         What it has heard · {to - since > BACK ? `the last ${BACK} Years` : `since Year ${yearText(since)}`}
       </h2>
-      <IceSky seed={seed} since={since} from={since} to={to} />
+      <IceSky seed={seed} since={since} from={since} to={to} mark={to >= f.sure ? f.dark : undefined} />
       <IceKey />
       <p className="text-[13px] leading-snug text-page-ink2">
         Since Year {yearText(since)} it has heard {n(bright)} star{bright === 1 ? "" : "s"} explode and{" "}
@@ -131,6 +154,44 @@ export function IceHeard({ seed, since, now }: { seed: number; since: number; no
             ? `One is sure, since Year ${yearText(f.sure)}: a telescope found the star gone. How large a share die dark isn’t settled yet.`
             : "None is sure yet. That takes one near enough to read, and a telescope to find the star gone."}
       </p>
+      {to >= f.sure && f.dark && <FirstDark death={f.dark} sure={f.sure} />}
     </section>
+  );
+}
+
+/** The first dark death made sure, told: where, when, what it means, and the Mind to ask. A jump's row for it led only
+ *  to this page, which gave it one line. Playtest 2026-11-13. Its id is the row's anchor. */
+function FirstDark({ death, sure }: { death: Death; sure: number }) {
+  const box = useRef<HTMLDivElement>(null);
+  const { hash } = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (hash === "#dark") box.current?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "center" });
+  }, [hash]);
+  const far = `about ${mly(death.mpc).toLocaleString("en-US")} million ly away`;
+  const where = death.host ? `the galaxy ${death.host}, ${far}` : `a galaxy ${far}`;
+  return (
+    <div id="dark" ref={box} className="mt-2 scroll-mt-4 rounded-lg border border-other/50 p-3">
+      <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">The first dark death</span>
+      <p className="mt-1.5 text-[13.5px] leading-snug">
+        At Year {yearText(death.at)} a burst of neutrinos reached us from {where}. They ran hot, then stopped short. That is how a
+        heavy star sounds when its core falls straight into a black hole. No flash followed.
+      </p>
+      <p className="mt-1.5 text-[13.5px] leading-snug">
+        At Year {yearText(sure)} our telescopes looked where the star had been. It was gone. Before, there were only two
+        candidates, N6946-BH1 and M31-2014-DS1, and both were disputed. Now we know some heavy stars end in silence.
+      </p>
+      <p className="mt-1.5 text-[13px] leading-snug text-page-ink2">
+        It tells us how many black holes the stars make, and so how many lie dark between them. None of it is a mind.
+      </p>
+      <button
+        onClick={() =>
+          navigate(`/play/mind?ask=${encodeURIComponent(`A star died dark in ${death.host ?? "a galaxy " + far}. What does it tell us?`)}`)
+        }
+        className="mt-3 h-[40px] w-full rounded-full border border-other text-[14px] font-medium text-other"
+      >
+        Ask the Mind what it means
+      </button>
+    </div>
   );
 }

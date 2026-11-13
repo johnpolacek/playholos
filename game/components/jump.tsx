@@ -286,7 +286,8 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
           out.push({
             key: `ice:${title}`,
             rank,
-            to: `/play/build/${buildSlug("Deep Ice Watch")}`,
+            // The sure dark death opens its own telling on the page. Playtest 2026-11-13.
+            to: `/play/build/${buildSlug("Deep Ice Watch")}${title === firsts[1][2] ? "#dark" : ""}`,
             mark: (
               <span style={{ color: buildColor("Deep Ice Watch") }}>
                 <BuildMark name="Deep Ice Watch" size={16} />

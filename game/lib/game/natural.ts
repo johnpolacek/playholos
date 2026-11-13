@@ -166,6 +166,8 @@ export interface IceFirsts {
   sure: number;
   /** The Year the share that die dark is settled, by enough dark deaths read near. */
   settled: number;
+  /** The first dark death made sure: where and when its neutrinos reached us. 2026-11-13. */
+  dark?: Death;
 }
 
 const firsts = new Map<string, IceFirsts>();
@@ -178,6 +180,7 @@ export function iceFirsts(seed: number, since: number): IceFirsts {
   let first: number | null = null;
   let sure: number | null = null;
   let settled: number | null = null;
+  let dark: Death | undefined;
   let read = 0;
   // Far past any likely wait: the share settles in about 50 Years.
   for (let y = Math.floor(since); settled === null && y < since + 5000; y++)
@@ -185,10 +188,11 @@ export function iceFirsts(seed: number, since: number): IceFirsts {
       if (d.at < since) continue;
       first ??= d.at;
       if (!d.dark || d.mpc > ICE.brightMpc) continue;
+      dark ??= d;
       sure ??= d.at + ICE.confirm;
       if (++read === ICE.settle) settled = Math.max(d.at, sure);
     }
-  const out = { first: first ?? since, sure: sure ?? since + 5000, settled: settled ?? since + 5000 };
+  const out = { first: first ?? since, sure: sure ?? since + 5000, settled: settled ?? since + 5000, dark };
   firsts.set(key, out);
   return out;
 }
@@ -247,7 +251,7 @@ function describeIce(seed: number, since: number, year: number) {
   return [
     `Our Deep Ice Watch, done at Year ${n(since)}, hears stars die in the galaxies round us by their neutrinos. It has heard ${n(bright)} explode, each followed by its flash, out to about ${mly(ICE.brightMpc)} million ly, and ${n(dark)} bursts that no flash followed, out to about ${mly(ICE.darkMpc)} million ly: a star falling straight to a black hole would sound so, hotter and cut short, and be heard that far. It can't tell where one lies: the count gives how far, and our telescopes find which galaxy, by the flash or by a star gone missing.`,
     year >= f.sure
-      ? `At Year ${n(Math.round(f.sure * 10) / 10)} we were sure of the first dark death: a telescope found the star gone, with no flash. Some heavy stars do end as black holes in silence.`
+      ? `At Year ${n(Math.round(f.sure * 10) / 10)} we were sure of the first dark death${f.dark ? `, heard at Year ${n(Math.round(f.dark.at * 10) / 10)} from ${f.dark.host ?? "a galaxy"} about ${n(mly(f.dark.mpc))} million ly away` : ""}: a telescope found the star gone, with no flash. Some heavy stars do end as black holes in silence. Before it, only two candidates, N6946-BH1 and M31-2014-DS1, both disputed.`
       : "No dark death is sure yet: that needs one near enough to read, and then a telescope to find the star gone.",
     year >= f.settled
       ? `By Year ${n(Math.round(f.settled * 10) / 10)}, with ${ICE.settle} dark deaths read near, the share was settled: about 1 heavy star in ${range.mid} dies dark, between 1 in ${range.low} and 1 in ${range.high}.`
