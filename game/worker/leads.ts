@@ -7,7 +7,7 @@ import { nextStopWhy } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readSwitches } from "./orders";
-import { readAimed, readCalls, readKnocks, readWill } from "./orders";
+import { readAimed, readCalls, readKnocks, readWill, readWreck } from "./orders";
 import { inPool, loadWorld } from "./world";
 
 // The worlds Earth's planet hunters have felt by Year 0, through the knowledge wall: measured, never who lives there.
@@ -67,6 +67,7 @@ export async function known(req: Request) {
     seeds: readSeeds(list(q.get("seeds"))),
     colony: readColony(one(q.get("colony"))),
     flybys: readFlybys(list(q.get("flybys"))),
+    wreck: readWreck(one(q.get("wreck"))),
   };
   // Once the Will lives at a hole, Earth's news reaches it a light-time late. 2026-10-26.
   const more = { knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) };
@@ -96,6 +97,7 @@ export async function next(req: Request) {
     seeds: readSeeds(list(q.get("seeds"))),
     colony: readColony(one(q.get("colony"))),
     flybys: readFlybys(list(q.get("flybys"))),
+    wreck: readWreck(one(q.get("wreck"))),
   };
   const scale = Number(world.earth.compute) || 1;
   const more = { knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) };

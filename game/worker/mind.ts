@@ -11,7 +11,7 @@ import { describeLeads } from "@/lib/game/leads";
 import { proximaSeen } from "@/lib/sim/proxima";
 import { kt, matterAt, schedule, fifthsOf } from "@/lib/game/plan";
 import { kitOf } from "@/lib/game/reach";
-import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readSwitches, readWill } from "./orders";
+import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readSwitches, readWill, readWreck } from "./orders";
 import { describeBuilds, describeOffers, describeQueue, describeRock } from "@/lib/mind/builds";
 import { FOUND, rockOf } from "@/lib/game/rocks";
 import { describeSky } from "@/lib/game/natural";
@@ -130,6 +130,7 @@ export async function mind(req: Request) {
     seeds,
     colony,
     flybys,
+    wreck,
     sent,
     pick,
     dry,
@@ -151,6 +152,7 @@ export async function mind(req: Request) {
     seeds?: unknown;
     colony?: unknown;
     flybys?: unknown;
+    wreck?: unknown;
     sent?: unknown;
     pick?: unknown;
     dry?: unknown;
@@ -167,7 +169,7 @@ export async function mind(req: Request) {
   // Where this Earth's road to Year 0 left the base kit, read beside the kit it changes.
   const road = world ? roadOf(pastOf(world)) : "";
   // Our order, dated as Build dates it with this game's compute.
-  const asked = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops), switches: readSwitches(switches), gifts: readGifts(gifts), lenses: readLenses(lenses), closeReads: readCloseReads(closeReads), sentinels: readSentinels(sentinels), seeds: readSeeds(seeds), colony: readColony(colony), flybys: readFlybys(flybys) };
+  const asked = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops), switches: readSwitches(switches), gifts: readGifts(gifts), lenses: readLenses(lenses), closeReads: readCloseReads(closeReads), sentinels: readSentinels(sentinels), seeds: readSeeds(seeds), colony: readColony(colony), flybys: readFlybys(flybys), wreck: readWreck(wreck) };
   const scale = Number(world?.earth.compute) || 1;
   // Strikes landed by now cut our thought from when each landed. 2026-10-28.
   const at = yearAt(began, Date.now(), away);

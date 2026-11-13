@@ -814,8 +814,18 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
         "Finding it opened a new build, the Close Look: a small craft of CAPSTONE's class with a sharp camera, 2 Years to build, then about 4 months' flight to the Moon's L4 or L5 or a Year to a rock beside us. " +
           "From a few kilometers it would see what the body is made of and how it holds. It would also see our craft come.",
       );
+    // Our kill vehicle's hit, known within seconds as its signal stopped. 2026-11-13.
+    if (w.wrecked !== undefined)
+      out.push(
+        `At Year ${yearText(w.wrecked)} our Interceptor's kill vehicle struck the watcher, and its signal stopped on the hit. The watcher sees nothing now. Whoever sent it will know it went dark once its reports stop arriving, a light-time from its home${w.answer ? `, about ${one(w.answer.ly)} Years after the hit` : ""}, and will answer as it chooses. We can't know how, or when it began.`,
+      );
+    // A warning after the wreck comes from a second watcher, sent to replace the first, and never found.
+    if (w.warned !== undefined && w.wrecked !== undefined && w.warned > w.wrecked)
+      out.push(
+        `At Year ${yearText(w.warned)}, as our seed left, a narrow laser reached Earth from near the Sun–Earth L4 or L5 point, where no craft of ours could find a thing so small. The same voice in eleven of our languages: look, listen and speak as you like, and build at no other star. The watcher we wrecked has been replaced.`,
+      );
     // Its own warning, at our first seed, once we had found it. Playtest 2026-11-01.
-    if (w.warned !== undefined)
+    else if (w.warned !== undefined)
       out.push(
         `At Year ${yearText(w.warned)}, as our first seed left, the watcher fired a narrow laser at Earth carrying a voice, speaking in eleven of our languages, learned from our broadcasts: look, listen and speak as you like, and build at no other star.${w.answer && w.answer.at <= w.warned ? " The same rule its maker's answer gave." : ""} ` +
           "Nothing yet has happened to our seed. What another seed would draw, it didn't say.",
@@ -824,15 +834,20 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     // happened, never who did it. 2026-10-30.
     if (w.seedsLost?.length)
       out.push(
-        `${w.seedsLost.length === 1 ? "One of our seed probes gone silent" : `${w.seedsLost.length} of our seed probes gone silent`}, after the watcher's warning and our next seed:\n` +
+        `${w.seedsLost.length === 1 ? "One of our seed probes gone silent" : `${w.seedsLost.length} of our seed probes gone silent`}, ${w.blinded ? "after we wrecked the watcher" : "after the watcher's warning and our next seed"}:\n` +
           w.seedsLost.map((l) => l.before
             ? `- Bound for ${l.star}: its word of landing never came. It was due by Year ${yearText(l.known)}.`
             : `- At ${l.star}: its word stopped at Year ${yearText(l.at)}, reaching us at Year ${yearText(l.known)}. Its last word showed nothing coming: whatever hit it came cold and fast.`).join("\n"),
       );
     if (w.struck)
       out.push(`At Year ${yearText(w.struck.lands)} something struck Earth from beyond our system with about ${Math.round(w.struck.mt).toLocaleString("en-US")} Mt, moving at most of light’s speed. No rock moves that fast. Nothing saw it come. It came after our seed probes' copies began launching seeds of their own.`);
-    if (w.by !== "its warning")
+    if (w.by !== "its warning" && w.wrecked === undefined) {
       out.push(`The Will can knock on it, with a message aimed at "the watcher". It lands within seconds, or minutes if it sits out by the Sun–Earth L4 or L5. What it does with a knock, and whether it passes word home, we can't know.`);
+      // Our one weapon, 2026-11-13. Said plainly, with its risk, for the Mind to weigh.
+      out.push(
+        `The Will can order it wrecked, from its page on Scan: a weapon. Once our Interceptor stands, one of its kill vehicles flies to it, ${w.by === "moon search" ? "about 3 days to the Moon's L4 or L5" : "about a Year to the rock it rides"}, and hits it. Then it sees nothing we do, our next seed included. But it is an attack on whoever sent it, which will know its watcher went dark a light-time later. A mind that wishes us ill may take that as we would take a strike, and treat us as if we had spread. A calmer one may send another watcher, hidden better. We can't tell which ours is. Once done, it can't be undone.`,
+      );
+    }
   }
   if (m.sleepers.length)
     out.push(

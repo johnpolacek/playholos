@@ -142,7 +142,8 @@ export const LATER: Later[] = [
     does: "think",
     after: "Mass Driver",
   },
-  // Parity, 2026-10-28: catch what the watch sees. Screens retired 2026-10-31, audit 2.1. The Strike Yard and the
+  // Parity, 2026-10-28: catch what the watch sees. Since 2026-11-13 it can also wreck the watcher, once found where a
+  // craft can reach it: the maker wrecks our craft, and we can wreck its craft. Screens retired 2026-10-31, audit 2.1. The Strike Yard and the
   // Helium-3 Harvest, its bullets' fuel, retired 2026-11-13, the designer's word: a bullet bought nothing.
   { name: "Interceptor", what: "A weapon, for defense: it wrecks a probe that stops in our system.", does: "keep", after: "X-Ray Watch" },
   // A rock coming, 2026-10-28: the deflector opens only once a survey finds one, in games whose seed sends one.
@@ -325,7 +326,7 @@ export const SAYS: Record<string, string> = {
   "Quiet Radars":
     "Ninety years of our radar sweeps are already out there, and nothing recalls them. Cutting the radars now means a listener whose ears open after our last sweep passes never hears us. Every listener who has heard us hears us stop, and can’t tell waking from dying.",
   "Interceptor":
-    "A weapon, for defense. Stored kill vehicles of a tonne each, about 5 Years. Once the X-Ray Watch sees a probe braking in, one meets it as it stops and wrecks it. Its sender loses its eyes here, and may take that as the act of war it is.",
+    "A weapon, for defense. Stored kill vehicles of a tonne each, about 5 Years. Once the X-Ray Watch sees a probe braking in, one meets it as it stops and wrecks it. Its sender loses its eyes here, and may take that as the act of war it is. If we have found the watcher where a craft can reach it, one can be sent to wreck that too, from its page on Scan.",
   "Rock Deflector":
     "A rock is coming at Earth. Ten impactors of a tonne each hit it at 6 km/s, and the rock thrown off pushes it 3.6 times harder, as DART’s did. The earlier the push lands, the less it must move the rock: a 140 m rock needs about 2 Years’ warning, a 60 m one a few weeks. Too late, and it strikes.",
   "Trojan Vault":

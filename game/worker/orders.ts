@@ -102,6 +102,11 @@ export function readWill(w: unknown): Will | null {
 }
 
 /** Our knocks on the watcher, from the save: the Years we sent them. Checked, at most 64. 2026-10-31. */
+/** The Year we ordered the watcher wrecked, if we did. 2026-11-13. */
+export function readWreck(w: unknown): number | undefined {
+  return typeof w === "number" && Number.isFinite(w) && w >= 0 && w <= 1_000_000 ? w : undefined;
+}
+
 export function readKnocks(raw: string | null): number[] {
   try {
     const v = JSON.parse(raw ?? "[]");

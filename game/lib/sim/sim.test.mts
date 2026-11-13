@@ -515,6 +515,44 @@ test("finding minds: a flash while the warm watch runs, most cold glows, the wat
   assert.ok(glowing / awake > 0.55 && glowing / awake < 0.85, `${glowing} of ${awake}`);   // about 7 in 10 since the all-sky cap loosened, 2026-10-31
 });
 
+// Wrecking the watcher, 2026-11-13, the designer's pick: our one weapon. Its maker learns a light-time later and answers
+// by its nature: a hostile one contains us at once, any other sends a new watcher, which flies as our craft that stops.
+test("wrecking the watcher: it sees nothing, and its maker answers by its nature", async () => {
+  const { ladderOf, answerToWreck } = await import("./ladder.ts");
+  const { HOSTILE, WRECK_FLIGHT } = await import("./minds.ts");
+  // Seed 22's maker is calm: it sends another watcher, and until it comes our launches go unseen.
+  const calm = await loadWorld(22);
+  const maker = calm.minds!.old.find((o) => o.id === calm.minds!.watcher.maker)!;
+  assert.ok(maker.peaceful > HOSTILE);
+  const back = answerToWreck(maker, 40);
+  assert.equal(back.contain, null);
+  assert.ok(Math.abs(back.rewatch! - (40 + maker.d + theirReady(maker.d) + sentinelYears(maker.d))) < 1e-9);
+  const blind = ladderOf(calm, seedProbes([{ star: "Proxima Centauri", leaves: 50 }, { star: "Barnard’s Star", leaves: 60 }]), null, 40);
+  assert.equal(blind.warned, null);
+  assert.equal(blind.lost.length, 0);
+  assert.equal(blind.blinded, false);
+  // Once the new one stands, it warns at our next seed, and the ladder runs as before.
+  const after = ladderOf(calm, seedProbes([{ star: "Proxima Centauri", leaves: back.rewatch! + 1 }]), null, 40);
+  assert.equal(after.warned, back.rewatch! + 1);
+  // Seed 19's maker is hostile: it takes the blinding as spreading, and its grams wreck our first seed, unwarned.
+  const harsh = await loadWorld(19);
+  const hm = harsh.minds!.old.find((o) => o.id === harsh.minds!.watcher.maker)!;
+  assert.ok(hm.peaceful <= HOSTILE);
+  assert.equal(answerToWreck(hm, 40).contain, 40 + hm.d);
+  const one = ladderOf(harsh, seedProbes([{ star: "Proxima Centauri", leaves: 50 }]), null, 40);
+  assert.equal(one.warned, null);
+  assert.ok(one.blinded && one.lost.length === 1 && one.lost[0].at > 40 + hm.d);
+  // Earth knows the hit within seconds, and a knock after it draws no answer. A watcher found only by its warning sits
+  // where no craft finds it, so an order there sends nothing.
+  const kit = { moonSearch: 5, wreck: { y: 30, interceptor: 20 }, knocks: [35] };
+  const w = earthKnows(calm, 400, kit).minds!.watcher!;
+  assert.ok(Math.abs(w.wrecked! - (30 + WRECK_FLIGHT.moon)) < 1e-9);
+  assert.equal(w.answer, undefined);
+  assert.ok(earthKnows(calm, 400, { ...kit, knocks: [10] }).minds!.watcher!.answer);
+  assert.equal(earthKnows(calm, 400, { ...kit, wreck: { y: 30, interceptor: null } }).minds!.watcher!.wrecked, undefined);
+  assert.ok(/kill vehicle struck the watcher/.test(describe(earthKnows(calm, 400, kit))));
+});
+
 test("the ladder: warned at our first seed, our seeds wrecked after another, and Earth struck once copies launch seeds", async () => {
   const { ladderOf } = await import("./ladder.ts");
   const { seedProbes } = await import("./spread.ts");

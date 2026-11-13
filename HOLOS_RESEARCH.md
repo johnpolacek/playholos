@@ -3572,3 +3572,10 @@ Added 2026-11-07, from that day’s sweep:
 - Closed 2026-10-16: Nguyen et al. 2026’s fitted shorelines don’t replace the single line. See What sets a natural world’s rung.
 - Closed 2026-10-16: the unknown powers of Earth’s aimed messages change nothing. Altair is no host. Gliese 581’s 2009 knock, about 3 × 10¹¹ W, clears the floor whatever 2008’s was. Lone Signal’s 3 kW is logged. See Earth’s aimed messages.
 - Closed 2026-10-16: links for Project Daedalus’s 1978 report and Criswell 1985. Daedalus has no free text: the BIS sells a reprint, and its shop link works. Criswell’s book is in the Internet Archive’s lending library.
+
+### Wrecking the watcher: a kill vehicle's flight, 2026-11-13
+
+- **[Apollo's translunar injection](https://en.wikipedia.org/wiki/Trans-lunar_injection)** · Reference, from memory, checked against the article's figures. About 3.1 km/s from low Earth orbit sends a craft to the Moon's distance, and Apollo's crews took about 3 days.
+  - Why it matters: the Moon's L4 and L5 points sit at the Moon's distance, so a craft that needs only to hit, not to stop, gets there on that one burn.
+  - Used: `game/lib/sim/minds.ts` `WRECK_FLIGHT.moon`, 3 days. This project's arithmetic: a tonne kill vehicle on storable fuel at about 3.1 km/s of exhaust burns about 0.63 t, and 0.37 t hits at about a km/s.
+- To a rock beside us the flight is a probe's, a Year, as our Close Look takes and Tianwen-2 took to Kamoʻoalewa, logged with the Close Look.

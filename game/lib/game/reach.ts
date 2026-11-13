@@ -581,9 +581,10 @@ export function kitOf(plan: Plan, scale: number) {
     sails: fly(sails),
     probe: probeNeeds(plan).every((n) => inOrder(plan, n)) ? fly(probe) : null,
     xray: done["X-Ray Watch"] ?? null,
-    // Nothing in the simulation reads this yet: no probe comes for it to catch. When one does, it must catch only
-    // while armed: plan.ts's isOn. 2026-11-11.
+    // No probe comes for it to catch yet. When one does, it must catch only while armed: plan.ts's isOn. 2026-11-11.
     interceptor: done["Interceptor"] ?? null,
+    // Our order to wreck the watcher, flown by the Interceptor's kill vehicle once it stands. 2026-11-13.
+    wreck: plan.wreck != null ? { y: plan.wreck, interceptor: done["Interceptor"] ?? null } : null,
     quiet: done["Quiet Radars"] ?? null,
   };
 }

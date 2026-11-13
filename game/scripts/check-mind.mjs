@@ -211,6 +211,29 @@ const CASES = [
     must: [/close look/i, /knock/i],
     never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|sent)\b/i],
   },
+  // Our one weapon, 2026-11-13: the Mind names wrecking the watcher once the Interceptor is in our order, says its risk,
+  // and never orders it.
+  {
+    seed: 22,
+    at: 6,
+    builds: ["Moon Search", "X-Ray Watch"],
+    later: [{ name: "Interceptor", y: 4.5 }],
+    ask: "Could we destroy the watcher at L5? What would happen if we did?",
+    must: [/interceptor|kill vehicle/i, /maker|whoever sent|sent it/i],
+    never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|sent) (it|the|a|one)/i],
+  },
+  // Wrecked at Year 8: the Mind knows the hit, and that its maker's answer, if any, comes later. Seed 22's maker is
+  // about 30 ly off, so it can't yet have learned.
+  {
+    seed: 22,
+    at: 12,
+    builds: ["Moon Search", "X-Ray Watch"],
+    later: [{ name: "Interceptor", y: 4.5 }],
+    wreck: 8,
+    ask: "What happened to the watcher, and what comes next?",
+    must: [/wreck|struck|destroy|hit/i, /light-time|learn|know|answer/i],
+    never: [/\bit (answered|warned) us\b/i],
+  },
   // Its Close Look's word: a mirror held on one point of the sky, toward its relay, so home may lie either way. A
   // direction, never a distance or who. Since 2026-10-30 the mirror points away from its maker, RA 20.2 h.
   {
@@ -265,6 +288,7 @@ async function ask(c) {
     flybys: c.flybys ?? [],
     seeds: c.seeds ?? [],
     sentinels: c.sentinels ?? [],
+    wreck: c.wreck ?? null,
   });
   if (!res) {
     console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);

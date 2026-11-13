@@ -164,6 +164,9 @@ export interface Plan {
   /** Builds that act on their own, stood down or armed again: each by its name, the Year, and which. The list only
    *  grows, and the last word by a Year holds. One never switched is on. plan.ts's SWITCHED. 2026-11-11. */
   switches?: (Ordered & { on: boolean })[];
+  /** The Year we ordered the watcher wrecked, our one weapon: a kill vehicle of our Interceptor's flies once it stands.
+   *  Once given, it stands. 2026-11-13. */
+  wreck?: number;
 }
 
 /** A build ordered in play, or taken back: its name, and the Year. */
