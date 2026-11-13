@@ -171,6 +171,8 @@ export const LATER: Later[] = [
   { name: "Mercury Works", what: "A factory on Mercury that copies itself, to build the Solar Swarm.", kt: 0.1, does: "lift", after: "Orbital Foundry" },
   { name: "Solar Swarm", what: "Compute from the Sun’s light, doubling every 2 Years.", does: "think", after: "Mercury Works" },
   { name: "Star Beam", what: "Gets a Solar Lens to its focus in ten weeks, not 17 Years.", does: "reach", after: "Solar Swarm" },
+  // Antimatter by the tonne, 2026-11-12, the designer's word: the first tool made from science. calcs/antimatter.py.
+  { name: "Antimatter Works", what: "Antimatter for craft that stop by rocket, at three tenths of light speed.", does: "reach", after: "Solar Swarm" },
   // The Star Beam can't push a seed ship. A patch of the swarm ten times wider can, 2026-11-10. calcs/mercury.py.
   { name: "Ship Beam", what: "Throws seed ships and flyby probes to speed, with no drive or fuel.", does: "reach", after: "Star Beam" },
   // The Ship Beam in stepped colors, from a patch ten times as wide, 2026-11-12, the designer's pick: it throws as
@@ -346,6 +348,8 @@ export const SAYS: Record<string, string> = {
     "Part of the swarm, 100 km across, phased as one laser of 10 TW. It pushes a lens to the Sun’s focus in about ten weeks, not 17 Years, carrying a telescope 3 m wide that pictures a world in about a week. No one has phased mirrors spread that far, so this is the least certain build we have.",
   "Ship Beam":
     "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out under 2% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW, in light of 1.55 microns, where the silicon in its sail’s mirror is clear. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days, and to its most, about a seventh, in about 135. The ship needs no Fusion Drive and no deuterium. With no drive it stops on its magnetic sail alone, and that sets its speed: as fast as it can stop from. On a short hop through thin gas that is under a tenth. On a long road it is the beam’s full push. Where a Fusion Drive and the Deuterium Works stand too, a thrown ship carries a small drive to end its stop, and lands far sooner: Proxima in about 51 Years, not 72. We send each ship the way that lands it soonest. It throws a flyby probe too, from the Probe Yard: 150 t leaves at over a third of light speed after 48 days of push, with no engine and no fuel. The beam does the same work on whatever rides its sail, so a lighter craft leaves faster, up to half of light speed. So it throws a bullet too: a rod of 30 t, which lands as hard as a bullet of 1,000 t and needs no helium-3. Past that a sail outruns its own mirror: the beam’s light reaches it stretched too red to reflect. We aim each craft where its star will be when it lands, so its beam passes that star by: about 180 AU at Proxima Centauri for a seed ship, and a light-year at a glow far off. Only an old mind awake near us has works that wide, and only round a bright star: its cold panels lie about 540 AU out round a star like the Sun, and a tenth as far round a red dwarf. It sees the beam as it would a knock, decades before the craft lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
+  "Antimatter Works":
+    "Accelerators, cooling rings and traps built through the swarm, run on a hundredth of its power. A plant built for it turns about 4 parts in 100,000 of its energy into antimatter, by known technology. Today’s turn 4 in 10 billion. So it makes little at first, and twice as much each time the swarm doubles: 10 million tonnes a Year once the swarm catches all the Sun. Its drive is a beamed core engine. Each annihilation throws out charged pions, and a magnetic nozzle turns them out the back. The rest leaves as gamma rays and neutrinos, which push nothing. A craft goes in two stages, one to go and one to stop, and cruises at three tenths of light speed. It stops by its own rocket, so it needs no gas to brake on, and its stop is the same at every star. Its heat holds it to a hundredth of a g: 31 Years to reach its speed, and 31 to stop. It burns about 450 t of antimatter for each tonne it lands, so a sentinel waits on 450 kt. A seed ship lands at Proxima Centauri in about 41 Years, and at a star 10 ly off between the clouds in 63, where it took 163. Its price: its stop is a flame of about 3×10¹⁵ W, pointed for 31 Years at the star it stops at. Anyone awake there sees it come. No one has kept more than a few antiprotons. In 2026, 92 of them rode a truck round CERN for half an hour. We take ice of antihydrogen, held off the walls by a magnet, to work. No one has made it.",
   "Wide Beam":
     "The Ship Beam stops at half of light speed, for two reasons. A sail that flees the light sees it stretched redder, and past half of light speed it is too red for the sail’s mirror. And the beam’s spot outgrows the sail about 1,800 AU out. This beam answers both. It is the Ship Beam’s patch grown ten times wider, 10,000 km, so its spot holds ten times as far. And it lases in four colors, each bluer, taking over one by one as the sail speeds up: 2.0 microns, then 1.55, 1.06 and 0.80. So the sail always sees light its mirror reflects, up to nine tenths of light speed. Each color is a kind of laser we build today. It throws the same 1,000 TW, since a sail can take no more. A bullet ordered once it stands is a rod of about 4 t at nine tenths of light speed, pushed for 78 days, with a bullet’s harm: what another mind throws, as fast. A flyby probe leaves at about three quarters of light speed, and passes Proxima Centauri about 6 Years later. A seed ship rides it too, but it must stop on its sail alone, so it gains only on roads past about 55 ly. A faster craft’s beam passes nearer its star, so more old minds would see this one. It goes dark when we keep the Ship Beam dark. In 2002 Jordin Kare drew a chain of lasers at stepped colors, for a sail at a tenth of light speed. No one has drawn one for nine tenths.",
   "Hypertelescope":
@@ -550,11 +554,12 @@ export const rodBy = (plan: Plan, beam: number | null | undefined, wide: number 
  *  are in our order. */
 export const NEEDS: Record<string, string[]> = { "Seed Ship": ["Fusion Drive", "Deuterium Works"] };
 /** What stands in for all a build needs. The Ship Beam pushes a Seed Ship in place of its drive and fuel. 2026-11-10. */
-export const INSTEAD: Record<string, string> = { "Seed Ship": "Ship Beam" };
+/** Or the Antimatter Works, whose drive takes it to speed and stops it. 2026-11-12. */
+export const INSTEAD: Record<string, string[]> = { "Seed Ship": ["Ship Beam", "Antimatter Works"] };
 
 /** What a build needs that our order lacks. Nothing, if what stands in for them is in our order. */
 export const lacks = (plan: Plan, name: string) =>
-  INSTEAD[name] && ordered(plan).includes(INSTEAD[name]) ? [] : (NEEDS[name] ?? []).filter((n) => !ordered(plan).includes(n));
+  INSTEAD[name]?.some((n) => ordered(plan).includes(n)) ? [] : (NEEDS[name] ?? []).filter((n) => !ordered(plan).includes(n));
 
 /** Builds as a line says them: the Fusion Drive and the Deuterium Works. */
 export const needs = (names: string[]) => names.map((n) => `the ${n}`).join(" and ");
@@ -584,7 +589,8 @@ export function schedule(plan: Plan, scale: number, harm: readonly Order[] = [])
   for (const b of ordered(plan)) {
     if (!NEEDS[b]) continue;
     const after = (names: string[]) => names.reduce<number | null>((y, n) => (y == null || done[n] == null ? null : Math.max(y, done[n]!)), done[b]);
-    const all = after(NEEDS[b]), instead = INSTEAD[b] ? after([INSTEAD[b]]) : null;
+    const all = after(NEEDS[b]);
+    const instead = (INSTEAD[b] ?? []).map((n) => after([n])).reduce<number | null>((m, y) => (y == null ? m : m == null ? y : Math.min(m, y)), null);
     done[b] = all == null ? instead : instead == null ? all : Math.min(all, instead);
   }
   return done;

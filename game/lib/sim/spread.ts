@@ -6,7 +6,7 @@
 // knowledge.ts. Settled 2026-10-26.
 import targets from "../../data/targets.json" with { type: "json" };
 import catalog from "../../data/works.json" with { type: "json" };
-import { pushedBy, shipYears } from "./speeds.ts";
+import { landYears } from "./speeds.ts";
 
 const { first, every, copies, generations } = catalog.seedProbe;
 
@@ -19,8 +19,9 @@ const STARS = targets.map((t) => ({ ...t, xyz: place(t.ra, t.dec, t.d) }));
 type Star = (typeof STARS)[number];
 
 /** Years from leaving to landing at a star `ly` away, as lib/sim/speeds.ts works each trip. `start` is the Years its
- *  start costs where our Ship Beam pushed it, in place of its burn's: it tells a pushed ship from one on its drive. */
-export const hop = (ly: number, start?: number, star?: string, drive?: boolean) => shipYears(ly, pushedBy(start), star, drive || !pushedBy(start));
+ *  start costs where our Ship Beam pushed it, in place of its burn's: it tells a pushed ship from one on its drive.
+ *  `am`: it went by antimatter, 2026-11-12. */
+export const hop = (ly: number, start?: number, star?: string, drive?: boolean, am?: boolean) => landYears(ly, start, star, drive, am);
 
 /** A companion within a light-year is the same home ground, as Proxima is to Alpha Centauri, as calcs/seed.py has it. */
 const HOME_GROUND = 1;
@@ -45,20 +46,20 @@ export interface Probe {
  *  go one at a time, the earliest first, each to the nearest star no probe of ours is bound for. A star we don't know
  *  the place of sends no probe. One our Ship Beam pushed carries its `burn`. Its copies burn their own fuel: no beam
  *  stands where they are built. */
-export function seedProbes(sent: readonly { star: string; leaves: number; burn?: number; drive?: boolean }[]): Probe[] {
+export function seedProbes(sent: readonly { star: string; leaves: number; burn?: number; drive?: boolean; am?: boolean }[]): Probe[] {
   const probes: Probe[] = [];
   const at = new Map<Probe, Star>();
   const free = (x: Star) => [...at.values()].every((y) => Math.hypot(x.xyz[0] - y.xyz[0], x.xyz[1] - y.xyz[1], x.xyz[2] - y.xyz[2]) >= HOME_GROUND);
   const launches: { by: Probe; t: number }[] = [];
-  const add = (x: Star, gen: number, from: string | null, leaves: number, ly: number, start?: number, drive?: boolean) => {
-    const p: Probe = { star: x.name, d: x.d, ra: x.ra, dec: x.dec, gen, from, leaves, lands: leaves + hop(ly, start, x.name, drive), copies: [] };
+  const add = (x: Star, gen: number, from: string | null, leaves: number, ly: number, start?: number, drive?: boolean, am?: boolean) => {
+    const p: Probe = { star: x.name, d: x.d, ra: x.ra, dec: x.dec, gen, from, leaves, lands: leaves + hop(ly, start, x.name, drive, am), copies: [] };
     probes.push(p);
     at.set(p, x);
     if (gen < generations) for (let k = 0; k < copies; k++) launches.push({ by: p, t: p.lands + first + k * every });
   };
   for (const s of [...sent].sort((a, b) => a.leaves - b.leaves)) {
     const x = STARS.find((y) => y.name === s.star);
-    if (x && free(x)) add(x, 1, null, s.leaves, x.d, s.burn, s.drive);
+    if (x && free(x)) add(x, 1, null, s.leaves, x.d, s.burn, s.drive, s.am);
   }
   for (let guard = 0; launches.length; guard++) {
     if (guard > 1e4) throw new Error("Seed probes did not settle.");

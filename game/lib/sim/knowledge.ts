@@ -11,7 +11,7 @@ import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { flashRatio, hyperSees, mirrorSees, OZONE_YEARS, panelEarths, starSeconds, STRIKE_MT } from "./strikes.ts";
 import { proximaB, proximaField, proximaSeen } from "./proxima.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
-import { pushedBy, sentinelYears, shipYears } from "./speeds.ts";
+import { landYears, sentinelYearsBy } from "./speeds.ts";
 import { peerAnswers, type Aimed, type Call } from "./peers.ts";
 import { beamsAt, oldAnswers } from "./old-minds.ts";
 import { reprisalLands, reprisalMt, reprisalOf } from "./reprisals.ts";
@@ -48,11 +48,11 @@ export interface Kit {
   /** Our Mind sent to a black hole or a star: where, how it lives there, and the Year it leaves. */
   /** `burn`: the Years its start costs over cruising, where the Ship Beam pushed it. Its own burn's otherwise.
    *  `drive`: thrown by a beam, it carries a small drive to end its stop. */
-  colony?: { star: string; mode: ColonyMode; leaves: number; burn?: number; drive?: boolean } | null;
+  colony?: { star: string; mode: ColonyMode; leaves: number; burn?: number; drive?: boolean; am?: boolean } | null;
   /** Each sentinel we sent, by its star as we name it, and the Year it leaves. */
-  sentinels?: { star: string; leaves: number }[];
+  sentinels?: { star: string; leaves: number; am?: boolean }[];
   /** Each seed probe we sent, by its star as we name it, and the Year it leaves. Its copies follow from spread.ts. */
-  seeds?: { star: string; leaves: number; burn?: number; drive?: boolean }[];
+  seeds?: { star: string; leaves: number; burn?: number; drive?: boolean; am?: boolean }[];
   /** Each sail or flyby probe we sent past a star: the Year it passes, and the Year its word reaches us. 2026-11-05.
    *  `thrown` is its speed as a share of light's, if a beam of ours threw it: sails, or a probe on the Ship Beam. */
   flybys?: { star: string; by: "sails" | "probe"; leaves?: number; passed: number; home: number; thrown?: number }[];
@@ -383,7 +383,7 @@ export function earthKnows(
     // A black hole we found: it weighs it, and measures its spin from how light and matter go round it.
     const dark = holes.find((h) => h.name === x.star);
     if (dark) {
-      const passed = x.leaves + sentinelYears(dark.d), home = passed + dark.d;
+      const passed = x.leaves + sentinelYearsBy(dark.d, undefined, x.am), home = passed + dark.d;
       const truth = world.holes!.find((h) => h.id === dark.id)!;
       if (home <= year) visits.push({ star: x.star, world: x.star, by: "sentinel", sight: "dark", passed, home, spin: truth.spin, clock: iscoClock(truth.spin) });
       continue;
@@ -391,7 +391,7 @@ export function earthKnows(
     const warm = /^Warm glow (\d+)$/.exec(x.star);
     const src = warm ? warmSrc[Number(warm[1]) - 1] : undefined;
     if (src) {
-      const passed = x.leaves + sentinelYears(src.d), home = passed + src.d;
+      const passed = x.leaves + sentinelYearsBy(src.d, undefined, x.am), home = passed + src.d;
       if (home > year) continue;
       const glow = "kind" in src ? (src as { kind: "eruption" | "merger" }).kind : ("mind" as const);
       visits.push({ star: x.star, world: x.star, by: "sentinel", sight: glow === "mind" ? "works" : "dusty", glow, passed, home });
@@ -399,7 +399,7 @@ export function earthKnows(
     }
     const d = x.star === PROXIMA.star ? PROXIMA.d : f?.d;
     if (d === undefined) continue;
-    const passed = x.leaves + sentinelYears(d, x.star), home = passed + d;
+    const passed = x.leaves + sentinelYearsBy(d, x.star, x.am), home = passed + d;
     if (home > year) continue;
     // A hostile old mind in that system, awake or asleep, wrecks a craft that comes to stay, as it arrives: its last
     // pictures show a craft not ours closing on it. 2026-11-11.
@@ -455,7 +455,7 @@ export function earthKnows(
   const crafts: NonNullable<MindKit["craft"]> = [...(craft ?? [])];
   for (const x of sentinels) {
     const pos = placeOf(x.star);
-    if (pos) crafts.push({ pos, arrives: x.leaves + sentinelYears(Math.hypot(...pos)), stays: true });
+    if (pos) crafts.push({ pos, arrives: x.leaves + sentinelYearsBy(Math.hypot(...pos), undefined, x.am), stays: true });
   }
   for (const p of probes) if (!ladder.cancelled.has(p.star)) crafts.push({ pos: atlasOf(p.ra, p.dec, p.d), arrives: p.lands, stays: true });
   const minds = mindsSeen(world, { ...kit0, craft: crafts }, year);
@@ -604,11 +604,11 @@ function fieldAir(f: FieldWorld) {
 /** Our Mind at a black hole, as far as its word has reached us by `year`: on its way, landed, or standing alone as a
  *  Mind, and, once it stands, who was there before it, and how its furnace has grown, a Mind's computing doubling every
  *  10 Years from our 2040 scale, as a neighbor's does. A refuge stays as small and dark as it began. 2026-10-26. */
-function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: ColonyMode; leaves: number; burn?: number; drive?: boolean }, year: number) {
+function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: ColonyMode; leaves: number; burn?: number; drive?: boolean; am?: boolean }, year: number) {
   const { stands } = catalog.seedShip;
   const h = holes.find((x) => x.name === c.star);
   if (!h) return colonyAtStar(world, c, year);
-  const lands = c.leaves + shipYears(h.d, pushedBy(c.burn), undefined, c.drive || !pushedBy(c.burn)), alone = lands + stands;
+  const lands = c.leaves + landYears(h.d, c.burn, undefined, c.drive, c.am), alone = lands + stands;
   const heard = year - h.d;                                       // what its word home shows of it now
   const truth = world.holes!.find((x) => x.id === h.id)!;
   const watts = c.mode === "furnace" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
@@ -620,12 +620,12 @@ function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star:
 /** Our Mind settled at a star, on its light and its rock, as far as its word has reached us by `year`: on its way,
  *  landed, or standing alone as a Mind, and its works growing as a furnace's do. No slow clock: a star has no
  *  innermost orbit to live on. 2026-10-27. Who was there first went with the neighbors, 2026-10-31. */
-function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number; burn?: number; drive?: boolean }, year: number) {
+function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number; burn?: number; drive?: boolean; am?: boolean }, year: number) {
   const { stands } = catalog.seedShip;
   const id = Object.keys(world.stars).find((k) => world.stars[k].shown === c.star);
   if (!id) return { star: c.star, mode: c.mode, leaves: c.leaves };
   const d = world.stars[id].d;
-  const lands = c.leaves + shipYears(d, pushedBy(c.burn), c.star, c.drive || !pushedBy(c.burn)), alone = lands + stands;
+  const lands = c.leaves + landYears(d, c.burn, c.star, c.drive, c.am), alone = lands + stands;
   const heard = year - d;
   // Settled, its works grow as a furnace's do. Kept small, it stays as it began. 2026-10-30.
   const watts = c.mode === "settle" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;

@@ -29,7 +29,7 @@ import {
   seedNeeds,
   seedReady,
   seedRoad,
-  SENTINEL_NEEDS,
+  sentinelNeeds,
   sentinelReady,
   sentinelRoad,
   strikeRoad,
@@ -97,6 +97,10 @@ function Need({ name, queued, done }: { name: string; queued: boolean; done: boo
   );
 }
 
+/** A craft that goes by the Antimatter Works' drive, in words: its speed, its slow start and stop, and the flame its stop
+ *  points at this star. calcs/antimatter.py. 2026-11-12. */
+const amLine = (r: Road) =>
+  r.antimatter ? ` It goes by the Antimatter Works’ drive at ${r.speed.toFixed(2)} of light speed, about 31 Years up to speed and 31 to stop, and stops by its rocket. Its stop is a flame pointed at this star, so anyone awake here sees it come.` : "";
 const WHAT: Record<string, string> = {
   strike:
     "A weapon, not a probe: it looks at nothing and only destroys. 1,000 t at a tenth of light speed, readied in 20 Years, and fired once the Helium-3 Harvest gathers its 37 kt, after any bullet before it: about 12 Years for the first, less as the harvest grows. It lands with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. Its launch flame shows only here, to a probe of theirs watching us.",
@@ -559,7 +563,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 2}
             to={to}
             name="Our Mind, to stay"
-            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed, mind.carries)} days, ${mind.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, mind.speed, lead?.lum, lead?.kms)}` : ""}${darkLine}`}
+            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed, mind.carries)} days, ${mind.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, mind.speed, lead?.lum, lead?.kms)}` : ""}${amLine(mind)}${darkLine}`}
             needs={shipNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // One Seed Ship, one Mind: once sent to one hole, no other. Sent once all three are in our order.
@@ -598,12 +602,12 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 1}
             to={to}
             name="A sentinel that stays"
-            line={WHAT.sentinel}
-            needs={SENTINEL_NEEDS}
+            line={`${WHAT.sentinel}${amLine(stay)}`}
+            needs={sentinelNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Sent once all three are in our order, before Begin too: it is built once they are done.
             can={sentinelReady(plan)}
-            send={() => change((p) => ({ ...p, sentinels: [...(p.sentinels ?? []), { name: lead.star, y: from }] }))}
+            send={() => change((p) => ({ ...p, sentinels: [...(p.sentinels ?? []), { name: lead.star, y: from, d: ly }] }))}
             what="Sentinel"
             {...way("sentinel")}
             recall={() => change((p) => recall(p, "sentinel", lead.star))}
@@ -615,7 +619,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 4}
             to={to}
             name="A seed probe that copies itself"
-            line={`${WHAT.seed}${seed.push ? ` The ${seed.push} pushes it to speed in ${pushDays(seed.speed, seed.carries)} days, ${seed.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, seed.speed, lead?.lum, lead?.kms)}` : ""}${darkLine}`}
+            line={`${WHAT.seed}${seed.push ? ` The ${seed.push} pushes it to speed in ${pushDays(seed.speed, seed.carries)} days, ${seed.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, seed.speed, lead?.lum, lead?.kms)}` : ""}${amLine(seed)}${darkLine}`}
             needs={seedNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Sent once all three are in our order, before Begin too: it is built once they are done.

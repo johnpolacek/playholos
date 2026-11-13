@@ -25,6 +25,7 @@ npm run dev                                # http://localhost:5173
   - `pyrandom.ts` is CPython's random generator, so a roll here matches the same roll in the calcs and the mocks.
   - `works.ts` paces Earth's works from the player's orders, in one loop from Year 0. `data/works.json` holds each work's Years and want.
   - `speeds.ts` is the one place a craft's travel time is worked out: ours by kind, and what another mind sends. Nothing else divides light-years by a speed. `calcs/speeds.py` holds what physics gives each trip.
+  - `antimatter.ts` is what the Antimatter Works makes, on a hundredth of the swarm's power, growing as the swarm does. `speeds.ts` has its drive's trips, and `lib/game/reach.ts`'s `amQueue` sends a craft by it only if that lands it soonest. `calcs/antimatter.py` holds the sources.
   - `strikes.ts` is what a bullet of ours does where it lands: its flash, and which telescope catches it. `calcs/strikes.py` holds the sources.
   - `reprisals.ts` is what an old mind does about a bullet of ours, by its nature. A build it wrecks rides the plan as a wreck: `lib/game/reach.ts`'s `settled`.
 

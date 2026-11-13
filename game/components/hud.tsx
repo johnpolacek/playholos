@@ -20,7 +20,7 @@ import {
   Warp,
 } from "@/components/jump";
 import { tenths, yearText } from "@/lib/game/clock";
-import { deuteriumAt, fuelOf, inOrder } from "@/lib/game/reach";
+import { amFuel, deuteriumAt, inOrder } from "@/lib/game/reach";
 import { CATALOG } from "@/lib/sim/works";
 import {
   ceiling,
@@ -373,7 +373,7 @@ export function Hud() {
   const short = shortAt(plan, done, now);
   // Our deuterium, once the Works is ordered: free stock, or the Year all we have sent for is in. 2026-11-07.
   const works = done["Deuterium Works"] ?? null;
-  const fuel = inOrder(plan, "Deuterium Works") ? { d: deuteriumAt(plan, fuelOf((n) => done[n]), now) } : null;
+  const fuel = inOrder(plan, "Deuterium Works") ? { d: deuteriumAt(plan, amFuel(plan, scale, (n) => done[n]), now) } : null;
   const { energy, compute } = useMemo(
     () => drawAt(plan, scale, now),
     [plan, scale, now],

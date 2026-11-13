@@ -139,8 +139,9 @@ export interface Plan {
    *  Solar Lens is done. One a star. 2026-10-26. */
   lenses?: Ordered[];
   /** Sentinels we sent, each by its star and the Year we ordered it: a probe that brakes and stays to watch. It is
-   *  built once the Probe Yard, a Fusion Drive and the Deuterium Works are done. One a star. 2026-10-26. */
-  sentinels?: Ordered[];
+   *  built once the Probe Yard, a Fusion Drive and the Deuterium Works are done. One a star. 2026-10-26. Since
+   *  2026-11-12 each carries how far its star is, so it goes the way that lands it soonest. */
+  sentinels?: (Ordered & { d?: number })[];
   /** Sails and flyby probes we sent past a star, each by its star, the Year we ordered it, how far we took it to be and
    *  which craft. One of each a star. Proxima's first flew by itself once queued before Begin. 2026-11-05. */
   flybys?: (Ordered & { d: number; by: "sails" | "probe" })[];

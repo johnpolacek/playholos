@@ -485,6 +485,16 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       before: "In 1960 Freeman Dyson argued that a growing people would come to use all its star’s light, and that its heat would show us where it lives.",
     },
   },
+  "Antimatter Works": {
+    site: { on: "planet", body: "Mercury", view: "orbit", draw: "ring", places: [{ lat: 0, lon: 0, name: "Through the swarm, round the Sun" }] },
+    story: {
+      have: "About 18 ng of antimatter, all ever made. Traps that hold a picogram. 92 antiprotons that rode a truck round CERN in 2026.",
+      where: "Through the Solar Swarm round the Sun, on a hundredth of what it turns to power.",
+      why: "Annihilation gives a craft its push with no gas to brake on, so it can stop at any star. A plant built for it turns about 4 parts in 100,000 of its energy into antimatter, and with the swarm, energy stops being the bar.",
+      takes: "About 450 t of antimatter for each tonne a craft lands, and as much hydrogen. Little at first, and twice as much each time the swarm doubles.",
+      before: "In 1953 Eugen Sänger drew a rocket that ran on annihilation. In 2003 Robert Frisbee drew the craft round it, with radiators hundreds of km long.",
+    },
+  },
   "Star Beam": {
     site: { on: "planet", body: "Mercury", draw: "ring", places: [{ lat: 0, lon: 0, name: "Part of the swarm, near Mercury" }] },
     story: {

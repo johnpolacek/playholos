@@ -60,7 +60,8 @@ export function readLenses(l: unknown): Ordered[] {
     .map(({ name, y }) => ({ name, y }))
     .slice(0, 16);
 }
-export const readSentinels = readLenses;
+// Sentinels, each with how far its star is, so each goes the way that lands it soonest. 2026-11-12.
+export const readSentinels = (l: unknown) => readStrikes(l);
 export const readCloseReads = readLenses;
 // Seed probes, each with how far its star is, so each is sent the way that lands it soonest. 2026-11-12.
 export const readSeeds = (l: unknown) => readStrikes(l);

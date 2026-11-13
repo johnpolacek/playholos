@@ -12,7 +12,7 @@ import { useLeads } from "@/components/scan";
 import { yearText } from "@/lib/game/clock";
 import type { Lead } from "@/lib/game/leads";
 import { buildSlug } from "@/lib/game/plan";
-import { type Fuel, fuelReady, inOrder, probeNeeds, roads, SENTINEL_NEEDS } from "@/lib/game/reach";
+import { type Fuel, fuelReady, inOrder, probeNeeds, roads, sentinelNeeds } from "@/lib/game/reach";
 import type { GlowOrder, Plan } from "@/lib/game/types";
 import type { MindsSeen } from "@/lib/sim/minds";
 import { CATALOG } from "@/lib/sim/works";
@@ -23,7 +23,7 @@ type By = GlowOrder["by"];
 // Warm glows are flashes seen across the Galaxy, most tens of thousands of ly out, so their ranges are wider. 2026-11-07.
 const WITHIN: Record<Kind, number[]> = { warm: [10_000, 30_000, Infinity], cold: [25, 50, 100] };
 const lyText = (d: number) => (Number.isFinite(d) ? `${d.toLocaleString("en-US")} ly` : "any distance");
-const needsOf = (plan: Plan, by: By) => (by === "sails" ? ["Laser Sail Array"] : by === "probe" ? probeNeeds(plan) : SENTINEL_NEEDS);
+const needsOf = (plan: Plan, by: By) => (by === "sails" ? ["Laser Sail Array"] : by === "probe" ? probeNeeds(plan) : sentinelNeeds(plan));
 const NAME: Record<By, string> = { sails: "Sails", probe: "A flyby probe", sentinel: "A sentinel" };
 /** Each craft's close-up on Reach's map. */
 const CRAFT: Record<By, CraftKind> = { sails: "sail", probe: "probe", sentinel: "sentinel" };
@@ -347,7 +347,7 @@ export function GlowOrders() {
       const sentinels = [...(p.sentinels ?? [])];
       for (const w of want) {
         if (w.by === "sentinel") {
-          if (!sentinels.some((s) => s.name === w.name)) sentinels.push({ name: w.name, y: w.y });
+          if (!sentinels.some((s) => s.name === w.name)) sentinels.push({ name: w.name, y: w.y, d: w.d });
         } else if (!flybys.some((f) => f.by === w.by && f.name === w.name)) flybys.push({ name: w.name, y: w.y, d: w.d, by: w.by });
       }
       return { ...p, flybys, sentinels };

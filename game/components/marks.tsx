@@ -885,6 +885,25 @@ const WideBeam = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The Antimatter Works: a storage ring with a particle going round it, and at its heart the flash where matter
+ *  meets antimatter, beating. Ours. 2026-11-12. */
+const Antimatter = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) => {
+      gsap.to(part("round"), { rotation: 360, svgOrigin: "8 8", duration: 3.2, ease: "none", repeat: -1, delay: offset() });
+      gsap.fromTo(part("flash"), { opacity: 0.25, scale: 0.6, svgOrigin: "8 8" }, { opacity: 1, scale: 1, svgOrigin: "8 8", duration: 0.9, ease: "power2.out", repeat: -1, repeatDelay: 0.7, delay: offset() });
+    }}
+  >
+    <circle cx="8" cy="8" r="5.6" />
+    <g data-k="round">
+      <circle cx="13.6" cy="8" r="0.9" fill="currentColor" stroke="none" />
+    </g>
+    <path data-k="flash" d="M8 6v4M6 8h4M6.6 6.6l2.8 2.8M9.4 6.6l-2.8 2.8" />
+  </Moving>
+);
+
 /** The Hypertelescope: mirrors spread wide in a curve, their light brought to one focus, which drifts as the fleet
  *  turns to a new star. Ours. 2026-10-29. */
 const Hyper = ({ size, still }: MarkProps) => (
@@ -1046,6 +1065,8 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <ShipBeam size={size} still={still} />;
     case "Wide Beam":
       return <WideBeam size={size} still={still} />;
+    case "Antimatter Works":
+      return <Antimatter size={size} still={still} />;
     case "Hypertelescope":
       return <Hyper size={size} still={still} />;
     case "Deep Ice Watch":

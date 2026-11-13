@@ -3,7 +3,8 @@
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { bulletsReady } from "@/lib/sim/conflict";
-import { bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, rodReady, SAIL_C, sailYears, sentinelYears, shipYears, stay, type Push } from "@/lib/sim/speeds";
+import { amBeta, amTonnes, amYears, bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, rodReady, SAIL_C, sailYears, sentinelYears, shipYears, stay, type Push } from "@/lib/sim/speeds";
+import { amWhen } from "@/lib/sim/antimatter";
 import { clearOf, fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, rodBy, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will, Wreck } from "./types";
@@ -75,6 +76,8 @@ export interface Road {
   fuel?: Fuel;
   /** The beam that throws it, in place of a drive. */
   push?: string | null;
+  /** It goes by the Antimatter Works' drive, and stops by its rocket. 2026-11-12. */
+  antimatter?: boolean;
 }
 
 /** The Year each thing our fusion craft and flyby probes wait on is done. Null while it isn't, or isn't ours to build. */
@@ -85,6 +88,8 @@ export interface Fuel {
   beam: number | null;
   /** The Wide Beam's Year done, if it is in our order: from then it throws what the Ship Beam threw. 2026-11-12. */
   wide?: number | null;
+  /** The craft that go by antimatter, by key, which draw no deuterium: amFuel. 2026-11-12. */
+  am?: ReadonlySet<string>;
 }
 type Done = (name: string) => number | null | undefined;
 export const fuelOf = (at: Done): Fuel => ({ works: at("Deuterium Works") ?? null, yard: at("Probe Yard") ?? null, drive: at("Fusion Drive") ?? null, beam: at("Ship Beam") ?? null, wide: at("Wide Beam") ?? null });
@@ -127,7 +132,7 @@ export function probeLeaves(plan: Plan, f: Fuel, sent: number, fuel: number | nu
 function draws(plan: Plan, f: Fuel): Draw[] {
   const all: Draw[] = plan.builds.includes("Probe Yard") ? [{ key: PROXIMA_PROBE, y: -Infinity, kt: FLYBY_PROBE.fuel, probe: -Infinity }] : [];
   for (const o of plan.flybys ?? []) if (o.by === "probe") all.push({ key: `probe:${o.name}`, y: o.y, kt: FLYBY_PROBE.fuel, probe: o.y });
-  for (const o of plan.sentinels ?? []) all.push({ key: `sentinel:${o.name}`, y: o.y, kt: CATALOG.sentinel.fuel });
+  for (const o of plan.sentinels ?? []) if (!f.am?.has(`sentinel:${o.name}`)) all.push({ key: `sentinel:${o.name}`, y: o.y, kt: CATALOG.sentinel.fuel });
   all.sort((a, b) => a.y - b.y);
   // A probe the Ship Beam throws burns nothing, so it draws nothing. Each is settled in the order sent, by the
   // deuterium that would be left to it then.
@@ -203,6 +208,8 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
     yard: doneOf("Probe Yard"), drive: ours("Fusion Drive"), works: ours("Deuterium Works"),
     beam: inOrder(plan, "Ship Beam") ? doneOf("Ship Beam") : null, wide: inOrder(plan, "Wide Beam") ? doneOf("Wide Beam") : null,
   };
+  // Sentinels that go by antimatter draw no deuterium. 2026-11-12.
+  f.am = amFuel(plan, scale, (n) => schedule(plan, scale)[n]).am;
   const { leaves, pushed, ready } = probeLeaves(plan, f, -Infinity, fuelReady(plan, f, PROXIMA_PROBE, FLYBY_PROBE.fuel, from));
   const arrives = leaves === null ? null : leaves + flybyYears(NEAREST.ly, pushed);
   const probe: Road = {
@@ -301,12 +308,74 @@ const SENTINEL = CATALOG.sentinel;
 export const SENTINEL_NEEDS = ["Probe Yard", "Fusion Drive", "Deuterium Works"];
 export const inOrder = (plan: Plan, name: string) => plan.builds.includes(name) || (plan.later ?? []).some((o) => o.name === name);
 
-/** The Year each sentinel we sent leaves, by its star, once what it needs is done. Null while any of it isn't. */
+/** Or its yard and the Antimatter Works: it goes, cruises and stops by its own rocket. 2026-11-12. */
+export const AM_WORKS = "Antimatter Works";
+export const AM_SENTINEL_NEEDS = ["Probe Yard", AM_WORKS];
+/** What a sentinel needs: its drive and fuel, or, with the Antimatter Works in our order and those not, the Works. */
+export const sentinelNeeds = (plan: Plan) => (inOrder(plan, AM_WORKS) && !SENTINEL_NEEDS.every((n) => inOrder(plan, n)) ? AM_SENTINEL_NEEDS : SENTINEL_NEEDS);
+const allDone = (at: Done, names: string[]) => (names.every((n) => at(n) != null) ? Math.max(...names.map((n) => at(n)!)) : null);
+
+/** A craft that may stop by antimatter: its key, the Year sent, its kind and build, how far it goes if we know, the
+ *  Year all its antimatter way needs is done, and the Year it lands by its soonest other way, or leaves if no distance. */
+interface AmCraft { key: string; y: number; kind: "sentinel" | "ship"; build: number; ly?: number; star?: string; ready: number | null; other: number | null }
+/** Our craft that go by antimatter, by key, and the Year each leaves. Each draws its antimatter from the Works in the
+ *  order sent, as deuterium is drawn, and goes by it only if that lands it soonest: physics picks, not the Will. With
+ *  no distance, an order from before this date, it goes by whichever way leaves first. calcs/antimatter.py.
+ *  2026-11-12. */
+function amQueue(plan: Plan, scale: number, at: Done, list: AmCraft[]): Map<string, number> {
+  const out = new Map<string, number>();
+  const works = inOrder(plan, AM_WORKS) ? (at(AM_WORKS) ?? null) : null;
+  if (works === null) return out;
+  const swarm = grownSpans(plan, scale, "Solar Swarm");
+  let sum = 0;
+  for (const c of [...list].sort((a, b) => a.y - b.y)) {
+    if (c.ready === null) continue;
+    const need = amTonnes(c.kind), fuel = amWhen(swarm, works, sum + need);
+    if (fuel === null) continue;
+    const leaves = Math.max(Math.max(c.y, c.ready) + c.build, fuel);
+    if (c.other !== null && leaves + (c.ly ? amYears(c.ly, c.kind) : 0) >= c.other - 1e-9) continue;
+    out.set(c.key, leaves);
+    sum += need;
+  }
+  return out;
+}
+/** Every craft of ours that may stop by antimatter, with when it lands by its other ways, by the builds' Years `at`.
+ *  `f` is the deuterium as it would be with none going by antimatter, which is the most a fusion craft waits. */
+function amCraft(plan: Plan, at: Done, extra: AmCraft[] = []): AmCraft[] {
+  const f = fuelOf(at), fusion = allDone(at, SENTINEL_NEEDS);
+  const sentinel = (o: { name: string; y: number; d?: number }): AmCraft => {
+    const fuel = fuelReady(plan, f, `sentinel:${o.name}`, SENTINEL.fuel, o.y);
+    const leaves = fusion === null || fuel === null ? null : Math.max(Math.max(o.y, fusion) + SENTINEL.build, fuel);
+    return { key: `sentinel:${o.name}`, y: o.y, kind: "sentinel", build: SENTINEL.build, ly: o.d, star: o.name, ready: allDone(at, AM_SENTINEL_NEEDS), other: leaves === null ? null : leaves + (o.d ? sentinelYears(o.d, o.name) : 0) };
+  };
+  const ship = (key: string, o: { name: string; y: number; d?: number }, build: number): AmCraft => {
+    const w = shipLeaves(plan, at, o.y, build, o.d, o.name);
+    return { key, y: o.y, kind: "ship", build, ly: o.d, star: o.name, ready: allDone(at, AM_SHIP_NEEDS), other: w.leaves === null ? null : w.leaves + (o.d ? shipYears(o.d, w.pushed, o.name, w.drive) : 0) };
+  };
+  return [
+    ...(plan.sentinels ?? []).map(sentinel),
+    ...(plan.seeds ?? []).map((o) => ship(`seed:${o.name}`, o, PROBE.build)),
+    ...(plan.colony ? [ship("colony", plan.colony, 0)] : []),
+    ...extra,
+  ];
+}
+/** Our deuterium with the craft that go by antimatter taken out of its draws. */
+export function amFuel(plan: Plan, scale: number, at: Done, f: Fuel = fuelOf(at)): Fuel {
+  return { ...f, am: new Set(amQueue(plan, scale, at, amCraft(plan, at)).keys()) };
+}
+
+/** The Year each sentinel we sent leaves, by its star, once what it needs is done, and whether it goes by antimatter.
+ *  Null while what it needs isn't done. */
 export function sentinels(plan: Plan, scale: number) {
   const done = schedule(plan, scale);
-  const ready = SENTINEL_NEEDS.every((n) => done[n] != null) ? Math.max(...SENTINEL_NEEDS.map((n) => done[n]!)) : null;
+  const at: Done = (n) => done[n];
+  const am = amQueue(plan, scale, at, amCraft(plan, at));
+  const f = { ...fuelOf(at), am: new Set(am.keys()) };
+  const ready = allDone(at, SENTINEL_NEEDS);
   return (plan.sentinels ?? []).map((o) => {
-    const fuel = fuelReady(plan, fuelOf((n) => done[n]), `sentinel:${o.name}`, SENTINEL.fuel, o.y);
+    const key = `sentinel:${o.name}`;
+    if (am.has(key)) return { star: o.name, leaves: am.get(key)!, am: true };
+    const fuel = fuelReady(plan, f, key, SENTINEL.fuel, o.y);
     return { star: o.name, leaves: ready === null || fuel === null ? null : Math.max(Math.max(o.y, ready) + SENTINEL.build, fuel) };
   });
 }
@@ -388,16 +457,28 @@ export function settled<V extends Pick<EarthView, "reprisals">>(plan: Plan, scal
  *  begun then. */
 export function sentinelRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road {
   const { orders, ...opts } = ordersOf(plan);
-  const more: Order[] = SENTINEL_NEEDS.filter((n) => !inOrder(plan, n)).map((n) => ({ y: from, begin: pacedName(n) }));
-  const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
-  const ready = SENTINEL_NEEDS.every((n) => at[pacedName(n)] !== undefined) ? Math.max(...SENTINEL_NEEDS.map((n) => at[pacedName(n)])) : null;
+  const needs = sentinelNeeds(plan);
+  const more: Order[] = needs.filter((n) => !inOrder(plan, n)).map((n) => ({ y: from, begin: pacedName(n) }));
+  const done = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
+  const at: Done = (n) => done[pacedName(n)];
   const sent = (plan.sentinels ?? []).find((o) => o.name === star);
-  const fuel = fuelReady(plan, fuelOf((n) => at[pacedName(n)]), `sentinel:${star}`, SENTINEL.fuel, sent?.y ?? from);
-  const leaves = ready === null || fuel === null ? null : Math.max(Math.max(sent?.y ?? from, ready) + SENTINEL.build, fuel);
-  const arrives = leaves === null ? null : leaves + sentinelTrip(ly, star);
-  return { name: "Send a sentinel", n: sent ? 1 : null, build: "Probe Yard", craft: "A sentinel", speed: stay("sentinel", ly, gasAt(star)).beta, done: ready, leaves, arrives, home: arrives === null ? null : arrives + ly };
+  const y = sent?.y ?? from, key = `sentinel:${star}`;
+  // Its fusion way, with the craft that go by antimatter drawing no deuterium.
+  const fusion = allDone(at, SENTINEL_NEEDS);
+  const fuel = fuelReady(plan, amFuel(plan, scale, at), key, SENTINEL.fuel, y);
+  const byFusion = fusion === null || fuel === null ? null : Math.max(Math.max(y, fusion) + SENTINEL.build, fuel);
+  // Or by antimatter, if that lands it soonest: in its place among our craft, or last if not yet sent.
+  const list = amCraft(plan, at, sent ? [] : [{ key, y, kind: "sentinel", build: SENTINEL.build, ly, star, ready: allDone(at, AM_SENTINEL_NEEDS), other: byFusion === null ? null : byFusion + sentinelTrip(ly, star) }]);
+  const am = amQueue(plan, scale, at, list.map((c) => (c.key === key ? { ...c, ly } : c))).get(key);
+  const leaves = am ?? byFusion;
+  const arrives = leaves === null ? null : leaves + (am !== undefined ? amYears(ly, "sentinel") : sentinelTrip(ly, star));
+  const ready = am !== undefined ? allDone(at, AM_SENTINEL_NEEDS) : fusion ?? allDone(at, AM_SENTINEL_NEEDS);
+  return {
+    name: "Send a sentinel", n: sent ? 1 : null, build: "Probe Yard", craft: "A sentinel", speed: am !== undefined ? amBeta(ly, "sentinel") : stay("sentinel", ly, gasAt(star)).beta,
+    done: ready, leaves, arrives, home: arrives === null ? null : arrives + ly, ...(am !== undefined ? { antimatter: true } : {}),
+  };
 }
-export const sentinelReady = (plan: Plan) => SENTINEL_NEEDS.every((n) => inOrder(plan, n));
+export const sentinelReady = (plan: Plan) => sentinelNeeds(plan).every((n) => inOrder(plan, n));
 
 /** A yard's Year done, as if begun at Year `from` when it isn't in our order. */
 function yardDone(plan: Plan, scale: number, from: number, yard: string) {
@@ -436,12 +517,15 @@ export const SHIP_NEEDS = ["Seed Ship", "Fusion Drive", "Deuterium Works"];
  *  2026-11-10, its speed by physics 2026-11-11. */
 export const BEAM_NEEDS = ["Seed Ship", "Ship Beam"];
 /** What a seed ship needs: its drive and fuel, or, with the Ship Beam in our order and those not, the beam alone. */
-export const shipNeeds = (plan: Plan) => (inOrder(plan, "Ship Beam") && !SHIP_NEEDS.every((n) => inOrder(plan, n)) ? BEAM_NEEDS : SHIP_NEEDS);
+/** Or the Antimatter Works, whose drive takes it to speed and stops it by its own rocket. 2026-11-12. */
+export const AM_SHIP_NEEDS = ["Seed Ship", "Antimatter Works"];
+export const shipNeeds = (plan: Plan) =>
+  SHIP_NEEDS.every((n) => inOrder(plan, n)) ? SHIP_NEEDS : inOrder(plan, "Ship Beam") ? BEAM_NEEDS : inOrder(plan, "Antimatter Works") ? AM_SHIP_NEEDS : SHIP_NEEDS;
 /** The Year a seed ship can leave, by its drive or by the beam, whichever is ready first, from each build's Year done. */
 function shipReadyAt(at: (name: string) => number | null | undefined) {
   const all = (names: string[]) => (names.every((n) => at(n) != null) ? Math.max(...names.map((n) => at(n)!)) : null);
-  const drive = all(SHIP_NEEDS), beam = all(BEAM_NEEDS);
-  return drive === null ? beam : beam === null ? drive : Math.min(drive, beam);
+  const ready = [all(SHIP_NEEDS), all(BEAM_NEEDS), all(AM_SHIP_NEEDS)].filter((y): y is number => y !== null);
+  return ready.length ? Math.min(...ready) : null;
 }
 /** A way a ship may go: the Year it leaves by it, which beam throws it, if one does, and whether it carries a small
  *  drive to end its stop. A ship on its own drive always does. */
@@ -475,12 +559,13 @@ export function colonyRoad(plan: Plan, scale: number, from: number, star: string
   const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
   const ready = shipReadyAt((n) => at[pacedName(n)]);
   const sent = plan.colony?.name === star ? plan.colony : undefined;
-  const { leaves, pushed, drive } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from, 0, ly, star);
-  const arrives = leaves === null ? null : leaves + shipYears(ly, pushed, star, drive);
+  const way = shipWay(plan, scale, (n) => at[pacedName(n)], "colony", sent?.y ?? from, 0, ly, star, !sent);
+  const { leaves, pushed, drive, am } = way;
+  const arrives = leaves === null ? null : leaves + (am ? amYears(ly, "ship") : shipYears(ly, pushed, star, drive));
   return {
-    name: "Send our Mind", n: sent ? 1 : null, build: "Seed Ship", craft: "A Mind", speed: stay("ship", ly, gasAt(star), pushed, drive).beta, done: ready, leaves, arrives, carries: !!pushed && drive,
+    name: "Send our Mind", n: sent ? 1 : null, build: "Seed Ship", craft: "A Mind", speed: am ? amBeta(ly, "ship") : stay("ship", ly, gasAt(star), pushed, drive).beta, done: ready, leaves, arrives, carries: !am && !!pushed && drive,
     home: arrives === null ? null : arrives + ly, stands: arrives === null ? null : arrives + SHIP.stands,
-    push: pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null,
+    push: am ? null : pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null, ...(am ? { antimatter: true } : {}),
   };
 }
 export const shipReady = (plan: Plan) => shipNeeds(plan).every((n) => inOrder(plan, n));
@@ -496,10 +581,21 @@ export const seedReady = shipReady;
  *  the Ship Beam's push if the beam is done by then, else its burn. Null while what it needs isn't done. */
 export function seedsOf(plan: Plan, scale: number) {
   const done = schedule(plan, scale);
+  const at: Done = (n) => done[n];
+  const am = amQueue(plan, scale, at, amCraft(plan, at));
   return (plan.seeds ?? []).map((o) => {
-    const { leaves, start, pushed, drive } = shipLeaves(plan, (n) => done[n], o.y, PROBE.build, o.d, o.name);
+    if (am.has(`seed:${o.name}`)) return { star: o.name, leaves: am.get(`seed:${o.name}`)! as number | null, burn: SHIP.burn, drive: false, am: true };
+    const { leaves, start, pushed, drive } = shipLeaves(plan, at, o.y, PROBE.build, o.d, o.name);
     return { star: o.name, leaves, burn: start, ...(pushed && drive ? { drive: true } : {}) };
   });
+}
+/** The way a seed ship or seed probe goes, keyed `key`: by antimatter if that lands it soonest, else shipLeaves's.
+ *  `last`: not yet sent, so it draws its antimatter after every craft we sent. */
+function shipWay(plan: Plan, scale: number, at: Done, key: string, y: number, build: number, ly: number, star: string, last: boolean) {
+  const w = shipLeaves(plan, at, y, build, ly, star);
+  const mine: AmCraft = { key, y, kind: "ship", build, ly, star, ready: allDone(at, AM_SHIP_NEEDS), other: w.leaves === null ? null : w.leaves + shipYears(ly, w.pushed, star, w.drive) };
+  const am = amQueue(plan, scale, at, last ? amCraft(plan, at, [mine]) : amCraft(plan, at).map((c) => (c.key === key ? mine : c))).get(key);
+  return am === undefined ? { ...w, am: false } : { leaves: am, start: SHIP.burn, pushed: false as Push, drive: true, am: true };
 }
 
 /** A seed probe to a star `ly` away as a road: what it needs built, the probe built and flying, landing to stay, and
@@ -511,12 +607,12 @@ export function seedRoad(plan: Plan, scale: number, from: number, star: string, 
   const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
   const ready = shipReadyAt((n) => at[pacedName(n)]);
   const sent = (plan.seeds ?? []).find((o) => o.name === star);
-  const { leaves, pushed, drive } = shipLeaves(plan, (n) => at[pacedName(n)], sent?.y ?? from, PROBE.build, ly, star);
-  const arrives = leaves === null ? null : leaves + shipYears(ly, pushed, star, drive);
+  const { leaves, pushed, drive, am } = shipWay(plan, scale, (n) => at[pacedName(n)], `seed:${star}`, sent?.y ?? from, PROBE.build, ly, star, !sent);
+  const arrives = leaves === null ? null : leaves + (am ? amYears(ly, "ship") : shipYears(ly, pushed, star, drive));
   return {
-    name: "Send a seed probe", n: sent ? 1 : null, build: "Seed Ship", craft: "A seed probe", speed: stay("ship", ly, gasAt(star), pushed, drive).beta, done: ready, leaves, arrives, carries: !!pushed && drive,
+    name: "Send a seed probe", n: sent ? 1 : null, build: "Seed Ship", craft: "A seed probe", speed: am ? amBeta(ly, "ship") : stay("ship", ly, gasAt(star), pushed, drive).beta, done: ready, leaves, arrives, carries: !am && !!pushed && drive,
     home: arrives === null ? null : arrives + ly, copies: arrives === null ? null : arrives + PROBE.first,
-    push: pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null,
+    push: am ? null : pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null, ...(am ? { antimatter: true } : {}),
   };
 }
 
@@ -568,11 +664,14 @@ export function kitOf(plan: Plan, scale: number) {
     colony: (() => {
       const c = plan.colony;
       if (!c) return null;
-      const { leaves, start, pushed, drive } = shipLeaves(plan, (n) => done[n], c.y, 0, c.d, c.name);
+      const at: Done = (n) => done[n];
+      const am = amQueue(plan, scale, at, amCraft(plan, at)).get("colony");
+      if (am !== undefined) return { star: c.name, mode: c.mode, leaves: am, burn: SHIP.burn, am: true };
+      const { leaves, start, pushed, drive } = shipLeaves(plan, at, c.y, 0, c.d, c.name);
       return leaves === null ? null : { star: c.name, mode: c.mode, leaves, burn: start, ...(pushed && drive ? { drive: true } : {}) };
     })(),
-    sentinels: sentinels(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves }] : [])),
-    seeds: seedsOf(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves, burn: x.burn, ...(x.drive ? { drive: true } : {}) }] : [])),
+    sentinels: sentinels(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves, ...(x.am ? { am: true } : {}) }] : [])),
+    seeds: seedsOf(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves, burn: x.burn, ...(x.drive ? { drive: true } : {}), ...(x.am ? { am: true } : {}) }] : [])),
     lenses: lenses(plan, scale).flatMap((l) => (l.looks !== null && l.home !== null ? [{ star: l.star, looks: l.looks, home: l.home }] : [])),
     flybys: flybysOf(plan, scale),
     sails: fly(sails),

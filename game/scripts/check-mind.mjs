@@ -211,6 +211,18 @@ const CASES = [
     must: [/wide beam/i, /nine tenths|0\.9/i, /colou?rs?/i],
     never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|fired)\b/i],
   },
+  // The Antimatter Works, 2026-11-12: a sentinel sent to a star between the clouds goes by its drive once its
+  // antimatter is in, and the Mind says its price: its stop is a flame pointed at that star.
+  {
+    seed: 22,
+    at: 140,
+    builds: ["Probe Yard", "Fusion Drive", "Deuterium Works"],
+    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Antimatter Works", y: 3 }],
+    sentinels: [{ name: "Tau Ceti", y: 3, d: 11.9 }],
+    ask: "How will our sentinel to Tau Ceti get there, and does anyone see it come?",
+    must: [/antimatter/i, /flame|gamma/i, /three tenths|0\.3/i],
+    never: [/magnetic sail/i],
+  },
   // Our telescopes turn to the array's worlds, 2026-11-12: the 15 m Mirror can split Gliese 832's world from its star
   // and reads its air. Until then the Mind was told no telescope we can build could split one.
   {
@@ -309,6 +321,7 @@ async function ask(c) {
     flybys: c.flybys ?? [],
     strikes: c.strikes ?? [],
     seeds: c.seeds ?? [],
+    sentinels: c.sentinels ?? [],
   });
   if (!res) {
     console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);

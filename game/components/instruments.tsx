@@ -205,6 +205,7 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
   if (name === "Helium-3 Harvest") return { line: "Gathering helium-3 from Uranus’s air, faster each time its craft double.", news: false };
   if (name === "Mercury Works") return { line: "Its seed copies itself from Mercury’s rock.", news: false };
   if (name === "Star Beam") return { line: "Ready. Each lens we send rides it to the Sun’s focus in about ten weeks.", news: false };
+  if (name === "Antimatter Works") return { line: "Making antimatter on a hundredth of the swarm’s power, twice as much each time it doubles.", news: false };
   if (name === "Wide Beam") return { line: `Ready. It throws each rod and flyby probe that leaves, a rod at ${CATALOG.speeds.wide.rod.beam.toFixed(2)} of light speed.`, news: false };
   if (name === "Ship Beam") return { line: `Ready. Each seed ship we send rides it, a tenth of light speed in ${CATALOG.beams.shipDays} days and as fast as it can stop from.`, news: false };
   if (name === "Thought Fields")

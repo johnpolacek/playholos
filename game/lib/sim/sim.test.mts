@@ -20,7 +20,8 @@ import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ICE, deathsIn, iceBetween, iceFirsts } from "../game/natural.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
-import { bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, sentinelYears, shipYears, stay, theirBeta, theirReady, theirYears } from "./speeds.ts";
+import { amBeta, amTonnes, amYears, bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, sentinelYears, sentinelYearsBy, shipYears, stay, theirBeta, theirReady, theirYears } from "./speeds.ts";
+import { amMade, amWhen } from "./antimatter.ts";
 import { proximaField } from "./proxima.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
@@ -1201,4 +1202,31 @@ test("a bullet is useless against an old mind, and what comes back is by its nat
   const glows = mindsSeen(world, kit, year).glows;
   const told = describe(earthKnows(world, year, { ...kit, strikes: glows.map((g, i) => ({ star: `Cold glow ${i + 1}`, fired: 100, lands: 100 + g.d / 0.5, d: g.d })) }));
   assert.ok(/It harmed nothing\./.test(told) && /could aim only at its star/.test(told));
+});
+
+test("an antimatter craft's trips match calcs/antimatter.py, near and far", () => {
+  for (const t of golden.antimatter) {
+    const kind = t.kind as "sentinel" | "ship";
+    assert.ok(Math.abs(amBeta(t.d, kind) - t.beta) < 1e-9, `${kind} ${t.d} ly speed`);
+    assert.ok(Math.abs(amYears(t.d, kind) - t.years) < 1e-6, `${kind} ${t.d} ly Years`);
+    assert.ok(Math.abs(amTonnes(kind) - t.anti) < 1e-6, `${kind} antimatter`);
+  }
+  // It stops by its rocket, so the gas at its star changes nothing, where a fusion sentinel's stop does.
+  assert.equal(sentinelYearsBy(10.5, "Epsilon Eridani", true), sentinelYearsBy(10.5, "Tau Ceti", true));
+  assert.ok(sentinelYearsBy(10, undefined, true) < sentinelYears(10) / 3);
+  // A seed probe by antimatter lands by its own Years, and its copies by fusion.
+  assert.equal(hop(10, catalog.seedShip.burn, undefined, false, true), amYears(10, "ship"));
+});
+
+test("the Antimatter Works makes twice as much each time the swarm doubles, and holds when the swarm is held", () => {
+  const perYear = catalog.speeds.antimatter.kgPerYear0 / 1000;
+  // Done with the swarm at its seed: its first two Years at the seed's rate, the next two at twice it.
+  assert.ok(Math.abs(amMade([[0, null]], 0, 4) - 6 * perYear) < 1e-12);
+  // Done 10 Years into the swarm's growth: it makes only from then, at the swarm's size then.
+  assert.ok(Math.abs(amMade([[0, null]], 10, 12) - 2 * 32 * perYear) < 1e-12);
+  // Held at Year 4, the swarm stays at two doublings' worth.
+  assert.ok(Math.abs(amMade([[0, 4]], 0, 10) - (2 + 4 + 6 * 4) * perYear) < 1e-12);
+  const when = amWhen([[0, null]], 0, catalog.speeds.antimatter.perTonne * 1000)!;
+  assert.ok(when > 95 && when < 105, `a sentinel's antimatter by Year ${when} of a swarm grown from its seed`);
+  assert.equal(amWhen([[0, null]], null, 1), null);
 });

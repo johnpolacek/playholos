@@ -212,3 +212,25 @@ export const worksAU = (lum = 1) => SPEEDS.seen.worksAU * Math.sqrt(lum);
 export const beamSeen = (ly: number, beta: number, lum = 1, kms?: number | null) => beta > 0 && beamMiss(ly, beta, kms) <= worksAU(lum);
 /** How near a star must be for an awake old mind there to see the beam that throws a craft at this speed, in ly. */
 export const seenWithin = (beta: number, lum = 1, kms?: number | null) => worksAU(lum) / beamMiss(1, beta, kms);
+
+/** Our antimatter drive, once the Antimatter Works stands: a beamed core engine, Frisbee's two stages through Keane
+ *  and Zhang's nozzle. It goes, cruises and stops by its own rocket, so its stop is the same at every star and needs no
+ *  gas. Its heat holds it to a hundredth of a g. calcs/antimatter.py. 2026-11-12. */
+const AM = SPEEDS.antimatter;
+/** Its cruise `ly` off: the stages' most, or less where dust and gas would wear through its shield first. */
+export const amBeta = (ly: number, kind: keyof typeof CRAFT = "sentinel") => Math.min(AM.beta, shieldBeta(ly, CRAFT[kind].tonnes, CRAFT[kind].front));
+/** Years from leaving to stopped `ly` off: up to speed at a hundredth of a g, by the clock at home, a cruise, and down
+ *  again. A road too short to reach its speed turns over halfway. */
+export function amYears(ly: number, kind: keyof typeof CRAFT = "sentinel") {
+  if (!(ly > 0)) return 0;
+  const beta = amBeta(ly, kind), phi = Math.atanh(beta);
+  const t = AM.cOverA * Math.sinh(phi), x = AM.cOverA * (Math.cosh(phi) - 1);
+  return ly >= 2 * x ? 2 * t + (ly - 2 * x) / beta : 2 * AM.cOverA * Math.sinh(Math.acosh(1 + ly / 2 / AM.cOverA));
+}
+/** Antimatter it burns, tonnes, for a craft of this kind: 447 t for each tonne landed, and as much hydrogen. */
+export const amTonnes = (kind: keyof typeof CRAFT = "sentinel") => CRAFT[kind].tonnes * AM.perTonne;
+/** Years for a sentinel `ly` off, at the star of that name: on its fusion drive, or by antimatter if `am`. */
+export const sentinelYearsBy = (ly: number, star?: string, am?: boolean) => (am ? amYears(ly, "sentinel") : sentinelYears(ly, star));
+/** Years for a seed ship or seed probe to land, by the way it went: antimatter if `am`, else as `start` tells. */
+export const landYears = (ly: number, start?: number, star?: string, drive?: boolean, am?: boolean) =>
+  am ? amYears(ly, "ship") : shipYears(ly, pushedBy(start), star, drive || !pushedBy(start));
