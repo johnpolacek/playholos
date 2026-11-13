@@ -99,7 +99,7 @@ function Need({ name, queued, done }: { name: string; queued: boolean; done: boo
 
 const WHAT: Record<string, string> = {
   strike:
-    "1,000 t at a tenth of light speed, readied in 20 Years, and fired once the Helium-3 Harvest gathers its 37 kt, after any bullet before it: about 12 Years for the first, less as the harvest grows. It lands with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. Its launch flame shows only here, to a probe of theirs watching us.",
+    "A weapon, not a probe: it looks at nothing and only destroys. 1,000 t at a tenth of light speed, readied in 20 Years, and fired once the Helium-3 Harvest gathers its 37 kt, after any bullet before it: about 12 Years for the first, less as the harvest grows. It lands with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. Its launch flame shows only here, to a probe of theirs watching us.",
   "Laser Sail Array": "Sails weighing a few grams, pushed by a beam from Earth, fly past at a fifth of light speed.",
   "Probe Yard": "A probe built in orbit and fueled with 6 kt of deuterium from the Deuterium Works. Building one takes 12 Years once its yard and a Fusion Drive are done. It burns 20 Years to a tenth of light speed and flies past.",
   mind:
@@ -621,15 +621,15 @@ export function DestinationPage({ slug }: { slug: string }) {
             road={bullet}
             i={ways.length + 6}
             to={to}
-            name="A bullet, fired here"
+            name="A weapon: a bullet, fired here"
             line={
               // What it would strike, and what we would see of it: a bullet needs a world whose path we know, and
               // nothing comes home from one. lib/sim/strikes.ts, 2026-11-12.
               (bullet.push
                 ? `${
                     bullet.push === "Wide Beam"
-                      ? `A rod of ${rodTonnes(ly, "wide").toFixed(1)} t with no engine, readied in about ${Math.round(rodReady(ly, "wide") * 365.25)} days. The Wide Beam throws it, stepping through four colors: ${CATALOG.speeds.wide.rod.days}`
-                      : `A rod of ${Math.round(CATALOG.speeds.rod.tonnes)} t with no engine, readied in about ${Math.round(CATALOG.speeds.rod.ready * 12)} months. The Ship Beam throws it: ${CATALOG.speeds.rod.days}`
+                      ? `A weapon, not a probe: it looks at nothing and only destroys. A rod of ${rodTonnes(ly, "wide").toFixed(1)} t with no engine, readied in about ${Math.round(rodReady(ly, "wide") * 365.25)} days. The Wide Beam throws it, stepping through four colors: ${CATALOG.speeds.wide.rod.days}`
+                      : `A weapon, not a probe: it looks at nothing and only destroys. A rod of ${Math.round(CATALOG.speeds.rod.tonnes)} t with no engine, readied in about ${Math.round(CATALOG.speeds.rod.ready * 12)} months. The Ship Beam throws it: ${CATALOG.speeds.rod.days}`
                   } days of push to ${bullet.speed.toFixed(2)} of light speed, with no helium-3. It lands as hard as a bullet, with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled.${beamLine(ly, bullet.speed, lead?.lum, lead?.kms)}`
                 : WHAT.strike) +
               (settles
