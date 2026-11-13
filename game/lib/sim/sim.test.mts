@@ -1004,12 +1004,16 @@ test("each of our craft that stops takes the Years calcs/speeds.py gives its tri
 });
 
 test("a flyby probe our Ship Beam throws flies as calcs/speeds.py has it: over a third of light speed, slower on a very long road", () => {
-  const probes = (golden as unknown as { probes: { d: number; beta: number; years: number }[] }).probes;
-  assert.ok(probes.length >= 7);
+  const probes = (golden as unknown as { probes: { d: number; beta: number; years: number; driveBeta: number; driveYears: number }[] }).probes;
+  assert.ok(probes.length >= 9);
   for (const g of probes) {
     assert.ok(Math.abs(flybyBeta(g.d, true) - g.beta) <= 1e-9 * g.beta, `${g.d} ly: ${flybyBeta(g.d, true)} against ${g.beta}`);
     assert.ok(Math.abs(flybyYears(g.d, true) - g.years) <= 1e-9 * g.years);
+    // On its own drive, as calcs/speeds.py has it: a tenth, or slower past about 12,500 ly. 2026-11-13.
+    assert.ok(Math.abs(flybyBeta(g.d) - g.driveBeta) <= 1e-9 * g.driveBeta, `${g.d} ly on its drive: ${flybyBeta(g.d)} against ${g.driveBeta}`);
+    assert.ok(Math.abs(flybyYears(g.d) - g.driveYears) <= 1e-9 * g.driveYears);
   }
+  assert.ok(flybyBeta(30000) < catalog.probe.speed && flybyBeta(10000) === catalog.probe.speed);
   // The beam's most near us, and its shield's most far off. On its drive, a tenth, with its burn's 10 Years.
   assert.ok(flybyBeta(4.25, true) === catalog.speeds.probe.beam && catalog.speeds.probe.beam > 0.36 && catalog.speeds.probe.beam < 0.375);
   assert.ok(flybyBeta(2700, true) < flybyBeta(1000, true) && flybyBeta(1000, true) < catalog.speeds.probe.beam);

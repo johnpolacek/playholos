@@ -85,7 +85,8 @@ function protonRange(beta: number) {
 function shieldBeta(d: number, tonnes: number, front: number) {
   const budget = (WEAR.share * tonnes * 1000) / front;
   const fits = (beta: number) => wear(beta, d) + 3 * protonRange(beta) <= budget;
-  let lo = 0.01, hi = WEAR.most;
+  // Its floor was 0.01 until 2026-11-13, which no craft reached until Andromeda.
+  let lo = 1e-4, hi = WEAR.most;
   if (fits(hi)) return hi;
   for (let i = 0; i < 60; i++) {
     const mid = (lo + hi) / 2;
@@ -140,12 +141,17 @@ export const sailYears = (ly: number) => ly / SAIL_C;
 /** How fast a flyby probe passes a star `ly` away, as a share of light speed. On its Fusion Drive its fuel holds it to
  *  a tenth. `pushed`: our Ship Beam threw it, with no engine or fuel. The beam does the same work on whatever rides its
  *  sail, so 150 t leaves at over a third of light speed, or slower on a road so long that dust would wear through its shield.
- *  calcs/speeds.py's probe_beta. 2026-11-12. */
+ *  calcs/speeds.py's probe_beta. 2026-11-12. On its drive too its shield holds it slower past about 12,500 ly:
+ *  drive_probe_beta, 2026-11-13. */
 export const flybyBeta = (ly: number, pushed: Push = false) =>
-  pushed ? Math.min((pushed === "wide" ? SPEEDS.wide : SPEEDS).probe.beam, shieldBeta(ly, SPEEDS.probe.tonnes, SPEEDS.probe.front)) : PROBE.speed;
+  Math.min(pushed ? (pushed === "wide" ? SPEEDS.wide : SPEEDS).probe.beam : PROBE.speed, shieldBeta(ly, SPEEDS.probe.tonnes, SPEEDS.probe.front));
 /** Years for a flyby probe to pass a star `ly` away: its cruise, and what its burn or its push adds. It never brakes. */
 export function flybyYears(ly: number, pushed: Push = false) {
-  if (!pushed) return ly / PROBE.speed + PROBE.burn;
+  // Its burn is shorter when its shield holds it under a tenth. calcs/speeds.py's drive_probe_years.
+  if (!pushed) {
+    const beta = flybyBeta(ly);
+    return ly / beta + (PROBE.burn * beta) / PROBE.speed;
+  }
   if (!(ly > 0)) return 0;
   const beta = flybyBeta(ly, pushed), by = (pushed === "wide" ? SPEEDS.wide : SPEEDS).probe;
   return ly / beta + (by.lost * beta) / by.beam;

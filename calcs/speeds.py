@@ -125,9 +125,10 @@ def proton_range(beta):
 SHIELD_SHARE = 0.1
 def shield_beta(d, tonnes, front_m2):
     """The fastest a craft can cross d ly before its shield outweighs its share. Never past 0.9: beyond it gas strikes
-    hard enough to set off showers in any shield, and no study follows a craft there (Semyonov 2009)."""
+    hard enough to set off showers in any shield, and no study follows a craft there (Semyonov 2009). Its floor was
+    0.01 until 2026-11-13, which no craft reached until Andromeda: a probe there must go slower still."""
     budget = SHIELD_SHARE * tonnes * 1000 / front_m2
-    lo, hi = 0.01, 0.9
+    lo, hi = 1e-4, 0.9
     if wear(hi, d) + 3 * proton_range(hi) <= budget: return hi
     for _ in range(60):
         mid = (lo + hi) / 2
@@ -278,6 +279,16 @@ def probe_years(d):
     if d <= 0: return 0.0
     b = probe_beta(d)
     return d / b + PROBE_BEAM_LOST * b / PROBE_BEAM
+
+# On its own Fusion Drive a flyby probe is held to a tenth of light speed by its fuel (calcs/craft.py), and its burn
+# takes 10 Years. On a road past about 10,000 ly its shield holds it slower, as it does the probe a beam throws, and its
+# burn is shorter for the lower speed. It carries the same fuel, so a slow one has fuel to spare. 2026-11-13.
+PROBE_BURN = 10
+def drive_probe_beta(d): return min(FUSION_BETA, shield_beta(d, PROBE['tonnes'], PROBE['front']))
+def drive_probe_years(d):
+    """Years for a flyby probe on its Fusion Drive to pass a star d ly away."""
+    b = drive_probe_beta(d)
+    return d / b + PROBE_BURN * b / FUSION_BETA
 
 # A bullet of ours is 1,000 t at a tenth of light speed, on its Fusion Drive. Thrown by the Ship Beam it is a rod with
 # no engine: as with what another mind throws, we keep the harm we mean and send it as fast as we can. The beam could
@@ -454,7 +465,8 @@ def golden_thrown():
 
 def golden_probes():
     """Flyby probes the Ship Beam throws, near and far, for game/lib/sim/speeds.ts to reproduce."""
-    return [dict(d=d, beta=probe_beta(d), years=probe_years(d)) for d in (4.25, 10.5, 50, 400, 1000, 2700, 30000)]
+    return [dict(d=d, beta=probe_beta(d), years=probe_years(d), driveBeta=drive_probe_beta(d), driveYears=drive_probe_years(d))
+            for d in (4.25, 10.5, 50, 400, 1000, 2700, 10000, 30000, 2.53e6)]
 
 
 def golden_rods():
@@ -515,7 +527,9 @@ if __name__ == '__main__':
     print(f'A flyby probe of {PROBE["tonnes"]:.0f} t, {PROBE["front"]:.1f} m2 of front, thrown by the Ship Beam: {PROBE_BEAM:.3f} of light speed in '
           f'{PROBE_BEAM_DAYS:.0f} days, {PROBE_BEAM_LOST * 365.25:.0f} days over cruising. Its light stretches {math.sqrt((1 + PROBE_BEAM) / (1 - PROBE_BEAM)):.2f} times.')
     for d in (4.25, 10.5, 50, 400, 1000, 2700):
-        print(f'  {d:>7} ly: {probe_beta(d):.2f} of light speed, {probe_years(d):>7,.1f} Years, where its Fusion Drive took {d / FUSION_BETA + 10:>8,.1f}.')
+        print(f'  {d:>7} ly: {probe_beta(d):.2f} of light speed, {probe_years(d):>7,.1f} Years, where its Fusion Drive takes {drive_probe_years(d):>8,.1f}.')
+    for d in (10000, 27000, 2.53e6):
+        print(f'  On its Fusion Drive, {d:>9,.0f} ly: its shield holds it to {drive_probe_beta(d):.3f} of light speed, {drive_probe_years(d):>12,.0f} Years.')
     print(f'A rod thrown by the Ship Beam in place of a bullet: {ROD_TONNES:.1f} t at {ROD_BEAM:.3f} of light speed, the mirror\'s most, lands with '
           f'{megatons(ROD_TONNES, ROD_BEAM):,.0f} Mt, a bullet\'s {megatons(BULLET_TONNES, FUSION_BETA):,.0f}. Pushed {ROD_BEAM_DAYS:.0f} days, '
           f'{ROD_BEAM_LOST * 365.25:.0f} over cruising, at {ROD_BEAM * C / (ROD_BEAM_DAYS * 86400) / 9.81:.0f} g on average. Readied in {ROD_READY:.2f} Years.')
