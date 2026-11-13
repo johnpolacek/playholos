@@ -9,7 +9,7 @@ const escaped = (s: string) => plain(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /** A lead's names as words may give them: its own, as Scan shortens it, and its worlds'. A world alone is only a letter,
  *  so it goes with its star, whole or by its first word: 82 Eridani d, Proxima b, Luyten b. */
-function namesOf(lead: Lead) {
+export function namesOf(lead: Lead) {
   const star = plain(lead.star);
   const short = star.split(" ")[0].replace(/'s$/, "");
   const worlds = (lead.system?.worlds ?? []).flatMap((w) => (w.name ? [`${star} ${w.name}`, `${short} ${w.name}`] : []));

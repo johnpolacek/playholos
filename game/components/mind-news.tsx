@@ -4,6 +4,7 @@ import { kindOf } from "@/components/arrival";
 import { useGame } from "@/components/game-provider";
 import { useLeap } from "@/components/jump";
 import { useKeepTalk, useMindNews } from "@/components/mind-chat";
+import { LinkedWords } from "@/components/linked-words";
 import { MindNote } from "@/components/mind-note";
 import { useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
@@ -354,7 +355,7 @@ export function MindSays() {
       </button>
       <MindNote still edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
         <p className="mb-1 font-mono text-[10px] leading-snug tracking-[.06em] text-muted">{properGlows(news)}</p>
-        {said(words) || "…"}
+        {said(words) ? <LinkedWords words={said(words)} onFollow={() => read(last)} /> : "…"}
         <span className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px]">
           {links.slice(0, 2).map((k) => (
             <Link key={k.to} to={k.to} onClick={() => read(last)} className="font-medium text-you hover:underline">

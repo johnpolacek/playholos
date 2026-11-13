@@ -6,6 +6,7 @@ import { useGame } from "@/components/game-provider";
 import { BuildCard } from "@/components/build-card";
 import { readingStands } from "@/components/close-reading";
 import { Check, Cross } from "@/components/icons";
+import { LinkedWords } from "@/components/linked-words";
 import { MindNote } from "@/components/mind-note";
 import { MindThinking, useThinking } from "@/components/mind-thinking";
 import { usePlan, useSchedule } from "@/components/picks";
@@ -268,7 +269,7 @@ function Answer({ id, text, still, asked, last }: { id: string; text: string; st
   return (
     <>
       <MindNote still={still} className="max-w-[86%] self-start text-[15px] leading-[1.5] whitespace-pre-wrap">
-        {properGlows(words) || "…"}
+        {properGlows(words) ? <LinkedWords words={properGlows(words)} done={still || last} /> : "…"}
       </MindNote>
       {draft && (
         <div className="max-w-[92%] self-start pl-3">
