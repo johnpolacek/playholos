@@ -1122,7 +1122,8 @@ test("a bullet's flash is seen only by what splits its world from its star, and 
   assert.equal(at(60, { sentinels: [{ star: "Proxima Centauri", leaves: 51 - stays }] }).strikes![0].seen, "sentinel");
   assert.equal(at(60, { sentinels: [{ star: "Proxima Centauri", leaves: 53 - stays }] }).strikes![0].seen, undefined);
   // What we built changes what we see, never what happened: the rest of what Earth knows is the same.
-  const { strikes: _seen, ...withBullet } = at(60, { mirror: 20 });
+  const withBullet = at(60, { mirror: 20 });
+  delete withBullet.strikes;
   assert.deepEqual(withBullet, earthKnows(world, 60, { mirror: 20 }));
   // At a star where we know no world, it has nothing to aim at.
   const through = earthKnows(world, 500, { strikes: [{ star: "Cold glow 1", fired: 10, lands: 300, d: 40 }] }).strikes![0];
