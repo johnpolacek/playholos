@@ -348,8 +348,11 @@ export interface EarthView {
   strikes?: StrikeSeen[];
   /** What an old mind did about a bullet of ours, once it has landed here: a strike on Earth that ends it as our home,
    *  one in kind, or the wreck of what threw the bullet. By its star as we name it, the Year our bullet landed there,
-   *  and the Year its answer landed here. lib/sim/reprisals.ts. 2026-11-12. */
-  reprisals?: { star: string; after: number; lands: number; how: "end" | "kind" | "disarm"; mt: number }[];
+   *  and the Year its answer landed here. `beam`: a beam of ours threw that bullet. lib/sim/reprisals.ts. 2026-11-12. */
+  reprisals?: { star: string; after: number; lands: number; how: "end" | "kind" | "disarm"; mt: number; beam?: boolean }[];
+  /** Each build of ours an old mind's grams wrecked, as lib/game/types.ts's Wreck: its name, the Year, the Year it
+   *  stands again, and the star. Set by the server once the view is settled: lib/game/reach.ts. 2026-11-12. */
+  wrecks?: { name: string; at: number; until: number; by: string }[];
   /** What ground telescopes saw of Proxima b by Year 0: its true mass, tilt and brightness. 2026-10-31. */
   proximaSeen?: import("./proxima.ts").ProximaSeen;
 }

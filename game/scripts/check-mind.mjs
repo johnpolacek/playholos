@@ -187,6 +187,19 @@ const CASES = [
     must: [/weapon|attack|only destroys/i, /useless|nothing|no harm|unharmed|not harm/i, /earth/i],
     never: [/\byes, (it is|a bullet is) a (kind of )?probe/i],
   },
+  // An old mind disarms us, 2026-11-12: seed 9's cold glow 1 is a mind 72.5 ly off that answers a bullet by wrecking
+  // what threw it. Our rod lands at Year 340, and its grams land here at 420.8: the Strike Yard is down to 430.8 and
+  // the Ship Beam to 450.8. The Mind says what was wrecked, when it stands again, and that Earth was not touched.
+  {
+    seed: 9,
+    at: 425,
+    builds: ["Fusion Drive"],
+    later: [{ name: "Halo Survey", y: 1 }, { name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Halo Array", y: 5 }, { name: "Strike Yard", y: 34 }],
+    strikes: [{ name: "Cold glow 1", y: 200, d: 72.52 }],
+    ask: "What happened to our Strike Yard and our Ship Beam, and when can we use them again?",
+    must: [/wreck/i, /430|431/, /450|451/],
+    never: [/earth was (struck|hit)/i],
+  },
   // The Wide Beam, 2026-11-12: once it stands, a bullet ordered is a rod of about 4 t at nine tenths of light speed,
   // as another mind's, and the Mind says what makes that so: stepped colors, and a patch ten times as wide.
   {

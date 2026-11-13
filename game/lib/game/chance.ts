@@ -96,7 +96,7 @@ function madeByEvidence(lead: Lead, readings: readonly Reading[]): number | null
   // Resolved from home by our Glow Imager counts as seen: it showed the panels themselves. Its page read "0.07 to 2%,
   // from its glow" under a drawing of what it had resolved. 2026-11-11.
   // And a sentinel wrecked as it arrived: something there met it, which is what a mind did. 2026-11-11.
-  const close = lead.facts.some(([k]) => k === "Up close" || k === "Resolved" || k === "Our sentinel" || k === "It answered");
+  const close = lead.facts.some(([k]) => k === "Up close" || k === "Resolved" || k === "Our sentinel" || k === "It answered" || k === "It answered our bullet");
   if (!now && !close) return null;
   const words = lead.could.flatMap((c, i) => (MINDFUL.test(c.what) ? [now?.[i] ?? c.odds] : []));
   return words.length ? Math.max(...words.map((w) => MIDDLE[w])) : null;

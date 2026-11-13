@@ -1,6 +1,6 @@
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
-import { useGame } from "@/components/game-provider";
+import { setWrecks, useGame } from "@/components/game-provider";
 import { openReadings, useOpenReadings } from "@/components/close-reading";
 import { Heard } from "@/components/heard";
 import { Path } from "@/components/path";
@@ -157,6 +157,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const maker = minds?.watcher?.struck, back = view?.reprisals;
   const struck = useMemo(() => [...(maker ? [maker] : []), ...(back ?? []).filter((r) => r.mt > 0)], [maker, back]);
   useEffect(() => setStruck(struck), [struck]);
+  // And each build of ours an old mind wrecked, for the plan every screen reads. 2026-11-12.
+  const wrecks = view?.wrecks;
+  useEffect(() => setWrecks(wrecks), [wrecks]);
   // And stars our seed probes reached with no lead of their own, 2026-10-26.
   const seeds = useMemo(() => visits.filter((v) => v.by === "seed" && !v.sent), [visits]);
   // Holes our craft went to keep their leads, beside the nearest.

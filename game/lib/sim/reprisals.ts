@@ -4,8 +4,8 @@
 // peaceful, the one that already says whether it wrecks a craft of ours that comes to stay:
 //   1, about 1 awake mind in 63: it ends Earth as our home, with a strike of Chicxulub's class.
 //   2, about 1 in 50: it strikes Earth in kind, one rod with a bullet's harm.
-//   3, about 1 in 24: it disarms us, wrecking the yard and the beam that threw the rod. Not built yet: until it is,
-//      a mind of this score does nothing, and nothing in the game says it did.
+//   3, about 1 in 24: it disarms us, wrecking the yard and the beam that threw the rod. Each is down until rebuilt,
+//      at its full Years: lib/game/reach.ts's wrecksOf. Earth is not touched.
 //   4 and up, 12 in 13: nothing. We are too small to matter.
 // The shares are what the scores of calcs/minds.py give over the pool's 33 games: samples, since nothing measures
 // what a mind wants. The mind that made our watcher is never hostile. A sleeping mind decides nothing: asleep it is
@@ -19,8 +19,7 @@ import type { OldMind } from "./types.ts";
 
 export type Reprisal = "end" | "kind" | "disarm" | "none";
 /** Its answer by its score, hostile to peaceful. Any score above these: none. */
-/** Disarming us, at 3, waits on its build: a wrecked yard and beam must stop our craft, not only be said to. */
-export const REPRISAL: Record<number, Exclude<Reprisal, "none">> = { 1: "end", 2: "kind" };
+export const REPRISAL: Record<number, Exclude<Reprisal, "none">> = { 1: "end", 2: "kind", 3: "disarm" };
 
 /** What an old mind does once a bullet of ours has landed in its system. */
 export function reprisalOf(m: OldMind, maker?: string): Reprisal {

@@ -314,7 +314,7 @@ export const SAYS: Record<string, string> = {
   "Interceptor":
     "A weapon, for defense. Stored kill vehicles of a tonne each, about 5 Years. Once the X-Ray Watch sees a probe braking in, one meets it as it stops and wrecks it. Its sender loses its eyes here, and may take that as the act of war it is.",
   "Strike Yard":
-    "A weapon. A bullet is no probe: it looks at nothing, sends nothing home, and only destroys. To fire one is to attack, and whoever is there will know who did. The yard readies bullets of 1,000 t, as any mind could, each in 20 Years, but none flies until the Helium-3 Harvest has gathered its 37 kt, about 12 Years for the first, less as the harvest grows. One lands at a tenth of light speed with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. It ends no world’s life. It needs a world whose path we know to aim at. Nothing comes home from one: we see its flash, about double that world’s light for three minutes, only with a telescope that splits the world from its star, or by a sentinel of ours there. Against an old mind it is useless: aimed at its star or at one of its panels, it harms nothing. But it is an attack, and its path points home. Most minds would do nothing about it. One might strike us in kind, or end Earth as our home. Its launch flame shows only in our own system: a probe of theirs watching here would see it, and no one farther off.",
+    "A weapon. A bullet is no probe: it looks at nothing, sends nothing home, and only destroys. To fire one is to attack, and whoever is there will know who did. The yard readies bullets of 1,000 t, as any mind could, each in 20 Years, but none flies until the Helium-3 Harvest has gathered its 37 kt, about 12 Years for the first, less as the harvest grows. One lands at a tenth of light speed with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. It ends no world’s life. It needs a world whose path we know to aim at. Nothing comes home from one: we see its flash, about double that world’s light for three minutes, only with a telescope that splits the world from its star, or by a sentinel of ours there. Against an old mind it is useless: aimed at its star or at one of its panels, it harms nothing. But it is an attack, and its path points home. Most minds would do nothing about it. One might take our weapon from us, strike us in kind, or end Earth as our home. Its launch flame shows only in our own system: a probe of theirs watching here would see it, and no one farther off.",
   "Rock Deflector":
     "A rock is coming at Earth. Ten impactors of a tonne each hit it at 6 km/s, and the rock thrown off pushes it 3.6 times harder, as DART’s did. The earlier the push lands, the less it must move the rock: a 140 m rock needs about 2 Years’ warning, a 60 m one a few weeks. Too late, and it strikes.",
   "Trojan Vault":
@@ -489,6 +489,8 @@ export const SWITCHED: Record<string, { on: string; off: string; turnOn: string;
 
 /** Whether a build that can be stood down is on at Year `y`: the last word by then, and on if none. */
 export function isOn(plan: Plan, name: string, y: number): boolean {
+  // Wrecked, it is down whatever the Will's word, until it is rebuilt. 2026-11-12.
+  if (wreckAt(plan, name, y)) return false;
   let on = true, at = -Infinity;
   for (const o of plan.switches ?? []) if (o.name === name && o.y <= y && o.y >= at) [on, at] = [o.on, o.y];
   return on;
@@ -497,8 +499,23 @@ export function isOn(plan: Plan, name: string, y: number): boolean {
 /** The first Year from `y` on that it is on: `y` itself if on then, or the Year we next arm it. Null if it stays off. */
 export function onFrom(plan: Plan, name: string, y: number): number | null {
   if (isOn(plan, name, y)) return y;
-  const later = (plan.switches ?? []).filter((o) => o.name === name && o.y > y).map((o) => o.y).sort((a, b) => a - b);
+  // The Years its state can change: each later word of the Will's, and each Year it is rebuilt from a wreck.
+  const later = [
+    ...(plan.switches ?? []).filter((o) => o.name === name && o.y > y).map((o) => o.y),
+    ...(plan.wrecks ?? []).filter((w) => w.name === name && w.until > y).map((w) => w.until),
+  ].sort((a, b) => a - b);
   return later.find((t) => isOn(plan, name, t)) ?? null;
+}
+
+/** The wreck a build of ours lies under at Year `y`, if an old mind's grams took it and it is not yet rebuilt.
+ *  lib/sim/reprisals.ts. 2026-11-12. */
+export const wreckAt = (plan: Plan, name: string, y: number) => (plan.wrecks ?? []).find((w) => w.name === name && w.at <= y && y < w.until);
+/** The first Year from `start` that a job of `span` Years at a build runs clear of every wreck of it: wrecked while at
+ *  work, it starts over once the build stands again. */
+export function clearOf(plan: Plan, name: string, start: number, span: number): number {
+  let s = start;
+  for (const w of (plan.wrecks ?? []).filter((x) => x.name === name).sort((a, b) => a.at - b.at)) if (w.at < s + span && w.until > s) s = w.until;
+  return s;
 }
 
 /** The Year it was last switched, if ever. */

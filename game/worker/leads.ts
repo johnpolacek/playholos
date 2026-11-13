@@ -2,7 +2,7 @@ import { WINDOWS } from "@/lib/game/leads";
 import { schedule, fifthsOf } from "@/lib/game/plan";
 import { rockAt, rockOf } from "@/lib/game/rocks";
 import { iceFirsts, skyOf, stormFirsts } from "@/lib/game/natural";
-import { kitOf } from "@/lib/game/reach";
+import { settled } from "@/lib/game/reach";
 import { nextStopWhy } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
@@ -70,7 +70,9 @@ export async function known(req: Request) {
     flybys: readFlybys(list(q.get("flybys"))),
   };
   // Once the Will lives at a hole, Earth's news reaches it a light-time late. 2026-10-26.
-  return Response.json(willKnows(world, year, { ...kitOf(plan, Number(world.earth.compute) || 1), knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) }, readWill(one(q.get("will")))));
+  // With each build an old mind wrecked for a bullet of ours worked in: lib/game/reach.ts's settled. 2026-11-12.
+  const more = { knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) };
+  return Response.json(settled(plan, Number(world.earth.compute) || 1, (kit) => willKnows(world, year, { ...kit, ...more }, readWill(one(q.get("will"))))).view);
 }
 
 /** How far ahead a skip looks for what comes next, in Years. A skip with nothing in reach goes this far at most. */
@@ -99,7 +101,8 @@ export async function next(req: Request) {
     flybys: readFlybys(list(q.get("flybys"))),
   };
   const scale = Number(world.earth.compute) || 1;
-  const ahead = willKnows(world, year + AHEAD, { ...kitOf(plan, scale), knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) }, readWill(one(q.get("will"))));
+  const more = { knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) };
+  const ahead = settled(plan, scale, (kit) => willKnows(world, year + AHEAD, { ...kit, ...more }, readWill(one(q.get("will"))))).view;
   const done = schedule(plan, scale);
   // A rock: the Year we find it, the Year our push lands if it turns it aside, and the Year it would strike. 2026-10-29.
   const rock = rockAt(rockOf(seed), plan, done, year);
@@ -122,10 +125,9 @@ export async function next(req: Request) {
         ]
       : []),
     ...ends,
-    // Each bullet of ours: the Year it lands, by reckoning, and the Year its light is home, seen or not. 2026-11-12.
-    // And what an old mind threw back for one, the Year it lands here. 2026-11-12.
-    ...(ahead.reprisals ?? []).map((r) => ({ at: r.lands, why: "something reaching us" })),
-    ...(ahead.strikes ?? []).flatMap((b) => [{ at: b.lands, why: "our bullet landing" }, ...(b.world ? [{ at: b.home, why: "our bullet’s light reaching us" }] : [])]),
+    // A build of ours an old mind wrecked, the Year it stands again. Our bullets landing, and what came back for one,
+    // stop the skip from the view itself: lib/sim/next.ts. 2026-11-12.
+    ...(ahead.wrecks ?? []).map((w) => ({ at: w.until, why: `our ${w.name} rebuilt` })),
     // A reply window on a star messaged before Year 0: a jump went past Luyten's Star's at Year 2.3 in two blind
     // playtests, though both players were waiting for it. 2026-11-07.
     ...WINDOWS.map((w) => ({ at: w.at, why: `${w.star}’s reply window` })),

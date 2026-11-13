@@ -10,7 +10,7 @@ import { grownSpans } from "@/lib/game/halo";
 import { iceBetween, iceFirsts, iceRange, stormFirsts, stormsHeard } from "@/lib/game/natural";
 import { SWARM } from "@/lib/sim/conflict";
 import { type Reading, starName } from "@/lib/game/leads";
-import { buildOf, buildSlug, computeAt, fifthsOf, isOn, LAUNCH_LIFT, ordered, PAST, SWITCHED } from "@/lib/game/plan";
+import { buildOf, buildSlug, computeAt, fifthsOf, isOn, wreckAt, LAUNCH_LIFT, ordered, PAST, SWITCHED } from "@/lib/game/plan";
 import type { Heard, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
 import { CO_ORBITALS, MOON_SEARCH_YEARS, type MindsSeen, moonSearchEnds, TOUR_EACH, TOUR_FLIGHT, TOUR_MAP, tourEnds } from "@/lib/sim/minds";
@@ -282,7 +282,7 @@ export function Working() {
       <ul className="mt-2 flex flex-col gap-2">
         {[...working].sort((a, b) => done[b]! - done[a]!).map((n) => (
           // One the Will has stood down says so, in place of what it would be doing. 2026-11-11.
-          <Card key={n} name={n} since={done[n]!} {...(SWITCHED[n] && !isOn(plan, n, now) ? { line: SWITCHED[n].whenOff, news: false } : doing(n, known, done[n]!))} />
+          <Card key={n} name={n} since={done[n]!} {...(wreckAt(plan, n, now) ? { line: `Wrecked at Year ${yearText(wreckAt(plan, n, now)!.at)} by an old mind, for the bullet we threw at it. It stands again at Year ${yearText(wreckAt(plan, n, now)!.until)}.`, news: false } : SWITCHED[n] && !isOn(plan, n, now) ? { line: SWITCHED[n].whenOff, news: false } : doing(n, known, done[n]!))} />
         ))}
       </ul>
     </>

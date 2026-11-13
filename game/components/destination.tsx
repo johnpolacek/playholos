@@ -17,7 +17,7 @@ import { isHole, starName, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
 import { span, lyOf, yearText } from "@/lib/game/clock";
-import { buildSlug, isOn, moves, recall } from "@/lib/game/plan";
+import { buildSlug, isOn, wreckAt, moves, recall } from "@/lib/game/plan";
 import {
   colonyRoad,
   lensKm,
@@ -248,6 +248,10 @@ export function DestinationPage({ slug }: { slug: string }) {
   const from = before ? 0 : Math.floor((orderAt ?? clock) * 10) / 10;
   // The Ship Beam, in our order and kept dark by the Will: plan.ts's SWITCHED. 2026-11-11.
   const dark = (plan.builds.includes("Ship Beam") || (plan.later ?? []).some((o) => o.name === "Ship Beam")) && !isOn(plan, "Ship Beam", from);
+  // Or wrecked by an old mind for a bullet we threw at it, until we have built it again. 2026-11-12.
+  const wrecked = wreckAt(plan, "Ship Beam", from);
+  const yardWrecked = wreckAt(plan, "Strike Yard", from);
+  const darkLine = wrecked ? ` Our Ship Beam lies wrecked until Year ${yearText(wrecked.until)}, so it won’t push before then.` : dark ? " We keep the Ship Beam dark, so it won’t push." : "";
   const ly = lead?.ly ?? 0;
   const nearest = lead?.star === NEAREST.name;
   const ways = useMemo(() => roads(plan, scale, from).map((r) => toward(r, ly, nearest ? undefined : from)), [plan, scale, from, ly, nearest]);
@@ -549,7 +553,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 2}
             to={to}
             name="Our Mind, to stay"
-            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed, mind.carries)} days, ${mind.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, mind.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed, mind.carries)} days, ${mind.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, mind.speed, lead?.lum, lead?.kms)}` : ""}${darkLine}`}
             needs={shipNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // One Seed Ship, one Mind: once sent to one hole, no other. Sent once all three are in our order.
@@ -605,7 +609,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 4}
             to={to}
             name="A seed probe that copies itself"
-            line={`${WHAT.seed}${seed.push ? ` The ${seed.push} pushes it to speed in ${pushDays(seed.speed, seed.carries)} days, ${seed.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, seed.speed, lead?.lum, lead?.kms)}` : ""}${dark ? " We keep the Ship Beam dark, so it won’t push." : ""}`}
+            line={`${WHAT.seed}${seed.push ? ` The ${seed.push} pushes it to speed in ${pushDays(seed.speed, seed.carries)} days, ${seed.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, seed.speed, lead?.lum, lead?.kms)}` : ""}${darkLine}`}
             needs={seedNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Sent once all three are in our order, before Begin too: it is built once they are done.
@@ -635,8 +639,15 @@ export function DestinationPage({ slug }: { slug: string }) {
               (settles
                 ? " Nothing comes home from a bullet. Its flash would about double this world’s light for three minutes: only a telescope that splits the world from its star sees that, or a sentinel of ours here."
                 : lead?.slug.startsWith("cold-glow-")
-                  ? " Against an old mind it is useless. With no picture of what glows here it can be aimed only at the star, which would not notice. With one, at a panel, which it passes through. If a mind keeps this star it is not harmed, and knows who threw it. Most would do nothing. One might strike us in kind, or end Earth as our home."
-                  : " We know no world here to aim it at, so it would strike nothing we know of and fly on.")
+                  ? " Against an old mind it is useless. With no picture of what glows here it can be aimed only at the star, which would not notice. With one, at a panel, which it passes through. If a mind keeps this star it is not harmed, and knows who threw it. Most would do nothing. One might take our weapon from us, strike us in kind, or end Earth as our home."
+                  : " We know no world here to aim it at, so it would strike nothing we know of and fly on.") +
+              // An old mind wrecked what readies or throws it: it waits until each stands again. 2026-11-12.
+              ((down) => (down.length ? ` ${down.join(", and ")}, so it waits.` : ""))(
+                [
+                  yardWrecked && `Our Strike Yard lies wrecked until Year ${yearText(yardWrecked.until)}`,
+                  wrecked && bullet.push && (yardWrecked ? `our Ship Beam until Year ${yearText(wrecked.until)}` : `Our Ship Beam lies wrecked until Year ${yearText(wrecked.until)}`),
+                ].filter(Boolean),
+              )
             }
             needs={bullet.push ? ["Strike Yard", bullet.push] : ["Strike Yard", "Helium-3 Harvest"]}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}

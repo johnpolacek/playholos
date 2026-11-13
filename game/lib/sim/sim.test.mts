@@ -1146,7 +1146,7 @@ test("a bullet is useless against an old mind, and what comes back is by its nat
   assert.ok(starSeconds(1) < 2e-6 && starSeconds(0.0107) < 2e-4 && PANEL_TAKES === 1e-8 && panelEarths(4.135e21) > 3e9);
   // Earth's end is Chicxulub's class, which ends Earth as our home. A strike in kind does not.
   assert.ok(harmOf(END_MT).ends && !harmOf(bulletMt()).ends && reprisalMt("end") === END_MT && reprisalMt("kind") === bulletMt() && reprisalMt("disarm") === 0);
-  assert.deepEqual(REPRISAL, { 1: "end", 2: "kind" });
+  assert.deepEqual(REPRISAL, { 1: "end", 2: "kind", 3: "disarm" });
   const kit = { halo: 3, haloArray: 20 };
   const year = 3000;
   const count: Record<string, number> = { end: 0, kind: 0, disarm: 0, none: 0 };
@@ -1184,9 +1184,18 @@ test("a bullet is useless against an old mind, and what comes back is by its nat
       assert.equal(back!.mt > 0, how !== "disarm");
     }
   }
+  // A beam that threw the bullet falls with the yard: the answer says so, and only then.
+  const w22 = await loadWorld(22);
+  const g22 = mindsSeen(w22, kit, year).glows;
+  const d3 = g22.findIndex((g) => reprisalOf(w22.minds!.old.find((o) => o.id === g.id)!, w22.minds!.watcher.maker) === "disarm");
+  if (d3 >= 0) {
+    const at = { star: `Cold glow ${d3 + 1}`, fired: 100, lands: 100 + g22[d3].d / 0.5, d: g22[d3].d };
+    assert.equal(earthKnows(w22, year, { ...kit, strikes: [{ ...at, thrown: true }] }).reprisals![0].beam, true);
+    assert.equal(earthKnows(w22, year, { ...kit, strikes: [at] }).reprisals![0].beam, undefined);
+  }
   // Over the pool every answer is drawn, the hardest the rarest, and most minds do nothing.
-  assert.ok(count.end >= 1 && count.kind >= 1 && panels >= 10);
-  assert.ok(count.none > 8 * (count.end + count.kind));
+  assert.ok(count.end >= 1 && count.kind >= 1 && count.disarm >= 1 && panels >= 10);
+  assert.ok(count.none > 8 * (count.end + count.kind + count.disarm) && count.end <= count.kind && count.kind <= count.disarm);
   // The Mind is told a bullet did nothing there, and what came back.
   const world = await loadWorld(22);
   const glows = mindsSeen(world, kit, year).glows;

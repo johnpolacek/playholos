@@ -87,7 +87,7 @@ export interface Kit {
   asteroidTour?: number | null;
   craft?: MindKit["craft"];
   /** Each bullet we fired, by its star as we name it: the Year fired, the Year it lands, and how far. 2026-11-12. */
-  strikes?: { star: string; fired: number; lands: number; d: number }[];
+  strikes?: { star: string; fired: number; lands: number; d: number; thrown?: boolean }[];
 }
 
 /** Our search of old recordings, for the Mind: how far it has combed by Year `year`, and how fast. */
@@ -508,7 +508,7 @@ export function earthKnows(
       const back = m && how !== "none" ? reprisalLands(m, b.lands) : Infinity;
       // One answer a mind: to the first bullet of ours that lands there.
       if (how !== "none" && back <= year && !reprisals.some((r) => r.star === b.star)) {
-        reprisals.push({ star: b.star, after: b.lands, lands: back, how, mt: reprisalMt(how) });
+        reprisals.push({ star: b.star, after: b.lands, lands: back, how, mt: reprisalMt(how), ...(how === "disarm" && b.thrown ? { beam: true } : {}) });
         g.reprised = back;
       }
       continue;
