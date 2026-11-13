@@ -3151,7 +3151,7 @@ Gathered by a research agent, to test whether our Far-Side Array could tell if a
 
 ### Tools that change play: antimatter by the tonne, and faster craft, 2026-11-11
 
-Gathered by a research agent, for what antimatter made with a Solar Swarm’s power would give. It updates the two entries above that set antimatter aside as absurd in cost. Read through OCR and summarizing fetches. Every drive here is a concept study, most by one author. Not yet used.
+Gathered by a research agent, for what antimatter made with a Solar Swarm’s power would give. It updates the two entries above that set antimatter aside as absurd in cost. Read through OCR and summarizing fetches. Every drive here is a concept study, most by one author. Used from 2026-11-12, by the entry below it.
 
 - **Making it.** With the swarm, energy stops being the bar.
   - Today about 4×10⁻¹⁰ of the energy in comes out as antimatter, nanograms a year ([Schmidt et al. 1999](https://ntrs.nasa.gov/citations/19990110316) · Study, Journal of Propulsion and Power 16, most read). All ever made is about 18 ng ([LaPointe 2020](https://ntrs.nasa.gov/citations/20200001904) · Study, NASA slides, read).
@@ -3173,7 +3173,42 @@ Gathered by a research agent, for what antimatter made with a Solar Swarm’s po
 - **The agent’s verdict.** A craft of a thousand tonnes that stops: two to three tenths of light speed is defensible. Half has one published design, at 80 million tonnes for 100 t carried. Confidence is low.
 - **Not verified:** Forward 1985 at its source, any magnetic sail above a tenth of light speed, and any ship drawn round the better nozzle.
 - Why it matters: every craft in the game cruises at a tenth of light speed, ours and theirs. Antimatter would at most double or triple that, at a price in fuel and heat that only a swarm pays, and only if it can be kept at all.
-- Not yet used. It waits on the designer’s picks.
+- Used 2026-11-12, by the entry below.
+
+### Antimatter by the tonne, read, 2026-11-12
+
+Read for the first tool made from science, at the designer’s word: antimatter made on the Solar Swarm’s power, for craft past fusion’s tenth of light speed. Each source says how much was read. It builds on the entry above. Numbers from `python3 calcs/antimatter.py`.
+
+- **[Keane and Zhang 2012](https://arxiv.org/abs/1205.2281)** · Preprint, arXiv 1205.2281. Read whole, 18 pages.
+  - A magnetic nozzle 3.8 m long and 1.5 m round, at most 12.5 T, turns 85% of the charged pions’ momentum out the back. Callas’s, which Frisbee used, turned 36%, and needed 138 T. Simulated in Geant4.
+  - The charged pions leave at 0.81 of light speed on average, by measured spectra, not Morgan’s 0.92 of 1974.
+  - So their exhaust speed for the pions is 0.69 of light speed, where Frisbee had 0.33.
+  - It quotes Frisbee 2008’s Table 5: 100 t to 40 ly at 0.42 of light speed and stopped, on four stages and 40 million tonnes of antimatter. At a quarter of light speed or less, two stages, with fuel “dramatically lower”.
+  - Making and keeping it in bulk “may prove to be unfeasible or prohibitively difficult”.
+  - Matters: it sets the engine. Used: `calcs/antimatter.py` `K_KEANE`.
+- **[Schmidt et al. 2000](https://ntrs.nasa.gov/citations/19990110316)** · Published, J. Propulsion and Power 16, 923 to 928, as Keane and Zhang cite it. Read through its text layer: the abstract, the introduction and the sections on energy cost and on production, about a third.
+  - The share of the wall plug’s energy that ends as antiprotons is 7.8×10⁻⁸ from the target times 5×10⁻³ at the plug, 3.9×10⁻¹⁰, at Fermilab.
+  - A plant built for it, “based on existing technology”, one antiproton for 20 collisions and a tenth at the plug: 3.9×10⁻⁵, five orders better.
+  - Each antiproton comes with an ordinary partner, so never more than half.
+  - Past a gram, “a completely new production technology is necessary”. Safe storage at that scale is unsolved.
+  - Matters: it sets what a joule buys. Used: `ETA_PLANT`, 2.3×10²¹ J a kg.
+- **[LaPointe 2020](https://ntrs.nasa.gov/citations/20200001904)** · Study, NASA slides. Read whole, 38 slides.
+  - Proton on antiproton gives about 3 charged pions and 2 neutral. The neutral ones become gamma rays at once. The charged carry 40% of the energy as motion.
+  - All antiprotons ever made: about 18 ng, 15 of them at Fermilab.
+  - A trap holds about 10¹² antiprotons, a picogram. Solid antihydrogen held off the walls by a magnetic bottle, or charged and held between electrodes, is proposed: “Critical area that still needs a lot of work!”
+  - A dedicated factory could make milligrams to grams a Year.
+  - Matters: the pions’ share. Used: `CHARGED_SHARE`, 22% of the mass.
+- **[Physics World, 25 March 2026](https://physicsworld.com/a/researchers-at-cern-transport-antiprotons-by-truck-in-world-first-experiment/)** · Press. Read whole, by a reading agent.
+  - 92 antiprotons rode a truck round CERN for 30 minutes, at up to 42 km/h, in BASE-STEP’s trap. Next, eight hours to Düsseldorf, its magnet held below 8.2 K.
+  - Matters: storage is shown at no scale that counts, 22 orders short of a gram.
+- **Frisbee 2003, AIAA 2003-4696.** Not read again. JPL’s server and its handle returned errors on 2026-11-12, and NASA’s record has no copy. Its figures are the OCR reading above: 0.01 g, radiators hundreds of km long, 0.5 of light speed on 39 million tonnes. The 2008 design Keane and Zhang quote is taken in its place, the cautious of the two.
+- **This project’s arithmetic,** `calcs/antimatter.py`.
+  - A rocket whose exhaust carries momentum k times its energy over c, the rest leaving as gamma rays and neutrinos, gains rapidity k times the log of its mass ratio. k is the pions’ mass share, times their momentum, times the nozzle’s share: 0.19 for Frisbee, 0.26 for Keane and Zhang, 1.39 times as much. Not the 2.1 of their two exhaust speeds, since a slower pion carries less momentum.
+  - Frisbee’s stage weighs 30 times what it pushes on, and gives 0.22 of rapidity. Through the better nozzle, the same stage gives 0.31. Two of them, one to go and one to stop: 0.30 of light speed, and 447 t of antimatter for each tonne landed.
+  - At Frisbee’s hundredth of a g: 31 Years and 4.7 ly to reach that speed, and the same to stop.
+  - A hundredth of the swarm’s power makes a sentinel’s 447 kt in a Year once the swarm has grown about 101 Years, and 10.5 Mt a Year once it catches all the Sun.
+  - Its flame at the stop is about 3×10¹⁵ W of gamma rays, neutrinos and heat, pointed at the star it stops at.
+- **Not verified:** Frisbee’s mass breakdown, at its source. Whether his radiators hold through the better nozzle. Any storage past a few antiprotons.
 
 ### What sets a craft’s speed: gas, the magnetic sail, beams, wear, 2026-11-11
 
