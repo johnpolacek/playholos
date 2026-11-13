@@ -241,6 +241,11 @@
    "years": 5,
    "want": 0.2
   },
+  "Chips at the limit": {
+   "years": 8,
+   "want": 1.0,
+   "steps": 4.89
+  },
   "Climate hold": {
    "years": 37,
    "want": 0.01

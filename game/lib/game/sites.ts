@@ -485,6 +485,17 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       before: "In 1960 Freeman Dyson argued that a growing people would come to use all its star’s light, and that its heat would show us where it lives.",
     },
   },
+  "Chips at the Limit": {
+    // In the fabs that make Thought Fields' chips: Hyperion's campus stands for them all.
+    site: { on: "earth", draw: "ring", places: [{ lat: 32.48, lon: -91.63, name: "In our fabs, for every campus like Hyperion" }] },
+    story: {
+      have: "Chips about 40 to 100 times as efficient as 2026’s, about 4×10¹³ operations a joule.",
+      where: "In the fabs that make every chip we think on, on Earth and in orbit.",
+      why: "Each operation costs the heat of the charge it throws away. Physics sets how little that can be, and our chips are about 7 times short of it.",
+      takes: "About 8 Years of new fabs, the pace chips have gained for 15 years.",
+      before: "In 2023 Ho, Erdil and Besiroglu worked out the wall for ordinary chips: about 200 times the best of their day.",
+    },
+  },
   "Climate Hold": {
     // Beside Thought Fields' first campus: its waste heat drives the sorbents. 2026-11-12.
     site: { on: "earth", draw: "ring", places: [{ lat: 32.48, lon: -91.63, name: "Beside our data centers, Richland Parish, Louisiana" }] },

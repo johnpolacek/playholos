@@ -3251,6 +3251,23 @@ Read for the Climate Hold, the designer’s picks (f) and (j): a small build for
 - **Not read:** Keith et al. 2018 and Zickfeld et al. 2021, both refused. So how much the sea gives back as we draw carbon down is unmodeled: the Hold only stops the rise.
 - **This project’s arithmetic.** The air gains about 5 GtC a Year at Year 0, 18 Gt of CO2. Taking it back takes 0.39 TW of electricity and 2.6 TW of low heat. Grown at 30% a year from one plant of a megatonne: 37 Years.
 
+### Thought near its limits, 2026-11-12
+
+Read for the tool the designer named “thought near its limits”. Each source says how much was read. Numbers from `python3 calcs/thought.py`.
+
+- **[Ho, Erdil and Besiroglu 2023](https://arxiv.org/abs/2312.08595)** · Published, IEEE International Conference on Rebooting Computing 2023. Read through its text layer: all but the appendices, about two thirds.
+  - The wall for ordinary chips, from the heat of switching transistors and charging wires: about 4.7×10¹⁵ operations a joule at 4 bits, 2.9×10¹⁴ at 16, with a spread of 0.7 orders at one standard deviation.
+  - That is “another 290/1.4 ≈ 207-fold” past the H100’s 1.4×10¹² a joule.
+  - Wires, not transistors, bound it. A switch must hold 1 to 2 orders over Landauer’s kT ln 2 to be reliable.
+  - Reversible chips “are out of the scope”.
+  - GPUs have doubled their operations a joule every 2.7 years for 15 years, as it cites an earlier count.
+  - Matters: our Year 0 chips, 4×10¹³ a joule, sit about 7 times short of the wall. Used: `calcs/thought.py` `WALL_FP16`.
+- **[Frank 2018, Physical foundations of Landauer’s principle](https://arxiv.org/abs/1901.10327)** · Published, Reversible Computation 2018. Only the abstract read.
+  - Landauer’s floor binds information ejected into heat, not every step. So computing that recycles its charge can go below it.
+  - Matters: past the wall lies reversible computing, shown only in test chips, so not built.
+- **Used before:** Bennett and Landauer on dissipation, and Vaire Computing’s test chip of 2025, above.
+- **This project’s arithmetic.** The wall is 7.2 times past us, 4.9 steps of a data center’s 1.5. At GPUs’ pace, 8 Years. An operation at the wall costs about 75,000 times Landauer’s floor at 300 K.
+
 ### What sets a craft’s speed: gas, the magnetic sail, beams, wear, 2026-11-11
 
 Gathered by a research agent, so that each craft’s speed falls out of physics, not a round figure: the designer’s word of 2026-11-11. It read through extracting fetches, and each source says how much. It corrects one figure the design has used since October: the gas a magnetic sail brakes on is far thinner between the local clouds than the 0.1 a cm³ we took everywhere.

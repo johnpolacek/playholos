@@ -885,6 +885,21 @@ const WideBeam = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** Chips at the Limit: a chip with its pins, and a pulse running through it, faster than before. Ours. 2026-11-12. */
+const LimitChips = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) => {
+      gsap.fromTo(part("pulse"), { strokeDashoffset: 0 }, { strokeDashoffset: -8, duration: 0.6, ease: "none", repeat: -1, delay: offset() });
+    }}
+  >
+    <path d="M4.5 4.5h7v7h-7z" />
+    <path d="M6.5 2.5v2M9.5 2.5v2M6.5 11.5v2M9.5 11.5v2M2.5 6.5h2M2.5 9.5h2M11.5 6.5h2M11.5 9.5h2" opacity={0.55} />
+    <path data-k="pulse" d="M6 8h1.2l0.8-1.6 0.8 3.2 0.8-1.6H10" strokeDasharray="5 3" />
+  </Moving>
+);
+
 /** The Climate Hold: Earth, and the air above it drawn back down, a wisp sinking to the ground and rising again.
  *  Ours. 2026-11-12. */
 const ClimateHold = ({ size, still }: MarkProps) => (
@@ -1084,6 +1099,8 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <ShipBeam size={size} still={still} />;
     case "Wide Beam":
       return <WideBeam size={size} still={still} />;
+    case "Chips at the Limit":
+      return <LimitChips size={size} still={still} />;
     case "Climate Hold":
       return <ClimateHold size={size} still={still} />;
     case "Antimatter Works":

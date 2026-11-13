@@ -1230,3 +1230,12 @@ test("the Antimatter Works makes twice as much each time the swarm doubles, and 
   assert.ok(when > 95 && when < 105, `a sentinel's antimatter by Year ${when} of a swarm grown from its seed`);
   assert.equal(amWhen([[0, null]], null, 1), null);
 });
+
+test("Chips at the Limit takes our thought about 4.9 steps further once done, so a large work after it is done sooner", () => {
+  assert.ok(Math.abs(catalog.works["Chips at the limit"].steps - Math.log(2.9e14 / 4e13) / Math.log(1.5)) < 0.01);
+  // A Fusion Drive wants ten flagships: with the chips done first, it gets more of them.
+  const at = (orders: Order[]) => pace(orders, 120, { scale: 1 }).done["Fusion drive"];
+  const plain = at([{ y: 0, begin: "Moon vault" }, { y: 20, begin: "Fusion drive" }]);
+  const sharp = at([{ y: 0, begin: "Chips at the limit" }, { y: 20, begin: "Fusion drive" }]);
+  assert.ok(sharp < plain - 1, `the drive done at ${sharp}, against ${plain}`);
+});

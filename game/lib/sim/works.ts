@@ -42,6 +42,8 @@ interface Work {
                                     // Mind's power: then each doubling adds its share, not a step. The Solar Swarm,
                                     // 2026-10-29
   full?: number;                    // the most doublings it can grow: the Solar Swarm, once it catches all the Sun
+  steps?: number;                   // once done, our thought goes this many data centers' steps further, as a gift's
+                                    // does: Chips at the Limit, 2026-11-12, calcs/thought.py
 }
 interface Catalog {
   works: Record<string, Work>;
@@ -310,7 +312,9 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         }
       }
     }
-    thought = (spared(t) * scale * STEP ** (dataCenters.length + doublings(t)) * STEP ** [...gifts.values()].reduce((a, b) => a + b, 0)) / FLAGSHIP;
+    // A work that makes every watt think further, once done: Chips at the Limit, 2026-11-12.
+    const made = Object.keys(done).reduce((a, w) => a + (WORKS[w]?.steps ?? 0), 0);
+    thought = (spared(t) * scale * STEP ** (dataCenters.length + doublings(t) + made) * STEP ** [...gifts.values()].reduce((a, b) => a + b, 0)) / FLAGSHIP;
     // What is set aside is a share of this Earth's own Year 0 compute, so studies keep a tenth of it whatever a war
     // left, as calcs/early_game.py has it since 2026-10-22.
     const set = scale * (studies + aside.reduce((sum, [a, b, share]) => sum + (a <= t + EPS && t + EPS < b ? share : 0), 0) + (building !== null ? CATALOG.dataCenter.aside : 0));

@@ -221,6 +221,9 @@ def works_catalog():
     # Each craft's speed with no other source, settled 2026-11-11: calcs/speeds.py.
     import speeds
     kit.update(speeds.catalog())
+    # Chips at the Limit, settled 2026-11-12: ordinary chips at the wall physics sets. calcs/thought.py.
+    import thought
+    works['Chips at the limit'] = thought.catalog()
     # The Climate Hold, settled 2026-11-12: holding Earth's air, for lore. calcs/climate.py.
     import climate
     works['Climate hold'] = climate.catalog()
