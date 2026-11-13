@@ -34,9 +34,6 @@ export interface Row {
   ly?: number;
   /** Only a range, for a far warm glow: shown in place of ly. Playtest 2026-11-01. */
   range?: [number, number];
-  /** A bullet at a tenth of light speed, ours or theirs: its star's real distance, since `ly` is its Years of flight.
-   *  2026-10-28. */
-  bullet?: { d: number; theirs?: boolean };
 }
 
 const over = (row: Row, now: number) => row.at !== null && now >= row.at;
@@ -98,14 +95,9 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
       </div>
       <div className="mt-[3px] flex justify-between gap-2.5 font-mono text-[9.5px] text-muted">
         <span>
-          {row.bullet ? row.msg : row.sent !== undefined ? `${row.sent > YEAR_0 + now ? "leaves" : row.kind === "flight" ? "left" : "sent"} ${row.kind === "flight" ? `Year ${yearText(row.sent - YEAR_0)}` : Math.floor(row.sent)} · ${row.msg}` : `from Year ${yearText(row.from ?? 0)}`}
+          {row.sent !== undefined ? `${row.sent > YEAR_0 + now ? "leaves" : row.kind === "flight" ? "left" : "sent"} ${row.kind === "flight" ? `Year ${yearText(row.sent - YEAR_0)}` : Math.floor(row.sent)} · ${row.msg}` : `from Year ${yearText(row.from ?? 0)}`}
         </span>
-        {row.bullet ? (
-          <span>
-            {`${lyOf(row.bullet.d)} ly at a tenth of light speed`}
-            {!row.bullet.theirs && <span className={shown ? "text-you" : ""}> ↗</span>}
-          </span>
-        ) : row.ly !== undefined && (
+        {row.ly !== undefined && (
           <span>
             {`${row.range ? `${lyOf(row.range[0])} to ${lyOf(row.range[1])}` : lyOf(row.ly)} ly${reply ? " there and back" : ""}`}
             {!theirs && <span className={shown ? "text-you" : ""}> ↗</span>}

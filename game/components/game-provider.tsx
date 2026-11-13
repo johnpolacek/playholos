@@ -1,9 +1,9 @@
-import { createContext, use, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { createContext, use, useEffect, useRef, useState } from "react";
 import { MS_PER_YEAR, ordersLand, yearAt } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
 import { track } from "@/lib/track";
 import { POOL } from "@/lib/sim/pool";
-import type { Plan, Save, Sent, Will, Wreck } from "@/lib/game/types";
+import type { Plan, Save, Sent, Will } from "@/lib/game/types";
 
 /** Notes what a new plan adds to the last: builds queued or ordered, builds taken back, Close Readings, lenses,
  *  sentinels. Each is noted once, as it joins. 2026-11-08. */
@@ -61,27 +61,6 @@ interface Game {
 
 const GameContext = createContext<Game | null>(null);
 
-// Builds of ours an old mind wrecked, as the server tells Scan: only its world knows which mind is hostile. They ride
-// the plan every screen reads, so a wrecked yard or beam holds back our craft everywhere at once, and they are never
-// saved. lib/game/types.ts's Wreck, 2026-11-12.
-const NO_WRECKS: readonly Wreck[] = [];
-let wrecked: readonly Wreck[] = NO_WRECKS;
-const wreckHearing = new Set<() => void>();
-export function setWrecks(to: readonly Wreck[] | undefined) {
-  const next = to?.length ? to : NO_WRECKS;
-  if (JSON.stringify(next) === JSON.stringify(wrecked)) return;
-  wrecked = next;
-  wreckHearing.forEach((f) => f());
-}
-const hearWrecks = (f: () => void) => (wreckHearing.add(f), () => void wreckHearing.delete(f));
-/** A plan as it is saved: without the wrecks, which are the server's to say. */
-function saved(plan: Plan): Plan {
-  if (!plan.wrecks) return plan;
-  const kept = { ...plan };
-  delete kept.wrecks;
-  return kept;
-}
-
 // The seed is drawn when a new game begins, from the pool of worlds calcs/export_worlds.py drew.
 const drawSeed = () => POOL[Math.floor(Math.random() * POOL.length)];
 function freshSave(): Save {
@@ -99,9 +78,6 @@ function released(s: Save): Save {
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [save, setSave] = useState<Save>();
   const [now, setNow] = useState(0);
-  const wrecks = useSyncExternalStore(hearWrecks, () => wrecked, () => NO_WRECKS);
-  // The save every screen reads: its plan with any wrecks worked in.
-  const shown = useMemo(() => (save?.plan && wrecks.length ? { ...save, plan: { ...save.plan, wrecks: [...wrecks] } } : save), [save, wrecks]);
 
   useEffect(() => {
     browserStore.load().then((loaded) => {
@@ -135,7 +111,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     if (s) update(f(s));
   };
   const game: Game = {
-    save: shown,
+    save,
     // Held, the clock reads the Year it stopped at. 2026-11-02.
     year: yearAt(began, save?.held ?? now, save?.will),
     orderAt: (() => {
@@ -160,8 +136,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       }),
     setPlan: (plan) =>
       change((s) => {
-        trackPlan(s.plan, saved(plan), yearAt(s.beganAt, s.held ?? Date.now(), s.will));
-        return { ...s, plan: saved(plan) };
+        trackPlan(s.plan, plan, yearAt(s.beganAt, s.held ?? Date.now(), s.will));
+        return { ...s, plan };
       }),
     setGuide: (guide) => change((s) => ({ ...s, guide })),
     setTalk: (talk) => change((s) => ({ ...s, talk })),

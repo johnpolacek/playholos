@@ -124,15 +124,15 @@ def golden():
     import senses
     heard = [dict(a=a, d=d, fifths=f, flux=senses.field_flux(a, d), at=senses.heard_at(senses.field_flux(a, d), f))
              for a, d, f in ((0.0485, 4.2465, [30.0]), (0.1, 32.6, [30.0, 36.0, 42.0, 48.0, 54.0]), (0.05, 12.0, [10.5, 17.25]), (0.3, 30.0, [0.0, 6.0, 12.0, 18.0, 24.0]), (0.1, 20.0, []))]
-    import speeds, strikes, antimatter
-    return dict(flashes=strikes.golden(), random=seqs, observe=seen, works=works_golden(), fields=heard, trips=speeds.golden(), thrown=speeds.golden_thrown(), probes=speeds.golden_probes(), rods=speeds.golden_rods(), misses=speeds.golden_misses(), wide=speeds.golden_wide(), storms=senses.golden_storms(), antimatter=antimatter.golden())
+    import speeds, antimatter
+    return dict(random=seqs, observe=seen, works=works_golden(), fields=heard, trips=speeds.golden(), thrown=speeds.golden_thrown(), probes=speeds.golden_probes(), misses=speeds.golden_misses(), wide=speeds.golden_wide(), storms=senses.golden_storms(), antimatter=antimatter.golden())
 
 # ---------- Works and their pacing ----------
 # calcs/early_game.py paces the mocks in two loops, each for one fixed order: first_hour() to Year 12, then replay().
 # The game runs one loop for any order (game/lib/sim/works.ts). Its numbers come from here, so they have one source.
 import early_game as eg, signs
 FH = {w: years for w, _, years in eg.FIRST_HOUR}
-CRAFT = ('Probe yard', 'Fusion drive', 'Seed ship', 'Strike yard')    # the Launch Tunnel's cut, HOLOS_GAME_CONCEPT.md, 2026-11-07
+CRAFT = ('Probe yard', 'Fusion drive', 'Seed ship')    # the Launch Tunnel's cut, HOLOS_GAME_CONCEPT.md, 2026-11-07
 ORBIT = ('Infrared telescope', 'Probe yard', 'A 15 m mirror', 'Orbital foundry', 'Seed ship', 'Fusion drive')    # the yard's cut, as the mocks apply it. The drive since 2026-10-22: it is joined in orbit, as Icarus's Firefly
 
 def works_catalog():
@@ -194,18 +194,10 @@ def works_catalog():
     works['X-ray sky watch'] = dict(years=eg.XRAY_YEARS, want=eg.WANTS['X-ray sky watch'][0], orbit=True)
     works['Interceptor'] = dict(years=eg.INTERCEPTOR_YEARS, want=eg.WANTS['Interceptor'][0])
     works['Quiet radars'] = dict(years=eg.QUIET_YEARS, want=eg.WANTS['Quiet radars'][0])
-    works['Strike yard'] = dict(years=eg.STRIKE_YARD_YEARS, want=eg.WANTS['Strike yard'][0], orbit=True)
     # Ground solar counts too, 2026-10-28: a fifth more of all energy, about 4.8 TW, which since 2026-10-31 is about as
     # much again as Year 0's 5 TW of electricity, audit 3.1.
     works['Ground solar']['energy'] = eg.SOLAR_ENERGY
     works['Fusion plants'] = dict(years=eg.FUSION_YEARS, want=eg.WANTS['Fusion plants'][0], energy=eg.FUSION_ENERGY)
-    # The Helium-3 Harvest, settled 2026-10-29: the audit's ~150 kt of Palaszewski's craft at Uranus, 1.5 kt a Year.
-    # Every bullet waits on its fuel, game/lib/sim/meetings.ts's HE3. Its 20 Years and 5 flagships are samples.
-    # Its craft copy themselves from the moons' rock and ice, so its rate doubles every 5 Years until held. It thinks
-    # with none of it: what it gathers is fuel.
-    # It stops once its craft have used up Uranus's five large moons, GM 609 km^3/s^2 (Jacobson et al. 1992), about
-    # 9.1e21 kg, from 150 kt: about 46 doublings, 2026-11-07. game/lib/sim/meetings.ts's HE3.full matches.
-    works['Helium-3 harvest'] = dict(years=20, want=5, orbit=True, grows=5, thinks=0, full=round(math.log2(609.3e9 / 6.674e-11 / 1.5e8), 1))
     # Mercury Works, the Solar Swarm, the Star Beam and the Hypertelescope, settled 2026-10-29: calcs/mercury.py.
     import mercury
     more, kit = mercury.catalog()
@@ -232,9 +224,6 @@ def works_catalog():
     import antimatter
     works['Antimatter works'] = dict(years=antimatter.WORKS_YEARS, want=antimatter.WORKS_WANT)
     kit['speeds']['antimatter'] = antimatter.catalog()
-    # What a bullet of ours does where it lands, and its flash, settled 2026-11-12: calcs/strikes.py.
-    import strikes
-    kit.update(strikes.catalog())
     # Proxima's own speed across our sky, for its lead: its page stands apart from the seed's finds.
     kit['speeds']['seen']['proxima'] = next(drift_of(h['id'])['kms'] for h in nb.load_hosts() if h['name'] == 'Proxima Centauri')
     # What the Launch Tunnel speeds: the craft whose hulls and fuel its cheap lift carries. 2026-11-07.

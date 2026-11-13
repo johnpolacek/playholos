@@ -1,5 +1,4 @@
 import { lyOf, tenths, YEAR_0, yearText } from "@/lib/game/clock";
-import { aimedAt } from "@/lib/sim/knowledge";
 import { glowNames, properGlows } from "@/lib/game/glow-names";
 import { KNOCKS } from "@/lib/game/knocks";
 import { watcherAway } from "@/lib/game/sends";
@@ -8,7 +7,7 @@ import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
 import type { MindsSeen, WatcherSeen } from "@/lib/sim/minds";
 import type { ProximaSeen } from "@/lib/sim/proxima";
 import { harm, type rockAt } from "./rocks";
-import type { DarkMass, EarthView, FeltWorld, FieldHeard, FieldWorld, Gas, Read, StrikeSeen, Visit } from "@/lib/sim/types";
+import type { DarkMass, FeltWorld, FieldHeard, FieldWorld, Gas, Read, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
 import { sentinelCruise, sentinelYears } from "@/lib/sim/speeds";
 import { type System, SYSTEMS } from "./systems";
@@ -67,8 +66,6 @@ export interface Reading {
   /** What our Far-Side Array heard of its magnetic field: true for one heard, false for none where one like Earth's
    *  would show. A small sign for or against air, lib/game/chance.ts. 2026-11-11. */
   field?: boolean;
-  /** Our bullet's flash, as a telescope of ours caught it: its light over the world's own. Drawn. 2026-11-12. */
-  flash?: number;
   /** This reading settles it: nothing lives or thinks here, as a warm glow read as dust. A playtest couldn't tell
    *  a settled glow from an open one, 2026-11-07. */
   ruledOut?: true;
@@ -964,13 +961,12 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         ...(g.near !== undefined ? ([["Up close", `${year(g.near)}, by our sentinel`]] as [string, string][]) : []),
         ...(g.lost !== undefined ? ([["Our sentinel", `Went dark as it arrived, ${year(g.lost)}. A craft not ours closed on it`]] as [string, string][]) : []),
         ...(g.answered !== undefined ? ([["It answered", `${year(g.answered)}. Its words are in what we have heard`]] as [string, string][]) : []),
-        ...(g.reprised !== undefined ? ([["It answered our bullet", `${year(g.reprised)}, when its answer landed here`]] as [string, string][]) : []),
         ...(names[`Cold glow ${i + 1}`] ? ([["We named it", `${names[`Cold glow ${i + 1}`].name}, for ${names[`Cold glow ${i + 1}`].after}. Once Cold Glow ${i + 1}`]] as [string, string][]) : []),
       ],
       // A sentinel that stays sees its source up close, and that settles it. 2026-10-31.
-      could: g.near !== undefined || g.imaged !== undefined || g.lost !== undefined || g.answered !== undefined || g.reprised !== undefined ? [
-        { what: "Something natural we don't know", why: g.near !== undefined || g.imaged !== undefined ? "Nothing natural we know sets panels on orbits this orderly." : g.answered !== undefined ? "Nothing natural answers a knock in our own words." : g.reprised !== undefined ? "Nothing natural throws back along the path of what we threw." : "Nothing natural steers a craft to meet ours.", odds: "almost no chance" },
-        { what: "An error in our looking", why: g.near !== undefined ? "Our sentinel is there, and sees it." : g.imaged !== undefined ? "Our Glow Imager shows each panel apart, on its own orbit." : g.answered !== undefined ? "It answered what we sent, and showed us our own world." : g.reprised !== undefined ? "Its answer to our bullet landed here, and was no error." : "Something there met our sentinel and silenced it.", odds: "almost no chance" },
+      could: g.near !== undefined || g.imaged !== undefined || g.lost !== undefined || g.answered !== undefined ? [
+        { what: "Something natural we don't know", why: g.near !== undefined || g.imaged !== undefined ? "Nothing natural we know sets panels on orbits this orderly." : g.answered !== undefined ? "Nothing natural answers a knock in our own words." : "Nothing natural steers a craft to meet ours.", odds: "almost no chance" },
+        { what: "An error in our looking", why: g.near !== undefined ? "Our sentinel is there, and sees it." : g.imaged !== undefined ? "Our Glow Imager shows each panel apart, on its own orbit." : g.answered !== undefined ? "It answered what we sent, and showed us our own world." : "Something there met our sentinel and silenced it.", odds: "almost no chance" },
         { what: "A mind computing cold", why: "Made panels shedding heat at 12 K, far from their star, are what cold computing would build.", odds: "almost certain" },
       ] : [
         { what: "Something natural we don't know", why: "Dust of grains we haven't measured, or a disk cold and far out. The sky has surprised us before.", odds: "likely" },
@@ -1633,86 +1629,9 @@ export function warmReadings(flashes: readonly MindsSeen["flashes"][number][], y
  *  read of a felt world's air, the Infrared Telescope's, then the 15 m Mirror's, which reads Proxima b too, then what
  *  our craft saw up close, last, and what our Close Look saw of the watcher. Shared by Scan and the Mind, so both judge
  *  from the same. 2026-11-01. */
-/** What we know of a bullet of ours once it has landed, for its star's page: that it landed, by reckoning, since
- *  nothing comes home from one. Then, once its light is home, what caught its flash, or that nothing of ours could.
- *  lib/sim/strikes.ts. 2026-11-12. */
-export function strikeReadings(b: StrikeSeen, year: number | null): Reading[] {
-  const star = starName(b.star), slug = slugOf(b.star);
-  const floor = (y: number) => Math.floor(y * 10 + 1e-9) / 10;
-  // At a cold glow's star a weapon is useless: aimed at its star or at one panel, it harms nothing. 2026-11-12.
-  if (b.glow)
-    return [{
-      id: `strike-${slug}-useless`, needs: "", at: floor(b.seen && year !== null && b.home <= year ? b.home : b.lands), by: b.seen ? "Our sentinel" : "Our reckoning", title: "Our bullet did nothing here",
-      line: `${b.seen ? "Our sentinel here watched our bullet arrive" : `By our reckoning our bullet reached this star at Year ${yearText(b.lands)}`}. ${aimedAt(b.glow).replace(/\bthere\b/g, "here")} It harmed nothing.`,
-      mind: "A weapon is useless against works this wide. Whoever keeps this star, if anyone does, was not harmed, and knows who threw this. What they do about it, we can’t know.",
-      now: [], tells: [],
-    }];
-  if (!b.world)
-    return [{
-      id: `strike-${slug}-through`, needs: "", at: floor(b.lands), by: "Our reckoning", title: "Our bullet flew on through",
-      line: `By our reckoning our bullet crossed this system at Year ${yearText(b.lands)}. We knew no world here to aim it at, so it struck nothing we know of and flew on.`,
-      mind: "A bullet must be aimed at a world whose path we know. Here we knew none. Nothing was harmed, and nothing learned.",
-      now: [], tells: [],
-    }];
-  const landed: Reading = {
-    id: `strike-${slug}-landed`, needs: "", at: floor(b.lands), by: "Our reckoning", title: "Our bullet has landed",
-    line: `By our reckoning our bullet struck ${star}’s world at Year ${yearText(b.lands)}, with about 110,000 Mt. Nothing comes home from a bullet. Its light reaches us at Year ${yearText(b.home)}.`,
-    mind: "Where it struck, that world is burned, and its air is scarred for Years. It is not the end of that world, or of anything that lives there. What we see of it depends on what we have built to look.",
-    now: [], tells: [],
-  };
-  if (year === null || b.home > year) return [landed];
-  const k = b.ratio!.toFixed(1);
-  const BY = { hyper: "Hypertelescope", wide: "15 m Mirror", near: "Infrared Telescope" } as const;
-  const flash: Reading = b.seen === "sentinel"
-    ? {
-        id: `strike-${slug}-flash`, needs: "", at: floor(b.home), by: "Our sentinel", title: "Our sentinel saw it land",
-        line: `Our sentinel at ${star} saw our bullet land: a fireball in that world’s air, and all beneath it burned.`,
-        mind: "It landed where we aimed. Where that air holds ozone, under half is left for one to three Years. No one has answered it.",
-        now: [], tells: [], flash: b.ratio,
-      }
-    : b.seen
-      ? {
-          id: `strike-${slug}-flash`, needs: "", at: floor(b.home), by: `Our ${BY[b.seen]}`, title: "The flash of our bullet",
-          line: `Our ${BY[b.seen]} watched ${star}’s world as the light arrived. It flared to about ${(1 + b.ratio!).toFixed(1)} times its usual light for about three minutes, then faded.`,
-          mind: "It landed where we aimed. Where that air holds ozone, under half is left for one to three Years. No one has answered it.",
-          now: [], tells: [], flash: b.ratio,
-        }
-      : {
-          id: `strike-${slug}-unseen`, needs: "", at: floor(b.home), by: "Our reckoning", title: "Its light passed unseen",
-          line: `The light of our bullet’s landing reached us at Year ${yearText(b.home)}. Nothing we have built could catch it: about ${k} times that world’s own light for three minutes, lost in its star’s glare.`,
-          mind: "We know it landed only by reckoning. A telescope that splits that world from its star, watching then, would have seen it.",
-          now: [], tells: [],
-        };
-  return [landed, flash];
-}
-
-/** What an old mind did about a bullet of ours, for its glow's page, once its answer has landed here.
- *  lib/sim/reprisals.ts. 2026-11-12. */
-export function reprisalReading(r: NonNullable<EarthView["reprisals"]>[number]): Reading {
-  const after = `${(r.lands - r.after).toFixed(1)} Years after our bullet reached this star`;
-  const base = { id: `reprisal-${slugOf(r.star)}`, needs: "", at: Math.floor(r.lands * 10 + 1e-9) / 10, by: "Our own sky", now: [], tells: [] };
-  if (r.how === "end")
-    return {
-      ...base, title: "It ended Earth as our home",
-      line: `A strike of about ${Math.round(r.mt / 1e6)} million Mt landed on Earth at Year ${yearText(r.lands)}, ${after}. Its track through our air points back here. It is the class of the rock that ended our great reptiles.`,
-      mind: "This was its answer. No Mind of ours can live on Earth now. We attacked a mind we could not harm, and it could harm us.",
-    };
-  if (r.how === "kind")
-    return {
-      ...base, title: "It struck us back",
-      line: `Something struck Earth at Year ${yearText(r.lands)} with about ${(Math.round(r.mt / 10000) * 10000).toLocaleString("en-US")} Mt, at most of light’s speed, ${after}. Its track through our air points back here.`,
-      mind: "An answer in kind: our own harm, returned. It could have done far more. A mind is here, and it is not our friend.",
-    };
-  return {
-    ...base, title: "It took our weapon from us",
-    line: `At Year ${yearText(r.lands)}, ${after}, grams at most of light’s speed wrecked our Strike Yard and the beam that throws our craft. Earth was not touched.`,
-    mind: "It stopped the threat and no more. A mind is here. It could have reached Earth as easily.",
-  };
-}
-
 export function readingsOf(
   leads: Lead[],
-  k: { felt?: FeltWorld[]; fields?: FieldWorld[]; proximaField?: FieldHeard; proxima?: Read; visits: Visit[]; strikes?: StrikeSeen[]; reprisals?: EarthView["reprisals"]; watcher?: WatcherSeen; knocks: number[]; observe?: string[]; year: number | null; flashes?: Parameters<typeof warmReadings>[0] },
+  k: { felt?: FeltWorld[]; fields?: FieldWorld[]; proximaField?: FieldHeard; proxima?: Read; visits: Visit[]; watcher?: WatcherSeen; knocks: number[]; observe?: string[]; year: number | null; flashes?: Parameters<typeof warmReadings>[0] },
 ): Record<string, Reading[]> {
   const warm = warmReadings(k.flashes ?? [], k.year);
   const air: Record<string, Reading[]> = Object.fromEntries(
@@ -1734,8 +1653,6 @@ export function readingsOf(
         ...landed(l.slug, k.observe, k.year),
         ...(air[l.star] ?? []),
         ...k.visits.filter((v) => v.star === l.star).map(visitReading),
-        ...(k.strikes ?? []).filter((b) => b.star === l.star).flatMap((b) => strikeReadings(b, k.year)),
-        ...(k.reprisals ?? []).filter((r) => r.star === l.star).map(reprisalReading),
         ...(l.slug === "small-dark-body" ? watched : []),
         ...(warm[l.slug] ?? []),
       ],

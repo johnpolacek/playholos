@@ -27,9 +27,6 @@ export function whyOf(path: readonly string[], owner?: unknown): Why {
   const key = path.at(-1);
   const by = (owner as { by?: string } | undefined)?.by;
   if (top === "visits" && (by === "lens" || by === "hyper")) return "our next finding";
-  // A bullet of ours landing, by reckoning, and its light home. What an old mind threw back, as it lands. 2026-11-12.
-  if (top === "strikes") return key === "home" ? "our bullet’s light reaching us" : "our bullet landing";
-  if (top === "reprisals" || top === "wrecks") return "something reaching us";
   if (top === "visits" || top === "colony" || key === "near" || key === "home" || (top === "minds" && path.includes("seedsLost"))) return "word from our craft";
   return "our next finding";
 }
@@ -53,10 +50,8 @@ export function nextKnownWhy(ahead: EarthView, year: number): { at: number; why:
       // A warm glow shows on Scan once ranged, not when first seen: a stop then found nothing new there. Playtest
       // 2026-10-30.
       // A seed gone silent shows once its silence is known, not at the Year it was lost. 2026-11-01.
-      // A bullet at a cold glow sends no light worth a stop: its Year home counts only where a sentinel of ours saw it.
-      // 2026-11-12.
       for (const [k, v] of Object.entries(x))
-        if (!(k === "seen" && "ranged" in x) && !(k === "at" && "known" in x) && !(k === "home" && "glow" in x && !("seen" in x)))
+        if (!(k === "seen" && "ranged" in x) && !(k === "at" && "known" in x))
           walk(v, k, [...path, k], x);
     }
   };

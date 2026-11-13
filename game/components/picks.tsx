@@ -87,7 +87,6 @@ export function setWatched(at: number | null) {
 }
 const hear = (f: () => void) => (hearing.add(f), () => void hearing.delete(f));
 // And the ladder's strike once it has landed, as Scan hears it: only the server's world knows who fires. 2026-10-30.
-// And each strike an old mind throws back for a bullet of ours, once it has landed. 2026-11-12.
 type Struck = { lands: number; mt: number };
 const NONE: readonly Struck[] = [];
 let struck: readonly Struck[] = NONE;

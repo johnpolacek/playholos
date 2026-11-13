@@ -15,7 +15,7 @@ import { span, lyOf, yearText } from "@/lib/game/clock";
 import { chancesOf } from "@/lib/game/chance";
 import { ODDS, type Odds, type Reading, starName } from "@/lib/game/leads";
 import { dates } from "@/lib/game/sends";
-import { FlashArt, VisitArt } from "@/components/visit-art";
+import { VisitArt } from "@/components/visit-art";
 import { WatcherVoice } from "@/components/watcher-voice";
 import { VOICED } from "@/lib/game/watcher-voice";
 import { glowNamed } from "@/lib/game/glow-names";
@@ -339,12 +339,6 @@ export function LeadPage({ slug }: { slug: string }) {
               <VisitArt sight={read.sight} />
             </div>
           )}
-          {/* Our bullet's flash, as our telescope caught it. 2026-11-12. */}
-          {read.flash !== undefined && (
-            <div className="mt-2.5 flex justify-center">
-              <FlashArt ratio={read.flash} />
-            </div>
-          )}
           {/* The watcher up close, drawn: its mirror held on one point of the sky. 2026-11-07. */}
           {read.close && (
             <div className="mt-2.5 rounded-lg border border-faint bg-paper px-2 py-1">
@@ -372,11 +366,6 @@ export function LeadPage({ slug }: { slug: string }) {
               {r.sight && (
                 <div className="mt-2 flex justify-center">
                   <VisitArt sight={r.sight} />
-                </div>
-              )}
-              {r.flash !== undefined && (
-                <div className="mt-2 flex justify-center">
-                  <FlashArt ratio={r.flash} size={96} />
                 </div>
               )}
               {r.close && (

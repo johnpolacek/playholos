@@ -9,9 +9,6 @@ import { tenths, yearText, YEAR_0 } from "@/lib/game/clock";
 import { events } from "@/lib/game/plan";
 import { dates, target } from "@/lib/game/sends";
 import type { Sent } from "@/lib/game/types";
-import { useSchedule } from "@/components/picks";
-import { strikesOf } from "@/lib/game/reach";
-import { bulletYears, type Push } from "@/lib/sim/speeds";
 
 // Our messages on Scan, under the leads: what we beamed at nearby stars from 1983 to 2018, still on their way. Light
 // crosses the same sky the leads sit in, and a reply would be a lead. Each row is on its whole journey, arriving at its
@@ -60,20 +57,10 @@ function sentRows(sent: Sent[]): Row[] {
   });
 }
 
-/** Our bullets: each from the Year we order it, flown once readied: at a tenth of light speed on its drive, or half thrown by our Ship Beam. The map draws each along
- *  its track. 2026-10-28. Theirs went with the neighbors, 2026-10-29. */
-function bulletRows(fired: { star: string; fired: number | null; pushed?: Push; d?: number }[]): Row[] {
-  return fired.flatMap((b, i): Row[] => {
-    if (b.d === undefined || b.fired === null) return [];
-    const flies = bulletYears(b.d, b.pushed);
-    return [{ key: `bullet${i}`, name: b.star, kind: "send", note: "Our bullet lands", at: b.fired + flies, msg: `fired Year ${b.fired.toFixed(1)}`, sent: YEAR_0 + b.fired, ly: flies, bullet: { d: b.d } }];
-  });
-}
-
 /** A message's line at a Year, counting: how long until it lands or its soonest reply, or how long since. A window gone
  *  by read "A reply could come, at the soonest", as though one might still be due. Playtest 2026-11-02. */
 function noteAt(r: Row, now: number | null): string {
-  if (now === null || r.at === null || r.bullet || r.name === EVERYWHERE || (r.kind !== "send" && r.kind !== "reply")) return r.note;
+  if (now === null || r.at === null || r.name === EVERYWHERE || (r.kind !== "send" && r.kind !== "reply")) return r.note;
   const left = r.at - now;
   // Thousands of Years read whole, with commas: "15485.9 Years" read as raw. Playtest 2026-11-07.
   // Under a tenth, in days: "arrives in 0.0 Years" read as already here. Playtest 2026-11-07.
@@ -87,22 +74,13 @@ function noteAt(r: Row, now: number | null): string {
 
 export function Messages() {
   const { year, save } = useGame();
-  const { scale } = useSchedule();
-  const plan = save?.plan;
-  const fired = useMemo(() => {
-    const d = new Map((plan?.strikes ?? []).map((o) => [o.name, o.d]));
-    return plan ? strikesOf(plan, scale).map((s) => ({ ...s, d: d.get(s.star) })) : [];
-  }, [plan, scale]);
-  const bullets = useMemo(() => bulletRows(fired), [fired]);
-  const ours = useMemo(() => [...sentRows(save?.sent ?? []), ...bullets], [save?.sent, bullets]);
+  const ours = useMemo(() => sentRows(save?.sent ?? []), [save?.sent]);
   const beams = useBeams();
   const { pick, peek, picked } = beams;
   // Every row aimed at a star can be shown on the map: Earth's old messages, then ours. Not a call sent every way.
   const aimable = useMemo(() => [...ROWS, ...ours.filter((r) => r.name !== EVERYWHERE)], [ours]);
   const list: Beam[] = useMemo(
-    () => aimable.map((r) => ({ key: r.key, star: r.name, sent: r.sent!, ly: r.ly!, reply: r.kind === "reply", bullet: r.bullet && (r.bullet.theirs ? ("in" as const) : ("out" as const)) }))
-      // Theirs comes in from its star: drawn as the leg home, so the map's head runs from their star to Sol.
-      .map((b) => (b.bullet === "in" ? { ...b, reply: true, sent: b.sent - b.ly } : b)),
+    () => aimable.map((r) => ({ key: r.key, star: r.name, sent: r.sent!, ly: r.ly!, reply: r.kind === "reply" })),
     [aimable],
   );
   useEffect(() => () => pick([], null), [pick]);

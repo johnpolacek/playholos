@@ -573,7 +573,7 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
 - **[Palaszewski 2014, atmospheric mining in the outer solar system](https://ntrs.nasa.gov/api/citations/20140006386/downloads/20140006386.pdf)** · Study, NASA TM-2014-217892 ([2021 update](https://ntrs.nasa.gov/api/citations/20210018165/downloads/Palaszewski_Atmospheric%20Mining%20in%20the%20Outer%20Solar%20System%20ASC.pdf)).
   - Helium-3 is about 1.5×10⁻⁵ of Uranus’s air and 1.9×10⁻⁵ of Neptune’s. A 100 t gas-core nuclear aerospacecraft gathers 500 kg in 38 to 95 days. Uranus and Neptune are easier to mine than Jupiter or Saturn.
   - Matters: a helium-3 harvest of about 1.5 kt a Year needs about 150 kt of craft.
-  - Used: the project audit, helium-3 harvest. Since 2026-10-29, the Helium-3 Harvest build, 1.5 kt a Year at first, which every bullet’s fuel waits on: `game/lib/sim/meetings.ts`. It doubles every 5 Years, Metzger et al. 2013’s pace with help from home, logged under Industry and big works.
+  - Used: the project audit, helium-3 harvest. Since 2026-10-29, the Helium-3 Harvest build, 1.5 kt a Year at first, which every bullet’s fuel waits on: `game/lib/sim/meetings.ts`. It doubles every 5 Years, Metzger et al. 2013’s pace with help from home, logged under Industry and big works. Retired 2026-11-13 with our bullets.
 - **[CHORD](https://arxiv.org/abs/2607.09374)** · Under construction ([progress](https://spaceq.ca/chord-the-successor-to-chime-readies-for-first-big-test-this-fall/)).
   - 512 six-meter dishes at 300 to 1,500 MHz, a transit instrument that scans the sky as Earth turns. Complete by the end of 2027, commissioned in 2028.
   - Matters: Earth’s Year 0 sky watch is a drift scan, not an always-on watch of the whole sky.
@@ -2712,7 +2712,7 @@ One research pass by an agent, 2026-11-12. Each entry says how much was read. Ar
   - A panel of a gram a m², the weight this project already takes for thin film, puts 10 g in the path of a bullet’s 10 m² front. Against its 1,000 t that is a hundred-millionth of its mass, so of its energy. No source gives the weight of an old mind’s panels: a sample. One a thousand times heavier takes a hundred-thousandth, so the answer holds.
   - A strike of Chicxulub’s class, 4.2×10²³ J as logged above, is 1.004×10⁸ Mt: 928 rods of a bullet’s harm.
   - What a mind does about an attack rests on no evidence. The grades are the designer’s picks, and their shares are samples.
-- Used: [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md), “Where our bullet lands” and “A bullet at an old mind’s star”. `calcs/strikes.py`, `game/lib/sim/strikes.ts`, `game/lib/sim/reprisals.ts`.
+- Used: [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md), “Where our bullet lands” and “A bullet at an old mind’s star”. `calcs/strikes.py`, `game/lib/sim/strikes.ts`, `game/lib/sim/reprisals.ts`. All retired 2026-11-13 with our bullets: git history holds the code.
 - Changed: a line of 2026-10-28 above, that an impact is news only to its target or a craft standing there. A telescope that splits the world from its star sees it too.
 
 ### Combing old recordings, 2026-10-28

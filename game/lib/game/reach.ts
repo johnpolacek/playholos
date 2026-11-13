@@ -2,13 +2,11 @@
 // we have gone and the two roads to the nearest star. Each can be queued before Begin, last in line. One queued is
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
-import { bulletsReady } from "@/lib/sim/conflict";
-import { amBeta, amTonnes, amYears, bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, rodReady, SAIL_C, sailArrives, sailYears, sentinelYears, shipYears, stay, type Push } from "@/lib/sim/speeds";
+import { amBeta, amTonnes, amYears, flybyBeta, flybyYears, gasAt, SAIL_C, sailArrives, sailYears, sentinelYears, shipYears, stay, type Push } from "@/lib/sim/speeds";
 import { amWhen } from "@/lib/sim/antimatter";
-import { clearOf, fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, rodBy, schedule, searchOf } from "./plan";
+import { fifthsOf, horizonOf, isOn, onFrom, ordersOf, pacedName, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
-import type { Plan, Will, Wreck } from "./types";
-import type { EarthView } from "@/lib/sim/types";
+import type { Plan, Will } from "./types";
 import { CATALOG, type Order, pace } from "@/lib/sim/works";
 import { TOUR_FLIGHT } from "@/lib/sim/minds";
 
@@ -384,76 +382,6 @@ export function sentinels(plan: Plan, scale: number) {
 /** Years a sentinel takes from leaving to staying, `ly` out: its cruise, its burn, and its braking on its sail. */
 export const sentinelTrip = sentinelYears;
 
-/** Our bullets, each by its star and the Year it is fired: readied 20 Years after its order once the Strike Yard is
- *  done, and fired once the Helium-3 Harvest has gathered its fuel, after each bullet before it. Null while either
- *  isn't. 2026-10-28, its helium-3 2026-10-29. */
-export function strikesOf(plan: Plan, scale: number) {
-  const done = schedule(plan, scale);
-  const at = firing(plan, plan.strikes ?? [], done["Strike Yard"] ?? null, done["Ship Beam"] ?? null, done["Wide Beam"] ?? null, grownSpans(plan, scale, "Helium-3 Harvest"));
-  return (plan.strikes ?? []).map((o, i) => ({ star: o.name, ...at[i] }));
-}
-/** When each bullet ordered is fired, and whether our Ship Beam throws it. One ordered once the Ship Beam stands is a
- *  rod of about 30 t with no engine: readied in about 7 months and thrown at half of light speed, with a bullet's
- *  harm and no helium-3, once the beam is let push. The rest are bullets on their Fusion Drives, and share the
- *  harvest among themselves. plan.ts's thrownAt, lib/sim/speeds.ts. 2026-11-12. */
-function firing(plan: Plan, orders: readonly { y: number; d?: number }[], yard: number | null, beam: number | null, wide: number | null, harvest: readonly [number, number | null][]) {
-  // Which beam throws each, if one does. One ordered once the Wide Beam stands is a lighter rod, readied sooner.
-  const rod = orders.map((o) => rodBy(plan, beam, wide, o.y));
-  // The Strike Yard wrecked while a bullet readies or waits in it: the bullet is lost with it, and is begun again once
-  // the yard stands. An old mind's answer to a bullet of ours, lib/sim/reprisals.ts. 2026-11-12.
-  const yardWrecks = (plan.wrecks ?? []).filter((w) => w.name === "Strike Yard").sort((a, b) => a.at - b.at);
-  const slow = orders.filter((_, i) => !rod[i]);
-  const begun = slow.map((o) => o.y);
-  let burned = bulletsReady(begun, yard, harvest);
-  for (let pass = 0; pass <= yardWrecks.length; pass++) {
-    let moved = false;
-    burned.forEach((fired, k) => {
-      const w = yard === null || fired === null ? undefined : yardWrecks.find((x) => x.at < fired && x.until > Math.max(begun[k], yard));
-      if (w) [begun[k], moved] = [w.until, true];
-    });
-    if (!moved) break;
-    burned = bulletsReady(begun, yard, harvest);
-  }
-  let k = 0;
-  return orders.map((o, i): { fired: number | null; pushed: Push } => {
-    if (!rod[i]) return { fired: burned[k++], pushed: false };
-    if (yard === null || beam === null) return { fired: null, pushed: rod[i] };
-    const ready = rodReady(o.d ?? 0, rod[i]);
-    return { fired: onFrom(plan, "Ship Beam", clearOf(plan, "Strike Yard", Math.max(o.y, yard, beam), ready) + ready), pushed: rod[i] };
-  });
-}
-
-/** What an old mind's grams wrecked, for each time one disarmed us: the Strike Yard, if it stood, and the beam, if it
- *  threw the bullet. Each is down from the Year the grams land until it is rebuilt, at its full Years: the Will's
- *  order for it stands, so we build it again. A Wide Beam is a wider patch of the same swarm, so it falls with the
- *  Ship Beam and takes its own Years more. lib/sim/reprisals.ts. 2026-11-12. */
-export function wrecksOf(plan: Plan, scale: number, reprisals: EarthView["reprisals"]): Wreck[] {
-  const done = schedule(plan, scale);
-  const years = (n: string) => CATALOG.works[pacedName(n)]?.years ?? 0;
-  return (reprisals ?? []).filter((r) => r.how === "disarm").flatMap((r) => {
-    const up = (n: string) => done[n] != null && done[n]! <= r.lands;
-    return [
-      ...(up("Strike Yard") ? [{ name: "Strike Yard", at: r.lands, until: r.lands + years("Strike Yard"), by: r.star }] : []),
-      ...(r.beam && up("Ship Beam") ? [{ name: "Ship Beam", at: r.lands, until: r.lands + years("Ship Beam") + (up("Wide Beam") ? years("Wide Beam") : 0), by: r.star }] : []),
-    ];
-  });
-}
-
-/** What Earth knows, with each wreck an old mind made worked in: a wreck holds back craft that had not yet left, which
- *  moves what they later meet, so the view is asked again until the wrecks stand still. A wreck touches only what
- *  comes after it, so this settles in as many passes as there are wrecks. `see` asks the simulation with a kit. */
-export function settled<V extends Pick<EarthView, "reprisals">>(plan: Plan, scale: number, see: (kit: ReturnType<typeof kitOf>) => V): { view: V & { wrecks?: Wreck[] }; plan: Plan } {
-  let p: Plan = { ...plan, wrecks: [] };
-  let view = see(kitOf(p, scale));
-  for (let pass = 0; pass < 12; pass++) {
-    const wrecks = wrecksOf(p, scale, view.reprisals);
-    if (JSON.stringify(wrecks) === JSON.stringify(p.wrecks)) break;
-    p = { ...p, wrecks };
-    view = see(kitOf(p, scale));
-  }
-  return { view: p.wrecks!.length ? { ...view, wrecks: p.wrecks } : view, plan: p.wrecks!.length ? p : plan };
-}
-
 /** A sentinel to a star `ly` away as a road: what it needs built, the sentinel built and flying, arriving to stay, and
  *  its first word home. Sent or not, dated as if sent at Year `from`, and what it needs, if not in our order, as if
  *  begun then. */
@@ -481,32 +409,6 @@ export function sentinelRoad(plan: Plan, scale: number, from: number, star: stri
   };
 }
 export const sentinelReady = (plan: Plan) => sentinelNeeds(plan).every((n) => inOrder(plan, n));
-
-/** A yard's Year done, as if begun at Year `from` when it isn't in our order. */
-function yardDone(plan: Plan, scale: number, from: number, yard: string) {
-  const { orders, ...opts } = ordersOf(plan);
-  const more: Order[] = inOrder(plan, yard) ? [] : [{ y: from, begin: pacedName(yard) }];
-  return pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done[pacedName(yard)] ?? null;
-}
-
-/** Our bullet at a star `ly` away, as a road: the Strike Yard, 20 Years to ready it once its helium-3 is in, and its flight at a tenth of light
- *  speed. Nothing comes home from it: its Year is the Year it lands. 2026-10-28. */
-export function strikeRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road {
-  const yard = yardDone(plan, scale, from, "Strike Yard");
-  // Our harvest as it grows, or one begun now if it isn't in our order.
-  const ordered = grownSpans(plan, scale, "Helium-3 Harvest");
-  const begun = yardDone(plan, scale, from, "Helium-3 Harvest");
-  const harvest: [number, number | null][] = ordered.length ? ordered : begun === null ? [] : [[begun, null]];
-  const strikes = plan.strikes ?? [];
-  const sent = strikes.find((o) => o.name === star);
-  // Its place among our bullets: the helium-3 goes to each in the order ordered, and one not yet sent comes last.
-  const order = sent ? strikes.map((o) => (o === sent ? { ...o, d: o.d ?? ly } : o)) : [...strikes, { y: from, d: ly }];
-  const beam = inOrder(plan, "Ship Beam") ? yardDone(plan, scale, from, "Ship Beam") : null;
-  const wide = inOrder(plan, "Wide Beam") ? yardDone(plan, scale, from, "Wide Beam") : null;
-  const { fired: leaves, pushed } = firing(plan, order, yard, beam, wide, harvest)[sent ? strikes.indexOf(sent) : order.length - 1];
-  const lands = leaves === null ? null : leaves + bulletYears(ly, pushed);
-  return { name: "A bullet", n: sent ? 1 : null, build: "Strike Yard", craft: "A bullet", speed: bulletBeta(ly, pushed), done: yard, leaves, arrives: lands, home: lands, push: pushed === "wide" ? "Wide Beam" : pushed ? "Ship Beam" : null };
-}
 
 /** Our Mind on the Seed Ship to a black hole `ly` away, to stay: it leaves once the Seed Ship, its Fusion Drive and the
  *  Deuterium Works are done, flies at a tenth of light speed with calcs/seed.py's burn and braking, and stands alone
@@ -683,12 +585,6 @@ export function kitOf(plan: Plan, scale: number) {
     // while armed: plan.ts's isOn. 2026-11-11.
     interceptor: done["Interceptor"] ?? null,
     quiet: done["Quiet Radars"] ?? null,
-    // Each bullet fired, with the Year it lands: nothing comes home from one, so the simulation works out what our
-    // telescopes and sentinels saw of it. An order from before 2026-11-12 carries no distance, and is left out.
-    strikes: strikesOf(plan, scale).flatMap((x, i) => {
-      const d = plan.strikes![i].d;
-      return x.fired !== null && d ? [{ star: x.star, fired: x.fired, lands: x.fired + bulletYears(d, x.pushed), d, thrown: !!x.pushed }] : [];
-    }),
   };
 }
 

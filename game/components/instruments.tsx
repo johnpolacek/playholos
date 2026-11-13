@@ -10,7 +10,7 @@ import { grownSpans } from "@/lib/game/halo";
 import { iceBetween, iceFirsts, iceRange, stormFirsts, stormsHeard } from "@/lib/game/natural";
 import { SWARM } from "@/lib/sim/conflict";
 import { type Reading, starName } from "@/lib/game/leads";
-import { buildOf, buildSlug, computeAt, fifthsOf, isOn, wreckAt, LAUNCH_LIFT, ordered, PAST, SWITCHED } from "@/lib/game/plan";
+import { buildOf, buildSlug, computeAt, fifthsOf, isOn, LAUNCH_LIFT, ordered, PAST, SWITCHED } from "@/lib/game/plan";
 import type { Heard, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
 import { CO_ORBITALS, MOON_SEARCH_YEARS, type MindsSeen, moonSearchEnds, TOUR_EACH, TOUR_FLIGHT, TOUR_MAP, tourEnds } from "@/lib/sim/minds";
@@ -202,11 +202,10 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
     const of = share >= 0.999 ? "all the Sun’s light" : share >= 1e-3 ? `${Math.round(share * 1000) / 10}% of the Sun’s light` : w < 1e15 ? `about ${(w / 1e12).toFixed(1)} TW of sunlight` : `about ${(w / 10 ** e).toFixed(1)}×10${[...String(e)].map((d) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(d)]).join("")} W of sunlight`;
     return { line: `Catching ${of}. ${share >= 0.999 ? "It can grow no more." : growing ? "It doubles every 2 Years." : "We hold it at its size."}`, news: false };
   }
-  if (name === "Helium-3 Harvest") return { line: "Gathering helium-3 from Uranus’s air, faster each time its craft double.", news: false };
   if (name === "Mercury Works") return { line: "Its seed copies itself from Mercury’s rock.", news: false };
   if (name === "Star Beam") return { line: "Ready. Each lens we send rides it to the Sun’s focus in about ten weeks.", news: false };
   if (name === "Antimatter Works") return { line: "Making antimatter on a hundredth of the swarm’s power, twice as much each time it doubles.", news: false };
-  if (name === "Wide Beam") return { line: `Ready. It throws each rod and flyby probe that leaves, a rod at ${CATALOG.speeds.wide.rod.beam.toFixed(2)} of light speed.`, news: false };
+  if (name === "Wide Beam") return { line: `Ready. It throws each flyby probe that leaves, at ${CATALOG.speeds.wide.probe.beam.toFixed(2)} of light speed.`, news: false };
   if (name === "Ship Beam") return { line: `Ready. Each seed ship we send rides it, a tenth of light speed in ${CATALOG.beams.shipDays} days and as fast as it can stop from.`, news: false };
   if (name === "Thought Fields")
     return { line: `Our compute is ${timesText(k.grown)} what it was at Year 0. No more campuses fit the grid.`, news: false };
@@ -286,7 +285,7 @@ export function Working() {
       <ul className="mt-2 flex flex-col gap-2">
         {[...working].sort((a, b) => done[b]! - done[a]!).map((n) => (
           // One the Will has stood down says so, in place of what it would be doing. 2026-11-11.
-          <Card key={n} name={n} since={done[n]!} {...(wreckAt(plan, n, now) ? { line: `Wrecked at Year ${yearText(wreckAt(plan, n, now)!.at)} by an old mind, for the bullet we threw at it. It stands again at Year ${yearText(wreckAt(plan, n, now)!.until)}.`, news: false } : SWITCHED[n] && !isOn(plan, n, now) ? { line: SWITCHED[n].whenOff, news: false } : doing(n, known, done[n]!))} />
+          <Card key={n} name={n} since={done[n]!} {...(SWITCHED[n] && !isOn(plan, n, now) ? { line: SWITCHED[n].whenOff, news: false } : doing(n, known, done[n]!))} />
         ))}
       </ul>
     </>

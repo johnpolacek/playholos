@@ -59,10 +59,6 @@ interface Catalog {
   beams: { array: number; beam: number; look: number; ship: number; shipDays: number };
   swarm: { watts: number; doubling: number; excess: number; perLy2: number; kelvin: number; spread: number };
   hyper: { kmPerLy: number; reach: number; slew: number; cities: number };
-  /** A bullet of ours where it lands, calcs/strikes.py: the share of its energy that leaves as light and for how many
-   *  seconds, the sunlight Earth reflects in W, a megaton in J, a bullet's megatons, the Years its world's ozone stays
-   *  under half, Earth's width in km, and the minutes of a Hypertelescope's picture. 2026-11-12. */
-  strike: { share: number; seconds: number; earthW: number; mtJ: number; mt: number; ozone: [number, number]; earthKm: number; hyperMin: number; sunW: number; panelW: number; earthFace: number; panelTakes: number; endMt: number };
   /** Calcs/speeds.py: each craft's speed with no other source, as a share of light speed. 2026-11-11. */
   speeds: {
     bullet: number; sail: number;
@@ -86,8 +82,9 @@ interface Catalog {
     /** A flyby probe the Ship Beam throws: its tonnes and its front in m², the beam's most for it as a share of light
      *  speed, the days of its push, and the Years that push costs over cruising. */
     probe: { tonnes: number; front: number; beam: number; days: number; lost: number };
-    /** A rod the Ship Beam throws in place of a bullet: its tonnes, for a bullet's harm at the most its sail's mirror
-     *  reflects, that speed, the days of its push, the Years the push costs, and the Years to ready one. */
+    /** A rod a beam throws with a bullet's harm, the measure another mind readies its own by: its tonnes at the most
+     *  the Ship Beam's mirror reflects, that speed, the days of its push, the Years the push costs, and the Years to
+     *  ready one. Ours went 2026-11-13. */
     rod: { tonnes: number; beam: number; days: number; lost: number; ready: number };
     /** Who sees a launch beam: how fast a star crosses our sky, in km/s, the middle speed of the stars near us, and
      *  Proxima's own, and how far an awake old mind's works reach
@@ -95,9 +92,9 @@ interface Catalog {
     seen: { kms: number; worksAU: number; proxima: number };
     /** The Wide Beam, the Ship Beam in stepped colors from a patch ten times as wide: its colors in microns, the most
      *  its sail's mirror reflects as a share of light speed, its sail in tonnes, how far its last color holds its
-     *  spot in ly, and what it throws: a flyby probe and a seed ship at the most its work gives, and a rod as another mind's, with
+     *  spot in ly, and what it throws: a flyby probe and a seed ship at the most its work gives, with
      *  the days and the Years its push costs near us. 2026-11-12. */
-    wide: { colors: number[]; most: number; sail: number; reach: number; probe: { beam: number; days: number; lost: number }; ship: { beam: number; days: number; lost: number; curve: number[][] }; rod: { beam: number; days: number; lost: number } };
+    wide: { colors: number[]; most: number; sail: number; reach: number; probe: { beam: number; days: number; lost: number }; ship: { beam: number; days: number; lost: number; curve: number[][] } };
   };
   /** Calcs/senses.py: our Far-Side Array hearing worlds' magnetic fields. The shares of worlds with one, among those
    *  that kept their air and those that did not, how far it hears, how bright a world's radio is (Proxima b's `flux0`

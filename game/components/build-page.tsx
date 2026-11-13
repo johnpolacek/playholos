@@ -29,12 +29,10 @@ import {
   takes,
   PAST,
 } from "@/lib/game/plan";
-import { isOn, SWITCHED, switchedAt, switchTo, wreckAt } from "@/lib/game/plan";
-import { properGlows } from "@/lib/game/glow-names";
+import { isOn, SWITCHED, switchedAt, switchTo } from "@/lib/game/plan";
 import { GROWS, grownDone, grownSpans } from "@/lib/game/halo";
 import { WATCHED } from "@/lib/sim/minds";
 import { SWARM } from "@/lib/sim/conflict";
-import { HE3, he3By } from "@/lib/sim/meetings";
 import { CATALOG } from "@/lib/sim/works";
 import { SITES } from "@/lib/game/sites";
 import { FOUND, harm, rockAt, rockOf } from "@/lib/game/rocks";
@@ -98,14 +96,11 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
       const grew = grownSpans(plan, scale, name, at).reduce((y, [a, b]) => y + Math.max(0, Math.min(b ?? now, now) - a), 0);
       const growing = back === null;
       const swarm = name === "Solar Swarm";
-      const harvest = name === "Helium-3 Harvest";
-      const every = swarm ? SWARM.doubling : harvest ? HE3.doubling : 10;
+      const every = swarm ? SWARM.doubling : 10;
       // Past all the Sun it doubles no more: the Solar Swarm stops at 55 doublings.
       const n = Math.min(Math.floor(grew / every), swarm ? Math.ceil(CATALOG.works["Solar swarm"].full ?? Infinity) : Infinity);
       const full = swarm && SWARM.watts * 2 ** n >= SWARM.most;
-      const sheds = harvest
-        ? `gathers about ${(HE3.perYear * 2 ** n).toLocaleString("en-US", { maximumFractionDigits: 1 })} kt of helium-3 a Year, ${Math.round(he3By(grownSpans(plan, scale, name, at), now)).toLocaleString("en-US")} kt so far`
-        : swarm ? `catches about ${watts(Math.min(SWARM.most, SWARM.watts * 2 ** n))} of sunlight, near 500 K` : `sheds about ${watts(1.2e12 * 2 ** (grew / 10))} at 77 K`;
+      const sheds = swarm ? `catches about ${watts(Math.min(SWARM.most, SWARM.watts * 2 ** n))} of sunlight, near 500 K` : `sheds about ${watts(1.2e12 * 2 ** (grew / 10))} at 77 K`;
       return (
         <div className="flex flex-col">
           <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
@@ -176,7 +171,7 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
 
 /** Builds whose craft we send later, each to the star we pick on Reach. A blind first-timer queued the Solar Lens,
  *  waited for it to ask which star, and had to ask the Mind. Playtest 2026-11-08. */
-const SENT_FROM_REACH = new Set(["Solar Lens", "Laser Sail Array", "Probe Yard", "Seed Ship", "Strike Yard", "Mind Link"]);
+const SENT_FROM_REACH = new Set(["Solar Lens", "Laser Sail Array", "Probe Yard", "Seed Ship", "Mind Link"]);
 
 /** A build's place in our order, and before Begin, the button that adds it or takes it out. When it is added or taken
  *  out, its new place rises in. */
@@ -479,8 +474,6 @@ export function BuildPage({ slug }: { slug: string }) {
   const build = [...BUILDS, ...LATER].find((b) => buildSlug(b.name) === slug);
   const later = LATER.find((b) => b.name === build?.name);
   const name = build?.name ?? null;
-  // An old mind wrecked it, and we are building it again: lib/game/plan.ts's wreckAt. 2026-11-12.
-  const wreck = year === null || !name ? undefined : wreckAt(plan, name === "Wide Beam" ? "Ship Beam" : name, year);
 
   // The map: our builds with places, and this one where it would stand.
   const placed = useMemo(() => placedOf(plan, done, scale), [plan, done, scale]);
@@ -541,16 +534,7 @@ export function BuildPage({ slug }: { slug: string }) {
       <div data-m>
         {later ? <Waits build={later} scale={scale} done={done} /> : <Queueing name={build.name} scale={scale} done={done} />}
       </div>
-      {/* Wrecked by an old mind for a bullet we threw at it, and being built again. The Wide Beam is a wider patch of
-          the same swarm, so it lies with the Ship Beam. 2026-11-12. */}
-      {wreck && (
-        <p data-m className="mt-3 rounded-lg border border-other/60 bg-other/[.06] px-3 py-2 text-[13.5px] leading-snug">
-          Wrecked at Year {yearText(wreck.at)}, by grams thrown at most of light speed from {properGlows(wreck.by)}’s star, for the bullet we threw there. We are building it again: it stands at Year{" "}
-          {yearText(wreck.until)}. Until then {build.name === "Strike Yard" ? "no bullet is readied" : "nothing rides it"}. Earth was not touched.
-        </p>
-      )}
-      {/* Wrecked, the Will's switch can light nothing, so it waits until the build stands again. */}
-      {SWITCHED[build.name] && !wreck && (
+      {SWITCHED[build.name] && (
         <div data-m>
           <Switch name={build.name} />
         </div>

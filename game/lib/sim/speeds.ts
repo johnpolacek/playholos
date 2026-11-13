@@ -15,7 +15,8 @@ const { gas: GAS, sailing: SAIL, wear: WEAR, craft: CRAFT } = SPEEDS;
 
 /** Sails of a few grams, pushed by our Laser Sail Array: a fifth of light speed, Starshot's. */
 export const SAIL_C = SPEEDS.sail;
-/** Our bullets, as a share of light speed: thrown by fusion, which holds them to a tenth. */
+/** A bullet's speed, as a share of light speed: 1,000 t on a Fusion Drive, held to a tenth. Ours went 2026-11-13. It
+ *  stays as the measure of a bullet's harm, lib/sim/conflict.ts's bulletMt, which the watcher's maker strikes with. */
 export const BULLET_C = SPEEDS.bullet;
 
 /** The ions a craft brakes on at a star, a cm³: a warm cloud's at the few stars known to sit in one, by the winds they
@@ -171,28 +172,6 @@ export const shipYears = (ly: number, pushed: Push = false, star?: string, drive
  *  push costs a fraction of a Year, and a Fusion Drive's burn 10. */
 export const pushedBy = (start?: number): Push =>
   start === undefined ? false : Math.abs(start - SPEEDS.wide.ship.lost) < 1e-9 ? "wide" : start < catalog.seedShip.burn;
-/** How fast a bullet of ours flies `ly`, as a share of light speed. On its Fusion Drive, a tenth. `pushed`: our Ship
- *  Beam threw it, as a rod of about 30 t with no engine, at the most its sail's mirror reflects, half of light speed,
- *  with a bullet's harm. Dust binds it only on a very long road. calcs/speeds.py's rod_beta. 2026-11-12. */
-export const bulletBeta = (ly: number, pushed: Push = false) =>
-  pushed ? Math.min(pushed === "wide" ? SPEEDS.wide.most : SPEEDS.rod.beam, shieldBeta(ly, SPEEDS.thrown.tonnes, SPEEDS.thrown.front)) : BULLET_C;
-/** Years for a bullet of ours to land `ly` away. It never brakes. */
-export function bulletYears(ly: number, pushed: Push = false) {
-  if (!pushed) return ly / BULLET_C;
-  if (!(ly > 0)) return 0;
-  const beta = bulletBeta(ly, pushed), by = pushed === "wide" ? SPEEDS.wide.rod : SPEEDS.rod;
-  return ly / beta + (by.lost * beta) / by.beam;
-}
-/** What a rod of ours weighs, in tonnes, for a bullet's harm at its speed. The Ship Beam's is one mass, about 30 t at
- *  its mirror's most. The Wide Beam's is bound by its shield, as another mind's, so it is that rod: about 4 t near us,
- *  heavier the farther dust slows it. calcs/speeds.py's wide_rod_tonnes. */
-export function rodTonnes(ly: number, pushed: Push = true) {
-  if (pushed !== "wide") return SPEEDS.rod.tonnes;
-  const energy = (beta: number) => 1 / Math.sqrt(1 - beta * beta) - 1;
-  return (SPEEDS.rod.tonnes * energy(SPEEDS.rod.beam)) / energy(bulletBeta(ly, "wide"));
-}
-/** Years the Strike Yard takes to ready a rod: by its mass, a bullet's 20 Years by its share of a bullet's. */
-export const rodReady = (ly: number, pushed: Push = true) => (pushed === "wide" ? (SPEEDS.rod.ready * rodTonnes(ly, pushed)) / SPEEDS.rod.tonnes : SPEEDS.rod.ready);
 /** How fast another mind throws what it sends `ly`, as a share of light speed. It never stops, and a mind with works
  *  hundreds of AU wide has push to spare, so only its shield binds it: a slender rod flies near nine tenths of light
  *  speed close by, and slower the farther dust wears it. calcs/speeds.py's thrown_beta. */

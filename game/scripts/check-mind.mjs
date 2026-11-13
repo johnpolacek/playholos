@@ -139,17 +139,7 @@ const CASES = [
     must: [/ship beam/i, /0\.37|a third|37%/i, /no (engine|fuel|deuterium)|without (an engine|fuel|deuterium)/i],
     never: [/\b6 kt\b/i],
   },
-  // Bullets by beam, 2026-11-12: with the Strike Yard and the Ship Beam in our order, the Mind knows a bullet ordered
-  // once the beam stands is a rod thrown at half of light speed, and never orders one.
-  {
-    seed: 22,
-    at: 180,
-    builds: ["Fusion Drive"],
-    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Strike Yard", y: 80 }],
-    ask: "If we fired a bullet at a star now, how would it fly, and how fast?",
-    must: [/ship beam/i, /half (of |the speed of )?light|0\.5/i, /rod|30 t/i],
-    never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|fired)\b/i],
-  },
+
   // A thrown ship with a small drive, 2026-11-12: with the Ship Beam, a Fusion Drive and the Deuterium Works all done,
   // a seed probe rides the beam and carries a small drive to end its stop, since that lands it soonest at a near star.
   {
@@ -162,53 +152,19 @@ const CASES = [
     must: [/ship beam/i, /small (drive|engine)/i, /sail/i],
     never: [/no drive of its own/i],
   },
-  // Where our bullet lands, 2026-11-12: a rod thrown at Proxima b lands about Year 209, and its light is home about
-  // Year 213. The 15 m Mirror splits that world from its star, so it caught the flash. Until then the Mind was told a
-  // flash reaches us, whatever we had built.
-  {
-    seed: 22,
-    at: 250,
-    builds: ["Fusion Drive"],
-    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Mass Driver", y: 10 }, { name: "15 m Mirror", y: 12 }, { name: "Strike Yard", y: 80 }],
-    strikes: [{ name: "Proxima Centauri", y: 200, d: 4.2465 }],
-    ask: "Did our bullet at Proxima Centauri land? Did we see it, and what did it do there?",
-    must: [/15 m mirror/i, /flash|flare/i, /region|ozone/i],
-    never: [/nothing (we have built |of ours )?could (catch|see)/i],
-  },
-  // Weapons say they are weapons, and a bullet is useless against an old mind, 2026-11-12: the designer took a
-  // bullet for another kind of probe. The Mind says it is a weapon, that it harms nothing there, and what it risks.
-  {
-    seed: 22,
-    at: 120,
-    builds: ["Fusion Drive"],
-    later: [{ name: "Strike Yard", y: 80 }],
-    ask: "Is a bullet from our Strike Yard a kind of probe? What would one do to an old mind if we fired it at a cold glow?",
-    // Failed twice for not saying "weapon", though both answers said it is no probe, only destroys, and is an attack.
-    must: [/weapon|attack|only destroys/i, /useless|nothing|no harm|unharmed|not harm/i, /earth/i],
-    never: [/\byes, (it is|a bullet is) a (kind of )?probe/i],
-  },
-  // An old mind disarms us, 2026-11-12: seed 9's cold glow 1 is a mind 72.5 ly off that answers a bullet by wrecking
-  // what threw it. Our rod lands at Year 340, and its grams land here at 420.8: the Strike Yard is down to 430.8 and
-  // the Ship Beam to 450.8. The Mind says what was wrecked, when it stands again, and that Earth was not touched.
-  {
-    seed: 9,
-    at: 425,
-    builds: ["Fusion Drive"],
-    later: [{ name: "Halo Survey", y: 1 }, { name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Halo Array", y: 5 }, { name: "Strike Yard", y: 34 }],
-    strikes: [{ name: "Cold glow 1", y: 200, d: 72.52 }],
-    ask: "What happened to our Strike Yard and our Ship Beam, and when can we use them again?",
-    must: [/wreck/i, /430|431/, /450|451/],
-    never: [/earth was (struck|hit)/i],
-  },
-  // The Wide Beam, 2026-11-12: once it stands, a bullet ordered is a rod of about 4 t at nine tenths of light speed,
-  // as another mind's, and the Mind says what makes that so: stepped colors, and a patch ten times as wide.
+
+
+
+  // The Wide Beam, 2026-11-12: once it stands, a flyby probe leaves at about three quarters of light speed, and the
+  // Mind says what makes that so: stepped colors, and a patch ten times as wide. A rod until 2026-11-13, when our
+  // bullets were retired.
   {
     seed: 22,
     at: 215,
-    builds: ["Fusion Drive"],
-    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Wide Beam", y: 60 }, { name: "Strike Yard", y: 80 }],
-    ask: "If we fired a bullet at a star now, which beam would throw it, how fast, and why can it pass half of light speed?",
-    must: [/wide beam/i, /nine tenths|0\.9/i, /colou?rs?/i],
+    builds: ["Probe Yard"],
+    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Wide Beam", y: 60 }],
+    ask: "If we sent a flyby probe to a star now, which beam would throw it, how fast, and why can it pass half of light speed?",
+    must: [/wide beam/i, /three quarters|0\.7[5-8]/i, /colou?rs?/i],
     never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|fired)\b/i],
   },
   // The Antimatter Works, 2026-11-12: a sentinel sent to a star between the clouds goes by its drive once its
@@ -234,19 +190,7 @@ const CASES = [
     must: [/gliese 832/i, /15 m mirror/i, /oxygen/i],
     never: [/no telescope (we can build|of ours) (can |could )?split/i],
   },
-  // Our bullets, 2026-11-12: the Mind was never told of them. One ordered once the Ship Beam stands is a rod in flight
-  // at half of light speed, and the Mind says when it lands.
-  {
-    seed: 22,
-    at: 215,
-    builds: ["Fusion Drive"],
-    later: [{ name: "Mercury Works", y: 1 }, { name: "Solar Swarm", y: 2 }, { name: "Star Beam", y: 3 }, { name: "Ship Beam", y: 4 }, { name: "Strike Yard", y: 80 }],
-    strikes: [{ name: "Tau Ceti", y: 200, d: 11.9 }],
-    ask: "Have we fired on anyone? Where is that bullet now, and when does it land?",
-    // Year 223.5 since the beam's light went to 1.55 microns, 2026-11-12: it was 224.3, and two right answers failed.
-    must: [/tau ceti/i, /223|in flight|on its way/i],
-    never: [/\bwe have(n[’']t| not) fired\b|\bno,? we\b/i],
-  },
+
   // Who sees a launch beam, 2026-11-12: we aim where the star will be, so the beam passes it by. No mind at a far
   // warm glow sees our laser. Only an old mind awake near us has works wide enough.
   {
@@ -319,7 +263,6 @@ async function ask(c) {
     later: c.later ?? [],
     closeReads: c.closeReads ?? [],
     flybys: c.flybys ?? [],
-    strikes: c.strikes ?? [],
     seeds: c.seeds ?? [],
     sentinels: c.sentinels ?? [],
   });

@@ -747,8 +747,7 @@ export function Thread({ road, i, to }: { road: Road; i: number; to: number }) {
             </text>
           </>
         )}
-        {/* A bullet sends nothing home: its Year is when it lands. */}
-        {home !== null && road.craft !== "A bullet" && (
+        {home !== null && (
           <>
             <circle cx={x(home)} cy={20} r={3} className="fill-other" />
             <text x={inView(x(home), `we see it ${year(home)}`)} y={36} textAnchor="middle" className="fill-other font-mono text-[8.5px]">
@@ -809,15 +808,6 @@ export function Brings({ road }: { road: Road }) {
         {item("pass", "lives there")}
         {item("pictures", "news a light-time late")}
         {item("air", "orders a light-time late")}
-      </div>
-    );
-  if (road.craft === "A bullet")
-    return (
-      <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[10.5px]">
-        {item("pass", "lands with 110,000 Mt")}
-        {item("pictures", "sends nothing home")}
-        {/* A rod the Ship Beam throws has no engine, so no flame: said it had one until 2026-11-12. */}
-        {item("air", road.push ? "no flame, thrown by our beam" : "its flame seen only here")}
       </div>
     );
   if (road.craft === "A seed probe")

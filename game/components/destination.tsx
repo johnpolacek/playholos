@@ -17,7 +17,7 @@ import { isHole, starName, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
 import { span, lyOf, yearText } from "@/lib/game/clock";
-import { buildSlug, isOn, wreckAt, moves, recall } from "@/lib/game/plan";
+import { buildSlug, isOn, moves, recall } from "@/lib/game/plan";
 import {
   colonyRoad,
   lensKm,
@@ -32,13 +32,12 @@ import {
   sentinelNeeds,
   sentinelReady,
   sentinelRoad,
-  strikeRoad,
   shipNeeds,
   shipReady,
   toward,
   willRoad,
 } from "@/lib/game/reach";
-import { beamMiss, beamSeen, finishWeight, rodReady, rodTonnes, SAIL_REACH, sailArrives, worksAU } from "@/lib/sim/speeds";
+import { beamMiss, beamSeen, finishWeight, SAIL_REACH, sailArrives, worksAU } from "@/lib/sim/speeds";
 import { CATALOG } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -102,8 +101,6 @@ function Need({ name, queued, done }: { name: string; queued: boolean; done: boo
 const amLine = (r: Road) =>
   r.antimatter ? ` It goes by the Antimatter Works’ drive at ${r.speed.toFixed(2)} of light speed, about 31 Years up to speed and 31 to stop, and stops by its rocket. Its stop is a flame pointed at this star, so anyone awake here sees it come.` : "";
 const WHAT: Record<string, string> = {
-  strike:
-    "A weapon, not a probe: it looks at nothing and only destroys. 1,000 t at a tenth of light speed, readied in 20 Years, and fired once the Helium-3 Harvest gathers its 37 kt, after any bullet before it: about 12 Years for the first, less as the harvest grows. It lands with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. Its launch flame shows only here, to a probe of theirs watching us.",
   "Laser Sail Array": "Sails weighing a few grams, pushed by a beam from Earth, fly past at a fifth of light speed.",
   "Probe Yard": "A probe built in orbit and fueled with 6 kt of deuterium from the Deuterium Works. Building one takes 12 Years once its yard and a Fusion Drive are done. It burns 20 Years to a tenth of light speed and flies past.",
   mind:
@@ -165,7 +162,7 @@ function Sent(props: {
           name={
             <>
               <b className="font-semibold">{name}</b>
-              {/* The kind of the build behind this craft, as a word: a bullet reads Attack. 2026-11-12. */}
+              {/* The kind of the build behind this craft, as a word. 2026-11-12. */}
               <KindTag name={needs[0]} className="ml-2 align-[2px]" />
             </>
           }
@@ -258,10 +255,7 @@ export function DestinationPage({ slug }: { slug: string }) {
   const from = before ? 0 : Math.floor((orderAt ?? clock) * 10) / 10;
   // The Ship Beam, in our order and kept dark by the Will: plan.ts's SWITCHED. 2026-11-11.
   const dark = (plan.builds.includes("Ship Beam") || (plan.later ?? []).some((o) => o.name === "Ship Beam")) && !isOn(plan, "Ship Beam", from);
-  // Or wrecked by an old mind for a bullet we threw at it, until we have built it again. 2026-11-12.
-  const wrecked = wreckAt(plan, "Ship Beam", from);
-  const yardWrecked = wreckAt(plan, "Strike Yard", from);
-  const darkLine = wrecked ? ` Our Ship Beam lies wrecked until Year ${yearText(wrecked.until)}, so it won’t push before then.` : dark ? " We keep the Ship Beam dark, so it won’t push." : "";
+  const darkLine = dark ? " We keep the Ship Beam dark, so it won’t push." : "";
   const ly = lead?.ly ?? 0;
   const nearest = lead?.star === NEAREST.name;
   const ways = useMemo(() => roads(plan, scale, from).map((r) => toward(r, ly, nearest ? undefined : from)), [plan, scale, from, ly, nearest]);
@@ -295,7 +289,6 @@ export function DestinationPage({ slug }: { slug: string }) {
     [felt, lead, plan, scale, from],
   );
   // What a mind can do to us, we can do here: fire on this star. 2026-10-28. Screens retired 2026-10-31.
-  const bullet = useMemo(() => (lead ? strikeRoad(plan, scale, from, lead.star, lead.ly) : null), [lead, plan, scale, from]);
   // Our Mind can go to a black hole, a furnace to feed or a shadow to hide in, 2026-10-26, or settle where a seed probe
   // could, on a star's light and rock, 2026-10-27.
   const hole = !!lead && isHole(lead.art);
@@ -333,8 +326,6 @@ export function DestinationPage({ slug }: { slug: string }) {
     will: { road: will && { ...will, home: will.arrives }, craft: null },
     sentinel: { road: stay, craft: "sentinel" },
     seed: { road: seed, craft: null },
-    // A bullet sends nothing home: its road ends as it lands.
-    bullet: { road: bullet, craft: null },
   };
   const playing = previewing ? plays[previewing] : null;
   useTripLoop(playing?.road ?? null, undefined, playing?.craft ? CRAFT_SHOT_SECS - 1 : 0);
@@ -630,46 +621,6 @@ export function DestinationPage({ slug }: { slug: string }) {
             what="Seed probe"
             {...way("seed")}
             recall={() => change((p) => recall(p, "seed", lead.star))}
-          />
-        )}
-        {bullet && (
-          <Sent
-            road={bullet}
-            i={ways.length + 6}
-            to={to}
-            name="A weapon: a bullet, fired here"
-            line={
-              // What it would strike, and what we would see of it: a bullet needs a world whose path we know, and
-              // nothing comes home from one. lib/sim/strikes.ts, 2026-11-12.
-              (bullet.push
-                ? `${
-                    bullet.push === "Wide Beam"
-                      ? `A weapon, not a probe: it looks at nothing and only destroys. A rod of ${rodTonnes(ly, "wide").toFixed(1)} t with no engine, readied in about ${Math.round(rodReady(ly, "wide") * 365.25)} days. The Wide Beam throws it, stepping through four colors: ${CATALOG.speeds.wide.rod.days}`
-                      : `A weapon, not a probe: it looks at nothing and only destroys. A rod of ${Math.round(CATALOG.speeds.rod.tonnes)} t with no engine, readied in about ${Math.round(CATALOG.speeds.rod.ready * 12)} months. The Ship Beam throws it: ${CATALOG.speeds.rod.days}`
-                  } days of push to ${bullet.speed.toFixed(2)} of light speed, with no helium-3. It lands as hard as a bullet, with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled.${beamLine(ly, bullet.speed, lead?.lum, lead?.kms)}`
-                : WHAT.strike) +
-              (settles
-                ? " Nothing comes home from a bullet. Its flash would about double this world’s light for three minutes: only a telescope that splits the world from its star sees that, or a sentinel of ours here."
-                : lead?.slug.startsWith("cold-glow-")
-                  ? " Against an old mind it is useless. With no picture of what glows here it can be aimed only at the star, which would not notice. With one, at a panel, which it passes through. If a mind keeps this star it is not harmed, and knows who threw it. Most would do nothing. One might take our weapon from us, strike us in kind, or end Earth as our home."
-                  : " We know no world here to aim it at, so it would strike nothing we know of and fly on.") +
-              // An old mind wrecked what readies or throws it: it waits until each stands again. 2026-11-12.
-              ((down) => (down.length ? ` ${down.join(", and ")}, so it waits.` : ""))(
-                [
-                  yardWrecked && `Our Strike Yard lies wrecked until Year ${yearText(yardWrecked.until)}`,
-                  wrecked && bullet.push && (yardWrecked ? `our Ship Beam until Year ${yearText(wrecked.until)}` : `Our Ship Beam lies wrecked until Year ${yearText(wrecked.until)}`),
-                ].filter(Boolean),
-              )
-            }
-            needs={bullet.push ? ["Strike Yard", bullet.push] : ["Strike Yard", "Helium-3 Harvest"]}
-            have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
-            // Ordered only in play, once the Strike Yard is in our order. One a star, and never taken back.
-            can={!before && inOrder("Strike Yard")}
-            send={() => {}}
-            what="Bullet"
-            {...way("bullet")}
-            sentAs={bullet.leaves !== null && (clock ?? 0) >= bullet.leaves ? "Fired" : "Readying"}
-            choices={[{ label: "Fire Here", send: () => change((p) => ({ ...p, strikes: [...(p.strikes ?? []), { name: lead!.star, y: from, d: lead!.ly }] })) }]}
           />
         )}
         <li data-m className="pl-7">

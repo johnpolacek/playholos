@@ -2,8 +2,6 @@ import { ChanceTag, chanceShift, isGlow } from "@/components/chances";
 import { chancesOf } from "@/lib/game/chance";
 import { Link } from "react-router";
 import { useSchedule } from "@/components/picks";
-import { strikesOf } from "@/lib/game/reach";
-import { bulletYears } from "@/lib/sim/speeds";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
@@ -89,20 +87,12 @@ export function LeadsMap({
       once: !m.repeat,
     })));
   }, [save?.sent, sent, calls]);
-  const tenth = year === null ? null : Math.floor(year * 10) / 10;
-  // A strike's flash, as a ring of its light spreading: one on Earth from Sol as it lands, and ours from its star once
-  // that light has reached us. 2026-10-28.
-  const { hits, scale } = useSchedule();
-  const plan = save?.plan;
+  // A strike's flash on Earth, as a ring of its light spreading from Sol as it lands. 2026-10-28. Ours at their stars
+  // went with our bullets, 2026-11-13.
+  const { hits } = useSchedule();
   useEffect(() => {
-    const onUs = hits.map((h) => ({ name: "Earth", ra: 0, dec: 0, ly: 0, sent: YEAR_0 + h.lands, flash: true }));
-    const ours = (plan ? strikesOf(plan, scale) : []).flatMap((s) => {
-      const t = target(s.star);
-      const lands = s.fired === null || !t ? null : s.fired + bulletYears(t.d, s.pushed);
-      return lands !== null && tenth !== null && lands + t!.d <= tenth ? [{ name: t!.name, ra: t!.ra, dec: t!.dec, ly: t!.d, sent: YEAR_0 + lands, flash: true }] : [];
-    });
-    theirs.splice(0, theirs.length, ...onUs, ...ours);
-  }, [tenth, theirs, hits, plan, scale]);
+    theirs.splice(0, theirs.length, ...hits.map((h) => ({ name: "Earth", ra: 0, dec: 0, ly: 0, sent: YEAR_0 + h.lands, flash: true })));
+  }, [theirs, hits]);
   const named = [...new Set(sent.map((m) => m.name))].filter((n) => !ids.includes(n));
   // Where the pointer is over the map, so the lead under it is named, even one stepped back. A settled map showed dots
   // with no names and no way to learn them. Playtest 2026-11-03.
@@ -198,7 +188,7 @@ export function LeadsMap({
           className="pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap text-other opacity-0"
         >
           {c.flash
-            ? `${c.name === "Earth" ? "the strike on Earth" : `our strike on ${c.name}`}, its flash · ${Math.max(0, YEAR_0 + (year ?? 0) - c.sent).toFixed(1)} ly out`
+            ? `the strike on Earth, its flash · ${Math.max(0, YEAR_0 + (year ?? 0) - c.sent).toFixed(1)} ly out`
             : `${c.name}’s call · ${Math.max(0, YEAR_0 + (year ?? 0) - c.sent).toFixed(1)} ly`}
         </span>
       ))}

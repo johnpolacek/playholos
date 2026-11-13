@@ -24,7 +24,6 @@ export function hitsAt(
   done: Record<string, number | null>,
   year: number,
   // The ladder's strike, once it has landed, as the server's view tells it: only the world knows who fires. 2026-10-30.
-  // And each an old mind throws back for a bullet of ours. 2026-11-12.
   struck: readonly { lands: number; mt: number }[] = [],
 ): Hit[] {
   const out: Hit[] = [];

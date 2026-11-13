@@ -1,6 +1,6 @@
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
-import { setWrecks, useGame } from "@/components/game-provider";
+import { useGame } from "@/components/game-provider";
 import { openReadings, useOpenReadings } from "@/components/close-reading";
 import { Heard } from "@/components/heard";
 import { Path } from "@/components/path";
@@ -142,7 +142,6 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   // What our Far-Side Array found and heard. 2026-11-11.
   const fields = view?.fields;
   const proximaField = view?.proximaField;
-  const strikes = view?.strikes;
   const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0, close: 0, calm: 0 }));
   // Keyed by the stars felt, so a reading landing never rebuilds the leads the map lights.
   // Black holes found join them, after the worlds, 2026-10-26.
@@ -153,13 +152,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const watchedYear = watchedAt(minds?.watcher);
   useEffect(() => setWatched(watchedYear), [watchedYear]);
   // And the maker's bullet, once it has landed, cuts our thought from then. 2026-10-30.
-  // And each strike an old mind threw back for a bullet of ours. 2026-11-12.
-  const maker = minds?.watcher?.struck, back = view?.reprisals;
-  const struck = useMemo(() => [...(maker ? [maker] : []), ...(back ?? []).filter((r) => r.mt > 0)], [maker, back]);
+  const maker = minds?.watcher?.struck;
+  const struck = useMemo(() => (maker ? [maker] : []), [maker]);
   useEffect(() => setStruck(struck), [struck]);
-  // And each build of ours an old mind wrecked, for the plan every screen reads. 2026-11-12.
-  const wrecks = view?.wrecks;
-  useEffect(() => setWrecks(wrecks), [wrecks]);
   // And stars our seed probes reached with no lead of their own, 2026-10-26.
   const seeds = useMemo(() => visits.filter((v) => v.by === "seed" && !v.sent), [visits]);
   // Holes our craft went to keep their leads, beside the nearest.
@@ -226,7 +221,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(() => {
     // What each lead has had read of it, as the Mind judges from too. Our knocks on the watcher, for its readings.
     const knocks = (save?.sent ?? []).filter((m) => target(m.to) === WATCHER).map((m) => m.y);
-    const readings = readingsOf(leads, { felt, fields, proximaField, proxima, visits, strikes, reprisals: back, watcher: minds?.watcher ?? undefined, flashes: minds?.flashes, knocks, observe, year: tenth });
+    const readings = readingsOf(leads, { felt, fields, proximaField, proxima, visits, watcher: minds?.watcher ?? undefined, flashes: minds?.flashes, knocks, observe, year: tenth });
     const opened = new Set(seen);
     // New until opened, or for 50 Years: a badge from Year 10 still read NEW at Year 9,104 until 2026-10-30.
     const recent = (at: number) => tenth === null || tenth - at < 50;
@@ -262,7 +257,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       }),
     );
     return { known: view?.year, leads, ids, dials, readings, fresh, standing, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
-  }, [view?.year, leads, felt, fields, proximaField, proxima, strikes, back, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
+  }, [view?.year, leads, felt, fields, proximaField, proxima, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 

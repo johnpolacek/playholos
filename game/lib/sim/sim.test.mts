@@ -20,7 +20,7 @@ import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ICE, deathsIn, iceBetween, iceFirsts } from "../game/natural.ts";
 import { fieldFlux, fieldHeardAt, FIELDS } from "./fields.ts";
-import { amBeta, amTonnes, amYears, bulletBeta, bulletYears, flybyBeta, flybyYears, gasAt, SAIL_REACH, sailArrives, sentinelYears, sentinelYearsBy, shipYears, stay, theirBeta, theirReady, theirYears } from "./speeds.ts";
+import { amBeta, amTonnes, amYears, flybyBeta, flybyYears, gasAt, SAIL_REACH, sailArrives, sentinelYears, sentinelYearsBy, shipYears, stay, theirBeta, theirReady, theirYears } from "./speeds.ts";
 import { amMade, amWhen } from "./antimatter.ts";
 import { proximaField } from "./proxima.ts";
 
@@ -244,7 +244,7 @@ test("the Launch Tunnel builds our craft a fifth faster, and nothing else", () =
     const orders: Order[] = [...(tunnel ? [{ y: 0, begin: "Launch tunnel" }] : []), { y: 50, begin: work }];
     return pace(orders, 200).done[work] - 50;
   };
-  assert.ok(Math.abs(took("Strike yard", true) / took("Strike yard", false) - 0.8) < 1e-3);
+  assert.ok(Math.abs(took("Seed ship", true) / took("Seed ship", false) - 0.8) < 1e-3);
   assert.ok(Math.abs(took("Infrared telescope", true) / took("Infrared telescope", false) - 1) < 1e-3);
 });
 
@@ -584,23 +584,6 @@ test("the Hypertelescope pictures each felt world in its reach, nearest first, a
   assert.fail("no seed has a felt world in reach");
 });
 
-test("bullets wait on helium-3 from a harvest that doubles every 5 Years, in the order ordered, and none without one", async () => {
-  const { bulletsReady, BULLET } = await import("./conflict.ts");
-  const { HE3, he3By, he3When } = await import("./meetings.ts");
-  // 1.5 kt a Year for 5 Years, 3 for the next 5: 22.5 kt by 10 Years in.
-  assert.ok(Math.abs(he3By([[30, null]], 40) - 22.5) < 1e-9);
-  // Held from Year 37 to 50, it gathers at 3 kt a Year, its size, then doubles again 3 Years after it grows on.
-  assert.ok(Math.abs(he3By([[30, 37], [50, null]], 55) - (1.5 * 5 + 3 * 2 + 3 * 13 + 3 * 3 + 6 * 2)) < 1e-9);
-  // The yard done at 10, the harvest at 30: the first waits on its fuel, the second on more, the third on its build.
-  const ready = bulletsReady([10, 10, 200], 10, [[30, null]]);
-  assert.ok(Math.abs(ready[0]! - he3When([[30, null]], HE3.bullet)!) < 1e-6 && ready[0]! > 42 && ready[0]! < 43);
-  assert.ok(Math.abs(ready[1]! - he3When([[30, null]], 2 * HE3.bullet)!) < 1e-6);
-  assert.equal(ready[2], 220);
-  assert.deepEqual(bulletsReady([10], 10, []), [null]);
-  // A neighbor starts its harvest when it chooses to strike: 20 Years to build, about 12.4 to fill.
-  assert.ok(Math.abs(BULLET.ready - 32.4) < 0.05, String(BULLET.ready));
-});
-
 test("skipping ahead stops at the next thing we learn or build, and says when, never what", async () => {
   const { nextKnown, nextStop, GLOW_GAP } = await import("./next.ts");
   const world = await loadWorld(10);
@@ -784,9 +767,9 @@ test("a launch beam is seen only where an old mind's works reach it: no peer ans
   const { peerAnswers } = await import("./peers.ts");
   const { oldAnswers, beamsAt, BEAM_TRAVELS, SILENT, ANSWERS_IN } = await import("./old-minds.ts");
   const { beamMiss, beamSeen, seenWithin, worksAU, SAIL_C } = await import("./speeds.ts");
-  // The miss and who sees it, as calcs/speeds.py has them, for sails, a seed ship, a flyby probe and a rod.
+  // The miss and who sees it, as calcs/speeds.py has them, for sails, a seed ship and a flyby probe.
   const misses = (golden as unknown as { misses: { d: number; beta: number; lum: number; kms: number | null; au: number; seen: boolean }[] }).misses;
-  assert.ok(misses.length >= 432 && misses.some((g) => g.seen) && misses.some((g) => !g.seen));
+  assert.ok(misses.length >= 324 && misses.some((g) => g.seen) && misses.some((g) => !g.seen));
   for (const g of misses) {
     assert.ok(Math.abs(beamMiss(g.d, g.beta, g.kms) - g.au) <= 1e-6 * g.au, `${g.d} ly at ${g.beta}: ${beamMiss(g.d, g.beta, g.kms)} against ${g.au}`);
     assert.equal(beamSeen(g.d, g.beta, g.lum, g.kms), g.seen, `${g.d} ly at ${g.beta}, ${g.lum} Suns, ${g.kms} km/s`);
@@ -800,7 +783,7 @@ test("a launch beam is seen only where an old mind's works reach it: no peer ans
   assert.ok(Math.abs(worksAU(0.25) / worksAU() - 0.5) < 1e-12 && seenWithin(catalog.speeds.probe.beam, 0.009) < 5.5 && beamSeen(40, catalog.speeds.probe.beam) && !beamSeen(40, catalog.speeds.probe.beam, 0.009));
   // The slower the craft, the wider its beam misses: sails are seen within about 21 ly, a probe within about 49.
   assert.ok(seenWithin(SAIL_C) > 20 && seenWithin(SAIL_C) < 23 && seenWithin(catalog.speeds.probe.beam) > 46 && seenWithin(catalog.speeds.probe.beam) < 52);
-  assert.ok(seenWithin(catalog.speeds.beam) < seenWithin(SAIL_C) && seenWithin(catalog.speeds.rod.beam) > seenWithin(catalog.speeds.probe.beam));
+  assert.ok(seenWithin(catalog.speeds.beam) < seenWithin(SAIL_C));
   assert.ok(beamMiss(4.2465, catalog.speeds.beam) > 150 && beamMiss(4.2465, catalog.speeds.beam) < 165);
   // Only a craft a beam threw at a cold glow counts: one on its drive, or one sent at a warm glow, lights nothing.
   assert.equal(beamsAt([{ star: "Cold glow 1", leaves: 10 }, { star: "Warm glow 1", leaves: 10, thrown: SAIL_C }, { star: "Tau Ceti", leaves: 10, thrown: SAIL_C }]).length, 0);
@@ -1026,53 +1009,16 @@ test("a flyby probe our Ship Beam throws flies as calcs/speeds.py has it: over a
   assert.equal(flybyYears(0, true), 0);
 });
 
-test("a rod our Ship Beam throws in place of a bullet flies as calcs/speeds.py has it: half of light speed, with a bullet's harm", async () => {
-  const { bulletMt, mtPerTonne } = await import("./conflict.ts");
-  const rods = (golden as unknown as { rods: { d: number; beta: number; years: number }[] }).rods;
-  assert.ok(rods.length >= 7);
-  for (const g of rods) {
-    assert.ok(Math.abs(bulletBeta(g.d, true) - g.beta) <= 1e-9 * g.beta, `${g.d} ly: ${bulletBeta(g.d, true)} against ${g.beta}`);
-    assert.ok(Math.abs(bulletYears(g.d, true) - g.years) <= 1e-9 * g.years);
-  }
-  const rod = catalog.speeds.rod;
-  // The mirror's most, under what the beam could push it to, and as hard as a bullet on its drive.
-  assert.ok(bulletBeta(50, true) === rod.beam && rod.beam > 0.51 && rod.beam < 0.53);
-  assert.ok(Math.abs((rod.tonnes * mtPerTonne(rod.beam)) / bulletMt() - 1) < 1e-6);
-  assert.ok(rod.tonnes > 28 && rod.tonnes < 31 && rod.ready < 1);
-  // Far off, dust binds it as it binds what another mind throws.
-  assert.equal(bulletBeta(2700, true), theirBeta(2700));
-  assert.equal(bulletYears(50), 50 / catalog.speeds.bullet);
-  assert.ok(bulletYears(50, true) < bulletYears(50) / 4.9);
-});
-
-test("our Wide Beam throws as calcs/speeds.py has it: a rod as another mind's, and a flyby probe at three quarters of light speed", async () => {
-  const { rodTonnes, rodReady } = await import("./speeds.ts");
-  const rows = (golden as unknown as { wide: { d: number; probe: number; probeYears: number; rod: number; rodYears: number; tonnes: number; ready: number }[] }).wide;
+test("our Wide Beam throws a flyby probe as calcs/speeds.py has it: at three quarters of light speed", () => {
+  const rows = (golden as unknown as { wide: { d: number; probe: number; probeYears: number }[] }).wide;
   assert.ok(rows.length >= 8);
   const near = (a: number, b: number) => Math.abs(a - b) <= 1e-9 * Math.abs(b);
-  for (const g of rows) {
-    assert.ok(near(flybyBeta(g.d, "wide"), g.probe) && near(flybyYears(g.d, "wide"), g.probeYears), `probe ${g.d} ly`);
-    assert.ok(near(bulletBeta(g.d, "wide"), g.rod) && near(bulletYears(g.d, "wide"), g.rodYears), `rod ${g.d} ly`);
-    assert.ok(near(rodTonnes(g.d, "wide"), g.tonnes) && near(rodReady(g.d, "wide"), g.ready), `rod's mass ${g.d} ly`);
-  }
+  for (const g of rows) assert.ok(near(flybyBeta(g.d, "wide"), g.probe) && near(flybyYears(g.d, "wide"), g.probeYears), `probe ${g.d} ly`);
   const wide = catalog.speeds.wide;
   // Four colors, each bluer, and a mirror that reflects them to just past nine tenths of light speed.
   assert.ok(wide.colors.length === 4 && wide.colors.every((c, i) => i === 0 || c < wide.colors[i - 1]) && wide.most > 0.9 && wide.most < 0.91);
-  // Its rod is another mind's: the same speed, mass and readying, by parity. Near us, nine tenths and about 4 t.
-  for (const d of [4.25, 50, 400, 2700]) {
-    assert.equal(bulletBeta(d, "wide"), theirBeta(d));
-    assert.ok(Math.abs(rodReady(d, "wide") - theirReady(d)) < 1e-12);
-  }
-  assert.ok(bulletBeta(10, "wide") === 0.9 && rodTonnes(10, "wide") > 3.5 && rodTonnes(10, "wide") < 4.3 && rodReady(10, "wide") < 0.1);
-  // Faster than the Ship Beam's on every road, and as hard: a bullet's harm at its own speed.
-  const { bulletMt, mtPerTonne } = await import("./conflict.ts");
-  for (const d of [4.25, 50, 400]) {
-    assert.ok(bulletBeta(d, "wide") > bulletBeta(d, true) && bulletYears(d, "wide") < bulletYears(d, true) && flybyBeta(d, "wide") > flybyBeta(d, true));
-    assert.ok(Math.abs((rodTonnes(d, "wide") * mtPerTonne(bulletBeta(d, "wide"))) / bulletMt() - 1) < 1e-6);
-  }
-  // The Ship Beam's rod is one mass, whatever the road.
-  assert.equal(rodTonnes(400), catalog.speeds.rod.tonnes);
-  assert.equal(rodReady(400), catalog.speeds.rod.ready);
+  // Faster than the Ship Beam's on every road.
+  for (const d of [4.25, 50, 400]) assert.ok(flybyBeta(d, "wide") > flybyBeta(d, true));
   // A probe is bound by its shield near us, under what the beam's work could give.
   assert.ok(flybyBeta(4.25, "wide") < wide.probe.beam && flybyBeta(4.25, "wide") > 0.72 && flybyYears(4.25, "wide") < 6.2);
 });
@@ -1090,125 +1036,6 @@ test("what another mind throws flies as calcs/speeds.py has it: near nine tenths
   assert.equal(theirBeta(30), 0.9);
   assert.ok(theirBeta(480) < theirBeta(150) && theirBeta(2700) < theirBeta(480));
   assert.equal(theirYears(0), 0);
-});
-
-// A bullet of ours where it lands, 2026-11-12: calcs/strikes.py's flash, and who sees it. Until then a bullet was
-// dated and nothing happened when it landed.
-test("a bullet's flash is seen only by what splits its world from its star, and seeing it changes nothing there", async () => {
-  const { flashHours, flashRatio, hyperFlash, hyperSees, mirrorSees } = await import("./strikes.ts");
-  const { WIDE } = await import("./observing.ts");
-  type Flash = { args: [number, number, number, number]; ratio: number; hyper: number; hyperSees: boolean; near: number | null; nearSees: boolean; wide: number | null; wideSees: boolean };
-  const flashes = (golden as unknown as { flashes: Flash[] }).flashes;
-  const close = (a: number | null, b: number | null) => (a === null || b === null ? a === b : Math.abs(a - b) <= 1e-9 * Math.abs(b));
-  assert.ok(flashes.length >= 7 && flashes.some((g) => g.wideSees) && flashes.some((g) => g.near !== null && !g.nearSees));
-  for (const g of flashes) {
-    const [dPc, radius, a, lum] = g.args;
-    assert.ok(close(flashRatio(radius, a, lum), g.ratio) && close(hyperFlash(dPc * 3.2616, radius, a, lum), g.hyper), `${g.args}`);
-    assert.ok(close(flashHours(dPc, radius, a, lum), g.near) && close(flashHours(dPc, radius, a, lum, WIDE), g.wide), `${g.args}`);
-    assert.deepEqual([hyperSees(dPc * 3.2616, radius, a, lum), mirrorSees(dPc, radius, a, lum), mirrorSees(dPc, radius, a, lum, WIDE)], [g.hyperSees, g.nearSees, g.wideSees]);
-  }
-  // An Earth twin's flash is a little more than its own light. The 15 m Mirror catches Proxima b's. No mirror we build
-  // catches an Earth twin's at 10 pc, and the Hypertelescope catches both.
-  assert.ok(flashes[0].ratio > 1.2 && flashes[0].ratio < 1.5 && !flashes[0].wideSees && flashes[0].hyperSees && flashes[1].wideSees && flashes[1].near === null);
-
-  // Fired at Proxima b at Year 10, landing at Year 52: its light is home at Year 56.24.
-  const world = await loadWorld(22);
-  const b = { star: "Proxima Centauri", fired: 10, lands: 52, d: 4.24 };
-  const at = (year: number, kit = {}) => earthKnows(world, year, { strikes: [b], ...kit });
-  assert.equal(at(51.9).strikes, undefined);
-  // Landed, by reckoning, and its light not yet home: nothing seen, whatever we have built.
-  const flying = at(55, { hyper: 20, mirror: 20 }).strikes![0];
-  assert.ok(flying.world && flying.seen === undefined && Math.abs(flying.home - 56.24) < 1e-9 && flying.ratio! > 1.9 && flying.ratio! < 2);
-  // Its light home: unseen with nothing built, or with a telescope done too late. Seen by one done in time.
-  assert.equal(at(60).strikes![0].seen, undefined);
-  assert.equal(at(60, { telescope: 20 }).strikes![0].seen, undefined);
-  assert.equal(at(60, { mirror: 57 }).strikes![0].seen, undefined);
-  assert.equal(at(60, { mirror: 56 }).strikes![0].seen, "wide");
-  assert.equal(at(60, { mirror: 20, hyper: 20 }).strikes![0].seen, "hyper");
-  // A sentinel of ours that stays there sees it land, if it was there first.
-  const stays = sentinelYears(4.24, "Proxima Centauri");
-  assert.equal(at(60, { sentinels: [{ star: "Proxima Centauri", leaves: 51 - stays }] }).strikes![0].seen, "sentinel");
-  assert.equal(at(60, { sentinels: [{ star: "Proxima Centauri", leaves: 53 - stays }] }).strikes![0].seen, undefined);
-  // What we built changes what we see, never what happened: the rest of what Earth knows is the same.
-  const withBullet = at(60, { mirror: 20 });
-  delete withBullet.strikes;
-  assert.deepEqual(withBullet, earthKnows(world, 60, { mirror: 20 }));
-  // At a star where we know no world, it has nothing to aim at.
-  const through = earthKnows(world, 500, { strikes: [{ star: "Cold glow 1", fired: 10, lands: 300, d: 40 }] }).strikes![0];
-  assert.ok(!through.world && through.seen === undefined && through.ratio === undefined);
-  // The Mind is told each, and never that a flash was seen where nothing could see it.
-  const told = describe(at(60));
-  assert.ok(/Bullets of ours that have landed/.test(told) && /nothing we have built could catch it/.test(told) && !/caught its flash/.test(told));
-  assert.ok(/Our 15 m Mirror caught its flash at Year 56\.2/.test(describe(at(60, { mirror: 20 }))));
-  assert.ok(!/Bullets of ours/.test(describe(earthKnows(world, 60))));
-});
-
-// A bullet at an old mind, 2026-11-12, the designer's picks: it is utterly useless there, and the mind's answer is
-// graded by its nature. lib/sim/reprisals.ts.
-test("a bullet is useless against an old mind, and what comes back is by its nature: nothing, our weapon, a strike in kind, or Earth's end", async () => {
-  const { REPRISAL, reprisalLands, reprisalMt, reprisalOf } = await import("./reprisals.ts");
-  const { END_MT, PANEL_TAKES, panelEarths, starSeconds } = await import("./strikes.ts");
-  const { bulletMt, harmOf } = await import("./conflict.ts");
-  const { mindsSeen } = await import("./minds.ts");
-  // The physics of useless: a star sheds a bullet's energy in a blink, and a panel takes a hundred-millionth of it.
-  assert.ok(starSeconds(1) < 2e-6 && starSeconds(0.0107) < 2e-4 && PANEL_TAKES === 1e-8 && panelEarths(4.135e21) > 3e9);
-  // Earth's end is Chicxulub's class, which ends Earth as our home. A strike in kind does not.
-  assert.ok(harmOf(END_MT).ends && !harmOf(bulletMt()).ends && reprisalMt("end") === END_MT && reprisalMt("kind") === bulletMt() && reprisalMt("disarm") === 0);
-  assert.deepEqual(REPRISAL, { 1: "end", 2: "kind", 3: "disarm" });
-  const kit = { halo: 3, haloArray: 20 };
-  const year = 3000;
-  const count: Record<string, number> = { end: 0, kind: 0, disarm: 0, none: 0 };
-  let panels = 0;
-  for (const seed of POOL) {
-    const world = await loadWorld(seed);
-    const olds = world.minds!.old, maker = world.minds!.watcher.maker;
-    assert.equal(reprisalOf(olds.find((m) => m.id === maker)!, maker), "none");
-    assert.ok(olds.filter((m) => m.asleep).every((m) => reprisalOf(m, maker) === "none"));
-    const glows = mindsSeen(world, kit, year).glows;
-    // A bullet at each cold glow we have found, fired at Year 100 at half of light speed.
-    const strikes = glows.map((g, i) => ({ star: `Cold glow ${i + 1}`, fired: 100, lands: 100 + g.d / 0.5, d: g.d }));
-    const view = earthKnows(world, year, { ...kit, strikes });
-    const blind = earthKnows(world, year, { ...kit, imager: 40, strikes });
-    for (const [i, g] of glows.entries()) {
-      const m = olds.find((o) => o.id === g.id)!, b = strikes[i];
-      const seen = view.strikes!.find((s) => s.star === b.star)!;
-      // Aimed at its star with no picture of what glows, at a panel with one. It strikes no world either way.
-      assert.ok(!seen.world && seen.glow!.aim === "star" && seen.ratio === undefined && seen.seen === undefined);
-      const pictured = blind.minds!.glows[i].imaged;
-      assert.equal(blind.strikes!.find((s) => s.star === b.star)!.glow!.aim, pictured !== undefined && pictured <= 100 ? "panel" : "star");
-      if (pictured !== undefined && pictured <= 100) panels++;
-      const how = reprisalOf(m, maker), back = view.reprisals?.find((r) => r.star === b.star);
-      count[how]++;
-      assert.equal(how, m.id !== maker ? (REPRISAL[m.peaceful] ?? "none") : "none");
-      if (how === "none") { assert.equal(back, undefined); assert.equal(view.minds!.glows[i].reprised, undefined); continue; }
-      // Its answer lands once it has readied what it throws and that has flown: never before.
-      const lands = reprisalLands(m, b.lands);
-      assert.ok(lands > b.lands + m.d && Math.abs(lands - b.lands - theirReady(m.d) - theirYears(m.d)) < 1e-9);
-      assert.deepEqual(back, { star: b.star, after: b.lands, lands, how, mt: reprisalMt(how) });
-      assert.equal(view.minds!.glows[i].reprised, lands);
-      assert.equal(earthKnows(world, lands - 0.01, { ...kit, strikes }).reprisals?.some((r) => r.star === b.star) ?? false, false);
-      // On Earth: a strike in kind harms and Earth's end ends, each from the Year it lands. Disarming us touches no one.
-      assert.equal(back!.mt > 0 && harmOf(back!.mt).ends, how === "end");
-      assert.equal(back!.mt > 0, how !== "disarm");
-    }
-  }
-  // A beam that threw the bullet falls with the yard: the answer says so, and only then.
-  const w22 = await loadWorld(22);
-  const g22 = mindsSeen(w22, kit, year).glows;
-  const d3 = g22.findIndex((g) => reprisalOf(w22.minds!.old.find((o) => o.id === g.id)!, w22.minds!.watcher.maker) === "disarm");
-  if (d3 >= 0) {
-    const at = { star: `Cold glow ${d3 + 1}`, fired: 100, lands: 100 + g22[d3].d / 0.5, d: g22[d3].d };
-    assert.equal(earthKnows(w22, year, { ...kit, strikes: [{ ...at, thrown: true }] }).reprisals![0].beam, true);
-    assert.equal(earthKnows(w22, year, { ...kit, strikes: [at] }).reprisals![0].beam, undefined);
-  }
-  // Over the pool every answer is drawn, the hardest the rarest, and most minds do nothing.
-  assert.ok(count.end >= 1 && count.kind >= 1 && count.disarm >= 1 && panels >= 10);
-  assert.ok(count.none > 8 * (count.end + count.kind + count.disarm) && count.end <= count.kind && count.kind <= count.disarm);
-  // The Mind is told a bullet did nothing there, and what came back.
-  const world = await loadWorld(22);
-  const glows = mindsSeen(world, kit, year).glows;
-  const told = describe(earthKnows(world, year, { ...kit, strikes: glows.map((g, i) => ({ star: `Cold glow ${i + 1}`, fired: 100, lands: 100 + g.d / 0.5, d: g.d })) }));
-  assert.ok(/It harmed nothing\./.test(told) && /could aim only at its star/.test(told));
 });
 
 test("an antimatter craft's trips match calcs/antimatter.py, near and far", () => {

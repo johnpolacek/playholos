@@ -61,12 +61,12 @@ export function readLenses(l: unknown): Ordered[] {
     .slice(0, 16);
 }
 // Sentinels, each with how far its star is, so each goes the way that lands it soonest. 2026-11-12.
-export const readSentinels = (l: unknown) => readStrikes(l);
+export const readSentinels = (l: unknown) => readDistances(l);
 export const readCloseReads = readLenses;
 // Seed probes, each with how far its star is, so each is sent the way that lands it soonest. 2026-11-12.
-export const readSeeds = (l: unknown) => readStrikes(l);
-// Our bullets, with how far each star is, so the Mind can say when each lands. 2026-11-12.
-export function readStrikes(l: unknown): (Ordered & { d?: number })[] {
+export const readSeeds = (l: unknown) => readDistances(l);
+// Orders with how far each star is, so each craft goes the way that lands it soonest. Our bullets' once, 2026-11-12.
+export function readDistances(l: unknown): (Ordered & { d?: number })[] {
   const far = new Map(Array.isArray(l) ? l.filter((o) => !!o && typeof o.name === "string" && typeof o.d === "number" && Number.isFinite(o.d) && o.d > 0).map((o) => [o.name as string, o.d as number]) : []);
   return readLenses(l).map((o) => (far.has(o.name) ? { ...o, d: far.get(o.name) } : o));
 }

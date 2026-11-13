@@ -3,14 +3,12 @@
 // The Mind names what it would start with only when asked, 2026-10-19, and never queues anything itself.
 import { FOUND } from "./rocks";
 import { WATCHED } from "@/lib/sim/minds";
-import { BULLET } from "@/lib/sim/conflict";
 import { plainBuild } from "./build-offer";
 import { KNOCKS } from "./knocks";
 import { YEAR_0 } from "./clock";
 import type { Plan } from "./types";
 import { GIFT_STEPS } from "@/lib/sim/messages";
 import { CATALOG, centers, pace, type Order } from "@/lib/sim/works";
-import { rodTonnes, type Push } from "@/lib/sim/speeds";
 
 /** What a build does, which gives it its color: listening, thinking, seeing, lifting, reaching, keeping us, or
  *  attacking. Attack has its own since 2026-11-12: the designer took a bullet for another kind of probe. */
@@ -144,11 +142,9 @@ export const LATER: Later[] = [
     does: "think",
     after: "Mass Driver",
   },
-  // Parity, 2026-10-28: catch what the watch sees, and strike a star. Screens retired 2026-10-31, audit 2.1.
+  // Parity, 2026-10-28: catch what the watch sees. Screens retired 2026-10-31, audit 2.1. The Strike Yard and the
+  // Helium-3 Harvest, its bullets' fuel, retired 2026-11-13, the designer's word: a bullet bought nothing.
   { name: "Interceptor", what: "A weapon, for defense: it wrecks a probe that stops in our system.", does: "keep", after: "X-Ray Watch" },
-  { name: "Strike Yard", what: "A weapon, not a probe: its bullets fly to a star only to destroy.", does: "attack", after: "Fusion Drive" },
-  // The audit's helium-3 harvest, 2026-10-29: every bullet's fuel, ours and every neighbor's, comes from one.
-  { name: "Helium-3 Harvest", what: "Helium-3 from Uranus’s air, a bullet’s fuel, doubling every 5 Years.", does: "attack", after: "Probe Yard" },
   // A rock coming, 2026-10-28: the deflector opens only once a survey finds one, in games whose seed sends one.
   {
     name: "Rock Deflector",
@@ -182,7 +178,7 @@ export const LATER: Later[] = [
   { name: "Ship Beam", what: "Throws seed ships and flyby probes to speed, with no drive or fuel.", does: "reach", after: "Star Beam" },
   // The Ship Beam in stepped colors, from a patch ten times as wide, 2026-11-12, the designer's pick: it throws as
   // fast as another mind does. calcs/mercury.py.
-  { name: "Wide Beam", what: "Throws rods and flyby probes at up to nine tenths of light speed.", does: "reach", after: "Ship Beam" },
+  { name: "Wide Beam", what: "Throws flyby probes at up to three quarters of light speed.", does: "reach", after: "Ship Beam" },
   // Labeyrie's exo-Earth imager, 2026-10-29: the next step past the 15 m Mirror, mirrors flying apart, not one wider.
   { name: "Hypertelescope", what: "Pictures any world we’ve found: seas, cloud, green land.", does: "see", after: "15 m Mirror" },
   // Seeing what makes a glow, from home, 2026-11-11, the designer's pick: cold mirrors flying apart, as the
@@ -296,7 +292,7 @@ export const SAYS: Record<string, string> = {
   "Launch Complex":
     "It doubles what we lift to orbit. Nothing we could start now waits on lift, but the Mass Driver can’t reach the Moon without it.",
   "Launch Tunnel":
-    "Superconducting magnets throw 40 t craft down a 110 km vacuum tunnel and out of a mountain at 8.8 km/s, ten a day. That is 128 kt a Year, three times the Launch Complex, at about $50 a kilogram. Cargo only: it pulls 30 g. Hulls and fuel come up cheaply, so the Probe Yard, Fusion Drive, Seed Ship and Strike Yard take a fifth less time once it is done. No one has built one, and the door of charged air that keeps the sky out of the tunnel is untested.",
+    "Superconducting magnets throw 40 t craft down a 110 km vacuum tunnel and out of a mountain at 8.8 km/s, ten a day. That is 128 kt a Year, three times the Launch Complex, at about $50 a kilogram. Cargo only: it pulls 30 g. Hulls and fuel come up cheaply, so the Probe Yard, Fusion Drive and Seed Ship take a fifth less time once it is done. No one has built one, and the door of charged air that keeps the sky out of the tunnel is untested.",
   "Orbital Yard": "It builds in orbit in a quarter less time. It pays most if we mean to build a lot up there.",
   "Moon Vault":
     "Nothing we know of threatens Earth yet. This keeps a copy of us out of reach of anything that hits Earth, in case something does. It takes half the matter we hold in orbit.",
@@ -330,8 +326,6 @@ export const SAYS: Record<string, string> = {
     "Ninety years of our radar sweeps are already out there, and nothing recalls them. Cutting the radars now means a listener whose ears open after our last sweep passes never hears us. Every listener who has heard us hears us stop, and can’t tell waking from dying.",
   "Interceptor":
     "A weapon, for defense. Stored kill vehicles of a tonne each, about 5 Years. Once the X-Ray Watch sees a probe braking in, one meets it as it stops and wrecks it. Its sender loses its eyes here, and may take that as the act of war it is.",
-  "Strike Yard":
-    "A weapon. A bullet is no probe: it looks at nothing, sends nothing home, and only destroys. To fire one is to attack, and whoever is there will know who did. The yard readies bullets of 1,000 t, as any mind could, each in 20 Years, but none flies until the Helium-3 Harvest has gathered its 37 kt, about 12 Years for the first, less as the harvest grows. One lands at a tenth of light speed with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. It ends no world’s life. It needs a world whose path we know to aim at. Nothing comes home from one: we see its flash, about double that world’s light for three minutes, only with a telescope that splits the world from its star, or by a sentinel of ours there. Against an old mind it is useless: aimed at its star or at one of its panels, it harms nothing. But it is an attack, and its path points home. Most minds would do nothing about it. One might take our weapon from us, strike us in kind, or end Earth as our home. Its launch flame shows only in our own system: a probe of theirs watching here would see it, and no one farther off.",
   "Rock Deflector":
     "A rock is coming at Earth. Ten impactors of a tonne each hit it at 6 km/s, and the rock thrown off pushes it 3.6 times harder, as DART’s did. The earlier the push lands, the less it must move the rock: a 140 m rock needs about 2 Years’ warning, a 60 m one a few weeks. Too late, and it strikes.",
   "Trojan Vault":
@@ -352,7 +346,7 @@ export const SAYS: Record<string, string> = {
   "Star Beam":
     "Part of the swarm, 100 km across, phased as one laser of 10 TW. It pushes a lens to the Sun’s focus in about ten weeks, not 17 Years, carrying a telescope 3 m wide that pictures a world in about a week. No one has phased mirrors spread that far, so this is the least certain build we have.",
   "Ship Beam":
-    "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out under 2% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW, in light of 1.55 microns, where the silicon in its sail’s mirror is clear. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days, and to its most, about a seventh, in about 135. The ship needs no Fusion Drive and no deuterium. With no drive it stops on its magnetic sail alone, and that sets its speed: as fast as it can stop from. On a short hop through thin gas that is under a tenth. On a long road it is the beam’s full push. Where a Fusion Drive and the Deuterium Works stand too, a thrown ship carries a small drive to end its stop, and lands far sooner: Proxima in about 51 Years, not 72. We send each ship the way that lands it soonest. It throws a flyby probe too, from the Probe Yard: 150 t leaves at over a third of light speed after 48 days of push, with no engine and no fuel. The beam does the same work on whatever rides its sail, so a lighter craft leaves faster, up to half of light speed. So it throws a bullet too: a rod of 30 t, which lands as hard as a bullet of 1,000 t and needs no helium-3. Past that a sail outruns its own mirror: the beam’s light reaches it stretched too red to reflect. We aim each craft where its star will be when it lands, so its beam passes that star by: about 180 AU at Proxima Centauri for a seed ship, and a light-year at a glow far off. Only an old mind awake near us has works that wide, and only round a bright star: its cold panels lie about 540 AU out round a star like the Sun, and a tenth as far round a red dwarf. It sees the beam as it would a knock, decades before the craft lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
+    "The Star Beam can’t push a seed ship. On the best sail it could carry, 1,500 t tops out under 2% of light speed. This beam is a patch of the swarm 1,000 km across, with 100 times the power: 1,000 TW, in light of 1.55 microns, where the silicon in its sail’s mirror is clear. It pushes a seed ship on a sail a kilometer wide to a tenth of light speed in about 78 days, and to its most, about a seventh, in about 135. The ship needs no Fusion Drive and no deuterium. With no drive it stops on its magnetic sail alone, and that sets its speed: as fast as it can stop from. On a short hop through thin gas that is under a tenth. On a long road it is the beam’s full push. Where a Fusion Drive and the Deuterium Works stand too, a thrown ship carries a small drive to end its stop, and lands far sooner: Proxima in about 51 Years, not 72. We send each ship the way that lands it soonest. It throws a flyby probe too, from the Probe Yard: 150 t leaves at over a third of light speed after 48 days of push, with no engine and no fuel. The beam does the same work on whatever rides its sail, so a lighter craft leaves faster, up to half of light speed. Past that a sail outruns its own mirror: the beam’s light reaches it stretched too red to reflect. We aim each craft where its star will be when it lands, so its beam passes that star by: about 180 AU at Proxima Centauri for a seed ship, and a light-year at a glow far off. Only an old mind awake near us has works that wide, and only round a bright star: its cold panels lie about 540 AU out round a star like the Sun, and a tenth as far round a red dwarf. It sees the beam as it would a knock, decades before the craft lands. In 1984 Robert Forward drew a lens this wide to push a sail to the stars. No one has built anything like it.",
   "Chips at the Limit":
     "Ordinary chips switch charge on and off and throw it away as heat, and physics sets a wall on how little that can cost. Worked from the heat of each switch and each wire, it lies about 200 times past the best chips of 2023, give or take five times either way. Ours at Year 0 are already most of the way there: the wall is about 7 times past them. These are new fabs making chips at that wall. Once done, every watt we think on thinks about 7 times as much, as five more data centers would, with no more power. It takes about 8 Years, the pace chips have gained for 15 years. Past the wall lies only computing that recycles its own charge, and no one has built one past a test.",
   "Climate Hold":
@@ -360,15 +354,13 @@ export const SAYS: Record<string, string> = {
   "Antimatter Works":
     "Accelerators, cooling rings and traps built through the swarm, run on a hundredth of its power. A plant built for it turns about 4 parts in 100,000 of its energy into antimatter, by known technology. Today’s turn 4 in 10 billion. So it makes little at first, and twice as much each time the swarm doubles: 10 million tonnes a Year once the swarm catches all the Sun. Its drive is a beamed core engine. Each annihilation throws out charged pions, and a magnetic nozzle turns them out the back. The rest leaves as gamma rays and neutrinos, which push nothing. A craft goes in two stages, one to go and one to stop, and cruises at three tenths of light speed. It stops by its own rocket, so it needs no gas to brake on, and its stop is the same at every star. Its heat holds it to a hundredth of a g: 31 Years to reach its speed, and 31 to stop. It burns about 450 t of antimatter for each tonne it lands, so a sentinel waits on 450 kt. A seed ship lands at Proxima Centauri in about 41 Years, and at a star 10 ly off between the clouds in 63, where it took 163. Its price: its stop is a flame of about 3×10¹⁵ W, pointed for 31 Years at the star it stops at. Anyone awake there sees it come. No one has kept more than a few antiprotons. In 2026, 92 of them rode a truck round CERN for half an hour. We take ice of antihydrogen, held off the walls by a magnet, to work. No one has made it.",
   "Wide Beam":
-    "The Ship Beam stops at half of light speed, for two reasons. A sail that flees the light sees it stretched redder, and past half of light speed it is too red for the sail’s mirror. And the beam’s spot outgrows the sail about 1,800 AU out. This beam answers both. It is the Ship Beam’s patch grown ten times wider, 10,000 km, so its spot holds ten times as far. And it lases in four colors, each bluer, taking over one by one as the sail speeds up: 2.0 microns, then 1.55, 1.06 and 0.80. So the sail always sees light its mirror reflects, up to nine tenths of light speed. Each color is a kind of laser we build today. It throws the same 1,000 TW, since a sail can take no more. A bullet ordered once it stands is a rod of about 4 t at nine tenths of light speed, pushed for 78 days, with a bullet’s harm: what another mind throws, as fast. A flyby probe leaves at about three quarters of light speed, and passes Proxima Centauri about 6 Years later. A seed ship rides it too, but it must stop on its sail alone, so it gains only on roads past about 55 ly. A faster craft’s beam passes nearer its star, so more old minds would see this one. It goes dark when we keep the Ship Beam dark. In 2002 Jordin Kare drew a chain of lasers at stepped colors, for a sail at a tenth of light speed. No one has drawn one for nine tenths.",
+    "The Ship Beam stops at half of light speed, for two reasons. A sail that flees the light sees it stretched redder, and past half of light speed it is too red for the sail’s mirror. And the beam’s spot outgrows the sail about 1,800 AU out. This beam answers both. It is the Ship Beam’s patch grown ten times wider, 10,000 km, so its spot holds ten times as far. And it lases in four colors, each bluer, taking over one by one as the sail speeds up: 2.0 microns, then 1.55, 1.06 and 0.80. So the sail always sees light its mirror reflects, up to nine tenths of light speed. Each color is a kind of laser we build today. It throws the same 1,000 TW, since a sail can take no more. A flyby probe leaves at about three quarters of light speed, and passes Proxima Centauri about 6 Years later. A seed ship rides it too, but it must stop on its sail alone, so it gains only on roads past about 55 ly. A faster craft’s beam passes nearer its star, so more old minds would see this one. It goes dark when we keep the Ship Beam dark. In 2002 Jordin Kare drew a chain of lasers at stepped colors, for a sail at a tenth of light speed. No one has drawn one for nine tenths.",
   "Hypertelescope":
     "Labeyrie’s design: 150 mirrors 3 m wide, flying in a formation 150 km across, their light brought to one focus. It pictures an Earth 10 light years away in half an hour, about 300 km a pixel: continents, seas, cloud, and land green where something grows. Cities and fields are far too small. Its pixel widens with distance, so past about 135 light years a world is under three pixels across. Unlike a lens, it turns to any star in about a week, so it pictures each world our Far-Side Array finds, most of them too close to their stars for a mirror to split.",
   "Galaxy Broadcast Array":
     "A dish array 2.9 km wide that sends 218 GW in short pulses, about 10²⁰ W along its beam. It sweeps the Galaxy’s plane, where nine in ten stars lie, and comes back to each about once a Year, for about a second. That is enough to be noticed anywhere in the Galaxy. A page of words is read on the first pass out to about 6,700 light years, and farther with each Year we repeat it. Nothing longer gets through. It sends nothing on its own. We choose the words and send them, from the Mind’s tab. Our own searches would miss a call like this: they watch one star for minutes and listen for steady tones.",
   "Glow Imager":
     "Twenty cold mirrors, each 3 m wide, flying up to 300 km apart beyond L2, held in step as the Hypertelescope’s are. They look in infrared light, the light heat gives off. That is wide enough to show what makes a glow. A cold glow 54 light years off shows its parts a few thousandths of the Earth’s distance from the Sun across. A warm glow 20,000 light years off shows 18 pixels wide. It turns to each glow we have found, a week each, on its own. It finds none: our surveys do that. And it can’t see a mind that sleeps, which gives off almost nothing. Only a craft up close finds one of those.",
-  "Helium-3 Harvest":
-    "A bullet at a tenth of light speed burns 61 kt of fusion fuel, and 37 kt of that is helium-3. Earth has almost none, and the Moon’s soil too little. Uranus’s air holds about 15 parts in a million, in a shallower well than Jupiter’s. A fleet of about 150 kt of craft dips in and gathers about 1.5 kt a Year at first. Its factories on Uranus’s moons copy the craft from their rock and ice, doubling the fleet every 5 Years, slower than Mercury’s since sunlight there is a 370th of ours. So the first bullet’s fuel takes about 12 Years, the fourth about 21, and 50 Years on it gathers a bullet’s fuel every 9 days. About 230 Years on, its craft have used up Uranus’s large moons, and it grows no more. Any mind’s grows the same way: one that chooses to strike needs about 32 Years before its first flies. Held, it gathers at its size.",
   "Cold Annex":
     "Chips at 77 K do about four times the work a watt, and in space nothing has to cool them but a shade and wide radiators. It thinks as much as Power from Orbit for about 4 Mt of rock, not 10. Both wait on the same rock, so whichever comes first in line takes it first. Its heat glows, as any mind’s would.",
 };
@@ -512,8 +504,6 @@ export const SWITCHED: Record<string, { on: string; off: string; turnOn: string;
 
 /** Whether a build that can be stood down is on at Year `y`: the last word by then, and on if none. */
 export function isOn(plan: Plan, name: string, y: number): boolean {
-  // Wrecked, it is down whatever the Will's word, until it is rebuilt. 2026-11-12.
-  if (wreckAt(plan, name, y)) return false;
   let on = true, at = -Infinity;
   for (const o of plan.switches ?? []) if (o.name === name && o.y <= y && o.y >= at) [on, at] = [o.on, o.y];
   return on;
@@ -522,23 +512,9 @@ export function isOn(plan: Plan, name: string, y: number): boolean {
 /** The first Year from `y` on that it is on: `y` itself if on then, or the Year we next arm it. Null if it stays off. */
 export function onFrom(plan: Plan, name: string, y: number): number | null {
   if (isOn(plan, name, y)) return y;
-  // The Years its state can change: each later word of the Will's, and each Year it is rebuilt from a wreck.
-  const later = [
-    ...(plan.switches ?? []).filter((o) => o.name === name && o.y > y).map((o) => o.y),
-    ...(plan.wrecks ?? []).filter((w) => w.name === name && w.until > y).map((w) => w.until),
-  ].sort((a, b) => a - b);
+  // The Years its state can change: each later word of the Will's.
+  const later = (plan.switches ?? []).filter((o) => o.name === name && o.y > y).map((o) => o.y).sort((a, b) => a - b);
   return later.find((t) => isOn(plan, name, t)) ?? null;
-}
-
-/** The wreck a build of ours lies under at Year `y`, if an old mind's grams took it and it is not yet rebuilt.
- *  lib/sim/reprisals.ts. 2026-11-12. */
-export const wreckAt = (plan: Plan, name: string, y: number) => (plan.wrecks ?? []).find((w) => w.name === name && w.at <= y && y < w.until);
-/** The first Year from `start` that a job of `span` Years at a build runs clear of every wreck of it: wrecked while at
- *  work, it starts over once the build stands again. */
-export function clearOf(plan: Plan, name: string, start: number, span: number): number {
-  let s = start;
-  for (const w of (plan.wrecks ?? []).filter((x) => x.name === name).sort((a, b) => a.at - b.at)) if (w.at < s + span && w.until > s) s = w.until;
-  return s;
 }
 
 /** The Year it was last switched, if ever. */
@@ -548,15 +524,6 @@ export const switchedAt = (plan: Plan, name: string, y: number) =>
 /** Stands a build down, or arms it again, at Year `y`. */
 export const switchTo = (name: string, y: number, on: boolean) => (p: Plan): Plan => ({ ...p, switches: [...(p.switches ?? []), { name, y, on }] });
 
-/** Whether a bullet ordered at Year `y` is a rod our Ship Beam throws, with the beam done at Year `beam`: the beam
- *  stands by then, or it is in our order and no Helium-3 Harvest is, so the rod waits for it. Else it is a bullet on
- *  its Fusion Drive. Its kind is set when ordered: the two are different craft. 2026-11-12. */
-export const thrownAt = (plan: Plan, beam: number | null | undefined, y: number) =>
-  (beam != null && beam <= y) || (ordered(plan).includes("Ship Beam") && !ordered(plan).includes("Helium-3 Harvest"));
-/** Which beam throws a bullet ordered at Year `y`, if one does: the Wide Beam if it stands by then, done at Year
- *  `wide`, else the Ship Beam. The Wide Beam's rod is lighter and faster, so it too is set when ordered. 2026-11-12. */
-export const rodBy = (plan: Plan, beam: number | null | undefined, wide: number | null | undefined, y: number): Push =>
-  !thrownAt(plan, beam, y) ? false : wide != null && wide <= y ? "wide" : true;
 
 /** What a build can't go without. A Seed Ship flies only on a Fusion Drive, fed by the Deuterium Works. It may be built
  *  first, as in the first seed ship's mock, but the drive sets the launch. Since 2026-10-20 it is queued only once both
@@ -673,15 +640,9 @@ function held(plan: Plan, done: Record<string, number | null>, year: number) {
   // machines, landed from Earth, since 2026-10-22.
   // Ordered again after it was taken back, a build has its matter already.
   const first = (plan.later ?? []).filter((o, i, all) => !plan.builds.includes(o.name) && all.findIndex((x) => x.name === o.name) === i);
-  // A bullet is 1 kt with 24 kt of deuterium, spent as each is ordered. 2026-10-28.
-  const each = (list: { y: number }[] | undefined, kt: number) => (list ?? []).filter((o) => o.y <= year).length * kt;
   const spent =
     plan.builds.reduce((s, b) => s + (buildOf(b)?.kt ?? 0), 0) +
-    first.reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0) +
-    // Its helium-3 comes from the harvest: only the bullet and its deuterium are lifted. 2026-10-29. A rod our Ship
-    // Beam throws is 30 t, with no fuel, and one our Wide Beam throws about 4 t. 2026-11-12.
-    each((plan.strikes ?? []).filter((o) => !thrownAt(plan, done["Ship Beam"], o.y)), (BULLET.tonnes * (1 + BULLET.deuterium * BULLET.fuelPerTonne)) / 1000) +
-    (plan.strikes ?? []).filter((o) => o.y <= year && thrownAt(plan, done["Ship Beam"], o.y)).reduce((s, o) => s + rodTonnes(o.d ?? 0, rodBy(plan, done["Ship Beam"], done["Wide Beam"], o.y)) / 1000, 0);
+    first.reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0);
   const lifted =
     SPARE_LIFT * year +
     (launch == null ? 0 : LAUNCH_LIFT * Math.max(0, year - launch)) +

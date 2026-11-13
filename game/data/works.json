@@ -184,24 +184,10 @@
    "years": 2,
    "want": 0.01
   },
-  "Strike yard": {
-   "years": 10,
-   "want": 3,
-   "orbit": true,
-   "craft": true
-  },
   "Fusion plants": {
    "years": 30,
    "want": 100,
    "energy": 2.4
-  },
-  "Helium-3 harvest": {
-   "years": 20,
-   "want": 5,
-   "orbit": true,
-   "grows": 5,
-   "thinks": 0,
-   "full": 45.8
   },
   "Mercury works": {
    "years": 12,
@@ -699,11 +685,6 @@
       434
      ]
     ]
-   },
-   "rod": {
-    "beam": 0.9,
-    "days": 78,
-    "lost": 0.028432815502723724
    }
   },
   "heavy": {
@@ -1025,23 +1006,5 @@
    "share": 0.01,
    "kgPerYear0": 2.489052814677986e-07
   }
- },
- "strike": {
-  "share": 0.03,
-  "seconds": 200.0,
-  "earthW": 5.0329336604518584e+16,
-  "mtJ": 4184000000000000.0,
-  "mt": 108216.12222122932,
-  "ozone": [
-   1.0,
-   3.5
-  ],
-  "earthKm": 12742,
-  "hyperMin": 30,
-  "sunW": 3.828e+26,
-  "panelW": 0.00235161750528,
-  "earthFace": 510064471909788.25,
-  "panelTakes": 1e-08,
-  "endMt": 100382409.17782028
  }
 }

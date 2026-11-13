@@ -290,28 +290,6 @@ export interface Visit {
   sent?: string;
 }
 
-/** A bullet of ours that has landed, by our reckoning, and what we saw of it. Nothing comes home from a bullet: we
- *  know it landed only by its light, and only where something of ours could catch that. lib/sim/strikes.ts. 2026-11-12. */
-export interface StrikeSeen {
-  star: string;
-  d: number;
-  fired: number;
-  lands: number;
-  /** The Year its light reaches us. */
-  home: number;
-  /** We knew a world there when it was fired, so it had something to aim at. Without one it flies on through. */
-  world: boolean;
-  /** Its flash over the world's own light. */
-  ratio?: number;
-  /** At a cold glow's star: what we could aim at, with what we knew when it was fired. A panel, if our Glow Imager or
-   *  a sentinel had shown us what glows there. Else only its star. Either way it harms nothing. Its star's light in
-   *  Suns, and the glow's watts, which give its panels' size. 2026-11-12. */
-  glow?: { aim: "panel" | "star"; lum?: number; watts: number };
-  /** What caught its flash, once its light is home: a sentinel of ours that stays there, or a telescope that splits
-   *  the world from its star. Absent with its light home: nothing of ours could. */
-  seen?: "sentinel" | "hyper" | "wide" | "near";
-}
-
 export interface EarthView {
   year: number;
   felt: FeltWorld[];
@@ -344,15 +322,6 @@ export interface EarthView {
   /** Worlds our Far-Side Array found by their magnetic fields, and what it heard of Proxima b's. 2026-11-11. */
   fields?: FieldWorld[];
   proximaField?: FieldHeard;
-  /** Each bullet of ours that has landed, oldest first. 2026-11-12. */
-  strikes?: StrikeSeen[];
-  /** What an old mind did about a bullet of ours, once it has landed here: a strike on Earth that ends it as our home,
-   *  one in kind, or the wreck of what threw the bullet. By its star as we name it, the Year our bullet landed there,
-   *  and the Year its answer landed here. `beam`: a beam of ours threw that bullet. lib/sim/reprisals.ts. 2026-11-12. */
-  reprisals?: { star: string; after: number; lands: number; how: "end" | "kind" | "disarm"; mt: number; beam?: boolean }[];
-  /** Each build of ours an old mind's grams wrecked, as lib/game/types.ts's Wreck: its name, the Year, the Year it
-   *  stands again, and the star. Set by the server once the view is settled: lib/game/reach.ts. 2026-11-12. */
-  wrecks?: { name: string; at: number; until: number; by: string }[];
   /** What ground telescopes saw of Proxima b by Year 0: its true mass, tilt and brightness. 2026-10-31. */
   proximaSeen?: import("./proxima.ts").ProximaSeen;
 }

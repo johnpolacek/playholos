@@ -436,22 +436,22 @@ def catalog():
                             craft=CRAFT,
                             # A flyby probe the Ship Beam throws: its mass and front, the beam's most, and its push.
                             probe=dict(PROBE, beam=PROBE_BEAM, days=round(PROBE_BEAM_DAYS), lost=PROBE_BEAM_LOST),
-                            # A rod the Ship Beam throws in place of a bullet: its mass for a bullet's harm at the
-                            # mirror's most, its push, and the Years the Strike Yard takes to ready one.
+                            # A rod a beam throws with a bullet's harm: its mass at the Ship Beam's mirror's most, its
+                            # push, and the Years to ready one. Ours went 2026-11-13. Another mind readies its own by
+                            # this measure, by parity: their_ready.
                             rod=dict(tonnes=ROD_TONNES, beam=ROD_BEAM, days=round(ROD_BEAM_DAYS), lost=ROD_BEAM_LOST, ready=ROD_READY),
                             # Who sees a launch beam: how fast a star crosses our sky, in km/s, and how far an awake
                             # old mind's works reach from its star, in AU.
                             seen=dict(kms=DRIFT_KMS, worksAU=WORKS_AU),
                             # The Wide Beam: its colors in microns, the mirror's most, its sail in tonnes, how far
                             # its last color holds its spot in ly, and what it throws: a flyby probe at the most its
-                            # work gives, and a rod as another mind's, with its push near us.
+                            # work gives, and ships.
                             wide=dict(colors=[round(c * 1e6, 2) for c in mercury.WIDE_COLORS], most=WIDE_MOST, sail=mercury.WIDE_SAIL_KG / 1e3,
                                       reach=WIDE_REACH[-1] / LY,
                                       probe=dict(beam=WIDE_PROBE, days=round(WIDE_PROBE_DAYS), lost=WIDE_PROBE_LOST),
                                       # `curve`: the days of push that bring a ship to each speed past the Ship Beam's most.
                                       ship=dict(beam=WIDE_SHIP, days=round(WIDE_SHIP_DAYS), lost=WIDE_SHIP_LOST,
-                                                curve=[[b, round(_push(b, _WIDE_SHIP_KG)[0])] for b in (0.15, 0.2, 0.25, 0.3, 0.35)]),
-                                      rod=dict(beam=WIDE_ROD, days=round(WIDE_ROD_DAYS), lost=WIDE_ROD_LOST)),
+                                                curve=[[b, round(_push(b, _WIDE_SHIP_KG)[0])] for b in (0.15, 0.2, 0.25, 0.3, 0.35)])),
                             # A ship that carries a small drive, so weighs more: rows of weight, the Ship Beam's speed for
                             # it, the Wide Beam's.
                             heavy=dict(step=HEAVY_STEP, rows=heavy())))
@@ -479,21 +479,16 @@ def golden_probes():
             for d in (4.25, 10.5, 50, 400, 1000, 2700, 10000, 30000, 2.53e6)]
 
 
-def golden_rods():
-    """Rods the Ship Beam throws in place of bullets, near and far, for game/lib/sim/speeds.ts to reproduce."""
-    return [dict(d=d, beta=rod_beta(d), years=rod_years(d)) for d in (4.25, 10.5, 50, 400, 1000, 2700, 30000)]
-
-
 def golden_wide():
-    """What the Wide Beam throws, near and far: a flyby probe and a rod, for game/lib/sim/speeds.ts to reproduce."""
-    return [dict(d=d, probe=wide_probe_beta(d), probeYears=wide_probe_years(d), rod=wide_rod_beta(d), rodYears=wide_rod_years(d),
-                 tonnes=wide_rod_tonnes(d), ready=wide_rod_ready(d)) for d in (4.25, 10.5, 50, 120, 400, 1000, 2700, 30000)]
+    """What the Wide Beam throws, near and far: a flyby probe, for game/lib/sim/speeds.ts to reproduce. Its rods went
+    with our bullets, 2026-11-13."""
+    return [dict(d=d, probe=wide_probe_beta(d), probeYears=wide_probe_years(d)) for d in (4.25, 10.5, 50, 120, 400, 1000, 2700, 30000)]
 
 def golden_misses():
     """How far a launch beam passes from its star, and whether an awake old mind there sees it, for each craft a beam
-    throws: sails, a seed ship, a flyby probe and a rod. For game/lib/sim/speeds.ts to reproduce."""
+    throws: sails, a seed ship and a flyby probe. For game/lib/sim/speeds.ts to reproduce."""
     return [dict(d=d, beta=b, lum=lum, kms=kms, au=beam_miss(d, b, kms), seen=beam_seen(d, b, lum, kms))
-            for d in (4.25, 10.5, 17, 20, 50, 62, 90, 400, 2700) for b in (SAIL_BETA, SHIP_BEAM, probe_beta(d), rod_beta(d))
+            for d in (4.25, 10.5, 17, 20, 50, 62, 90, 400, 2700) for b in (SAIL_BETA, SHIP_BEAM, probe_beta(d))
             for lum in (1.0, 0.009, 0.17) for kms in (None, 9, 24, 90)]
 
 

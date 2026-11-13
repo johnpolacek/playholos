@@ -1,27 +1,15 @@
-// Strikes and harm: what a bullet or a rock does to a world, by the same physics. Our Strike Yard and Interceptor
-// stay buildable at the same price and pace. Pellet screens were retired 2026-10-31, audit 2.1. The neighbors who struck back are retired, and their side of
-// it went 2026-10-29. Sources in HOLOS_RESEARCH.md, "Strikes, screens and harm". Pure, so it tests fast.
-import { HE3, he3When, STRIKE_BUILD, STRIKE_READY, STRIKE_V } from "./meetings.ts";
+// Strikes and harm: what a rod or a rock does to a world, by the same physics. Pellet screens were retired 2026-10-31,
+// audit 2.1, and our own bullets 2026-11-13, the designer's word: a bullet bought nothing. The Interceptor stays. Sources
+// in HOLOS_RESEARCH.md, "Strikes, screens and harm". Pure, so it tests fast.
 import catalog from "../../data/works.json" with { type: "json" };
+import { BULLET_C } from "./speeds.ts";
 
-/** A bullet of ours: 1,000 t at a tenth of light speed, on its Fusion Drive. Another mind's lands as hard, the same
- *  energy in a rod of a few tonnes thrown near nine tenths of light speed, since speed costs a mind with a wide beam
- *  nothing and gives its target less time (calcs/speeds.py, 2026-11-11). A neighbor's was ready about 32.4 Years after
- *  it chose to strike, its helium-3 harvest built and filled, until 2026-11-12: its beam stands, so it readies a rod in
- *  about a month, lib/sim/speeds.ts's theirReady. Each tonne lands with 108 Mt, so it lands with about 110,000 Mt,
- *  enough to scar the air worldwide and cool the climate. Chicxulub would take over 200,000 t. The fuel to fire it is
- *  61 t of fusion fuel a tonne, 60% helium-3 from a harvest and 40% deuterium from the sea. */
-export const BULLET = { tonnes: 1000, v: STRIKE_V, ready: STRIKE_READY, build: STRIKE_BUILD, fuelPerTonne: 61, deuterium: 0.4 };
+/** A bullet's harm, the measure another mind strikes with: the energy of 1,000 t at a tenth of light speed, about
+ *  110,000 Mt, enough to scar the air worldwide and cool the climate. The watcher's maker throws it as a rod of a few
+ *  tonnes near nine tenths of light speed, since speed costs a mind with a wide beam nothing (calcs/speeds.py). Chicxulub
+ *  would take over 200,000 t. Ours were retired 2026-11-13. */
+export const BULLET = { tonnes: 1000, v: BULLET_C };
 
-/** When each of our bullets is ready, in the order we ordered them: built 20 Years after its order once the Strike Yard
- *  is done, and fired once the harvest, growing over its spans, has gathered its 36.6 kt of helium-3, after every
- *  bullet before it. Null without a harvest, or a yard. 2026-10-29. */
-export function bulletsReady(orders: readonly number[], yard: number | null, harvest: readonly [number, number | null][]) {
-  return orders.map((y, i) => {
-    const fuel = yard === null ? null : he3When(harvest, (i + 1) * HE3.bullet);
-    return yard === null || fuel === null ? null : Math.max(Math.max(y, yard) + STRIKE_BUILD, fuel);
-  });
-}
 /** Kinetic energy at speed v (in c), per tonne, in megatons: (γ - 1)mc². */
 export const mtPerTonne = (v: number) => ((1 / Math.sqrt(1 - v * v) - 1) * 1000 * 299792458 ** 2) / 4.184e15;
 export const bulletMt = (tonnes = BULLET.tonnes, v = BULLET.v) => tonnes * mtPerTonne(v);

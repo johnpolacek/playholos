@@ -8,6 +8,7 @@ import { useAhead, useIdleNow } from "@/components/hud";
 import { useMindNews } from "@/components/mind-chat";
 import { MindSays, useJumpWords } from "@/components/mind-news";
 import { MindNote } from "@/components/mind-note";
+import { MindThinking, useThinking } from "@/components/mind-thinking";
 import { usePlan, useSchedule } from "@/components/picks";
 import { Quiet } from "@/components/quiet";
 import { watcherWords } from "@/lib/game/watcher-words";
@@ -74,6 +75,10 @@ export function IdleNote() {
   // with its own words on it. On the Mind tab the talk shows those. 2026-11-04.
   const leap = useLeap();
   const told = useJumpWords(leap?.snap.said);
+  // Waiting on the Mind's words, the note shows it thinking, as the talk does. A lone "…" read as nothing happening.
+  // Playtest 2026-11-13.
+  const waiting = !!leap && path !== "/play/mind" && (told.coming || (told.fresh && !told.words));
+  const thinking = useThinking(waiting);
   // Later news closes the jump's card, so it shows in its own note: the card kept "Asteroid Tour done · Year 4.7" over
   // the Mind's words on the Deuterium Works, done after. Blind playtest 2026-11-07.
   const latest = useMindNews().last;
@@ -116,9 +121,10 @@ export function IdleNote() {
             {/* What reached us first, the Mind's words after: they stream in late, and above the list they pushed its rows
                 from under the cursor, in two blind playtests. 2026-11-07. */}
             <Arrived from={leap.from} to={leap.to} snap={leap.snap} />
-            {(told.fresh || told.coming) && path !== "/play/mind" && (
+            {thinking.here && <MindThinking on={waiting} gone={thinking.gone} />}
+            {!thinking.here && told.fresh && path !== "/play/mind" && (
               <p aria-live="polite">
-                {told.words || "…"}{" "}
+                {told.words}{" "}
                 {told.fresh && (
                   <Link to="/play/mind" onClick={told.read} className="inline-flex min-h-6 items-center text-[12.5px] whitespace-nowrap text-you hover:underline">
                     Reply ›
@@ -143,7 +149,7 @@ export function IdleNote() {
   const spent = idle && !pick;
   const reads = plan.closeReads ?? [];
   // One we have sent a craft to is answered too: it kept asking us to go after a probe was on its way. 2026-11-05.
-  const engaged = new Set([...(plan.flybys ?? []), ...(plan.sentinels ?? []), ...(plan.lenses ?? []), ...(plan.seeds ?? []), ...(plan.strikes ?? [])].map((o) => o.name));
+  const engaged = new Set([...(plan.flybys ?? []), ...(plan.sentinels ?? []), ...(plan.lenses ?? []), ...(plan.seeds ?? [])].map((o) => o.name));
   const heat = !spent || glow
     ? undefined
     : leads.find((l) => {

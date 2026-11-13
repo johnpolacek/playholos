@@ -292,14 +292,6 @@ const Intercept = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
-/** The Strike Yard: a bullet on its long flame, outbound. 2026-10-28. */
-const Strike = ({ size, still }: MarkProps) => (
-  <Moving size={size} still={still} move={(_, part) => void sway(part("flame"), { opacity: 0.3 }, { opacity: 1 }, 0.7)}>
-    <path d="M8.6 6.6h4.2l1.4 1.4-1.4 1.4H8.6z" />
-    <path data-k="flame" d="M8.4 8H1.8M7.6 7l-4 -1.4M7.6 9l-4 1.4" opacity={still ? 1 : 0.3} />
-  </Moving>
-);
-
 /** The Rock Deflector: an impactor streaking in, and the rock it meets nudged aside. 2026-10-28. */
 const Deflector = ({ size, still }: MarkProps) => (
   <Moving
@@ -986,15 +978,6 @@ const DeepIce = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
-/** The Helium-3 Harvest: an ice giant, and a craft dipping into its air and climbing out again. Ours. 2026-10-29. */
-const Harvest = ({ size, still }: MarkProps) => (
-  <Moving size={size} still={still} move={(_, part) => void sway(part("craft"), { x: 0, y: 0 }, { x: -1.8, y: 2.2 }, 1.8)}>
-    <circle cx="6.4" cy="9.6" r="4.6" />
-    <path d="M2.6 8.4h7.6" opacity={0.45} />
-    <circle data-k="craft" cx="12.6" cy="4.2" r="1" fill="currentColor" stroke="none" />
-  </Moving>
-);
-
 /** The Mind Link: a wide mirror, its beam going out in pulses. Ours. 2026-10-26. */
 const Link = ({ size, still }: MarkProps) => (
   <Moving
@@ -1056,8 +1039,6 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <Quiet size={size} still={still} />;
     case "Interceptor":
       return <Intercept size={size} still={still} />;
-    case "Strike Yard":
-      return <Strike size={size} still={still} />;
     case "Rock Deflector":
       return <Deflector size={size} still={still} />;
     case "Trojan Vault":
@@ -1113,8 +1094,6 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <GlowImager size={size} still={still} />;
     case "Galaxy Broadcast Array":
       return <GalaxyCall size={size} still={still} />;
-    case "Helium-3 Harvest":
-      return <Harvest size={size} still={still} />;
     case "Star Mapper":
       return <Hole size={size} still={still} />;
     case "Mind Link":

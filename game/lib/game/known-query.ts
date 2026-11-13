@@ -14,7 +14,6 @@ export function knownQuery(save: Save | undefined, year: number | null) {
     lenses: JSON.stringify(plan?.lenses ?? []),
     closeReads: JSON.stringify(plan?.closeReads ?? []),
     sentinels: JSON.stringify(plan?.sentinels ?? []),
-    strikes: JSON.stringify(plan?.strikes ?? []),
     flybys: JSON.stringify(plan?.flybys ?? []),
     seeds: JSON.stringify(plan?.seeds ?? []),
     colony: JSON.stringify(plan?.colony ?? null),

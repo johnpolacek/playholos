@@ -158,27 +158,12 @@ export interface Plan {
    *  hole for power, hides in its shadow, or settles at a star. One a game, since the Seed Ship carries one.
    *  2026-10-26, a star since 2026-10-27. */
   colony?: Ordered & { mode: ColonyMode; d?: number };
-  /** Our bullets, each by the star it is fired at and the Year we ordered it, readied by the Strike Yard. One a star.
-   *  2026-10-28. */
-  strikes?: (Ordered & { d?: number })[];
   /** Craft we canceled before they left, as "sentinel:<star>", so a standing order does not send them again.
    *  2026-11-10. */
   recalls?: string[];
   /** Builds that act on their own, stood down or armed again: each by its name, the Year, and which. The list only
    *  grows, and the last word by a Year holds. One never switched is on. plan.ts's SWITCHED. 2026-11-11. */
   switches?: (Ordered & { on: boolean })[];
-  /** Builds of ours an old mind wrecked for a bullet we threw at it, each down from the Year its grams land until the
-   *  Year it is rebuilt, at its full Years. Never saved or sent: the server works them out from the world's truth, and
-   *  Scan hands them to the plan. lib/sim/reprisals.ts, reach.ts's wrecksOf. 2026-11-12. */
-  wrecks?: Wreck[];
-}
-
-/** A build wrecked: its name, the Year, the Year it stands again, and the star whose mind did it, as we name it. */
-export interface Wreck {
-  name: string;
-  at: number;
-  until: number;
-  by: string;
 }
 
 /** A build ordered in play, or taken back: its name, and the Year. */
