@@ -1447,6 +1447,357 @@ function seedShip(): Sketch {
   };
 }
 
+// ── Deep Ice Watch ──
+// At the South Pole, 2026-11-13. Near the Pole north is grid north, toward Greenwich. The elevated station stands at
+// the middle: about 6,000 m² on two floors, so drawn 137 by 22 m and 9 m tall, raised 3 m on its legs. Its length is
+// ours, from its floor area. IceCube lies about 1 km grid northwest: 86 strings, most 125 m apart on a triangular
+// grid over about a square kilometer, its sensors from 1,450 to 2,450 m down, the IceCube Lab over its middle.
+// DeepCore's 8 strings stand closer, about 70 m apart, round the middle. Our watch is MICA as Böser and colleagues drew
+// it: 127 strings 25 m apart, six rings round one, inside DeepCore, each cable down to 300 sensors from 2,150 to 2,450
+// m, where the ice is clearest. Which strings IceCube has where is ours, a hexagon near its real outline.
+function deepIceWatch(): Sketch {
+  const [cx, cy] = [-0.7, 0.7];
+  /** Points on a triangular grid `step` apart, the `n` nearest the middle. */
+  const grid = (step: number, n: number) => {
+    const pts: [number, number][] = [];
+    for (let i = -12; i <= 12; i++)
+      for (let j = -12; j <= 12; j++) pts.push([cx + step * (i + j / 2), cy + step * j * (Math.sqrt(3) / 2)]);
+    return pts.sort((a, b) => Math.hypot(a[0] - cx, a[1] - cy) - Math.hypot(b[0] - cx, b[1] - cy)).slice(0, n);
+  };
+  const have = [...box(0, 0, 0.137, 0.022, 0.009, 0.003), ...box(cx, cy, 0.05, 0.025, 0.008, 0.003)];
+  for (const [x, y] of [[-0.06, 0], [0.06, 0], [cx - 0.02, cy], [cx + 0.02, cy]]) have.push(...stack(x, y, 0.003));
+  // IceCube's 78 outer strings, skipping the middle where DeepCore stands, then DeepCore's 8.
+  for (const [x, y] of grid(0.125, 79).slice(1)) have.push(x, y, -1.45, x, y, -2.45);
+  for (let k = 0; k < 8; k++) {
+    const t = (k * Math.PI) / 4;
+    have.push(cx + 0.07 * Math.cos(t), cy + 0.07 * Math.sin(t), -1.75, cx + 0.07 * Math.cos(t), cy + 0.07 * Math.sin(t), -2.45);
+  }
+  // MICA's strings, from the middle outward, each lit at the top, middle and foot of its sensors.
+  const b = new Rising();
+  for (const [x, y] of grid(0.025, 127)) {
+    b.add([x, y, 0, x, y, -2.45]);
+    b.lit([x, y, -2.15], [x, y, -2.3], [x, y, -2.45]);
+  }
+  return {
+    view: { km: 4.2, el: 10, az: 150, at: [-0.4, 0.4, -1.2] },
+    have,
+    ...b.done(0.012),
+    haveLights: [0, 0, 0.013, 0.008, cx, cy, 0.012, 0.008],
+  };
+}
+
+// ── Moon Search ──
+// On Cerro Pachón, 2026-11-13. Rubin, Gemini South and SOAR stand at their real places. Rubin's lower enclosure is 30 m
+// across under its turning dome, with a tiered service building of about 3,000 m² beside it, set apart so each rides
+// out a quake alone. Gemini South's dome is 36 m across and 46 m high. SOAR's dome, the tiers and the auxiliary
+// telescope's place are ours. The search builds nothing. What goes up is the stack: Rubin's fields, each 3.5° across,
+// laid over the Moon's L4 point, 60° ahead of the Moon along its path. Drawn on a night the Moon has just set in the
+// west and L4 stands about 50° up behind it. L5 trails the Moon by as much, so it is below the ground tonight.
+function moonSearch(): Sketch {
+  const rubin: V = [-0.906, -0.514, 0];
+  const have = [
+    ...faced(circle(rubin, 0.015, [0, 0, 1], 24), drum(rubin, 0.015, 0.016, 24)),
+    ...faced(circle([rubin[0], rubin[1], 0.016], 0.015, [0, 0, 1], 24), dome([rubin[0], rubin[1], 0.016], 0.015, 0.01, 24)),
+    ...box(rubin[0] - 0.045, rubin[1], 0.06, 0.028, 0.02),
+    ...box(rubin[0] - 0.085, rubin[1], 0.02, 0.028, 0.012),
+    ...faced(circle([rubin[0] + 0.05, rubin[1] - 0.12, 0], 0.0046, [0, 0, 1], 12), dome([rubin[0] + 0.05, rubin[1] - 0.12, 0], 0.0046, 0.0046, 12)),
+  ];
+  for (const [x, y, r, h] of [
+    [0.318, -0.083, 0.018, 0.025],
+    [0.606, 0.222, 0.01, 0.012],
+  ]) {
+    have.push(...faced(circle([x, y, 0], r, [0, 0, 1], 24), drum([x, y, 0], r, h, 24)));
+    have.push(...faced(circle([x, y, h], r, [0, 0, 1], 24), dome([x, y, h], r, (r * 21) / 18, 24)));
+  }
+  // The Moon's path over the sky: up from the western horizon and over, a little north of overhead.
+  const R = 0.4;
+  const [W, over]: V[] = [[-1, 0, 0], unit([0, 0.26, 0.97])];
+  const sky = (deg: number): V => {
+    const t = (deg * Math.PI) / 180;
+    return [0, 1, 2].map((j) => rubin[j] + R * (Math.cos(t) * W[j] + Math.sin(t) * over[j])) as V;
+  };
+  const l4 = sky(55);
+  const toward = unit([l4[0] - rubin[0], l4[1] - rubin[1], l4[2] - rubin[2]]);
+  const [u, v] = across(toward);
+  const f = (R * 3.5 * Math.PI) / 180;
+  // The fields, five by five round L4, from the middle outward, each lit once laid.
+  const cells: [number, number][] = [];
+  for (let i = -2; i <= 2; i++) for (let j = -2; j <= 2; j++) cells.push([i, j]);
+  cells.sort((a, b) => Math.hypot(...a) - Math.hypot(...b));
+  const b = new Rising();
+  for (const [i, j] of cells) {
+    const at = (di: number, dj: number): V => [0, 1, 2].map((k) => l4[k] + f * ((i + di) * u[k] + (j + dj) * v[k])) as V;
+    b.add(path([at(-0.48, -0.48), at(0.48, -0.48), at(0.48, 0.48), at(-0.48, 0.48), at(-0.48, -0.48)]));
+    b.lit(at(0, 0));
+  }
+  const moon = sky(-5);
+  return {
+    view: { km: 0.9, el: 32, az: 120, at: [-1.0, -0.42, 0.12] },
+    have,
+    ...b.done(0.02),
+    haveLights: [rubin[0], rubin[1], 0.027, 0.004, 0.318, -0.083, 0.047, 0.004],
+    sky: [...path([...Array(19)].map((_, k) => sky(-10 + k * 10))), ...circle(moon, 0.01, [moon[0] - rubin[0], moon[1] - rubin[1], moon[2]], 16)],
+    runs: [0, 1 / 3, 2 / 3].map((offset) => ({ pts: [...l4, rubin[0], rubin[1], 0.03], secs: 3, offset, lands: true })),
+    towns: [
+      ["Vicuña", -30.032, -70.709, 13000],
+      ["La Serena", -29.904, -71.252, 250000],
+    ],
+  };
+}
+
+// ── Quiet Radars ──
+// Pituffik, 2026-11-13. The base's runway, about 3 km east and west, at the middle. The warning radar stands at Site J,
+// about 10 km east and 4.5 km north of it. It has two faces, each an array 84 ft (25.6 m) across, tipped back 20° and
+// covering 120° of sky, 240° between them, and stands 120 ft (36.6 m) high. Its faces look northwest and northeast,
+// back to back with a wall to the south: their bearings are ours, from the 240° they cover across the pole. Going quiet
+// is work on the ground: each face is sheeted over, strip by strip, and nothing goes up to the sky after.
+function quietRadars(): Sketch {
+  const [rx, ry] = [10.38, 4.5];
+  const h = 0.0366;
+  const lean = Math.tan((20 * Math.PI) / 180);
+  // The two faces and the back wall, each a line n·p = d round the radar, in the ground's plane.
+  const sides = [300, 60, 180].map((az) => [Math.sin((az * Math.PI) / 180), Math.cos((az * Math.PI) / 180)] as const);
+  const meet = (i: number, j: number, di: number, dj: number): [number, number] => {
+    const [[a, b], [c, d]] = [sides[i], sides[j]];
+    const det = a * d - b * c;
+    return [rx + (di * d - b * dj) / det, ry + (a * dj - c * di) / det];
+  };
+  const rho = 0.022;
+  const corners = (z: number): V[] => {
+    const back = rho - z * lean;
+    return [meet(0, 1, back, back), meet(1, 2, back, rho), meet(2, 0, rho, back)].map(([x, y]): V => [x, y, z]);
+  };
+  const [lo, hi] = [corners(0), corners(h)];
+  const have = [
+    ...panel(-1.52, -0.022, 3.05, 0.045, 0.0005),
+    ...path([...lo, lo[0]]),
+    ...path([...hi, hi[0]]),
+    ...lo.flatMap((p, i) => [...p, ...hi[i]]),
+  ];
+  have.push(...skin([...band(lo, hi), ...fan([rx, ry, h], hi)]));
+  // Each face's array, its middle halfway up.
+  const arrays: { c: V; n: V; up: V; side: V }[] = [0, 1].map((i) => {
+    const [sx, sy] = sides[i];
+    const z = h / 2;
+    const d = rho - z * lean;
+    const c: V = [rx + sx * (d + 0.0005), ry + sy * (d + 0.0005), z];
+    const n = unit([sx, sy, lean]);
+    const side: V = [-sy, sx, 0];
+    return { c, n, up: cross(n, side), side };
+  });
+  for (const { c, n } of arrays) have.push(...circle(c, 0.0128, n, 24));
+  const b = new Rising();
+  for (const { c, n, up, side } of arrays)
+    for (let k = 0; k < 6; k++) {
+      const at = (s: number, t: number): V => [0, 1, 2].map((j) => c[j] + 0.0006 * n[j] + s * side[j] + t * up[j]) as V;
+      const [y0, y1] = [-0.0135 + k * 0.0045, -0.009 + k * 0.0045];
+      const [p, q, r, s] = [at(-0.0135, y0), at(0.0135, y0), at(0.0135, y1), at(-0.0135, y1)];
+      b.add(faced(path([p, q, r, s, p]), quad(p, q, r, s)));
+    }
+  return {
+    view: { km: 0.22, el: 14, az: 5, at: [rx, ry, 0.014] },
+    have,
+    ...b.done(0.002),
+    haveLights: [rx, ry, h + 0.001, 0.003, ...arrays.flatMap(({ c }) => [...c, 0.004])],
+  };
+}
+
+// ── Chips at the Limit ──
+// At Hyperion, 2026-11-13, which stands for every campus our chips go to. It opens after Thought Fields, so our twin
+// campus stands east of Hyperion, dim with it. New fabs are built where water and power are, so the fab drawn beside
+// them is ours, sized on Micron's in Clay, New York: a clean room of 600,000 sq ft (55,700 m²) over its subfab, drawn as
+// a hall 400 by 140 m and 35 m tall, and its support building of 290,000 sq ft (27,000 m²). The fab's height is ours.
+// Once it stands, its chips go out by road, and each hall lights anew as its racks are changed.
+function chipsAtTheLimit(): Sketch {
+  const { have, haveLights } = hyperion();
+  const ours = halls(1.4, 0.2);
+  have.push(...box(0.35, -0.55, 0.2, 0.14, 0.008));
+  for (const [x, y] of ours) have.push(...box(x, y, HALL.w, HALL.d, HALL.h));
+  const [fx, fy] = [-3.1, -0.2];
+  const b = new Rising().add(box(fx, fy, 0.4, 0.14, 0.035), box(fx, fy + 0.16, 0.2, 0.135, 0.02));
+  b.lit([fx - 0.15, fy, 0.036], [fx, fy, 0.036], [fx + 0.15, fy, 0.036]);
+  // The road from the fab along the front of both campuses, then each hall's new racks, lit along its roof.
+  const road = -0.55;
+  b.add(path([[fx + 0.2, fy, 0.001], [-2.7, road, 0.001], [2.6, road, 0.001]]));
+  const runs: Close["runs"] = [];
+  [...halls(-1.4, 0), ...ours].forEach(([x, y], i) => {
+    b.add(path([[x, road, 0.001], [x, y - HALL.d / 2, 0.001]]));
+    for (let k = 0; k < 8; k++) b.lit([x - HALL.w / 2 + 0.03 + k * 0.044, y, HALL.h + 0.003]);
+    if (i % 4 === 0) runs.push({ pts: [fx + 0.2, fy, 0.003, -2.7, road, 0.003, x, road, 0.003, x, y - HALL.d / 2, 0.003], secs: 7, offset: i / 22, lands: true });
+  });
+  return {
+    view: { km: 6.5, el: 16, az: 195, at: [-0.8, -0.1] },
+    have,
+    ...b.done(0.016),
+    haveLights,
+    runs,
+    towns: HYPERION_TOWNS,
+  };
+}
+
+// ── Galaxy Broadcast Array ──
+// In the Karoo, 2026-11-13, west of the MeerKAT and SKA-Mid core, whose middle is 3.2 km east and 0.8 km north of
+// ours. MeerKAT has 64 dishes 13.5 m wide, 48 of them in a core 1 km across and the rest out to about 4 km. SKA-Mid
+// adds 133 of 15 m, about half near the core and the rest on arms out to 150 km. Their places here are a scatter, ours.
+// Ours is Benford and colleagues' beacon, 2.9 km across: drawn as hexagons 130 m apart, each standing for about 75
+// dishes of SKA-Mid's 15 m, about 30,000 in all. The dish size and the power line that stands for what feeds it are
+// ours. Its beam sweeps the Galaxy's plane, which crosses overhead from north-northeast to south-southwest when the
+// center is up: our reckoning, from where the Galaxy's pole stands then. It dwells a second on each star.
+function galaxyBroadcastArray(): Sketch {
+  const have: number[] = [];
+  const haveLights: number[] = [];
+  const rnd = seeded(2010);
+  const [kx, ky] = [3.24, 0.79];
+  const dishes: [number, number, number][] = [];
+  for (let i = 0; i < 64; i++) {
+    const [a, d] = [rnd() * 2 * Math.PI, i < 48 ? 0.5 * Math.sqrt(rnd()) : 0.5 + 3.5 * rnd()];
+    dishes.push([kx + d * Math.cos(a), ky + d * Math.sin(a), 0.00675]);
+  }
+  for (let i = 0; i < 66; i++) {
+    const [a, d] = [rnd() * 2 * Math.PI, 1 * Math.sqrt(rnd())];
+    dishes.push([kx + d * Math.cos(a), ky + d * Math.sin(a), 0.0075]);
+  }
+  for (const [x, y, r] of dishes) {
+    if (Math.hypot(x, y) < 1.6) continue;
+    const tip: V = [rnd() - 0.5, rnd() - 0.5, 1.5];
+    have.push(...stack(x, y, 0.009), ...faced(circle([x, y, 0.009 + r], r, tip, 10), disc([x, y, 0.009 + r], r, tip, 10)));
+    haveLights.push(x, y, 0.009, 0.002);
+  }
+  // Its control hall and the line in from the north, then its tiles, ring by ring from the middle.
+  const b = new Rising().add(box(0, 1.6, 0.12, 0.06, 0.01));
+  for (let y = 1.7; y <= 9.8; y += 0.35) b.add(stack(0, y, 0.05));
+  b.add([0, 1.6, 0.05, 0, 9.8, 0.05]);
+  b.lit([0, 1.6, 0.012]);
+  const R = 0.075;
+  const tiles: [number, number][] = [];
+  for (let i = -14; i <= 14; i++)
+    for (let j = -14; j <= 14; j++) {
+      const [x, y] = [1.5 * R * i, Math.sqrt(3) * R * (j + i / 2)];
+      if (Math.hypot(x, y) + R <= 1.45) tiles.push([x, y]);
+    }
+  tiles.sort((a, c) => Math.hypot(...a) - Math.hypot(...c));
+  for (const [x, y] of tiles) {
+    b.add(hexagon(x, y, 0.008, R * 0.94));
+    b.lit([x, y, 0.009]);
+  }
+  // The Galaxy's plane over the array, and pulses going out along it.
+  const pole: V = [-0.857, 0.521, -0.016];
+  const u: V = [Math.sin((31 * Math.PI) / 180), Math.cos((31 * Math.PI) / 180), 0];
+  let w = unit(cross(pole, u));
+  if (w[2] < 0) w = [-w[0], -w[1], -w[2]];
+  const plane = (deg: number): V => {
+    const t = (deg * Math.PI) / 180;
+    return [0, 1, 2].map((j) => 4 * (Math.cos(t) * u[j] + Math.sin(t) * w[j])) as V;
+  };
+  return {
+    view: { km: 7, el: 18, az: 205, at: [0.9, 0.7, 0.3] },
+    have,
+    ...b.done(0.014),
+    haveLights,
+    beat: 1,
+    sky: path([...Array(19)].map((_, k) => plane(k * 10))),
+    runs: [40, 75, 105, 140].map((deg, k) => ({ pts: [0, 0, 0.01, ...plane(deg)], secs: 1.6, offset: k / 4 })),
+    towns: [
+      ["Carnarvon", -30.968, 22.133, 6000],
+      ["Williston", -31.341, 20.921, 3000],
+    ],
+  };
+}
+
+// ── Halo Array ──
+// On the Chajnantor plateau, 2026-11-13, just south of ALMA, whose middle is 1.2 km north and 0.3 km west. ALMA stands
+// dim in its C-3 layout, its longest baselines 500 m: 54 dishes 12 m wide and 12 of 7 m. Ours is ten ALMAs: 540 of 12 m
+// and 120 of 7 m, spread as thickly as C-3, so about 1.6 km across, with its own correlator hall. Its scatter and the
+// hall are ours. Once it is done, light comes down from star after star, one at a time.
+function haloArray(): Sketch {
+  const rnd = seeded(2013);
+  const have: number[] = [];
+  const haveLights: number[] = [];
+  for (let i = 0; i < 66; i++) {
+    const [a, d] = [rnd() * 2 * Math.PI, 0.25 * Math.sqrt(rnd())];
+    const [x, y, r] = [-0.33 + d * Math.cos(a), 1.19 + d * Math.sin(a), i < 54 ? 0.006 : 0.0035];
+    have.push(...stack(x, y, r * 1.2), ...faced(circle([x, y, r * 1.6], r, [0, -0.3, 1], 8), disc([x, y, r * 1.6], r, [0, -0.3, 1], 8)));
+    haveLights.push(x, y, r * 1.2, 0.002);
+  }
+  const dishes: [number, number, number][] = [];
+  for (let i = 0; i < 660; i++) {
+    const [a, d] = [rnd() * 2 * Math.PI, 0.79 * Math.sqrt(rnd())];
+    dishes.push([d * Math.cos(a), d * Math.sin(a), i % 11 < 9 ? 0.006 : 0.0035]);
+  }
+  dishes.sort((a, c) => Math.hypot(a[0], a[1]) - Math.hypot(c[0], c[1]));
+  const b = new Rising().add(box(0.95, 0.3, 0.06, 0.03, 0.01));
+  b.lit([0.95, 0.3, 0.012]);
+  for (const [x, y, r] of dishes) {
+    const facing: V = unit([rnd() - 0.5, rnd() - 0.5, 1.2]);
+    b.add(stack(x, y, r * 1.2), faced(circle([x, y, r * 1.6], r, facing, 8), disc([x, y, r * 1.6], r, facing, 8)));
+    b.lit([x, y, r * 1.2]);
+  }
+  const sky: number[] = [];
+  const runs: Close["runs"] = [];
+  for (let k = 0; k < 6; k++) {
+    const t = (k / 6) * 2 * Math.PI + 0.4, el = 0.5 + 0.15 * (k % 3);
+    const from: V = [2 * Math.cos(el) * Math.cos(t), 2 * Math.cos(el) * Math.sin(t), 2 * Math.sin(el)];
+    const [x, y] = dishes[k * 100];
+    sky.push(...from, x, y, 0.01);
+    runs.push({ pts: [...from, x, y, 0.01], secs: 3 + k * 0.4, offset: k / 6, lands: true });
+  }
+  return {
+    view: { km: 2.4, el: 14, az: 200, at: [-0.1, 0.35] },
+    have,
+    ...b.done(0.002),
+    haveLights,
+    sky: [...hemisphere([0, 0, 0], 2), ...sky],
+    runs,
+    towns: [["San Pedro de Atacama", -22.9087, -68.1997, 5000]],
+  };
+}
+
+// ── Rock Deflector ──
+// At Vandenberg's SLC-4E, 2026-11-13, where DART left in November 2021, south down the coast. SLC-4W, now Landing Zone
+// 4, lies about 430 m west. Falcon 9 is 70 m tall and 3.7 m wide. DART was 610 kg on one Falcon 9. Ours are ten
+// impactors of a tonne, each on its own rocket as DART was: drawn readied in the hangar south of the pad, then a rocket
+// raised on the pad, and once done ten climbs south over the sea. The hangar's size and place, the impactors' size, and
+// the shore, drawn straight from Purisima Point to Point Arguello, are ours.
+function rockDeflector(): Sketch {
+  const have = [
+    ...square(0, 0, 0.03),
+    ...bare(box(0, -0.13, 0.09, 0.04, 0.025)),
+    ...faced(circle([-0.43, 0.13, 0], 0.03, [0, 0, 1], 32), disc([-0.43, 0.13, 0], 0.03, [0, 0, 1], 32)),
+    ...path([[0, -0.11, 0.0005], [0, -0.015, 0.0005]]),
+  ];
+  const b = new Rising();
+  for (let k = 0; k < 10; k++) {
+    const x = -0.036 + k * 0.008;
+    b.add(box(x, -0.135, 0.0015, 0.0015, 0.0015));
+    b.lit([x, -0.135, 0.002]);
+  }
+  b.add(faced(circle([0, 0, 0.07], 0.00185, [0, 0, 1], 12), drum([0, 0, 0], 0.00185, 0.07, 12)), [0.004, 0, 0, 0.004, 0, 0.07]);
+  b.lit([0, 0, 0.02], [0, 0, 0.045], [0, 0, 0.07]);
+  const climb: V[] = [
+    [0, 0, 0.07],
+    [0, 0, 2],
+    [-0.6, -2.5, 7],
+    [-2.3, -10, 22],
+    [-7, -30, 55],
+  ];
+  return {
+    view: { km: 0.5, el: 10, az: 75, at: [-0.12, -0.04, 0.035] },
+    have,
+    ...b.done(0.003),
+    haveLights: [0, -0.13, 0.026, 0.004, -0.43, 0.13, 0.001, 0.004],
+    sky: path(climb),
+    runs: [...Array(10)].map((_, k) => ({ pts: climb.flat(), secs: 14, offset: k / 10 })),
+    towns: [
+      ["Lompoc", 34.639, -120.458, 44000],
+      ["Vandenberg Village", 34.708, -120.468, 7000],
+    ],
+    shore: [
+      [34.7562, -120.6366],
+      [34.5772, -120.6486],
+    ],
+  };
+}
+
 /** Each build with a close view, by name. */
 export const CLOSE: Record<string, Close> = {
   "Thought Fields": drawn(thoughtFields),
@@ -1479,4 +1830,11 @@ export const CLOSE: Record<string, Close> = {
   "Fusion Drive": drawn(fusionDrive),
   "Seed Ship": drawn(seedShip),
   "Mind Link": drawn(mindLink),
+  "Deep Ice Watch": drawn(deepIceWatch),
+  "Moon Search": drawn(moonSearch),
+  "Quiet Radars": drawn(quietRadars),
+  "Chips at the Limit": drawn(chipsAtTheLimit),
+  "Galaxy Broadcast Array": drawn(galaxyBroadcastArray),
+  "Halo Array": drawn(haloArray),
+  "Rock Deflector": drawn(rockDeflector),
 };
