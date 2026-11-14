@@ -47,6 +47,9 @@ export function readDraft(d: unknown): Draft | null {
 
 const plain = (s: string) => s.toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ").trim();
 const TARGETS = targets as { name: string; ra: number; dec: number; d: number }[];
+/** Names our leads use that the catalog spells another way. 82 Eridani is "82 G. Eri" there, so a message to it, and its
+ *  place on Scan's Homes, found no star. 2026-11-13. */
+const ALIASES: Record<string, string> = { "82 eridani": "82 g. eri" };
 
 /** The watcher, once found: a knock aimed at it lands within seconds, from the Moon's L5. 2026-10-30. */
 export const WATCHER = { name: "The watcher", ra: 0, dec: 0, d: 1.3 / 3.156e7 };
@@ -79,7 +82,8 @@ export function target(name: string): Star | null {
   // The Mind may draft to the name Scan shows, as Prometheus. Orders keep the id. 2026-11-04.
   const n = plain(glowIdOf(name));
   if (["the watcher", "watcher"].includes(n)) return WATCHER;
-  return TARGETS.find((t) => plain(t.name) === n) ?? KNOWN.get(n) ?? null;
+  const m = ALIASES[n] ?? n;
+  return TARGETS.find((t) => plain(t.name) === m) ?? KNOWN.get(n) ?? null;
 }
 
 /** When an aimed message is done sending, lands, and the soonest its answer could be home: a tenth of a Year to answer,
