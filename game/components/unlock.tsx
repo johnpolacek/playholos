@@ -82,7 +82,7 @@ export function Unlock() {
             onChange={(e) => WHOLE.test(e.currentTarget.value.trim()) && void open(e.currentTarget.value.trim())}
             className="h-10 min-w-0 grow rounded-md border border-faint bg-panel px-2.5 font-mono text-[12.5px] outline-none placeholder:text-muted focus:border-muted"
           />
-          <button type="submit" disabled={busy} className="h-10 shrink-0 rounded-md bg-ink px-3.5 text-[13px] text-paper disabled:opacity-60">
+          <button type="submit" disabled={busy} className="h-10 shrink-0 rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-60">
             {busy ? "Opening…" : "Open"}
           </button>
         </div>
@@ -162,7 +162,7 @@ function OnUs({ site }: { site: string }) {
         type="button"
         disabled={state === "checking"}
         onClick={() => setState("checking")}
-        className="h-10 self-start rounded-md bg-ink px-3.5 text-[13px] text-paper disabled:opacity-60"
+        className="h-10 self-start rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-60"
       >
         {state === "checking" ? "Checking…" : "Open our Mind"}
       </button>
@@ -193,7 +193,7 @@ function Local() {
       </p>
       <div className="flex flex-col gap-2 rounded-md border border-faint bg-panel p-2.5">
         <p className="font-mono text-[12px] leading-relaxed text-ink">{ASK}</p>
-        <button type="button" onClick={() => void copy()} className="h-8 self-end rounded-md bg-ink px-3 text-[12.5px] text-paper">
+        <button type="button" onClick={() => void copy()} className="h-8 self-end rounded-md bg-button px-3 text-[12.5px] text-paper">
           {copied ? "Copied" : "Copy"}
         </button>
       </div>

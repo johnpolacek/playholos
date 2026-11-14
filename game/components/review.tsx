@@ -317,7 +317,7 @@ export function Review({ onClose }: { onClose(): void }) {
         <button
           ref={next}
           onClick={() => (at === last ? (then ? navigate(then.to) : onClose()) : go(at + 1))}
-          className="h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
+          className="h-11 rounded-full bg-button text-[15px] font-medium text-paper"
         >
           {at === last
             ? (then?.name ?? "Back to Scan")

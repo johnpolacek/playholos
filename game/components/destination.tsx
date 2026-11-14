@@ -197,7 +197,7 @@ function Sent(props: {
             <button
               disabled={sent}
               onClick={() => setAsking({ label: `Send it`, send })}
-              className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${sent ? "border border-faint text-muted" : "bg-ink text-paper"}`}
+              className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${sent ? "border border-faint text-muted" : "bg-button text-paper"}`}
             >
               {sent ? (sentAs ?? (waiting ? `${what[0].toUpperCase()}${what.slice(1)} leaves Year ${year(road.leaves!)}` : `${what} sent`)) : `Send a ${what}`}
             </button>
@@ -207,7 +207,7 @@ function Sent(props: {
         {can && !sent && !asking && choices && (
           <div className="mt-2 flex flex-wrap justify-end gap-1.5">
             {choices.map((c) => (
-              <button key={c.label} onClick={() => setAsking(c)} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
+              <button key={c.label} onClick={() => setAsking(c)} className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">
                 {c.label}
               </button>
             ))}
@@ -241,7 +241,7 @@ function Sent(props: {
                 // Sent, it shows on the map at once, before Begin too. 2026-11-08.
                 preview(true);
               }}
-              className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper"
+              className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper"
             >
               {asking.label}
             </button>
@@ -559,7 +559,7 @@ export function DestinationPage({ slug }: { slug: string }) {
                       if (!plan.builds.includes(road.build)) way(by).preview(true);
                       change(toggleBuild(road.build));
                     }}
-                    className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${plan.builds.includes(road.build) ? "border border-ink" : "bg-ink text-paper"}`}
+                    className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${plan.builds.includes(road.build) ? "border border-ink" : "bg-button text-paper"}`}
                   >
                     {plan.builds.includes(road.build) ? "Remove from Queue" : "Add to Queue"}
                   </button>

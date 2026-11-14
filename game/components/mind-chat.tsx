@@ -308,7 +308,7 @@ function Talk({ messages, lastAnswer, status, error }: Pick<ReturnType<typeof us
             </p>
           );
         return message.role === "user" ? (
-          <div key={message.id} className="max-w-[86%] self-end rounded-xl bg-ink px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">
+          <div key={message.id} className="max-w-[86%] self-end rounded-xl bg-button px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">
             {properGlows(text)}
           </div>
         ) : (
@@ -384,7 +384,7 @@ export function MindSettings({ keyed, free = false }: { keyed: boolean; free?: b
   };
   const shown = free && pick.model === "claude-opus-5-5" ? FREE_MODEL : pick.model;
   const toggle = (on: boolean) =>
-    `rounded-full px-2 py-0.5 transition-colors ${on ? "bg-ink text-paper" : "text-page-ink2 hover:text-ink"}`;
+    `rounded-full px-2 py-0.5 transition-colors ${on ? "bg-button text-paper" : "text-page-ink2 hover:text-ink"}`;
   return (
     <div className="mb-3 flex flex-col gap-2 rounded-lg border border-dashed border-muted p-3 font-mono text-[10.5px] tracking-[.06em] uppercase">
       <Row name="Model">
@@ -453,7 +453,7 @@ function AskBox({ busy, onAsk, className = "", focus = false }: { busy: boolean;
           aria-label="Ask the Mind"
           className="min-w-0 grow bg-transparent text-base outline-none placeholder:text-muted"
         />
-        <button type="submit" disabled={!input.trim()} aria-label="Send" className="size-8 shrink-0 rounded-full bg-ink text-paper disabled:opacity-35">
+        <button type="submit" disabled={!input.trim()} aria-label="Send" className="size-8 shrink-0 rounded-full bg-button text-paper disabled:opacity-35">
           ↑
         </button>
       </div>

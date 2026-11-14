@@ -166,7 +166,7 @@ function Sparking({
         onClick={onClick}
         onPointerEnter={start}
         onPointerLeave={stop}
-        className="relative h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper transition-[transform,box-shadow] duration-300 ease-out hover:shadow-[0_0_18px_-4px_var(--you)] active:scale-[.98] motion-reduce:transition-none"
+        className="relative h-[46px] rounded-full bg-button text-[15px] font-medium text-paper transition-[transform,box-shadow] duration-300 ease-out hover:shadow-[0_0_18px_-4px_var(--you)] active:scale-[.98] motion-reduce:transition-none"
       >
         {children}
       </button>

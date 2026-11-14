@@ -58,7 +58,7 @@ function Copy({ text, label }: { text: string; label: string }) {
       type="button"
       onClick={() => void copy()}
       aria-label={`Copy ${label}`}
-      className="h-8 shrink-0 rounded-md bg-ink px-3 text-[12.5px] text-paper"
+      className="h-8 shrink-0 rounded-md bg-button px-3 text-[12.5px] text-paper"
     >
       {copied ? "Copied" : "Copy"}
     </button>

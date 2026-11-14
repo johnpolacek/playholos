@@ -177,7 +177,7 @@ function Strategy({ p, scale, at }: { p: Package; scale: number; at: number }) {
           className={
             mine
               ? "mt-1.5 h-5 self-start rounded-full border border-faint px-1.5 text-[12px] leading-none text-muted transition-colors hover:border-muted hover:text-ink"
-              : "mt-3 h-11 rounded-full bg-ink text-[15px] font-medium text-paper transition-colors"
+              : "mt-3 h-11 rounded-full bg-button text-[15px] font-medium text-paper transition-colors"
           }
         >
           {mine ? "clear" : `Start with ${p.name}`}
@@ -433,7 +433,7 @@ export function Tour({ onClose }: { onClose(): void }) {
           onClick={() =>
             lead ? navigate(lead.to) : at === last ? (then ? navigate(then.to) : onClose()) : go(at + 1)
           }
-          className={`h-11 rounded-full bg-ink text-[15px] font-medium text-paper ${!at && !lead ? "col-span-2" : ""}`}
+          className={`h-11 rounded-full bg-button text-[15px] font-medium text-paper ${!at && !lead ? "col-span-2" : ""}`}
         >
           {lead ? lead.name : at === last ? (then?.name ?? "Back to Build") : onward}
         </button>

@@ -110,7 +110,7 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
           {!full && (
             <button
               onClick={() => change(growing ? takeBack(name, now) : orderLater(name, now))}
-              className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${growing ? "border border-ink" : "bg-ink text-paper"}`}
+              className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${growing ? "border border-ink" : "bg-button text-paper"}`}
             >
               {growing ? "Hold Its Size" : "Let It Grow"}
             </button>
@@ -129,7 +129,7 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
         </p>
         <button
           onClick={() => change(orderLater(name, now))}
-          className="mt-2.5 h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
+          className="mt-2.5 h-11 rounded-full bg-button text-[15px] font-medium text-paper"
         >
           Add to Queue
         </button>
@@ -153,7 +153,7 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
         </p>
         <button
           onClick={() => change(orderLater(name, now))}
-          className="mt-2.5 h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
+          className="mt-2.5 h-11 rounded-full bg-button text-[15px] font-medium text-paper"
         >
           Resume Build
         </button>
@@ -252,7 +252,7 @@ export function Queueing({
       {open && (queued || !lacking.length) && (
         <button
           onClick={() => change(advised !== undefined && !queued ? putAt(advised) : toggleBuild(name))}
-          className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${queued ? "border border-ink" : "bg-ink text-paper"}`}
+          className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${queued ? "border border-ink" : "bg-button text-paper"}`}
         >
           {queued
             ? "Remove from Queue"
@@ -263,7 +263,7 @@ export function Queueing({
       )}
       {/* Queued, and the Mind advised it elsewhere in line: the move it advised, as the main button. 2026-11-08. */}
       {open && queued && advised !== undefined && advised !== at && (
-        <button onClick={() => change(putAt(advised))} className="mt-2 h-11 rounded-full bg-ink text-[15px] font-medium text-paper">
+        <button onClick={() => change(putAt(advised))} className="mt-2 h-11 rounded-full bg-button text-[15px] font-medium text-paper">
           {advised === 0 ? "Move to the Front" : `Move to ${cap(ordinal(advised))} in Queue`}
         </button>
       )}
@@ -352,7 +352,7 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
         </p>
         <button
           onClick={() => change(orderLater(build.name, now))}
-          className="mt-2.5 h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
+          className="mt-2.5 h-11 rounded-full bg-button text-[15px] font-medium text-paper"
         >
           Add to Queue
         </button>
@@ -448,7 +448,7 @@ function Switch({ name }: { name: string }) {
             role="radio"
             aria-checked={on === to}
             onClick={() => to !== on && change(switchTo(name, now, to))}
-            className={`h-9 rounded-full text-[13.5px] font-medium transition-colors ${on === to ? (to ? "bg-(--c) text-paper" : "bg-ink text-paper") : "text-page-ink2 hover:text-ink"}`}
+            className={`h-9 rounded-full text-[13.5px] font-medium transition-colors ${on === to ? (to ? "bg-(--c) text-paper" : "bg-button text-paper") : "text-page-ink2 hover:text-ink"}`}
           >
             {to ? s.on : s.off}
           </button>

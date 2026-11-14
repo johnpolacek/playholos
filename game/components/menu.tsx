@@ -68,7 +68,7 @@ function Feedback() {
                 type="button"
                 onClick={() => void send()}
                 disabled={!text.trim() || state === "sending"}
-                className="h-9 shrink-0 rounded-md bg-ink px-3.5 text-[13px] text-paper disabled:opacity-50"
+                className="h-9 shrink-0 rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-50"
               >
                 {state === "sending" ? "Sending…" : "Send"}
               </button>

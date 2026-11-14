@@ -334,7 +334,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
         </button>
         <button
           onClick={() => (at === last ? (then ? navigate(then.to) : onClose()) : go(at + 1))}
-          className="h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
+          className="h-11 rounded-full bg-button text-[15px] font-medium text-paper"
         >
           {at === last ? (then?.name ?? "Back to Reach") : `Next · ${STOPS[at + 1]}`}
         </button>

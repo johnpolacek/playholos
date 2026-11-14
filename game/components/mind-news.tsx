@@ -287,7 +287,7 @@ export function YearZero() {
           {open && !failed && !(ours && said(words)) && <Gathering />}
         </MindNote>
       </div>
-      <button data-z="item" onClick={close} className="mt-6 h-[46px] rounded-full bg-ink px-8 text-[15px] font-medium text-paper">
+      <button data-z="item" onClick={close} className="mt-6 h-[46px] rounded-full bg-button px-8 text-[15px] font-medium text-paper">
         Continue
       </button>
     </div>

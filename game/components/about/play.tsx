@@ -389,7 +389,7 @@ export function Play({
         data-a-bar
         href="/play"
         onLeave={() => fx.current?.blast()}
-        className="relative overflow-clip rounded-full border border-ink/70 px-3 py-1.5 text-ink transition-colors [-webkit-tap-highlight-color:transparent] hover:bg-ink hover:text-paper"
+        className="relative overflow-clip rounded-full border border-ink/70 px-3 py-1.5 text-ink transition-colors [-webkit-tap-highlight-color:transparent] hover:bg-button hover:text-paper"
       >
         PLAY
       </AboutLink>

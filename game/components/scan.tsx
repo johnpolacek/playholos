@@ -385,7 +385,7 @@ export function Scan() {
             role="tab"
             aria-selected={lens === key}
             onClick={() => setParams(key === "all" ? {} : { lens: key }, { replace: true })}
-            className={`h-7 rounded-full px-3 text-[12.5px] font-medium transition-colors ${lens === key ? "bg-ink text-paper" : "border border-faint text-page-ink2 hover:border-muted"}`}
+            className={`h-7 rounded-full px-3 text-[12.5px] font-medium transition-colors ${lens === key ? "bg-button text-paper" : "border border-faint text-page-ink2 hover:border-muted"}`}
           >
             {label} <span className="font-mono text-[10.5px] opacity-70">{count[key]}</span>
           </button>

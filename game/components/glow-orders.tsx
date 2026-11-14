@@ -302,13 +302,13 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
                     setAsking(false);
                     showCraft(CRAFT[by]);
                   }}
-                  className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper"
+                  className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper"
                 >
                   Send them
                 </button>
               </>
             ) : (
-              <button onClick={() => setAsking(true)} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
+              <button onClick={() => setAsking(true)} className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">
                 Set this order
               </button>
             )}

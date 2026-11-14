@@ -224,7 +224,7 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
             <Link
               to={next.to}
               onClick={() => onClose()}
-              className="flex h-[46px] items-center justify-center rounded-full bg-ink px-3 text-center text-[15px] leading-tight font-medium text-paper"
+              className="flex h-[46px] items-center justify-center rounded-full bg-button px-3 text-center text-[15px] leading-tight font-medium text-paper"
             >
               {next.name}
             </Link>
@@ -234,7 +234,7 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
             <button onClick={() => onClose()} className="h-[46px] rounded-full border border-ink text-[15px] font-medium">
               Not yet
             </button>
-            <button onClick={onBegin} className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper">
+            <button onClick={onBegin} className="h-[46px] rounded-full bg-button text-[15px] font-medium text-paper">
               Begin · Year 0
             </button>
           </>

@@ -11,6 +11,8 @@
   --paper: #121314;
   --ink: #e6e3db;
   --muted: #9c988f;
+  /* A solid button: chalk, a step below ink, so it doesn't glare on the dark. Too bright as ink, 2026-11-13. */
+  --button: #bdb9af;
   --faint: #34363a;
   --panel: #17181a;
   --track: #2a2b2e;
@@ -43,6 +45,7 @@
   --color-paper: var(--paper);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
+  --color-button: var(--button);
   --color-faint: var(--faint);
   --color-panel: var(--panel);
   --color-track: var(--track);

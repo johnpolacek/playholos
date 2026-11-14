@@ -209,7 +209,7 @@ export function Meet({ onNext, onReplay }: { onBack?(): void; onSkip(): void; on
               ref={minds}
               data-m="act"
               onClick={begin}
-              className="h-16 w-full rounded-full bg-ink text-[21px] font-semibold tracking-[.02em] text-paper"
+              className="h-16 w-full rounded-full bg-button text-[21px] font-semibold tracking-[.02em] text-paper"
             >
               Begin
             </Minds>

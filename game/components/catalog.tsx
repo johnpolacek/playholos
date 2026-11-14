@@ -135,7 +135,7 @@ export function Catalog({ className = "" }: { className?: string }) {
                         // The map shows where it now goes up: on a tap, nothing had flown it from Earth. 2026-11-08.
                         if (SITES[b.name]) pick(b.name);
                       }}
-                      className="h-9 shrink-0 rounded-full border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-ink hover:text-paper"
+                      className="h-9 shrink-0 rounded-full border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-button hover:text-paper"
                     >
                       {takenAt(plan, b.name) === null ? "Add to Queue" : "Resume Build"}
                     </button>
@@ -215,7 +215,7 @@ function AllBuilt({ names, className }: { names: string[]; className: string }) 
       <p className="mt-3 text-[13.5px] leading-snug text-page-ink2">
         Every build open to us stands. What is left is what we do with them: where we send our craft, and whom we call.
       </p>
-      <Link to="/play/reach" className="mt-3 mb-5 inline-flex h-9 items-center self-start rounded-full border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-ink hover:text-paper">
+      <Link to="/play/reach" className="mt-3 mb-5 inline-flex h-9 items-center self-start rounded-full border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-button hover:text-paper">
         Go to Reach ›
       </Link>
     </>
