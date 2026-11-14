@@ -39,18 +39,30 @@ export function Voyage({ road, craft, star, ly, now, warm }: { road: Road; craft
   const at = x(flown);
   const marks = MARKS.filter(([, d]) => d < ly * 0.8);
   const target = warm ? "var(--other)" : "var(--you)";
+  const fuel = road.antimatter ? "antimatter" : "deuterium";
+  const w = road.waits;
+  // In the yard, which step it is on: the build it waits on, its own building, or its fuel.
+  const step = !w || leaves === null ? null : w.ready === null || now < w.ready ? 0 : w.built === null || now < w.built ? 1 : 2;
+  const ahead = w?.ahead ? `, with ${w.ahead} craft of ours ahead of it in line` : "";
+  // What waiting for its fuel adds, once built: said, since a wait of decades read as nothing but a far Year.
+  const wait = (built: number) =>
+    leaves! - built > 0.05 ? `Then about ${Math.round(leaves! - built).toLocaleString("en-US")} Years for its ${fuel}${ahead}.` : `Then it leaves.`;
   const status =
     phase === "yard"
-      ? road.fuelWait && now >= road.fuelWait.built
-        ? `Built, waiting on ${road.fuelWait.fuel}. It leaves in Year ${yearText(leaves!)}.`
-        : leaves === null
-          ? "In our yard. No Year to leave yet."
-          : `In our yard. It leaves in Year ${yearText(leaves)}.`
+      ? leaves === null
+        ? "In our yard. No Year to leave yet."
+        : step === 0
+          ? `It waits on the ${w!.on}, done in Year ${yearText(w!.ready!)}. Then the Probe Yard builds it. ${w!.built === null ? "" : wait(w!.built)}`.trim()
+          : step === 1
+            ? `The Probe Yard is building it, done in Year ${yearText(w!.built!)}. ${wait(w!.built!)}`
+            : `Built. It waits for its ${fuel}${ahead}. It leaves in Year ${yearText(leaves)}.`
       : phase === "flight"
         ? `In flight at ${road.speed.toFixed(2)} of light’s speed. It arrives in Year ${yearText(arrives!)}.`
         : phase === "word"
           ? `There. Its first word is crossing back, home by Year ${yearText(home!)}.`
           : "There, and its word is home.";
+  // Its road out of the yard, step by step, each with its Year.
+  const steps: [string, number | null][] = w ? [[`The ${w.on}`, w.ready], ["Built", w.built], [`Its ${fuel}, leaves`, leaves]] : [];
   return (
     <section data-m className="mt-3 overflow-hidden rounded-xl border border-you/40 bg-[radial-gradient(120%_90%_at_0%_50%,rgba(91,184,214,.10),transparent_60%)] px-3 pt-2.5 pb-3">
       <div className="flex items-baseline justify-between gap-2">
@@ -123,6 +135,25 @@ export function Voyage({ road, craft, star, ly, now, warm }: { road: Road; craft
         )}
       </svg>
       <p className="mt-1 text-[13px] leading-snug text-ink">{status}</p>
+      {phase === "yard" && step !== null && (
+        <ol aria-label="Before it leaves" className="relative mt-2.5 grid grid-cols-3">
+          {/* The line between the steps, lit as far as we have come. */}
+          <span aria-hidden className="absolute top-[5px] right-[16.7%] left-[16.7%] h-px bg-faint" />
+          <span aria-hidden className="absolute top-[5px] left-[16.7%] h-px bg-you transition-[width] duration-700" style={{ width: `${(step / 2) * 66.6}%` }} />
+          {steps.map(([name, y], k) => (
+            <li key={name} className="relative flex flex-col items-center text-center">
+              <span
+                className={`relative z-[1] size-[11px] rounded-full border ${k < step ? "border-you bg-you" : k === step ? "border-you bg-panel shadow-[0_0_10px_var(--you)] animate-pulse motion-reduce:animate-none" : "border-track bg-panel"}`}
+              />
+              <span className={`mt-1 font-mono text-[9.5px] leading-tight ${k <= step ? "text-ink" : "text-muted"}`}>{name}</span>
+              <span className="font-mono text-[9.5px] text-muted tabular-nums">{y === null ? "not yet" : `Year ${yearText(y)}`}</span>
+            </li>
+          ))}
+        </ol>
+      )}
+      {phase === "yard" && road.antimatter && (
+        <p className="mt-2 text-[12px] leading-snug text-page-ink2">By antimatter, since that lands it soonest. The Antimatter Works makes it slowly, and each craft takes its share in turn.</p>
+      )}
       <dl className="mt-2 grid grid-cols-3 gap-2 font-mono text-[10px] text-muted">
         <div>
           <dt className="tracking-[.08em] uppercase">Flown</dt>

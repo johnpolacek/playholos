@@ -79,6 +79,10 @@ export interface Road {
   push?: string | null;
   /** It goes by the Antimatter Works' drive, and stops by its rocket. 2026-11-12. */
   antimatter?: boolean;
+  /** Why it leaves when it does, step by step: the last build it needs and when that is done, when the craft is built,
+   *  and how many of our craft take their fuel before it. "In our yard. It leaves in Year 185.8" said when, never why.
+   *  Playtest 2026-11-13. */
+  waits?: { on: string; ready: number | null; built: number | null; ahead: number };
 }
 
 /** The Year each thing our fusion craft and flyby probes wait on is done. Null while it isn't, or isn't ours to build. */
@@ -402,13 +406,26 @@ export function sentinelRoad(plan: Plan, scale: number, from: number, star: stri
   const byFusion = fusion === null || fuel === null ? null : Math.max(Math.max(y, fusion) + SENTINEL.build, fuel);
   // Or by antimatter, if that lands it soonest: in its place among our craft, or last if not yet sent.
   const list = amCraft(plan, at, sent ? [] : [{ key, y, kind: "sentinel", build: SENTINEL.build, ly, star, ready: allDone(at, AM_SENTINEL_NEEDS), other: byFusion === null ? null : byFusion + sentinelTrip(ly, star) }]);
-  const am = amQueue(plan, scale, at, list.map((c) => (c.key === key ? { ...c, ly } : c))).get(key);
+  const queue = amQueue(plan, scale, at, list.map((c) => (c.key === key ? { ...c, ly } : c)));
+  const am = queue.get(key);
   const leaves = am ?? byFusion;
   const arrives = leaves === null ? null : leaves + (am !== undefined ? amYears(ly, "sentinel") : sentinelTrip(ly, star));
   const ready = am !== undefined ? allDone(at, AM_SENTINEL_NEEDS) : fusion ?? allDone(at, AM_SENTINEL_NEEDS);
   const built = ready === null ? null : Math.max(y, ready) + SENTINEL.build;
   const fuelWait = leaves !== null && built !== null && leaves > built + 0.05 ? { built, fuel: am !== undefined ? ("antimatter" as const) : ("deuterium" as const) } : undefined;
+  // The build it waits on last, and the craft ahead of it for fuel: by antimatter, those queued before it; by deuterium,
+  // the craft sent before it that draw on the Works.
+  const way = am !== undefined ? AM_SENTINEL_NEEDS : SENTINEL_NEEDS;
+  const on = [...way].sort((a, b) => (at(b) ?? Infinity) - (at(a) ?? Infinity))[0];
+  const ahead = am !== undefined
+    ? (() => {
+        // In the queue's own order: by Year sent, the first sent first.
+        const order = [...list].sort((a, b) => a.y - b.y);
+        return order.slice(0, order.findIndex((c) => c.key === key)).filter((c) => queue.has(c.key)).length;
+      })()
+    : [...(plan.sentinels ?? []), ...(plan.flybys ?? []).filter((o) => o.by === "probe")].filter((o) => o.y < y && o.name !== star).length;
   return {
+    waits: { on, ready, built, ahead },
     name: "Send a sentinel", n: sent ? 1 : null, build: "Probe Yard", craft: "A sentinel", speed: am !== undefined ? amBeta(ly, "sentinel") : stay("sentinel", ly, gasAt(star)).beta,
     done: ready, leaves, arrives, home: arrives === null ? null : arrives + ly, ...(am !== undefined ? { antimatter: true } : {}), ...(fuelWait ? { fuelWait } : {}),
   };
