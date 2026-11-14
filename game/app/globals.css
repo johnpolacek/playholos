@@ -1,3 +1,6 @@
+/* ui-sdk adds a little CSS in its own layer. Declared first, so ours wins over it. 2026-11-14. */
+@layer ui-sdk;
+
 @import "tailwindcss";
 
 /* A screen wider than it is tall, from a phone on its side to a desktop. The art and the words stand side by side. */

@@ -56,7 +56,7 @@ Every piece two screens or more share. Use these before writing a new one, and a
 - `MindNote` (`components/mind-note.tsx`): the Mind's words on any page.
 - `Meter` (`components/hud.tsx`): a top bar reading, with its bar, number and the word under it.
 - `RailTab` (`components/rail.tsx`): one tab on the rail, with a count of signals heard or a dot for news.
-- `Sources` (`components/sources.tsx`): the ⓘ and the sheet of the real record it opens.
+- `Sources` (`components/sources.tsx`): the ⓘ and the sheet of the real record it opens. Our first part on ui-sdk (`@ui-sdk/react`, beta), its Drawer: focus held inside, Escape, a press outside or a drag down to close. `app/globals.css` declares its `@layer ui-sdk` first.
 - `BuildMark`, `buildTone`, `buildBlue`, `LeadMark`, `LockMark` (`components/marks.tsx`): what each build and lead is, drawn, and in its color.
 - `Lens`, `Globe`, `Dials`, `Check`, `Cross`, `KeyMark`, `Prompt` (`components/icons.tsx`): small control icons.
 - `VisitArt` (`components/visit-art.tsx`): what our craft saw of a world up close.
