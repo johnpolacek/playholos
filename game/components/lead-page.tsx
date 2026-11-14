@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { usePlan, useSchedule } from "@/components/picks";
-import { flybyRoad } from "@/lib/game/reach";
+import { flybyRoad, sentinelRoad } from "@/lib/game/reach";
 import { BackBar } from "@/components/back-bar";
 import { CloseReading } from "@/components/close-reading";
 import { LeadArt } from "@/components/lead-art";
@@ -172,7 +172,7 @@ function GlowVerdict({ flash }: { flash: { read?: { saw: string }; imaged?: { sa
 
 export function LeadPage({ slug }: { slug: string }) {
   const { leads, dials, readings, fresh, setLook, minds } = useLeads();
-  const { see, save } = useGame();
+  const { see, save, year: now } = useGame();
   const { plan } = usePlan();
   const { scale } = useSchedule();
   const navigate = useNavigate();
@@ -182,6 +182,12 @@ export function LeadPage({ slug }: { slug: string }) {
   // Our flyby probe there, if one is sent. 2026-11-05.
   const probe = lead ? plan.flybys?.find((o) => o.by === "probe" && o.name === lead.star) : undefined;
   const probeRoad = probe ? flybyRoad(plan, scale, probe.y, probe) : null;
+  // Our sentinel there, sent by hand or by our standing order for glows. Prometheus had one on its way since Year 46.7,
+  // and its page said nothing of it. Playtest 2026-11-13.
+  const stayer = lead ? plan.sentinels?.find((o) => o.name === lead.star) : undefined;
+  const going = stayer && !probeRoad ? sentinelRoad(plan, scale, stayer.y, stayer.name, stayer.d ?? lead!.ly) : null;
+  // Only until its first word is home: after that, its readings say what it found.
+  const stayRoad = going && (going.home === null || (now ?? 0) < going.home) ? going : null;
   // What we sent it, when it lands and when an answer could come, here as on Scan's Messages. A warm glow's page never
   // said we had messaged it until a playtest, 2026-11-01.
   const ours: [string, string][] = !lead
@@ -292,10 +298,11 @@ export function LeadPage({ slug }: { slug: string }) {
       )}
       {/* A way to go there, as a button: a link at the end of this line went unseen. Playtest 2026-11-05. Once a probe of
           ours is on its way, as our standing order sends to each warm glow, it says so in its place. */}
-      {lead.art.kind !== "near" && probeRoad && (
+      {lead.art.kind !== "near" && (probeRoad || stayRoad) && (
         <p data-m className="mt-2 text-[13px] leading-snug text-page-ink2">
-          <span className="text-you">A flyby probe of ours is on its way.</span>{" "}
-          {probeRoad.arrives !== null && probeRoad.home !== null && `It passes in Year ${yearText(probeRoad.arrives)}, and its pictures reach us by Year ${yearText(probeRoad.home)}.`}{" "}
+          <span className="text-you">{probeRoad ? "A flyby probe of ours is on its way." : "A sentinel of ours is on its way."}</span>{" "}
+          {probeRoad && probeRoad.arrives !== null && probeRoad.home !== null && `It passes in Year ${yearText(probeRoad.arrives)}, and its pictures reach us by Year ${yearText(probeRoad.home)}.`}
+          {stayRoad && stayRoad.arrives !== null && stayRoad.home !== null && `It arrives in Year ${yearText(stayRoad.arrives)}, and its first word reaches us by Year ${yearText(stayRoad.home)}.`}{" "}
           <Link to={`/play/reach/${lead.slug}`} className="whitespace-nowrap text-you hover:underline">
             Other ways to engage ›
           </Link>
@@ -305,7 +312,7 @@ export function LeadPage({ slug }: { slug: string }) {
       {/* Engage holds at the panel's foot while the page under it scrolls: on a phone the tab bar cut it in half. On a
           bar of its own, so what scrolls under it hides whole rather than showing half under the button. Screen critic,
           2026-11-09. */}
-      {lead.art.kind !== "near" && !probeRoad && !(lead.art.kind === "warm" && flash?.read?.saw === "dust") && (
+      {lead.art.kind !== "near" && !probeRoad && !stayRoad && !(lead.art.kind === "warm" && flash?.read?.saw === "dust") && (
         <div data-m className="sticky bottom-0 z-10 -mx-4 mt-1.5 bg-panel px-4 pt-1 pb-3">
           <Link
             to={`/play/reach/${lead.slug}`}

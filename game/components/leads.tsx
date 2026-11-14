@@ -381,13 +381,26 @@ export function LeadList({
         messaged,
         knocked,
       });
+    // A craft of ours bound for it, which a row said nothing of. Playtest 2026-11-13: a sentinel had been on its way to
+    // Prometheus for 50 Years, and its row offered only "Call out to it".
+    const plan = save?.plan;
+    const bound = (l: Lead) =>
+      visits.some((v) => v.star === l.star) ? null
+      : plan?.colony?.name === l.star ? "Our Mind"
+      : plan?.sentinels?.some((o) => o.name === l.star) ? "A sentinel"
+      : plan?.seeds?.some((o) => o.name === l.star) ? "A seed probe"
+      : plan?.flybys?.some((o) => o.name === l.star) ? "A flyby craft"
+      : null;
     const link = (l: Lead, i: number) => {
       const move = next(l);
       return (
         <>
-          <Link to={`/play/lead/${l.slug}`} {...peek(i)} className={`block text-left ${move ? "pt-2.5 pb-1" : "py-2.5"}`}>
+          <Link to={`/play/lead/${l.slug}`} {...peek(i)} className={`block text-left ${move || bound(l) ? "pt-2.5 pb-1" : "py-2.5"}`}>
             {row(l, !!move)}
           </Link>
+          {bound(l) && (
+            <span className="-mt-0.5 mb-1.5 ml-7 block text-[12.5px] text-you">{bound(l)} of ours is on its way.</span>
+          )}
           {move && (
             <Link
               to={move.to}
