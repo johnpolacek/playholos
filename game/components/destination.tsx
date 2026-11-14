@@ -84,7 +84,7 @@ function Need({ name, queued, done }: { name: string; queued: boolean; done: boo
   return (
     <Link
       to={`/play/build/${buildSlug(name)}`}
-      className="inline-flex h-7 items-center gap-1.5 rounded-full border border-faint pr-2.5 pl-2 text-[12.5px] text-ink transition-colors hover:border-muted"
+      className="inline-flex h-7 items-center gap-1.5 rounded-full border border-faint pr-2.5 pl-2 text-[12.5px] whitespace-nowrap text-ink transition-colors hover:border-muted"
     >
       <span className={buildTone(name, queued || done)}>
         <BuildMark name={name} size={13} />
@@ -202,16 +202,17 @@ function Sent(props: {
               {sent ? (sentAs ?? (waiting ? `${what[0].toUpperCase()}${what.slice(1)} leaves Year ${year(road.leaves!)}` : `${what} sent`)) : `Send a ${what}`}
             </button>
           )}
-          {can && !sent && !asking && choices && (
-            <span className="flex shrink-0 gap-1.5">
-              {choices.map((c) => (
-                <button key={c.label} onClick={() => setAsking(c)} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
-                  {c.label}
-                </button>
-              ))}
-            </span>
-          )}
         </div>
+        {/* Two choices on their own line: beside the needs they squeezed each need to two lines. Playtest 2026-11-13. */}
+        {can && !sent && !asking && choices && (
+          <div className="mt-2 flex flex-wrap justify-end gap-1.5">
+            {choices.map((c) => (
+              <button key={c.label} onClick={() => setAsking(c)} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
+                {c.label}
+              </button>
+            ))}
+          </div>
+        )}
         {/* Waiting to leave, it says when on its own line, with Cancel: beside the needs, the two buttons squeezed the
             needs to two lines each and ran off the panel. 2026-11-10. */}
         {waiting && recall && (
