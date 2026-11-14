@@ -9,6 +9,8 @@ import { LeadMark } from "@/components/marks";
 import { Face, ListHead } from "@/components/tab-head";
 import type { Standing } from "@/components/scan";
 import { nextMove } from "@/lib/game/next";
+import { roads, sentinelRoad, toward } from "@/lib/game/reach";
+import { sailArrives } from "@/lib/sim/speeds";
 import { EMPTY } from "@/lib/game/plan";
 import type { Dials, Mark, Show } from "@/lib/drift";
 import type { Visit } from "@/lib/sim/types";
@@ -298,6 +300,7 @@ export function LeadList({
   headClass?: string;
 }) {
   const { year, save } = useGame();
+  const { scale } = useSchedule();
   // Glows we have messaged keep their own rows. 2026-11-01.
   const messaged = new Set((save?.sent ?? []).map((m) => m.to));
   const knocked = (save?.sent ?? []).some((m) => m.to !== "everywhere" && target(m.to) === WATCHER);
@@ -371,8 +374,23 @@ export function LeadList({
   if (!fold) {
     // Each row's next move, under it as a link of its own: a row of nine new worlds said what we found and never what
     // to do. Playtest 2026-11-13.
+    // The craft whose word would reach us first, of those we could send now: sails, a flyby probe or a sentinel.
+    const from = Math.floor((year ?? 0) * 10) / 10;
+    const base = roads(save?.plan ?? EMPTY, scale, from);
+    const best = (l: Lead) => {
+      if (!["orbit", "glow", "dark", "pair"].includes(l.art.kind)) return null;
+      const p = save?.plan ?? EMPTY;
+      const ways = [
+        sailArrives(l.ly) ? { label: "Sails", key: "sail", home: toward(base[0], l.ly, from).home } : null,
+        { label: "A flyby probe", key: "probe", home: toward(base[1], l.ly, from).home },
+        { label: "A sentinel", key: "sentinel", home: sentinelRoad(p, scale, from, l.star, l.ly).home },
+      ].filter((w): w is { label: string; key: string; home: number } => !!w && w.home !== null);
+      return ways.sort((a, b) => a.home - b.home)[0] ?? null;
+    };
     const next = (l: Lead) =>
       nextMove(l, {
+        best: best(l),
+        now: from,
         plan: save?.plan ?? EMPTY,
         visits,
         chances: chancesOf(l, readings[l.slug] ?? []),
@@ -409,6 +427,11 @@ export function LeadList({
               className="mb-2.5 ml-7 inline-flex h-7 items-center rounded-full border border-you/50 px-3 text-[12.5px] font-medium text-you transition-colors hover:border-you hover:bg-you/10"
             >
               {move.label} ›
+            </Link>
+          )}
+          {move?.more && (
+            <Link to={`/play/reach/${l.slug}`} state={{ engage: true }} className="mb-2.5 ml-2 inline-flex h-7 items-center text-[12.5px] text-muted hover:text-you">
+              Compare ways ›
             </Link>
           )}
         </>

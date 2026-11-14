@@ -15,7 +15,9 @@ export interface NextMove {
   /** Where that is done. */
   to: string;
   /** Lands Reach on how we send, as the lead page's Engage does, or on one way to send by its name. */
-  engage?: boolean | "sentinel" | "mind";
+  engage?: boolean | string;
+  /** Other ways there are to compare, on Reach. */
+  more?: boolean;
 }
 
 export interface NextContext {
@@ -31,9 +33,21 @@ export interface NextContext {
   messaged: ReadonlySet<string>;
   /** We have knocked on the watcher. */
   knocked: boolean;
+  /** Of the craft that could go and look, the one whose word would reach us first, and when: the row named a sentinel
+   *  for every world, though a flyby probe would tell us centuries sooner. Playtest 2026-11-13. */
+  best?: { label: string; key: string; home: number } | null;
+  now: number;
 }
 
+const years = (y: number) => (y < 10 ? `${y.toFixed(1)} Years` : `${Math.round(y).toLocaleString("en-US")} Years`);
+
 const faded = (l: Lead) => l.facts.some(([k, v]) => k === "Faded" || (k === "Its light" && v.startsWith("Dust")));
+
+/** The craft whose word reaches us first, or a sentinel and the build it waits on first. */
+function look(l: Lead, c: NextContext, again: boolean): NextMove {
+  if (c.best) return { label: `${c.best.label}: word in ${years(c.best.home - c.now)}`, to: `/play/reach/${l.slug}`, engage: c.best.key, more: true };
+  return sentinel(l, c.plan, again);
+}
 
 /** A sentinel there, or the build it waits on first. */
 function sentinel(l: Lead, plan: Plan, again: boolean): NextMove {
@@ -65,7 +79,7 @@ export function nextMove(l: Lead, c: NextContext): NextMove | null {
         return l.art.kind === "orbit" && life >= 0.4 && !c.plan.colony ? { label: "Send our Mind to stay", to: `/play/reach/${l.slug}`, engage: "mind" } : null;
       // A world worth a look: one that may hold life. Bare rock can wait. A glow or a hole is always worth one.
       if (l.art.kind === "orbit" && life < 0.1) return null;
-      return sentinel(l, c.plan, seen.length > 0);
+      return look(l, c, seen.length > 0);
     }
     default:
       return null;
