@@ -374,14 +374,17 @@ export function LeadList({
   if (!fold) {
     // Each row's next move, under it as a link of its own: a row of nine new worlds said what we found and never what
     // to do. Playtest 2026-11-13.
-    // The craft whose word would reach us first, of those we could send now: sails, a flyby probe or a sentinel.
+    // The craft whose word would reach us first, of those we could send now: sails, a flyby probe or a sentinel. For a
+    // world, the first that reads its air.
     const from = Math.floor((year ?? 0) * 10) / 10;
     const base = roads(save?.plan ?? EMPTY, scale, from);
     const best = (l: Lead) => {
       if (!["orbit", "glow", "dark", "pair"].includes(l.art.kind)) return null;
       const p = save?.plan ?? EMPTY;
       const ways = [
-        sailArrives(l.ly) ? { label: "Sails", key: "sail", home: toward(base[0], l.ly, from).home } : null,
+        // A world's air is what tells us of life, and sails can't read it: for a world, only craft that can. The Will's
+        // call, 2026-11-13. A glow or a hole has no air to read, so sails count there.
+        l.art.kind !== "orbit" && sailArrives(l.ly) ? { label: "Sails", key: "sail", home: toward(base[0], l.ly, from).home } : null,
         { label: "A flyby probe", key: "probe", home: toward(base[1], l.ly, from).home },
         { label: "A sentinel", key: "sentinel", home: sentinelRoad(p, scale, from, l.star, l.ly).home },
       ].filter((w): w is { label: string; key: string; home: number } => !!w && w.home !== null);
