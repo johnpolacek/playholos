@@ -2,7 +2,8 @@
 // 2026-11-10 in faces that hide what stands behind them and carry dots lit by the Sun. In km, x
 // east, y north and z up. In orbit, x is the way it goes and z is away from Earth. At L2, z is away from the Sun.
 // Real where we know it, our own where no one has said. Sources in HOLOS_RESEARCH.md, "Close views". Settled
-// 2026-10-18.
+// 2026-10-18. At a planet, since 2026-11-13: on its ground, z is up, or in space beside it, z is away from the Sun and
+// x is the way the planet goes, as lib/drift.ts's closePlace says.
 
 export interface Close {
   /** Where the camera stands: how far from the middle in km, its angle above the ground, and which way it looks
@@ -39,6 +40,10 @@ export interface Close {
   towns?: [name: string, lat: number, lon: number, people: number][];
   /** The shore, from one point to another, by latitude and longitude. The sea lies to its right. */
   shore?: [[number, number], [number, number]];
+  /** At a planet: it stands on the ground, not in space near it. 2026-11-13. */
+  ground?: boolean;
+  /** How long the plan's dashes are, in km, for a build too wide for the usual 18 m. 2026-11-13. */
+  dash?: number;
 }
 
 /** A build as its own function draws it. What stands there already gets its faces after, in `drawn`. */
@@ -2099,6 +2104,249 @@ function glowImager(): Sketch {
   };
 }
 
+// ── At Mercury and in the swarm, 2026-11-13 ──
+// Mercury is 2,439.7 km in radius, and its escape speed is 4.25 km/s. Sunlight there is about 9.1 kW/m², 6.7 times
+// Earth's (calcs/mercury.py). On its ground z is up, and the Sun stands about 48° up, as lib/drift.ts places it. In
+// space the swarm's builds stand four of Mercury's radii ahead of it and one toward the Sun, z away from the Sun, so
+// Mercury's middle lies 9,760 km behind them and 2,440 km up. Sources in HOLOS_RESEARCH.md, "Close views at Mercury".
+/** A collector of the swarm: a square of film `s` km wide, flat at height z, facing the Sun below it. */
+const film = (x: number, y: number, s: number, z = 0) => panel(x - s / 2, y - s / 2, s, s, z);
+/** A patch of the swarm phased as one laser, `r` km in radius: its edge, then its collectors from the middle out, each
+ *  square standing for many, each lit by its lasers on its dark face once it stands. */
+function beamPatch(b: Rising, r: number, n = 14) {
+  b.add(circle([0, 0, 0], r, [0, 0, 1], 48));
+  const step = (2 * r) / n;
+  const at: [number, number][] = [];
+  for (let i = 0; i < n; i++)
+    for (let j = 0; j < n; j++) {
+      const [x, y] = [(i - (n - 1) / 2) * step, (j - (n - 1) / 2) * step];
+      if (Math.hypot(x, y) < r - step * 0.45) at.push([x, y]);
+    }
+  at.sort((p, q) => Math.hypot(...p) - Math.hypot(...q));
+  for (const [x, y] of at) {
+    b.add(film(x, y, step * 0.94));
+    b.lit([x, y, step * 0.02]);
+  }
+}
+/** The rest of the swarm round a patch, dim: squares `s` km wide scattered from `r0` out to `r1`, each standing for
+ *  many. */
+function swarmAround(r0: number, r1: number, s: number, k: number, seed: number) {
+  const rnd = seeded(seed);
+  const out: number[] = [];
+  for (let i = 0; i < k; i++) {
+    const [a, d] = [rnd() * 2 * Math.PI, r0 + (r1 - r0) * Math.sqrt(rnd())];
+    out.push(...film(d * Math.cos(a), d * Math.sin(a), s, (rnd() - 0.5) * s * 0.4));
+  }
+  return out;
+}
+/** A beam from a patch's edge, `r` km in radius, to a sail over it, and the sail's road on out. */
+function beamTo(r: number, sail: V, away: V) {
+  const out: number[] = [];
+  for (let k = 0; k < 12; k++) out.push(...on([0, 0, 0], r, (k * Math.PI) / 6), ...sail);
+  return [...out, ...sail, ...away];
+}
+
+// ── Mercury Works ──
+// Armstrong and Sandberg's seed: a square kilometer of panels landed on Mercury, about 100 t at 0.1 kg a m², drawn as
+// 100 panels 100 m wide in a field 1.1 km square. The hall where machines copy them from the ground's rock stands by
+// it, 60 by 40 m: ours. Then the mass driver that throws collectors off. Mercury's escape speed is 4.25 km/s, and at
+// the 100 g of O'Neill's group's driver that takes 9.2 km of track. Loads leave level, east, and Mercury curves away
+// beneath them: 82 m down at 20 km, 740 m at 60. The craters round it are ours, as deep as the Moon's.
+function mercuryWorks(): Sketch {
+  const have: number[] = [];
+  const rnd = seeded(2013);
+  for (let k = 0; k < 18; k++) {
+    const [x, y, r] = [(rnd() - 0.5) * 14, (rnd() - 0.5) * 10, 0.04 + rnd() * 0.45];
+    // None under the driver or the field.
+    if (Math.abs(y) < r + 0.1 && x > -5 && x < 6) continue;
+    if (x + r > -4.3 && x - r < -2.9 && y + r > -2.7 && y - r < -1.4) continue;
+    have.push(...crater(x, y, r));
+  }
+  const b = new Rising().add(box(-4.6, -0.9, 0.06, 0.04, 0.015));
+  b.lit([-4.6, -0.9, 0.017]);
+  for (let i = 0; i < 100; i++) {
+    const [x, y] = [-4.15 + (i % 10) * 0.11, -1.55 - Math.floor(i / 10) * 0.11];
+    b.add(square(x, y, 0.1, 0.001));
+    if (i % 11 === 0) b.lit([x, y, 0.002]);
+  }
+  // The driver: its loading station, then its coils east, every 200 m, lit each kilometer.
+  const [x0, x1] = [-4, 5.2];
+  b.add(box(x0 - 0.12, 0, 0.12, 0.08, 0.02));
+  b.lit([x0 - 0.12, 0, 0.022]);
+  for (let i = 0; i <= 46; i++) {
+    const x = x0 + i * 0.2;
+    b.add(circle([x, 0, 0.012], 0.01, [1, 0, 0], 12));
+    if (i % 5 === 0) b.lit([x, 0, 0.024]);
+  }
+  b.add(
+    [x0, 0, 0.012, x1, 0, 0.012],
+    [x0, 0.05, 0.004, x1, 0.05, 0.004],
+    path([
+      [x1, 0.05, 0.004],
+      [x1 + 0.08, 0.025, 0.008],
+      [x1, 0, 0.012],
+    ]),
+  );
+  // A load flies level. The ground here is drawn falling away as x² over twice Mercury's radius, so its height over
+  // our flat frame stays 12 m.
+  const flight: V[] = [x0, x1, 20, 40, 60].map((x): V => [x, 0, 0.012]);
+  return {
+    view: { km: 9, el: 12, az: 200, at: [-1.4, -0.7] },
+    have,
+    ...b.done(0.012),
+    haveLights: [],
+    sky: path(flight.slice(1)),
+    runs: [0, 0.25, 0.5, 0.75].map((offset) => ({ pts: flight.flat(), secs: 3, offset })),
+    ground: true,
+  };
+}
+
+// ── Solar Swarm ──
+// Thin film at a gram a square meter, thrown off Mercury and doubling every 2 Years. Each collector is drawn as a
+// square of film a kilometer wide, the seed's square kilometer, about a tonne: its size is ours. They go up a
+// generation at a time, 1, 1, 2, 4 and on to 64, each twice the last, drifting apart along Mercury's way round the Sun
+// as the driver's spread of 0.3 km/s spreads them. Loads still come in from Mercury, behind them and above.
+function solarSwarm(): Sketch {
+  const rnd = seeded(1960);
+  const b = new Rising();
+  [1, 1, 2, 4, 8, 16, 32, 64].forEach((n, gen) => {
+    const spread = 4 + 5 * gen;
+    for (let k = 0; k < n; k++) {
+      const [x, y, z] = [(rnd() - 0.5) * 2 * spread, (rnd() - 0.5) * spread * 0.5, (rnd() - 0.5) * 3];
+      b.add(film(x, y, 1, z));
+      b.lit([x, y, z + 0.05]);
+    }
+  });
+  const from = unit([-9760, 0, 2440]);
+  return {
+    view: { km: 62, el: 24, az: 120, at: [0, 0, 6] },
+    have: [],
+    ...b.done(0.35),
+    haveLights: [],
+    // Their arc along Mercury's way round the Sun.
+    sky: [-120, 0, 0, 120, 0, 0],
+    runs: [0, 1 / 3, 2 / 3].map((offset, k) => ({
+      pts: [400 * from[0], 400 * from[1], 400 * from[2], (k - 1) * 20, (k - 1) * 3, 0],
+      secs: 6,
+      offset,
+      lands: true,
+    })),
+  };
+}
+
+// ── Antimatter Works ──
+// Schmidt and colleagues' plant: protons thrown at a target, and the antiprotons cooled, gathered and trapped. Drawn
+// at Fermilab's sizes: a ring like its Main Injector, 3,319 m round, which fed its antiproton target 120 GeV protons,
+// and two rings like its Debuncher and Accumulator, about 505 m and 474 m round, where antiprotons were cooled and
+// gathered. Then traps for the ice it makes. It stands behind the swarm's film, in its shade, so the traps keep cold,
+// on power from the nine collectors round it. At the swarm's seed size a hundredth of its power is 18 MW, and it grows
+// with each doubling, so this is one cell of many. Its layout is ours.
+function antimatterWorks(): Sketch {
+  const cells: [number, number][] = Array.from({ length: 9 }, (_, i) => [((i % 3) - 1) * 1.1, (Math.floor(i / 3) - 1) * 1.1]);
+  const have = cells.flatMap(([x, y]) => film(x, y, 1));
+  const z = 0.35;
+  const main: V = [0, 0, z];
+  const R = 3.319 / (2 * Math.PI);
+  const b = new Rising();
+  // Power up from the middle of each collector round it to the ring over it, then the ring, its line along its top.
+  for (const [x, y] of cells.filter(([x, y]) => x || y)) {
+    const l = Math.hypot(x, y);
+    b.add([x, y, 0, (x / l) * R, (y / l) * R, z]);
+  }
+  b.add(faced(circle([0, 0, z + 0.012], R, [0, 0, 1], 48), torus(main, R, 0.012, 48, 6)));
+  for (let k = 0; k < 8; k++) b.lit(on(main, R, (k * Math.PI) / 4));
+  // The target, then the cooling rings beside it.
+  b.add(box(R + 0.03, 0, 0.04, 0.03, 0.03, z - 0.015));
+  b.lit([R + 0.03, 0, z + 0.017]);
+  const [deb, acc]: V[] = [
+    [0.75, 0.1, z],
+    [0.75, -0.1, z],
+  ];
+  b.add(circle(deb, 0.505 / (2 * Math.PI), [0, 0, 1], 24), circle(acc, 0.474 / (2 * Math.PI), [0, 0, 1], 24), [R + 0.05, 0, z, deb[0] - 0.08, deb[1], z]);
+  b.lit(deb, acc);
+  // The traps in a row, each a ball held off its walls by a magnet.
+  for (let k = 0; k < 5; k++) {
+    const t: V = [0.9 + k * 0.04, -0.25, z];
+    b.add(circle(t, 0.012, [1, 0, 0], 12), faced(circle(t, 0.012, [0, 0, 1], 12), ball(t, 0.012)));
+    b.lit(t);
+  }
+  b.add([acc[0] + 0.07, acc[1], z, 0.9, -0.25, z]);
+  // Protons round the main ring, and antimatter going out to a craft.
+  const round = ring(main, R, [0, 0, 1], 48);
+  const leave = [1.06, -0.25, z, 3, -1.2, 2];
+  return {
+    view: { km: 4.2, el: 34, az: 130, at: [0.3, 0, 0.3] },
+    have,
+    ...b.done(0.02),
+    haveLights: [],
+    sky: leave,
+    runs: [...[0, 0.5].map((offset) => ({ pts: [...round, round[0]].flat(), secs: 2.5, offset })), { pts: leave, secs: 6 }],
+  };
+}
+
+// ── Star Beam ──
+// Lubin's DE-STAR grown: a patch of the swarm 100 km across, its collectors phased as one laser of 10 TW, about 1.27
+// kW on each square meter of its face. Each square here stands for about 45 collectors. It lases from its dark
+// face, away from the Sun, and pushes a 2 t lens on a 100 m sail, holding its spot on the sail for about 17 AU. The
+// rest of the swarm lies dim round it. Lubin's arrays are flat, as this is: its shape is theirs, its place ours.
+function starBeam(): Sketch {
+  const b = new Rising();
+  beamPatch(b, 50);
+  const sail: V = [0, 30, 150];
+  const away: V = [0, 120, 600];
+  return {
+    view: { km: 380, el: 20, az: 120, at: [0, 10, 50] },
+    have: swarmAround(62, 140, 6, 40, 2015),
+    ...b.done(1.2),
+    haveLights: [],
+    sky: beamTo(50, sail, away),
+    runs: [0, 1 / 3, 2 / 3].map((offset) => ({ pts: [0, 0, 0, ...sail, ...away], secs: 2.5, offset })),
+  };
+}
+
+// ── Ship Beam ──
+// The Star Beam's patch grown ten times wider round it, 1,000 km, Forward's width: 1,000 TW on the same 1.27 kW a
+// square meter, in light of 1.55 microns. Each square stands for about 4,500 collectors. It holds its spot on a 1 km
+// sail for about 1,800 AU, and pushes a 1,500 t seed ship to a tenth of light speed in 78 days, 680 AU out. The Star
+// Beam lies dim at its middle.
+function shipBeam(): Sketch {
+  const b = new Rising();
+  beamPatch(b, 500);
+  const sail: V = [0, 300, 1500];
+  const away: V = [0, 1200, 6000];
+  return {
+    view: { km: 7000, el: 16, az: 110, at: [-1200, 0, 800] },
+    dash: 0.15,
+    have: [...circle([0, 0, 0], 50, [0, 0, 1], 24), ...swarmAround(620, 1400, 60, 40, 1984)],
+    ...b.done(12),
+    haveLights: [0, 0, 1, 6],
+    sky: beamTo(500, sail, away),
+    runs: [0, 1 / 3, 2 / 3].map((offset) => ({ pts: [0, 0, 0, ...sail, ...away], secs: 2.5, offset })),
+  };
+}
+
+// ── Wide Beam ──
+// The Ship Beam's patch grown ten times wider again, 10,000 km, twice Mercury's width, filled, not thinned: each square
+// stands for about 350,000 collectors. It throws the same 1,000 TW in four colors, 2.0, 1.55, 1.06 and 0.80
+// microns, each taking over in turn as the sail speeds up, as Kare's chain did. A line has one color, so four pulses
+// up the beam stand for them. It holds the spot on a 1 km sail for about half a light-year, and throws a flyby probe
+// at about three quarters of light speed. The Ship Beam lies dim at its middle, and Mercury behind it.
+function wideBeam(): Sketch {
+  const b = new Rising();
+  beamPatch(b, 5000, 16);
+  const sail: V = [0, 3000, 15000];
+  const away: V = [0, 12000, 60000];
+  return {
+    view: { km: 38000, el: 18, az: 115, at: [-3000, 1000, 5000] },
+    dash: 1.5,
+    have: [...circle([0, 0, 0], 500, [0, 0, 1], 32), ...circle([0, 0, 0], 50, [0, 0, 1], 16)],
+    ...b.done(110),
+    haveLights: [0, 0, 10, 60],
+    sky: beamTo(5000, sail, away),
+    runs: [0, 0.25, 0.5, 0.75].map((offset) => ({ pts: [0, 0, 0, ...sail, ...away], secs: 3, offset })),
+  };
+}
+
 /** Each build with a close view, by name. */
 export const CLOSE: Record<string, Close> = {
   "Thought Fields": drawn(thoughtFields),
@@ -2146,4 +2394,10 @@ export const CLOSE: Record<string, Close> = {
   "Close Look": drawn(closeLook),
   "Hypertelescope": drawn(hypertelescope),
   "Glow Imager": drawn(glowImager),
+  "Mercury Works": drawn(mercuryWorks),
+  "Solar Swarm": drawn(solarSwarm),
+  "Antimatter Works": drawn(antimatterWorks),
+  "Star Beam": drawn(starBeam),
+  "Ship Beam": drawn(shipBeam),
+  "Wide Beam": drawn(wideBeam),
 };

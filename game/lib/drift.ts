@@ -4029,7 +4029,12 @@ void main() {
         dirty = true;
       }
       for (const [body, g] of globes) {
-        const o = p * arrived(g.at) * Number(focus?.site.on === "planet" && focus.site.body === body);
+        // Down on its ground, its globe goes as Close View's own ground comes, as the Moon's dots do. 2026-11-13.
+        const o =
+          p *
+          arrived(g.at) *
+          Number(focus?.site.on === "planet" && focus.site.body === body) *
+          (focus && CLOSE[focus.name]?.ground ? 1 - ramp(down, 0.5, 0.8) : 1);
         g.mat.uniforms.uOpacity.value = o;
         g.globe.uniforms.uOpacity.value = o;
         if (g.rings) g.rings.uniforms.uOpacity.value = o;
@@ -4120,6 +4125,7 @@ void main() {
   function closePlace(w: NonNullable<Show["works"]>[number]) {
     const { lat, lon } = w.site.places[0];
     const at = new THREE.Vector3();
+    cSun.copy(sunDir);
     if (w.site.on === "earth") {
       at.set(...onGlobe(lat, lon, 1)).applyQuaternion(spin.quaternion);
       cUp.copy(at);
@@ -4132,6 +4138,24 @@ void main() {
       inOrbit(w.site.orbit ?? { km: 400, tilt: 51.6, minutes: 92.9 }, at, heading);
       cUp.copy(at).normalize();
       cNorth.crossVectors(cUp, heading);
+    } else if (w.site.on === "planet") {
+      // At a planet, 2026-11-13. Its day lasts months, so a place holds still against the Sun. A build on its ground
+      // stands where the map's view of the planet looks down, on the day side with the Sun about 48° up, so the fall
+      // lands on the face in view. One in space stands four of its radii ahead of it on its way round the Sun, and one
+      // toward the Sun, level with its sunward face: in full sunlight, clear of the planet and its shadow, with the
+      // planet beside it. Up is away from the Sun, as at L2, and east is the way the planet goes. Ours.
+      const center = planetAt(w.site.body!);
+      const R = planetR(w.site.body!);
+      cSun.copy(bodyPosition(w.site.body!, pilot.sky.date)).negate().normalize();
+      const ahead = cSun.clone().cross(eN).normalize();
+      if (CLOSE[w.name]?.ground) {
+        cUp.copy(cSun).addScaledVector(ahead, 0.8).addScaledVector(eN, 0.35).normalize();
+        at.copy(center).addScaledVector(cUp, R);
+      } else {
+        cUp.copy(cSun).negate();
+        at.copy(center).addScaledVector(ahead, 4 * R).addScaledVector(cSun, R);
+      }
+      cNorth.copy(eN);
     } else {
       at.copy(haloAt(w.site));
       cUp.copy(sunDir).negate();
@@ -4367,10 +4391,11 @@ void main() {
             return false;
           }
         : undefined;
-      const ground = on === "earth" || on === "moon";
-      const R = on === "moon" ? 1737.4 : 6371.0084;
+      // On a planet's ground too, since 2026-11-13, curving at its radius.
+      const ground = on === "earth" || on === "moon" || (on === "planet" && !!m.ground);
+      const R = on === "moon" ? 1737.4 : on === "planet" ? planetR(w.site.body!) * 6371.0084 : 6371.0084;
       const seed = Math.round(Math.abs(lat * 1000 + lon));
-      if (ground) g.add(field(R, on === "moon" ? 25 : 60, seed, clear).points(fieldGlow));
+      if (ground) g.add(field(R, on === "earth" ? 60 : 25, seed, clear).points(fieldGlow));
 
       // Faces: what hides, and the dots on them. About one dot to every two and a half pixels of face as the view
       // first frames it, a third as many on ground we look through, and never more than a phone can draw.
@@ -4419,8 +4444,9 @@ void main() {
       const poolGlow = additive(glow({ minPx: 0.6, maxPx: 2.2, depthTest: true }));
       const haveLines = segments(have, "ink");
       const solid = segments(m.build, "mind");
-      // The plan: each line cut into dashes, about 18 m long on the ground and finer on the small builds in space.
-      const dash = Math.min(0.018, m.view.km / 300);
+      // The plan: each line cut into dashes, about 18 m long on the ground and finer on the small builds in space. A
+      // build thousands of km wide sets its own, or its dashes would run to millions. 2026-11-13.
+      const dash = m.dash ?? Math.min(0.018, m.view.km / 300);
       const dashes: number[] = [];
       for (let i = 0; i < m.build.length; i += 6) {
         const [a, b] = [m.build.slice(i, i + 3), m.build.slice(i + 3, i + 6)];
@@ -4475,7 +4501,7 @@ void main() {
         runPts,
       );
       place.add(g);
-      return { g, on, fieldGlow, haveLines, dashed, solid, sky, haveGlow, lightGlow, townGlow, runGlow, runs, runPts, dots, hideOurs, poolGlow };
+      return { g, on, ground, fieldGlow, haveLines, dashed, solid, sky, haveGlow, lightGlow, townGlow, runGlow, runs, runPts, dots, hideOurs, poolGlow };
     }
     const made = new Map<string, ReturnType<typeof model>>();
     const p0 = new THREE.Vector3();
@@ -4492,13 +4518,13 @@ void main() {
       const p = ramp(down, 0.55, 0.9);
       p0.copy(local.origin).sub(earthAU).divideScalar(R_E_AU);
       const day =
-        m.on === "earth" || m.on === "moon"
-          ? smooth((sunDir.dot(cUp) + 0.1) / 0.35)
+        m.ground
+          ? smooth((cSun.dot(cUp) + 0.1) / 0.35)
           : m.on === "orbit"
             ? Number(p0.dot(sunDir) > 0 || p0.clone().addScaledVector(sunDir, -p0.dot(sunDir)).length() > 1)
             : 1;
       const beat = still || !c.beat ? 0 : Math.exp(-((clock % c.beat) / c.beat) * 4);
-      m.fieldGlow.uniforms.uOpacity.value = p * (m.on === "moon" ? 0.18 + 0.6 * day : 0.22 + 0.45 * day);
+      m.fieldGlow.uniforms.uOpacity.value = p * (m.on === "earth" ? 0.22 + 0.45 * day : 0.18 + 0.6 * day);
       m.haveLines.mat.uniforms.uOpacity.value = p * (0.28 + 0.14 * day);
       m.haveGlow.uniforms.uOpacity.value = p * (0.9 - 0.6 * day);
       m.townGlow.uniforms.uOpacity.value = p * (1 - day) * 0.85;
@@ -4520,8 +4546,8 @@ void main() {
       // The dots take the Sun as it stands over the place now. On the ground it lights them once it clears the
       // horizon. By night the lamps do, and while the build goes up, its newest dots flash.
       const u = (m.dots.material as THREE.ShaderMaterial).uniforms;
-      u.uSun.value.set(sunDir.dot(cEast), sunDir.dot(cNorth), sunDir.dot(cUp));
-      u.uLit.value = m.on === "earth" || m.on === "moon" ? smooth((sunDir.dot(cUp) + 0.02) / 0.12) : day;
+      u.uSun.value.set(cSun.dot(cEast), cSun.dot(cNorth), cSun.dot(cUp));
+      u.uLit.value = m.ground ? smooth((cSun.dot(cUp) + 0.02) / 0.12) : day;
       u.uReveal.value = built > 0 ? built : -1;
       u.uNight.value = 1 - 0.9 * day;
       u.uFresh.value = built < 1 ? 1 : 0;
@@ -4761,6 +4787,8 @@ void main() {
   const sysDir = new THREE.Vector3(0, 1, 0);
   const closeTurn = { az: 0, el: 0 };
   const [cUp, cNorth, cEast, cDir] = Array.from({ length: 4 }, () => new THREE.Vector3());
+  /** The way to the Sun from Close View's place: Earth's, but a planet's own at a planet. 2026-11-13. */
+  const cSun = new THREE.Vector3();
   const basis = new THREE.Matrix4();
   /** The ground at the build's place, turned to lie flat there: x east, y north, z up. */
   const place = new THREE.Group();
@@ -4913,11 +4941,13 @@ void main() {
       L.camera.near = L.near(d);
       L.camera.far = L.far(d);
       // Close View can stand far out at L2, or right down on the Moon. Earth's layer then starts at its nearest ground,
-      // Earth's or the Moon's, and reaches past Earth.
+      // Earth's or the Moon's, and reaches past Earth. At a planet, its ground too, 2026-11-13.
       if (L === earth && down > 0) {
         const span = L.camera.position.length();
         const toMoon = L.camera.position.distanceTo(moonAt) - MOON_R;
-        L.camera.near = Math.max(L.camera.near, 0.5 * Math.min(span - 1, toMoon));
+        const body = closing?.site.on === "planet" ? closing.site.body! : null;
+        const toPlanet = body ? L.camera.position.distanceTo(planetAt(body)) - planetR(body) : Infinity;
+        L.camera.near = Math.max(L.camera.near, 0.5 * Math.min(span - 1, toMoon, toPlanet));
         L.camera.far = Math.max(L.camera.far, span + 70);
       }
       L.camera.updateProjectionMatrix();
