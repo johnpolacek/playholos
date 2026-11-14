@@ -1,10 +1,7 @@
-import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 
-// The bar over the kit's pages, /ui and /design, as SPEC-01/HARDWARE's sits over its own: the accents on the left,
-// the pages on the right. The accent it sets carries to the page below as --accent. 2026-11-14.
-
-const ACCENTS = ["you", "other", "think", "see", "lift", "reach", "keep"] as const;
+// The bar over the kit's pages, /ui and /design, as SPEC-01/HARDWARE's sits over its own: the kit's name on the left,
+// the pages on the right. The page below takes our blue as --accent. The accent picker left 2026-11-14.
 
 const PAGES = [
   { label: "Components", to: "/ui" },
@@ -12,24 +9,13 @@ const PAGES = [
 ];
 
 export default function KitLayout() {
-  const [accent, setAccent] = useState<(typeof ACCENTS)[number]>("you");
   const { pathname } = useLocation();
   return (
-    <div style={{ "--accent": `var(--${accent})` } as React.CSSProperties} className="min-h-dvh bg-page pt-2 text-ink">
+    <div style={{ "--accent": "var(--you)" } as React.CSSProperties} className="min-h-dvh bg-page pt-2 text-ink">
       <nav className="sticky top-2 z-10 mx-4 flex items-center justify-between gap-4 rounded-2xl border border-rowline bg-paper/90 px-4 py-2.5 backdrop-blur sm:mx-auto sm:max-w-5xl">
-        <div className="flex gap-1.5" role="radiogroup" aria-label="Accent">
-          {ACCENTS.map((a) => (
-            <button
-              key={a}
-              role="radio"
-              aria-checked={a === accent}
-              aria-label={a}
-              onClick={() => setAccent(a)}
-              className={`size-4 rounded-full ${a === accent ? "ring-2 ring-ink/70 ring-offset-2 ring-offset-paper" : ""}`}
-              style={{ background: `var(--${a})` }}
-            />
-          ))}
-        </div>
+        <Link to="/ui" className="font-mono text-[11px] tracking-[.08em] text-ink">
+          HOLOS/UI
+        </Link>
         <div className="flex gap-4 font-mono text-[10px] tracking-[.08em] uppercase">
           {PAGES.map((p) => {
             const on = pathname === p.to;
