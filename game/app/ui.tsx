@@ -1,21 +1,22 @@
 import { useState } from "react";
-import { Link } from "react-router";
 import { BackBar } from "@/components/back-bar";
+import { Meter } from "@/components/hud";
 import { Check, Cross, Dials, Globe, KeyMark, Lens, Prompt } from "@/components/icons";
 import { BuildMark, buildBlue, buildTone, LeadMark, LockMark } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
+import { RailTab } from "@/components/rail";
 import { Thread } from "@/components/review";
+import { Sources } from "@/components/sources";
 import { Face, ListHead, TabHead } from "@/components/tab-head";
 import { VisitArt } from "@/components/visit-art";
 import { type Art, WINDOWS } from "@/lib/game/leads";
 import { BUILDS } from "@/lib/game/plan";
+import { MIND_SOURCES } from "@/lib/game/sources";
+import { CATALOG } from "@/lib/sim/works";
 
 // The game's kit, laid out as SPEC-01/HARDWARE lays out its own (spec-01.vercel.app): a bar of accents and sections
 // over a grid of numbered cards, each one part drawn live. A first pass, 2026-11-14, from the parts /design already
-// draws. It grows a card at a time.
-
-// The accents a card's number can take: our blue, theirs, and what each build does.
-const ACCENTS = ["you", "other", "think", "see", "lift", "reach", "keep"] as const;
+// draws. It grows a card at a time. The bar over it is app/kit-layout.tsx, which sets the cards' --accent.
 
 const STOPS = ["How we reach", "Voyager 1", "Send a sail", "Send a flyby probe", "More roads"].map((name) => ({ name }));
 
@@ -45,37 +46,10 @@ function Card({ n, name, span = 1, children }: { n: number; name: string; span?:
 }
 
 export default function Kit() {
-  const [accent, setAccent] = useState<(typeof ACCENTS)[number]>("you");
   const [at, setAt] = useState(2);
   const [closer, setCloser] = useState(true);
   return (
-    <div style={{ "--accent": `var(--${accent})` } as React.CSSProperties} className="min-h-dvh bg-page text-ink">
-      <nav className="sticky top-2 z-10 mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-2xl border border-rowline bg-paper/90 px-4 py-2.5 backdrop-blur max-sm:mx-4">
-        <div className="flex gap-1.5" role="radiogroup" aria-label="Accent">
-          {ACCENTS.map((a) => (
-            <button
-              key={a}
-              role="radio"
-              aria-checked={a === accent}
-              aria-label={a}
-              onClick={() => setAccent(a)}
-              className={`size-4 rounded-full ${a === accent ? "ring-2 ring-ink/70 ring-offset-2 ring-offset-paper" : ""}`}
-              style={{ background: `var(--${a})` }}
-            />
-          ))}
-        </div>
-        <div className="flex gap-4 font-mono text-[10px] tracking-[.08em] uppercase">
-          <span className="flex items-center gap-1.5 text-ink">
-            <i className="size-1.5 rounded-full bg-[var(--accent)]" />
-            Components
-          </span>
-          <Link to="/design" className="flex items-center gap-1.5 text-muted hover:text-ink">
-            <i className="size-1.5 rounded-full bg-faint" />
-            Design
-          </Link>
-        </div>
-      </nav>
-
+    <>
       <main className="mx-auto max-w-[52rem] px-4 pt-14 pb-24">
         <h1 className="font-mono text-[clamp(34px,7vw,56px)] leading-none font-light tracking-[-.02em]">HOLOS/UI</h1>
         <p className="mt-4 max-w-[46ch] font-mono text-[12.5px] leading-relaxed text-page-ink2">
@@ -188,8 +162,37 @@ export default function Kit() {
               ))}
             </div>
           </Card>
+          <Card n={13} name="Meter" span={2}>
+            {/* The top bar at Year 0: our thinking draws about a hundredth of Earth's grid, and nothing is yet in orbit. */}
+            <div className="grid w-full grid-cols-3 gap-2.5">
+              <Meter label="ENERGY" at={0.01} value="1%" sub="of the grid" />
+              <Meter label="MATTER" value="0 kt" sub="in orbit" />
+              <Meter label="DEUTERIUM" at={0} value="0 kt" sub="Works not done" late />
+            </div>
+          </Card>
+          <Card n={14} name="Readout">
+            <div className="flex flex-col items-end gap-1">
+              <span className="text-[15px] font-medium">Year 0.00</span>
+              <span className="font-mono text-[11px] text-muted tabular-nums">+{Math.round(CATALOG.deuterium.perYear)} kt a Year</span>
+            </div>
+          </Card>
+          <Card n={15} name="Dialog">
+            <div className="flex items-center gap-2 font-mono text-[10.5px] tracking-[.08em] text-muted uppercase">
+              The real record
+              <Sources sources={MIND_SOURCES} />
+            </div>
+          </Card>
+
+          <Card n={16} name="Tabs" span={2}>
+            <nav aria-label="Tabs" className="grid h-16 w-full grid-cols-4 rounded-xl border border-faint bg-paper">
+              <RailTab to="/ui" label="Scan" on={false} calls={2} />
+              <RailTab to="/ui" label="Build" on />
+              <RailTab to="/ui" label="Reach" on={false} />
+              <RailTab to="/ui" label="Mind" on={false} dot />
+            </nav>
+          </Card>
         </div>
       </main>
-    </div>
+    </>
   );
 }

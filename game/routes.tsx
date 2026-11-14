@@ -55,9 +55,15 @@ export const router = createBrowserRouter([
       { path: "universe", lazy: later(() => import("@/app/sim")) },
       { path: "sim", lazy: later(() => import("@/app/sim")) },
       // The game's colors, type and shared parts, drawn live. 2026-10-28.
-      { path: "design", lazy: later(() => import("@/app/design")) },
-      // The kit: each shared part on its own numbered card, laid out as SPEC-01/HARDWARE lays out its own. 2026-11-14.
-      { path: "ui", lazy: later(() => import("@/app/ui")) },
+      // The kit: each shared part on its own numbered card, laid out as SPEC-01/HARDWARE lays out its own. The two
+      // share one bar. 2026-11-14.
+      {
+        lazy: later(() => import("@/app/kit-layout")),
+        children: [
+          { path: "design", lazy: later(() => import("@/app/design")) },
+          { path: "ui", lazy: later(() => import("@/app/ui")) },
+        ],
+      },
       // Godview shows what the player can't see, so only the dev server has it.
       ...(import.meta.env.DEV ? [{ path: "godview", lazy: later(() => import("@/app/godview")) }] : []),
       { path: "*", Component: NotFound },

@@ -6,7 +6,7 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 // The ⓘ on a memory screen, and the sheet it opens: the real record behind the screen, with canonical links.
 // The sheet rises over the whole phone and sinks away on close.
 
-function Sheet({ sources, onClose }: { sources: Source[]; onClose(): void }) {
+function Sheet({ sources, onClose, page = false }: { sources: Source[]; onClose(): void; page?: boolean }) {
   const root = useRef<HTMLDivElement>(null);
   const closing = useRef(false);
 
@@ -39,7 +39,7 @@ function Sheet({ sources, onClose }: { sources: Source[]; onClose(): void }) {
       role="dialog"
       aria-modal
       aria-label="The real record"
-      className="absolute inset-0 z-50 flex flex-col justify-end"
+      className={`${page ? "fixed" : "absolute"} inset-0 z-50 flex flex-col justify-end`}
     >
       <div data-s="back" onClick={close} className="absolute inset-0 bg-black/55" />
       <div
@@ -96,7 +96,10 @@ export function Sources({ sources }: { sources: Source[] }) {
           <path d="M8 7v4.5M8 4.6v.1" strokeLinecap="round" strokeWidth="1.5" />
         </svg>
       </button>
-      {open && phone && createPortal(<Sheet sources={sources} onClose={() => setOpen(false)} />, phone)}
+      {/* Off the game's screen, as on /ui, the sheet rises over the whole page. 2026-11-14. */}
+      {open &&
+        typeof document !== "undefined" &&
+        createPortal(<Sheet sources={sources} onClose={() => setOpen(false)} page={!phone} />, phone ?? document.body)}
     </>
   );
 }

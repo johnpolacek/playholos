@@ -48,12 +48,15 @@ Everything else inside the shell is placeholder.
 
 ## Shared UI
 
-Every piece two screens or more share. Use these before writing a new one, and add a part here and to `/design` when a second screen needs it. `/design` draws them all live, with the colors and type, from `app/design.tsx`.
+Every piece two screens or more share. Use these before writing a new one, and add a part here and to `/design` when a second screen needs it. `/design` draws them all live, with the colors and type, from `app/design.tsx`. `/ui` draws each on its own numbered card, laid out as SPEC-01/HARDWARE lays out its own, from `app/ui.tsx`. The two share one bar, `app/kit-layout.tsx`.
 
 - `BackBar` (`components/back-bar.tsx`): every way back from a page to where it was opened. Never a pill. From a walk, its stops sit at the end.
 - `TabHead`, `ListHead`, `Face` (`components/tab-head.tsx`): a tab's top line, a list's head, and a list row.
 - `Thread` (`components/review.tsx`): a walk's stops. `WalkHead` (`components/reach-tour.tsx`) is How we reach's head with it.
 - `MindNote` (`components/mind-note.tsx`): the Mind's words on any page.
+- `Meter` (`components/hud.tsx`): a top bar reading, with its bar, number and the word under it.
+- `RailTab` (`components/rail.tsx`): one tab on the rail, with a count of signals heard or a dot for news.
+- `Sources` (`components/sources.tsx`): the ⓘ and the sheet of the real record it opens.
 - `BuildMark`, `buildTone`, `buildBlue`, `LeadMark`, `LockMark` (`components/marks.tsx`): what each build and lead is, drawn, and in its color.
 - `Lens`, `Globe`, `Dials`, `Check`, `Cross`, `KeyMark`, `Prompt` (`components/icons.tsx`): small control icons.
 - `VisitArt` (`components/visit-art.tsx`): what our craft saw of a world up close.

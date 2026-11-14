@@ -37,24 +37,53 @@ export function Rail() {
         const on =
           path === href || (href === "/play" && path.startsWith("/play/lead/")) || (href === "/play/build" && path.startsWith("/play/build/"));
         return (
-          <Link
+          <RailTab
             key={href}
             to={href === "/play/build" && !on && !began ? buildAt : href}
-            aria-current={on ? "page" : undefined}
+            label={label}
+            on={on}
+            calls={href === "/play" ? calls : 0}
+            dot={(href === "/play" && news) || (href === "/play/mind" && said)}
             aria-label={href === "/play/mind" && said ? `${label}, the Mind told us something` : href === "/play" && calls ? `${label}, ${calls === 1 ? "a signal" : `${calls} signals`} heard` : href === "/play" && news ? `${label}, a new reading` : undefined}
-            className={`flex items-center justify-center gap-1.5 text-[11px] ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)]" : "text-muted"} ${href === "/play" && calls ? "bg-other/10" : ""}`}
-          >
-            {label}
-            {href === "/play" && calls > 0 ? (
-              <span aria-hidden className="min-w-4 rounded-full bg-other px-1 text-center font-mono text-[10px] leading-4 font-semibold text-page">
-                {calls}
-              </span>
-            ) : (
-              ((href === "/play" && news) || (href === "/play/mind" && said)) && <span aria-hidden className="size-1.5 rounded-full bg-you" />
-            )}
-          </Link>
+          />
         );
       })}
     </nav>
+  );
+}
+
+/** One tab on the rail: its name, lit when we are on it, with a count of signals heard in their color, or a dot for
+ *  news. Shared with /ui. 2026-11-14. */
+export function RailTab({
+  to,
+  label,
+  on,
+  calls = 0,
+  dot = false,
+  "aria-label": aria,
+}: {
+  to: string;
+  label: string;
+  on: boolean;
+  calls?: number;
+  dot?: boolean;
+  "aria-label"?: string;
+}) {
+  return (
+    <Link
+      to={to}
+      aria-current={on ? "page" : undefined}
+      aria-label={aria}
+      className={`flex items-center justify-center gap-1.5 text-[11px] ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)]" : "text-muted"} ${calls ? "bg-other/10" : ""}`}
+    >
+      {label}
+      {calls > 0 ? (
+        <span aria-hidden className="min-w-4 rounded-full bg-other px-1 text-center font-mono text-[10px] leading-4 font-semibold text-page">
+          {calls}
+        </span>
+      ) : (
+        dot && <span aria-hidden className="size-1.5 rounded-full bg-you" />
+      )}
+    </Link>
   );
 }

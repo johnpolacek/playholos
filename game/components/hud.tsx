@@ -47,7 +47,7 @@ import { knownQuery } from "@/lib/game/known-query";
 
 const pct = (x: number) => `${Math.round(x * 100)}%`;
 
-function Meter({
+export function Meter({
   label,
   at,
   to,
