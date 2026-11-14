@@ -1798,6 +1798,307 @@ function rockDeflector(): Sketch {
   };
 }
 
+// ── Watches, a weapon and the far eyes, drawn 2026-11-13 ──
+/** A flat square `s` from its middle to each side, round `c`, facing `n`. */
+function tileAt(c: V, n: V, s: number) {
+  const [u, v] = across(n);
+  const p = (a: number, b: number): V => [0, 1, 2].map((j) => c[j] + s * (a * u[j] + b * v[j])) as V;
+  const pts = [p(-1, -1), p(1, -1), p(1, 1), p(-1, 1)];
+  return faced(path([...pts, pts[0]]), quad(pts[0], pts[1], pts[2], pts[3]));
+}
+/** A tube standing up from `c`, `h` tall: its two ends and four sides, with its faces. */
+function upright(c: V, r: number, h: number, k = 16) {
+  const top: V = [c[0], c[1], c[2] + h];
+  const out = [...circle(c, r, [0, 0, 1], k), ...circle(top, r, [0, 0, 1], k)];
+  for (let i = 0; i < 4; i++) out.push(...on(c, r, (i * Math.PI) / 2), ...on(top, r, (i * Math.PI) / 2));
+  return faced(out, drum(c, r, h, k));
+}
+
+// ── X-Ray Watch ──
+// Einstein Probe is 1,450 kg and 3 by 3.4 m. Its wide-field telescope is 12 lobster-eye modules that see 3,600 square
+// degrees together, so each module sees about 17° by 17°: drawn as 12 tiles in rows of four and three, each turned to
+// its own patch of sky. Its follow-up telescope is two Wolter tubes 1.6 m long beside them. Ours is one of six of its
+// class. The other five fly spread round this same orbit, too far apart to show. The bus, the wings and where each
+// part sits are ours. In orbit, z is away from Earth, and it looks that way.
+function xRayWatch(): Sketch {
+  const b = new Rising().add(box(0, 0, 0.0014, 0.0014, 0.0012));
+  for (const side of [-1, 1]) b.add([0, side * 0.0007, 0.0006, 0, side * 0.0008, 0.0006], panel(-0.0006, side > 0 ? 0.0008 : -0.0018, 0.0012, 0.001, 0.0006));
+  b.lit([0.0006, 0.0006, 0.0012], [-0.0006, -0.0006, 0.0012]);
+  const step = (17 * Math.PI) / 180;
+  for (let j = 0; j < 3; j++)
+    for (let i = 0; i < 4; i++) {
+      const n = unit([Math.tan((i - 1.5) * step), Math.tan((j - 1) * step), 1]);
+      b.add(tileAt([0.0012 * n[0], 0.0012 * n[1], 0.0003 + 0.0012 * n[2]], n, 0.00016));
+    }
+  b.lit([0, 0, 0.0016]);
+  for (const y of [-0.00025, 0.00025]) {
+    b.add(upright([0.00095, y, 0], 0.0002, 0.0016));
+    b.lit([0.00095, y, 0.0016]);
+  }
+  // Its field, about 68° by 51°, out from the middle of the tiles.
+  const mid: V = [0, 0, 0.0015];
+  const corner = (a: number, c: number): V => {
+    const n = unit([a * Math.tan(2 * step), c * Math.tan(1.5 * step), 1]);
+    return [mid[0] + 0.02 * n[0], mid[1] + 0.02 * n[1], mid[2] + 0.02 * n[2]];
+  };
+  const corners = [corner(-1, -1), corner(1, -1), corner(1, 1), corner(-1, 1)];
+  const sky = [...path([...corners, corners[0]]), ...corners.flatMap((c) => [...mid, ...c])];
+  const flash = unit([0.4, -0.25, 1]);
+  return {
+    view: { km: 0.008, el: 18, az: 210, at: [0, 0, 0.0009] },
+    have: [],
+    ...b.done(0.00012),
+    haveLights: [],
+    sky,
+    runs: [{ pts: [0.02 * flash[0], 0.02 * flash[1], 0.0015 + 0.02 * flash[2], ...mid], secs: 4, lands: true }],
+  };
+}
+
+// ── Interceptor ──
+// About 40 t in geostationary orbit: twelve kill vehicles of a tonne, each riding a kick stage of the Star 48B's
+// class, 1.24 m wide, 2.03 m long and about 2.1 t. That is about 38 t, and a carrier of about 2 t holds them in two
+// rings of six round its spine, ready. DART's body, about 1.2 by 1.3 by 1.3 m, sets each kill vehicle's. The carrier,
+// its wings and dish, and the rings are ours.
+function interceptor(): Sketch {
+  const b = new Rising().add(tube(-0.0035, 0.0035, 0, 0, 0.0008));
+  b.lit([-0.0035, 0, 0.0008], [0.0035, 0, 0.0008]);
+  b.add([0.0035, 0, 0, 0.005, 0, 0], [0.005, -0.0065, 0, 0.005, 0.0065, 0]);
+  for (const side of [-1, 1]) b.add(panel(0.004, side > 0 ? 0.0025 : -0.0065, 0.002, 0.004));
+  b.add([-0.0035, 0, 0, -0.0042, 0, 0], faced(circle([-0.0042, 0, 0], 0.0006, [1, 0, 0], 20), disc([-0.0042, 0, 0], 0.0006, [1, 0, 0], 20)));
+  for (const [layer, x0] of [
+    [0, -0.0034],
+    [1, 0.0001],
+  ])
+    for (let k = 0; k < 6; k++) {
+      const a = ((k + layer * 0.5) * Math.PI) / 3;
+      const [y, z] = [0.0016 * Math.cos(a), 0.0016 * Math.sin(a)];
+      const cx = x0 + 0.00203 + 0.00065;
+      b.add(tube(x0, x0 + 0.00203, y, z, 0.00062), box(cx, y, 0.0013, 0.0013, 0.0013, z - 0.00065));
+      b.lit([cx, y, z + 0.00065]);
+    }
+  return {
+    view: { km: 0.024, el: 20, az: 215, at: [0.0005, 0, 0] },
+    have: [],
+    ...b.done(0.0002),
+    haveLights: [],
+  };
+}
+
+// ── Relay Search ──
+// Beside the Orbital Yard, as a lens is built: one sail of our lenses' class, 32 m square, about 1,000 m², with a
+// camera about 1 m wide at its middle and a smaller heat imager beside it. Once done it leaves, falling toward the Sun
+// to dive past it as a lens does. Its shapes are ours.
+function relaySearch(): Sketch {
+  const x = 0.12;
+  const b = new Rising().add(square(x, 0, 0.032, 0.01), [x - 0.016, -0.016, 0.01, x + 0.016, 0.016, 0.01], [x + 0.016, -0.016, 0.01, x - 0.016, 0.016, 0.01]);
+  b.add(upright([x, 0, 0.01], 0.0005, 0.0015));
+  b.lit([x, 0, 0.0115]);
+  b.add(upright([x + 0.003, 0, 0.01], 0.0003, 0.001));
+  b.lit([x + 0.003, 0, 0.011]);
+  const out = [x, 0, 0.01, 0.6, 0, -0.4];
+  return {
+    view: { km: 0.12, el: 24, az: 200, at: [0.1, 0, 0.008] },
+    have: [...tube(-0.06, 0.06, 0, 0, 0.006), ...panel(-0.015, 0.012, 0.03, 0.028), ...panel(-0.015, -0.04, 0.03, 0.028)],
+    ...b.done(0.002),
+    haveLights: [0, 0, 0.006, 0.002],
+    sky: out,
+    runs: [{ pts: out, secs: 6 }],
+  };
+}
+
+// ── Warm Sky Watch ──
+// NEO Surveyor, 0.5 m wide, keeps its telescope in a dark box 3.7 m long behind a shade 6 m tall and 2.4 m wide, and
+// cools it with no cryogen at all. Ours is 1.3 m wide, so drawn 2.6 times its size: a box 9.6 m long over a shade 16 by
+// 6.2 m in two panels. Under the shade, toward the Sun, the bus faces it. On top, facing the cold sky, its radiator.
+// Like WISE it looks square to the Sun and sweeps a ring of sky as it goes. The shade's slight fold and the box's
+// width are ours. At L2, z is away from the Sun.
+function warmSkyWatch(): Sketch {
+  const b = new Rising().add(box(0, 0, 0.0018, 0.0018, 0.0018, -0.0018));
+  b.lit([0, 0, -0.0018]);
+  for (const side of [-1, 1]) {
+    const pts: V[] = [
+      [-0.008, 0, 0],
+      [0.008, 0, 0],
+      [0.008, side * 0.0031, 0.0005],
+      [-0.008, side * 0.0031, 0.0005],
+    ];
+    b.add(faced(path([...pts, pts[0]]), quad(pts[0], pts[1], pts[2], pts[3])));
+  }
+  b.add(box(0.0004, 0, 0.0096, 0.0022, 0.0022, 0.0006));
+  b.add(faced(circle([0.00521, 0, 0.0017], 0.00065, [1, 0, 0], 24), disc([0.00521, 0, 0.0017], 0.00065, [1, 0, 0], 24)));
+  b.add(panel(-0.004, -0.0009, 0.007, 0.0018, 0.00283));
+  b.lit([0.00521, 0, 0.0017], [-0.004, 0, 0.0029]);
+  // The ring of sky it sweeps, square to the Sun, and the light that comes in along where it looks.
+  const ring: number[] = circle([0, 0, 0.0017], 0.05, [0, 0, 1], 48);
+  return {
+    view: { km: 0.035, el: 20, az: 130, at: [0.001, 0, 0.001] },
+    have: [],
+    ...b.done(0.0003),
+    haveLights: [],
+    sky: [...ring, 0.00521, 0, 0.0017, 0.05, 0, 0.0017],
+    runs: [{ pts: [0.05, 0, 0.0017, 0.00521, 0, 0.0017], secs: 3, lands: true }],
+  };
+}
+
+// ── Asteroid Tour ──
+// Kamoʻoalewa, its first stop. From the ground it was put at 40 to 100 m, but Tianwen-2's first picture, from about 20
+// km on 2 July 2026, shows a lumpy, long rock only about 16 to 20 m across, and its light curve turns it once in about
+// 28 minutes. Drawn 20 by 13 by 11 m: its long size is Tianwen-2's, the rest ours. The probe is of Tianwen-2's class:
+// a body about 2 by 2.5 m and two round wings 4.7 m wide, 15 m tip to tip, their faces to the Sun. It maps from the
+// sunlit side about 50 m off, sweeping round as the rock turns under it. That distance and the lumps are ours.
+function asteroidTour(): Sketch {
+  const have: number[] = [];
+  const lump = (t: number, u: number) => 1 + 0.14 * Math.sin(3 * t + 1) * Math.cos(u) + 0.08 * Math.sin(5 * t + 2 * u);
+  const face = (t: number, u: number): V => [
+    0.01 * lump(t, u) * Math.cos(u) * Math.cos(t),
+    0.0065 * lump(t, u) * Math.cos(u) * Math.sin(t),
+    0.0055 * lump(t, u) * Math.sin(u),
+  ];
+  for (const u of [-0.9, -0.45, 0, 0.45, 0.9]) have.push(...path([...Array(25)].map((_, i) => face((i / 24) * 2 * Math.PI, u))));
+  for (let k = 0; k < 6; k++) have.push(...path([...Array(13)].map((_, i) => face((k * Math.PI) / 3, (i / 12) * Math.PI - Math.PI / 2))));
+  const rock: number[] = [];
+  for (let i = 0; i < 24; i++)
+    for (let j = 0; j < 12; j++) {
+      const [t0, t1] = [(i / 24) * 2 * Math.PI, ((i + 1) / 24) * 2 * Math.PI];
+      const [u0, u1] = [(j / 12) * Math.PI - Math.PI / 2, ((j + 1) / 12) * Math.PI - Math.PI / 2];
+      rock.push(...quad(face(t0, u0), face(t1, u0), face(t1, u1), face(t0, u1)));
+    }
+  ghost(rock, (c) => c);
+  const [px, pz] = [0.04, -0.03];
+  const b = new Rising().add(box(px, 0, 0.002, 0.002, 0.0025, pz - 0.00125));
+  b.lit([px, 0, pz + 0.00125]);
+  for (const side of [-1, 1]) {
+    const c: V = [px, side * 0.00515, pz];
+    b.add([px, side * 0.001, pz, px, side * 0.0028, pz], faced(circle(c, 0.00235, [0, 0, 1], 16), disc(c, 0.00235, [0, 0, 1], 16)));
+    b.lit(c);
+  }
+  // Its sweep round the sunlit side, in the plane through the rock and the Sun.
+  const arc: V[] = Array.from({ length: 19 }, (_, i) => {
+    const t = -Math.PI + (i / 18) * Math.PI;
+    return [0.05 * Math.cos(t), 0, 0.05 * Math.sin(t)];
+  });
+  return {
+    view: { km: 0.14, el: 10, az: 180, at: [0.02, 0, -0.014] },
+    have,
+    ...b.done(0.0008),
+    haveLights: [],
+    sky: path(arc),
+    runs: [{ pts: arc.flat(), secs: 24 }],
+  };
+}
+
+// ── Close Look ──
+// A craft of CAPSTONE's class, 25 kg: a body about 0.3 by 0.3 by 0.6 m with its radio mast on top, and two wings,
+// 2.4 m tip to tip, as a satellite catalog lists it. To see a thing 10 cm wide, its camera is a telescope 10 cm wide,
+// which splits about 2 cm from 3 km off. It holds about 3 km from the watcher and looks along +x. We draw no watcher:
+// what it is, we don't know yet. The camera and where the parts sit are ours.
+function closeLook(): Sketch {
+  const b = new Rising().add(box(0, 0, 0.0003, 0.0003, 0.0006, -0.0003));
+  for (const side of [-1, 1]) b.add(panel(-0.00015, side > 0 ? 0.00015 : -0.0012, 0.0003, 0.00105));
+  b.add(stack(0, 0, 0.0003, 0.0003));
+  b.lit([0, 0, 0.0006]);
+  b.add(tube(0.00015, 0.00035, 0, 0.0001, 0.00005));
+  b.lit([0.00035, 0, 0.0001]);
+  const sight = [3, 0, 0.0001, 0.00035, 0, 0.0001];
+  return {
+    view: { km: 0.0055, el: 30, az: 140, at: [0.0001, 0, 0] },
+    have: [],
+    ...b.done(0.00005),
+    haveLights: [],
+    sky: sight,
+    runs: [{ pts: sight, secs: 4, lands: true }],
+  };
+}
+
+// ── Hypertelescope and Glow Imager ──
+// Labeyrie's mirrors fly on a bowl, part of a sphere, and send their light to a focus craft halfway to its middle.
+// His 1 km Luciola set each mirror's focus 3.6 km off, 3.6 times its width. Ours keep that ratio: 540 km out for the
+// Hypertelescope's 150 km, so its bowl is only 2.6 km deep at the rim. A slide of his lays 150 mirrors in three rings,
+// and so do we, 25, 50 and 75 mirrors at 25, 50 and 75 km. A mirror 3 m wide is far too small to see at this size:
+// each is drawn as a light, with a short mark 6 km long pointing at the focus. The marks are not the craft. At L2, z
+// is away from the Sun, and they look out that way.
+/** The mirrors on a bowl whose focus is `F` km above its middle at `c`, ring by ring: [radius km, how many]. */
+const flotilla = (c: V, F: number, rings: [number, number][]): V[] =>
+  rings.flatMap(([r, n], i) =>
+    Array.from({ length: n }, (_, k): V => {
+      const a = ((k + 0.5 * i) / n) * 2 * Math.PI;
+      return [c[0] + r * Math.cos(a), c[1] + r * Math.sin(a), c[2] + (r * r) / (4 * F)];
+    }),
+  );
+const HYPER = { F: 540, rings: [[25, 25], [50, 50], [75, 75]] as [number, number][] };
+/** A mark from a mirror toward its focus, `l` km long. */
+const toward = (m: V, f: V, l: number) => {
+  const d = unit([f[0] - m[0], f[1] - m[1], f[2] - m[2]]);
+  return [...m, m[0] + l * d[0], m[1] + l * d[1], m[2] + l * d[2]];
+};
+/** Light from some of the mirrors to the focus, drawn once it is done, and a light running down each. */
+function cone(mirrors: V[], f: V, every: number) {
+  const sky: number[] = [];
+  const runs: Close["runs"] = [];
+  mirrors.forEach((m, i) => {
+    if (i % every) return;
+    sky.push(...m, ...f);
+    if (runs.length < 8) runs.push({ pts: [...m, ...f], secs: 3, offset: runs.length / 8, lands: true });
+  });
+  return { sky, runs };
+}
+function hypertelescope(): Sketch {
+  const f: V = [0, 0, HYPER.F];
+  const b = new Rising().add([-2, 0, f[2], 2, 0, f[2]], [0, -2, f[2], 0, 2, f[2]]);
+  b.lit(f);
+  const mirrors = flotilla([0, 0, 0], HYPER.F, HYPER.rings);
+  for (const m of mirrors) {
+    b.add(toward(m, f, 6));
+    b.lit(m);
+  }
+  const { sky, runs } = cone(mirrors.slice(75), f, 5);
+  return {
+    view: { km: 820, el: 55, az: 210, at: [0, 0, 260] },
+    have: [],
+    ...b.done(2.5),
+    haveLights: [],
+    sky,
+    runs,
+  };
+}
+
+// ── Glow Imager ──
+// Twenty mirrors 3 m wide, up to 300 km apart, flying as the Hypertelescope's do, so their focus is 1,080 km out at
+// the same 3.6 times. Each sits behind its own small shade, near 40 K: too small to draw here. Laid out in two rings,
+// 7 at 75 km and 13 at 150 km, so the widest pair is 300 km apart: that layout is ours. Beside it, nearer the Sun, the
+// Hypertelescope stands dim. Where the two sit, side by side, is ours.
+function glowImager(): Sketch {
+  const F = 1080;
+  const f: V = [0, 0, F];
+  const b = new Rising().add([-4, 0, F, 4, 0, F], [0, -4, F, 0, 4, F]);
+  b.lit(f);
+  const mirrors = flotilla([0, 0, 0], F, [
+    [75, 7],
+    [150, 13],
+  ]);
+  // Each ring's line is where its mirrors fly, not a thing built: a guide, as the marks are.
+  for (const r of [75, 150]) b.add(circle([0, 0, (r * r) / (4 * F)], r, [0, 0, 1], 48));
+  for (const m of mirrors) {
+    b.add(toward(m, f, 12));
+    b.lit(m);
+  }
+  const { sky, runs } = cone(mirrors, f, 1);
+  // The Hypertelescope, dim: its rim, its focus and the line to it, and its mirrors' lights.
+  const hc: V = [-480, 0, -100];
+  const hf: V = [hc[0], 0, hc[2] + HYPER.F];
+  const rim = 75 ** 2 / (4 * HYPER.F);
+  const have = [...circle([hc[0], 0, hc[2] + rim], 75, [0, 0, 1], 48), ...hc, ...hf, hf[0] - 2, 0, hf[2], hf[0] + 2, 0, hf[2]];
+  const haveLights = [...flotilla(hc, HYPER.F, HYPER.rings).flatMap((m) => [...m, 3]), ...hf, 4];
+  return {
+    view: { km: 1700, el: 62, az: 200, at: [-220, 0, 300] },
+    have,
+    ...b.done(6),
+    haveLights,
+    sky,
+    runs,
+  };
+}
+
 /** Each build with a close view, by name. */
 export const CLOSE: Record<string, Close> = {
   "Thought Fields": drawn(thoughtFields),
@@ -1837,4 +2138,12 @@ export const CLOSE: Record<string, Close> = {
   "Galaxy Broadcast Array": drawn(galaxyBroadcastArray),
   "Halo Array": drawn(haloArray),
   "Rock Deflector": drawn(rockDeflector),
+  "X-Ray Watch": drawn(xRayWatch),
+  "Interceptor": drawn(interceptor),
+  "Relay Search": drawn(relaySearch),
+  "Warm Sky Watch": drawn(warmSkyWatch),
+  "Asteroid Tour": drawn(asteroidTour),
+  "Close Look": drawn(closeLook),
+  "Hypertelescope": drawn(hypertelescope),
+  "Glow Imager": drawn(glowImager),
 };
