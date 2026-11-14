@@ -20,6 +20,8 @@ type Step = {
   /** Why it can't be taken yet, said under it: a blind first-timer tapped "Read a glow’s light", got nothing, and
    *  learned only from the Mind that it needs a warm glow and our Infrared Telescope. 2026-11-07. */
   waits?: string;
+  /** The way to land on when it opens a star on Reach, as a Scan row's next move does. */
+  engage?: boolean | string;
 };
 type Stage = { name: string; steps: Step[] };
 
@@ -57,7 +59,7 @@ export function usePath(): { stages: Stage[]; next: Step | null } {
         waits: scope ? "Waits for a warm glow, ranged and still shining." : "Needs our Infrared Telescope, and a warm glow to read." },
         // To a glow we have, once we have one: with none, it opened Reach's list and a blind first-timer tapped it twice
         // for nothing at Year 0. 2026-11-07.
-        { label: "Send a craft to a glow", at: close ? "done" : "todo", to: firstGlow ? `/play/reach/${firstGlow.slug}` : undefined, waits: "Waits for a warm glow, ranged by our Infrared Telescope." },
+        { label: "Send a craft to a glow", at: close ? "done" : "todo", to: firstGlow ? `/play/reach/${firstGlow.slug}` : undefined, engage: true, waits: "Waits for a warm glow, ranged by our Infrared Telescope." },
         { label: "Find a mind", at: found ? "done" : close ? "going" : "todo" },
       ],
     },
@@ -67,7 +69,7 @@ export function usePath(): { stages: Stage[]; next: Step | null } {
         build("Deuterium Works"),
         build("Fusion Drive"),
         build("Seed Ship"),
-        { label: "Send our Mind to stay", at: plan.colony ? "done" : "todo", to: home ? `/play/reach/${home.slug}` : "/play/reach" },
+        { label: "Send our Mind to stay", at: plan.colony ? "done" : "todo", to: home ? `/play/reach/${home.slug}` : "/play/reach", engage: home ? "mind" : undefined },
         { ...build("Mind Link", "Move the Will there"), at: save?.will ? "done" : inOrder(plan, "Mind Link") ? "going" : "todo", to: colony ? `/play/reach/${colony.slug}` : `/play/build/${buildSlug("Mind Link")}` },
       ],
     },

@@ -350,7 +350,10 @@ export function DestinationPage({ slug }: { slug: string }) {
     return () => showCraft(null);
   }, [playingCraft, previewing, showCraft]);
   // Engage may name the way to land on, as a Scan row's next move does: "sentinel" or "mind". 2026-11-13.
-  const came = useLocation().state as { craft?: CraftKind | null; engage?: boolean | string } | null;
+  // Keyed on each visit, so a step that opens the page we are on still lands: "Send our Mind to stay" did nothing
+  // from Tau Ceti's own page. Playtest 2026-11-13.
+  const { state, key: visit } = useLocation();
+  const came = state as { craft?: CraftKind | null; engage?: boolean | string } | null;
   const cameWith = came?.craft;
   // Engage on a lead lands on how we send, not on the facts again: blind first-timers, five runs of six, met the
   // facts they had just read, saw no send, and scrolled or asked the Mind. 2026-11-08.
@@ -360,7 +363,7 @@ export function DestinationPage({ slug }: { slug: string }) {
     const to = typeof came.engage === "string" ? document.getElementById(`way-${came.engage}`) : null;
     const t = setTimeout(() => (to ?? send.current)?.scrollIntoView({ behavior: "smooth", block: "start" }), 450);
     return () => clearTimeout(t);
-  }, [came?.engage, slug]);
+  }, [came?.engage, slug, visit]);
   useEffect(() => {
     if (!cameWith) return;
     showCraft(cameWith);

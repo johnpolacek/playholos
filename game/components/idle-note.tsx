@@ -315,6 +315,7 @@ export function IdleNote() {
           {!watchNew && step?.to && (
             <Link
               to={step.to}
+              state={step.engage ? { engage: step.engage } : undefined}
               className="inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
             >
               {step.label} ›
