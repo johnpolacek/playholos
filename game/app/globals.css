@@ -235,3 +235,15 @@ body {
     opacity: 0;
   }
 }
+
+/* A craft's road on its lead's page, components/voyage.tsx: dashes flowing outward, and its word running home. */
+@keyframes voy-flow {
+  to {
+    stroke-dashoffset: -6;
+  }
+}
+@keyframes voy-back {
+  to {
+    stroke-dashoffset: 8;
+  }
+}

@@ -18,6 +18,7 @@ import { dates } from "@/lib/game/sends";
 import { VisitArt } from "@/components/visit-art";
 import { WatcherVoice } from "@/components/watcher-voice";
 import { WreckCard } from "@/components/wreck-card";
+import { Voyage } from "@/components/voyage";
 import { VOICED } from "@/lib/game/watcher-voice";
 import { glowNamed } from "@/lib/game/glow-names";
 import { UnrangedGlow, WARM_WHAT } from "@/components/unranged-glow";
@@ -298,15 +299,22 @@ export function LeadPage({ slug }: { slug: string }) {
       )}
       {/* A way to go there, as a button: a link at the end of this line went unseen. Playtest 2026-11-05. Once a probe of
           ours is on its way, as our standing order sends to each warm glow, it says so in its place. */}
-      {lead.art.kind !== "near" && (probeRoad || stayRoad) && (
+      {lead.art.kind !== "near" && probeRoad && (
         <p data-m className="mt-2 text-[13px] leading-snug text-page-ink2">
-          <span className="text-you">{probeRoad ? "A flyby probe of ours is on its way." : "A sentinel of ours is on its way."}</span>{" "}
-          {probeRoad && probeRoad.arrives !== null && probeRoad.home !== null && `It passes in Year ${yearText(probeRoad.arrives)}, and its pictures reach us by Year ${yearText(probeRoad.home)}.`}
-          {stayRoad && stayRoad.arrives !== null && stayRoad.home !== null && `It arrives in Year ${yearText(stayRoad.arrives)}, and its first word reaches us by Year ${yearText(stayRoad.home)}.`}{" "}
+          <span className="text-you">A flyby probe of ours is on its way.</span>{" "}
+          {probeRoad.arrives !== null && probeRoad.home !== null && `It passes in Year ${yearText(probeRoad.arrives)}, and its pictures reach us by Year ${yearText(probeRoad.home)}.`}{" "}
           <Link to={`/play/reach/${lead.slug}`} className="whitespace-nowrap text-you hover:underline">
             Other ways to engage ›
           </Link>
         </p>
+      )}
+      {lead.art.kind !== "near" && stayRoad && (
+        <>
+          <Voyage road={stayRoad} craft="Our sentinel" star={starName(lead.star)} ly={stayer!.d ?? lead.ly} now={now ?? 0} warm={lead.art.kind === "warm"} />
+          <Link data-m to={`/play/reach/${lead.slug}`} className="mt-1.5 self-start text-[13px] text-you hover:underline">
+            Other ways to engage ›
+          </Link>
+        </>
       )}
       {lead.art.kind === "warm" && flash && <GlowVerdict flash={flash} />}
       {/* Engage holds at the panel's foot while the page under it scrolls: on a phone the tab bar cut it in half. On a
