@@ -125,7 +125,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - Set aside: any craft sent to another star counting as spreading.
 - **Only seeds that build a star out count, settled 2026-10-30.** Earth rules out hungry spread, not quiet spread, so the watcher counts only growth.
   - *Builders:* a seed probe, which mines and copies itself. Our Mind sent to settle a star and build it out. Our Mind sent to feed a hole.
-  - *Quiet:* our Mind kept small at a star, a receiver and a cold Mind built from a comet’s worth of rock, chosen as Keep Small on the destination’s page. Our Mind hidden in a hole’s shadow. Neither draws the warning.
+  - *Quiet:* our Mind kept small at a star, a receiver and a cold Mind built from a comet’s worth of rock, chosen as Secret Backup on the destination’s page, against Settlement. Renamed from Keep Small and Settle Here, 2026-11-13: either one wakes as us if Earth is lost, and the kept-small one is the one no one sees. Our Mind hidden in a hole’s shadow. Neither draws the warning.
   - *Fixed with it:* before, a Mind sent to settle drew no warning, only seed probes did.
   - The rungs below now count builder seeds only.
 - **Each rung has its trigger.** Settled 2026-10-29. Each matches a real step toward growth without limit.
