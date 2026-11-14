@@ -1031,8 +1031,9 @@ function watcherLead(w: WatcherSeen): Lead {
   const rock = w.by === "asteroid tour";
   // L4 or L5, as the seed placed it: every game read L5 until 2026-10-30.
   const L = w.place.endsWith("L4") ? "L4" : "L5";
-  // Known only by its warning, it is placed only as its laser places it, and no craft can find it there, as
-  // lib/sim/minds.ts has it. Its lead named Sun–Earth L4 and offered a craft no Build had until a playtest, 2026-11-01.
+  // Known only by its warning, it is placed only as its laser places it. Its lead named Sun–Earth L4 and offered a craft
+  // no Build had until a playtest, 2026-11-01. Its laser fixes the line it sits on, so our Close Look can search that
+  // line, 2026-11-14.
   const away = watcherAway(w.place);
   const sun = w.place.startsWith("Sun–Earth");
   const from = w.place.startsWith("Earth–Moon")
@@ -1103,8 +1104,8 @@ function watcherLead(w: WatcherSeen): Lead {
       moon || rock
         ? "A craft sent to look closely would see what it is. It may see us coming."
         : sun
-          ? "Its laser came from a zone tens of millions of km wide. A craft there would see a thing this small only within about 200,000 km, so none could find it."
-          : "We never looked closely where it sits. Its laser is all we have of it.",
+          ? "Its laser fixed the line it sits on, to about 700 km. A craft searching along that line would find it, and it may see us coming."
+          : "Its laser showed where it sits. A craft sent to look closely would see what it is. It may see us coming.",
       "A knock aimed at it would tell it we know it is there.",
     ],
     // Drawn at the point it holds, L4 or L5, and on the rock it rides: every drawing said L5 until 2026-11-07.
@@ -1126,6 +1127,11 @@ export function makerSeen(w: WatcherSeen | null | undefined): { ra: number; dec:
   return null;
 }
 
+/** How the watcher turns to hold its mirror on one point: with the Earth and Moon at their points or on a rock, and
+ *  once a Year round the Sun at the Sun–Earth points, as Earth does. */
+const turning = (w: WatcherSeen) =>
+  w.place.startsWith("Sun–Earth") ? "turning once a Year, as it circles the Sun beside us, to keep it there." : "turning as the Earth and Moon turn to keep it there.";
+
 export function watcherReadings(w: WatcherSeen, knocks: number[], year: number): Reading[] {
   const made = w.by === "moon search" ? (["almost certain", "almost no chance", "almost no chance"] as Odds[]) : (["almost certain", "almost no chance"] as Odds[]);
   const sky = (x: { ra: number; dec: number }) => `RA ${(Math.round(x.ra * 10) / 10 % 24).toFixed(1)} h, Dec ${x.dec.toFixed(0)}°`;
@@ -1138,7 +1144,7 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       by: "Close Look",
       title: "Seen up close",
       close: { ra: w.looked.ra, dec: w.looked.dec },
-      line: `Near black and about 10 cm across, smooth, with a mirror about 2 cm wide. It holds that mirror on one point of the sky, toward ${sky(w.looked)}, turning as the Earth and Moon turn to keep it there.`,
+      line: `Near black and about 10 cm across, smooth, with a mirror about 2 cm wide. It holds that mirror on one point of the sky, toward ${sky(w.looked)}, ${turning(w)}`,
       mind: "A thing that reports home by laser would aim so. It may aim straight home. Or it may aim at a relay out past 550 AU, where the Sun’s pull focuses light, and then home lies the other way, through the Sun. It saw our craft come.",
       now: made,
       tells: [

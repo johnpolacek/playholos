@@ -97,7 +97,12 @@ function found(name: string, k: Known): { line: string; news: boolean } | null {
   if (name === "Close Look" && w)
     return w.looked
       ? { line: `Saw it up close at Year ${yearText(w.looked.at)}: near black, with a small mirror held on one point of the sky. It saw us come.`, news: recent(w.looked.at) }
-      : { line: `Flying to the dark body at ${w.by === "moon search" ? `the Moon’s ${w.place.slice(-2)}` : w.place}.`, news: false };
+      : {
+          line: w.place.startsWith("Sun–Earth")
+            ? `Flying to the Sun–Earth ${w.place.slice(-2)}, to search along the line the watcher’s laser came down.`
+            : `Flying to the dark body at ${w.place.startsWith("Earth–Moon") ? `the Moon’s ${w.place.slice(-2)}` : w.by === "asteroid tour" ? w.place : "the rock its laser came from"}.`,
+          news: false,
+        };
   // Our Relay Search: flying out along the mirror's line, then what it found there. 2026-10-30.
   if (name === "Relay Search" && w?.looked)
     return w.relay

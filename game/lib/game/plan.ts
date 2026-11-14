@@ -273,7 +273,7 @@ export const SAYS: Record<string, string> = {
   "Asteroid Tour":
     "Six known asteroids share Earth’s orbit, circling the Sun beside us for centuries. Something left to watch us could ride one. A probe maps each whole surface to centimeters in a Year, then flies on: Kamoʻoalewa first, Cruithne last, 12 Years in all with the Year’s flight out. A watcher floating free at the Sun–Earth L4 or L5 points it can’t find: those zones are tens of millions of km wide.",
   "Close Look":
-    "We know where it sits now. A craft the size of CAPSTONE, with a sharp camera, flies there in about 4 months, or a Year to a rock beside us, and looks from a few kilometers. It would see what it is made of and how it holds. It would also see us come.",
+    "We know where it sits now. A craft the size of CAPSTONE, with a sharp camera, flies there in about 4 months, or a Year to a rock beside us. Out by the Sun–Earth L4 or L5 it flies about 13 months, then searches along the line the laser came down. It looks from a few kilometers. It would see what it is made of and how it holds. It would also see us come.",
   "Relay Search":
     "The watcher’s mirror points out past the planets. Beyond 550 AU the Sun’s pull bends light to a focus, and a craft there could send a weak beam very far, out the other side of the Sun. A sailcraft of our lenses’ class flies out along that line with a camera and a heat imager, looking for whatever the mirror talks to. It would see us come.",
   "Moon Search":

@@ -130,7 +130,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "CAPSTONE, a 25 kg craft, reached its orbit round the Moon in 2022 after 4 months on a low-energy path, for about $30 million. Nothing has looked at the Moon’s L4 or L5 points up close.",
       where: "Flown from Earth to wherever the watcher sits, and held a few kilometers from it.",
       why: "From Earth it is a faint dot. A camera a few kilometers off sees its shape, its surface and how it holds its place.",
-      takes: "One small craft of CAPSTONE’s class with a sharp camera, about $50 million, 2 Years to build. About 4 months to the Moon’s L4 or L5, or a Year to a rock beside us.",
+      takes: "One small craft of CAPSTONE’s class with a sharp camera, about $50 million, 2 Years to build. About 4 months to the Moon’s L4 or L5, or a Year to a rock beside us. To the Sun–Earth L4 or L5, about 13 months on its own launcher, as ESA’s Vigil would take, then a few months searching along the laser’s line.",
       before: "No one has sent a craft to meet something made elsewhere. Whatever it is will see ours come.",
     },
   },

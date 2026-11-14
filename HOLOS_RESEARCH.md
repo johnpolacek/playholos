@@ -3605,3 +3605,9 @@ Added 2026-11-07, from that day’s sweep:
   - Why it matters: the Moon's L4 and L5 points sit at the Moon's distance, so a craft that needs only to hit, not to stop, gets there on that one burn.
   - Used: `game/lib/sim/minds.ts` `WRECK_FLIGHT.moon`, 3 days. This project's arithmetic: a tonne kill vehicle on storable fuel at about 3.1 km/s of exhaust burns about 0.63 t, and 0.37 t hits at about a km/s.
 - To a rock beside us the flight is a probe's, a Year, as our Close Look takes and Tianwen-2 took to Kamoʻoalewa, logged with the Close Look.
+
+### A Close Look at the Sun–Earth L4 or L5, 2026-11-14
+
+- **[ESA Vigil](https://en.wikipedia.org/wiki/Vigil_(space_mission))** and **[ROOM, “Vantage Vigil”, 2025](https://room.eu.com/article/vantage-vigil-europes-first-operational-space-weather-mission-nears-approval)** · Planned mission, not yet flown. Vigil would launch in 2031 to the Sun–Earth L5 point. On a shared launch it cruises about 44 months. On a dedicated launcher, 12 to 14 months. A NOAA/NASA summit deck gives about 3.5 Years.
+  - Why it matters: a watcher found only by its laser at the Sun–Earth L4 or L5 opened nothing, a dead end in play. Its laser fixes the line it sits on, so a craft can search that line.
+  - Used: `game/lib/sim/minds.ts` `CLOSE_FLIGHT.sun`, 1.5 Years. About 13 months on its own launcher, then a sweep along the line. This project's arithmetic: a telescope fixes a laser's direction to about an arcsecond, about 700 km at 1 AU. Where along it, we can't tell, across a zone some 30 million km deep. The camera sees a dark 10 cm body within about 200,000 km, so drifting along the line at 2 km/s it covers the zone in under half a Year.

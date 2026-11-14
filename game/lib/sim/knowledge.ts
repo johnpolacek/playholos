@@ -410,7 +410,8 @@ export function earthKnows(
   // its warning, and a bullet strikes Earth once our probes' copies launch seeds of their own. lib/sim/ladder.ts.
   const probes = seedProbes(seeds);
   // Our order to wreck the watcher, 2026-11-13: once the Interceptor stands, a kill vehicle flies to it, if we found it
-  // where a craft can reach it by the Year we ordered. Found only by its warning, it sits where nothing finds it.
+  // where a craft can reach it by the Year we ordered. Found only by its warning, it isn't yet placed closely enough to
+  // hit.
   const wrecked = (() => {
     if (!wreck || wreck.interceptor === null) return null;
     const flies = Math.max(wreck.y, wreck.interceptor);
@@ -790,7 +791,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     // Our Close Look's word, and a knock the Will may send it. 2026-10-30.
     if (w.looked)
       out.push(
-        `Our Close Look reached it and sent word home at Year ${yearText(w.looked.at)}. Up close it is near black, about 10 cm across, with a mirror about 2 cm wide held on one point of the sky, ${sky(w.looked)}, turning as the Earth and Moon turn to keep it there. ` +
+        `Our Close Look reached it and sent word home at Year ${yearText(w.looked.at)}. Up close it is near black, about 10 cm across, with a mirror about 2 cm wide held on one point of the sky, ${sky(w.looked)}, ${w.place.startsWith("Sun–Earth") ? "turning once a Year, as it circles the Sun beside us, to keep it there." : "turning as the Earth and Moon turn to keep it there."} ` +
           "A thing that reports home by laser would aim so. It may aim straight home. Or it may aim at a relay out past 550 AU, where the Sun's pull focuses light, and then home lies the other way, through the Sun. We can't tell how far, or who. It surely saw our craft come.",
       );
     // Its maker's answer to our first knock, one round trip later. 2026-10-31.
@@ -809,9 +810,9 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
       out.push(
         "Its mirror opened a new build, the Relay Search: one sailcraft of our lenses' class, about $500 million, 5 Years to build, flown out along the mirror's line past the Sun's focus, 1,000 AU and beyond, as our lenses fly. It would find a relay if one is there. Whatever is there would see it come.",
       );
-    else if (w.by !== "its warning")
+    else
       out.push(
-        "Finding it opened a new build, the Close Look: a small craft of CAPSTONE's class with a sharp camera, 2 Years to build, then about 4 months' flight to the Moon's L4 or L5 or a Year to a rock beside us. " +
+        `Finding it opened a new build, the Close Look: a small craft of CAPSTONE's class with a sharp camera, 2 Years to build, then ${w.place.startsWith("Sun–Earth") ? "about 13 months' flight to the Sun–Earth L4 or L5, as ESA's Vigil would take, and a few months searching along the line its laser came down, fixed to about 700 km" : w.place.startsWith("Earth–Moon") ? "about 4 months' flight to the Moon's L4 or L5" : "about a Year's flight to the rock it rides"}. ` +
           "From a few kilometers it would see what the body is made of and how it holds. It would also see our craft come.",
       );
     // Our kill vehicle's hit, known within seconds as its signal stopped. 2026-11-13.

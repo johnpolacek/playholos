@@ -157,8 +157,15 @@ export const TOUR_FLIGHT = 1;
 export const moonSearchEnds = (built: number) => built + MOON_SEARCH_YEARS;
 export const tourEnds = (built: number) => built + TOUR_FLIGHT + (CO_ORBITALS.length - 1) * TOUR_EACH + TOUR_MAP;
 /** Years our Close Look flies to the watcher: about 4 months to the Moon's L5 on a low-energy path, as CAPSTONE took
- *  to its lunar orbit, and a Year to a co-orbital rock, as Tianwen-2 to Kamoʻoalewa. */
-export const CLOSE_FLIGHT = { moon: 0.3, rock: 1 } as const;
+ *  to its lunar orbit, and a Year to a co-orbital rock, as Tianwen-2 to Kamoʻoalewa. To the Sun–Earth L4 or L5, 2026-11-14:
+ *  about 13 months on its own launcher, as ESA's Vigil would take to L5, then a sweep along the line its laser came
+ *  down. That line is fixed to about an arcsecond, about 700 km at 1 AU, but where along it we can't tell, across a zone
+ *  some 30 million km deep. Its camera sees a 10 cm body within about 200,000 km, so drifting along the line at 2 km/s
+ *  it covers the zone in under half a Year. */
+export const CLOSE_FLIGHT = { moon: 0.3, rock: 1, sun: 1.5 } as const;
+/** Where the watcher sits, for a craft's flight to it. */
+export const flightTo = (w: WatcherSeen) =>
+  w.by === "moon search" || w.place.startsWith("Earth–Moon") ? "moon" : w.place.startsWith("Sun–Earth") ? "sun" : "rock";
 /** Years our Interceptor's kill vehicle flies to wreck the watcher, 2026-11-13. It needs only to hit, never to stop, so
  *  it leaves Earth orbit on the 3.1 km/s burn that sends a craft to the Moon's distance, and the Moon's L4 and L5 sit at
  *  that distance: about 3 days, as Apollo's crews took. Its tonne burns about 0.63 t of storable fuel for that, at an
@@ -167,8 +174,9 @@ export const CLOSE_FLIGHT = { moon: 0.3, rock: 1 } as const;
 export const WRECK_FLIGHT = { moon: 3 / 365.25, rock: 1 } as const;
 /** The event that opens our Close Look: the watcher found where a craft can reach it. */
 export const WATCHED = "The watcher found";
-/** The Year a found watcher opens our Close Look, or null: one known only by its warning sits where no craft finds it. */
-export const watchedAt = (w: WatcherSeen | null | undefined) => (w && w.by !== "its warning" ? w.seen : null);
+/** The Year a found watcher opens our Close Look, or null. Found only by its warning, its laser still fixes the line it
+ *  sits on, so a craft can search that line. Until 2026-11-14 that one opened nothing, a dead end in play. */
+export const watchedAt = (w: WatcherSeen | null | undefined) => (w ? w.seen : null);
 
 /** How near a flyby's path must pass a sleeping mind for its 1 m telescope to see it, in AU. */
 export const FLYBY_SEES_AU = 50;
@@ -398,7 +406,8 @@ export function atlasOf(ra: number, dec: number, d: number): [number, number, nu
 
 /** The watcher, found by where it sits: from Earth at the Moon's L4 or L5, by the asteroid tour on a co-orbital rock,
  *  or anywhere once it warns us at our first seed ship. At the Sun–Earth L4 or L5 points nothing finds it but its
- *  warning: the zone is tens of millions of km wide, and a probe sees a dark 10 cm body only within about 200,000 km. */
+ *  warning: the zone is tens of millions of km wide, and a probe sees a dark 10 cm body only within about 200,000 km.
+ *  Its laser gives the line, and our Close Look searches along it. */
 export function watcherOf(world: World, kit: MindKit, year: number): WatcherSeen | null {
   const w = world.minds?.watcher;
   if (!w) return null;
@@ -418,7 +427,7 @@ export function watcherOf(world: World, kit: MindKit, year: number): WatcherSeen
   const knock = (kit.knocks ?? []).filter((k) => k >= first.seen && k < (kit.wrecked ?? Infinity)).sort((a, b) => a - b)[0];
   const answered = maker && knock !== undefined && knock + 2 * maker.d <= year ? { answer: { knock, at: knock + 2 * maker.d, ly: maker.d, ...skyOf(maker.pos) } } : {};
   if (kit.closeLook == null || watchedAt(first) === null || !maker) return { ...first, ...answered, ...wrecked };
-  const home = Math.max(kit.closeLook, first.seen) + (first.by === "moon search" ? CLOSE_FLIGHT.moon : CLOSE_FLIGHT.rock);
+  const home = Math.max(kit.closeLook, first.seen) + CLOSE_FLIGHT[flightTo(first)];
   // Wrecked before our Close Look reached it, it finds only what is left. 2026-11-13.
   if (home > year || home > (kit.wrecked ?? Infinity)) return { ...first, ...answered, ...wrecked };
   const looked = { at: home, ...skyOf([-maker.pos[0], -maker.pos[1], -maker.pos[2]]) };
