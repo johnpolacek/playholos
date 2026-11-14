@@ -1,6 +1,6 @@
 import { createContext, use, useEffect, useRef, useState } from "react";
 import { MS_PER_YEAR, ordersLand, yearAt } from "@/lib/game/clock";
-import { browserStore } from "@/lib/game/store";
+import { browserStore, STORE_KEY } from "@/lib/game/store";
 import { track } from "@/lib/track";
 import { POOL } from "@/lib/sim/pool";
 import type { Plan, Save, Sent, Will } from "@/lib/game/types";
@@ -99,6 +99,22 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   // The latest save, so two changes in one tap both land.
   const latest = useRef<Save>(undefined);
+
+  // Another tab's change lands here too. Each tab wrote its whole save, so an older tab's next tick wiped a message
+  // sent from a newer one. Playtest 2026-11-13: a message to Prometheus, and one to Gliese 526, gone from the save.
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== STORE_KEY) return;
+      browserStore.load().then((game) => {
+        if (!game) return;
+        latest.current = game;
+        setSave(game);
+        setNow(Date.now());
+      });
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
   function update(game: Save) {
     latest.current = game;
     setSave(game);

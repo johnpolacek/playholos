@@ -8,7 +8,8 @@ export interface GameStore {
   clear(): Promise<void>;
 }
 
-const KEY = "holos:save";
+export const STORE_KEY = "holos:save";
+const KEY = STORE_KEY;
 /** Builds no longer in the game, which a save from before may hold. */
 const RETIRED = new Set(["Strike Yard", "Helium-3 Harvest"]);
 
