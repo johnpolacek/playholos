@@ -11,6 +11,8 @@ import { axis, Brings, Key, says, sooner, targetOf, Thread, tripAt, useReach, us
 import { useLeads } from "@/components/scan";
 import { VisitArt } from "@/components/visit-art";
 import { Chances } from "@/components/chances";
+import { HearBack, type HearRow } from "@/components/hear-back";
+import { dates } from "@/lib/game/sends";
 import { LeadArt } from "@/components/lead-art";
 import { SystemArt } from "@/components/system-art";
 import { isHole, starName, visitReading } from "@/lib/game/leads";
@@ -153,7 +155,13 @@ function Sent(props: {
   // in one tap.
   const [asking, setAsking] = useState<{ label: string; send(): void } | null>(null);
   return (
-    <li data-m id={`way-${what.toLowerCase().replace(/ /g, "-")}`} style={buildBlue(needs[0])} className="scroll-mt-20 border-t border-faint py-2.5">
+    <li
+      data-m
+      id={`way-${what.toLowerCase().replace(/ /g, "-")}`}
+      style={buildBlue(needs[0])}
+      // Chosen, it is lit, so a return to this page shows what we picked. Playtest 2026-11-13.
+      className={`scroll-mt-20 border-t py-2.5 ${sent ? "-mx-2 rounded-lg border-you/50 bg-you/[.06] px-2" : "border-faint"}`}
+    >
       {/* Its head plays its road on the map, the craft up close where we have one, and again to stop. 2026-11-08. */}
       <button onClick={() => preview(!previewing)} aria-pressed={previewing} className={`block w-full text-left transition-colors duration-200 ${previewing ? WASH : ""}`}>
         <Face
@@ -164,6 +172,7 @@ function Sent(props: {
               <b className="font-semibold">{name}</b>
               {/* The kind of the build behind this craft, as a word. 2026-11-12. */}
               <KindTag name={needs[0]} className="ml-2 align-[2px]" />
+              {sent && <span className="ml-1.5 rounded-full bg-you px-1.5 py-px align-[2px] font-mono text-[8.5px] tracking-[.08em] text-paper">CHOSEN</span>}
             </>
           }
           line={line}
@@ -399,6 +408,21 @@ export function DestinationPage({ slug }: { slug: string }) {
     { scope: root, dependencies: [lead?.slug] },
   );
 
+  // Each way side by side: when its first word reaches us, and which we chose. 2026-11-13.
+  const sailNever = !sailArrives(ly);
+  const hear: HearRow[] = !lead
+    ? []
+    : [
+        { key: "message", label: "A message", home: dates(from, ly, "page").back, ours: (save?.sent ?? []).some((m) => m.to === lead.star), brings: "An answer, if they hear it and reply at once" },
+        { key: "sail", label: "Sails", home: sailNever ? null : flown[0].home, never: sailNever ? "too far" : "not yet", ours: flown[0].n !== null, brings: "Pictures as they pass" },
+        { key: "probe", label: "A flyby probe", home: flown[1].home, never: "not yet", ours: flown[1].n !== null, brings: "Pictures, and its air, as it passes" },
+        ...(lens ? [{ key: "lens", label: "A lens at the Sun’s focus", home: lens.home, never: "not yet", ours: lens.n !== null, brings: "A picture of its face, from home" }] : []),
+        ...(stay ? [{ key: "sentinel", label: "A sentinel", home: stay.home, never: "not yet", ours: stay.n !== null, brings: "Its word as it stays and watches" }] : []),
+        ...(seed ? [{ key: "seed-probe", label: "A seed probe", home: seed.home, never: "not yet", ours: seed.n !== null, brings: "Its word, and copies of itself sent on" }] : []),
+        ...(mind ? [{ key: "mind", label: "Our Mind, to stay", home: mind.home, never: "not yet", ours: mind.n !== null, brings: "Word that our Mind stands there" }] : []),
+      ];
+  const pickWay = (key: string) =>
+    (key === "message" ? send.current : document.getElementById(`way-${key}`))?.scrollIntoView({ behavior: "smooth", block: "start" });
   if (!leads.length || !save) return null;
   if (!lead)
     return (
@@ -497,6 +521,7 @@ export function DestinationPage({ slug }: { slug: string }) {
           It faded by {lead.facts.find(([k]) => k === "Faded")![1]}. A craft sent now finds only what is left there.
         </p>
       )}
+      <HearBack rows={hear} now={from} onPick={pickWay} />
       <ListHead data-m left={`Ways to engage · ${ways.length + (lens ? 1 : 0) + (stay ? 1 : 0) + (mind ? 1 : 0) + LOCKED.length}`} right="Passes" className="mt-5" />
       <ul className="mt-1">
         {flown.map((road, k) => {
