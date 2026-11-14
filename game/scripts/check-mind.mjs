@@ -1,8 +1,8 @@
 // Asks the live Mind a few questions on a running dev server and checks its answers by code: that it knows its own
 // Earth's road to Year 0, a war over Taiwan, Mars, fusion, and doesn't claim what didn't happen, and that it speaks as
 // we, never I. It asks on your own Claude login through the claude CLI, or with --via api as players do, for a few
-// cents of the key in .dev.vars. Run from game/, with npm run dev going: npm run check:mind, or with another address,
-// npm run check:mind -- http://localhost:5181. 2026-10-23.
+// cents of the key in .dev.vars. Run from game/, with pnpm dev going: pnpm check:mind, or with another address,
+// pnpm check:mind http://localhost:5181. 2026-10-23.
 import { CHECKS } from "../evals/mind/checks.mjs";
 import { costOf } from "../lib/access.ts";
 import { askMind, askMindCli, askMindCodex } from "./ask-mind.mjs";
@@ -291,7 +291,7 @@ async function ask(c) {
     wreck: c.wreck ?? null,
   });
   if (!res) {
-    console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);
+    console.error(`Nothing answers at ${base}. Start the dev server first: pnpm dev.`);
     process.exit(1);
   }
   const { text } = res;

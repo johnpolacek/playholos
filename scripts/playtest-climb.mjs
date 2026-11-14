@@ -9,14 +9,14 @@ import { writeIndex } from "./states.mjs";
 // flag moved from an earlier run, so a fix shows whether it climbed. 2026-11-08. The --since also writes since.json into
 // the newer run, so the Screens tab on playtests/regime.html shows each reshot screen before and after. 2026-11-08.
 //
-//   npm run playtest:climb                       the calls from the newest capture run
-//   npm run playtest:climb -- --since <run>      what rose and fell since that run
-//   npm run playtest:climb -- --run <run> --max 20
-//   npm run playtest:climb -- --noise <run>      how far scores drift with no change: that run against the newest,
+//   pnpm playtest:climb                       the calls from the newest capture run
+//   pnpm playtest:climb --since <run>      what rose and fell since that run
+//   pnpm playtest:climb --run <run> --max 20
+//   pnpm playtest:climb --noise <run>      how far scores drift with no change: that run against the newest,
 //                                                both shot from the same build. Saved to captures/noise.json
 //
-// The loop: npm run playtest:local -- screens, then this. Pick letters. Fix ONE. Then
-// npm run playtest:local -- screens --dirty --only <its states>, look at the after shot, and run this with --since.
+// The loop: pnpm playtest:local screens, then this. Pick letters. Fix ONE. Then
+// pnpm playtest:local screens --dirty --only <its states>, look at the after shot, and run this with --since.
 // It prints KEEP or REVERT for each screen it shot, by the climb rule, so the call never drifts. 2026-11-08.
 
 const capDir = fileURLToPath(new URL("../playtests/captures/", import.meta.url));
@@ -37,7 +37,7 @@ const load = (name) => {
 };
 const now = opt("run") ?? runs.at(-1);
 if (!now) {
-  console.error("No scored capture runs yet. Run npm run playtest:local -- screens first.");
+  console.error("No scored capture runs yet. Run pnpm playtest:local screens first.");
   process.exit(1);
 }
 const cur = load(now);
@@ -143,12 +143,12 @@ if (opt("since")) {
     return { k, verdict, why: [...up2.map((x) => `${x.rating} ${sign(x.da)}, ${sign(x.db)}`), ...clr.map((g) => `cleared ${g.rule}`), ...down2.map((x) => `fell ${x.rating} ${sign(x.da)}, ${sign(x.db)}`)].join("; ") };
   });
   const wordsFell = moved.filter((x) => x.key.startsWith("words") && fell(x) && (shot.has(`${x.state} phone`) || shot.has(`${x.state} laptop`)));
-  console.log(`\n# Verdict, bar ${barA} and ${barB}${noise ? ` from noise ${noise.from} and ${noise.to}` : ", no noise measured yet: npm run playtest:climb -- --noise <run>"}`);
+  console.log(`\n# Verdict, bar ${barA} and ${barB}${noise ? ` from noise ${noise.from} and ${noise.to}` : ", no noise measured yet: pnpm playtest:climb --noise <run>"}`);
   for (const s of screens) console.log(`  ${s.verdict.padEnd(6)} ${s.k}${s.why ? `: ${s.why}` : ""}`);
   for (const x of wordsFell) console.log(`  REVERT words ${x.state}: fell ${x.rating} ${sign(x.da)}, ${sign(x.db)}`);
   const any = (v) => screens.some((s) => s.verdict === v);
   const call = any("REVERT") || wordsFell.length ? "REVERT" : any("KEEP") ? "KEEP" : "REVERT (flat: nothing rose past the noise)";
-  console.log(`\nCall: ${call}. Check the after shot by eye before keeping: npm run playtests, Screens, ${cur.name}.`);
+  console.log(`\nCall: ${call}. Check the after shot by eye before keeping: pnpm playtests, Screens, ${cur.name}.`);
   process.exit(0);
 }
 
@@ -201,4 +201,4 @@ const top = calls.sort((p, q) => p.rank - q.rank).slice(0, max);
 console.log(`# Climb calls from ${now}, target ${TARGET}\n`);
 top.forEach((c, i) => console.log(`(${letter(i)}) ${c.what}\n    ${c.where}\n    by ${c.by}\n`));
 if (aside.length) console.log(`Settled, not called (${aside.length}):\n${aside.map((x) => `  ${x}`).join("\n")}\n`);
-console.log(`${calls.length - top.length} more. Pick letters, fix them, rerun the screens they touch, then: npm run playtest:climb -- --since ${now}`);
+console.log(`${calls.length - top.length} more. Pick letters, fix them, rerun the screens they touch, then: pnpm playtest:climb --since ${now}`);

@@ -14,7 +14,7 @@ Spoilers: the design docs and `game/data/worlds/` say who the neighbors are.
 
 - `game/`: the game, a React app on a Cloudflare Worker. See [game/README.md](game/README.md).
 - `src/`, `assets/`, `data/`: the atlas, a 3D map from Earth to the Local Group. The game draws its sky from it. See [The atlas](#the-atlas).
-- `npx/`: the `npx playholos` launcher, published to npm. It downloads this repo and runs `npm run play`.
+- `npx/`: the `npx playholos` launcher, published to npm. It downloads this repo and runs `scripts/play.mjs`.
 - `calcs/`: Python that draws whole games, prices every work, and checks every neighbor against what Earth can see. The game's simulation is ported from it.
 - [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md): the design, settled one question at a time.
 - [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md): every source behind the design, what it found, and where the design uses it.
@@ -60,16 +60,16 @@ Needs Node 20.9 or later, and Python 3 for `calcs/` and `scripts/`.
 ```sh
 git clone https://github.com/johnpolacek/playholos.git
 cd playholos
-npm install                 # the atlas's packages, which the game also uses
+pnpm install                # the atlas's packages, which the game also uses
 cd game
-npm install
-npm run worlds:local        # the drawn worlds, into the dev server's local bucket
+pnpm install
+pnpm worlds:local           # the drawn worlds, into the dev server's local bucket
 ```
 
 Then start the dev server one of two ways. Both open http://localhost:5173, with the Mind unlocked.
 
-- `npm run dev:cli` asks the Mind on your Claude login through the `claude` CLI. No key, no API cost. This is what `npx playholos` runs.
-- `npm run dev` asks the Mind as the live site does, through the API. Copy `.env.example` to `.dev.vars` and add your `ANTHROPIC_API_KEY`.
+- `pnpm dev:cli` asks the Mind on your Claude login through the `claude` CLI. No key, no API cost. This is what `npx playholos` runs.
+- `pnpm dev` asks the Mind as the live site does, through the API. Copy `.env.example` to `.dev.vars` and add your `ANTHROPIC_API_KEY`.
 
 The rest of the game runs without either. On the dev server, http://localhost:5173/godview shows what the player can't see.
 
@@ -93,14 +93,14 @@ The rest of the game runs without either. On the dev server, http://localhost:51
 Run these before a pull request:
 
 ```sh
-npm test                    # at the root: the atlas against JPL Horizons
+pnpm test                   # at the root: the atlas against JPL Horizons
 cd game
-npm test                    # the simulation against the Python
-npm run lint
-npx tsc --noEmit
+pnpm test                   # the simulation against the Python
+pnpm lint
+pnpm exec tsc --noEmit
 ```
 
-If you change what the Mind is told or how it answers, also run `npm run check:mind` with the dev server going. It asks on your Claude login, for free. `npm run trace:mind` asks the full set of test questions. See [game/README.md](game/README.md).
+If you change what the Mind is told or how it answers, also run `pnpm check:mind` with the dev server going. It asks on your Claude login, for free. `pnpm trace:mind` asks the full set of test questions. See [game/README.md](game/README.md).
 
 ## License
 
@@ -114,11 +114,11 @@ The data and textures keep their own licenses, listed in [THIRD_PARTY_LICENSES.m
 
 ## The atlas
 
-Run `npm run build`, then open **index.html** in a modern browser. The atlas is drawn as minimalist line diagrams, ink on paper or chalk on slate, with a light / dark toggle. The application, the surface maps its globes are traced from, ephemeris, and catalogs are embedded in that file. No server, account, CDN, or internet connection is needed. WebGL 2 / hardware acceleration is required.
+Run `pnpm build`, then open **index.html** in a modern browser. The atlas is drawn as minimalist line diagrams, ink on paper or chalk on slate, with a light / dark toggle. The application, the surface maps its globes are traced from, ephemeris, and catalogs are embedded in that file. No server, account, CDN, or internet connection is needed. WebGL 2 / hardware acceleration is required.
 
 **Science review:** the [October 1, 2026 research baseline](legacy/v1/HOLOS_GAME_CONCEPT.md#research-baseline-october-1-2026) records observation limits, uncertain clues, cohort catalog pinning and engineering assumptions that still need validation.
 
-**Color edition:** open **color.html** for the original rendering: photographic surface maps, glowing stars, and a dark interface. Positions, orbits, catalogs, measurements, navigation, Godview, and the player home are identical; only the drawing differs. It is also self-contained and offline. With `npm run dev`, visit **http://127.0.0.1:4173/color.html**. See [Drawing style](#drawing-style).
+**Color edition:** open **color.html** for the original rendering: photographic surface maps, glowing stars, and a dark interface. Positions, orbits, catalogs, measurements, navigation, Godview, and the player home are identical; only the drawing differs. It is also self-contained and offline. With `pnpm dev`, visit **http://127.0.0.1:4173/color.html**. See [Drawing style](#drawing-style).
 
 Explore Earth and the Moon, all eight planets, **109,400 HYG stars** (958 searchable), the Milky Way, and **10 selected neighboring galaxies**. Search for names and aliases such as M31 or M33. This is an educational coordinate atlas with documented observations and uncertainty, not a complete or exact reconstruction of the universe.
 
@@ -140,7 +140,7 @@ Choose **Player home** in the atlas header, or open `index.html#home`; `#home-sy
 
 ### Drawing style
 
-`npm run build` writes `index.html` (line drawing) and `color.html` (color edition) from the same source; `__LINE_ART__` is set at build time for `index.html`. The line drawing's conventions:
+`pnpm build` writes `index.html` (line drawing) and `color.html` (color edition) from the same source; `__LINE_ART__` is set at build time for `index.html`. The line drawing's conventions:
 
 - Orbits are solid hairlines; distance guides are dashed. Line widths stay constant in screen pixels at every scale.
 - Planets, the Moon, and the Sun appear as open circle symbols (Saturn with a ring) until their true globe is larger than the symbol.
@@ -171,10 +171,10 @@ The **Model and sources** dialog explains these assumptions inside the applicati
 ### Editing and rebuilding
 
 ```sh
-npm install
-npm run build
-npm test
-npm run dev
+pnpm install
+pnpm build
+pnpm test
+pnpm dev
 ```
 
 The preview is `http://127.0.0.1:4173`. The build creates portable `index.html` and `color.html`; either file can be shared on its own. Ordinary builds do not fetch data.

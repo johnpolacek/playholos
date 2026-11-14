@@ -2,7 +2,7 @@ import { env } from "cloudflare:workers";
 
 // A player's note from the menu, kept as a row in Analytics Engine beside the events: the player's random id as the
 // index, "feedback", the screen, the country and the note as blobs, the Year as a double. Three a minute from one
-// address. npm run events lists them, and the daily check reads them. The dev server keeps nothing. 2026-11-08.
+// address. pnpm events lists them, and the daily check reads them. The dev server keeps nothing. 2026-11-08.
 
 export const NOTE_MAX = 1000;
 

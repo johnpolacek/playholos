@@ -1,12 +1,12 @@
 // Asks the live Mind every question in evals/mind/cases.json on a running dev server, and saves each answer beside
-// what the Mind was told, one trace a line, in evals/mind/traces/. They are for reading by hand in npm run review:mind,
-// to find how the Mind fails before any check is written for it. 2026-10-23. Run from game/, with npm run dev going:
-//   npm run trace:mind                      every case, on your own Claude login, at no API cost
-//   npm run trace:mind -- --via api         every case, as players ask it, about 4 cents each of the key in .dev.vars
-//   npm run trace:mind -- --via codex       every case, on your own ChatGPT login through the codex CLI
-//   npm run trace:mind -- --only c01,c07    just those
-//   npm run trace:mind -- --dry             what each state tells the Mind, without asking it, for nothing
-//   npm run trace:mind -- --base http://localhost:5181
+// what the Mind was told, one trace a line, in evals/mind/traces/. They are for reading by hand in pnpm review:mind,
+// to find how the Mind fails before any check is written for it. 2026-10-23. Run from game/, with pnpm dev going:
+//   pnpm trace:mind                      every case, on your own Claude login, at no API cost
+//   pnpm trace:mind --via api         every case, as players ask it, about 4 cents each of the key in .dev.vars
+//   pnpm trace:mind --via codex       every case, on your own ChatGPT login through the codex CLI
+//   pnpm trace:mind --only c01,c07    just those
+//   pnpm trace:mind --dry             what each state tells the Mind, without asking it, for nothing
+//   pnpm trace:mind --base http://localhost:5181
 import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { MIND_MODEL } from "../lib/access.ts";
 import { base as history, CHARTERS, dialsFor } from "../lib/game/charter.ts";
@@ -57,7 +57,7 @@ async function saveFor(state, line) {
 try {
   await fetch(base);
 } catch {
-  console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);
+  console.error(`Nothing answers at ${base}. Start the dev server first: pnpm dev.`);
   process.exit(1);
 }
 
@@ -152,5 +152,5 @@ for (const { name } of [...CHECKS, ...SEND_CHECKS, ...BUILD_CHECKS]) {
   const ids = traces.filter((t) => t.checks.includes(name)).map((t) => t.id);
   console.log(`${ids.length ? "breaks" : "keeps "} ${name}${ids.length ? `: ${ids.join(", ")}` : ""}`);
 }
-console.log(`${traces.length - failed} of ${traces.length} answered. Saved to evals/mind/traces/${file}. Read them: npm run review:mind.`);
+console.log(`${traces.length - failed} of ${traces.length} answered. Saved to evals/mind/traces/${file}. Read them: pnpm review:mind.`);
 process.exit(failed ? 1 : 0);

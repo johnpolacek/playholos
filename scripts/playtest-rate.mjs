@@ -7,7 +7,7 @@ import { regime } from "./regime.mjs";
 // meant to test, so it grades the intent. The rater sees only what the run left: its log and its screenshots, never
 // the player's report or the code. It asks on your own Claude login through the claude CLI. 2026-11-08.
 //
-//   npm run playtest:rate playtests/<run>        rate the run into its scores.json, then run npm run playtest:score
+//   pnpm playtest:rate playtests/<run>        rate the run into its scores.json, then run pnpm playtest:score
 //
 // RATER_MODEL picks the model, opus by default. Ratings the player wrote itself are kept under "self", never scored.
 
@@ -21,7 +21,7 @@ const MAX_BYTES = 18 << 20;
 const arg = process.argv[2];
 const dir = arg && (existsSync(arg) ? arg : join("playtests", arg));
 if (!dir || !existsSync(dir)) {
-  console.error("Usage: npm run playtest:rate playtests/<run>");
+  console.error("Usage: pnpm playtest:rate playtests/<run>");
   process.exit(1);
 }
 const read = (f) => (existsSync(join(dir, f)) ? readFileSync(join(dir, f), "utf8") : null);
@@ -92,4 +92,4 @@ if (other) scores.second = { via: "codex", model: codexLabel(), ratings: other }
 scores.rated = { by: "rater", model: MODEL, shots: shots.length, of: pngs.length };
 writeFileSync(join(dir, "scores.json"), JSON.stringify(scores, null, 2) + "\n");
 for (const p of PLAYERS) console.log(`${p.id}: ${ratings(p).map((r) => `${r.id} ${scores[p.id][r.id].score ?? "–"}${other ? `/${other[p.id]?.[r.id]?.score ?? "–"}` : ""}`).join(", ")}${other ? "  (Claude/second reader)" : ""}`);
-console.log(`\nWrote ${join(dir, "scores.json")}. Next: npm run playtest:score ${dir}`);
+console.log(`\nWrote ${join(dir, "scores.json")}. Next: pnpm playtest:score ${dir}`);

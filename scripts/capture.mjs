@@ -147,5 +147,5 @@ writeIndex();
 const bad = shots.filter((s) => s.status === "failed");
 const missing = shots.filter((s) => s.status === "no save");
 console.log(`\n${shots.length - bad.length - missing.length} of ${shots.length} shots in playtests/captures/${run}.${missing.length ? ` ${new Set(missing.map((s) => s.state)).size} state(s) have no save yet.` : ""}`);
-console.log("Score them blind: npm run playtest:critic. See them: npm run playtests, Screens.");
+console.log("Score them blind: pnpm playtest:critic. See them: pnpm playtests, Screens.");
 if (bad.length) process.exit(1);

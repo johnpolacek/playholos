@@ -1,5 +1,5 @@
 // Uploads each seed's world, game/data/worlds/<seed>.json.gz, to the private R2 bucket the Worker reads them from.
-// Run: npm run worlds (the live bucket, before each deploy), or npm run worlds:local (the dev server's copy).
+// Run: pnpm worlds (the live bucket, before each deploy), or pnpm worlds:local (the dev server's copy).
 // Only worlds whose bytes changed are sent: a sidecar of hashes records what the bucket holds. 2026-10-31.
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";

@@ -1,7 +1,7 @@
 import { EVENT_NAMES, type EventName } from "@/lib/events";
 
 // How people play, one anonymous row an event: what happened, a short detail such as a build's name, and the Year. No
-// cookie, no name, no words from the Mind's talk. Only playholos.com sends. A game on our own machine, by npm run play
+// cookie, no name, no words from the Mind's talk. Only playholos.com sends. A game on our own machine, by pnpm play
 // or a playtest, sends nothing, so our tests never count as players, and no one's local game reports to us unasked.
 // Global Privacy Control turns it off, and so does marking a browser as ours. 2026-11-08.
 

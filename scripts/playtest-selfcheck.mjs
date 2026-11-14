@@ -117,10 +117,10 @@ function checkRun(dir) {
   add("player", "the report was written", read(dir, "REPORT.md"), read(dir, "REPORT.md") ? "REPORT.md" : "no REPORT.md", "Have the runner save the player's last message as REPORT.md.");
   add("runner", "the build is named in scores.json", scores.build, scores.build ?? "none", "Have the runner write the build into scores.json before the scorer runs.");
   if (!smoke) {
-    add("readers", "the judge graded understanding", scores.blind?.understood?.score != null, String(scores.blind?.understood?.score ?? "none"), "Run npm run playtest:judge on this folder and read its error.");
+    add("readers", "the judge graded understanding", scores.blind?.understood?.score != null, String(scores.blind?.understood?.score ?? "none"), "Run pnpm playtest:judge on this folder and read its error.");
     add("readers", "the judge graded the check-ins", scores.blind?.["check-ins"]?.score != null, String(scores.blind?.["check-ins"]?.score ?? "none"), "No check-ins reached the judge. See the check-in line above.");
   }
-  add("readers", "the scorecard was written", read(dir, "SCORECARD.md"), read(dir, "SCORECARD.md") ? "yes" : "no", "Run npm run playtest:score on this folder.");
+  add("readers", "the scorecard was written", read(dir, "SCORECARD.md"), read(dir, "SCORECARD.md") ? "yes" : "no", "Run pnpm playtest:score on this folder.");
   if (runner?.who === "claude" && !smoke)
     add("readers", "the screens were shot and read", existsSync(join(root, "captures", name, "critic.json")), existsSync(join(root, "captures", name, "critic.json")) ? "critic.json" : "no critic.json", "Run capture.mjs then playtest-critic.mjs for this run.");
   add("cost", "minutes and tokens were logged", scores.cost?.minutes != null && scores.cost?.total > 0, scores.cost ? `${scores.cost.minutes} min, ${Math.round((scores.cost.total ?? 0) / 1000)}k tokens` : "no cost", "Run run-cost.mjs with the player's session or its codex log.");

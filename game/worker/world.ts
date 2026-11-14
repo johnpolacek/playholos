@@ -14,7 +14,7 @@ export function inPool(seed: unknown): seed is number {
 
 async function read(seed: number): Promise<World> {
   const file = await env.WORLDS.get(`${seed}.json.gz`);
-  if (!file) throw new Error(`World ${seed} is missing from the bucket. Run npm run worlds.`);
+  if (!file) throw new Error(`World ${seed} is missing from the bucket. Run pnpm worlds.`);
   return new Response(file.body.pipeThrough(new DecompressionStream("gzip"))).json();
 }
 

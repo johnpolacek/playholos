@@ -5,7 +5,7 @@ import { execFileSync } from "node:child_process";
 import { runChecks, tally } from "./playtest-checks.mjs";
 import { povs } from "./regime.mjs";
 
-// npm run playtest:score playtests/<folder>: adds the code ratings to a playtest's scores.json, writes SCORECARD.md
+// pnpm playtest:score playtests/<folder>: adds the code ratings to a playtest's scores.json, writes SCORECARD.md
 // beside it and prints the trend across past runs. The ratings and anchors live in playtests/regime.html. 2026-11-06.
 
 // The players and their ratings come from the regime, playtests/regime.html. 2026-11-08.

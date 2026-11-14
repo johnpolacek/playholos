@@ -25,15 +25,15 @@ A hard science fiction game about the Fermi paradox, and the atlas it draws its 
 Run these before a pull request:
 
 ```sh
-npm test                    # at the root: the atlas against JPL Horizons
+pnpm test                   # at the root: the atlas against JPL Horizons
 cd game
-npm test                    # the simulation against the Python
-npm run lint
-npx tsc --noEmit
+pnpm test                   # the simulation against the Python
+pnpm lint
+pnpm exec tsc --noEmit
 ```
 
-If you change what the Mind is told or how it answers, also run `npm run check:mind` in `game/` with the dev server going. `npm run trace:mind` asks the full set of test questions. See [game/README.md](game/README.md).
+If you change what the Mind is told or how it answers, also run `pnpm check:mind` in `game/` with the dev server going. `pnpm trace:mind` asks the full set of test questions. See [game/README.md](game/README.md).
 
 ## Deploying
 
-Nothing deploys on push. `npm run deploy` in `game/` builds the client and the Worker and publishes both to playholos.com.
+Nothing deploys on push. `pnpm run deploy` in `game/` builds the client and the Worker and publishes both to playholos.com.

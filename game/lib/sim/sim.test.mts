@@ -1,4 +1,4 @@
-// The simulation's checks: run `npm test`. Each pins the TypeScript to what Python and the mocks show.
+// The simulation's checks: run `pnpm test`. Each pins the TypeScript to what Python and the mocks show.
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import golden from "./golden.json" with { type: "json" };

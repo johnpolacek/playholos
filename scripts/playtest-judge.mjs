@@ -9,8 +9,8 @@ import { regime } from "./regime.mjs";
 // playtests/regime.html. Any lead the player names is checked against what its log shows it saw. It asks on your own
 // Claude login through the claude CLI, never an API key. 2026-11-08.
 //
-//   npm run playtest:judge playtests/<run>       grade a run into its scores.json, as blind.understood and blind.check-ins
-//   npm run playtest:judge -- --validate         grade every case in playtests/judge/labels.json and compare
+//   pnpm playtest:judge playtests/<run>       grade a run into its scores.json, as blind.understood and blind.check-ins
+//   pnpm playtest:judge --validate         grade every case in playtests/judge/labels.json and compare
 //
 // JUDGE_MODEL picks the model, opus by default.
 
@@ -170,7 +170,7 @@ if (args.includes("--validate")) {
 } else {
   const name = args.find((a) => !a.startsWith("--"));
   if (!name) {
-    console.error("Usage: npm run playtest:judge playtests/<run>, or npm run playtest:judge -- --validate");
+    console.error("Usage: pnpm playtest:judge playtests/<run>, or pnpm playtest:judge --validate");
     process.exit(1);
   }
   const run = files(name);

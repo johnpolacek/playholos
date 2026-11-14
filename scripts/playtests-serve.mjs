@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { extname, join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-// npm run playtests:serve: the playtests folder at http://localhost:4400/, its home the regime page, playtests/regime.html,
+// pnpm playtests:serve: the playtests folder at http://localhost:4400/, its home the regime page, playtests/regime.html,
 // so the bare address opens it, and every run's screenshots, reports and captures beside it. Local only. It opens the
 // page in the default browser, unless NO_OPEN is set, and if the server already runs, it only opens the page. 2026-11-08.
 

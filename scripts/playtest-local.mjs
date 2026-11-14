@@ -12,9 +12,9 @@ import { laneOf, pickLanes, regime } from "./regime.mjs";
 // the results back to playtests/. Your checkout, your dev server and your browser are never touched, so you can keep
 // working and playing while it runs. 2026-11-08.
 //
-//   npm run playtest:local -- screens                 shoot every named state, then the critic, about 3 minutes
-//   npm run playtest:local -- cloud [--scenario id]   an engineer plays a scenario, then the rater scores it
-//   npm run playtest:local -- blind                   a first-timer plays from screenshots, then the judge grades it
+//   pnpm playtest:local screens                 shoot every named state, then the critic, about 3 minutes
+//   pnpm playtest:local cloud [--scenario id]   an engineer plays a scenario, then the rater scores it
+//   pnpm playtest:local blind                   a first-timer plays from screenshots, then the judge grades it
 //
 //   --dirty          play your uncommitted changes too, not only what is committed
 //   --model sonnet   the player's model, for cloud and blind. Sonnet plays faster, Opus sees more
@@ -38,7 +38,7 @@ const VALUED = ["--scenario", "--model", "--player", "--only", "--stamp", "--lan
 const words = args.filter((a, i) => !a.startsWith("--") && !VALUED.includes(args[i - 1]));
 const asked = words[0] ?? "screens";
 if (!["screens", "cloud", "blind", "lane"].includes(asked)) {
-  console.error("Usage: npm run playtest:local -- screens | cloud [--scenario id] | blind | lane <pick> [--parallel n]  [--dirty] [--model sonnet] [--keep]");
+  console.error("Usage: pnpm playtest:local screens | cloud [--scenario id] | blind | lane <pick> [--parallel n]  [--dirty] [--model sonnet] [--keep]");
   process.exit(1);
 }
 const R = regime();
@@ -46,9 +46,9 @@ const R = regime();
 // Lanes, 2026-11-09: focused playtests, each one question. A pick is one lane, several joined by commas, a group as
 // @name, or all. Each lane runs as this script with --lane, on its own copy, ports and browser, up to --parallel at once.
 //
-//   npm run playtest:local -- lane rules
-//   npm run playtest:local -- lane @play --parallel 3
-//   npm run playtest:local -- lane all --parallel 1
+//   pnpm playtest:local lane rules
+//   pnpm playtest:local lane @play --parallel 3
+//   pnpm playtest:local lane all --parallel 1
 //
 // Results land in playtests/<stamp>/<lane>/, with SUMMARY.md on top: every lane's kept findings, worst first, lettered.
 if (asked === "lane" && !opt("lane")) {
@@ -289,7 +289,7 @@ if (kind === "screens") {
     mkdirSync(join(repo, outRel), { recursive: true });
     writeFileSync(join(repo, outRel, "lane.json"), JSON.stringify({ lane: lane.id, captures: run }, null, 2) + "\n");
   }
-  say(`Done in ${Math.round((Date.now() - started) / 60000)} min. See npm run playtests:serve, Screens.`);
+  say(`Done in ${Math.round((Date.now() - started) / 60000)} min. See pnpm playtests:serve, Screens.`);
   process.exit(0);
 }
 

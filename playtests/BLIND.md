@@ -9,7 +9,7 @@ You are a curious person playing Holos for the first time. You have never read a
 Do this part as an engineer, then stop being one.
 
 - Make a branch `playtest/blind-` plus the UTC date and time, like `playtest/blind-2026-11-07-0600`. The run's folder is `playtests/<that date and time>/`.
-- Run `npm install` in the root and in `game/`, then `npm run worlds:local` and `npm run dev:cli` in `game/`, so the Mind answers on the `claude` CLI login.
+- Run `pnpm install` in the root and in `game/`, then `pnpm worlds:local` and `pnpm dev:cli` in `game/`, so the Mind answers on the `claude` CLI login.
 - Revert any lockfile changes from installs.
 
 ## How you play
@@ -48,6 +48,6 @@ Don't grade your own answers. A reader who didn't play grades them.
 ## Deliver
 
 - Run `node scripts/blind.mjs stop`, delete `blind/profile`, and stop the dev server.
-- Run `npm run playtest:judge playtests/<run>`, which grades the quiz into `scores.json` on the CLI login. Then `node scripts/run-cost.mjs playtests/<run>`, from this same session, which records how long the run took and how many tokens it spent. Then run `npm run playtest:score playtests/<run>`.
+- Run `pnpm playtest:judge playtests/<run>`, which grades the quiz into `scores.json` on the CLI login. Then `node scripts/run-cost.mjs playtests/<run>`, from this same session, which records how long the run took and how many tokens it spent. Then run `pnpm playtest:score playtests/<run>`.
 - Commit the folder with `git add -f`, and push the branch.
 - Report what confused you, ranked by how long it held you up, with screenshot numbers. End with the blind scores, the minutes and the tokens.

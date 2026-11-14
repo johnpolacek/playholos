@@ -1,4 +1,4 @@
-// npm run events [days] [--since-last]: how people played playholos.com, from the rows lib/track.ts sends. Players a day, how far
+// pnpm events [days] [--since-last]: how people played playholos.com, from the rows lib/track.ts sends. Players a day, how far
 // they got, what they built, and where they came from. Reads Analytics Engine's SQL API with a token that can read
 // Account Analytics, from CLOUDFLARE_API_TOKEN or .dev.vars. Rows are kept 90 days. 2026-11-08.
 import { readFileSync, writeFileSync } from "node:fs";

@@ -14,9 +14,9 @@ import { writeIndex } from "./states.mjs";
 //   design    every state at once, so it can judge how they hold together: consistency, spacing, type, clutter
 //   editor    each state's words beside its screenshot: clarity and concision, with the lines rewritten shorter
 //
-//   npm run playtest:critic                         every pass on the newest capture run
-//   npm run playtest:critic <run>                   a capture run in playtests/captures/
-//   npm run playtest:critic -- --only design,editor
+//   pnpm playtest:critic                         every pass on the newest capture run
+//   pnpm playtest:critic <run>                   a capture run in playtests/captures/
+//   pnpm playtest:critic --only design,editor
 //
 // CRITIC_MODEL picks the model, opus by default. It prints every rating that fell 2 or more since the last scored run.
 
@@ -36,7 +36,7 @@ const runs = existsSync(capDir)
   : [];
 const name = named ?? runs.at(-1);
 if (!name || !runs.includes(name)) {
-  console.error(name ? `No capture run ${name} in playtests/captures/.` : "No capture runs yet. Run npm run playtest:capture first.");
+  console.error(name ? `No capture run ${name} in playtests/captures/.` : "No capture runs yet. Run pnpm playtest:capture first.");
   process.exit(1);
 }
 const dir = join(capDir, name);

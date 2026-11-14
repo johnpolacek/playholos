@@ -10,20 +10,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # The version comes from packageManager in package.json.
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
           cache-dependency-path: |
-            package-lock.json
-            game/package-lock.json
+            pnpm-lock.yaml
+            game/pnpm-lock.yaml
       # The atlas, checked against JPL Horizons.
-      - run: npm ci
-      - run: npm test
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
       # The game, its simulation checked against the Python.
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
         working-directory: game
-      - run: npm test
+      - run: pnpm test
         working-directory: game
-      - run: npm run lint
+      - run: pnpm lint
         working-directory: game

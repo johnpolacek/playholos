@@ -7,7 +7,7 @@ You are a fresh-eyes playtester for Holos. Play one scenario as a brand new play
 ## Setup
 
 - The game lives in `game/`: Vite and React, with a Cloudflare Worker in `game/worker/`.
-- Run `npm install` in the root and in `game/`, then `npm run worlds:local` in `game/`, so the worlds are in the local bucket. A fresh container lacks them. Then `npm run dev:cli` in `game/`, so the Mind answers on the `claude` CLI login, never an API key.
+- Run `pnpm install` in the root and in `game/`, then `pnpm worlds:local` in `game/`, so the worlds are in the local bucket. A fresh container lacks them. Then `pnpm dev:cli` in `game/`, so the Mind answers on the `claude` CLI login, never an API key.
 - The Mind must answer through the `claude` CLI, wired in `game/mind-cli.ts`. Don't use an API key or a stubbed Mind.
 - If the CLI Mind fails, stop and work out why. Report the exact error text and what would make it work.
 - There is no display. Play in headless Playwright Chromium and take screenshots.
@@ -15,7 +15,7 @@ You are a fresh-eyes playtester for Holos. Play one scenario as a brand new play
 ## Pick a scenario
 
 - Each run plays one scenario. `node scripts/regime.mjs scenarios` lists them in turn.
-- If the trigger's prompt names a scenario, play that one. Otherwise run `npm run playtest:score`, find the newest cloud run's scenario, and play the next in turn. With none yet, play the first.
+- If the trigger's prompt names a scenario, play that one. Otherwise run `pnpm playtest:score`, find the newest cloud run's scenario, and play the next in turn. With none yet, play the first.
 - `node scripts/regime.mjs scenario <id>` prints its steps and expectations. Follow its steps, check each expectation, and stop where it says.
 
 ## Play
@@ -51,9 +51,9 @@ A replay goes in `scores.json` with `"replay": true`, so the trend can tell it f
 - Commit the screenshots and a report to `playtests/<that date and time>/` and push the branch. Git ignores that folder, so add it with `git add -f`.
 - The report: what you did, findings ranked by severity with screenshot links, and the CLI Mind status.
 - Write `scores.json` with only `"build"`, `"scenario"` and `"seed"`, and `"replay": true` for a replay. Don't rate the run.
-- Run `npm run playtest:rate playtests/<that date and time>`. A reader who didn't play rates the three players from your log and screenshots, on the CLI login. Then run `npm run playtest:score playtests/<that date and time>` and commit `log.jsonl`, `scores.json` and `SCORECARD.md` with the rest. Fix nothing the checks flag. Report them.
-- Shoot the named screens: `npm run playtest:capture -- --run <that date and time>`, then `npm run playtest:critic <that date and time>`. Commit `playtests/captures/<that date and time>/` with `git add -f`. Report any shot that failed and any rating the critic says fell.
-- Last, from this same session, run `node scripts/run-cost.mjs playtests/<that date and time>`. It records how long the run took and how many tokens it spent, yours and the readers'. Then run `npm run playtest:score` on the run again, so the scorecard shows it, and commit.
+- Run `pnpm playtest:rate playtests/<that date and time>`. A reader who didn't play rates the three players from your log and screenshots, on the CLI login. Then run `pnpm playtest:score playtests/<that date and time>` and commit `log.jsonl`, `scores.json` and `SCORECARD.md` with the rest. Fix nothing the checks flag. Report them.
+- Shoot the named screens: `pnpm playtest:capture --run <that date and time>`, then `pnpm playtest:critic <that date and time>`. Commit `playtests/captures/<that date and time>/` with `git add -f`. Report any shot that failed and any rating the critic says fell.
+- Last, from this same session, run `node scripts/run-cost.mjs playtests/<that date and time>`. It records how long the run took and how many tokens it spent, yours and the readers'. Then run `pnpm playtest:score` on the run again, so the scorecard shows it, and commit.
 - Don't change game code, except a minimal fix to get the CLI Mind running, in its own commit.
 - Revert lockfile changes from installs. Stop the dev server and browser when done.
 - End with the branch name, the scenario and seed, the CLI Mind outcome, the rater's three scores and the overall, the checks that failed, the expectations met, the trend it printed, what the screen critic said fell, the minutes and tokens, and the top findings.

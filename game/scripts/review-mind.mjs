@@ -1,6 +1,6 @@
 // Serves evals/mind/review.html, for reading the Mind's traces by hand and marking each pass or fail with a note. The
 // marks are kept in evals/mind/labels.json, keyed by trace file and case, as each is made. 2026-10-23. Run from game/:
-// npm run review:mind, then open http://localhost:5190. With another port: npm run review:mind -- 5191.
+// pnpm review:mind, then open http://localhost:5190. With another port: pnpm review:mind 5191.
 import { existsSync, readdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
 
