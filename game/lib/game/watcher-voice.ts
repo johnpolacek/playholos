@@ -1,9 +1,11 @@
-// The watcher's rule as it speaks it: one line in eleven of our languages, learned from our broadcasts, English last.
+// The watcher's rule as it speaks it: one line in eleven of our languages, learned from our broadcasts, English first, so we
+// understand it before the rest.
 // The audio is made once by scripts/watcher-voice.mjs, which holds the same lines. 2026-11-05.
 
 export type Spoken = { lang: string; name: string; text: string; rtl?: boolean };
 
 export const WATCHER_VOICE: Spoken[] = [
+  { lang: "en", name: "English", text: "Look, listen and speak as you like. Build at no other star." },
   { lang: "zh", name: "中文", text: "看吧，听吧，随意说话。不要在别的恒星建造。" },
   { lang: "hi", name: "हिन्दी", text: "देखो, सुनो और जैसा चाहो बोलो। किसी और तारे पर निर्माण मत करो।" },
   { lang: "es", name: "Español", text: "Mirad, escuchad y hablad como queráis. No construyáis en ninguna otra estrella." },
@@ -14,7 +16,6 @@ export const WATCHER_VOICE: Spoken[] = [
   { lang: "ja", name: "日本語", text: "見よ、聞け、好きに話せ。ほかの星で築くな。" },
   { lang: "sw", name: "Kiswahili", text: "Tazameni, sikilizeni na semeni mpendavyo. Msijenge kwenye nyota nyingine yoyote." },
   { lang: "de", name: "Deutsch", text: "Schaut, hört und sprecht, wie ihr wollt. Baut bei keinem anderen Stern." },
-  { lang: "en", name: "English", text: "Look, listen and speak as you like. Build at no other star." },
 ];
 
 /** The readings that carry the voice. */

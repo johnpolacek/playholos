@@ -7,6 +7,7 @@ import { flybyRoad, sentinelRoad } from "@/lib/game/reach";
 import { BackBar } from "@/components/back-bar";
 import { CloseReading } from "@/components/close-reading";
 import { LeadArt } from "@/components/lead-art";
+import { Lens } from "@/components/icons";
 import { WatcherClose } from "@/components/watcher-art";
 import { SystemArt } from "@/components/system-art";
 import { LeadMark } from "@/components/marks";
@@ -172,7 +173,7 @@ function GlowVerdict({ flash }: { flash: { read?: { saw: string }; imaged?: { sa
 }
 
 export function LeadPage({ slug }: { slug: string }) {
-  const { leads, dials, readings, fresh, setLook, minds } = useLeads();
+  const { leads, dials, readings, fresh, setLook, minds, close, setClose } = useLeads();
   const { see, save, year: now } = useGame();
   const { plan } = usePlan();
   const { scale } = useSchedule();
@@ -345,7 +346,7 @@ export function LeadPage({ slug }: { slug: string }) {
           <span className="font-mono text-[10px] tracking-[.1em] text-you">
             READING · YEAR {yearText(read.at)} · {read.by.toUpperCase()}
           </span>
-          <h2 className="mt-1 text-[16px] leading-snug font-semibold">{read.title}</h2>
+          <h2 className={`mt-1 text-[16px] leading-snug font-semibold ${read.contact ? "text-other" : ""}`}>{read.title}</h2>
           <p className="mt-0.5 text-[13.5px] leading-snug">{read.line}</p>
           <ChanceTag shift={movedBy(lead, all, read)} className="mt-1 block" />
           {VOICED.has(read.id) && <ListenButton onClick={() => setVoice(true)} />}
@@ -375,7 +376,7 @@ export function LeadPage({ slug }: { slug: string }) {
               <span className="font-mono text-[10px] tracking-[.1em] text-muted">
                 EARLIER · YEAR {yearText(r.at)} · {r.by.toUpperCase()}
               </span>
-              <h3 className="mt-0.5 text-[14.5px] leading-snug font-semibold">{r.title}</h3>
+              <h3 className={`mt-0.5 text-[14.5px] leading-snug font-semibold ${r.contact ? "text-other" : ""}`}>{r.title}</h3>
               <p className="mt-0.5 text-[13.5px] leading-snug text-page-ink2">{r.line}</p>
               <ChanceTag shift={movedBy(lead, all, r)} className="mt-1 block" />
               {VOICED.has(r.id) && <ListenButton onClick={() => setVoice(true)} />}
@@ -401,6 +402,18 @@ export function LeadPage({ slug }: { slug: string }) {
           <LeadArt art={lead.art} />
         )}
       </div>
+      {/* The watcher's place, on the map: its Close View flies into our own system, where it holds beside Earth. The
+          map's pill was all there was, and a playtest looked for it here, 2026-11-14. */}
+      {lead.system && lead.art.kind === "near" && (
+        <button
+          data-m
+          onClick={() => setClose(!close)}
+          className="mt-2 flex h-9 w-full items-center justify-center gap-2 rounded-full border border-faint text-[13.5px] font-medium hover:border-muted"
+        >
+          <Lens closer={!close} size={15} />
+          {close ? "Pull Back" : "See where it sits"}
+        </button>
+      )}
 
       {lead.art.kind === "warm" && (
         <>
@@ -429,7 +442,7 @@ export function LeadPage({ slug }: { slug: string }) {
         ))}
       </dl>
 
-      {lead.system && lead.art.kind !== "orbit" && (
+      {lead.system && lead.art.kind !== "orbit" && lead.art.kind !== "near" && (
         <>
           <h2 data-m className={`mt-5 ${HEAD}`}>Its system</h2>
           <div data-m className="mt-1.5 rounded-xl border border-faint bg-paper px-2 py-1">

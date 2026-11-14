@@ -590,7 +590,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             road={mind}
             i={ways.length + 2}
             to={to}
-            name="Our Mind, to stay"
+            name={`Our Mind, to stay at ${lead.star}`}
             line={`${hole ? WHAT.mind : WHAT.settle}${mind.push ? ` The ${mind.push} pushes it to speed in ${pushDays(mind.speed, mind.carries)} days, ${mind.carries ? "with a small drive and its fuel aboard to end its stop" : "with no drive or fuel"}.${beamLine(ly, mind.speed, lead?.lum, lead?.kms)}` : ""}${amLine(mind)}${darkLine}`}
             needs={shipNeeds(plan)}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}

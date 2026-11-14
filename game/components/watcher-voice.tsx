@@ -9,8 +9,14 @@ import { WATCHER_VOICE } from "@/lib/game/watcher-voice";
 const AMBER = "#e0a24a";
 
 export function WatcherVoice({ onClose }: { onClose(): void }) {
-  // Waiting for us to listen (browsers play sound only after a tap), speaking line i, or done.
-  const [at, setAt] = useState<"wait" | number | "done">("wait");
+  // Waiting for us to listen (browsers play sound only after a tap), or on line i. Once all are heard, done.
+  const [at, setAt] = useState<"wait" | number>("wait");
+  const [done, setDone] = useState(false);
+  // The first time through runs on from line to line. A line we pick plays alone.
+  const auto = useRef(true);
+  const now = useRef(-1);
+  // The arrow keys reach pick through this, set after each render, so the key listener stays put.
+  const step = useRef<(i: number) => void>(() => undefined);
   const canvas = useRef<HTMLCanvasElement>(null);
   const audio = useRef<HTMLAudioElement | null>(null);
   const ctx = useRef<AudioContext | null>(null);
@@ -18,8 +24,14 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
   const gap = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
-    // Escape closes the voice only, not the lead page under it: caught first, and kept from it.
+    // Escape closes the voice only, not the lead page under it: caught first, and kept from it. The arrows step lines.
     const esc = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        if (now.current < 0) return;
+        e.preventDefault();
+        step.current(now.current + (e.key === "ArrowLeft" ? -1 : 1));
+        return;
+      }
       if (e.key !== "Escape") return;
       e.stopPropagation();
       onClose();
@@ -41,18 +53,40 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
   const play = (i: number) => {
     const el = audio.current;
     if (!el) return;
-    if (i >= WATCHER_VOICE.length) return setAt("done");
+    clearTimeout(gap.current);
+    if (i >= WATCHER_VOICE.length) {
+      auto.current = false;
+      setDone(true);
+      return;
+    }
+    now.current = i;
     setAt(i);
     el.src = `/audio/watcher/${WATCHER_VOICE[i].lang}.mp3`;
-    void el.play().catch(() => setAt("done"));
+    void el.play().catch(() => setDone(true));
+  };
+
+  // A line we pick, by arrow or dot: it plays alone, and the run on stops.
+  function pick(i: number) {
+    if (i < 0 || i >= WATCHER_VOICE.length) return;
+    auto.current = false;
+    play(i);
+  }
+
+  useEffect(() => {
+    step.current = pick;
+  });
+
+  const again = () => {
+    auto.current = true;
+    setDone(false);
+    play(0);
   };
 
   const listen = () => {
     const el = new Audio();
     el.preload = "auto";
     el.onended = () => {
-      const i = WATCHER_VOICE.findIndex((s) => el.src.endsWith(`/${s.lang}.mp3`));
-      gap.current = setTimeout(() => play(i + 1), 700);
+      if (auto.current) gap.current = setTimeout(() => play(now.current + 1), 700);
     };
     audio.current = el;
     try {
@@ -118,11 +152,11 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  const line = typeof at === "number" ? WATCHER_VOICE[at] : at === "done" ? WATCHER_VOICE.at(-1)! : null;
+  const line = typeof at === "number" ? WATCHER_VOICE[at] : null;
 
   return createPortal(
     <div role="dialog" aria-modal="true" aria-label="The watcher’s voice" className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 px-4">
-      <button onClick={onClose} aria-label="Close" className="absolute top-4 right-4 font-mono text-[11px] tracking-[.12em] text-muted uppercase hover:text-ink">
+      <button onClick={onClose} aria-label="Close" className="absolute top-4 right-4 inline-flex h-9 items-center rounded-full border border-ink/40 px-4 font-mono text-[12px] tracking-[.12em] text-ink uppercase transition-colors hover:border-ink hover:bg-ink hover:text-black">
         Close ✕
       </button>
       <span className="font-mono text-[10.5px] tracking-[.16em] text-other uppercase">A voice from beyond our system</span>
@@ -149,16 +183,29 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
           )
         )}
       </div>
-      {at !== "wait" && (
-        <div className="mt-6 flex gap-1.5" aria-hidden>
+      {typeof at === "number" && (
+        <div className="mt-6 flex items-center gap-1">
+          <button onClick={() => pick(at - 1)} disabled={at === 0} aria-label="The line before" className="px-2 text-[18px] text-muted hover:text-ink disabled:opacity-30">
+            ‹
+          </button>
           {WATCHER_VOICE.map((s, i) => (
-            <span key={s.lang} className={`size-1.5 rounded-full ${at === "done" || i <= (at as number) ? "bg-other" : "bg-track"}`} />
+            <button key={s.lang} onClick={() => pick(i)} aria-label={s.name} aria-current={i === at} className="group p-1">
+              <span className={`block size-1.5 rounded-full transition-transform group-hover:scale-150 ${i === at ? "scale-150 bg-other" : "bg-track"}`} />
+            </button>
           ))}
+          <button
+            onClick={() => pick(at + 1)}
+            disabled={at === WATCHER_VOICE.length - 1}
+            aria-label="The line after"
+            className="px-2 text-[18px] text-muted hover:text-ink disabled:opacity-30"
+          >
+            ›
+          </button>
         </div>
       )}
-      {at === "done" && (
+      {done && (
         <div className="mt-6 flex gap-4 text-[13px]">
-          <button onClick={() => play(0)} className="text-other hover:underline">
+          <button onClick={again} className="text-other hover:underline">
             Hear it again
           </button>
           <button onClick={onClose} className="text-ink hover:underline">

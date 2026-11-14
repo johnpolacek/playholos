@@ -12,7 +12,7 @@ import { Review } from "@/components/review";
 import type { Dials } from "@/lib/drift";
 import { placeLeads } from "@/lib/game/places";
 import { knownQuery } from "@/lib/game/known-query";
-import { type Lead, due, leadsOf, lifeOf, ODDS, type Reading, readingsOf, rockLead, skyId, betelgeuseLead } from "@/lib/game/leads";
+import { type Lead, due, leadsOf, makerSeen, lifeOf, ODDS, type Reading, readingsOf, rockLead, skyId, betelgeuseLead } from "@/lib/game/leads";
 import { setStruck, setWatched, useSchedule } from "@/components/picks";
 import { watchedAt } from "@/lib/sim/minds";
 import { skyOf } from "@/lib/game/natural";
@@ -288,7 +288,10 @@ export function useStepTap(step: (by: 1 | -1) => void) {
 /** The map on Scan: the stars within 50 light-years, and the leads lit in turn as the camera arrives. An open lead's
  * page holds the focus, so the camera goes on to its star once all are lit. */
 export function ScanMap({ className, quick = false }: { className: string; /** Lights every lead at once, for the map opening on one from our talk. */ quick?: boolean }) {
-  const { leads, ids, dials, look, readings, standing } = useLeads();
+  const { leads, ids, dials, look, readings, standing, minds } = useLeads();
+  const maker = useMemo(() => makerSeen(minds?.watcher), [minds?.watcher]);
+  // The watcher's lead stands at Sol, so inside its Close View its name sits on the Sun.
+  const here = leads.find((l) => l.slug === "small-dark-body")?.star;
   const quiet = useMemo(() => leads.map((l) => (standing[l.slug] === "needs" ? 0 : 1)), [leads, standing]);
   // Each lead glows by the Mind's word that something lives there, brighter as a reading raises it. 2026-10-29.
   const life = useMemo(
@@ -334,7 +337,7 @@ export function ScanMap({ className, quick = false }: { className: string; /** L
   }, [dials, ids]);
   useEffect(() => () => void gsap.killTweensOf(dials), [dials]);
   return ids.length ? (
-    <LeadsMap dials={dials} ids={ids} life={life} quiet={quiet} notes={notes} system={look?.system} onReady={onReady} className={className} />
+    <LeadsMap dials={dials} ids={ids} life={life} quiet={quiet} notes={notes} maker={maker} here={here} system={look?.system} onReady={onReady} className={className} />
   ) : null;
 }
 
@@ -373,7 +376,6 @@ export function Scan() {
   const homes = useMemo(() => leads.filter(isHome).sort((a, b) => a.ly - b.ly), [leads]);
   if (!leads.length) return null;
   if (params.has("review")) return <Review onClose={close} />;
-  const count: Record<Lens, number> = { all: leads.length, minds: minds.length, homes: homes.length };
   return (
     <>
       <Path />
@@ -387,7 +389,7 @@ export function Scan() {
             onClick={() => setParams(key === "all" ? {} : { lens: key }, { replace: true })}
             className={`h-7 rounded-full px-3 text-[12.5px] font-medium transition-colors ${lens === key ? "bg-button text-paper" : "border border-faint text-page-ink2 hover:border-muted"}`}
           >
-            {label} <span className="font-mono text-[10.5px] opacity-70">{count[key]}</span>
+            {label}
           </button>
         ))}
       </div>

@@ -1,4 +1,4 @@
-import { ChanceTag, chanceShift, isGlow } from "@/components/chances";
+import { ChanceTag, chanceShift, mindFirst } from "@/components/chances";
 import { chancesOf } from "@/lib/game/chance";
 import { Link } from "react-router";
 import { useSchedule } from "@/components/picks";
@@ -48,11 +48,18 @@ export function LeadsMap({
   life,
   quiet,
   notes,
+  maker,
+  here,
   onReady,
   className,
 }: {
   dials: Dials;
   ids: string[];
+  /** A lead that stands at Sol, the watcher's: inside its Close View its mark is the Sun, and named so. A playtest read
+   *  "A signal from close by" on the Sun, beside the watcher that sent it, 2026-11-14. */
+  here?: string;
+  /** Where the watcher's maker lies, as far as Earth can tell. 2026-11-14. */
+  maker?: NonNullable<Show["maker"]>["at"];
   /** Words after a lead's name on the map, by its id: a warm glow's distance. 2026-11-03. */
   notes?: Record<string, string>;
   /** 1 for each lead, by its place in ids, with nothing for us to do: once the calm dial rises it steps back to a dot,
@@ -76,6 +83,9 @@ export function LeadsMap({
   const [warm] = useState<number[]>(() => []);
   useEffect(() => void warm.splice(0, warm.length, ...life), [warm, life]);
   const [hush] = useState<number[]>(() => []);
+  // Filled in place too, so news of the maker never turns the camera.
+  const [makerAt] = useState<NonNullable<Show["maker"]>>(() => ({ at: null }));
+  useEffect(() => void Object.assign(makerAt, { at: maker ?? null }), [makerAt, maker]);
   useEffect(() => void hush.splice(0, hush.length, ...quiet), [hush, quiet]);
   useEffect(() => void Object.assign(dials, { year: YEAR_0 + (year ?? 0) }), [dials, year]);
   useEffect(() => {
@@ -129,6 +139,7 @@ export function LeadsMap({
       for (const { id, x, y, a } of [...marks].sort((p, q) => rank(p.id) - rank(q.id))) {
         const n = names.current[id];
         if (!n) continue;
+        if (id === here) n.textContent = dials.close ? "Sun" : starName(id);
         // In the Mind's shot, only the lead our talk is on and Sol are named, unless pointed at. 2026-11-04.
         const shot = !!dials.chart && !!focus && id !== focus && id !== pointed && id !== "Sol";
         if (a <= 0 || shot || (wide && id !== focus && id !== pointed && id !== "Sol" && !warmName(id))) { n.style.opacity = "0"; continue; }
@@ -148,7 +159,7 @@ export function LeadsMap({
         n.style.opacity = String(a * (1 - back) * (id === "Sol" && wide ? Math.max(clear, 0.9) : lead || id === "Sol" ? clear : clear === 1 ? 1 : 0) * (focus && ids.includes(id) && id !== focus ? 0.45 : 1) * (wide && warmName(id) && !shining(id) ? 0.6 : 1));
       }
     },
-    [dials, ids, theirs, hush],
+    [dials, ids, theirs, hush, here],
   );
   return (
     <div
@@ -168,6 +179,7 @@ export function LeadsMap({
       theirCalls={theirs}
       life={warm}
       hush={hush}
+      maker={makerAt}
       system={system}
       onReady={onReady}
       onMarks={onMarks}
@@ -197,6 +209,16 @@ export function LeadsMap({
             : `${c.name}’s call · ${Math.max(0, YEAR_0 + (year ?? 0) - c.sent).toFixed(1)} ly`}
         </span>
       ))}
+      {maker && (
+        <span
+          ref={(el) => {
+            names.current.maker = el;
+          }}
+          className="pointer-events-none absolute top-0 left-0 rounded-sm bg-paper/80 px-1 font-mono text-[10px] whitespace-nowrap text-other opacity-0"
+        >
+          {maker.ly === null ? "toward the watcher’s maker" : `the watcher’s maker · ${Math.round(maker.ly).toLocaleString("en-US")} ly`}
+        </span>
+      )}
       {named.map((n) => (
         <span
           key={`sent:${n}`}
@@ -326,7 +348,7 @@ export function LeadList({
 
   const chance = (l: Lead) => {
     const c = chancesOf(l, readings[l.slug] ?? []);
-    return c && !(c.mind === "unknown" && !c.life) ? chanceShift(null, c, isGlow(l)) : null;
+    return c && !(c.mind === "unknown" && !c.life) ? chanceShift(null, c, mindFirst(l)) : null;
   };
   const row = (l: Lead, moved = false) => {
     const read = readings[l.slug]?.at(-1);

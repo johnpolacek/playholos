@@ -1,5 +1,6 @@
 import { type Lead, lifeOf, type Odds, type Reading, starName } from "@/lib/game/leads";
 import { FIELD_ODDS } from "@/lib/sim/fields";
+import { VOICED } from "@/lib/game/watcher-voice";
 
 // The chance that something lives at a lead, and that a mind arose there, as the Mind works them out from what Earth
 // knows by this Year, never from the seed's truth: the Mind's word, read as a percent, widened by how little we have to
@@ -108,6 +109,9 @@ export function chancesOf(lead: Lead, readings: readonly Reading[]): Chances | n
   // and a playtest couldn't tell which to believe. 2026-11-07.
   // By its light, a Close Reading's dust, or by its shape, our Glow Imager's cloud. 2026-11-11.
   const ruled = readings.find((r) => r.ruledOut);
+  // Settled the other way: a thing that spoke to us in eleven of our languages was made by a mind. Its page read 97 to
+  // 98% beside the voice until a playtest, 2026-11-14. Past 99%, as nothing we only hear is ever quite certain.
+  if (readings.some((r) => VOICED.has(r.id))) return { mind: { lo: 0.995, hi: 1 }, basis: "it spoke to us", sure: 1 };
   if (ruled) return { mind: { lo: 0, hi: 0 }, basis: ruled.id.endsWith("-imaged") ? "ruled out by its shape" : "ruled out by its light", sure: 1, ruledOut: true };
   const basis = basisOf(lead, readings);
   const word = lifeOf(lead, readings);

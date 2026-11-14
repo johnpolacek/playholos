@@ -163,6 +163,9 @@ export interface Show {
   /** For "leads": 1 for a lead with nothing for us to do, which steps back as the calm dial rises, 0 for one that needs
    *  us. By its place in `leads`. Filled in place, read each frame. 2026-11-02. */
   hush?: number[];
+  /** For "leads": where the watcher's maker lies, as far as Earth can tell: its way, and its distance once known.
+   *  Filled in place, read each frame, so news of it never turns the camera. 2026-11-14. */
+  maker?: { at: { ra: number; dec: number; ly: number | null } | null };
 
   /** For "sim": the minds a simulation drew, the place in view, light-years in the atlas frame, or none for Sol, how
    *  far out to look from, as log10 AU, and the places whose screen positions come back through onMarks. */
@@ -2216,18 +2219,21 @@ void main() {
       }
       sysParts.length = 0;
       sysLines.length = 0;
-      const toUs = at.clone().normalize().negate();
+      // Our own system, for the watcher, sits at Sol, with no way to us: it is seen as from a star ahead. 2026-11-14.
+      const toUs = at.lengthSq() > 1e-12 ? at.clone().normalize().negate() : new THREE.Vector3(0, 0, 1);
       const side = new THREE.Vector3(0, 1, 0).cross(toUs).normalize();
       pn.copy(toUs).multiplyScalar(Math.cos(60 * DEG)).addScaledVector(side, Math.sin(60 * DEG)).normalize();
       pu.copy(toUs).addScaledVector(pn, -toUs.dot(pn)).normalize();
       pv.copy(pn).cross(pu).normalize();
-      sysDir.copy(pu).multiplyScalar(Math.cos(35 * DEG)).addScaledVector(pn, Math.sin(35 * DEG)).normalize();
+      // Our own we look down on from well above, so Earth's orbit reads as the near circle it is. 2026-11-14.
+      const lift = at.lengthSq() > 1e-12 ? 35 : 70;
+      sysDir.copy(pu).multiplyScalar(Math.cos(lift * DEG)).addScaledVector(pn, Math.sin(lift * DEG)).normalize();
       const { worlds, hz, belts = [] } = system;
       worldAt.splice(0, worldAt.length, ...worlds.map(() => new THREE.Vector3()));
       // The view frames what is sure: confirmed worlds and the warm zone, or with no world, the dust. A claim far out,
       // like Proxima's disputed c, shows only as its orbit passes.
       const sure = worlds.filter((w) => w.status === "confirmed").map((w) => w.a * (1 + w.e));
-      sysSpan = Math.max(...sure, hz?.[1] ?? 0, ...(sure.length ? [] : belts.map((b) => b.to)), 0.01);
+      sysSpan = system.span ?? Math.max(...sure, hz?.[1] ?? 0, ...(sure.length ? [] : belts.map((b) => b.to)), 0.01);
       const add = (o: THREE.Object3D) => {
         sys.scene.add(o);
         sysParts.push(o);
@@ -2256,6 +2262,7 @@ void main() {
         add(warm.points(sysBeltGlow));
       }
       worlds.forEach((w, i) => {
+        if (w.with) return;
         const pts = Array.from({ length: 200 }, (_, k) => {
           const nu = (k / 200) * 2 * Math.PI;
           const r = (w.a * (1 - w.e * w.e)) / (1 + w.e * Math.cos(nu));
@@ -2300,13 +2307,22 @@ void main() {
         const worlds = built.system.worlds;
         const fastest = Math.min(...worlds.map((w) => w.days));
         const pos = sysWorlds.geometry.attributes.position as THREE.BufferAttribute;
+        const angle: number[] = [];
         worlds.forEach((w, i) => {
+          // One held at another's L4 or L5 rides with it, the angle between them fixed.
+          if (w.with) {
+            angle[i] = angle[w.with.of] + w.with.deg * DEG;
+            flat(w.a, angle[i], worldAt[i]);
+            pos.setXYZ(i, worldAt[i].x, worldAt[i].y, worldAt[i].z);
+            return;
+          }
           const M = ((2 * Math.PI * clock) / (30 * (w.days / fastest)) + i * 2.3) % (2 * Math.PI);
           let E = M;
           for (let k = 0; k < 6; k++) E -= (E - w.e * Math.sin(E) - M) / (1 - w.e * Math.cos(E));
           const px = w.a * (Math.cos(E) - w.e);
           const py = w.a * Math.sqrt(1 - w.e * w.e) * Math.sin(E);
-          flat(Math.hypot(px, py), Math.atan2(py, px) + turnOfWorld(i), worldAt[i]);
+          angle[i] = Math.atan2(py, px) + turnOfWorld(i);
+          flat(Math.hypot(px, py), angle[i], worldAt[i]);
           pos.setXYZ(i, worldAt[i].x, worldAt[i].y, worldAt[i].z);
         });
         pos.needsUpdate = true;
@@ -3120,6 +3136,20 @@ void main() {
     });
     const beadGlow = glow({ fixed: true });
     const beadPts = beads.points(beadGlow);
+    // The watcher's maker, in gold: a dotted way out from Sol along its line once the relay shows it, fading out past
+    // the map's edge since we can't tell how far, and its place lit at the end once its answer gives the distance.
+    // 2026-11-14.
+    const MAKER_DOTS = 36;
+    const makerDots = new Cloud();
+    for (let j = 1; j <= MAKER_DOTS; j++) makerDots.add(0, 0, 0, 3.5, 0, K.lamp);
+    makerDots.add(0, 0, 0, 7, 0, K.lamp);
+    makerDots.add(0, 0, 0, 30, 0, K.lamp);
+    const makerGlow = glow({ fixed: true });
+    const makerPts = makerDots.points(makerGlow);
+    group.add(makerPts);
+    const makerTo = new THREE.Vector3();
+    /** How far the way runs when we can't tell the distance: past the map's last ring, into the dark. */
+    const MAKER_WAY = 64;
     // The Mind's subject: a dashed line from Sol to the lead in the talk, drawn out from Sol. Rewritten for each lead,
     // in the lead's own ink. 2026-11-04.
     const chartMat = line("mind", 0);
@@ -3329,6 +3359,23 @@ void main() {
       haloSize.needsUpdate = true;
       beadB.needsUpdate = true;
 
+      const mk = spec.mode === "leads" ? spec.maker?.at ?? null : null;
+      if (mk) makerTo.copy(skyBasis(mk.ra * 15, mk.dec).radial).multiplyScalar(mk.ly ?? MAKER_WAY);
+      const makerPos = makerPts.geometry.attributes.position as THREE.BufferAttribute;
+      const makerB = makerPts.geometry.attributes.aBright as THREE.BufferAttribute;
+      for (let j = 0; j < MAKER_DOTS; j++) {
+        const u = (j + 1) / (MAKER_DOTS + 1);
+        v.copy(makerTo).multiplyScalar(u);
+        makerPos.setXYZ(j, v.x, v.y, v.z);
+        // Ranged, the dots hold to the end. Unranged, they fade as the way runs on.
+        makerB.setX(j, mk ? 0.55 * (mk.ly === null ? (1 - u) ** 1.5 : 1) : 0);
+      }
+      for (const j of [MAKER_DOTS, MAKER_DOTS + 1]) makerPos.setXYZ(j, makerTo.x, makerTo.y, makerTo.z);
+      makerB.setX(MAKER_DOTS, mk?.ly != null ? 1 : 0);
+      makerB.setX(MAKER_DOTS + 1, mk?.ly != null ? 0.45 + 0.15 * Math.sin(clock * 1.3) : 0);
+      makerPos.needsUpdate = makerB.needsUpdate = true;
+      makerGlow.uniforms.uOpacity.value = p * (1 - chartIn);
+
       // What we sent, by the year the dials hold.
       const year = d?.year ?? YEAR_0;
       const sent = spec.mode === "leads" ? (spec.sent ?? []).slice(0, MAX_SENT) : [];
@@ -3386,6 +3433,11 @@ void main() {
         });
         const sol = onScreen(new THREE.Vector3());
         marks.push({ id: "Sol", x: sol.x, y: sol.y, a: p });
+        // The maker named at its place, or partway along its way while we can't tell how far.
+        if (mk) {
+          const s = onScreen(v.copy(makerTo).multiplyScalar(mk.ly === null ? 0.55 : 1));
+          marks.push({ id: "maker", x: s.x, y: s.y, a: s.z < 1 ? p * (1 - chartIn) : 0 });
+        }
         // Each ring is named where it is lowest on screen, nearest the viewer, and not while a lead's path is shown,
         // where the rings lie nearly edge on.
         for (const r of RINGS) {

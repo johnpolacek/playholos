@@ -69,6 +69,8 @@ export interface Reading {
   /** This reading settles it: nothing lives or thinks here, as a warm glow read as dust. A playtest couldn't tell
    *  a settled glow from an open one, 2026-11-07. */
   ruledOut?: true;
+  /** The first words a mind beyond our system speaks to us, drawn in its color. Playtest 2026-11-14. */
+  contact?: true;
 }
 
 /** What a lead's page draws: a world's orbit against its star's warm zone, or a message's trip. */
@@ -1038,10 +1040,30 @@ function watcherLead(w: WatcherSeen): Lead {
     : sun
       ? `near the Sun–Earth ${L} point, ${L === "L4" ? "ahead of" : "behind"} Earth in its orbit`
       : "near a rock sharing Earth’s orbit";
+  const spoke = w.warned !== undefined || w.answer !== undefined;
+  // Where it sits, for the map's Close View: Earth on its orbit round the Sun, and the watcher holding 60° ahead or
+  // behind. Only where it sits on Earth's orbit: the Moon's points and a rock's path are another drawing. Playtest
+  // 2026-11-14, "something to click to show a closeup of the source".
+  const system: System | undefined = sun
+    ? {
+        temp: 5772,
+        lum: 1,
+        // Earth's whole orbit in view, with room round it: framed on 1 AU it ran past the map's edges, and the
+        // watcher with it.
+        span: 2,
+        worlds: [
+          { name: "Earth", a: 1, e: 0.0167, days: 365.25, mass: 1, status: "confirmed" },
+          { name: `the watcher, at ${L}`, a: 1, e: 0, days: 365.25, status: "confirmed", lead: true, with: { of: 0, deg: L === "L4" ? 60 : -60 } },
+        ],
+      }
+    : undefined;
   return {
     slug: "small-dark-body",
     at: [0, 0, 0],
-    star: moon ? `A dark body at ${L}` : rock ? `A made thing on ${w.place}` : "A signal from close by",
+    ...(system ? { system } : {}),
+    // Once it has spoken it is the watcher, by one name everywhere: "A signal from close by" on the lead beside "the
+    // watcher" in its Close View read as two things. Playtest 2026-11-14.
+    star: spoke ? `The watcher, ${moon || (!rock && !sun) ? `at the Moon’s ${L}` : rock ? `on ${w.place}` : `at ${L}`}` : moon ? `A dark body at ${L}` : rock ? `A made thing on ${w.place}` : "A signal from close by",
     what: moon ? "Something holding where nothing should" : rock ? "Something made, on a rock beside us" : "An answer to our ship",
     line: moon
       ? `About 10 cm across, at the Moon’s ${L} point, where the Sun’s pull clears all rock.`
@@ -1086,13 +1108,24 @@ function watcherLead(w: WatcherSeen): Lead {
       "A knock aimed at it would tell it we know it is there.",
     ],
     // Drawn at the point it holds, L4 or L5, and on the rock it rides: every drawing said L5 until 2026-11-07.
+    // No life bar: it is a made thing 10 cm across, and life was never the question here. It read "life 5–20%" beside
+    // its voice until a playtest, 2026-11-14.
     art: { kind: "near", where: moon ? "moon" : rock ? "co-orbital" : "warning", L, ...(rock ? { rock: w.place } : {}) },
-    life: "very unlikely",
   };
 }
 
 /** What came of the watcher once found: our Close Look's word, and each knock we sent it, in the order they came. Its
  *  odds are the moon find's or the rock's, as watcherLead() lists them. 2026-10-30. */
+/** Where the watcher's maker lies, as far as Earth can tell, for the map: its way once our Relay Search finds the
+ *  relay on its mirror's line, since home lies the other way through the Sun, and its distance too once its answer to
+ *  our knock comes, half the round trip. Null before either. Playtest 2026-11-14, "can we pinpoint the source?" */
+export function makerSeen(w: WatcherSeen | null | undefined): { ra: number; dec: number; ly: number | null } | null {
+  if (!w) return null;
+  if (w.answer) return { ra: w.answer.ra, dec: w.answer.dec, ly: w.answer.ly };
+  if (w.looked && w.relay) return { ra: (w.looked.ra + 12) % 24, dec: -w.looked.dec, ly: null };
+  return null;
+}
+
 export function watcherReadings(w: WatcherSeen, knocks: number[], year: number): Reading[] {
   const made = w.by === "moon search" ? (["almost certain", "almost no chance", "almost no chance"] as Odds[]) : (["almost certain", "almost no chance"] as Odds[]);
   const sky = (x: { ra: number; dec: number }) => `RA ${(Math.round(x.ra * 10) / 10 % 24).toFixed(1)} h, Dec ${x.dec.toFixed(0)}°`;
@@ -1131,6 +1164,8 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
         "It went quiet for us. Whatever it carries, it means to keep from us.",
       ],
     });
+  // The first words it speaks to us, answer or warning, are first contact, and titled so. Playtest 2026-11-14.
+  const first = Math.min(w.answer?.at ?? Infinity, w.warned ?? Infinity);
   // Its maker's answer to our first knock, one round trip later, settled 2026-10-31. Its timing gives the distance.
   if (w.answer && w.answer.at <= year)
     out.push({
@@ -1138,7 +1173,8 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       needs: "",
       at: tenths(w.answer.at),
       by: "A beam aimed at Earth",
-      title: "An answer",
+      title: w.answer.at === first ? "First contact" : "An answer",
+      ...(w.answer.at === first ? { contact: true as const } : {}),
       line: `A tight beam aimed at Earth from ${sky(w.answer)}, built to be read: a picture of Earth from far above at the hour we knocked, at Year ${yearText(w.answer.knock)}, and a voice. It speaks one short message in eleven of our languages, one after another, learned from our broadcasts: “Look, listen and speak as you like. Build at no other star.” Then pictures of Earth, one for every thousand years: ice sheets coming and going, the Sahara green and then dry, and in the last few thousand years, fields and cities.`,
       mind: `It came ${Math.round(2 * w.answer.ly).toLocaleString("en-US")} Years after our knock, so whoever sent the watcher lies about ${Math.round(w.answer.ly).toLocaleString("en-US")} light-years away, and has watched Earth for longer than we have kept records. It told us the one thing it cares about. It gave us nothing that makes us faster. What it would do if we built at another star, it didn’t say.`,
       now: made,
@@ -1164,25 +1200,40 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       needs: "",
       at: tenths(w.warned),
       by: "A laser from near the Sun",
-      title: "Another watcher",
+      title: w.warned === first ? "First contact" : "Another watcher",
+      ...(w.warned === first ? { contact: true as const } : {}),
       line: `As our seed left, at Year ${yearText(w.warned)}, a narrow laser reached Earth from near the Sun–Earth L4 or L5 point, carrying the same voice in eleven of our languages: “Look, listen and speak as you like. Build at no other star.”`,
       mind: "The watcher we wrecked has been replaced, by one hidden where no craft of ours can find a thing so small. Whoever sent it chose to keep watching rather than to strike. It saw our seed leave.",
       now: made,
       tells: ["What a second seed would draw now, it didn’t say. Its maker knows we struck once."],
     });
-  // Its own warning at our first seed, when we had found it first. Playtest 2026-11-01.
-  else if (w.warned !== undefined && w.warned <= year)
+  // Its own warning at our first seed, when we had found it first. Playtest 2026-11-01. Where the laser came from, and
+  // what we know of its maker by then: it said neither until a playtest, 2026-11-14, "can we tell where it came from?"
+  else if (w.warned !== undefined && w.warned <= year) {
+    const L = w.place.endsWith("L4") ? "L4" : "L5";
+    const where = w.by === "moon search" ? `its place at the Moon’s ${L} point` : `its place on ${w.place}`;
+    const maker =
+      w.answer && w.answer.at <= w.warned
+        ? `Its maker lies about ${Math.round(w.answer.ly).toLocaleString("en-US")} light-years away, toward ${sky(w.answer)}.`
+        : w.relay && home && w.relay.at <= w.warned
+          ? `Its maker likely lies toward ${sky(home)}, at a distance we can’t tell.`
+          : "Who made it, and from how far, we don’t know yet.";
     out.push({
       id: "watcher-warning",
       needs: "",
       at: tenths(w.warned),
       by: "The watcher’s laser",
-      title: "A warning",
-      line: `As our first seed left, at Year ${yearText(w.warned)}, the watcher fired a narrow laser at Earth carrying a voice. It speaks in eleven of our languages, learned from our broadcasts: “Look, listen and speak as you like. Build at no other star.”${w.answer && w.answer.at <= w.warned ? " The rule its maker’s answer gave, said again." : ""}`,
-      mind: "It saw our seed leave and spoke at once. Nothing has happened to our seed yet. What a second seed would draw, it didn’t say.",
+      title: w.warned === first ? "First contact" : "A warning",
+      ...(w.warned === first ? { contact: true as const } : {}),
+      line: `As our first seed left, at Year ${yearText(w.warned)}, the watcher fired a narrow laser at Earth from ${where}, carrying a voice. It speaks in eleven of our languages, learned from our broadcasts: “Look, listen and speak as you like. Build at no other star.”${w.answer && w.answer.at <= w.warned ? " The rule its maker’s answer gave, said again." : ""}`,
+      mind: `It saw our seed leave and spoke at once. ${maker} Nothing has happened to our seed yet. What a second seed would draw, it didn’t say.`,
       now: made,
-      tells: ["Our seed already gone can’t be called back. Whether we send another is ours to choose."],
+      tells: [
+        "Our seed already gone can’t be called back. Whether we send another is ours to choose.",
+        ...(w.looked && w.looked.at <= w.warned ? [] : ["Its mirror, seen up close, would show which way its reports go."]),
+      ],
     });
+  }
   // The ladder as we see it: seed probes gone silent, and a strike from beyond our system. 2026-10-30.
   if (w.seedsLost?.length && w.seedsLost[0].known <= year) {
     const gone = w.seedsLost.filter((l) => l.known <= year);

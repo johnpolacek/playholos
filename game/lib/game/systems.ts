@@ -16,6 +16,9 @@ export interface Body {
   status: "confirmed" | "candidate" | "disputed";
   /** The world the lead is about. */
   lead?: boolean;
+  /** Held at a fixed angle from another body, by its place in the list, in degrees ahead along its orbit: a thing at
+   *  that body's L4, 60 ahead, or L5, 60 behind. It shares that body's orbit, so draws none of its own. 2026-11-14. */
+  with?: { of: number; deg: number };
 }
 
 /** A world's name on the map: a claim not confirmed asks, and one with no name yet is "its world". */
@@ -39,6 +42,8 @@ export interface System {
   beyond?: string;
   /** Only the one world is known: the rest of the system is unknown. */
   unknown?: boolean;
+  /** How far out the map's Close View frames, in AU, where its worlds alone would run past the edge. 2026-11-14. */
+  span?: number;
 }
 
 export const SYSTEMS: Record<string, System> = {

@@ -53,11 +53,15 @@ export function movedBy(lead: Lead, readings: readonly Reading[], r: Reading) {
   const now = chancesOf(lead, [...before(readings, r), r]);
   if (!now) return null;
   const was = chancesOf(lead, before(readings, r));
-  return chanceShift(was, now, isGlow(lead));
+  return chanceShift(was, now, mindFirst(lead));
 }
 
 /** A glow in the sky, whose chance we give as a mind's. */
 export const isGlow = (l: Lead) => l.art.kind === "glow" || l.art.kind === "warm";
+
+/** A lead whose question is a mind, not life: a glow, or the watcher, a made thing 10 cm across. Its warning read
+ *  "life 5–20%" until a playtest, 2026-11-14, "why does it say life?" */
+export const mindFirst = (l: Lead) => isGlow(l) || l.slug === "small-dark-body";
 
 export function chanceShift(was: ChanceSet | null, now: ChanceSet, mindFirst = false) {
   if (now.ruledOut) return { label: "mind", from: was?.ruledOut || !was?.mind || was.mind === "unknown" ? null : rangeText(was.mind), to: "ruled out", up: false };
