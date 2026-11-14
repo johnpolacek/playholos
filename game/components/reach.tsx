@@ -1,3 +1,4 @@
+import { Slider, SliderControl, SliderThumb, SliderTrack } from "@ui-sdk/react/slider";
 import { Toggle } from "@ui-sdk/react/toggle";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 import { SAIL_C } from "@/lib/sim/speeds";
@@ -605,92 +606,105 @@ export function Ruler() {
     const near = [...MARKS.map((m) => m.au), far].find((au) => Math.abs(at(au) - x) < 10);
     return zoomFor(near ?? auAt(x));
   };
-  const step = (by: number) => fly(Math.min(end, Math.max(NEAR_ZOOM, (dials.zoom ?? end) + by)));
+  // Keys and screen readers move a ui-sdk Slider kept out of sight behind the drawing, since 2026-11-14. The map's zoom
+  // moves outside React, so a key steps from where the map is, not from the value last drawn.
+  const [keyed, setKeyed] = useState<number | null>(null);
+  const shown = keyed ?? dials.zoom ?? end;
+  const key = (to: number) => {
+    const z = to <= NEAR_ZOOM ? NEAR_ZOOM : to >= end ? end : Math.min(end, Math.max(NEAR_ZOOM, (dials.zoom ?? end) + (to > shown ? 0.5 : -0.5)));
+    setKeyed(z);
+    fly(z);
+  };
 
   return (
-    <svg
-      ref={svg}
-      viewBox={`0 0 ${w} 84`}
-      className="w-full cursor-pointer touch-none overflow-visible opacity-80 outline-none select-none focus-visible:ring-2 focus-visible:ring-you/50"
-      role="slider"
-      tabIndex={0}
-      aria-label={`The map's view, from Earth to ${target.name}`}
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-valuenow={Math.round((((dials.zoom ?? end) - NEAR_ZOOM) / (end - NEAR_ZOOM)) * 100)}
-      onPointerDown={(e) => {
-        e.currentTarget.setPointerCapture(e.pointerId);
-        press.current = { x: xOf(e), moved: false };
-        // A press takes the map where it is, and calls off any flight still to come. 2026-11-08.
-        hold(dials.zoom ?? end);
-      }}
-      onPointerMove={(e) => {
-        const p = press.current;
-        if (!p) return;
-        if (!p.moved && Math.abs(xOf(e) - p.x) < 4) return;
-        p.moved = true;
-        hold(zoomFor(auAt(xOf(e))));
-      }}
-      onPointerUp={(e) => {
-        const p = press.current;
-        press.current = null;
-        if (p && !p.moved) fly(snap(xOf(e)));
-      }}
-      onPointerCancel={() => (press.current = null)}
-      onKeyDown={(e) => {
-        const by = { ArrowRight: 0.5, ArrowUp: 0.5, ArrowLeft: -0.5, ArrowDown: -0.5 }[e.key];
-        if (by) step(by);
-        else if (e.key === "Home") fly(NEAR_ZOOM);
-        else if (e.key === "End") fly(end);
-        else return;
-        e.preventDefault();
-      }}
-    >
-      {Array.from({ length: Math.floor(decades) + 1 }, (_, k) => NEAR_AU * 10 ** k).map((au) => (
-        <line key={au} x1={at(au)} x2={at(au)} y1={42} y2={48} className="stroke-faint" />
-      ))}
-      <line x1={at(VOYAGER.au)} x2={r} y1={45} y2={45} strokeDasharray="2 4" className="stroke-muted/60" />
-      <line x1={l} x2={at(VOYAGER.au)} y1={45} y2={45} strokeWidth={1.5} className="stroke-you/70" />
-      {LIGHT.filter(([, au]) => au < far).map(([label, au]) => (
-        <g key={label}>
-          <line x1={at(au)} x2={at(au)} y1={48} y2={54} className="stroke-muted/60" />
-          <text x={at(au)} y={64} textAnchor="middle" className="fill-muted font-mono text-[7.5px]">
-            {label}
-          </text>
+    <div className="relative rounded-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-you/50">
+      <svg
+        ref={svg}
+        viewBox={`0 0 ${w} 84`}
+        aria-hidden
+        className="block w-full cursor-pointer touch-none overflow-visible opacity-80 select-none"
+        onPointerDown={(e) => {
+          e.currentTarget.setPointerCapture(e.pointerId);
+          press.current = { x: xOf(e), moved: false };
+          setKeyed(null);
+          // A press takes the map where it is, and calls off any flight still to come. 2026-11-08.
+          hold(dials.zoom ?? end);
+        }}
+        onPointerMove={(e) => {
+          const p = press.current;
+          if (!p) return;
+          if (!p.moved && Math.abs(xOf(e) - p.x) < 4) return;
+          p.moved = true;
+          hold(zoomFor(auAt(xOf(e))));
+        }}
+        onPointerUp={(e) => {
+          const p = press.current;
+          press.current = null;
+          if (p && !p.moved) fly(snap(xOf(e)));
+        }}
+        onPointerCancel={() => (press.current = null)}
+      >
+        {Array.from({ length: Math.floor(decades) + 1 }, (_, k) => NEAR_AU * 10 ** k).map((au) => (
+          <line key={au} x1={at(au)} x2={at(au)} y1={42} y2={48} className="stroke-faint" />
+        ))}
+        <line x1={at(VOYAGER.au)} x2={r} y1={45} y2={45} strokeDasharray="2 4" className="stroke-muted/60" />
+        <line x1={l} x2={at(VOYAGER.au)} y1={45} y2={45} strokeWidth={1.5} className="stroke-you/70" />
+        {LIGHT.filter(([, au]) => au < far).map(([label, au]) => (
+          <g key={label}>
+            <line x1={at(au)} x2={at(au)} y1={48} y2={54} className="stroke-muted/60" />
+            <text x={at(au)} y={64} textAnchor="middle" className="fill-muted font-mono text-[7.5px]">
+              {label}
+            </text>
+          </g>
+        ))}
+        {MARKS.map((m, i) => (
+          <g key={m.name}>
+            {lift[i] > 0 && <line x1={at(m.au)} x2={at(m.au)} y1={42} y2={36 - lift[i]} className="stroke-faint" />}
+            <circle cx={at(m.au)} cy={45} r={m.craft ? 2.5 : 2} className={m.craft ? "fill-you/80" : "fill-ink/60"} />
+            <text
+              x={at(m.au) + (i === 0 ? -2 : 0)}
+              y={33 - lift[i]}
+              textAnchor={i === 0 ? "start" : "middle"}
+              className={`font-mono text-[8px] ${m.craft ? "fill-you/80" : "fill-muted"}`}
+            >
+              {m.name}
+            </text>
+          </g>
+        ))}
+        <circle cx={r} cy={45} r={3} className="fill-ink/70" />
+        <circle cx={r} cy={45} r={6.5} className="fill-ink/10" />
+        {/* Its name ends short of the view's mark, which stands at the end when the map looks out that far and cut it. */}
+        <text x={r - 6} y={33} textAnchor="end" className="fill-page-ink2 font-mono text-[8px]">
+          {target.name}
+        </text>
+        <text x={l - 2} y={80} className="fill-muted/80 font-mono text-[7.5px]">
+          each tick ten times farther · tap or drag to fly the map
+        </text>
+        <text x={r} y={80} textAnchor="end" className="fill-muted/80 font-mono text-[7.5px]">
+          {target.far ?? `${lyOf(target.ly)} ly`}
+        </text>
+        {/* The map's view: where it is looking out to, now. */}
+        <g ref={view} className="pointer-events-none">
+          <line x1={0} x2={0} y1={37} y2={53} strokeWidth={1.25} className="stroke-other/80" />
+          <path d="M-3.5 33 L3.5 33 L0 37.5 Z" className="fill-other/80" />
         </g>
-      ))}
-      {MARKS.map((m, i) => (
-        <g key={m.name}>
-          {lift[i] > 0 && <line x1={at(m.au)} x2={at(m.au)} y1={42} y2={36 - lift[i]} className="stroke-faint" />}
-          <circle cx={at(m.au)} cy={45} r={m.craft ? 2.5 : 2} className={m.craft ? "fill-you/80" : "fill-ink/60"} />
-          <text
-            x={at(m.au) + (i === 0 ? -2 : 0)}
-            y={33 - lift[i]}
-            textAnchor={i === 0 ? "start" : "middle"}
-            className={`font-mono text-[8px] ${m.craft ? "fill-you/80" : "fill-muted"}`}
-          >
-            {m.name}
-          </text>
-        </g>
-      ))}
-      <circle cx={r} cy={45} r={3} className="fill-ink/70" />
-      <circle cx={r} cy={45} r={6.5} className="fill-ink/10" />
-      {/* Its name ends short of the view's mark, which stands at the end when the map looks out that far and cut it. */}
-      <text x={r - 6} y={33} textAnchor="end" className="fill-page-ink2 font-mono text-[8px]">
-        {target.name}
-      </text>
-      <text x={l - 2} y={80} className="fill-muted/80 font-mono text-[7.5px]">
-        each tick ten times farther · tap or drag to fly the map
-      </text>
-      <text x={r} y={80} textAnchor="end" className="fill-muted/80 font-mono text-[7.5px]">
-        {target.far ?? `${lyOf(target.ly)} ly`}
-      </text>
-      {/* The map's view: where it is looking out to, now. */}
-      <g ref={view} className="pointer-events-none">
-        <line x1={0} x2={0} y1={37} y2={53} strokeWidth={1.25} className="stroke-other/80" />
-        <path d="M-3.5 33 L3.5 33 L0 37.5 Z" className="fill-other/80" />
-      </g>
-    </svg>
+      </svg>
+      <Slider
+        value={shown}
+        min={NEAR_ZOOM}
+        max={end}
+        step={0.5}
+        onValueChange={(v) => key(v as number)}
+        format={(v) => `${Math.round(((v - NEAR_ZOOM) / (end - NEAR_ZOOM)) * 100)}% of the way out`}
+        className="sr-only"
+      >
+        <SliderControl>
+          <SliderTrack>
+            <SliderThumb aria-label={`The map's view, from Earth to ${target.name}`} />
+          </SliderTrack>
+        </SliderControl>
+      </Slider>
+    </div>
   );
 }
 

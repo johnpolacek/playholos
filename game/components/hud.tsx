@@ -10,6 +10,7 @@ import { useGame } from "@/components/game-provider";
 import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
 import { usePlan, useSchedule } from "@/components/picks";
+import { Tip } from "@/components/tip";
 import { Link } from "react-router";
 import {
   announceJump,
@@ -206,34 +207,37 @@ function Skip() {
   // The link vanished with no word until 2026-10-30, and players thought it broke.
   if (next === null)
     return (
-      <span
-        className="ml-2 text-muted"
-        title="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on."
-      >
-        Nothing ahead
-      </span>
+      <Tip
+        toggleable
+        text="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on."
+        trigger={<button type="button" className="ml-2 text-muted">Nothing ahead</button>}
+      />
     );
   if (to === null) return null;
   return (
     <>
       {/* A pill with faint specks of light, named for what it does: "Next" read as unclear in play. 2026-11-01. */}
-      <button
-        onClick={jump}
-        disabled={rest}
-        onPointerEnter={() => setHover(true)}
-        onPointerLeave={() => setHover(false)}
-        onFocus={() => setHover(true)}
-        onBlur={() => setHover(false)}
-        // Filled, as the one move on a quiet screen: as a faint outline it read as a status. Playtest 2026-11-02.
-        className="relative -my-1 ml-2 inline-flex h-7 items-center rounded-full bg-you px-3 text-[12.5px] font-medium text-paper transition-[filter,opacity] hover:brightness-110 disabled:opacity-60"
-        title="Jump ahead to when something new happens"
-      >
-        <Specks on={hover} tone="--paper" />
-        {/* What comes next, never its Year, so a finding stays a surprise till it lands: "Jump to 579.5 · something new in
-            the sky" read as cryptic. The long quiet says the Years once we're there. 2026-11-04. */}
-        Jump to {why ?? "what comes next"}
-        <span className="ml-1">›</span>
-      </button>
+      <Tip
+        text="Jump ahead to when something new happens"
+        trigger={
+        <button
+          onClick={jump}
+          disabled={rest}
+          onPointerEnter={() => setHover(true)}
+          onPointerLeave={() => setHover(false)}
+          onFocus={() => setHover(true)}
+          onBlur={() => setHover(false)}
+          // Filled, as the one move on a quiet screen: as a faint outline it read as a status. Playtest 2026-11-02.
+          className="relative -my-1 ml-2 inline-flex h-7 items-center rounded-full bg-you px-3 text-[12.5px] font-medium text-paper transition-[filter,opacity] hover:brightness-110 disabled:opacity-60"
+        >
+          <Specks on={hover} tone="--paper" />
+          {/* What comes next, never its Year, so a finding stays a surprise till it lands: "Jump to 579.5 · something new in
+              the sky" read as cryptic. The long quiet says the Years once we're there. 2026-11-04. */}
+          Jump to {why ?? "what comes next"}
+          <span className="ml-1">›</span>
+        </button>
+        }
+      />
     </>
   );
 }

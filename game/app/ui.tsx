@@ -1,3 +1,4 @@
+import { Input } from "@ui-sdk/react/input";
 import { useState } from "react";
 import { BackBar } from "@/components/back-bar";
 import { Meter } from "@/components/hud";
@@ -9,6 +10,7 @@ import { RunLocal } from "@/components/run-local";
 import { Thread } from "@/components/review";
 import { Sources } from "@/components/sources";
 import { Face, ListHead, TabHead } from "@/components/tab-head";
+import { Tip } from "@/components/tip";
 import { VisitArt } from "@/components/visit-art";
 import { type Art, WINDOWS } from "@/lib/game/leads";
 import { BUILDS } from "@/lib/game/plan";
@@ -191,7 +193,23 @@ export default function Kit() {
             </RunLocal>
           </Card>
 
-          <Card n={17} name="Tabs" span={2}>
+          <Card n={17} name="Tooltip">
+            <Tip
+              toggleable
+              text="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on."
+              trigger={<button type="button" className="text-[13px] text-muted">Nothing ahead</button>}
+            />
+          </Card>
+          <Card n={18} name="Field" span={2}>
+            <div className="flex h-11 w-full items-center gap-2 rounded-full border border-ink bg-paper pr-1.5 pl-3.5">
+              <Input placeholder="Ask the Mind…" aria-label="Ask the Mind" className="min-w-0 grow bg-transparent text-base outline-none placeholder:text-muted" />
+              <button type="button" aria-label="Send" className="size-8 shrink-0 rounded-full bg-button text-paper">
+                ↑
+              </button>
+            </div>
+          </Card>
+
+          <Card n={19} name="Tabs" span={2}>
             <nav aria-label="Tabs" className="grid h-16 w-full grid-cols-4 rounded-xl border border-faint bg-paper">
               <RailTab to="/ui" label="Scan" on={false} calls={2} />
               <RailTab to="/ui" label="Build" on />

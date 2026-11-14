@@ -1,3 +1,4 @@
+import { Input } from "@ui-sdk/react/input";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { CostLine, previews, usePreview } from "@/components/costs";
@@ -77,11 +78,11 @@ export function Catalog({ className = "" }: { className?: string }) {
       <div id="catalog" className="scroll-mt-4" />
       {open.length > 0 && <ListHead left={`Catalog · ${open.length}`} right="Done in" className={className} />}
       {many && (
-        <input
+        <Input
           ref={box}
           type="search"
           value={find}
-          onChange={(e) => setFind(e.target.value)}
+          onValueChange={setFind}
           placeholder="Find a build"
           aria-label="Find a build"
           className="mt-2 h-9 w-full rounded-full border border-faint bg-transparent px-4 text-[13px] text-ink placeholder:text-muted focus:border-muted focus:outline-none"

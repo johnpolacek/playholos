@@ -1,3 +1,4 @@
+import { Textarea } from "@ui-sdk/react/textarea";
 import { Dialog, DialogBackdrop, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@ui-sdk/react/dialog";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
@@ -55,9 +56,9 @@ function Feedback() {
           <p className="text-[13px] text-page-ink2">Sent. Thank you, it’s read.</p>
         ) : (
           <>
-            <textarea
+            <Textarea
               value={text}
-              onChange={(e) => setText(e.currentTarget.value)}
+              onValueChange={setText}
               maxLength={1000}
               rows={3}
               placeholder="What’s confusing, broken, or wonderful?"

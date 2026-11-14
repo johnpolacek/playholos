@@ -1,3 +1,5 @@
+import { Field, FieldError } from "@ui-sdk/react/field";
+import { Input } from "@ui-sdk/react/input";
 import { useEffect, useRef, useState } from "react";
 import { Check, KeyMark, Prompt } from "@/components/icons";
 import type { Wrong } from "@/lib/access";
@@ -30,6 +32,13 @@ function Route() {
 const KEYS = "https://platform.claude.com/settings/keys";
 /** A whole key, as Anthropic gives it: once one is in the field, it opens the Mind with no second tap. */
 const WHOLE = /^sk-ant-[A-Za-z0-9_-]{20,}$/;
+
+/** Why a key or code didn't open the Mind. */
+const WRONG: Partial<Record<Wrong, string>> = {
+  key: "That key doesn’t open the Mind. It takes an Anthropic API key, not a claude.ai login.",
+  workspace: "We can’t find a workspace that key can ask in. Make a key for a single workspace.",
+  code: "That code doesn’t open the Mind.",
+};
 
 // Asks for a key or the code before the Mind will talk. It is a card, not the Mind's input, so a key is never mistaken
 // for a question. A key spends the player's money and a code spends ours, so a browser holds only one. Kept to a line,
@@ -71,24 +80,26 @@ export function Unlock() {
           </a>{" "}
           to enable the Mind.
         </p>
-        <div className="flex gap-2">
-          <input
-            name="code"
-            type="password"
-            autoComplete="off"
-            spellCheck={false}
-            placeholder="sk-ant-… or code"
-            aria-label="Anthropic API key or access code"
-            onChange={(e) => WHOLE.test(e.currentTarget.value.trim()) && void open(e.currentTarget.value.trim())}
-            className="h-10 min-w-0 grow rounded-md border border-faint bg-panel px-2.5 font-mono text-[12.5px] outline-none placeholder:text-muted focus:border-muted"
-          />
-          <button type="submit" disabled={busy} className="h-10 shrink-0 rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-60">
-            {busy ? "Opening…" : "Open"}
-          </button>
-        </div>
-        {wrong === "key" && <p className="text-xs text-other">That key doesn’t open the Mind. It takes an Anthropic API key, not a claude.ai login.</p>}
-        {wrong === "workspace" && <p className="text-xs text-other">We can’t find a workspace that key can ask in. Make a key for a single workspace.</p>}
-        {wrong === "code" && <p className="text-xs text-other">That code doesn’t open the Mind.</p>}
+        <Field name="code" invalid={!!(wrong && WRONG[wrong])} className="contents">
+          <div className="flex gap-2">
+            <Input
+              type="password"
+              autoComplete="off"
+              spellCheck={false}
+              placeholder="sk-ant-… or code"
+              aria-label="Anthropic API key or access code"
+              onValueChange={(v) => WHOLE.test(v.trim()) && void open(v.trim())}
+              className="h-10 min-w-0 grow rounded-md border border-faint bg-panel px-2.5 font-mono text-[12.5px] outline-none placeholder:text-muted focus:border-muted"
+            />
+            <button type="submit" disabled={busy} className="h-10 shrink-0 rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-60">
+              {busy ? "Opening…" : "Open"}
+            </button>
+          </div>
+          {/* The field's own error, so a screen reader hears why the key failed with the field. 2026-11-14. */}
+          <FieldError match={!!(wrong && WRONG[wrong])} className="text-xs text-other">
+            {wrong && WRONG[wrong]}
+          </FieldError>
+        </Field>
         <Route />
       </form>
       <Local />

@@ -1,3 +1,4 @@
+import { Input } from "@ui-sdk/react/input";
 import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { Chat, useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
@@ -451,10 +452,10 @@ function AskBox({ busy, onAsk, className = "", focus = false }: { busy: boolean;
     >
       {queued && <p className="mb-1.5 px-1 text-[13.5px] leading-snug text-muted">Next, once we finish: “{queued}”</p>}
       <div className="flex h-11 items-center gap-2 rounded-full border border-ink bg-paper pr-1.5 pl-3.5">
-        <input
+        <Input
           ref={box}
           value={input}
-          onChange={(e) => setInput(e.currentTarget.value)}
+          onValueChange={setInput}
           placeholder="Ask the Mind…"
           aria-label="Ask the Mind"
           className="min-w-0 grow bg-transparent text-base outline-none placeholder:text-muted"
