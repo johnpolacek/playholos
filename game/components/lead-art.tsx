@@ -534,8 +534,12 @@ function NovaArt({ ly }: { ly: number }) {
 // Here at home, from above. The Moon's L5: Earth, the Moon going round, and the point 60° behind it, where a dark body
 // holds as the Sun's pull would clear rock away. A rock beside us: the Sun, Earth's orbit, and a rock sharing it on its
 // horseshoe. A rock coming: Earth, and the rock's path in, ending in a flash if it struck. 2026-10-30.
-function NearArt({ where, struck, L = "L5", rock: on }: { where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean; L?: "L4" | "L5"; rock?: string }) {
+function NearArt({ where, struck, L = "L5", rock: on, on: from }: { where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean; L?: "L4" | "L5"; rock?: string; on?: "sun" | "moon" | "rock" }) {
+  // Found by its warning, drawn where its laser came from. By the Sun–Earth L4 or L5: the Sun, Earth going round, the
+  // point 60° ahead or behind, and the laser's line to Earth. 2026-11-14.
+  const sun = where === "warning" && from === "sun";
   const moving = useRef<SVGCircleElement>(null);
+  const laser = useRef<SVGLineElement>(null);
   const point = useRef<SVGCircleElement>(null);
   const rock = useRef<SVGCircleElement>(null);
   const [cx, cy] = [W / 2, H / 2 - 6];
@@ -559,6 +563,7 @@ function NearArt({ where, struck, L = "L5", rock: on }: { where: "moon" | "co-or
     point.current?.setAttribute("cx", String(px));
     point.current?.setAttribute("cy", String(py));
     point.current?.setAttribute("opacity", String(0.55 + 0.45 * Math.sin(t * 2)));
+    if (laser.current) for (const [k, v] of [["x1", px], ["y1", py], ["x2", mx], ["y2", my]] as const) laser.current.setAttribute(k, String(v));
   }, 3);
   if (where === "rock")
     return (
@@ -580,16 +585,30 @@ function NearArt({ where, struck, L = "L5", rock: on }: { where: "moon" | "co-or
         <CoOrbitArt rock={on} />
       </div>
     );
-  const co = where === "co-orbital";
+  const co = where === "co-orbital" || (where === "warning" && from === "rock");
+  // The Sun at the center, Earth going round it, as a rock beside us is drawn.
+  const solar = co || sun;
   const diagram = (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={co ? "A rock sharing Earth's orbit, with something on it" : `Earth and the Moon, with a dark body holding at the Moon's ${L} point`}>
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      className="w-full"
+      role="img"
+      aria-label={sun ? `The Sun and Earth's orbit, with the watcher holding at the Sun–Earth ${L} point and its laser reaching Earth` : co ? "A rock sharing Earth's orbit, with something on it" : `Earth and the Moon, with a dark body holding at the Moon's ${L} point`}
+    >
       <circle cx={cx} cy={cy} r={R} fill="none" stroke="var(--muted)" strokeWidth={0.6} strokeDasharray="1 3" />
-      <circle cx={cx} cy={cy} r={co ? 7 : 6} fill={co ? "#f4e9c8" : "var(--you)"} opacity={0.9} />
-      <circle ref={moving} cx={cx + R} cy={cy} r={co ? 4.5 : 3.5} fill={co ? "var(--you)" : "#d8d8d8"} />
+      {sun && <line ref={laser} stroke="var(--other)" strokeWidth={0.8} strokeDasharray="3 2" opacity={0.6} />}
+      <circle cx={cx} cy={cy} r={solar ? 7 : 6} fill={solar ? "#f4e9c8" : "var(--you)"} opacity={0.9} />
+      <circle ref={moving} cx={cx + R} cy={cy} r={solar ? 4.5 : 3.5} fill={solar ? "var(--you)" : "#d8d8d8"} />
       <circle ref={point} cx={cx} cy={cy - R} r={2.4} fill="var(--other)" />
-      <text x={cx} y={cy + 18} textAnchor="middle" className="fill-muted font-mono text-[7px]">{co ? "SUN" : "EARTH"}</text>
+      <text x={cx} y={cy + 18} textAnchor="middle" className="fill-muted font-mono text-[7px]">{solar ? "SUN" : "EARTH"}</text>
       <text x={16} y={H - 12} className="fill-muted font-mono text-[7px]">
-        {co ? "A ROCK SHARING OUR ORBIT, AND WHAT RIDES IT" : where === "warning" ? "SOMEWHERE NEAR US, UNSEEN" : L === "L4" ? "THE MOON’S L4: 60° AHEAD OF IT, HOLDING" : "THE MOON’S L5: 60° BEHIND IT, HOLDING"}
+        {sun
+          ? `SUN–EARTH ${L}: 60° ${L === "L4" ? "AHEAD OF" : "BEHIND"} EARTH, AND ITS LASER`
+          : co
+            ? where === "warning" ? "A ROCK SHARING OUR ORBIT, WHERE ITS LASER CAME FROM" : "A ROCK SHARING OUR ORBIT, AND WHAT RIDES IT"
+            : L === "L4"
+              ? "THE MOON’S L4: 60° AHEAD OF IT, HOLDING"
+              : "THE MOON’S L5: 60° BEHIND IT, HOLDING"}
       </text>
     </svg>
   );
@@ -603,7 +622,7 @@ function NearArt({ where, struck, L = "L5", rock: on }: { where: "moon" | "co-or
 }
 
 export function LeadArt({ art }: { art: Art }) {
-  if (art.kind === "near") return <NearArt where={art.where} struck={art.struck} L={art.L} rock={art.rock} />;
+  if (art.kind === "near") return <NearArt where={art.where} struck={art.struck} L={art.L} rock={art.rock} on={art.on} />;
   if (art.kind === "warm" && art.shape) return <ShapeArt shape={art.shape} near={art.near} far={art.far} />;
   if (art.kind === "warm") return <WarmArt near={art.near} far={art.far} />;
   if (art.kind === "orbit") return <Orbit a={art.a} e={art.e} hz={art.hz} />;

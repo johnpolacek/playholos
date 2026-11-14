@@ -87,7 +87,7 @@ export type Art =
   | { kind: "seed"; sight: Visit["sight"] }
   /** Something here at home, drawn where it sits: at the Moon's L5, on a rock sharing our orbit, or a rock coming in.
    *  2026-10-30. */
-  | { kind: "near"; where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean; L?: "L4" | "L5"; rock?: string }
+  | { kind: "near"; where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean; L?: "L4" | "L5"; rock?: string; on?: "sun" | "moon" | "rock" }
   /** A star exploded: its brightness as we saw it. 2026-10-30. */
   | { kind: "nova"; ly: number };
 
@@ -1116,7 +1116,9 @@ function watcherLead(w: WatcherSeen): Lead {
     // Drawn at the point it holds, L4 or L5, and on the rock it rides: every drawing said L5 until 2026-11-07.
     // No life bar: it is a made thing 10 cm across, and life was never the question here. It read "life 5–20%" beside
     // its voice until a playtest, 2026-11-14.
-    art: { kind: "near", where: moon ? "moon" : rock ? "co-orbital" : "warning", L, ...(rock ? { rock: w.place } : {}) },
+    // Found by its warning, drawn where its laser came from: it drew the Moon's points for a watcher by the Sun–Earth
+    // L5 until a playtest, 2026-11-14.
+    art: { kind: "near", where: moon ? "moon" : rock ? "co-orbital" : "warning", L, ...(rock ? { rock: w.place } : {}), ...(!moon && !rock ? { on: sun ? ("sun" as const) : w.place.startsWith("Earth–Moon") ? ("moon" as const) : ("rock" as const) } : {}) },
   };
 }
 
