@@ -12,6 +12,7 @@ import { axis, farZoom, Thread, useReach, useTripLoop, year } from "@/components
 import { ReachScale } from "@/components/reach-scale";
 import { Thread as Stops } from "@/components/review";
 import { useStepTap } from "@/components/scan";
+import { overlaid } from "@/components/sheet";
 import { tenths } from "@/lib/game/clock";
 import { buildNamed, buildSlug, lacks, LATER, needs, openAt, ordered } from "@/lib/game/plan";
 import type { Plan } from "@/lib/game/types";
@@ -197,7 +198,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   useEffect(() => {
     const keys = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-      if (document.querySelector("dialog[open]")) return;
+      if (overlaid(e)) return;
       const by = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
       if (e.key === "Escape") onClose();
       else if (by) setAt((a) => Math.max(0, Math.min(last, a + by)));

@@ -5,6 +5,7 @@ import { Check, Cross, Dials, Globe, KeyMark, Lens, Prompt } from "@/components/
 import { BuildMark, buildBlue, buildTone, LeadMark, LockMark } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { RailTab } from "@/components/rail";
+import { RunLocal } from "@/components/run-local";
 import { Thread } from "@/components/review";
 import { Sources } from "@/components/sources";
 import { Face, ListHead, TabHead } from "@/components/tab-head";
@@ -183,7 +184,14 @@ export default function Kit() {
             </div>
           </Card>
 
-          <Card n={16} name="Tabs" span={2}>
+          <Card n={16} name="Sheet">
+            <RunLocal className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper px-3.5 text-[13px]">
+              Run locally
+              <span className="text-muted">↓</span>
+            </RunLocal>
+          </Card>
+
+          <Card n={17} name="Tabs" span={2}>
             <nav aria-label="Tabs" className="grid h-16 w-full grid-cols-4 rounded-xl border border-faint bg-paper">
               <RailTab to="/ui" label="Scan" on={false} calls={2} />
               <RailTab to="/ui" label="Build" on />

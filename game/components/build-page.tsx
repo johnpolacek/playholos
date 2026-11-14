@@ -9,6 +9,7 @@ import { IceHeard } from "@/components/ice-sky";
 import { Opens } from "@/components/opens";
 import { buildStory, Story, toggleBuild, usePlan, useSchedule } from "@/components/picks";
 import { placedOf, useWorks } from "@/components/works";
+import { overlaid } from "@/components/sheet";
 import { span, tenths, yearText } from "@/lib/game/clock";
 import { CLOSE } from "@/lib/game/close";
 import {
@@ -485,7 +486,7 @@ export function BuildPage({ slug }: { slug: string }) {
   // In Close View, Esc pulls back first, as the button does, and the next leaves the page. 2026-11-08.
   useEffect(() => {
     const back = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
+      if (e.key !== "Escape" || overlaid(e)) return;
       if (close) setClose(false);
       else navigate(from?.to ?? "/play/build", { state: from?.state });
     };

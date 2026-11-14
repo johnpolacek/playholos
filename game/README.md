@@ -57,6 +57,7 @@ Every piece two screens or more share. Use these before writing a new one, and a
 - `Meter` (`components/hud.tsx`): a top bar reading, with its bar, number and the word under it.
 - `RailTab` (`components/rail.tsx`): one tab on the rail, with a count of signals heard or a dot for news.
 - `Sources` (`components/sources.tsx`): the ⓘ and the sheet of the real record it opens. Our first part on ui-sdk (`@ui-sdk/react`, beta), its Drawer: focus held inside, Escape, a press outside or a drag down to close. `app/globals.css` declares its `@layer ui-sdk` first.
+- `useSheet`, `SHEET` (`components/sheet.tsx`): a sheet on ui-sdk's Dialog that keeps its own GSAP motion. ui-sdk holds focus, closes on Escape or a press outside, and hands focus back; the close waits while the sheet's exit plays. The menu, Begin's steps and Run locally are built on it. `overlaid` tells a page's own keys to stand aside while a sheet is open. Year 0, the watcher's voice, the Will's crossing and the game's end are ui-sdk Dialogs too.
 - `BuildMark`, `buildTone`, `buildBlue`, `LeadMark`, `LockMark` (`components/marks.tsx`): what each build and lead is, drawn, and in its color.
 - `Lens`, `Globe`, `Dials`, `Check`, `Cross`, `KeyMark`, `Prompt` (`components/icons.tsx`): small control icons.
 - `VisitArt` (`components/visit-art.tsx`): what our craft saw of a world up close.

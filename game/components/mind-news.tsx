@@ -1,3 +1,4 @@
+import { Dialog, DialogClose, DialogContent, DialogTitle } from "@ui-sdk/react/dialog";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Link, useLocation } from "react-router";
 import { kindOf } from "@/components/arrival";
@@ -239,12 +240,6 @@ export function YearZero() {
     },
     { scope: root, dependencies: [on] },
   );
-  useEffect(() => {
-    if (!on) return;
-    const key = (e: KeyboardEvent) => e.key === "Escape" && close();
-    window.addEventListener("keydown", key);
-    return () => window.removeEventListener("keydown", key);
-  });
   if (!on) return null;
   const ours = news === BEGUN;
   // A failure of what the Mind was saying before isn't Year 0's: its news is still to come.
@@ -254,43 +249,44 @@ export function YearZero() {
     setOn(false);
   }
   return (
-    <div
-      ref={root}
-      role="dialog"
-      aria-modal
-      aria-label="Year 0"
-      className="fixed inset-0 z-[90] flex flex-col items-center overflow-y-auto bg-paper/80 px-4 pt-[max(32px,calc(50dvh-330px))] pb-8 backdrop-blur-[3px]"
-    >
-      {/* Anchored from the top, with room kept for the Mind's words, so nothing moves as they arrive. 2026-11-08. */}
-      <svg aria-hidden viewBox="-100 -100 200 200" className="w-[min(260px,60vw)] shrink-0">
-        {[92, 70, 48].map((r, i) => (
-          <circle key={r} data-z="ring" r={r} fill="none" stroke="var(--you)" strokeOpacity={0.15 + i * 0.15} strokeWidth={0.8} />
-        ))}
-        <circle data-z="core" r={14} fill="var(--you)" fillOpacity={0.25} />
-        <circle r={5} fill="var(--you)" />
-      </svg>
-      <p data-z="item" className="mt-4 font-mono text-[11px] tracking-[.14em] text-muted">
-        {YEAR_0}
-      </p>
-      <h1 data-z="item" className="mt-1 text-[34px] leading-none font-medium tracking-tight">
-        Year 0
-      </h1>
-      <div data-z="item" className="mt-6 min-h-[168px] w-full max-w-[440px]">
-        <MindNote still={!busy} className="text-[15px] leading-[1.5]">
-          <span aria-live="polite">
-            {!open || failed
-              ? "The clock runs now, a Year every five minutes, even while we’re away, and it pauses when nothing is building. What we queued has started. We will tell you as it lands."
-              : ours && said(words)
-                ? said(words)
-                : null}
-          </span>
-          {open && !failed && !(ours && said(words)) && <Gathering />}
-        </MindNote>
-      </div>
-      <button data-z="item" onClick={close} className="mt-6 h-[46px] rounded-full bg-button px-8 text-[15px] font-medium text-paper">
-        Continue
-      </button>
-    </div>
+    // On ui-sdk's Dialog since 2026-11-14: focus stays here, the game behind is out of reach, and Escape continues.
+    <Dialog open onOpenChange={(stays) => stays || close()}>
+      <DialogContent
+        ref={root}
+        initialFocus="content"
+        className="fixed inset-0 flex h-dvh max-h-none w-full max-w-none flex-col items-center overflow-y-auto bg-paper/80 px-4 pt-[max(32px,calc(50dvh-330px))] pb-8 text-ink outline-none backdrop-blur-[3px]"
+      >
+        {/* Anchored from the top, with room kept for the Mind's words, so nothing moves as they arrive. 2026-11-08. */}
+        <svg aria-hidden viewBox="-100 -100 200 200" className="w-[min(260px,60vw)] shrink-0">
+          {[92, 70, 48].map((r, i) => (
+            <circle key={r} data-z="ring" r={r} fill="none" stroke="var(--you)" strokeOpacity={0.15 + i * 0.15} strokeWidth={0.8} />
+          ))}
+          <circle data-z="core" r={14} fill="var(--you)" fillOpacity={0.25} />
+          <circle r={5} fill="var(--you)" />
+        </svg>
+        <p data-z="item" className="mt-4 font-mono text-[11px] tracking-[.14em] text-muted">
+          {YEAR_0}
+        </p>
+        <DialogTitle render={<h1 />} data-z="item" className="mt-1 text-[34px] leading-none font-medium tracking-tight">
+          Year 0
+        </DialogTitle>
+        <div data-z="item" className="mt-6 min-h-[168px] w-full max-w-[440px]">
+          <MindNote still={!busy} className="text-[15px] leading-[1.5]">
+            <span aria-live="polite">
+              {!open || failed
+                ? "The clock runs now, a Year every five minutes, even while we’re away, and it pauses when nothing is building. What we queued has started. We will tell you as it lands."
+                : ours && said(words)
+                  ? said(words)
+                  : null}
+            </span>
+            {open && !failed && !(ours && said(words)) && <Gathering />}
+          </MindNote>
+        </div>
+        <DialogClose data-z="item" className="mt-6 h-[46px] rounded-full bg-button px-8 text-[15px] font-medium text-paper">
+          Continue
+        </DialogClose>
+      </DialogContent>
+    </Dialog>
   );
 }
 

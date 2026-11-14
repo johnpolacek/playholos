@@ -1,8 +1,10 @@
+import { Dialog, DialogBackdrop, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@ui-sdk/react/dialog";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { GalacticYear } from "@/components/galactic-year";
 import { useGame } from "@/components/game-provider";
 import { RunLocal } from "@/components/run-local";
+import { type Sheet, useSheet } from "@/components/sheet";
 import { useLeaveShell } from "@/components/wake";
 import { forgetKey, useAccess, useAllowance } from "@/lib/key";
 import { plainClick, useLeaveFor } from "@/lib/leave";
@@ -80,82 +82,69 @@ function Feedback() {
   );
 }
 
-// The drawer slides in from the left over the whole screen. A native modal dialog, so focus stays inside it, the game
-// behind can't be reached, and Escape closes it.
-function Drawer({ onClose }: { onClose(): void }) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const closing = useRef(false);
+// New game asks twice, and the second ask lapses. It lives inside the drawer, so closing it forgets the first ask.
+function NewGame({ close }: { close: Sheet["close"] }) {
   const { newGame } = useGame();
   const leaveShell = useLeaveShell();
-  const leaveFor = useLeaveFor();
-  const open = useAccess();
-  const keyed = open === undefined ? null : open === "key";
-  const { free } = useAllowance();
   const [sure, setSure] = useState(false);
-
-  useEffect(() => {
-    if (!dialog.current?.open) dialog.current?.showModal();
-  }, []);
-
-  // New game asks twice, and the second ask lapses.
   useEffect(() => {
     if (!sure) return;
     const id = setTimeout(() => setSure(false), 4000);
     return () => clearTimeout(id);
   }, [sure]);
+  return (
+    <button onClick={() => (sure ? close(() => leaveShell(newGame)) : setSure(true))} className={`h-11 grow text-left ${sure ? "text-other" : ""}`}>
+      {sure ? "Tap again to erase this game" : "New game"}
+    </button>
+  );
+}
 
-  const { contextSafe } = useGSAP(
-    () => {
-      if (prefersReducedMotion()) return;
+// The drawer slides in from the left over the whole screen. On ui-sdk's Dialog since 2026-11-14, so focus stays
+// inside it, the game behind can't be reached, Escape or a press outside closes it, and focus goes back to the galaxy.
+function Drawer({ sheet }: { sheet: Sheet }) {
+  const scope = useRef<HTMLDivElement>(null);
+  const close = sheet.close;
+  const leaveFor = useLeaveFor();
+  const open = useAccess();
+  const keyed = open === undefined ? null : open === "key";
+  const { free } = useAllowance();
+
+  useGSAP(
+    (_, contextSafe) => {
+      // Faster out than in. The shell's leaving runs after, outside these, or it would be reverted with them.
+      sheet.exits(contextSafe!((done: () => void) => {
+        if (prefersReducedMotion()) return done();
+        gsap
+          .timeline({ defaults: { ease: "power2.in" }, onComplete: done })
+          .to('[data-d="panel"]', { xPercent: -100, duration: 0.22 })
+          .to('[data-d="back"]', { autoAlpha: 0, duration: 0.2 }, 0);
+      }));
+      if (!sheet.open || prefersReducedMotion()) return;
       gsap
         .timeline({ defaults: { ease: "power3.out" } })
         .fromTo('[data-d="back"]', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 })
         .fromTo('[data-d="panel"]', { xPercent: -100 }, { xPercent: 0, duration: 0.4 }, 0)
         .fromTo('[data-d="item"]', { autoAlpha: 0, x: -12 }, { autoAlpha: 1, x: 0, duration: 0.35, stagger: 0.035 }, 0.12);
     },
-    { scope: dialog },
+    { scope, dependencies: [sheet.open] },
   );
 
-  // Faster out than in. `then` runs once the drawer is gone.
-  const close = (then?: () => void) =>
-    contextSafe(() => {
-      if (closing.current) return;
-      closing.current = true;
-      const done = () => {
-        dialog.current?.close();
-        onClose();
-        // After this drawer's own animations are gone: run inside them, the shell's leaving would be reverted with them.
-        if (then) setTimeout(then);
-      };
-      if (prefersReducedMotion()) return done();
-      gsap
-        .timeline({ defaults: { ease: "power2.in" }, onComplete: done })
-        .to('[data-d="panel"]', { xPercent: -100, duration: 0.22 })
-        .to('[data-d="back"]', { autoAlpha: 0, duration: 0.2 }, 0);
-    })();
-
   return (
-    <dialog
-      ref={dialog}
-      aria-label="Menu"
-      onCancel={(e) => {
-        e.preventDefault();
-        close();
-      }}
-      // The browser can close it without asking, as on a second Escape. Then it is already gone.
-      onClose={() => closing.current || onClose()}
-      className="m-0 h-dvh max-h-none w-full max-w-none overflow-hidden bg-transparent p-0 text-ink backdrop:bg-transparent"
-    >
-      <div data-d="back" onClick={() => close()} className="absolute inset-0 bg-black/55" />
-      <nav data-d="panel" className="relative flex h-full w-[min(320px,86%)] flex-col overflow-y-auto border-r border-faint bg-paper px-5 pt-3 pb-8">
+    <div ref={scope} className="contents">
+      <DialogBackdrop data-d="back" className="fixed inset-0 bg-black/55" />
+      <DialogContent
+        data-d="panel"
+        render={<nav />}
+        className="fixed inset-y-0 right-auto left-0 m-0 flex h-dvh max-h-none w-[min(320px,86%)] flex-col overflow-y-auto border-r border-faint bg-paper px-5 pt-3 pb-8 text-ink outline-none"
+      >
         <div data-d="item" className="flex items-center justify-between">
           <span className="flex items-center gap-2.5">
             <GalacticYear size={34} />
-            <span className="font-mono text-[10.5px] tracking-[.1em]">HOLOS</span>
+            <DialogTitle className="font-mono text-[10.5px] font-normal tracking-[.1em]">HOLOS</DialogTitle>
           </span>
-          <button onClick={() => close()} aria-label="Close" className="-mr-3 size-11 text-xl leading-none text-muted">
+          <DialogClose aria-label="Close" className="-mr-3 size-11 text-xl leading-none text-muted">
             ×
-          </button>
+          </DialogClose>
         </div>
         <p data-d="item" className="mt-1 text-[13px] leading-[1.45] text-page-ink2">
           Earth, around Sol. We circle the galaxy’s core once every 230 million years.
@@ -193,9 +182,7 @@ function Drawer({ onClose }: { onClose(): void }) {
           ) : null}
         </div>
         <div data-d="item" className={row}>
-          <button onClick={() => (sure ? close(() => leaveShell(newGame)) : setSure(true))} className={`h-11 grow text-left ${sure ? "text-other" : ""}`}>
-            {sure ? "Tap again to erase this game" : "New game"}
-          </button>
+          <NewGame close={close} />
         </div>
 
         {/* The drawer slides away, then the game plays out to the page. */}
@@ -234,35 +221,20 @@ function Drawer({ onClose }: { onClose(): void }) {
           Run locally
           <span className="text-muted">↓</span>
         </RunLocal>
-      </nav>
-    </dialog>
+      </DialogContent>
+    </div>
   );
 }
 
 /** The galaxy in the top bar's corner, and the menu it opens. */
 export function Menu() {
-  const [open, setOpen] = useState(false);
-  const button = useRef<HTMLButtonElement>(null);
+  const sheet = useSheet();
   return (
-    <>
-      <button
-        ref={button}
-        onClick={() => setOpen(true)}
-        aria-label="Menu"
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        className="-my-2 -ml-2 flex size-12 items-center justify-center text-ink"
-      >
+    <Dialog open={sheet.open} onOpenChange={sheet.onOpenChange}>
+      <DialogTrigger aria-label="Menu" className="-my-2 -ml-2 flex size-12 items-center justify-center text-ink">
         <GalacticYear size={40} />
-      </button>
-      {open && (
-        <Drawer
-          onClose={() => {
-            setOpen(false);
-            button.current?.focus();
-          }}
-        />
-      )}
-    </>
+      </DialogTrigger>
+      <Drawer sheet={sheet} />
+    </Dialog>
   );
 }

@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { Dialog, DialogBackdrop, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@ui-sdk/react/dialog";
+import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
+import { SHEET, type Sheet, useSheet } from "@/components/sheet";
 import { Sparks } from "@/components/sparks";
 import { useCompute, useEarth } from "@/components/picks";
 import type { Save } from "@/lib/game/types";
@@ -244,19 +246,24 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
   );
 }
 
-// A native modal dialog, as the menu is: focus stays inside, the game behind can't be reached, and Escape closes it.
-// A sheet from the bottom when tall, a card in the middle when wide.
-function Sheet({ count, onClose, onBegin }: { count: string; onClose(): void; onBegin(): void }) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const closing = useRef(false);
+// On ui-sdk's Dialog, as the menu is, since 2026-11-14: focus stays inside, the game behind can't be reached, Escape or
+// a press outside closes it, and focus goes back to the count. A sheet from the bottom when tall, a card in the middle
+// when wide.
+function Sheet({ count, sheet, onBegin }: { count: string; sheet: Sheet; onBegin(): void }) {
+  const scope = useRef<HTMLDivElement>(null);
+  const close = sheet.close;
 
-  useEffect(() => {
-    if (!dialog.current?.open) dialog.current?.showModal();
-  }, []);
-
-  const { contextSafe } = useGSAP(
-    () => {
-      if (prefersReducedMotion()) return;
+  useGSAP(
+    (_, contextSafe) => {
+      // Faster out than in. `then` runs once the sheet is gone, outside its animations, as the menu's does.
+      sheet.exits(contextSafe!((done: () => void) => {
+        if (prefersReducedMotion()) return done();
+        gsap
+          .timeline({ defaults: { ease: "power2.in" }, onComplete: done })
+          .to('[data-b="panel"]', { autoAlpha: 0, y: 24, duration: 0.22 })
+          .to('[data-b="back"]', { autoAlpha: 0, duration: 0.2 }, 0);
+      }));
+      if (!sheet.open || prefersReducedMotion()) return;
       gsap
         .timeline({ defaults: { ease: "power3.out" } })
         .fromTo('[data-b="back"]', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 })
@@ -272,58 +279,25 @@ function Sheet({ count, onClose, onBegin }: { count: string; onClose(): void; on
           0.9,
         );
     },
-    { scope: dialog },
+    { scope, dependencies: [sheet.open] },
   );
 
-  // Faster out than in. `then` runs once the sheet is gone, outside its animations, as the menu's does.
-  const close = (then?: () => void) =>
-    contextSafe(() => {
-      if (closing.current) return;
-      closing.current = true;
-      const gone = () => {
-        dialog.current?.close();
-        onClose();
-        if (then) setTimeout(then);
-      };
-      if (prefersReducedMotion()) return gone();
-      gsap
-        .timeline({ defaults: { ease: "power2.in" }, onComplete: gone })
-        .to('[data-b="panel"]', { autoAlpha: 0, y: 24, duration: 0.22 })
-        .to('[data-b="back"]', { autoAlpha: 0, duration: 0.2 }, 0);
-    })();
-
   return (
-    <dialog
-      ref={dialog}
-      aria-labelledby="begin-title"
-      onCancel={(e) => {
-        e.preventDefault();
-        close();
-      }}
-      onClose={() => closing.current || onClose()}
-      className="m-0 h-dvh max-h-none w-full max-w-none overflow-hidden bg-transparent p-0 text-left text-ink backdrop:bg-transparent"
-    >
-      <div data-b="back" onClick={() => close()} className="absolute inset-0 bg-black/55" />
-      <div className="pointer-events-none relative flex h-full items-end justify-center wide:items-center wide:p-6">
-        <section
-          data-b="panel"
-          className="pointer-events-auto flex max-h-full w-full max-w-xl flex-col overflow-y-auto rounded-t-2xl border border-b-0 border-faint bg-paper px-5 pt-4 pb-5 wide:w-[420px] wide:rounded-2xl wide:border-b"
-        >
-          <div data-b="item" className="flex items-start justify-between">
-            <span className="flex flex-col gap-1">
-              <span className="font-mono text-[10.5px] tracking-[.1em] text-muted">YEAR 0 · {count}</span>
-              <h2 id="begin-title" className="text-[19px] leading-snug font-medium">
-                Before we begin
-              </h2>
-            </span>
-            <button onClick={() => close()} aria-label="Close" className="-mt-2 -mr-3 size-11 text-xl leading-none text-muted">
-              ×
-            </button>
-          </div>
-          <List onClose={close} onBegin={() => close(onBegin)} />
-        </section>
-      </div>
-    </dialog>
+    <div ref={scope} className="contents">
+      <DialogBackdrop data-b="back" className="fixed inset-0 bg-black/55" />
+      <DialogContent data-b="panel" className={`${SHEET} wide:w-[420px]`}>
+        <div data-b="item" className="flex items-start justify-between">
+          <span className="flex flex-col gap-1">
+            <span className="font-mono text-[10.5px] tracking-[.1em] text-muted">YEAR 0 · {count}</span>
+            <DialogTitle className="text-[19px] leading-snug font-medium">Before we begin</DialogTitle>
+          </span>
+          <DialogClose aria-label="Close" className="-mt-2 -mr-3 size-11 text-xl leading-none text-muted">
+            ×
+          </DialogClose>
+        </div>
+        <List onClose={close} onBegin={() => close(onBegin)} />
+      </DialogContent>
+    </div>
   );
 }
 
@@ -331,7 +305,7 @@ function Sheet({ count, onClose, onBegin }: { count: string; onClose(): void; on
 export function Begin() {
   const { save, year } = useGame();
   const begin = useBegin();
-  const [open, setOpen] = useState(false);
+  const sheet = useSheet();
   const [hover, setHover] = useState(false);
   const button = useRef<HTMLButtonElement>(null);
   const now = useNow();
@@ -359,16 +333,18 @@ export function Begin() {
   const count = n === STEPS.length ? "ALL STEPS DONE" : `${n} OF ${STEPS.length} STEPS DONE`;
 
   return (
-    <>
+    <Dialog open={sheet.open} onOpenChange={sheet.onOpenChange}>
       {year === null && (
-        <button
+        <DialogTrigger
           ref={button}
           // All four done, Begin begins. The sheet is for what is still open.
-          onClick={() => (next ? setOpen(true) : begin())}
+          onClick={(e) => {
+            if (next) return;
+            e.preventDefault();
+            begin();
+          }}
           onPointerEnter={() => setHover(true)}
           onPointerLeave={() => setHover(false)}
-          aria-haspopup={next ? "dialog" : undefined}
-          aria-expanded={next ? open : undefined}
           className={
             next
               ? "-my-1 -mr-1 inline-flex h-6 items-center gap-1.5 rounded-full border border-you/50 pr-2.5 pl-1.5 text-xs text-ink transition-colors hover:bg-you/10"
@@ -388,19 +364,10 @@ export function Begin() {
               Begin
             </>
           )}
-        </button>
+        </DialogTrigger>
       )}
-      {open && (
-        <Sheet
-          count={count}
-          onClose={() => {
-            setOpen(false);
-            button.current?.focus();
-          }}
-          onBegin={begin}
-        />
-      )}
-    </>
+      <Sheet count={count} sheet={sheet} onBegin={begin} />
+    </Dialog>
   );
 }
 

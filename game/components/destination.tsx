@@ -17,6 +17,7 @@ import { LeadArt } from "@/components/lead-art";
 import { SystemArt } from "@/components/system-art";
 import { isHole, starName, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
+import { overlaid } from "@/components/sheet";
 import { HISTORY } from "@/lib/game/charter";
 import { span, lyOf, yearText } from "@/lib/game/clock";
 import { buildSlug, isOn, moves, recall } from "@/lib/game/plan";
@@ -396,7 +397,7 @@ export function DestinationPage({ slug }: { slug: string }) {
   }, [setTrip, tripCraft, tripSignal]);
 
   useEffect(() => {
-    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/play/reach");
+    const back = (e: KeyboardEvent) => e.key === "Escape" && !overlaid(e) && navigate("/play/reach");
     window.addEventListener("keydown", back);
     return () => window.removeEventListener("keydown", back);
   }, [navigate]);

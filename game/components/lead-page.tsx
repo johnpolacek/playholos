@@ -23,6 +23,7 @@ import { Voyage } from "@/components/voyage";
 import { VOICED } from "@/lib/game/watcher-voice";
 import { glowNamed } from "@/lib/game/glow-names";
 import { UnrangedGlow, WARM_WHAT } from "@/components/unranged-glow";
+import { overlaid } from "@/components/sheet";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One lead, as a report: drawn, then what we measured, what it could be with the Mind's word for each, and what would
@@ -241,7 +242,7 @@ export function LeadPage({ slug }: { slug: string }) {
   }, [looked, setLook]);
 
   useEffect(() => {
-    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/play");
+    const back = (e: KeyboardEvent) => e.key === "Escape" && !overlaid(e) && navigate("/play");
     window.addEventListener("keydown", back);
     return () => window.removeEventListener("keydown", back);
   }, [navigate]);

@@ -1,3 +1,4 @@
+import { Dialog, DialogContent, DialogTitle } from "@ui-sdk/react/dialog";
 import { useGame } from "@/components/game-provider";
 import { lyOf, span, yearText } from "@/lib/game/clock";
 
@@ -22,35 +23,38 @@ export function Crossing() {
   if (!will || year === null || year < will.y || year >= will.at) return null;
   const u = Math.min(1, (year - will.y) / (will.at - will.y));
   const front = X0 + u * (X1 - X0);
+  // On ui-sdk's Dialog since 2026-11-14: the game behind is out of reach, focus stays here, and it closes itself when we wake.
   return (
-    <div role="dialog" aria-modal aria-label="The Will is crossing" className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-paper px-4">
-      <p className="font-mono text-[11px] tracking-[.14em] text-muted">THE WILL IS CROSSING</p>
-      <h1 className="mt-2 text-center text-[22px] leading-snug font-medium">To our Mind at {will.hole}</h1>
-      <p className="mt-1 text-[13.5px] text-page-ink2">
-        {lyOf(will.d)} ly · Year {yearText(year)} · we wake in <span className="font-mono tabular-nums">{span(will.at - year)}</span>
-      </p>
-      <svg viewBox={`0 0 ${W} 140`} className="mt-6 w-full max-w-[520px]" role="img" aria-label={`The beam is ${Math.round(u * 100)}% of the way`}>
-        {FIELD.map((s, i) => (
-          <circle key={i} cx={s.x} cy={s.y} r={0.6} fill="var(--ink)" opacity={s.o} />
-        ))}
-        <line x1={X0} x2={X1} y1={Y} y2={Y} stroke="var(--muted)" strokeWidth={0.7} strokeDasharray="2 4" opacity={0.6} />
-        <line x1={X0} x2={front} y1={Y} y2={Y} stroke="var(--you)" strokeWidth={1.4} />
-        <circle cx={front} cy={Y} r={9} fill="var(--you)" opacity={0.18} className="motion-safe:animate-pulse" />
-        <circle cx={front} cy={Y} r={2.6} fill="var(--you)" />
-        <circle cx={X0} cy={Y} r={4} fill="#f4e7c5" />
-        <circle cx={X1} cy={Y} r={4.5} fill="var(--paper)" stroke="var(--you)" strokeWidth={1} />
-        <text x={X0} y={Y + 22} textAnchor="middle" className="fill-muted font-mono text-[8px]">
-          SOL
-        </text>
-        <text x={X1} y={Y + 22} textAnchor="middle" className="fill-muted font-mono text-[8px]">
-          OUR MIND
-        </text>
-      </svg>
-      <p className="mt-6 max-w-[34ch] text-center text-[14px] leading-snug text-page-ink2">
-        {will.lost
-          ? "Earth’s Mind is gone. We are light now, crossing to the copy of us kept there. We wake knowing only what we knew when Earth fell."
-          : "We are light now, between the stars. Earth goes on by our orders and our charter. We wake knowing only what we knew when we left."}
-      </p>
-    </div>
+    <Dialog open dismissible={false}>
+      <DialogContent className="fixed inset-0 flex h-dvh max-h-none w-full max-w-none flex-col items-center justify-center bg-paper px-4 text-ink outline-none">
+        <p className="font-mono text-[11px] tracking-[.14em] text-muted">THE WILL IS CROSSING</p>
+        <DialogTitle render={<h1 />} className="mt-2 text-center text-[22px] leading-snug font-medium">To our Mind at {will.hole}</DialogTitle>
+        <p className="mt-1 text-[13.5px] text-page-ink2">
+          {lyOf(will.d)} ly · Year {yearText(year)} · we wake in <span className="font-mono tabular-nums">{span(will.at - year)}</span>
+        </p>
+        <svg viewBox={`0 0 ${W} 140`} className="mt-6 w-full max-w-[520px]" role="img" aria-label={`The beam is ${Math.round(u * 100)}% of the way`}>
+          {FIELD.map((s, i) => (
+            <circle key={i} cx={s.x} cy={s.y} r={0.6} fill="var(--ink)" opacity={s.o} />
+          ))}
+          <line x1={X0} x2={X1} y1={Y} y2={Y} stroke="var(--muted)" strokeWidth={0.7} strokeDasharray="2 4" opacity={0.6} />
+          <line x1={X0} x2={front} y1={Y} y2={Y} stroke="var(--you)" strokeWidth={1.4} />
+          <circle cx={front} cy={Y} r={9} fill="var(--you)" opacity={0.18} className="motion-safe:animate-pulse" />
+          <circle cx={front} cy={Y} r={2.6} fill="var(--you)" />
+          <circle cx={X0} cy={Y} r={4} fill="#f4e7c5" />
+          <circle cx={X1} cy={Y} r={4.5} fill="var(--paper)" stroke="var(--you)" strokeWidth={1} />
+          <text x={X0} y={Y + 22} textAnchor="middle" className="fill-muted font-mono text-[8px]">
+            SOL
+          </text>
+          <text x={X1} y={Y + 22} textAnchor="middle" className="fill-muted font-mono text-[8px]">
+            OUR MIND
+          </text>
+        </svg>
+        <p className="mt-6 max-w-[34ch] text-center text-[14px] leading-snug text-page-ink2">
+          {will.lost
+            ? "Earth’s Mind is gone. We are light now, crossing to the copy of us kept there. We wake knowing only what we knew when Earth fell."
+            : "We are light now, between the stars. Earth goes on by our orders and our charter. We wake knowing only what we knew when we left."}
+        </p>
+      </DialogContent>
+    </Dialog>
   );
 }

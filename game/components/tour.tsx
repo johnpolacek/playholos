@@ -11,6 +11,7 @@ import { ListHead } from "@/components/tab-head";
 import { showWalk, throughState } from "@/components/through";
 import { Welcome } from "@/components/welcome";
 import { placedOf, useWorks } from "@/components/works";
+import { overlaid } from "@/components/sheet";
 import { tenths, yearText } from "@/lib/game/clock";
 import { BUILDS, buildOf, buildSlug, lacks, matter, moves, needs, packed, PACKAGES, PAST, schedule, type Package } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
@@ -297,7 +298,7 @@ export function Tour({ onClose }: { onClose(): void }) {
     const keys = (e: KeyboardEvent) => {
       // Typing, or a sheet open over the tour, keeps the keys.
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-      if (document.querySelector("dialog[open]")) return;
+      if (overlaid(e)) return;
       const by = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
       if (e.key === "Escape") onClose();
       else if (by) setAt((a) => Math.max(0, Math.min(last, a + by)));

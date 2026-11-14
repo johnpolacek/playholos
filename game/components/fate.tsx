@@ -1,3 +1,4 @@
+import { Dialog, DialogContent, DialogTitle } from "@ui-sdk/react/dialog";
 import { useEffect, useMemo } from "react";
 import { useGame } from "@/components/game-provider";
 import { useSchedule } from "@/components/picks";
@@ -25,16 +26,19 @@ export function Fate() {
   }, [end, lives, will, moveWill]);
   // A tenth of a Year, half a minute of play, to see the flash before the end.
   if (!end || lives || year === null || year < end.lands + 0.1) return null;
+  // On ui-sdk's Dialog since 2026-11-14: the game behind is out of reach, focus stays here, and nothing but New game closes it.
   return (
-    <div role="dialog" aria-modal aria-label="The game is over" className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-paper px-4">
-      <p className="font-mono text-[11px] tracking-[.14em] text-muted">YEAR {tenths(end.lands)}</p>
-      <h1 className="mt-2 text-center text-[22px] leading-snug font-medium">No Mind of ours survives</h1>
-      <p className="mt-3 max-w-[36ch] text-center text-[14px] leading-snug text-page-ink2">
-        {end.from === "a rock" ? "A rock" : `A bullet from ${end.from}`} struck Earth with about {Math.round(end.mt).toLocaleString("en-US")} Mt. No vault and no colony stood to carry us on.
-      </p>
-      <button onClick={newGame} className="mt-6 h-11 rounded-full bg-button px-6 text-[15px] font-medium text-paper">
-        New game
-      </button>
-    </div>
+    <Dialog open dismissible={false}>
+      <DialogContent className="fixed inset-0 flex h-dvh max-h-none w-full max-w-none flex-col items-center justify-center bg-paper px-4 text-ink outline-none">
+        <p className="font-mono text-[11px] tracking-[.14em] text-muted">YEAR {tenths(end.lands)}</p>
+        <DialogTitle render={<h1 />} className="mt-2 text-center text-[22px] leading-snug font-medium">No Mind of ours survives</DialogTitle>
+        <p className="mt-3 max-w-[36ch] text-center text-[14px] leading-snug text-page-ink2">
+          {end.from === "a rock" ? "A rock" : `A bullet from ${end.from}`} struck Earth with about {Math.round(end.mt).toLocaleString("en-US")} Mt. No vault and no colony stood to carry us on.
+        </p>
+        <button onClick={newGame} className="mt-6 h-11 rounded-full bg-button px-6 text-[15px] font-medium text-paper">
+          New game
+        </button>
+      </DialogContent>
+    </Dialog>
   );
 }

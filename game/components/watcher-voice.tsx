@@ -1,3 +1,4 @@
+import { Dialog, DialogClose, DialogContent } from "@ui-sdk/react/dialog";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { WATCHER_VOICE } from "@/lib/game/watcher-voice";
@@ -155,65 +156,70 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
   const line = typeof at === "number" ? WATCHER_VOICE[at] : null;
 
   return createPortal(
-    <div role="dialog" aria-modal="true" aria-label="The watcher’s voice" className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 px-4">
-      <button onClick={onClose} aria-label="Close" className="absolute top-4 right-4 inline-flex h-9 items-center rounded-full border border-ink/40 px-4 font-mono text-[12px] tracking-[.12em] text-ink uppercase transition-colors hover:border-ink hover:bg-ink hover:text-black">
-        Close ✕
-      </button>
-      <span className="font-mono text-[10.5px] tracking-[.16em] text-other uppercase">A voice from beyond our system</span>
-      <canvas ref={canvas} className="mt-6 h-40 w-full max-w-3xl" aria-hidden />
-      <div className="mt-6 flex min-h-[7.5rem] max-w-2xl flex-col items-center text-center">
-        {at === "wait" ? (
-          <>
-            <p className="text-[15px] leading-snug text-page-ink2">It speaks in our own languages, learned from our broadcasts.</p>
-            <button
-              onClick={listen}
-              className="mt-5 inline-flex h-10 items-center rounded-full bg-other px-6 text-[14px] font-medium text-black transition-[filter] hover:brightness-110"
-            >
-              Listen ›
-            </button>
-          </>
-        ) : (
-          line && (
+    // On ui-sdk's Dialog since 2026-11-14: focus stays here and the page behind is out of reach. Escape is ours, above.
+    <Dialog open onOpenChange={(stays) => stays || onClose()}>
+      <DialogContent
+        aria-label="The watcher’s voice"
+        initialFocus="content"
+        className="fixed inset-0 flex h-dvh max-h-none w-full max-w-none flex-col items-center justify-center bg-black/95 px-4 text-ink outline-none"
+      >
+        <DialogClose aria-label="Close" className="absolute top-4 right-4 inline-flex h-9 items-center rounded-full border border-ink/40 px-4 font-mono text-[12px] tracking-[.12em] text-ink uppercase transition-colors hover:border-ink hover:bg-ink hover:text-black">
+          Close ✕
+        </DialogClose>
+        <span className="font-mono text-[10.5px] tracking-[.16em] text-other uppercase">A voice from beyond our system</span>
+        <canvas ref={canvas} className="mt-6 h-40 w-full max-w-3xl" aria-hidden />
+        <div className="mt-6 flex min-h-[7.5rem] max-w-2xl flex-col items-center text-center">
+          {at === "wait" ? (
             <>
-              <span className="font-mono text-[10.5px] tracking-[.14em] text-muted">{line.name}</span>
-              <p key={line.lang} lang={line.lang} dir={line.rtl ? "rtl" : "ltr"} className="mt-2 animate-voice motion-reduce:animate-none text-[22px] leading-snug text-ink">
-                {line.text}
-              </p>
+              <p className="text-[15px] leading-snug text-page-ink2">It speaks in our own languages, learned from our broadcasts.</p>
+              <button
+                onClick={listen}
+                className="mt-5 inline-flex h-10 items-center rounded-full bg-other px-6 text-[14px] font-medium text-black transition-[filter] hover:brightness-110"
+              >
+                Listen ›
+              </button>
             </>
-          )
-        )}
-      </div>
-      {typeof at === "number" && (
-        <div className="mt-6 flex items-center gap-1">
-          <button onClick={() => pick(at - 1)} disabled={at === 0} aria-label="The line before" className="px-2 text-[18px] text-muted hover:text-ink disabled:opacity-30">
-            ‹
-          </button>
-          {WATCHER_VOICE.map((s, i) => (
-            <button key={s.lang} onClick={() => pick(i)} aria-label={s.name} aria-current={i === at} className="group p-1">
-              <span className={`block size-1.5 rounded-full transition-transform group-hover:scale-150 ${i === at ? "scale-150 bg-other" : "bg-track"}`} />
+          ) : (
+            line && (
+              <>
+                <span className="font-mono text-[10.5px] tracking-[.14em] text-muted">{line.name}</span>
+                <p key={line.lang} lang={line.lang} dir={line.rtl ? "rtl" : "ltr"} className="mt-2 animate-voice motion-reduce:animate-none text-[22px] leading-snug text-ink">
+                  {line.text}
+                </p>
+              </>
+            )
+          )}
+        </div>
+        {typeof at === "number" && (
+          <div className="mt-6 flex items-center gap-1">
+            <button onClick={() => pick(at - 1)} disabled={at === 0} aria-label="The line before" className="px-2 text-[18px] text-muted hover:text-ink disabled:opacity-30">
+              ‹
             </button>
-          ))}
-          <button
-            onClick={() => pick(at + 1)}
-            disabled={at === WATCHER_VOICE.length - 1}
-            aria-label="The line after"
-            className="px-2 text-[18px] text-muted hover:text-ink disabled:opacity-30"
-          >
-            ›
-          </button>
-        </div>
-      )}
-      {done && (
-        <div className="mt-6 flex gap-4 text-[13px]">
-          <button onClick={again} className="text-other hover:underline">
-            Hear it again
-          </button>
-          <button onClick={onClose} className="text-ink hover:underline">
-            Back to what we know ›
-          </button>
-        </div>
-      )}
-    </div>,
+            {WATCHER_VOICE.map((s, i) => (
+              <button key={s.lang} onClick={() => pick(i)} aria-label={s.name} aria-current={i === at} className="group p-1">
+                <span className={`block size-1.5 rounded-full transition-transform group-hover:scale-150 ${i === at ? "scale-150 bg-other" : "bg-track"}`} />
+              </button>
+            ))}
+            <button
+              onClick={() => pick(at + 1)}
+              disabled={at === WATCHER_VOICE.length - 1}
+              aria-label="The line after"
+              className="px-2 text-[18px] text-muted hover:text-ink disabled:opacity-30"
+            >
+              ›
+            </button>
+          </div>
+        )}
+        {done && (
+          <div className="mt-6 flex gap-4 text-[13px]">
+            <button onClick={again} className="text-other hover:underline">
+              Hear it again
+            </button>
+            <DialogClose className="text-ink hover:underline">Back to what we know ›</DialogClose>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>,
     document.body,
   );
 }

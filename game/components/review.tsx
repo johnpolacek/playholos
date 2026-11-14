@@ -10,6 +10,7 @@ import { buildNamed } from "@/lib/game/plan";
 import { MindNote } from "@/components/mind-note";
 import { LeadMark } from "@/components/marks";
 import { useLeads, useStepTap } from "@/components/scan";
+import { overlaid } from "@/components/sheet";
 import { span, lyOf, yearText } from "@/lib/game/clock";
 import { isHole, starName } from "@/lib/game/leads";
 import {
@@ -137,7 +138,7 @@ export function Review({ onClose }: { onClose(): void }) {
         e.target instanceof HTMLTextAreaElement
       )
         return;
-      if (document.querySelector("dialog[open]")) return;
+      if (overlaid(e)) return;
       const by = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
       if (e.key === "Escape") onClose();
       else if (by) setAt((a) => Math.max(0, Math.min(last, a + by)));
