@@ -1,3 +1,4 @@
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 import { useState } from "react";
 import { Link } from "react-router";
 import { useOpenReadings } from "@/components/close-reading";
@@ -104,8 +105,8 @@ function Trail({ stage, next, open, toggle }: { stage: Stage; next: Step | null;
   const first = stage.steps.findIndex((s) => s.at !== "done");
   const run = first < 0 ? n : first;
   return (
-    <div>
-      <button onClick={toggle} aria-expanded={open} className="grid w-full grid-cols-[96px_1fr_34px] items-center gap-3 py-1 text-left">
+    <Collapsible open={open} onOpenChange={toggle}>
+      <CollapsibleTrigger className="grid w-full grid-cols-[96px_1fr_34px] items-center gap-3 py-1 text-left">
         <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">{stage.name}</span>
         <span className="relative flex h-4 items-center justify-between">
           <span className="absolute inset-x-1 top-1/2 h-px -translate-y-1/2 bg-track" />
@@ -122,36 +123,34 @@ function Trail({ stage, next, open, toggle }: { stage: Stage; next: Step | null;
         <span className="text-right font-mono text-[10.5px] text-muted tabular-nums">
           {lit}/{n}
         </span>
-      </button>
-      {open && (
-        <ul className="mb-1 ml-[108px] flex flex-col gap-0.5">
-          {stage.steps.map((s) => {
-            const mark = s.at === "done" ? "✓" : s.at === "going" ? "◐" : "○";
-            const words = (
-              <>
-                <span className={`mr-1.5 inline-block w-3 ${s.at === "todo" ? "text-muted" : "text-you"}`}>{mark}</span>
-                {s.label}
-                {s.at === "going" && <span className="text-muted"> · under way</span>}
-              </>
-            );
-            return (
-              <li key={s.label} className={`text-[12.5px] ${s.at === "done" ? "text-muted" : "text-ink"}`}>
-                {s.to && s.at !== "done" ? (
-                  <Link to={s.to} className="hover:underline">
-                    {words} <span className="text-you">›</span>
-                  </Link>
-                ) : (
-                  <>
-                    {words}
-                    {s.at === "todo" && s.waits && <span className="block pl-[18px] text-[11.5px] leading-snug text-muted">{s.waits}</span>}
-                  </>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
+      </CollapsibleTrigger>
+      <CollapsiblePanel render={<ul />} className="mb-1 ml-[108px] flex flex-col gap-0.5">
+        {stage.steps.map((s) => {
+          const mark = s.at === "done" ? "✓" : s.at === "going" ? "◐" : "○";
+          const words = (
+            <>
+              <span className={`mr-1.5 inline-block w-3 ${s.at === "todo" ? "text-muted" : "text-you"}`}>{mark}</span>
+              {s.label}
+              {s.at === "going" && <span className="text-muted"> · under way</span>}
+            </>
+          );
+          return (
+            <li key={s.label} className={`text-[12.5px] ${s.at === "done" ? "text-muted" : "text-ink"}`}>
+              {s.to && s.at !== "done" ? (
+                <Link to={s.to} className="hover:underline">
+                  {words} <span className="text-you">›</span>
+                </Link>
+              ) : (
+                <>
+                  {words}
+                  {s.at === "todo" && s.waits && <span className="block pl-[18px] text-[11.5px] leading-snug text-muted">{s.waits}</span>}
+                </>
+              )}
+            </li>
+          );
+        })}
+      </CollapsiblePanel>
+    </Collapsible>
   );
 }
 

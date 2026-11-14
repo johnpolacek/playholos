@@ -1,3 +1,4 @@
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 // Standing orders for glows, settled 2026-11-07 (m:235): "For each new glow within ___ ly, send ___". One card on Reach,
 // a row for warm glows and one for cold. Warm glows can take sails, a flyby probe or a sentinel. A cold glow takes only
 // a sentinel, since a pass is too quick to learn more there than we knew. Each craft shows its price per glow and when
@@ -215,15 +216,15 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
         ? `Set now, it sends a flyby probe past each of the ${glows(now)} we have found within ${lyText(within)}, thrown by our ${push}.`
       : `Set now, it sends ${NAME[by].toLowerCase()} to each of the ${glows(now)} we have found within ${lyText(within)}: ${t(now * fuel)} of deuterium${allIn === null ? "" : `, all in by Year ${yearText(Math.max(from, allIn))}`}.`;
   return (
-    <div className="mt-2 border-t border-faint pt-2">
-      <button onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex w-full items-center justify-between gap-3 text-left">
+    <Collapsible open={open} onOpenChange={setOpen} className="mt-2 border-t border-faint pt-2">
+      <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 text-left">
         <b className="text-[14px] font-semibold">{kind === "warm" ? "Warm glows" : "Cold glows"} · {found}</b>
         <span className="flex items-center gap-2 font-mono text-[10px] tracking-[.1em] text-muted uppercase">
           Sent · {sent}
           <span className={`text-[12px] transition-transform duration-200 motion-reduce:transition-none ${open ? "rotate-90" : ""}`}>›</span>
         </span>
-      </button>
-      {!open ? (
+      </CollapsibleTrigger>
+      {!open && (
         <button onClick={() => setOpen(true)} className="mt-0.5 block w-full text-left">
           <span className="flex items-baseline justify-between gap-3">
             <span className="text-[12.5px] leading-snug text-page-ink2">
@@ -234,8 +235,8 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
           {pace && <Finds pace={pace} now={from} within={order?.within ?? within} />}
           <span className="text-[12px] text-you">More ›</span>
         </button>
-      ) : (
-        <>
+      )}
+      <CollapsiblePanel>
       {pace && <Projection pace={pace} now={from} within={order?.within ?? within} by={order?.by ?? by} />}
       {order ? (
         <>
@@ -318,9 +319,8 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
           <button onClick={() => setOpen(false)} className="mt-2 block text-[12px] text-you">
             Less ‹
           </button>
-        </>
-      )}
-    </div>
+      </CollapsiblePanel>
+    </Collapsible>
   );
 }
 

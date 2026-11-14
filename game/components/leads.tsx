@@ -1,3 +1,4 @@
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 import { ChanceTag, chanceShift, mindFirst } from "@/components/chances";
 import { chancesOf } from "@/lib/game/chance";
 import { Link } from "react-router";
@@ -514,8 +515,8 @@ export function LeadList({
         if (l !== g.members[0]) return null;
         const open = openGroup === g.key;
         return (
-          <li key={g.key} className="border-t border-faint">
-            <button onClick={() => setOpenGroup(open ? null : g.key)} aria-expanded={open} className="block w-full py-2.5 text-left">
+          <Collapsible key={g.key} render={<li />} open={open} onOpenChange={(o) => setOpenGroup(o ? g.key : null)} className="border-t border-faint">
+            <CollapsibleTrigger className="block w-full py-2.5 text-left">
               <Face
                 mark={<LeadMark art={l.art} />}
                 tone="text-you"
@@ -535,14 +536,14 @@ export function LeadList({
                 }
                 more={false}
               />
-            </button>
-            {open && g.key === "cold-glows" && <div className="pl-5">{COLD_WORDS}</div>}
-            {open && (
+            </CollapsibleTrigger>
+            <CollapsiblePanel>
+              {g.key === "cold-glows" && <div className="pl-5">{COLD_WORDS}</div>}
               <ul className="mb-1 flex flex-col pl-5">
                 {g.members.map((c) => <li key={c.star} className="border-t border-faint">{link(c, leads.indexOf(c))}</li>)}
               </ul>
-            )}
-          </li>
+            </CollapsiblePanel>
+          </Collapsible>
         );
       });
     const count = (part: Standing) => list.filter((l) => stand(l) === part).length;
@@ -582,19 +583,16 @@ export function LeadList({
         )}
         {quiet > 0 && (
           <>
-            <button
-              onClick={() => setQuietOpen(!quietOpen)}
-              aria-expanded={quietOpen}
-              className="mt-5 flex w-full items-baseline justify-between pr-5 text-left font-mono text-[10px] tracking-[.1em] text-muted uppercase hover:text-ink"
-            >
-              <span>Quiet · {quiet}</span>
-              <span className={`transition-transform duration-300 ${quietOpen ? "rotate-90" : ""}`}>›</span>
-            </button>
-            {quietOpen ? (
-              <ul className="mt-1 flex flex-col">{rows("quiet")}</ul>
-            ) : (
-              <p className="mt-1 border-t border-faint py-2.5 text-[13.5px] text-page-ink2">Nothing for us to do at these yet.</p>
-            )}
+            <Collapsible open={quietOpen} onOpenChange={setQuietOpen}>
+              <CollapsibleTrigger className="mt-5 flex w-full items-baseline justify-between pr-5 text-left font-mono text-[10px] tracking-[.1em] text-muted uppercase hover:text-ink">
+                <span>Quiet · {quiet}</span>
+                <span className={`transition-transform duration-300 ${quietOpen ? "rotate-90" : ""}`}>›</span>
+              </CollapsibleTrigger>
+              <CollapsiblePanel render={<ul />} className="mt-1 flex flex-col">
+                {rows("quiet")}
+              </CollapsiblePanel>
+              {!quietOpen && <p className="mt-1 border-t border-faint py-2.5 text-[13.5px] text-page-ink2">Nothing for us to do at these yet.</p>}
+            </Collapsible>
           </>
         )}
       </>
@@ -607,15 +605,13 @@ export function LeadList({
         const open = shown === i;
         return (
           <li key={l.star} data-m="lead" className="border-t border-faint">
-            <div
+            <Collapsible
+              open={open}
+              onOpenChange={(o) => pick(o ? i : null)}
               {...peek(i)}
               className={`transition-opacity duration-300 ${picked !== null && !open ? "opacity-50" : ""}`}
             >
-              <button
-                onClick={() => pick(picked === i ? null : i)}
-                aria-expanded={open}
-                className="flex w-full items-baseline gap-3 py-2.5 text-left"
-              >
+              <CollapsibleTrigger className="flex w-full items-baseline gap-3 py-2.5 text-left">
                 <span className={`shrink-0 self-center ${l.reply ? "text-other" : "text-you"}`}>
                   <LeadMark art={l.art} />
                 </span>
@@ -626,11 +622,9 @@ export function LeadList({
                 <span className={`shrink-0 text-muted transition-transform duration-300 ${open ? "rotate-90" : ""}`}>
                   ›
                 </span>
-              </button>
-              <div
-                aria-hidden={!open}
-                className={`grid transition-[grid-template-rows] duration-300 ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
-              >
+              </CollapsibleTrigger>
+              {/* Kept from leaving until its rows close, so it slides shut as it slides open. */}
+              <CollapsiblePanel className="grid grid-rows-[1fr] transition-[grid-template-rows] duration-300 data-ending-style:grid-rows-[0fr] data-starting-style:grid-rows-[0fr] motion-reduce:transition-none">
                 <div className="min-h-0 overflow-hidden">
                   <div className="pb-3 pl-5">
                     <p className="text-[13.5px] leading-snug text-page-ink2">{lineAt(l, year)}</p>
@@ -644,8 +638,8 @@ export function LeadList({
                     </dl>
                   </div>
                 </div>
-              </div>
-            </div>
+              </CollapsiblePanel>
+            </Collapsible>
           </li>
         );
       })}

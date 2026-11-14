@@ -1,3 +1,4 @@
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 import { SAIL_C } from "@/lib/sim/speeds";
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
@@ -298,8 +299,8 @@ function Fleet({ title, build, rows, now, children }: { title: string; build: st
   const next = Math.min(...rows.filter((r) => r.home > now).map((r) => r.home));
   const line = now < first ? `The first leaves in Year ${year(first)}.` : home === rows.length ? "All have sent word home." : `${home ? `${home} have sent word home. ` : ""}Next word home in Year ${year(next)}.`;
   return (
-    <li className="border-t border-faint">
-      <button onClick={() => setOpen(!open)} aria-expanded={open} className="block w-full py-2.5 text-left">
+    <Collapsible render={<li />} open={open} onOpenChange={setOpen} className="border-t border-faint">
+      <CollapsibleTrigger className="block w-full py-2.5 text-left">
         <Face mark={<BuildMark name={build} />} tone="text-you" name={<b className="font-semibold">{title} · {rows.length}</b>} line={line} right={open ? "Close" : "Open"} more={false} />
         {/* Each craft on one line, from leaving to its word home. */}
         <span className="relative mt-1.5 ml-7 block h-3" aria-hidden>
@@ -315,9 +316,9 @@ function Fleet({ title, build, rows, now, children }: { title: string; build: st
             );
           })}
         </span>
-      </button>
-      {open && children}
-    </li>
+      </CollapsibleTrigger>
+      <CollapsiblePanel>{children}</CollapsiblePanel>
+    </Collapsible>
   );
 }
 
@@ -1185,8 +1186,8 @@ export function Reach() {
           const far = (q: Place) => q.lead.range?.[1] ?? q.lead.ly;
           const soonest = g.members.map((q) => q.soonest).filter((y): y is number => y !== null);
           return (
-            <li key={g.key} className="border-t border-faint">
-              <button onClick={() => setOpenGroup(open ? null : g.key)} aria-expanded={open} className="block w-full py-2.5 text-left">
+            <Collapsible key={g.key} render={<li />} open={open} onOpenChange={(o) => setOpenGroup(o ? g.key : null)} className="border-t border-faint">
+              <CollapsibleTrigger className="block w-full py-2.5 text-left">
                 <Face
                   mark={<LeadMark art={p.lead.art} />}
                   tone="text-you"
@@ -1195,9 +1196,11 @@ export function Reach() {
                   right={soonest.length ? `Year ${year(Math.min(...soonest))}` : "Not yet"}
                   more={false}
                 />
-              </button>
-              {open && <ul className="mb-1 pl-5">{g.members.map(place)}</ul>}
-            </li>
+              </CollapsibleTrigger>
+              <CollapsiblePanel render={<ul />} className="mb-1 pl-5">
+                {g.members.map(place)}
+              </CollapsiblePanel>
+            </Collapsible>
           );
         })}
       </ul>

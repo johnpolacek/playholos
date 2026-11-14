@@ -1,3 +1,4 @@
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useNext } from "@/components/begin";
@@ -609,9 +610,10 @@ export function Guide() {
     { scope: root, dependencies: [talk?.now, idea?.at] },
   );
 
-  // The drawing stays in view on a wide screen as Costs' ring does, so it is the tab's own child, not wrapped.
+  // The drawing stays in view on a wide screen as Costs' ring does, so it is the tab's own child, not wrapped: the
+  // Collapsible around it draws no box.
   return (
-    <>
+    <Collapsible open={more} onOpenChange={setMore} className="contents">
       <section className="-mx-4 border-b border-rowline bg-panel px-4 pb-3 wide:sticky wide:-top-3 wide:z-10 wide:pt-3">
         <div className="flex min-h-[18px] items-center justify-between font-mono text-[10px] tracking-[.1em] text-muted">
           <span>OUR COMPUTE</span>
@@ -681,15 +683,13 @@ export function Guide() {
             </Link>
           )}
         </div>
-        <button
-          onClick={() => setMore(!more)}
-          aria-expanded={more}
-          className="mt-2.5 font-mono text-[10.5px] tracking-[.08em] text-muted uppercase hover:text-ink"
-        >
+        <CollapsibleTrigger className="mt-2.5 font-mono text-[10.5px] tracking-[.08em] text-muted uppercase hover:text-ink">
           More: matter and energy {more ? "▾" : "›"}
-        </button>
+        </CollapsibleTrigger>
       </section>
-      {more && <Ceilings />}
-    </>
+      <CollapsiblePanel className="contents">
+        <Ceilings />
+      </CollapsiblePanel>
+    </Collapsible>
   );
 }

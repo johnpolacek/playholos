@@ -1,3 +1,4 @@
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
@@ -21,27 +22,23 @@ export default function Mind() {
   // The model, effort, cost and key sit behind one button, so play never shows them unasked.
   const [settings, setSettings] = useState(false);
   const tool = open ? (
-    <button
-      type="button"
-      aria-label="Mind settings"
-      aria-expanded={settings}
-      onClick={() => setSettings((s) => !s)}
-      className={`p-2.5 transition-colors hover:text-ink ${settings ? "text-ink" : ""}`}
-    >
+    <CollapsibleTrigger aria-label="Mind settings" className="p-2.5 transition-colors hover:text-ink data-open:text-ink">
       <Dials />
-    </button>
+    </CollapsibleTrigger>
   ) : undefined;
   return (
-    <>
+    <Collapsible open={settings} onOpenChange={setSettings} className="contents">
       <TabHead title="MIND" right={open === null ? "LOCKED" : undefined} tool={tool} />
       {open ? (
         <>
-          {settings && <MindSettings keyed={open === "key"} free={open === "free"} />}
+          <CollapsiblePanel className="contents">
+            <MindSettings keyed={open === "key"} free={open === "free"} />
+          </CollapsiblePanel>
           <MindChat ask={question} />
         </>
       ) : (
         open === null && <Unlock />
       )}
-    </>
+    </Collapsible>
   );
 }
