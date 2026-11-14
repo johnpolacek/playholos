@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useGame } from "@/components/game-provider";
@@ -88,11 +89,11 @@ function Banner({ h, more, onHide }: { h: Heard; more: number; onHide(): void })
       >
         Open on Scan
       </Link>
-      <button onClick={onHide} aria-label="Hide for now" className="flex size-11 shrink-0 items-center justify-center text-muted hover:text-ink">
+      <Button onClick={onHide} aria-label="Hide for now" className="flex size-11 shrink-0 items-center justify-center text-muted hover:text-ink">
         <svg aria-hidden width="12" height="12" viewBox="0 0 12 12">
           <path d="M1.5 1.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.4" />
         </svg>
-      </button>
+      </Button>
     </div>
   );
 }
@@ -143,11 +144,11 @@ function Crossing({ h, onDone }: { h: Heard; onDone(): void }) {
   };
   return (
     <div ref={scope} className="absolute inset-0 z-30 flex flex-col overflow-y-auto bg-page/90 px-4 pt-3 pb-4 wide:px-12 wide:pt-10">
-      <button onClick={onDone} aria-label="Close" className="absolute top-1 right-1 flex size-11 items-center justify-center text-muted hover:text-ink">
+      <Button onClick={onDone} aria-label="Close" className="absolute top-1 right-1 flex size-11 items-center justify-center text-muted hover:text-ink">
         <svg aria-hidden width="12" height="12" viewBox="0 0 12 12">
           <path d="M1.5 1.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.4" />
         </svg>
-      </button>
+      </Button>
       <svg role="img" aria-label={`Its light crossing ${h.d.toFixed(1)} light-years from ${h.star} to Earth, ${Math.floor(sent)} to ${Math.floor(came)}`} viewBox="0 0 1000 300" className="max-h-[46%] w-full shrink-0 overflow-visible">
         <line x1={X0} y1={Y} x2={X1} y2={Y} stroke="var(--other)" strokeDasharray="2 6" opacity="0.45" />
         <line data-trail x1={X0} y1={Y} x2={X1} y2={Y} stroke="var(--other)" strokeWidth="1.5" opacity="0.8" />
@@ -185,7 +186,7 @@ function Crossing({ h, onDone }: { h: Heard; onDone(): void }) {
               We need not answer today.
             </p>
             <div className="flex flex-wrap gap-4 text-[13px]">
-              <button
+              <Button
                 onClick={() => {
                   see([heardId(h)]);
                   go(`/play?heard=${encodeURIComponent(heardId(h))}`);
@@ -193,13 +194,13 @@ function Crossing({ h, onDone }: { h: Heard; onDone(): void }) {
                 className="text-you hover:underline"
               >
                 Read it on Scan
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => go(`/play/mind?ask=${encodeURIComponent(`${kindOf(h)} just reached us from ${h.star}. What should we make of it?`)}`)}
                 className="text-you hover:underline"
               >
                 Talk it through
-              </button>
+              </Button>
             </div>
           </div>
         </div>

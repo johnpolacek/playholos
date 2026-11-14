@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useMemo, useRef } from "react";
 import { Link, useLocation } from "react-router";
 import { useGame } from "@/components/game-provider";
@@ -195,12 +196,12 @@ export function CloseReading({ lead }: { lead: Lead }) {
           {scope == null || scope > now ? (
             <p className="mt-2 text-[12.5px] text-muted">Needs our Infrared Telescope.</p>
           ) : (
-            <button
+            <Button
               onClick={() => change((p) => ({ ...p, closeReads: [...(p.closeReads ?? []), { name: lead.star, y: now }] }))}
               className="mt-2 h-8 rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
             >
               Read its light
-            </button>
+            </Button>
           )}
         </>
       )}

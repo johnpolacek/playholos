@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@ui-sdk/react/dialog";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Link, useLocation } from "react-router";
@@ -344,11 +345,11 @@ export function MindSays() {
       role="status"
       className="absolute top-10 left-2.5 z-20 max-h-[calc(100%-3.5rem)] w-[min(400px,calc(100%-20px))] overflow-y-auto rounded-xl border border-faint bg-paper/90 pt-2 pr-2 backdrop-blur-sm"
     >
-      <button onClick={() => setAway(last)} aria-label="Put away" className="absolute top-0 right-0 z-10 flex size-9 items-center justify-center text-muted hover:text-ink">
+      <Button onClick={() => setAway(last)} aria-label="Put away" className="absolute top-0 right-0 z-10 flex size-9 items-center justify-center text-muted hover:text-ink">
         <svg aria-hidden width="10" height="10" viewBox="0 0 12 12">
           <path d="M1.5 1.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.4" />
         </svg>
-      </button>
+      </Button>
       <MindNote still edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
         <p className="mb-1 font-mono text-[10px] leading-snug tracking-[.06em] text-muted">{properGlows(news)}</p>
         {said(words) ? <LinkedWords words={said(words)} onFollow={() => read(last)} /> : "…"}

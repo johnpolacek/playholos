@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useBeams } from "@/components/beams";
 import { useGame } from "@/components/game-provider";
@@ -223,13 +224,13 @@ export function WorksMap({ className }: { className: string }) {
             >
               {/* A tap on its name takes the map down to it, as Close View does. */}
               {CLOSE[w.name] && !close ? (
-                <button
+                <Button
                   tabIndex={-1}
                   onClick={() => setClose(true)}
                   className="pointer-events-auto cursor-pointer [text-align:inherit]"
                 >
                   {words}
-                </button>
+                </Button>
               ) : (
                 words
               )}

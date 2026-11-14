@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Tabs as TabsRoot, TabsList, TabsPanel, TabsTab } from "@ui-sdk/react/tabs";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
@@ -544,19 +545,19 @@ export default function Sim() {
                     UNIVERSE {Math.min(at, split - 1) + 1} / {split}
                   </p>
                   <div className="flex gap-1.5">
-                    <button
+                    <Button
                       className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={at <= 0}
                       onClick={() => setAt((a) => Math.max(0, a - 1))}
                     >
                       Back
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px]"
                       onClick={() => (at >= split - 1 ? goTab("stars") : (setOpening(false), setAt((a) => a + 1)))}
                     >
                       Next
-                    </button>
+                    </Button>
                   </div>
                 </div>
                 <h2 data-rise className="mt-1.5 font-semibold" style={{ color: stop.clash ? ROSE : undefined }}>
@@ -575,26 +576,26 @@ export default function Sim() {
                     {busy && onSim ? " · DRAWING…" : ""}
                   </p>
                   <div className="flex gap-1.5">
-                    <button
+                    <Button
                       className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={place <= 0}
                       onClick={() => go(place - 1)}
                     >
                       Back
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={place >= places.length - 1}
                       onClick={() => go(place + 1)}
                     >
                       Next
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       className="w-16 rounded-full border border-faint px-2 py-0.5 font-mono text-[11px] text-muted hover:text-ink"
                       onClick={() => setAuto((a) => !a)}
                     >
                       {auto ? "Hold" : "Drift"}
-                    </button>
+                    </Button>
                   </div>
                 </div>
                 <h2 data-rise className="mt-1.5 font-semibold" style={{ color: here?.kind === "fills" ? ROSE : undefined }}>
@@ -681,13 +682,13 @@ export default function Sim() {
                 here, so the chance must stay under it.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
-                <button
+                <Button
                   className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] hover:text-ink"
                   onClick={() => setSeed((s) => s + 1)}
                 >
                   Roll again
-                </button>
-                <button
+                </Button>
+                <Button
                   className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] text-muted hover:text-ink"
                   onClick={() => {
                     setValues({});
@@ -695,7 +696,7 @@ export default function Sim() {
                   }}
                 >
                   Holos game odds
-                </button>
+                </Button>
               </div>
               <p className="mt-2 text-[12px] text-muted">Same odds, a new roll of the dice.</p>
               <p className="mt-1 font-mono text-[10px] text-muted">ROLL {seed}</p>
@@ -780,12 +781,12 @@ function Time({
   return (
     <div className="mt-3">
       <div className="flex items-center gap-2">
-        <button
+        <Button
           className="w-14 shrink-0 rounded-full border border-faint px-2 py-0.5 font-mono text-[11px]"
           onClick={onPlay}
         >
           {playing ? "Pause" : "Play"}
-        </button>
+        </Button>
         <input
           type="range"
           min={0}

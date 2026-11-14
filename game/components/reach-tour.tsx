@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useNext } from "@/components/begin";
@@ -85,15 +86,15 @@ export function WalkHead(props: {
           {at ? `REACH · ${at} OF ${last}` : "REACH · HOW WE REACH"}
           {at === last && <span className="text-you"> · DONE</span>}
         </span>
-        <button onClick={back} disabled={!at} aria-label="Back" className="-my-3 size-11 text-xl leading-none text-ink disabled:text-faint wide:hidden">
+        <Button onClick={back} disabled={!at} aria-label="Back" className="-my-3 size-11 text-xl leading-none text-ink disabled:text-faint wide:hidden">
           ‹
-        </button>
-        <button onClick={next} disabled={nextOff} aria-label={nextLabel} className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden">
+        </Button>
+        <Button onClick={next} disabled={nextOff} aria-label={nextLabel} className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden">
           ›
-        </button>
-        <button onClick={onClose} aria-label="Close the walk" className="-my-3 -mr-3 size-11 text-xl leading-none">
+        </Button>
+        <Button onClick={onClose} aria-label="Close the walk" className="-my-3 -mr-3 size-11 text-xl leading-none">
           ×
-        </button>
+        </Button>
       </div>
       <Stops stops={STOPS.map((name) => ({ name }))} at={at} go={go} />
     </div>
@@ -327,18 +328,18 @@ export function ReachTour({ onClose }: { onClose(): void }) {
       <div
         className={`sticky bottom-0 mt-auto grid-cols-[1fr_1.4fr] gap-2 bg-panel pt-3 pb-3 ${at === last ? "grid" : "hidden wide:grid"}`}
       >
-        <button
+        <Button
           onClick={() => (at ? go(at - 1) : onClose())}
           className="h-11 rounded-full border border-ink text-[15px] font-medium"
         >
           {at ? "Back" : "Not now"}
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => (at === last ? (then ? navigate(then.to) : onClose()) : go(at + 1))}
           className="h-11 rounded-full bg-button text-[15px] font-medium text-paper"
         >
           {at === last ? (then?.name ?? "Back to Reach") : `Next · ${STOPS[at + 1]}`}
-        </button>
+        </Button>
       </div>
     </div>
   );

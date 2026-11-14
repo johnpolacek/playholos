@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useMindPick } from "@/components/catalog";
@@ -33,11 +34,11 @@ const SPARE = 0.8;
 /** Puts a note away, from its top corner, the same on every note here. */
 function PutAway({ onClick }: { onClick(): void }) {
   return (
-    <button onClick={onClick} aria-label="Put away" className="absolute top-0 right-0 z-10 flex size-9 items-center justify-center text-muted hover:text-ink">
+    <Button onClick={onClick} aria-label="Put away" className="absolute top-0 right-0 z-10 flex size-9 items-center justify-center text-muted hover:text-ink">
       <svg aria-hidden width="10" height="10" viewBox="0 0 12 12">
         <path d="M1.5 1.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.4" />
       </svg>
-    </button>
+    </Button>
   );
 }
 
@@ -263,17 +264,17 @@ export function IdleNote() {
         )}
         <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2">
           {!watchNew && pick && orderAt !== null && (
-            <button
+            <Button
               onClick={start}
               className="h-8 rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
             >
               Start {pick.build.name}
-            </button>
+            </Button>
           )}
           {!watchNew && pick && (
-            <button onClick={() => snooze(pick.build.name, year ?? 0)} className="inline-flex min-h-6 items-center text-[12.5px] text-muted hover:text-ink">
+            <Button onClick={() => snooze(pick.build.name, year ?? 0)} className="inline-flex min-h-6 items-center text-[12.5px] text-muted hover:text-ink">
               Snooze this one
-            </button>
+            </Button>
           )}
           {watchNew && watchLead && (
             <>
@@ -345,12 +346,12 @@ export function IdleNote() {
             </>
           )}
           {(!idle || !pick) && ahead && (
-            <button
+            <Button
               onClick={ahead.go}
               className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow || heat || openSky || flight || step ? "border border-you/60 text-you" : "bg-you text-paper"}`}
             >
               Jump to {ahead.why ?? "what comes next"} ›
-            </button>
+            </Button>
           )}
           {(!idle || pick) && (
             <Link
@@ -362,13 +363,13 @@ export function IdleNote() {
             </Link>
           )}
           {held && (
-            <button
+            <Button
               onClick={playOn}
               // Waiting on a reading, the clock is the one thing to move.
               className={reading ? "h-8 rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110" : "inline-flex min-h-6 items-center text-[12.5px] text-muted hover:text-ink"}
             >
               Play on
-            </button>
+            </Button>
           )}
         </div>
       </MindNote>

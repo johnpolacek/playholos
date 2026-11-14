@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useSyncExternalStore } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { buildSlug } from "@/lib/game/plan";
@@ -47,7 +48,7 @@ export function Through() {
   const go = () =>
     next ? navigate(`/play/build/${buildSlug(next)}`, { state: throughState(on) }) : navigate("/play/build?tour", { state: { at: on.at } });
   return (
-    <button
+    <Button
       onClick={go}
       className="absolute top-2 right-2.5 z-10 inline-flex h-8 items-center gap-1.5 rounded-full border border-other/70 bg-paper/90 pr-2 pl-3 text-xs text-other backdrop-blur-sm transition-colors hover:bg-other/10"
     >
@@ -60,6 +61,6 @@ export function Through() {
       <span aria-hidden className="text-[14px] leading-none">
         ›
       </span>
-    </button>
+    </Button>
   );
 }

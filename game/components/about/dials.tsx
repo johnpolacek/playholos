@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   chain,
@@ -360,14 +361,14 @@ export function Dials() {
             {PRESETS.map((p) => {
               const on = JSON.stringify(p.set) === JSON.stringify(values);
               return (
-                <button
+                <Button
                   key={p.name}
                   type="button"
                   onClick={() => setValues(p.set)}
                   className={`rounded-full border px-3 py-1 font-mono text-[10.5px] tracking-[.1em] transition-colors ${on ? "border-you text-you" : "border-faint text-muted hover:text-ink"}`}
                 >
                   {p.name.toUpperCase()}
-                </button>
+                </Button>
               );
             })}
           </div>

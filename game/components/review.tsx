@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { useNext } from "@/components/begin";
@@ -57,7 +58,7 @@ export function Thread({
         const lit = k <= at;
         return (
           <li key={s.name} className="relative">
-            <button
+            <Button
               onClick={() => go(k)}
               aria-label={s.name}
               aria-current={k === at ? "step" : undefined}
@@ -72,7 +73,7 @@ export function Thread({
                       : `border-you ring-you/30 ${lit ? "bg-you" : "bg-panel"}`
                 }`}
               />
-            </button>
+            </Button>
           </li>
         );
       })}
@@ -170,29 +171,29 @@ export function Review({ onClose }: { onClose(): void }) {
             {at ? `SCAN · REVIEW ${at} OF ${last}` : "SCAN · REVIEW"}
             {at === last && <span className="text-you"> · DONE</span>}
           </span>
-          <button
+          <Button
             onClick={() => go(at - 1)}
             disabled={!at}
             aria-label="Back"
             className="-my-3 size-11 text-xl leading-none text-ink disabled:text-faint wide:hidden"
           >
             ‹
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => (at === last ? then && navigate(then.to) : go(at + 1))}
             disabled={at === last && !then}
             aria-label={at === last && then ? then.name : "Next"}
             className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden"
           >
             ›
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onClose}
             aria-label="Close the review"
             className="-my-3 -mr-3 size-11 text-xl leading-none"
           >
             ×
-          </button>
+          </Button>
         </div>
         <Thread
           stops={[
@@ -273,14 +274,14 @@ export function Review({ onClose }: { onClose(): void }) {
               </div>
             )}
             {lead.system && (
-              <button
+              <Button
                 data-r
                 onClick={() => setClose(!close)}
                 className="mt-4 flex h-[46px] shrink-0 items-center justify-center gap-2 rounded-full border border-ink text-[15px] font-medium"
               >
                 <Lens closer={!close} size={17} />
                 {close ? "Pull Back" : "Close View"}
-              </button>
+              </Button>
             )}
           </>
         ) : (
@@ -309,13 +310,13 @@ export function Review({ onClose }: { onClose(): void }) {
       <div
         className={`sticky bottom-0 mt-auto grid-cols-[1fr_1.4fr] gap-2 bg-panel pt-3 pb-3 ${at === last ? "grid" : "hidden wide:grid"}`}
       >
-        <button
+        <Button
           onClick={() => (at ? go(at - 1) : onClose())}
           className="h-11 rounded-full border border-ink text-[15px] font-medium"
         >
           {at ? "Back" : "Not now"}
-        </button>
-        <button
+        </Button>
+        <Button
           ref={next}
           onClick={() => (at === last ? (then ? navigate(then.to) : onClose()) : go(at + 1))}
           className="h-11 rounded-full bg-button text-[15px] font-medium text-paper"
@@ -325,7 +326,7 @@ export function Review({ onClose }: { onClose(): void }) {
             : at
               ? `Next · ${starName(leads[order[at]].star)}`
               : `First · ${starName(leads[order[0]].star)}`}
-        </button>
+        </Button>
       </div>
     </div>
   );

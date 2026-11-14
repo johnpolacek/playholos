@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useSyncExternalStore } from "react";
 import {
   behave,
@@ -76,13 +77,13 @@ export function BehaveDials() {
           HOW MINDS BEHAVE
         </div>
         {!holos && (
-          <button
+          <Button
             type="button"
             onClick={() => behave.set(HOLOS)}
             className="rounded-full border border-faint px-3 py-1 font-mono text-[10.5px] tracking-[.1em] text-muted hover:text-ink"
           >
             HOLOS
-          </button>
+          </Button>
         )}
       </div>
       <ol className="mt-4 flex flex-col gap-6">

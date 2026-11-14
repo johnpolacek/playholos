@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { before, ChanceTag, Chances, movedBy, verdictOf } from "@/components/chances";
 import { Link, useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
@@ -128,7 +129,7 @@ function AirBands({ air }: { air: NonNullable<Reading["air"]> }) {
 /** A way back to the watcher's voice. */
 function ListenButton({ onClick }: { onClick(): void }) {
   return (
-    <button
+    <Button
       onClick={onClick}
       className="mt-2 inline-flex h-8 items-center gap-2 self-start rounded-full border border-other/70 px-3.5 text-[13px] text-other transition-colors hover:bg-other/10"
     >
@@ -136,7 +137,7 @@ function ListenButton({ onClick }: { onClick(): void }) {
         <path d="M0 5h2l1-3 2 6 2-8 2 10 2-7 1 4 1-2h3" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
       </svg>
       Hear its voice
-    </button>
+    </Button>
   );
 }
 
@@ -410,14 +411,14 @@ export function LeadPage({ slug }: { slug: string }) {
       {/* The watcher's place, on the map: its Close View flies into our own system, where it holds beside Earth. The
           map's pill was all there was, and a playtest looked for it here, 2026-11-14. */}
       {lead.system && lead.art.kind === "near" && (
-        <button
+        <Button
           data-m
           onClick={() => setClose(!close)}
           className="mt-2 flex h-9 w-full items-center justify-center gap-2 rounded-full border border-faint text-[13.5px] font-medium hover:border-muted"
         >
           <Lens closer={!close} size={15} />
           {close ? "Pull Back" : "See where it sits"}
-        </button>
+        </Button>
       )}
 
       {lead.art.kind === "warm" && (
@@ -481,7 +482,7 @@ export function LeadPage({ slug }: { slug: string }) {
           2026-11-13, and taking it whole 2026-11-14. */}
       {lead.slug === "small-dark-body" && minds?.watcher && <WatcherCards w={minds.watcher} />}
 
-      <button
+      <Button
         data-m
         // What it is, then what we could do: asked only what it was, the Mind restated a cold glow and a blind first-timer
         // was left with no next step. 2026-11-07.
@@ -489,7 +490,7 @@ export function LeadPage({ slug }: { slug: string }) {
         className="mt-6 h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium"
       >
         Ask the Mind about it
-      </button>
+      </Button>
     </div>
   );
 }

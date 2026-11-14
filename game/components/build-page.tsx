@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Fragment, useEffect, useMemo, useRef } from "react";
@@ -110,12 +111,12 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
             {full ? "It catches all the Sun, and can grow no more." : growing ? `It doubles every ${every} Years while it grows.` : `We hold it at its size, since Year ${yearText(back!)}.`}
           </p>
           {!full && (
-            <button
+            <Button
               onClick={() => change(growing ? takeBack(name, now) : orderLater(name, now))}
               className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${growing ? "border border-ink" : "bg-button text-paper"}`}
             >
               {growing ? "Hold Its Size" : "Let It Grow"}
-            </button>
+            </Button>
           )}
         </div>
       );
@@ -129,12 +130,12 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
             ? `Ordered now, it would be done ${PAST}.`
             : `Ordered now, it would be done by Year ${yearText(again.at)}, in ${span(again.at - now)}.`}
         </p>
-        <button
+        <Button
           onClick={() => change(orderLater(name, now))}
           className="mt-2.5 h-11 rounded-full bg-button text-[15px] font-medium text-paper"
         >
           Add to Queue
-        </button>
+        </Button>
       </div>
     );
   if (back !== null && again) {
@@ -153,21 +154,21 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
             ? "Resumed now, it would be done after Year 1,000."
             : `Resumed now, it would be done by Year ${yearText(again.at)}, in ${span(again.at - now)}.`}
         </p>
-        <button
+        <Button
           onClick={() => change(orderLater(name, now))}
           className="mt-2.5 h-11 rounded-full bg-button text-[15px] font-medium text-paper"
         >
           Resume Build
-        </button>
+        </Button>
       </div>
     );
   }
   const at = done[name];
   if (!ordered(plan).includes(name) || (at != null && at <= now)) return null;
   return (
-    <button onClick={() => change(takeBack(name, now))} className="mt-2.5 h-11 rounded-full border border-ink text-[15px] font-medium">
+    <Button onClick={() => change(takeBack(name, now))} className="mt-2.5 h-11 rounded-full border border-ink text-[15px] font-medium">
       Pause Build
-    </button>
+    </Button>
   );
 }
 
@@ -252,7 +253,7 @@ export function Queueing({
         </p>
       )}
       {open && (queued || !lacking.length) && (
-        <button
+        <Button
           onClick={() => change(advised !== undefined && !queued ? putAt(advised) : toggleBuild(name))}
           className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${queued ? "border border-ink" : "bg-button text-paper"}`}
         >
@@ -261,23 +262,23 @@ export function Queueing({
             : advised === undefined || advised === plan.builds.length
               ? "Add to Queue"
               : `Add ${cap(ordinal(advised))} in Queue`}
-        </button>
+        </Button>
       )}
       {/* Queued, and the Mind advised it elsewhere in line: the move it advised, as the main button. 2026-11-08. */}
       {open && queued && advised !== undefined && advised !== at && (
-        <button onClick={() => change(putAt(advised))} className="mt-2 h-11 rounded-full bg-button text-[15px] font-medium text-paper">
+        <Button onClick={() => change(putAt(advised))} className="mt-2 h-11 rounded-full bg-button text-[15px] font-medium text-paper">
           {advised === 0 ? "Move to the Front" : `Move to ${cap(ordinal(advised))} in Queue`}
-        </button>
+        </Button>
       )}
       {/* The first in line gets our compute first. The Mind advised moving one to the front, and its page offered only
           Remove. Blind playtest 2026-11-07. */}
       {open && queued && at > 0 && advised !== 0 && (
-        <button
+        <Button
           onClick={() => change(front)}
           className="mt-2 h-9 rounded-full text-[13.5px] text-you hover:underline"
         >
           Move to the front of the queue
-        </button>
+        </Button>
       )}
       {!open && <InPlay name={name} scale={scale} done={done} />}
     </div>
@@ -352,12 +353,12 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
           Open since Year {yearText(by)}, {build.after === FOUND ? "when we found a rock coming" : build.after === WATCHED ? "when we found the watcher" : `after the ${build.after}`}.{" "}
           {when == null ? "Ordered now, it would be done after Year 1,000." : `Ordered now, it would be done by Year ${yearText(when)}, in ${span(when - now)}.`}
         </p>
-        <button
+        <Button
           onClick={() => change(orderLater(build.name, now))}
           className="mt-2.5 h-11 rounded-full bg-button text-[15px] font-medium text-paper"
         >
           Add to Queue
-        </button>
+        </Button>
       </div>
     );
   // Only a rock found opens the deflector, and most games never see one.
@@ -562,7 +563,7 @@ export function BuildPage({ slug }: { slug: string }) {
         <Opens name={build.name} />
       </div>
       {CLOSE[build.name] && (
-        <button
+        <Button
           data-m
           onClick={() => {
             // After the map's own Back to Earth nothing is picked, and the button did nothing. Picked again, it flies
@@ -574,9 +575,9 @@ export function BuildPage({ slug }: { slug: string }) {
         >
           <Lens closer={!close} size={17} />
           {close ? "Pull Back" : "Close View"}
-        </button>
+        </Button>
       )}
-      <button
+      <Button
         data-m
         onClick={() =>
           navigate(
@@ -586,7 +587,7 @@ export function BuildPage({ slug }: { slug: string }) {
         className={`${CLOSE[build.name] ? "mt-2.5" : "mt-6"} h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium`}
       >
         Ask the Mind about it
-      </button>
+      </Button>
     </div>
   );
 }

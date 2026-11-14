@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useRef, useState } from "react";
 import { useReach, type Target } from "@/components/reach";
 import { placeLeads } from "@/lib/game/places";
@@ -143,7 +144,7 @@ export function ReachScale() {
       <nav aria-label="Places" onPointerUp={(e) => e.stopPropagation()} className="relative">
         <div className="mb-2 flex items-center justify-between">
           <span className="font-mono text-[10px] tracking-[.08em] text-muted">OUT FROM EARTH</span>
-          <button
+          <Button
             onClick={() => setPlaying((p) => !p)}
             aria-label={playing ? "Hold here" : "Play on"}
             className="-my-2 -mr-2 flex h-9 items-center gap-1.5 px-2 font-mono text-[10px] tracking-[.08em] text-muted"
@@ -159,7 +160,7 @@ export function ReachScale() {
               </svg>
             )}
             {playing ? "HOLD" : "PLAY"}
-          </button>
+          </Button>
         </div>
         <ol className="flex flex-col">
           {PLACES.map((p, i) => {
@@ -168,7 +169,7 @@ export function ReachScale() {
             const next = PLACES[i + 1];
             return (
               <li key={p.id} className="relative">
-                <button onClick={() => setAt(i)} aria-current={on ? "step" : undefined} className="flex w-full items-center gap-3 py-1.5 text-left">
+                <Button onClick={() => setAt(i)} aria-current={on ? "step" : undefined} className="flex w-full items-center gap-3 py-1.5 text-left">
                   <span className="relative flex size-5 shrink-0 items-center justify-center">
                     {on && <span className="absolute inset-0 animate-ping rounded-full bg-you/30 motion-reduce:hidden" />}
                     <span className={`rounded-full transition-all duration-500 ${on ? "size-3 bg-you shadow-[0_0_12px] shadow-you" : past ? "size-2 bg-you/60" : "size-2 bg-muted/60"}`} />
@@ -177,7 +178,7 @@ export function ReachScale() {
                     <span className={`text-[14px] transition-colors ${on ? "font-medium text-ink" : "text-page-ink2"}`}>{p.name}</span>
                     <span className={`font-mono text-[11px] ${on ? "text-you" : "text-muted"}`}>{p.far}</span>
                   </span>
-                </button>
+                </Button>
                 {next && (
                   <div className="relative ml-[9px] flex h-7 items-center pl-[22px]">
                     <span className="absolute top-0 bottom-0 -left-px w-0.5 rounded-full bg-faint" />

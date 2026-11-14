@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Field, FieldError } from "@ui-sdk/react/field";
 import { Input } from "@ui-sdk/react/input";
 import { useEffect, useRef, useState } from "react";
@@ -91,9 +92,9 @@ export function Unlock() {
               onValueChange={(v) => WHOLE.test(v.trim()) && void open(v.trim())}
               className="h-10 min-w-0 grow rounded-md border border-faint bg-panel px-2.5 font-mono text-[12.5px] outline-none placeholder:text-muted focus:border-muted"
             />
-            <button type="submit" disabled={busy} className="h-10 shrink-0 rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-60">
+            <Button type="submit" disabled={busy} className="h-10 shrink-0 rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-60">
               {busy ? "Opening…" : "Open"}
-            </button>
+            </Button>
           </div>
           {/* The field's own error, so a screen reader hears why the key failed with the field. 2026-11-14. */}
           <FieldError match={!!(wrong && WRONG[wrong])} className="text-xs text-other">
@@ -169,14 +170,14 @@ function OnUs({ site }: { site: string }) {
         Ask our Mind free, up to a daily limit. A quick check makes sure you’re a person.
       </p>
       <div ref={box} />
-      <button
+      <Button
         type="button"
         disabled={state === "checking"}
         onClick={() => setState("checking")}
         className="h-10 self-start rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-60"
       >
         {state === "checking" ? "Checking…" : "Open our Mind"}
-      </button>
+      </Button>
       {state === "failed" && <p className="text-xs text-other">The check didn’t pass. Try again, or use a key below.</p>}
     </section>
   );
@@ -204,9 +205,9 @@ function Local() {
       </p>
       <div className="flex flex-col gap-2 rounded-md border border-faint bg-panel p-2.5">
         <p className="font-mono text-[12px] leading-relaxed text-ink">{ASK}</p>
-        <button type="button" onClick={() => void copy()} className="h-8 self-end rounded-md bg-button px-3 text-[12.5px] text-paper">
+        <Button type="button" onClick={() => void copy()} className="h-8 self-end rounded-md bg-button px-3 text-[12.5px] text-paper">
           {copied ? "Copied" : "Copy"}
-        </button>
+        </Button>
       </div>
       <p className="text-[13px] text-page-ink2">
         Or run <code className="font-mono text-[12px] text-ink">npx playholos</code> in a terminal.{" "}

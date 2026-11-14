@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useRef, useState } from "react";
 import { prefersReducedMotion } from "@/lib/motion";
 import { layered, LINES, RUNGS, SOURCES, surface } from "@/lib/about/see";
@@ -288,7 +289,7 @@ export function See() {
         <ol className="mt-4 flex flex-wrap gap-2">
           {RUNGS.map((r, i) => (
             <li key={r.key}>
-              <button
+              <Button
                 type="button"
                 onClick={() => {
                   held.current = true;
@@ -298,7 +299,7 @@ export function See() {
               >
                 <span className="mr-1.5 opacity-60">{i + 1}</span>
                 {r.name.toUpperCase()}
-              </button>
+              </Button>
             </li>
           ))}
         </ol>

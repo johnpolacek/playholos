@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useRef, type ReactNode } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
@@ -31,7 +32,7 @@ export function OpeningActs({
     <div
       className={`mt-auto grid shrink-0 grid-cols-[auto_auto_1fr] gap-2 ${pad}`}
     >
-      <button
+      <Button
         data-m="act"
         onClick={onBack}
         aria-label="Back"
@@ -48,8 +49,8 @@ export function OpeningActs({
         >
           <path d="m15 18-6-6 6-6" />
         </svg>
-      </button>
-      <button
+      </Button>
+      <Button
         data-m="act"
         onClick={onSkip}
         className={`${GHOST} gap-1 text-[15px] font-medium`}
@@ -73,7 +74,7 @@ export function OpeningActs({
             className="transition-transform delay-75 duration-300 ease-out group-hover:translate-x-1.5"
           />
         </svg>
-      </button>
+      </Button>
       <Sparking onClick={onNext}>{next}</Sparking>
     </div>
   );
@@ -162,14 +163,14 @@ function Sparking({
         aria-hidden
         className="pointer-events-none absolute inset-0 overflow-visible"
       />
-      <button
+      <Button
         onClick={onClick}
         onPointerEnter={start}
         onPointerLeave={stop}
         className="relative h-[46px] rounded-full bg-button text-[15px] font-medium text-paper transition-[transform,box-shadow] duration-300 ease-out hover:shadow-[0_0_18px_-4px_var(--you)] active:scale-[.98] motion-reduce:transition-none"
       >
         {children}
-      </button>
+      </Button>
     </div>
   );
 }

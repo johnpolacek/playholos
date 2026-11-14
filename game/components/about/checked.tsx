@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useRef, useState } from "react";
 import { record, STARS, verdict, type Star } from "@/lib/about/checked";
 import { starsWithin } from "@/lib/about/dials";
@@ -197,14 +198,14 @@ export function CheckedStars() {
             if (!star) return null;
             return (
               <li key={l.name}>
-                <button
+                <Button
                   type="button"
                   onClick={() => setPick(star)}
                   className={`text-left text-[14px] leading-[1.45] ${star.name === pick.name ? "text-other" : "hover:text-ink"}`}
                 >
                   <span className="font-semibold">{l.name}</span>
                   <span className="text-muted">. {l.why}</span>
-                </button>
+                </Button>
               </li>
             );
           })}

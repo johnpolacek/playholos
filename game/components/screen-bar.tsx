@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Link } from "react-router";
 import { Replay } from "@/components/icons";
 import { Sources } from "@/components/sources";
@@ -54,7 +55,7 @@ function WaysOut() {
 export function ReplayButton({ onReplay }: { onReplay(): void }) {
   if (prefersReducedMotion()) return null;
   return (
-    <button
+    <Button
       data-m="kick"
       onPointerDown={(e) => e.stopPropagation()}
       onClick={onReplay}
@@ -63,6 +64,6 @@ export function ReplayButton({ onReplay }: { onReplay(): void }) {
     >
       <span className="hidden wide:inline">REPLAY</span>
       <Replay size={13} />
-    </button>
+    </Button>
   );
 }

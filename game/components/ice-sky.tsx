@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useMemo, useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { tenths, yearText } from "@/lib/game/clock";
@@ -184,14 +185,14 @@ function FirstDark({ death, sure }: { death: Death; sure: number }) {
       <p className="mt-1.5 text-[13px] leading-snug text-page-ink2">
         It tells us how many black holes the stars make, and so how many lie dark between them. None of it is a mind.
       </p>
-      <button
+      <Button
         onClick={() =>
           navigate(`/play/mind?ask=${encodeURIComponent(`A star died dark in ${death.host ?? "a galaxy " + far}. What does it tell us?`)}`)
         }
         className="mt-3 h-[40px] w-full rounded-full border border-other text-[14px] font-medium text-other"
       >
         Ask the Mind what it means
-      </button>
+      </Button>
     </div>
   );
 }

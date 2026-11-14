@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Slider, SliderControl, SliderThumb, SliderTrack } from "@ui-sdk/react/slider";
 import { Toggle } from "@ui-sdk/react/toggle";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
@@ -374,7 +375,7 @@ function Flybys({ rows, now, aimAt }: { rows: { id: string; slug?: string; name:
 function CancelCraft({ go }: { go(): void }) {
   return (
     <div className="mt-1.5 flex justify-end pl-7">
-      <button
+      <Button
         onClick={(e) => {
           e.stopPropagation();
           go();
@@ -383,7 +384,7 @@ function CancelCraft({ go }: { go(): void }) {
         className="h-7 rounded-full border border-faint px-3 text-[12.5px] font-medium hover:border-ink"
       >
         Cancel
-      </button>
+      </Button>
     </div>
   );
 }
@@ -1220,9 +1221,9 @@ export function Reach() {
         })}
       </ul>
       {shown > FEW && (
-        <button onClick={() => setAllPlaces(!allPlaces)} className="border-t border-faint py-2.5 text-left text-[13px] text-you">
+        <Button onClick={() => setAllPlaces(!allPlaces)} className="border-t border-faint py-2.5 text-left text-[13px] text-you">
           {allPlaces ? "Fewer ‹" : `All ${shown.toLocaleString("en-US")} ›`}
-        </button>
+        </Button>
       )}
     </div>
   );

@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useCallback, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { Ceilings, Costs, usePreview } from "@/components/costs";
@@ -65,9 +66,9 @@ export function Build() {
         </>
       )}
       <div className="mt-auto flex shrink-0 flex-col gap-2 pt-4 pb-4">
-        <button onClick={() => leaveShell(newGame)} className="h-9 rounded-full border border-ink text-sm">
+        <Button onClick={() => leaveShell(newGame)} className="h-9 rounded-full border border-ink text-sm">
           New game
-        </button>
+        </Button>
       </div>
     </>
   );

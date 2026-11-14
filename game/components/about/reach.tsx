@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useState } from "react";
 import { round } from "@/lib/about/dials";
 import { CRAFT, PLACES, SOURCES, trip } from "@/lib/about/reach";
@@ -130,14 +131,14 @@ export function Reach() {
         <Race pick={pick} />
         <div className="mt-4 flex flex-wrap gap-2">
           {CRAFT.map((x) => (
-            <button
+            <Button
               key={x.key}
               type="button"
               onClick={() => setPick(x.key)}
               className={`rounded-full border px-3 py-1 font-mono text-[10.5px] tracking-[.1em] transition-colors ${x.key === pick ? "border-other text-other" : "border-faint text-muted hover:text-ink"}`}
             >
               {x.name.toUpperCase()}
-            </button>
+            </Button>
           ))}
         </div>
         <p className="mt-4 max-w-[60ch] text-[15px] leading-[1.55]">

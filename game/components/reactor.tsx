@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useImperativeHandle, useRef } from "react";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 import { ParticleField, perimeterPoint, type Particle } from "@/lib/particles";
@@ -269,7 +270,7 @@ export function Reactor({
   ref,
   mood = "pulse",
   ...props
-}: Omit<React.ComponentProps<"button">, "ref"> & { ref?: React.Ref<ReactorHandle>; mood?: Mood }) {
+}: Omit<React.ComponentProps<typeof Button>, "ref"> & { ref?: React.Ref<ReactorHandle>; mood?: Mood }) {
   const scope = useRef<HTMLSpanElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const button = useRef<HTMLButtonElement>(null);
@@ -343,7 +344,7 @@ export function Reactor({
         className="pointer-events-none absolute -z-10"
         style={{ left: -BLEED, top: -BLEED, color: COLOR[mood], filter: "drop-shadow(0 0 3px currentColor)" }}
       />
-      <button ref={button} type="button" {...props} />
+      <Button ref={button} type="button" {...props} />
     </span>
   );
 }

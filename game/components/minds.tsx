@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useImperativeHandle, useRef } from "react";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 import { type Particle, ParticleField, perimeterPoint } from "@/lib/particles";
@@ -51,7 +52,7 @@ type Mind = {
 export function Minds({
   ref,
   ...props
-}: Omit<React.ComponentProps<"button">, "ref"> & { ref?: React.Ref<MindsHandle> }) {
+}: Omit<React.ComponentProps<typeof Button>, "ref"> & { ref?: React.Ref<MindsHandle> }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const button = useRef<HTMLButtonElement>(null);
   const fx = useRef<MindsHandle>(null);
@@ -314,7 +315,7 @@ export function Minds({
   return (
     <>
       <canvas ref={canvas} aria-hidden className="pointer-events-none absolute top-0 left-0 -z-10 text-you" />
-      <button ref={button} type="button" {...props} />
+      <Button ref={button} type="button" {...props} />
     </>
   );
 }

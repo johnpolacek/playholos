@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { yearText } from "@/lib/game/clock";
 
 // When we would hear back, each way to engage side by side: a bar from now to the Year its word reaches us, on a
@@ -54,7 +55,7 @@ export function HearBack({ rows, now, onPick }: { rows: HearRow[]; now: number; 
           const wait = r.home === null ? null : r.home - now;
           return (
             <li key={r.key}>
-              <button onClick={() => onPick(r.key)} className="group block w-full text-left">
+              <Button onClick={() => onPick(r.key)} className="group block w-full text-left">
                 <div className="flex items-baseline justify-between gap-2 text-[12.5px] leading-snug">
                   <span className={r.ours ? "font-semibold text-you" : "text-ink group-hover:text-you"}>
                     {r.label}
@@ -73,7 +74,7 @@ export function HearBack({ rows, now, onPick }: { rows: HearRow[]; now: number; 
                   )}
                 </div>
                 <span className="mt-0.5 block text-[11px] text-muted">{r.brings}</span>
-              </button>
+              </Button>
             </li>
           );
         })}

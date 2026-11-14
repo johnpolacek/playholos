@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Input } from "@ui-sdk/react/input";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
@@ -129,7 +130,7 @@ export function Catalog({ className = "" }: { className?: string }) {
                   order !== null && (
                     // Only the button previews its build now: a row that scrolled under a resting pointer turned the top
                     // bar into "IF ADDED" numbers, and a blind first-timer took them for what we had queued. 2026-11-08.
-                    <button
+                    <Button
                       {...previews(b.name, preview)}
                       onClick={() => {
                         change(orderLater(b.name, order));
@@ -139,7 +140,7 @@ export function Catalog({ className = "" }: { className?: string }) {
                       className="h-9 shrink-0 rounded-full border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-button hover:text-paper"
                     >
                       {takenAt(plan, b.name) === null ? "Add to Queue" : "Resume Build"}
-                    </button>
+                    </Button>
                   )
                 )}
               </div>
@@ -182,7 +183,7 @@ export function Catalog({ className = "" }: { className?: string }) {
       {/* Pinned to the panel's bottom left, clear of each row's Add to Queue on the right. */}
       {many && past.box && !past.end && (
         <div className="pointer-events-none sticky bottom-3 z-20 flex">
-          <button
+          <Button
             onClick={() => {
               box.current?.scrollIntoView({ block: "center", behavior: "smooth" });
               box.current?.focus({ preventScroll: true });
@@ -190,7 +191,7 @@ export function Catalog({ className = "" }: { className?: string }) {
             className="pointer-events-auto h-9 rounded-full border border-faint bg-panel px-4 text-[13px] text-ink shadow-lg hover:border-muted"
           >
             Find a build
-          </button>
+          </Button>
         </div>
       )}
       <div ref={end} />

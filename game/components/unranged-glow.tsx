@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router";
 import { useGame } from "@/components/game-provider";
@@ -86,12 +87,12 @@ export function UnrangedGlow({ n, flash }: { n: number; flash: FlashSeen }) {
           </Link>
         )}
         {!gone && to !== null && (
-          <button
+          <Button
             onClick={jump}
             className="mt-2.5 inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
           >
             Jump to its ranging ›
-          </button>
+          </Button>
         )}
       </section>
 
@@ -122,13 +123,13 @@ export function UnrangedGlow({ n, flash }: { n: number; flash: FlashSeen }) {
         ))}
       </dl>
 
-      <button
+      <Button
         data-m
         onClick={() => navigate(`/play/mind?ask=${encodeURIComponent(`What is ${name.toLowerCase()}, and what could we do while we range it?`)}`)}
         className="mt-6 h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium"
       >
         Ask the Mind about it
-      </button>
+      </Button>
     </div>
   );
 }

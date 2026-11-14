@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Dialog, DialogClose, DialogContent } from "@ui-sdk/react/dialog";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -172,12 +173,12 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
           {at === "wait" ? (
             <>
               <p className="text-[15px] leading-snug text-page-ink2">It speaks in our own languages, learned from our broadcasts.</p>
-              <button
+              <Button
                 onClick={listen}
                 className="mt-5 inline-flex h-10 items-center rounded-full bg-other px-6 text-[14px] font-medium text-black transition-[filter] hover:brightness-110"
               >
                 Listen ›
-              </button>
+              </Button>
             </>
           ) : (
             line && (
@@ -192,29 +193,29 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
         </div>
         {typeof at === "number" && (
           <div className="mt-6 flex items-center gap-1">
-            <button onClick={() => pick(at - 1)} disabled={at === 0} aria-label="The line before" className="px-2 text-[18px] text-muted hover:text-ink disabled:opacity-30">
+            <Button onClick={() => pick(at - 1)} disabled={at === 0} aria-label="The line before" className="px-2 text-[18px] text-muted hover:text-ink disabled:opacity-30">
               ‹
-            </button>
+            </Button>
             {WATCHER_VOICE.map((s, i) => (
-              <button key={s.lang} onClick={() => pick(i)} aria-label={s.name} aria-current={i === at} className="group p-1">
+              <Button key={s.lang} onClick={() => pick(i)} aria-label={s.name} aria-current={i === at} className="group p-1">
                 <span className={`block size-1.5 rounded-full transition-transform group-hover:scale-150 ${i === at ? "scale-150 bg-other" : "bg-track"}`} />
-              </button>
+              </Button>
             ))}
-            <button
+            <Button
               onClick={() => pick(at + 1)}
               disabled={at === WATCHER_VOICE.length - 1}
               aria-label="The line after"
               className="px-2 text-[18px] text-muted hover:text-ink disabled:opacity-30"
             >
               ›
-            </button>
+            </Button>
           </div>
         )}
         {done && (
           <div className="mt-6 flex gap-4 text-[13px]">
-            <button onClick={again} className="text-other hover:underline">
+            <Button onClick={again} className="text-other hover:underline">
               Hear it again
-            </button>
+            </Button>
             <DialogClose className="text-ink hover:underline">Back to what we know ›</DialogClose>
           </div>
         )}

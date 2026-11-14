@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Dialog, DialogBackdrop, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@ui-sdk/react/dialog";
 import { useRef, useState } from "react";
 import { Link } from "react-router";
@@ -217,12 +218,12 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
       <div data-b="item" className="mt-3 grid grid-cols-[1fr_1.4fr] gap-2">
         {next ? (
           <>
-            <button
+            <Button
               onClick={() => (sure ? onBegin() : setSure(true))}
               className="h-[46px] rounded-full border border-ink text-[15px] font-medium"
             >
               {sure ? "Yes, begin" : "Begin now"}
-            </button>
+            </Button>
             <Link
               to={next.to}
               onClick={() => onClose()}
@@ -233,12 +234,12 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
           </>
         ) : (
           <>
-            <button onClick={() => onClose()} className="h-[46px] rounded-full border border-ink text-[15px] font-medium">
+            <Button onClick={() => onClose()} className="h-[46px] rounded-full border border-ink text-[15px] font-medium">
               Not yet
-            </button>
-            <button onClick={onBegin} className="h-[46px] rounded-full bg-button text-[15px] font-medium text-paper">
+            </Button>
+            <Button onClick={onBegin} className="h-[46px] rounded-full bg-button text-[15px] font-medium text-paper">
               Begin · Year 0
-            </button>
+            </Button>
           </>
         )}
       </div>
@@ -379,7 +380,7 @@ export function BeginOnMap({ className = "" }: { className?: string }) {
   const [hover, setHover] = useState(false);
   if (!save || year !== null || !now.known || STEPS.some((s) => !s.done(save, now))) return null;
   return (
-    <button
+    <Button
       onClick={begin}
       onPointerEnter={() => setHover(true)}
       onPointerLeave={() => setHover(false)}
@@ -391,6 +392,6 @@ export function BeginOnMap({ className = "" }: { className?: string }) {
       <span aria-hidden className="absolute inset-0 rounded-full border border-you motion-safe:animate-ping" />
       <Sparks on={hover} />
       Begin
-    </button>
+    </Button>
   );
 }

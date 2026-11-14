@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
@@ -28,7 +29,7 @@ function Order({ label, sure: yes, tone, give, note }: { label: string; sure: st
   const [sure, setSure] = useState(false);
   return (
     <div className="mt-2.5 flex flex-wrap items-center gap-2">
-      <button
+      <Button
         onClick={() => {
           if (!sure) return setSure(true);
           give();
@@ -37,11 +38,11 @@ function Order({ label, sure: yes, tone, give, note }: { label: string; sure: st
         className={`h-9 rounded-full px-4 text-[14px] font-medium text-paper ${tone}`}
       >
         {sure ? yes : label}
-      </button>
+      </Button>
       {sure && (
-        <button onClick={() => setSure(false)} className="h-9 rounded-full border border-ink px-4 text-[14px]">
+        <Button onClick={() => setSure(false)} className="h-9 rounded-full border border-ink px-4 text-[14px]">
           Not now
-        </button>
+        </Button>
       )}
       <span className="text-[12.5px] text-muted">{note}</span>
     </div>

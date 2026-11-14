@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Input } from "@ui-sdk/react/input";
 import { useState } from "react";
 import { BackBar } from "@/components/back-bar";
@@ -62,24 +63,24 @@ export default function Kit() {
         <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-4">
           <Card n={1} name="Button" span={2}>
             <div className="flex w-full max-w-72 flex-col gap-2.5">
-              <button className="h-[46px] rounded-full bg-button text-[15px] font-medium text-paper">Add to Queue</button>
-              <button className="h-[46px] rounded-full border border-ink text-[15px] font-medium">Ask the Mind about it</button>
+              <Button className="h-[46px] rounded-full bg-button text-[15px] font-medium text-paper">Add to Queue</Button>
+              <Button className="h-[46px] rounded-full border border-ink text-[15px] font-medium">Ask the Mind about it</Button>
             </div>
           </Card>
           <Card n={2} name="Row button">
             <div className="flex flex-col items-center gap-2">
-              <button className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">Feed It</button>
-              <button className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium text-muted">Sent, to hide</button>
+              <Button className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">Feed It</Button>
+              <Button className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium text-muted">Sent, to hide</Button>
             </div>
           </Card>
           <Card n={3} name="Map pill">
-            <button
+            <Button
               onClick={() => setCloser(!closer)}
               className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs"
             >
               <Lens closer={closer} />
               {closer ? "Close View" : "Pull Back"}
-            </button>
+            </Button>
           </Card>
 
           <Card n={4} name="Back bar" span={2}>
@@ -197,15 +198,15 @@ export default function Kit() {
             <Tip
               toggleable
               text="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on."
-              trigger={<button type="button" className="text-[13px] text-muted">Nothing ahead</button>}
+              trigger={<Button type="button" className="text-[13px] text-muted">Nothing ahead</Button>}
             />
           </Card>
           <Card n={18} name="Field" span={2}>
             <div className="flex h-11 w-full items-center gap-2 rounded-full border border-ink bg-paper pr-1.5 pl-3.5">
               <Input placeholder="Ask the Mind…" aria-label="Ask the Mind" className="min-w-0 grow bg-transparent text-base outline-none placeholder:text-muted" />
-              <button type="button" aria-label="Send" className="size-8 shrink-0 rounded-full bg-button text-paper">
+              <Button type="button" aria-label="Send" className="size-8 shrink-0 rounded-full bg-button text-paper">
                 ↑
-              </button>
+              </Button>
             </div>
           </Card>
 

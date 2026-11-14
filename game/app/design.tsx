@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useState } from "react";
 import { BackBar } from "@/components/back-bar";
 import { Check, Cross, Dials, Globe, KeyMark, Lens, Prompt } from "@/components/icons";
@@ -150,24 +151,24 @@ export default function Design() {
         use="Rounded full. Primary, light on dark, for the one thing a page asks: Add to Queue, Send. Outline for the rest: Ask the Mind, Close View. 46px tall in a page’s column, 32px inside a row."
       >
         <div className="flex flex-col gap-2.5">
-          <button className="h-[46px] rounded-full bg-button text-[15px] font-medium text-paper">Add to Queue</button>
-          <button className="h-[46px] rounded-full border border-ink text-[15px] font-medium">Ask the Mind about it</button>
+          <Button className="h-[46px] rounded-full bg-button text-[15px] font-medium text-paper">Add to Queue</Button>
+          <Button className="h-[46px] rounded-full border border-ink text-[15px] font-medium">Ask the Mind about it</Button>
           <div className="flex gap-2">
-            <button className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">Feed It</button>
-            <button className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium text-muted">Sent, to hide</button>
+            <Button className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">Feed It</Button>
+            <Button className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium text-muted">Sent, to hide</Button>
           </div>
         </div>
       </Part>
       <Part name="Map pill" file="components/map-strip.tsx" use="On the map, over the sky: a small pill on paper, with an icon. Close View, Pull Back, Back to Earth.">
         <div className="flex gap-1.5">
-          <button onClick={() => setCloser(!closer)} className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs">
+          <Button onClick={() => setCloser(!closer)} className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs">
             <Lens closer={closer} />
             {closer ? "Close View" : "Pull Back"}
-          </button>
-          <button className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs">
+          </Button>
+          <Button className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs">
             <Globe />
             Back to Earth
-          </button>
+          </Button>
         </div>
       </Part>
 

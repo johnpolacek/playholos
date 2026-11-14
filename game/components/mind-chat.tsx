@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Input } from "@ui-sdk/react/input";
 import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { Chat, useChat } from "@ai-sdk/react";
@@ -352,12 +353,12 @@ function KeyRow() {
       {sure ? (
         <>
           <span className="px-2 text-other">Clear it?</span>
-          <button type="button" onClick={forgetKey} className="rounded-full bg-other px-2 py-0.5 text-paper">
+          <Button type="button" onClick={forgetKey} className="rounded-full bg-other px-2 py-0.5 text-paper">
             Clear
-          </button>
-          <button type="button" onClick={() => setSure(false)} className="px-2 py-0.5 text-page-ink2 hover:text-ink">
+          </Button>
+          <Button type="button" onClick={() => setSure(false)} className="px-2 py-0.5 text-page-ink2 hover:text-ink">
             Keep
-          </button>
+          </Button>
         </>
       ) : (
         <>
@@ -365,9 +366,9 @@ function KeyRow() {
             <Check size={12} />
             Set
           </span>
-          <button type="button" aria-label="Clear the key" onClick={() => setSure(true)} className="p-1 text-muted hover:text-ink">
+          <Button type="button" aria-label="Clear the key" onClick={() => setSure(true)} className="p-1 text-muted hover:text-ink">
             <Cross size={12} />
-          </button>
+          </Button>
         </>
       )}
     </Row>
@@ -460,9 +461,9 @@ function AskBox({ busy, onAsk, className = "", focus = false }: { busy: boolean;
           aria-label="Ask the Mind"
           className="min-w-0 grow bg-transparent text-base outline-none placeholder:text-muted"
         />
-        <button type="submit" disabled={!input.trim()} aria-label="Send" className="size-8 shrink-0 rounded-full bg-button text-paper disabled:opacity-35">
+        <Button type="submit" disabled={!input.trim()} aria-label="Send" className="size-8 shrink-0 rounded-full bg-button text-paper disabled:opacity-35">
           ↑
-        </button>
+        </Button>
       </div>
     </form>
   );
@@ -481,14 +482,14 @@ function Hello({ onAsk }: { onAsk(text: string): void }) {
       </MindNote>
       <div className="flex flex-wrap gap-1.5 pl-3">
         {STARTERS.map((q) => (
-          <button
+          <Button
             key={q}
             type="button"
             onClick={() => onAsk(q)}
             className="rounded-full border border-faint px-3 py-1 text-[14px] text-page-ink2 transition-colors hover:border-muted hover:text-ink"
           >
             {q}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

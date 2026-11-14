@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import {
   useEffect,
   useMemo,
@@ -210,7 +211,7 @@ function Skip() {
       <Tip
         toggleable
         text="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on."
-        trigger={<button type="button" className="ml-2 text-muted">Nothing ahead</button>}
+        trigger={<Button type="button" className="ml-2 text-muted">Nothing ahead</Button>}
       />
     );
   if (to === null) return null;
@@ -220,7 +221,7 @@ function Skip() {
       <Tip
         text="Jump ahead to when something new happens"
         trigger={
-        <button
+        <Button
           onClick={jump}
           disabled={rest}
           onPointerEnter={() => setHover(true)}
@@ -235,7 +236,7 @@ function Skip() {
               the sky" read as cryptic. The long quiet says the Years once we're there. 2026-11-04. */}
           Jump to {why ?? "what comes next"}
           <span className="ml-1">›</span>
-        </button>
+        </Button>
         }
       />
     </>
@@ -360,12 +361,12 @@ function Held({ idle }: { idle: boolean }) {
           Add a build
         </Link>
       )}
-      <button
+      <Button
         onClick={playOn}
         className="-my-1 inline-flex h-7 items-center rounded-full bg-you px-3 font-medium text-paper hover:brightness-110"
       >
         Play on ›
-      </button>
+      </Button>
     </span>
   );
 }

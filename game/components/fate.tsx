@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Dialog, DialogContent, DialogTitle } from "@ui-sdk/react/dialog";
 import { useEffect, useMemo } from "react";
 import { useGame } from "@/components/game-provider";
@@ -35,9 +36,9 @@ export function Fate() {
         <p className="mt-3 max-w-[36ch] text-center text-[14px] leading-snug text-page-ink2">
           {end.from === "a rock" ? "A rock" : `A bullet from ${end.from}`} struck Earth with about {Math.round(end.mt).toLocaleString("en-US")} Mt. No vault and no colony stood to carry us on.
         </p>
-        <button onClick={newGame} className="mt-6 h-11 rounded-full bg-button px-6 text-[15px] font-medium text-paper">
+        <Button onClick={newGame} className="mt-6 h-11 rounded-full bg-button px-6 text-[15px] font-medium text-paper">
           New game
-        </button>
+        </Button>
       </DialogContent>
     </Dialog>
   );

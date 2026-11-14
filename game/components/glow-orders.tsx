@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 // Standing orders for glows, settled 2026-11-07 (m:235): "For each new glow within ___ ly, send ___". One card on Reach,
 // a row for warm glows and one for cold. Warm glows can take sails, a flyby probe or a sentinel. A cold glow takes only
@@ -225,7 +226,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
         </span>
       </CollapsibleTrigger>
       {!open && (
-        <button onClick={() => setOpen(true)} className="mt-0.5 block w-full text-left">
+        <Button onClick={() => setOpen(true)} className="mt-0.5 block w-full text-left">
           <span className="flex items-baseline justify-between gap-3">
             <span className="text-[12.5px] leading-snug text-page-ink2">
               {order ? `${NAME[order.by]} to each within ${lyText(order.within)}` : "No order set"}
@@ -234,7 +235,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
           </span>
           {pace && <Finds pace={pace} now={from} within={order?.within ?? within} />}
           <span className="text-[12px] text-you">More ›</span>
-        </button>
+        </Button>
       )}
       <CollapsiblePanel>
       {pace && <Projection pace={pace} now={from} within={order?.within ?? within} by={order?.by ?? by} />}
@@ -245,16 +246,16 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
             {NAME[order.by].toLowerCase()}. {thrown(order.by) ? THROWN(push) : PRICE[order.by]}
           </p>
           {order.by !== "sails" && <p className="mt-1 text-[12.5px] leading-snug text-muted">{stockLine(plan, stock, from)}</p>}
-          <button onClick={() => set(undefined)} className="mt-2 h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+          <Button onClick={() => set(undefined)} className="mt-2 h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
             Stop sending to new ones
-          </button>
+          </Button>
         </>
       ) : (
         <>
           <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">For each {kind} glow</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {WITHIN[kind].map((w) => (
-              <button
+              <Button
                 key={w}
                 onClick={() => {
                   setWithin(w);
@@ -263,13 +264,13 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
                 className={chip(within === w)}
               >
                 {Number.isFinite(w) ? `Within ${w.toLocaleString("en-US")} ly` : "At any distance"}
-              </button>
+              </Button>
             ))}
           </div>
           <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">send</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {choices.map((c) => (
-              <button
+              <Button
                 key={c}
                 onClick={() => {
                   setBy(c);
@@ -278,7 +279,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
                 className={chip(by === c)}
               >
                 {NAME[c]}
-              </button>
+              </Button>
             ))}
           </div>
           <p className="mt-1.5 text-[12.5px] leading-snug text-muted">
@@ -294,10 +295,10 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
             ) : asking ? (
               <>
                 <span className="text-[12.5px] text-muted">A craft can be canceled until it leaves.</span>
-                <button onClick={() => setAsking(false)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+                <Button onClick={() => setAsking(false)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
                   Wait
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => {
                     set({ since: from, by, within });
                     setAsking(false);
@@ -306,19 +307,19 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
                   className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper"
                 >
                   Send them
-                </button>
+                </Button>
               </>
             ) : (
-              <button onClick={() => setAsking(true)} className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">
+              <Button onClick={() => setAsking(true)} className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">
                 Set this order
-              </button>
+              </Button>
             )}
           </div>
         </>
       )}
-          <button onClick={() => setOpen(false)} className="mt-2 block text-[12px] text-you">
+          <Button onClick={() => setOpen(false)} className="mt-2 block text-[12px] text-you">
             Less ‹
-          </button>
+          </Button>
       </CollapsiblePanel>
     </Collapsible>
   );

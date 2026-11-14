@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
@@ -81,7 +82,7 @@ function useReorder(
     return 0;
   };
 
-  const grip = (name: string, i: number): React.ButtonHTMLAttributes<HTMLButtonElement> => ({
+  const grip = (name: string, i: number): Omit<React.ComponentProps<typeof Button>, "ref"> => ({
     onPointerDown: (e) => {
       e.preventDefault();
       // Focused, so the arrow keys move it after a tap: a blind first-timer tapped the dots, pressed ArrowUp, and the
@@ -141,9 +142,9 @@ function useReorder(
 }
 
 /** A queued build's handle: six dots under its mark. */
-function Grip({ name, i, n, ...rest }: { name: string; i: number; n: number } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+function Grip({ name, i, n, ...rest }: { name: string; i: number; n: number } & Omit<React.ComponentProps<typeof Button>, "ref">) {
   return (
-    <button
+    <Button
       {...rest}
       data-grip={name}
       aria-label={`Move the ${name}, ${i + 1} of ${n} in line. Drag, or use the arrow keys.`}
@@ -152,7 +153,7 @@ function Grip({ name, i, n, ...rest }: { name: string; i: number; n: number } & 
       <svg width="8" height="13" viewBox="0 0 8 13" fill="currentColor" aria-hidden>
         {[1.5, 6.5, 11.5].flatMap((y) => [<circle key={`a${y}`} cx="1.5" cy={y} r="1.2" />, <circle key={`b${y}`} cx="6.5" cy={y} r="1.2" />])}
       </svg>
-    </button>
+    </Button>
   );
 }
 

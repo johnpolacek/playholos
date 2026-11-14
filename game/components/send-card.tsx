@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { useEffect, useRef, useState } from "react";
 import { useBeams } from "@/components/beams";
@@ -43,12 +44,12 @@ function Buttons({ label, onSend, off }: { label: string; onSend(): void; off?: 
   if (shut) return <p className="font-mono text-[11px] text-muted">Not sent. Tell us what to change.</p>;
   return (
     <div className="flex items-center gap-2">
-      <button type="button" disabled={off} onClick={onSend} className="rounded-full bg-you px-4 py-2 text-[13px] font-semibold text-paper disabled:opacity-35">
+      <Button type="button" disabled={off} onClick={onSend} className="rounded-full bg-you px-4 py-2 text-[13px] font-semibold text-paper disabled:opacity-35">
         {label}
-      </button>
-      <button type="button" onClick={() => setShut(true)} className="rounded-full border border-frame px-3.5 py-[7px] text-[13px] text-muted transition-colors hover:text-ink">
+      </Button>
+      <Button type="button" onClick={() => setShut(true)} className="rounded-full border border-frame px-3.5 py-[7px] text-[13px] text-muted transition-colors hover:text-ink">
         Change it
-      </button>
+      </Button>
     </div>
   );
 }
@@ -279,9 +280,9 @@ function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: str
           {sent.repeat && sent.stopped === undefined ? (
             <>
               Calling since Year {yearText(sent.y)} ·{" "}
-              <button type="button" onClick={() => stopSending(id, year ?? sent.y)} className="underline">
+              <Button type="button" onClick={() => stopSending(id, year ?? sent.y)} className="underline">
                 Stop
-              </button>
+              </Button>
             </>
           ) : sent.repeat ? `Called from Year ${one(sent.y)} to ${one(sent.stopped!)}` : `Sent once at Year ${one(sent.y)}`}
         </p>

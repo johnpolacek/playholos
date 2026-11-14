@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useState } from "react";
 import { DocBody, PageHead } from "@/components/about/doc-page";
 import doc from "../../../HOLOS_GAME_CONCEPT.md?doc";
@@ -76,19 +77,19 @@ function Answer({ shown, setShown }: { shown: boolean; setShown: (v: boolean) =>
         </ol>
         {!shown && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <button
+            <Button
               onClick={() => setShown(true)}
               className="h-10 rounded-full bg-button px-5 text-[14px] font-medium text-paper"
             >
               Reveal our answer
-            </button>
+            </Button>
           </div>
         )}
       </div>
       {shown && (
-        <button onClick={() => setShown(false)} className="mt-5 font-mono text-[10.5px] tracking-[.1em] text-muted">
+        <Button onClick={() => setShown(false)} className="mt-5 font-mono text-[10.5px] tracking-[.1em] text-muted">
           HIDE IT AGAIN
-        </button>
+        </Button>
       )}
     </section>
   );

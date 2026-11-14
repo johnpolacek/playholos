@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Dialog, DialogBackdrop, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@ui-sdk/react/dialog";
 import { useRef, useState } from "react";
 import { Prompt } from "@/components/icons";
@@ -56,14 +57,14 @@ function Copy({ text, label }: { text: string; label: string }) {
     setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <button
+    <Button
       type="button"
       onClick={() => void copy()}
       aria-label={`Copy ${label}`}
       className="h-8 shrink-0 rounded-md bg-button px-3 text-[12.5px] text-paper"
     >
       {copied ? "Copied" : "Copy"}
-    </button>
+    </Button>
   );
 }
 

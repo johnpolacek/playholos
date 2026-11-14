@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Toggle } from "@ui-sdk/react/toggle";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
@@ -169,10 +170,9 @@ function Strategy({ p, scale, at }: { p: Package; scale: number; at: number }) {
       </h2>
       <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">{p.what}</p>
       {open && (
-        <button
+        <Button
           data-r
           disabled={!known}
-          aria-pressed={mine}
           onClick={() => change((plan) => ({ ...plan, builds: mine ? [] : builds }))}
           // Clearing is rare, so once it is ours the button shrinks to a small outline. OURS on the title already says it.
           // 2026-11-07.
@@ -183,7 +183,7 @@ function Strategy({ p, scale, at }: { p: Package; scale: number; at: number }) {
           }
         >
           {mine ? "clear" : `Start with ${p.name}`}
-        </button>
+        </Button>
       )}
       <div data-r className="mt-3">
         <MindNote className="text-[14.5px] leading-snug">
@@ -338,25 +338,25 @@ export function Tour({ onClose }: { onClose(): void }) {
             {at === last ? "BUILD · OUR ORDER" : at ? `BUILD · ${at} OF ${PACKAGES.length}` : "BUILD"}
             {open && full && <span className="text-you"> · DONE</span>}
           </span>
-          <button
+          <Button
             onClick={() => go(at - 1)}
             disabled={!at}
             aria-label="Back"
             className="-my-3 size-11 text-xl leading-none text-ink disabled:text-faint wide:hidden"
           >
             ‹
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => (at === last ? then && navigate(then.to) : go(at + 1))}
             disabled={at === last && !then}
             aria-label={at === last && then ? then.name : "Next"}
             className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden"
           >
             ›
-          </button>
-          <button onClick={onClose} aria-label="Close the builds" className="-my-3 -mr-3 size-11 text-xl leading-none">
+          </Button>
+          <Button onClick={onClose} aria-label="Close the builds" className="-my-3 -mr-3 size-11 text-xl leading-none">
             ×
-          </button>
+          </Button>
         </div>
         <Thread
           stops={[{ name: "How we start" }, ...PACKAGES.map((p) => ({ name: p.name })), { name: "Our order" }]}
@@ -420,17 +420,17 @@ export function Tour({ onClose }: { onClose(): void }) {
         className={`sticky bottom-0 mt-auto grid-cols-[1fr_1.4fr] gap-2 bg-panel pt-3 pb-3 ${lead || !at ? "grid" : "hidden wide:grid"}`}
       >
         {lead && at < last ? (
-          <button onClick={() => go(at + 1)} className={outline}>
+          <Button onClick={() => go(at + 1)} className={outline}>
             Keep looking
-          </button>
+          </Button>
         ) : (
           at > 0 && (
-            <button onClick={() => go(at - 1)} className={outline}>
+            <Button onClick={() => go(at - 1)} className={outline}>
               Back
-            </button>
+            </Button>
           )
         )}
-        <button
+        <Button
           ref={next}
           onClick={() =>
             lead ? navigate(lead.to) : at === last ? (then ? navigate(then.to) : onClose()) : go(at + 1)
@@ -438,7 +438,7 @@ export function Tour({ onClose }: { onClose(): void }) {
           className={`h-11 rounded-full bg-button text-[15px] font-medium text-paper ${!at && !lead ? "col-span-2" : ""}`}
         >
           {lead ? lead.name : at === last ? (then?.name ?? "Back to Build") : onward}
-        </button>
+        </Button>
       </div>
     </div>
   );

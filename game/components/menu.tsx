@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Textarea } from "@ui-sdk/react/textarea";
 import { Dialog, DialogBackdrop, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@ui-sdk/react/dialog";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -67,14 +68,14 @@ function Feedback() {
             />
             <div className="flex items-center justify-between gap-3">
               <span className="text-xs text-muted">{state === "failed" ? "That didn’t send. Try again in a minute." : "Goes to the game’s maker, with this screen."}</span>
-              <button
+              <Button
                 type="button"
                 onClick={() => void send()}
                 disabled={!text.trim() || state === "sending"}
                 className="h-9 shrink-0 rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-50"
               >
                 {state === "sending" ? "Sending…" : "Send"}
-              </button>
+              </Button>
             </div>
           </>
         )}
@@ -94,9 +95,9 @@ function NewGame({ close }: { close: Sheet["close"] }) {
     return () => clearTimeout(id);
   }, [sure]);
   return (
-    <button onClick={() => (sure ? close(() => leaveShell(newGame)) : setSure(true))} className={`h-11 grow text-left ${sure ? "text-other" : ""}`}>
+    <Button onClick={() => (sure ? close(() => leaveShell(newGame)) : setSure(true))} className={`h-11 grow text-left ${sure ? "text-other" : ""}`}>
       {sure ? "Tap again to erase this game" : "New game"}
-    </button>
+    </Button>
   );
 }
 
@@ -170,12 +171,12 @@ function Drawer({ sheet }: { sheet: Sheet }) {
             </span>
           </span>
           {keyed ? (
-            <button
+            <Button
               onClick={forgetKey}
               className="-mr-2 h-11 shrink-0 px-2 text-[13px] underline underline-offset-2"
             >
               Forget
-            </button>
+            </Button>
           ) : keyed === false ? (
             <Link to="/play/mind" onClick={() => close()} className="-mr-2 flex h-11 shrink-0 items-center px-2 text-[13px] underline underline-offset-2">
               {open === null ? "Open" : "Add"}

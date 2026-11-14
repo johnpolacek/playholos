@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Lens } from "@/components/icons";
@@ -24,13 +25,13 @@ export function WideLeads() {
   useEffect(() => () => void Object.assign(dials, { wide: 0 }), [dials]);
   if (!any || close || prefersReducedMotion()) return null;
   return (
-    <button
+    <Button
       onClick={() => setWide(!wide)}
       title={wide ? "Back to the stars around us" : "See our warm glows across the Milky Way"}
       className="absolute right-2.5 bottom-3 inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs"
     >
       <Lens closer={wide} />
       {wide ? "Nearby Stars" : `Milky Way · ${count} warm glow${count > 1 ? "s" : ""}`}
-    </button>
+    </Button>
   );
 }

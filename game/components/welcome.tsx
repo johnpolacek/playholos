@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { War } from "@/components/guide";
@@ -211,7 +212,7 @@ export function Welcome({ go }: { go(stop: number): void }) {
           const on = lit === i;
           const mine = ours === i;
           return (
-            <button
+            <Button
               key={p.name}
               onClick={() => go(i + 1)}
               onPointerEnter={(e) => void (e.pointerType === "mouse" && point(i))}
@@ -230,7 +231,7 @@ export function Welcome({ go }: { go(stop: number): void }) {
                 {mine && <span className="ml-1.5 font-mono text-[9.5px] font-normal tracking-[.1em]">OURS</span>}
               </span>
               <span className="mt-[3px] block text-[12px] leading-snug text-page-ink2">{p.what}</span>
-            </button>
+            </Button>
           );
         })}
       </div>

@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { Toggle } from "@ui-sdk/react/toggle";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -196,22 +197,22 @@ function Sent(props: {
           </span>
           {extra}
           {can && !asking && (sent || !choices) && !(waiting && recall) && (
-            <button
+            <Button
               disabled={sent}
               onClick={() => setAsking({ label: `Send it`, send })}
               className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${sent ? "border border-faint text-muted" : "bg-button text-paper"}`}
             >
               {sent ? (sentAs ?? (waiting ? `${what[0].toUpperCase()}${what.slice(1)} leaves Year ${year(road.leaves!)}` : `${what} sent`)) : `Send a ${what}`}
-            </button>
+            </Button>
           )}
         </div>
         {/* Two choices on their own line: beside the needs they squeezed each need to two lines. Playtest 2026-11-13. */}
         {can && !sent && !asking && choices && (
           <div className="mt-2 flex flex-wrap justify-end gap-1.5">
             {choices.map((c) => (
-              <button key={c.label} onClick={() => setAsking(c)} className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">
+              <Button key={c.label} onClick={() => setAsking(c)} className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">
                 {c.label}
-              </button>
+              </Button>
             ))}
           </div>
         )}
@@ -224,19 +225,19 @@ function Sent(props: {
                 ? `Built by Year ${year(road.fuelWait.built)}. Leaves Year ${year(road.leaves!)}, once our ${road.fuelWait.fuel === "antimatter" ? "Antimatter" : "Deuterium"} Works has made its fuel.`
                 : `Leaves Year ${year(road.leaves!)}.`}
             </span>
-            <button onClick={recall} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium hover:border-ink">
+            <Button onClick={recall} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium hover:border-ink">
               Cancel
-            </button>
+            </Button>
           </div>
         )}
         {/* The ask sits on its own line: beside the needs it ran off the panel, playtest 2026-11-01. */}
         {can && !sent && asking && (
           <div className="mt-2 flex flex-wrap items-center justify-end gap-1.5">
             <span className="text-[12.5px] text-muted">{recall ? "We can cancel it until it leaves." : "Can’t be called back."}</span>
-            <button onClick={() => setAsking(null)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+            <Button onClick={() => setAsking(null)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
               Wait
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => {
                 asking.send();
                 setAsking(null);
@@ -246,7 +247,7 @@ function Sent(props: {
               className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper"
             >
               {asking.label}
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -485,10 +486,10 @@ export function DestinationPage({ slug }: { slug: string }) {
           <div className="flex items-center justify-between gap-2">
             <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">What we know</span>
             {lead.system && (
-              <button onClick={() => setClose(!close)} className="flex h-7 items-center gap-1.5 rounded-full border border-faint px-3 text-[12.5px] hover:border-muted">
+              <Button onClick={() => setClose(!close)} className="flex h-7 items-center gap-1.5 rounded-full border border-faint px-3 text-[12.5px] hover:border-muted">
                 <Lens closer={!close} size={13} />
                 {close ? "Pull back" : "See its system"}
-              </button>
+              </Button>
             )}
           </div>
           <p className="mt-1 text-[14px] leading-snug">{(readings[lead.slug] ?? []).at(-1)?.title ?? lead.line}</p>
@@ -555,7 +556,7 @@ export function DestinationPage({ slug }: { slug: string }) {
               right={worn ? "Too far" : road.arrives === null ? "Not yet" : `Year ${year(road.arrives)}`}
               extra={
                 queues && (
-                  <button
+                  <Button
                     onClick={() => {
                       // Queued, its road plays on the map, as a tap on its head does. 2026-11-08.
                       if (!plan.builds.includes(road.build)) way(by).preview(true);
@@ -564,7 +565,7 @@ export function DestinationPage({ slug }: { slug: string }) {
                     className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${plan.builds.includes(road.build) ? "border border-ink" : "bg-button text-paper"}`}
                   >
                     {plan.builds.includes(road.build) ? "Remove from Queue" : "Add to Queue"}
-                  </button>
+                  </Button>
                 )
               }
             />
@@ -695,14 +696,14 @@ export function DestinationPage({ slug }: { slug: string }) {
         </MindNote>
       </div>
       {lead.system && (
-        <button
+        <Button
           data-m
           onClick={() => setClose(!close)}
           className="mt-6 flex h-[46px] shrink-0 items-center justify-center gap-2 rounded-full border border-ink text-[15px] font-medium"
         >
           <Lens closer={!close} size={17} />
           {close ? "Pull Back" : "Close View"}
-        </button>
+        </Button>
       )}
     </div>
   );
