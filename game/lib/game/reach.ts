@@ -82,7 +82,7 @@ export interface Road {
   /** Why it leaves when it does, step by step: the last build it needs and when that is done, when the craft is built,
    *  and how many of our craft take their fuel before it. "In our yard. It leaves in Year 185.8" said when, never why.
    *  Playtest 2026-11-13. */
-  waits?: { on: string; ready: number | null; built: number | null; ahead: number };
+  waits?: { on: string; ready: number | null; built: number | null; ahead: number; held?: boolean };
 }
 
 /** The Year each thing our fusion craft and flyby probes wait on is done. Null while it isn't, or isn't ours to build. */
@@ -425,10 +425,15 @@ export function sentinelRoad(plan: Plan, scale: number, from: number, star: stri
       })()
     : [...(plan.sentinels ?? []), ...(plan.flybys ?? []).filter((o) => o.by === "probe")].filter((o) => o.y < y && o.name !== star).length;
   return {
-    waits: { on, ready, built, ahead },
+    waits: { on, ready, built, ahead, ...(am !== undefined && held(plan, scale) ? { held: true } : {}) },
     name: "Send a sentinel", n: sent ? 1 : null, build: "Probe Yard", craft: "A sentinel", speed: am !== undefined ? amBeta(ly, "sentinel") : stay("sentinel", ly, gasAt(star)).beta,
     done: ready, leaves, arrives, home: arrives === null ? null : arrives + ly, ...(am !== undefined ? { antimatter: true } : {}), ...(fuelWait ? { fuelWait } : {}),
   };
+}
+/** Our Solar Swarm held from growing, for good as our plan stands: the Antimatter Works then makes only what it can. */
+function held(plan: Plan, scale: number) {
+  const spans = grownSpans(plan, scale, "Solar Swarm");
+  return spans.length > 0 && spans.at(-1)![1] !== null;
 }
 export const sentinelReady = (plan: Plan) => sentinelNeeds(plan).every((n) => inOrder(plan, n));
 

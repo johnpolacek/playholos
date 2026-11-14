@@ -61,6 +61,19 @@ export function Voyage({ road, craft, star, ly, now, warm }: { road: Road; craft
         : phase === "word"
           ? `There. Its first word is crossing back, home by Year ${yearText(home!)}.`
           : "There, and its word is home.";
+  // What would shorten the wait, from what sets it: the Works makes twice as much each time the Solar Swarm doubles,
+  // every 2 Years, and each craft takes its fuel in the order sent. The Will asked for it, 2026-11-13.
+  const sooner =
+    phase !== "yard" || !w || step === null || leaves === null || w.built === null || leaves - w.built <= 0.05
+      ? null
+      : [
+          road.antimatter && w.held && "Let our Solar Swarm grow again. Each doubling, every 2 Years, doubles what the Antimatter Works makes.",
+          // The wait already counts on the swarm growing, so growth is no lever: only a hold would move it, the wrong way.
+          road.antimatter && !w.held && w.ahead === 0 && "Nothing we can do shortens it now. This wait already counts on our Solar Swarm growing, which doubles what the Antimatter Works makes every 2 Years. Holding the swarm would lengthen it.",
+          road.antimatter && !w.held && w.ahead > 0 && "This wait already counts on our Solar Swarm growing, which doubles what the Antimatter Works makes every 2 Years.",
+          !road.antimatter && "Each craft we send draws on the Deuterium Works in turn.",
+          w.ahead > 0 && `Cancel ${w.ahead === 1 ? "the craft" : "a craft"} ahead of it in line, and it takes that share.`,
+        ].filter(Boolean).join(" ") || null;
   // Its road out of the yard, step by step, each with its Year.
   const steps: [string, number | null][] = w ? [[`The ${w.on}`, w.ready], ["Built", w.built], [`Its ${fuel}, leaves`, leaves]] : [];
   return (
@@ -153,6 +166,12 @@ export function Voyage({ road, craft, star, ly, now, warm }: { road: Road; craft
       )}
       {phase === "yard" && road.antimatter && (
         <p className="mt-2 text-[12px] leading-snug text-page-ink2">By antimatter, since that lands it soonest. The Antimatter Works makes it slowly, and each craft takes its share in turn.</p>
+      )}
+      {phase === "yard" && sooner && (
+        <p className="mt-1.5 text-[12px] leading-snug">
+          <span className="font-mono text-[10px] tracking-[.08em] text-you uppercase">To shorten it · </span>
+          {sooner}
+        </p>
       )}
       <dl className="mt-2 grid grid-cols-3 gap-2 font-mono text-[10px] text-muted">
         <div>
