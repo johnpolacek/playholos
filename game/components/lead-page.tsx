@@ -226,15 +226,19 @@ export function LeadPage({ slug }: { slug: string }) {
   }, [unread, see]);
 
   // The map turns to the lead, and its system, if we know it, is open to the map's Close View.
+  // Let go only when we leave the lead, not each time a reading renews it, so its Close View holds as we chose it.
   useEffect(() => {
     if (i < 0) return;
     Object.assign(dials, { focus: i + 1 });
-    setLook(leads[i]);
     return () => {
       Object.assign(dials, { focus: 0 });
       setLook(null);
     };
-  }, [dials, i, leads, setLook]);
+  }, [dials, i, setLook]);
+  const looked = i < 0 ? null : leads[i];
+  useEffect(() => {
+    if (looked) setLook(looked);
+  }, [looked, setLook]);
 
   useEffect(() => {
     const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/play");

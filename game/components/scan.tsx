@@ -196,7 +196,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => knowStars(leads.flatMap((l) => (l.at && l.at[2] > 0 ? [{ name: l.star, ra: l.at[0], dec: l.at[1], d: l.at[2], ...(l.range ? { range: l.range } : {}) }] : []))), [leads]);
   // The map places leads the sky file lacks: black holes found, and far landmarks.
   useEffect(() => placeLeads(Object.fromEntries(leads.flatMap((l) => (l.at ? [[skyId(l.star), l.at]] : [])))), [leads]);
-  // The scene reads Close View from the dials each frame, and the screen from here. Another lead starts outside.
+  // The scene reads Close View from the dials each frame, and the screen from here. A lead whose system we know opens
+  // inside it: picking one and then tapping "See where it sits" was a step too many, playtest 2026-11-14. The same
+  // lead, renewed as a reading lands, keeps whatever view we chose, so Pull Back holds.
   const [look, setLookState] = useState<Lead | null>(null);
   const [close, setCloseState] = useState(false);
   const setClose = useCallback(
@@ -206,9 +208,12 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     },
     [dials],
   );
+  const looking = useRef<string | null>(null);
   const setLook = useCallback(
     (lead: Lead | null) => {
-      setClose(false);
+      const slug = lead?.slug ?? null;
+      if (slug !== looking.current) setClose(!!lead?.system);
+      looking.current = slug;
       setLookState(lead);
     },
     [setClose],
