@@ -338,7 +338,7 @@ export function ScanMap({ className, quick = false }: { className: string; /** L
 
 /** The Scan tab: Earth's leads, and how long a message takes to reach each. Each opens its own page. */
 export function Scan() {
-  const { leads, dials, readings, fresh, standing, heard } = useLeads();
+  const { leads, dials, readings, fresh, standing, heard, visits } = useLeads();
   const [params, setParams] = useSearchParams();
   const close = useCallback(() => setParams({}, { replace: true }), [setParams]);
   const open = useOpenReadings();
@@ -348,7 +348,7 @@ export function Scan() {
     <>
       <Path />
       {heard.length > 0 && <Heard />}
-      <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} standing={standing} readable={open} headClass={heard.length ? "mt-5" : "mt-1"} />
+      <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} standing={standing} readable={open} visits={visits} headClass={heard.length ? "mt-5" : "mt-1"} />
       <Messages />
     </>
   );

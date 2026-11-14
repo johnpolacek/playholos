@@ -153,7 +153,7 @@ function Sent(props: {
   // in one tap.
   const [asking, setAsking] = useState<{ label: string; send(): void } | null>(null);
   return (
-    <li data-m style={buildBlue(needs[0])} className="border-t border-faint py-2.5">
+    <li data-m id={`way-${what.toLowerCase().replace(/ /g, "-")}`} style={buildBlue(needs[0])} className="scroll-mt-20 border-t border-faint py-2.5">
       {/* Its head plays its road on the map, the craft up close where we have one, and again to stop. 2026-11-08. */}
       <button onClick={() => preview(!previewing)} aria-pressed={previewing} className={`block w-full text-left transition-colors duration-200 ${previewing ? WASH : ""}`}>
         <Face
@@ -339,14 +339,16 @@ export function DestinationPage({ slug }: { slug: string }) {
     showCraft(playingCraft);
     return () => showCraft(null);
   }, [playingCraft, previewing, showCraft]);
-  const came = useLocation().state as { craft?: CraftKind | null; engage?: boolean } | null;
+  // Engage may name the way to land on, as a Scan row's next move does: "sentinel" or "mind". 2026-11-13.
+  const came = useLocation().state as { craft?: CraftKind | null; engage?: boolean | string } | null;
   const cameWith = came?.craft;
   // Engage on a lead lands on how we send, not on the facts again: blind first-timers, five runs of six, met the
   // facts they had just read, saw no send, and scrolled or asked the Mind. 2026-11-08.
   const send = useRef<HTMLAnchorElement>(null);
   useEffect(() => {
     if (!came?.engage) return;
-    const t = setTimeout(() => send.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 450);
+    const to = typeof came.engage === "string" ? document.getElementById(`way-${came.engage}`) : null;
+    const t = setTimeout(() => (to ?? send.current)?.scrollIntoView({ behavior: "smooth", block: "start" }), 450);
     return () => clearTimeout(t);
   }, [came?.engage, slug]);
   useEffect(() => {

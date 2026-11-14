@@ -8,7 +8,10 @@ import { SkyArt } from "@/components/sky";
 import { LeadMark } from "@/components/marks";
 import { Face, ListHead } from "@/components/tab-head";
 import type { Standing } from "@/components/scan";
+import { nextMove } from "@/lib/game/next";
+import { EMPTY } from "@/lib/game/plan";
 import type { Dials, Mark, Show } from "@/lib/drift";
+import type { Visit } from "@/lib/sim/types";
 import { span, YEAR_0, lyOf, yearText } from "@/lib/game/clock";
 import { target, WATCHER } from "@/lib/game/sends";
 import { type Lead, lineAt, type Reading, starName } from "@/lib/game/leads";
@@ -275,6 +278,7 @@ export function LeadList({
   fresh,
   standing,
   readable,
+  visits = [],
   headClass = "",
 }: {
   leads: Lead[];
@@ -286,11 +290,14 @@ export function LeadList({
   readable?: Lead[];
   /** Where each lead stands, by slug: the list splits on it. Quiet folds shut. 2026-11-02. */
   standing?: Record<string, Standing>;
+  /** What our craft have seen up close, so a row knows a sentinel has already looked. */
+  visits?: readonly Visit[];
   headClass?: string;
 }) {
   const { year, save } = useGame();
   // Glows we have messaged keep their own rows. 2026-11-01.
   const messaged = new Set((save?.sent ?? []).map((m) => m.to));
+  const knocked = (save?.sent ?? []).some((m) => m.to !== "everywhere" && target(m.to) === WATCHER);
   // The lead in view: the one the Will points at, or else the one they picked, which stays until picked again.
   const [picked, setPicked] = useState<number | null>(null);
   const [peeked, setPeeked] = useState<number | null>(null);
@@ -315,7 +322,7 @@ export function LeadList({
     const c = chancesOf(l, readings[l.slug] ?? []);
     return c && !(c.mind === "unknown" && !c.life) ? chanceShift(null, c, isGlow(l)) : null;
   };
-  const row = (l: Lead) => {
+  const row = (l: Lead, moved = false) => {
     const read = readings[l.slug]?.at(-1);
     const isNew = !!read && !!fresh?.has(read.id);
     // A warm glow is gold, on the list as on the map: our hottest kind of lead. Dimmer once faded. 2026-11-03.
@@ -344,7 +351,7 @@ export function LeadList({
             )}
             {/* Our chance at it, on its row: the main thing about a world sat on its page, below the fold. 2026-11-07. */}
             {chance(l) && <ChanceTag shift={chance(l)} className="mt-0.5 block" />}
-            {readable?.includes(l) && <span className="mt-0.5 block font-medium text-other">Ready for a Close Reading</span>}
+            {!moved && readable?.includes(l) && <span className="mt-0.5 block font-medium text-other">Ready for a Close Reading</span>}
           </>
         }
         right={reach(l)}
@@ -359,11 +366,38 @@ export function LeadList({
   });
 
   if (!fold) {
-    const link = (l: Lead, i: number) => (
-      <Link to={`/play/lead/${l.slug}`} {...peek(i)} className="block py-2.5 text-left">
-        {row(l)}
-      </Link>
-    );
+    // Each row's next move, under it as a link of its own: a row of nine new worlds said what we found and never what
+    // to do. Playtest 2026-11-13.
+    const next = (l: Lead) =>
+      nextMove(l, {
+        plan: save?.plan ?? EMPTY,
+        visits,
+        chances: chancesOf(l, readings[l.slug] ?? []),
+        waiting: standing?.[l.slug] === "waiting",
+        readable: !!readable?.includes(l),
+        messaged,
+        knocked,
+      });
+    const link = (l: Lead, i: number) => {
+      const move = next(l);
+      return (
+        <>
+          <Link to={`/play/lead/${l.slug}`} {...peek(i)} className={`block text-left ${move ? "pt-2.5 pb-1" : "py-2.5"}`}>
+            {row(l, !!move)}
+          </Link>
+          {move && (
+            <Link
+              to={move.to}
+              state={move.engage ? { engage: move.engage } : undefined}
+              {...peek(i)}
+              className="mb-2.5 ml-7 inline-flex h-7 items-center rounded-full border border-you/50 px-3 text-[12.5px] font-medium text-you transition-colors hover:border-you hover:bg-you/10"
+            >
+              {move.label} ›
+            </Link>
+          )}
+        </>
+      );
+    };
     // Cold glows our craft hasn't seen up close gather in one row, where the first stood. The Halo Survey finds
     // hundreds, and they buried the watcher and the strike. Playtest 2026-11-01. Faded warm glows we haven't messaged
     // gather too: the Warm Sky Watch finds hundreds over the Years. Playtest 2026-11-01, 464 by Year 34,944.
