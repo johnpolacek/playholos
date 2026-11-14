@@ -119,7 +119,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       where: "Circling the Sun beside Earth, from one co-orbital asteroid to the next.",
       why: "Six known asteroids share our orbit and stay near us for centuries. Anything left to watch us could ride one, and only a probe in orbit round each sees something a few centimeters across.",
       takes: "One probe of Tianwen-2’s class, about $500 million, 5 Years to build. A Year to the first rock, then 2 Years each.",
-      before: "Kamoʻoalewa, 40 to 100 m wide, may be a piece of our Moon thrown off long ago. Benford 2019 named such rocks as where a watcher could sit.",
+      before: "Kamoʻoalewa is only about 20 m wide, Tianwen-2’s first look shows, half the smallest guess from the ground. It may be a piece of our Moon thrown off long ago. Benford 2019 named such rocks as where a watcher could sit.",
     },
   },
   "Close Look": {
@@ -164,8 +164,9 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
     },
   },
   "Deep Ice Watch": {
-    // The South Pole, inside IceCube, where MICA was drawn: the clearest deep ice we have drilled.
-    site: { on: "earth", draw: "ring", places: [{ lat: -90, lon: 0, name: "Amundsen-Scott Station, South Pole" }] },
+    // The South Pole, inside IceCube, where MICA was drawn: the clearest deep ice we have drilled. A hair off the Pole,
+    // about 200 m toward Greenwich: at -90 exactly the close view has no north, and drew its strings skewed. 2026-11-13.
+    site: { on: "earth", draw: "ring", places: [{ lat: -89.998, lon: 0, name: "Amundsen-Scott Station, South Pole" }] },
     story: {
       have: "IceCube has watched a cubic kilometer of South Pole ice since 2010, and catches any star that dies in our own galaxy. Hyper-Kamiokande would catch about ten neutrinos from one in Andromeda, and none from beyond.",
       where: "Inside IceCube at the South Pole, 2,150 to 2,450 m down, where the ice is clearest. IceCube round it flags the cosmic rays that could pass for a catch.",
