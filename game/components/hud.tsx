@@ -266,8 +266,13 @@ export function useIdleNow() {
     () => drawAt(plan, scale, now).compute,
     [plan, scale, now],
   );
+  // Only when there is a build we could add: with none open, the hold offered nothing but Play on. 2026-11-13.
+  const canAdd = useMemo(
+    () => openAt(plan, done, now).some((b) => !lacks(plan, b.name).length),
+    [plan, done, now],
+  );
   const spare =
-    year !== null && !!past && rising && ended >= 0 && compute < SPARE;
+    year !== null && !!past && rising && ended >= 0 && compute < SPARE && canAdd;
   return {
     idle: year !== null && !!past && !rising,
     spare,
