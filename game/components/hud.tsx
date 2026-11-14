@@ -83,16 +83,19 @@ function Meter({
           </span>
         )}
       </span>
+      {/* A meter with no bar keeps its place, so its number lines up with the others. 2026-11-13. */}
+      {at === undefined && <b aria-hidden className="h-1" />}
       {at !== undefined && (
         <b className="relative h-1 bg-track">
           <s
             className="absolute inset-y-0 left-0 bg-fill2 transition-[width] duration-500 motion-reduce:transition-none"
-            style={{ width: `${at * 100}%` }}
+            style={{ width: `${Math.min(1, at) * 100}%` }}
           />
-          {to !== undefined && to > at && (
+          {/* Held inside the track: a share past 100% once ran the bar across the other meters. 2026-11-13. */}
+          {to !== undefined && to > at && at < 1 && (
             <i
               className="absolute inset-y-0 border-y border-dashed border-muted/70"
-              style={{ left: `${at * 100}%`, width: `${(to - at) * 100}%` }}
+              style={{ left: `${at * 100}%`, width: `${(Math.min(1, to) - at) * 100}%` }}
             />
           )}
         </b>

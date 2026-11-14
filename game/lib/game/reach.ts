@@ -62,6 +62,9 @@ export interface Road {
   home: number | null;
   /** Thrown by a beam, it carries a small drive and its fuel to end its stop. 2026-11-12. */
   carries?: boolean;
+  /** Built, it waits on its fuel: the Year it is built, and the fuel it waits for. "Leaves Year 185.8" alone read as
+   *  unexplained when the craft was done at Year 93.7. Playtest 2026-11-13. */
+  fuelWait?: { built: number; fuel: "antimatter" | "deuterium" };
   /** Years its burns add over cruising. */
   extra?: number;
   /** Years it flies to a place so many light-years off, as lib/sim/speeds.ts has its kind of craft. 2026-11-11. */
@@ -403,9 +406,11 @@ export function sentinelRoad(plan: Plan, scale: number, from: number, star: stri
   const leaves = am ?? byFusion;
   const arrives = leaves === null ? null : leaves + (am !== undefined ? amYears(ly, "sentinel") : sentinelTrip(ly, star));
   const ready = am !== undefined ? allDone(at, AM_SENTINEL_NEEDS) : fusion ?? allDone(at, AM_SENTINEL_NEEDS);
+  const built = ready === null ? null : Math.max(y, ready) + SENTINEL.build;
+  const fuelWait = leaves !== null && built !== null && leaves > built + 0.05 ? { built, fuel: am !== undefined ? ("antimatter" as const) : ("deuterium" as const) } : undefined;
   return {
     name: "Send a sentinel", n: sent ? 1 : null, build: "Probe Yard", craft: "A sentinel", speed: am !== undefined ? amBeta(ly, "sentinel") : stay("sentinel", ly, gasAt(star)).beta,
-    done: ready, leaves, arrives, home: arrives === null ? null : arrives + ly, ...(am !== undefined ? { antimatter: true } : {}),
+    done: ready, leaves, arrives, home: arrives === null ? null : arrives + ly, ...(am !== undefined ? { antimatter: true } : {}), ...(fuelWait ? { fuelWait } : {}),
   };
 }
 export const sentinelReady = (plan: Plan) => sentinelNeeds(plan).every((n) => inOrder(plan, n));

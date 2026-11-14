@@ -431,7 +431,7 @@ const NAMES: Record<string, string> = {
   moon: "the Moon · south-pole stations",
   l2: "Roman · JWST · L2",
   sun: "the Sun",
-  home: "the Sun · Voyager 1 · New Horizons",
+  home: "Sol",
   horizons: "New Horizons · 14 light-hours",
   voyager: "Voyager 1 · silent · 30 light-hours",
 };
@@ -763,8 +763,16 @@ export function Thread({ road, i, to }: { road: Road; i: number; to: number }) {
 /** The Years a destination's roads run to: the last word home, rounded up to a tick, and the step between ticks. */
 export function axis(roads: Road[]) {
   const last = Math.max(...roads.map((r) => r.home ?? 0));
-  const step = last <= 120 ? 20 : last <= 300 ? 50 : 100;
+  // Past 300 Years, a round step that keeps about eight ticks: a sentinel to a warm glow 10,000 ly off drew a tick
+  // every 100 Years to Year 88,000, and their labels ran together into thick bars. Playtest 2026-11-13.
+  const step = last <= 120 ? 20 : last <= 300 ? 50 : niceStep(last / 8);
   return { to: Math.max(60, Math.ceil(last / step) * step), step };
+}
+
+/** The least of 1, 2 or 5 times a power of ten that is at least `x`, and at least 100. */
+function niceStep(x: number) {
+  const p = 10 ** Math.floor(Math.log10(Math.max(100, x)));
+  return [1, 2, 5, 10].map((m) => m * p).find((v) => v >= x) ?? 10 * p;
 }
 
 /** Years along the bottom of the roads. */
@@ -776,7 +784,7 @@ export function Years({ to, step }: { to: number; step: number }) {
         <g key={t}>
           <line x1={L + (t / to) * (R - L)} x2={L + (t / to) * (R - L)} y1={0} y2={4} className="stroke-muted" />
           <text x={L + (t / to) * (R - L)} y={14} textAnchor="middle" className="fill-muted font-mono text-[8px]">
-            {t ? t : "Year 0"}
+            {t ? t.toLocaleString("en-US") : "Year 0"}
           </text>
         </g>
       ))}

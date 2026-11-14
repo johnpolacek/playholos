@@ -705,7 +705,10 @@ export function drawAt(plan: Plan, scale: number, year: number) {
   const gifts = new Map<string, number>();
   for (const g of [...(plan.gifts ?? [])].sort((a, b) => a.y - b.y)) if (g.y <= year && !gifts.has(g.name)) gifts.set(g.name, GIFT_STEPS[g.size ?? "collection"]);
   const gifted = [...gifts.values()].reduce((a, b) => a + b, 0);
-  const earth = thought / CATALOG.step ** (doublings + own + gifted);
+  // Chips at the Limit makes every watt think further, so its steps draw no more power either. The top bar read
+  // 597% of the grid once it was done until 2026-11-13.
+  const made = Object.keys(done).reduce((a, w) => a + (CATALOG.works[w]?.steps ?? 0), 0);
+  const earth = thought / CATALOG.step ** (doublings + own + gifted + made);
   // Of all our compute, studies counted at work, as Build's ring counts it: the top bar said 3% where Build said 6%
   // until 2026-10-30.
   return { compute: thought > 0 ? 1 - idle / thought : 1, energy: (earth * CATALOG.flagship) / (CATALOG.gridRoom * grid) };

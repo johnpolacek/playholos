@@ -10,7 +10,7 @@ import { usePlan, useSchedule } from "@/components/picks";
 import { heardId, useLeads } from "@/components/scan";
 import { yearText } from "@/lib/game/clock";
 import { type Lead, starName } from "@/lib/game/leads";
-import { buildSlug, drawAt, fifthsOf, ordered } from "@/lib/game/plan";
+import { buildSlug, drawAt, fifthsOf, lacks, openAt, ordered } from "@/lib/game/plan";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { iceFirsts, iceRange, stormFirsts, STORMS } from "@/lib/game/natural";
 import { glowNamed } from "@/lib/game/glow-names";
@@ -242,7 +242,9 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
     // the radars and the Launch Complex finished, and nothing said to start more. Playtest 2026-11-07.
     const finished = out.length > 0;
     const { compute } = drawAt(plan, scale, to);
-    if (finished && compute < SPARE) {
+    // Only when there is a build we could add, as the hold asks: with none open it said "We can start another" to
+    // a Will who could not. Playtest 2026-11-13.
+    if (finished && compute < SPARE && openAt(plan, done, to).some((b) => !lacks(plan, b.name).length)) {
       const rising = ordered(plan).some((n) => done[n] == null || done[n]! > to + 1e-6);
       out.push({
         key: "spare",

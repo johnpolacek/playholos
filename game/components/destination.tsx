@@ -207,7 +207,11 @@ function Sent(props: {
             needs to two lines each and ran off the panel. 2026-11-10. */}
         {waiting && recall && (
           <div className="mt-2 flex flex-wrap items-center justify-end gap-1.5">
-            <span className="text-[12.5px] text-muted">Leaves Year {year(road.leaves!)}.</span>
+            <span className="text-[12.5px] text-muted">
+              {road.fuelWait
+                ? `Built by Year ${year(road.fuelWait.built)}. Leaves Year ${year(road.leaves!)}, once our ${road.fuelWait.fuel === "antimatter" ? "Antimatter" : "Deuterium"} Works has made its fuel.`
+                : `Leaves Year ${year(road.leaves!)}.`}
+            </span>
             <button onClick={recall} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium hover:border-ink">
               Cancel
             </button>
