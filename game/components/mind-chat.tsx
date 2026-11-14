@@ -65,6 +65,7 @@ const transport = new DefaultChatTransport({
       sentinels: save?.plan?.sentinels ?? [],
       flybys: save?.plan?.flybys ?? [],
       wreck: save?.plan?.wreck ?? null,
+      take: save?.plan?.take ?? null,
       seeds: save?.plan?.seeds ?? [],
       colony: save?.plan?.colony ?? null,
       will: save?.will ?? null,

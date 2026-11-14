@@ -23,6 +23,7 @@ export function knownQuery(save: Save | undefined, year: number | null) {
     observe: JSON.stringify(plan?.observe ?? []),
     // Our order to wreck the watcher. 2026-11-13.
     wreck: JSON.stringify(plan?.wreck ?? null),
+    take: JSON.stringify(plan?.take ?? null),
     // Our knocks on the watcher, for its maker's answer. 2026-10-31.
     knocks: JSON.stringify((save?.sent ?? []).filter((m) => target(m.to) === WATCHER).map((m) => m.y)),
     // Our messages aimed at peers' warm glows, for their answers. 2026-10-31.

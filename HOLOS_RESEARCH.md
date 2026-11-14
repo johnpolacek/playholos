@@ -3611,3 +3611,12 @@ Added 2026-11-07, from that day’s sweep:
 - **[ESA Vigil](https://en.wikipedia.org/wiki/Vigil_(space_mission))** and **[ROOM, “Vantage Vigil”, 2025](https://room.eu.com/article/vantage-vigil-europes-first-operational-space-weather-mission-nears-approval)** · Planned mission, not yet flown. Vigil would launch in 2031 to the Sun–Earth L5 point. On a shared launch it cruises about 44 months. On a dedicated launcher, 12 to 14 months. A NOAA/NASA summit deck gives about 3.5 Years.
   - Why it matters: a watcher found only by its laser at the Sun–Earth L4 or L5 opened nothing, a dead end in play. Its laser fixes the line it sits on, so a craft can search that line.
   - Used: `game/lib/sim/minds.ts` `CLOSE_FLIGHT.sun`, 1.5 Years. About 13 months on its own launcher, then a sweep along the line. This project's arithmetic: a telescope fixes a laser's direction to about an arcsecond, about 700 km at 1 AU. Where along it, we can't tell, across a zone some 30 million km deep. The camera sees a dark 10 cm body within about 200,000 km, so drifting along the line at 2 km/s it covers the zone in under half a Year.
+
+### Taking the watcher home: what a lab could read of it, 2026-11-14
+
+- **[Cosmic-ray exposure ages](https://en.wikipedia.org/wiki/Cosmic_ray_exposure_dating)** · Reference, from memory, checked against the article. Galactic cosmic rays make stable noble-gas isotopes such as neon-21 and helium-3 in anything left in space, at known rates. Counting them in milligrams dates a meteorite’s time in space, from about a million years to billions, to about 10 to 20%.
+  - Why it matters: a watcher brought home would carry its own clock. It is the one thing a self-erased shell can’t hide.
+  - Used: `game/lib/sim/minds.ts` `TAKE_STUDY` and `ageText`. The age shown is the world’s `arrivedYearsAgo`, in two figures.
+- **[Presolar grains](https://en.wikipedia.org/wiki/Presolar_grains)** · Reference. Dust grains older than the Sun, found in meteorites, are known by isotope ratios unlike anything formed in our system.
+  - Why it matters: the same test would show the watcher was made from another star’s matter, though not which star.
+  - Used: the lab’s reading on the watcher’s page, `game/lib/game/leads.ts`, and the Mind’s, `game/lib/sim/knowledge.ts`.

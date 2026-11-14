@@ -612,6 +612,8 @@ export function kitOf(plan: Plan, scale: number) {
     interceptor: done["Interceptor"] ?? null,
     // Our order to wreck the watcher, flown by the Interceptor's kill vehicle once it stands. 2026-11-13.
     wreck: plan.wreck != null ? { y: plan.wreck, interceptor: done["Interceptor"] ?? null } : null,
+    // Our order to take it whole and bring it home. 2026-11-14.
+    take: plan.take ?? null,
     quiet: done["Quiet Radars"] ?? null,
   };
 }

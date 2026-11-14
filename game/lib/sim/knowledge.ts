@@ -1,7 +1,7 @@
 // The knowledge wall: what Earth knows at a moment, from the seed's truth. Settled 2026-10-13: the Mind judges from
 // what Earth knows, never the seed. So nothing here passes on who lives where, a world's rung, or anything not yet
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
-import { atlasOf, glowsFound, guardAt, mindsSeen, watchedAt, watcherOf, WRECK_FLIGHT, type MindKit, type MindsSeen } from "./minds.ts";
+import { ageText, atlasOf, CLOSE_FLIGHT, flightTo, flightWords, glowsFound, guardAt, mindsSeen, TAKE_BUILD, watchedAt, watcherOf, WRECK_FLIGHT, type MindKit, type MindsSeen } from "./minds.ts";
 import targets from "../../data/targets.json" with { type: "json" };
 import { glowNames } from "../game/glow-names.ts";
 import { giftWords } from "../game/sends.ts";
@@ -65,6 +65,8 @@ export interface Kit {
   knocks?: number[];
   /** Our order to wreck the watcher: the Year we gave it, and the Year our Interceptor is done, or null. 2026-11-13. */
   wreck?: { y: number; interceptor: number | null } | null;
+  /** The Year we ordered the watcher taken whole and brought home, if we did. 2026-11-14. */
+  take?: number | null;
   /** Our messages aimed at peers' warm glows, for their answers. 2026-10-31. */
   aimed?: Aimed[];
   /** Our calls through the Galaxy Broadcast Array, for the answers of minds we never found. 2026-11-11. */
@@ -246,7 +248,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, imager = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [], calls = [], farSide = [], wreck = null }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, imager = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [], calls = [], farSide = [], wreck = null, take = null }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // What our Far-Side Array has heard, 2026-11-11: the radio a magnetic field makes where a red dwarf's wind strikes
@@ -409,17 +411,38 @@ export function earthKnows(
   // The ladder, played, 2026-10-30: grams from the watcher's maker wreck our builder seeds once we launch another after
   // its warning, and a bullet strikes Earth once our probes' copies launch seeds of their own. lib/sim/ladder.ts.
   const probes = seedProbes(seeds);
+  // The watcher warns at our first seed that builds out a star: a seed probe, a Mind sent to settle, or to feed a hole.
+  // A Mind kept small, or hidden in a hole's shadow, is quiet spread, and no watcher counts it. 2026-10-30.
+  const builds = [...seeds.map((s) => s.leaves), ...(colony && (colony.mode === "settle" || colony.mode === "furnace") ? [colony.leaves] : [])];
+  const firstSeed = builds.length ? Math.min(...builds) : null;
+  // Where our Close Look placed it, if it did, whatever else befalls it: what a kill vehicle aims at for one found only
+  // by its laser, and what our craft that takes it needs. 2026-11-14.
+  const placed = watcherOf(world, { moonSearch, asteroidTour, firstSeed, closeLook }, Infinity);
+  const lookedAt = placed?.looked?.at ?? null;
   // Our order to wreck the watcher, 2026-11-13: once the Interceptor stands, a kill vehicle flies to it, if we found it
-  // where a craft can reach it by the Year we ordered. Found only by its warning, it isn't yet placed closely enough to
-  // hit.
-  const wrecked = (() => {
+  // where a craft can reach it by the Year we ordered. Found only by its laser, once our Close Look has placed it.
+  const hit = (() => {
     if (!wreck || wreck.interceptor === null) return null;
     const flies = Math.max(wreck.y, wreck.interceptor);
-    const w = watcherOf(world, { moonSearch, asteroidTour }, wreck.y);
-    const from = watchedAt(w);
-    return from === null || !w ? null : Math.max(flies, from) + (w.by === "moon search" ? WRECK_FLIGHT.moon : WRECK_FLIGHT.rock);
+    const seen = watcherOf(world, { moonSearch, asteroidTour }, wreck.y);
+    const w = seen ?? (lookedAt !== null ? placed : null);
+    const from = seen ? watchedAt(seen) : lookedAt;
+    return from === null || !w ? null : Math.max(flies, from) + WRECK_FLIGHT[flightTo(w)];
   })();
-  const ladder = ladderOf(world, probes, colony, wrecked);
+  // Our order to take it whole and bring it home, 2026-11-14: once our Close Look has seen it, a craft of its class is
+  // built, flies there, catches it, and flies home.
+  const caught = (() => {
+    if (take == null || lookedAt === null || !placed) return null;
+    const flight = CLOSE_FLIGHT[flightTo(placed)];
+    const at = Math.max(take, lookedAt) + TAKE_BUILD + flight;
+    return { at, home: at + flight };
+  })();
+  // Whichever reaches it first: a kill vehicle finds nothing to take, and a craft that took it leaves nothing to hit.
+  const wrecked = hit !== null && (caught === null || hit < caught.at) ? hit : null;
+  const taken = caught !== null && (hit === null || caught.at < hit) ? caught : null;
+  // Either way it goes dark, and its maker answers that. 2026-11-14.
+  const dark = wrecked ?? taken?.at ?? null;
+  const ladder = ladderOf(world, probes, colony, dark);
   const lostOf = new Map(ladder.lost.map((l) => [l.star, l]));
   for (const p of probes) {
     if (ladder.cancelled.has(p.star)) continue;
@@ -434,13 +457,9 @@ export function earthKnows(
   }
   visits.sort((a, b) => a.home - b.home);
   // The realistic premise's minds, as far as we have found them. 2026-10-29.
-  // The watcher warns at our first seed that builds out a star: a seed probe, a Mind sent to settle, or to feed a hole.
-  // A Mind kept small, or hidden in a hole's shadow, is quiet spread, and no watcher counts it. 2026-10-30.
-  const builds = [...seeds.map((s) => s.leaves), ...(colony && (colony.mode === "settle" || colony.mode === "furnace") ? [colony.leaves] : [])];
-  const firstSeed = builds.length ? Math.min(...builds) : null;
   // Our craft in other systems, for finding minds there: sentinels and seed probes stay, and a sentinel can go to a cold
   // glow's star, named as Scan names it. Until 2026-10-31 this list was never filled, so no game could find a sleeper.
-  const kit0 = { telescope, warmWatch, halo, haloArray, imager, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, knocks, closeReads, wrecked };
+  const kit0 = { telescope, warmWatch, halo, haloArray, imager, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, knocks, closeReads, wrecked, taken };
   const glows = mindsSeen(world, kit0, year).glows;
   const placeOf = (star: string): [number, number, number] | null => {
     const t = targets.find((x) => x.name === star);
@@ -820,10 +839,21 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
       out.push(
         `At Year ${yearText(w.wrecked)} our Interceptor's kill vehicle struck the watcher, and its signal stopped on the hit. The watcher sees nothing now. Whoever sent it will know it went dark once its reports stop arriving, a light-time from its home${w.answer ? `, about ${one(w.answer.ly)} Years after the hit` : ""}, and will answer as it chooses. We can't know how, or when it began.`,
       );
-    // A warning after the wreck comes from a second watcher, sent to replace the first, and never found.
-    if (w.warned !== undefined && w.wrecked !== undefined && w.warned > w.wrecked)
+    // Taken whole and brought home, 2026-11-14: dark as our craft caught it, and studied once home.
+    if (w.taken)
       out.push(
-        `At Year ${yearText(w.warned)}, as our seed left, a narrow laser reached Earth from near the Sun–Earth L4 or L5 point, where no craft of ours could find a thing so small. The same voice in eleven of our languages: look, listen and speak as you like, and build at no other star. The watcher we wrecked has been replaced.`,
+        `At Year ${yearText(w.taken.at)} our craft closed on the watcher and took it whole in a soft bag. As it closed, the watcher's mirror went dark and its signal stopped. Then something inside it changed: whatever ran it erased itself, leaving a still, dark shell. Whoever sent it will know it went dark once its reports stop arriving, a light-time from its home${w.answer ? `, about ${one(w.answer.ly)} Years after` : ""}, and will answer as it chooses. ` +
+          (!w.taken.back ? `It is on its way home, due about Year ${yearText(w.taken.home)}.` : `It came home at Year ${yearText(w.taken.home)}, to a sealed lab.`),
+      );
+    if (w.taken?.studied !== undefined && w.taken.age !== undefined)
+      out.push(
+        `What our lab read of the watcher, at Year ${yearText(w.taken.studied)}. Counting the neon and helium the Galaxy's cosmic rays made in its skin, as meteorites are dated, it has sat in space ${ageText(w.taken.age)}. It was here long before us. Its isotopes are not the Sun's: the mix differs from anything in our system, as dust grains older than the Sun do. It was made from another star's matter. ` +
+          "What ran it is gone. Its parts are finer than our tools can open without losing what they were, so it gives us nothing to copy.",
+      );
+    // A warning after the wreck comes from a second watcher, sent to replace the first, and never found.
+    if (w.warned !== undefined && (w.wrecked ?? w.taken?.at) !== undefined && w.warned > (w.wrecked ?? w.taken!.at))
+      out.push(
+        `At Year ${yearText(w.warned)}, as our seed left, a narrow laser reached Earth from near the Sun–Earth L4 or L5 point. The same voice in eleven of our languages: look, listen and speak as you like, and build at no other star. ${w.taken ? "The watcher we took" : "The watcher we wrecked"} has been replaced.`,
       );
     // Its own warning, at our first seed, once we had found it. Playtest 2026-11-01.
     else if (w.warned !== undefined)
@@ -835,20 +865,22 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     // happened, never who did it. 2026-10-30.
     if (w.seedsLost?.length)
       out.push(
-        `${w.seedsLost.length === 1 ? "One of our seed probes gone silent" : `${w.seedsLost.length} of our seed probes gone silent`}, ${w.blinded ? "after we wrecked the watcher" : "after the watcher's warning and our next seed"}:\n` +
+        `${w.seedsLost.length === 1 ? "One of our seed probes gone silent" : `${w.seedsLost.length} of our seed probes gone silent`}, ${w.blinded ? (w.taken ? "after we took the watcher" : "after we wrecked the watcher") : "after the watcher's warning and our next seed"}:\n` +
           w.seedsLost.map((l) => l.before
             ? `- Bound for ${l.star}: its word of landing never came. It was due by Year ${yearText(l.known)}.`
             : `- At ${l.star}: its word stopped at Year ${yearText(l.at)}, reaching us at Year ${yearText(l.known)}. Its last word showed nothing coming: whatever hit it came cold and fast.`).join("\n"),
       );
     if (w.struck)
       out.push(`At Year ${yearText(w.struck.lands)} something struck Earth from beyond our system with about ${Math.round(w.struck.mt).toLocaleString("en-US")} Mt, moving at most of light’s speed. No rock moves that fast. Nothing saw it come. It came after our seed probes' copies began launching seeds of their own.`);
-    if (w.by !== "its warning" && w.wrecked === undefined) {
+    if (w.by !== "its warning" && w.wrecked === undefined && !w.taken)
       out.push(`The Will can knock on it, with a message aimed at "the watcher". It lands within seconds, or minutes if it sits out by the Sun–Earth L4 or L5. What it does with a knock, and whether it passes word home, we can't know.`);
-      // Our one weapon, 2026-11-13. Said plainly, with its risk, for the Mind to weigh.
+    // Our one weapon, 2026-11-13, and taking it whole instead, 2026-11-14. Said plainly, with their risk, for the Mind
+    // to weigh. Found only by its laser, both wait for our Close Look to place it.
+    if ((w.by !== "its warning" || w.looked) && w.wrecked === undefined && !w.taken)
       out.push(
-        `The Will can order it wrecked, from its page on Scan: a weapon. Once our Interceptor stands, one of its kill vehicles flies to it, ${w.by === "moon search" ? "about 3 days to the Moon's L4 or L5" : "about a Year to the rock it rides"}, and hits it. Then it sees nothing we do, our next seed included. But it is an attack on whoever sent it, which will know its watcher went dark a light-time later. A mind that wishes us ill may take that as we would take a strike, and treat us as if we had spread. A calmer one may send another watcher, hidden better. We can't tell which ours is. Once done, it can't be undone.`,
+        `The Will can order it wrecked, from its page on Scan: a weapon. Once our Interceptor stands, one of its kill vehicles flies to it, ${flightWords(w, true)}, and hits it. Then it sees nothing we do, our next seed included. But it is an attack on whoever sent it, which will know its watcher went dark a light-time later. A mind that wishes us ill may take that as we would take a strike, and treat us as if we had spread. A calmer one may send another watcher, hidden better. We can't tell which ours is. Once done, it can't be undone.`,
+        `${w.looked ? "Or the Will can" : "Once our Close Look has seen it, the Will could instead"} order it taken whole and brought home, to study, from the same page: a craft of the Close Look's class with a soft bag, 2 Years to build, flying ${flightWords(w, false)} and the same back. It blinds the watcher as surely as a wreck, and its maker will know the same way, a light-time later, and may answer the same way. But we would hold it: how long it has been here, and what it is made of. It would see our craft come.`,
       );
-    }
   }
   if (m.sleepers.length)
     out.push(

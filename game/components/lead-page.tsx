@@ -18,7 +18,7 @@ import { ODDS, type Odds, type Reading, starName } from "@/lib/game/leads";
 import { dates } from "@/lib/game/sends";
 import { VisitArt } from "@/components/visit-art";
 import { WatcherVoice } from "@/components/watcher-voice";
-import { WreckCard } from "@/components/wreck-card";
+import { WatcherCards } from "@/components/wreck-card";
 import { Voyage } from "@/components/voyage";
 import { VOICED } from "@/lib/game/watcher-voice";
 import { glowNamed } from "@/lib/game/glow-names";
@@ -472,10 +472,9 @@ export function LeadPage({ slug }: { slug: string }) {
         </p>
       ))}
 
-      {/* Our one weapon, on the watcher found where a craft can reach it. 2026-11-13. */}
-      {lead.slug === "small-dark-body" && lead.art.kind === "near" && (lead.art.where === "moon" || lead.art.where === "co-orbital") && (
-        <WreckCard where={lead.art.where} />
-      )}
+      {/* What we can do to the watcher found where a craft can reach it: bring it home, or wreck it, our one weapon.
+          2026-11-13, and taking it whole 2026-11-14. */}
+      {lead.slug === "small-dark-body" && minds?.watcher && <WatcherCards w={minds.watcher} />}
 
       <button
         data-m

@@ -5,6 +5,7 @@ import { watcherAway } from "@/lib/game/sends";
 import { lightTime } from "@/lib/light";
 import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
 import type { MindsSeen, WatcherSeen } from "@/lib/sim/minds";
+import { ageText } from "@/lib/sim/minds";
 import type { ProximaSeen } from "@/lib/sim/proxima";
 import { harm, type rockAt } from "./rocks";
 import type { DarkMass, FeltWorld, FieldHeard, FieldWorld, Gas, Read, Visit } from "@/lib/sim/types";
@@ -1206,8 +1207,33 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       now: made,
       tells: ["What comes back, and when, will tell us what kind of mind sent it.", "A seed we launch now goes unseen, unless another watcher has come."],
     });
+  // Taken whole by our craft, then home and studied. 2026-11-14.
+  if (w.taken && w.taken.at <= year)
+    out.push({
+      id: "watcher-taken",
+      needs: "",
+      at: tenths(w.taken.at),
+      by: "Our craft",
+      title: "Taken whole",
+      line: `Our craft closed on the watcher at Year ${yearText(w.taken.at)} and took it whole in a soft bag. As it closed, the mirror went dark and its signal stopped. Then something inside it changed: whatever ran it erased itself, leaving a still, dark shell.`,
+      mind: `It sees nothing of us now, as surely as if we had wrecked it. Whoever sent it will know it went dark a light-time from home${w.answer ? `, about ${Math.round(w.answer.ly).toLocaleString("en-US")} Years after` : ""}, and will answer as it chooses. ${w.taken.back ? `It came home at Year ${yearText(w.taken.home)}, to a sealed lab.` : `It comes home about Year ${yearText(w.taken.home)}.`}`,
+      now: made,
+      tells: ["Its skin will tell us how long it has sat in space, as a meteorite’s does.", "What comes back from its maker, and when, will tell us what kind of mind sent it."],
+    });
+  if (w.taken?.studied !== undefined && w.taken.age !== undefined && w.taken.studied <= year)
+    out.push({
+      id: "watcher-studied",
+      needs: "",
+      at: tenths(w.taken.studied),
+      by: "Our lab",
+      title: "Here before us",
+      line: `Counting the neon and helium the Galaxy’s cosmic rays made in its skin, as meteorites are dated: it has sat in space ${ageText(w.taken.age)}. Its isotopes are not the Sun’s. The mix differs from anything in our system, as dust grains older than the Sun do. It was made from another star’s matter.`,
+      mind: "It watched long before we were here to see it. What ran it is gone, and its parts are finer than our tools can open without losing what they were. It gives us nothing to copy, which may be as its maker meant.",
+      now: made,
+      tells: ["Where it was made, its matter can’t say. Only that it wasn’t here."],
+    });
   // A warning after the wreck: a second watcher, sent to replace the first, never found. 2026-11-13.
-  if (w.warned !== undefined && w.wrecked !== undefined && w.warned > w.wrecked && w.warned <= year)
+  if (w.warned !== undefined && (w.wrecked ?? w.taken?.at) !== undefined && w.warned > (w.wrecked ?? w.taken!.at) && w.warned <= year)
     out.push({
       id: "watcher-warning",
       needs: "",
@@ -1216,7 +1242,7 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       title: w.warned === first ? "First contact" : "Another watcher",
       ...(w.warned === first ? { contact: true as const } : {}),
       line: `As our seed left, at Year ${yearText(w.warned)}, a narrow laser reached Earth from near the Sun–Earth L4 or L5 point, carrying the same voice in eleven of our languages: “Look, listen and speak as you like. Build at no other star.”`,
-      mind: "The watcher we wrecked has been replaced, by one hidden where no craft of ours can find a thing so small. Whoever sent it chose to keep watching rather than to strike. It saw our seed leave.",
+      mind: `The watcher we ${w.taken ? "took" : "wrecked"} has been replaced, by one out near the Sun–Earth L4 or L5. Whoever sent it chose to keep watching rather than to strike. It saw our seed leave.`,
       now: made,
       tells: ["What a second seed would draw now, it didn’t say. Its maker knows we struck once."],
     });
@@ -1260,7 +1286,7 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       title: gone.length === 1 ? "A seed gone silent" : "Our seeds gone silent",
       // After we wrecked the watcher, when its maker took that as spreading. 2026-11-13.
       line: (() => {
-        const why = w.blinded ? "after we wrecked the watcher" : "after we launched another seed past the watcher’s warning";
+        const why = w.blinded ? (w.taken ? "after we took the watcher" : "after we wrecked the watcher") : "after we launched another seed past the watcher’s warning";
         return gone.length === 1
           ? `One of our seed probes went silent ${why}, at ${gone[0].star}. Its last word showed nothing coming.`
           : `${gone.length} of our seed probes went silent ${why}: ${gone.map((l) => l.star).join(", ")}. The last word from each showed nothing coming.`;
@@ -1298,11 +1324,11 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
         // Not "No answer" at once: an answer from its maker takes a round trip. Playtest 2026-11-01.
         title: "Knocked",
         // After we wrecked it, a knock reaches nothing. 2026-11-13.
-        line: w.wrecked !== undefined && y >= w.wrecked
+        line: (w.wrecked ?? w.taken?.at) !== undefined && y >= (w.wrecked ?? w.taken!.at)
           ? `Our knock reached where it held, at Year ${yearText(y)}. Nothing is there now to hear it.`
           : `Our knock reached it within seconds of Year ${yearText(y)}. It made no answer itself, and held its place.`,
-        mind: w.wrecked !== undefined && y >= w.wrecked
-          ? "We wrecked it before this knock. Nothing there can pass it on."
+        mind: (w.wrecked ?? w.taken?.at) !== undefined && y >= (w.wrecked ?? w.taken!.at)
+          ? `We ${w.taken ? "took" : "wrecked"} it before this knock. Nothing there can pass it on.`
           : "It answers on its own terms, if at all. If it passed word of our knock home, an answer would take as long as light takes there and back.",
         now: w.looked ? made : watcherLead(w).could.map((c) => c.odds),
         tells: ["Its silence tells us little. Something left to watch would watch, and wait."],

@@ -68,6 +68,7 @@ export async function known(req: Request) {
     colony: readColony(one(q.get("colony"))),
     flybys: readFlybys(list(q.get("flybys"))),
     wreck: readWreck(one(q.get("wreck"))),
+    take: readWreck(one(q.get("take"))),
   };
   // Once the Will lives at a hole, Earth's news reaches it a light-time late. 2026-10-26.
   const more = { knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) };
@@ -98,6 +99,7 @@ export async function next(req: Request) {
     colony: readColony(one(q.get("colony"))),
     flybys: readFlybys(list(q.get("flybys"))),
     wreck: readWreck(one(q.get("wreck"))),
+    take: readWreck(one(q.get("take"))),
   };
   const scale = Number(world.earth.compute) || 1;
   const more = { knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) };

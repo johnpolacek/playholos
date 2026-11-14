@@ -167,6 +167,9 @@ export interface Plan {
   /** The Year we ordered the watcher wrecked, our one weapon: a kill vehicle of our Interceptor's flies once it stands.
    *  Once given, it stands. 2026-11-13. */
   wreck?: number;
+  /** The Year we ordered the watcher taken whole and brought home, to study: a craft of our Close Look's class flies
+   *  once the Close Look has seen it. Once given, it stands. 2026-11-14. */
+  take?: number;
 }
 
 /** A build ordered in play, or taken back: its name, and the Year. */
