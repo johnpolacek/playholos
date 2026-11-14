@@ -16,7 +16,7 @@ import { usePath } from "@/components/path";
 import { useLeads } from "@/components/scan";
 import { starName } from "@/lib/game/leads";
 import { tenths, yearText } from "@/lib/game/clock";
-import { buildSlug, drawAt, orderLater, searchOf } from "@/lib/game/plan";
+import { buildSlug, drawAt, lacks, openAt, orderLater, searchOf } from "@/lib/game/plan";
 import { flybyRoad } from "@/lib/game/reach";
 import { combedAt } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -45,7 +45,7 @@ export function IdleNote() {
   const { save, year, orderAt, playOn, snooze } = useGame();
   const { idle, held, last } = useIdleNow();
   const { plan, change } = usePlan();
-  const { scale } = useSchedule();
+  const { scale, done } = useSchedule();
   const { standing, leads, minds, readings } = useLeads();
   // The watcher found, and its word not yet read: the biggest news there is, so it holds the note until we open it.
   // It reached us as a small label on the map until a playtest, 2026-11-05.
@@ -64,7 +64,10 @@ export function IdleNote() {
   const searching = useMemo(() => combedAt(searchOf(plan, scale), now) < now - 0.05, [plan, scale, now]);
   // Searching counts too: compute combing old recordings is compute our builds could use, and at 39% at work nothing
   // said so. Playtest 2026-11-07.
-  const spare = !idle && compute < SPARE;
+  // Only when there is a build we could add, as the jump and the hold ask: at Year 134 it said "Only 0% of our
+  // compute is at work" with every open build rising and none to start. Playtest 2026-11-13.
+  const canAdd = useMemo(() => openAt(plan, done, now).some((b) => !lacks(plan, b.name).length), [plan, done, now]);
+  const spare = !idle && compute < SPARE && canAdd;
   // A glow waiting on a Close Reading stands under Needs us, and this note is what points to it, so it doesn't hide.
   const needs = Object.entries(standing).some(([slug, s]) => s === "needs" && !open.some((l) => l.slug === slug));
   const quiet = !idle && !needs && (spare || ahead !== null);
