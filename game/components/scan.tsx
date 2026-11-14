@@ -5,6 +5,8 @@ import { openReadings, useOpenReadings } from "@/components/close-reading";
 import { Heard } from "@/components/heard";
 import { Path } from "@/components/path";
 import { LeadList, LeadsMap } from "@/components/leads";
+import { HomesChart, isHome } from "@/components/homes";
+import { chancesOf } from "@/lib/game/chance";
 import { Messages } from "@/components/messages";
 import { Review } from "@/components/review";
 import type { Dials } from "@/lib/drift";
@@ -336,20 +338,72 @@ export function ScanMap({ className, quick = false }: { className: string; /** L
   ) : null;
 }
 
+/** Two things a Will looks for, each a lens on the same leads: a mind, or a home. Playtest 2026-11-13: nine new worlds
+ *  in one list, and no way to ask which could hold a mind or which we could go to. */
+type Lens = "all" | "minds" | "homes";
+const LENSES: { key: Lens; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "minds", label: "Minds" },
+  { key: "homes", label: "Homes" },
+];
+
+/** The chance of a mind there, at its highest, or -1 where a mind isn't the question. */
+function mindOf(l: Lead, rs: readonly Reading[]) {
+  // The watcher is one already, and a shining warm glow our likeliest.
+  if (l.slug === "small-dark-body") return 1;
+  const c = chancesOf(l, rs);
+  if (c?.ruledOut) return -1;
+  if (l.art.kind === "warm" || l.art.kind === "glow") return typeof c?.mind === "object" ? c.mind.hi : 0.5;
+  // A living world's few percent is life's question, kept for Homes. A sign that could be a mind's is a tenth or more.
+  return typeof c?.mind === "object" && c.mind.hi >= 0.1 ? c.mind.hi : -1;
+}
+
 /** The Scan tab: Earth's leads, and how long a message takes to reach each. Each opens its own page. */
 export function Scan() {
   const { leads, dials, readings, fresh, standing, heard, visits } = useLeads();
   const [params, setParams] = useSearchParams();
   const close = useCallback(() => setParams({}, { replace: true }), [setParams]);
   const open = useOpenReadings();
+  const lens = (LENSES.find((x) => x.key === params.get("lens"))?.key ?? "all") as Lens;
+  const minds = useMemo(
+    () => leads.map((l) => [l, mindOf(l, readings[l.slug] ?? [])] as const).filter(([, m]) => m >= 0).sort((a, b) => b[1] - a[1]).map(([l]) => l),
+    [leads, readings],
+  );
+  // Nearest first: how soon we could be there.
+  const homes = useMemo(() => leads.filter(isHome).sort((a, b) => a.ly - b.ly), [leads]);
   if (!leads.length) return null;
   if (params.has("review")) return <Review onClose={close} />;
+  const count: Record<Lens, number> = { all: leads.length, minds: minds.length, homes: homes.length };
   return (
     <>
       <Path />
       {heard.length > 0 && <Heard />}
-      <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} standing={standing} readable={open} visits={visits} headClass={heard.length ? "mt-5" : "mt-1"} />
-      <Messages />
+      <div role="tablist" aria-label="What we look for" className="mt-4 flex gap-1.5">
+        {LENSES.map(({ key, label }) => (
+          <button
+            key={key}
+            role="tab"
+            aria-selected={lens === key}
+            onClick={() => setParams(key === "all" ? {} : { lens: key }, { replace: true })}
+            className={`h-7 rounded-full px-3 text-[12.5px] font-medium transition-colors ${lens === key ? "bg-ink text-paper" : "border border-faint text-page-ink2 hover:border-muted"}`}
+          >
+            {label} <span className="font-mono text-[10.5px] opacity-70">{count[key]}</span>
+          </button>
+        ))}
+      </div>
+      {lens === "homes" && <HomesChart leads={homes} readings={readings} />}
+      <LeadList
+        leads={leads}
+        only={lens === "minds" ? minds : lens === "homes" ? homes : undefined}
+        dials={dials}
+        readings={readings}
+        fresh={fresh}
+        standing={standing}
+        readable={open}
+        visits={visits}
+        headClass="mt-4"
+      />
+      {lens === "all" && <Messages />}
     </>
   );
 }

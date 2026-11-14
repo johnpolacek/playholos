@@ -279,6 +279,7 @@ export function LeadList({
   standing,
   readable,
   visits = [],
+  only,
   headClass = "",
 }: {
   leads: Lead[];
@@ -292,6 +293,8 @@ export function LeadList({
   standing?: Record<string, Standing>;
   /** What our craft have seen up close, so a row knows a sentinel has already looked. */
   visits?: readonly Visit[];
+  /** Only these, in this order: a lens on Scan. The rest stay on the map, so each row's index still finds its star. */
+  only?: Lead[];
   headClass?: string;
 }) {
   const { year, save } = useGame();
@@ -433,10 +436,12 @@ export function LeadList({
         : [],
     );
     const stand = (l: Lead) => standing?.[l.slug] ?? "quiet";
-    const groups = [...glows, ...said].map((g) => ({ ...g, members: leads.filter((l) => stand(l) === "quiet" && g.test(l)) }));
+    const list = only ?? leads;
+    const groups = [...glows, ...said].map((g) => ({ ...g, members: list.filter((l) => stand(l) === "quiet" && g.test(l)) }));
     const groupOf = (l: Lead) => (stand(l) === "quiet" ? groups.find((g) => g.members.length > 1 && g.test(l)) : undefined);
     const rows = (part: Standing) =>
-      leads.map((l, i) => {
+      list.map((l) => {
+        const i = leads.indexOf(l);
         if (stand(l) !== part) return null;
         const g = groupOf(l);
         if (!g)
@@ -473,13 +478,13 @@ export function LeadList({
             {open && g.key === "cold-glows" && <div className="pl-5">{COLD_WORDS}</div>}
             {open && (
               <ul className="mb-1 flex flex-col pl-5">
-                {leads.map((c, j) => g.members.includes(c) && <li key={c.star} className="border-t border-faint">{link(c, j)}</li>)}
+                {g.members.map((c) => <li key={c.star} className="border-t border-faint">{link(c, leads.indexOf(c))}</li>)}
               </ul>
             )}
           </li>
         );
       });
-    const count = (part: Standing) => leads.filter((l) => stand(l) === part).length;
+    const count = (part: Standing) => list.filter((l) => stand(l) === part).length;
     const needs = count("needs");
     const watching = count("watching");
     const waiting = count("waiting");
