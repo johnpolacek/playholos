@@ -1,5 +1,6 @@
+import { Toggle } from "@ui-sdk/react/toggle";
 import { Link } from "react-router";
-import { type Aim, focusable, pointer, Story, WASH } from "@/components/picks";
+import { type Aim, aimed, Story, WASH } from "@/components/picks";
 import { BeamMark, BuildMark, buildBlue, RecordMark } from "@/components/marks";
 import { OpensLine } from "@/components/opens";
 import { Face } from "@/components/tab-head";
@@ -206,14 +207,9 @@ export function Item({
         {grip}
       </li>
     );
-  return (
-    <li
-      data-q="row"
-      data-key={row.key}
-      {...(aim && pointer(aim))}
-      {...(aim && focusable(aim))}
-      className={`group border-t border-faint py-2.5 outline-none transition-[background-color,box-shadow] duration-200 ${aim ? "cursor-pointer" : ""} ${aim?.lit ? WASH : ""}`}
-    >
+  const look = `group border-t border-faint py-2.5 outline-none transition-[background-color,box-shadow] duration-200 ${aim ? "cursor-pointer" : ""} ${aim?.lit ? WASH : ""}`;
+  const body = (
+    <>
       {head}
       <div className="pl-7">
         <Journey row={row} now={now} shown={!!aim?.shown} />
@@ -238,6 +234,18 @@ export function Item({
           />
         </div>
       )}
+    </>
+  );
+  // A row we can aim at is one Toggle, pressed while the map shows it.
+  if (aim)
+    return (
+      <Toggle render={<li />} data-q="row" data-key={row.key} {...aimed(aim)} className={look}>
+        {body}
+      </Toggle>
+    );
+  return (
+    <li data-q="row" data-key={row.key} className={look}>
+      {body}
     </li>
   );
 }

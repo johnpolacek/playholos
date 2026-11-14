@@ -1,3 +1,4 @@
+import { Toggle } from "@ui-sdk/react/toggle";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BackBar } from "@/components/back-bar";
@@ -164,7 +165,7 @@ function Sent(props: {
       className={`scroll-mt-20 border-t py-2.5 ${sent ? "-mx-2 rounded-lg border-you/50 bg-you/[.06] px-2" : "border-faint"}`}
     >
       {/* Its head plays its road on the map, the craft up close where we have one, and again to stop. 2026-11-08. */}
-      <button onClick={() => preview(!previewing)} aria-pressed={previewing} className={`block w-full text-left transition-colors duration-200 ${previewing ? WASH : ""}`}>
+      <Toggle pressed={previewing} onPressedChange={preview} className={`block w-full text-left transition-colors duration-200 ${previewing ? WASH : ""}`}>
         <Face
           mark={<BuildMark name={needs[0]} />}
           tone={buildTone(needs[0], sent)}
@@ -180,7 +181,7 @@ function Sent(props: {
           right={right ?? ((road.home ?? (road.craft === "The Will" ? road.arrives : null)) === null ? "Not yet" : `Year ${year((road.home ?? road.arrives)!)}`)}
           more={false}
         />
-      </button>
+      </Toggle>
       <div className="pl-7">
         <div className="mt-1.5 mb-1">
           <Brings road={road} />

@@ -1,3 +1,4 @@
+import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { useEffect, useRef, useState } from "react";
 import { useBeams } from "@/components/beams";
 import { starName } from "@/lib/game/leads";
@@ -238,14 +239,19 @@ function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: str
       <span className={`${lab} text-you`}>To everyone</span>
       <Travels draft={draft} />
       {!sent && canCall && (
-        <div className="inline-flex self-start rounded-full border border-frame p-0.5" role="group" aria-label="How far">
-          <button type="button" aria-pressed={!far} onClick={() => setFar(false)} className={toggle(!far)}>
+        <SegmentedControl
+          aria-label="How far"
+          value={far ? "galaxy" : "near"}
+          onValueChange={(v) => v && setFar(v === "galaxy")}
+          className="inline-flex self-start rounded-full border border-frame p-0.5"
+        >
+          <SegmentedControlItem value="near" className={({ checked }) => toggle(checked)}>
             The stars near us
-          </button>
-          <button type="button" aria-pressed={far} onClick={() => setFar(true)} className={toggle(far)}>
+          </SegmentedControlItem>
+          <SegmentedControlItem value="galaxy" className={({ checked }) => toggle(checked)}>
             The Galaxy
-          </button>
-        </div>
+          </SegmentedControlItem>
+        </SegmentedControl>
       )}
       {!sent && !galaxy && (
         <label className="flex flex-col gap-1.5">
@@ -281,14 +287,19 @@ function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: str
         </p>
       ) : (
         <>
-          <div className="inline-flex self-start rounded-full border border-frame p-0.5" role="group" aria-label="Repeat">
-            <button type="button" aria-pressed={repeat} onClick={() => setRepeat(true)} className={toggle(repeat)}>
+          <SegmentedControl
+            aria-label="Repeat"
+            value={repeat ? "repeat" : "once"}
+            onValueChange={(v) => v && setRepeat(v === "repeat")}
+            className="inline-flex self-start rounded-full border border-frame p-0.5"
+          >
+            <SegmentedControlItem value="repeat" className={({ checked }) => toggle(checked)}>
               Repeat until stopped
-            </button>
-            <button type="button" aria-pressed={!repeat} onClick={() => setRepeat(false)} className={toggle(!repeat)}>
+            </SegmentedControlItem>
+            <SegmentedControlItem value="once" className={({ checked }) => toggle(checked)}>
               Once
-            </button>
-          </div>
+            </SegmentedControlItem>
+          </SegmentedControl>
           {over && <p className="text-[12.5px] text-other">More power than Earth makes. Send less, or not as far.</p>}
           <Buttons label={repeat ? "Start calling" : "Send once"} off={over} onSend={() => send({ ...draft, id, y: year ?? 0, asked, reach: galaxy ? reach : dial, repeat, ...(galaxy ? { galaxy: true } : {}) })} />
         </>

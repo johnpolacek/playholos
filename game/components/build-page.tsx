@@ -1,3 +1,4 @@
+import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Fragment, useEffect, useMemo, useRef } from "react";
 import { useGame } from "@/components/game-provider";
@@ -442,19 +443,22 @@ function Switch({ name }: { name: string }) {
   const at = switchedAt(plan, name, now);
   return (
     <div className="mt-3 rounded-lg border border-rowline p-2.5" style={{ "--c": buildColor(name) } as React.CSSProperties}>
-      <div role="radiogroup" aria-label={`How the ${name} stands`} className="grid grid-cols-2 gap-1 rounded-full bg-ink/[.06] p-1">
+      <SegmentedControl
+        aria-label={`How the ${name} stands`}
+        value={on ? "on" : "off"}
+        onValueChange={(v) => v && (v === "on") !== on && change(switchTo(name, now, v === "on"))}
+        className="grid grid-cols-2 gap-1 rounded-full bg-ink/[.06] p-1"
+      >
         {[true, false].map((to) => (
-          <button
+          <SegmentedControlItem
             key={String(to)}
-            role="radio"
-            aria-checked={on === to}
-            onClick={() => to !== on && change(switchTo(name, now, to))}
+            value={to ? "on" : "off"}
             className={`h-9 rounded-full text-[13.5px] font-medium transition-colors ${on === to ? (to ? "bg-(--c) text-paper" : "bg-button text-paper") : "text-page-ink2 hover:text-ink"}`}
           >
             {to ? s.on : s.off}
-          </button>
+          </SegmentedControlItem>
         ))}
-      </div>
+      </SegmentedControl>
       <p className="mt-2 px-1 text-[13px] leading-snug text-page-ink2">
         {on ? s.whenOn : s.whenOff}
         {at !== null && year !== null ? ` Set at Year ${yearText(at)}.` : ""}

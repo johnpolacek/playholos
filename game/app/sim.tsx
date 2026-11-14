@@ -1,3 +1,4 @@
+import { Tabs as TabsRoot, TabsList, TabsPanel, TabsTab } from "@ui-sdk/react/tabs";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Play } from "@/components/icons";
@@ -535,7 +536,7 @@ export default function Sim() {
                   tabs={onSim ? DRAWN_TABS : [{ id: "tour", label: "Tour" }, ...REAL_TABS]}
                   active={tab ?? "tour"}
                   onPick={(id) => goTab(id as Tab | "tour")}
-                />
+                >
                 {stop && (
                   <>
                 <div className="mt-2.5 flex items-center justify-between gap-2">
@@ -630,6 +631,7 @@ export default function Sim() {
                 )}
                   </>
                 )}
+                </Tabs>
               </section>
             )}
           </div>
@@ -968,7 +970,7 @@ function Field({ perStar }: { perStar: number }) {
 
 /** The tabs at a card's head: a section's lists, one lit by a pill that slides to whichever is picked, and stretches a
  *  little on the way as if it had weight. 2026-11-10. */
-function Tabs({ tabs, active, onPick }: { tabs: { id: string; label: string }[]; active: string | null; onPick(id: string): void }) {
+function Tabs({ tabs, active, onPick, children }: { tabs: { id: string; label: string }[]; active: string; onPick(id: string): void; children: React.ReactNode }) {
   const row = useRef<HTMLDivElement>(null);
   const pill = useRef<HTMLSpanElement>(null);
   const was = useRef<{ x: number; w: number } | null>(null);
@@ -990,22 +992,27 @@ function Tabs({ tabs, active, onPick }: { tabs: { id: string; label: string }[];
     tl.to(p, { x: to.x, width: to.w, duration: 0.28, ease: "power3.out" });
     return () => void tl.kill();
   }, [active, tabs]);
+  // On ui-sdk's Tabs since 2026-11-14: the arrow keys move between them, and what the card shows below is the picked
+  // tab's panel, one panel that follows the pick.
   return (
-    <div ref={row} role="tablist" className="relative flex flex-wrap gap-1 font-mono text-[11px]">
-      <span ref={pill} aria-hidden className="pointer-events-none absolute top-0 bottom-0 left-0 rounded-full bg-ink/15 opacity-0" />
-      {tabs.map((t) => (
-        <button
-          key={t.id}
-          role="tab"
-          data-tab={t.id}
-          aria-selected={active === t.id}
-          className={`relative z-10 rounded-full px-3 py-0.5 transition-colors duration-300 ${active === t.id ? "text-ink" : "text-muted hover:text-ink"}`}
-          onClick={() => onPick(t.id)}
-        >
-          {t.label}
-        </button>
-      ))}
-    </div>
+    <TabsRoot value={active} onValueChange={(id) => id && onPick(id)}>
+      <TabsList ref={row} aria-label="Sections" className="relative flex flex-wrap gap-1 font-mono text-[11px]">
+        <span ref={pill} aria-hidden className="pointer-events-none absolute top-0 bottom-0 left-0 rounded-full bg-ink/15 opacity-0" />
+        {tabs.map((t) => (
+          <TabsTab
+            key={t.id}
+            value={t.id}
+            data-tab={t.id}
+            className={`relative z-10 rounded-full px-3 py-0.5 transition-colors duration-300 ${active === t.id ? "text-ink" : "text-muted hover:text-ink"}`}
+          >
+            {t.label}
+          </TabsTab>
+        ))}
+      </TabsList>
+      <TabsPanel value={active} className="outline-none">
+        {children}
+      </TabsPanel>
+    </TabsRoot>
   );
 }
 

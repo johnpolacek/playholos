@@ -1,3 +1,4 @@
+import { Toggle, ToggleGroup } from "@ui-sdk/react/toggle";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
@@ -652,16 +653,23 @@ export function Guide() {
             <span className="mr-0.5">
               IDEAS MET · {talk.seen.length} OF {Object.keys(IDEAS).length}
             </span>
-            {talk.seen.filter((k): k is Key => k in IDEAS).map((k) => (
-              <button
-                key={k}
-                onClick={() => reread(k)}
-                aria-pressed={k === talk.now}
-                className={`rounded-full border px-2 py-[3px] text-[10.5px] tracking-normal ${k === talk.now ? "border-you/70 text-you" : "border-faint text-page-ink2 hover:border-muted"}`}
-              >
-                {IDEAS[k]}
-              </button>
-            ))}
+            <ToggleGroup
+              aria-label="Ideas met"
+              value={[talk.now]}
+              onValueChange={(v) => v[0] && reread(v[0] as Key)}
+              deselectable={false}
+              className="contents"
+            >
+              {talk.seen.filter((k): k is Key => k in IDEAS).map((k) => (
+                <Toggle
+                  key={k}
+                  value={k}
+                  className={`rounded-full border px-2 py-[3px] text-[10.5px] tracking-normal ${k === talk.now ? "border-you/70 text-you" : "border-faint text-page-ink2 hover:border-muted"}`}
+                >
+                  {IDEAS[k]}
+                </Toggle>
+              ))}
+            </ToggleGroup>
           </div>
         )}
         <div className="mt-3 flex min-h-[34px] items-center justify-between gap-2.5">

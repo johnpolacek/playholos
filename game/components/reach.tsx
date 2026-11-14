@@ -1,3 +1,4 @@
+import { Toggle } from "@ui-sdk/react/toggle";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 import { SAIL_C } from "@/lib/sim/speeds";
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -349,15 +350,15 @@ function Flybys({ rows, now, aimAt }: { rows: { id: string; slug?: string; name:
                     {words}
                   </Link>
                 ) : (
-                  <button
-                    onClick={aim.toggle}
+                  <Toggle
+                    pressed={aim.shown}
+                    onPressedChange={() => aim.toggle()}
                     onPointerEnter={() => aim.point(true)}
                     onPointerLeave={() => aim.point(false)}
-                    aria-pressed={aim.shown}
                     className={`flex w-full items-baseline justify-between gap-3 py-1.5 text-left transition-colors duration-200 ${aim.lit ? WASH : ""}`}
                   >
                     {words}
-                  </button>
+                  </Toggle>
                 )}
                 {r.recall && <CancelCraft go={r.recall} />}
               </li>

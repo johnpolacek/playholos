@@ -180,24 +180,13 @@ export interface Aim {
 /** A lit row's wash reaches past its edges without moving them. */
 export const WASH = "bg-ink/[.04] shadow-[-10px_0_0_rgb(230_227_219/.04),10px_0_0_rgb(230_227_219/.04)]";
 
-/** A row's tap and mouse, which pick it and point at it. */
-export const pointer = (aim: Aim): React.HTMLAttributes<HTMLElement> => ({
-  onClick: aim.toggle,
-  onPointerEnter: (e) => void (e.pointerType === "mouse" && aim.point(true)),
-  onPointerLeave: (e) => void (e.pointerType === "mouse" && aim.point(false)),
-});
-
-/** A row's keys, for whatever in it takes the focus. */
-export const focusable = (aim: Aim): React.HTMLAttributes<HTMLElement> => ({
-  role: "button",
-  tabIndex: 0,
-  "aria-pressed": aim.shown,
-  onKeyDown: (e) => {
-    if (e.key !== "Enter" && e.key !== " ") return;
-    e.preventDefault();
-    aim.toggle();
-  },
-  onFocus: (e) => void (e.currentTarget.matches(":focus-visible") && aim.point(true)),
+/** A whole row as ui-sdk's Toggle, pressed while its aim is shown: its tap, keys and mouse. Since 2026-11-14. */
+export const aimed = (aim: Aim) => ({
+  pressed: aim.shown,
+  onPressedChange: () => aim.toggle(),
+  onPointerEnter: (e: React.PointerEvent) => void (e.pointerType === "mouse" && aim.point(true)),
+  onPointerLeave: (e: React.PointerEvent) => void (e.pointerType === "mouse" && aim.point(false)),
+  onFocus: (e: React.FocusEvent) => void (e.currentTarget.matches(":focus-visible") && aim.point(true)),
   onBlur: () => aim.point(false),
 });
 

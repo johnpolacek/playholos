@@ -1,3 +1,4 @@
+import { Toggle } from "@ui-sdk/react/toggle";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useNext } from "@/components/begin";
@@ -81,11 +82,11 @@ function Choose({ scale, done }: { scale: number; done: Record<string, number | 
           const locked = n < 0 && lacking.length > 0;
           return (
             <li key={b.name}>
-              <button
+              <Toggle
                 disabled={!open || locked}
-                aria-pressed={n >= 0}
+                pressed={n >= 0}
                 // A tap flies the map there too: a phone has no pointing. 2026-11-07.
-                onClick={() => {
+                onPressedChange={() => {
                   change(toggleBuild(b.name));
                   if (SITES[b.name]) pick(b.name);
                 }}
@@ -140,7 +141,7 @@ function Choose({ scale, done }: { scale: number; done: Record<string, number | 
                 <span className="pt-0.5 text-right font-mono text-[11px] text-page-ink2 tabular-nums">
                   {locked ? "" : when(by(b.name))}
                 </span>
-              </button>
+              </Toggle>
             </li>
           );
         })}

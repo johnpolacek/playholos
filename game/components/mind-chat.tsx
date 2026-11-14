@@ -1,3 +1,4 @@
+import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { Chat, useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -390,18 +391,22 @@ export function MindSettings({ keyed, free = false }: { keyed: boolean; free?: b
     <div className="mb-3 flex flex-col gap-2 rounded-lg border border-dashed border-muted p-3 font-mono text-[10.5px] tracking-[.06em] uppercase">
       <Row name="Model">
         {/* On us, Opus thinks as Sonnet, so it isn't offered. 2026-11-08. */}
-        {(Object.keys(MIND_MODELS) as MindModel[]).filter((m) => !free || m !== "claude-opus-5-5").map((m) => (
-          <button key={m} type="button" aria-pressed={shown === m} onClick={() => choose({ model: m })} className={toggle(shown === m)}>
-            {MIND_MODELS[m].name}
-          </button>
-        ))}
+        <SegmentedControl aria-label="Model" value={shown} onValueChange={(m) => m && choose({ model: m as MindModel })} className="flex items-center gap-0.5">
+          {(Object.keys(MIND_MODELS) as MindModel[]).filter((m) => !free || m !== "claude-opus-5-5").map((m) => (
+            <SegmentedControlItem key={m} value={m} className={({ checked }) => toggle(checked)}>
+              {MIND_MODELS[m].name}
+            </SegmentedControlItem>
+          ))}
+        </SegmentedControl>
       </Row>
       <Row name="Effort">
-        {EFFORTS.map((e) => (
-          <button key={e} type="button" aria-pressed={pick.effort === e} onClick={() => choose({ effort: e })} className={toggle(pick.effort === e)}>
-            {e}
-          </button>
-        ))}
+        <SegmentedControl aria-label="Effort" value={pick.effort} onValueChange={(e) => e && choose({ effort: e as typeof pick.effort })} className="flex items-center gap-0.5">
+          {EFFORTS.map((e) => (
+            <SegmentedControlItem key={e} value={e} className={({ checked }) => toggle(checked)}>
+              {e}
+            </SegmentedControlItem>
+          ))}
+        </SegmentedControl>
       </Row>
       <Row name="This talk">
         <span className="px-2 text-page-ink2 normal-case tabular-nums">{spent(messages)}</span>

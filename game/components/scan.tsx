@@ -1,3 +1,4 @@
+import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
@@ -385,19 +386,22 @@ export function Scan() {
     <>
       <Path />
       {heard.length > 0 && <Heard />}
-      <div role="tablist" aria-label="What we look for" className="mt-4 flex gap-1.5">
+      <SegmentedControl
+        aria-label="What we look for"
+        value={lens}
+        onValueChange={(key) => key && setParams(key === "all" ? {} : { lens: key }, { replace: true })}
+        className="mt-4 flex gap-1.5"
+      >
         {LENSES.map(({ key, label }) => (
-          <button
+          <SegmentedControlItem
             key={key}
-            role="tab"
-            aria-selected={lens === key}
-            onClick={() => setParams(key === "all" ? {} : { lens: key }, { replace: true })}
+            value={key}
             className={`h-7 rounded-full px-3 text-[12.5px] font-medium transition-colors ${lens === key ? "bg-button text-paper" : "border border-faint text-page-ink2 hover:border-muted"}`}
           >
             {label}
-          </button>
+          </SegmentedControlItem>
         ))}
-      </div>
+      </SegmentedControl>
       {lens === "homes" && <HomesChart leads={homes} readings={readings} />}
       <LeadList
         leads={leads}
