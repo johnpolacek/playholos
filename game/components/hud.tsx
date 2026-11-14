@@ -150,6 +150,9 @@ function Skip() {
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
   // Undefined while we ask, null once the server says nothing comes. 2026-10-30.
   const [next, setNext] = useState<number | null | undefined>(undefined);
+  // The orders that answer was for. A build ordered and a tap on the jump before the server's new answer flew a
+  // playtest 883 Years past Relay Search done, on the stop the plan had before it. 2026-11-14.
+  const [answered, setAnswered] = useState<string | null>(null);
   const [hover, setHover] = useState(false);
   const seed = save?.seed;
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,6 +160,11 @@ function Skip() {
     () => knownQuery(save, tenth),
     [tenth, save?.plan, save?.will],
   );
+  const orders = useMemo(() => {
+    const q = new URLSearchParams(query);
+    q.delete("year");
+    return q.toString();
+  }, [query]);
   useEffect(() => {
     if (seed === undefined || tenth === null) return;
     let live = true;
@@ -170,13 +178,14 @@ function Skip() {
           if (!live) return;
           setNext(v ? v.next : undefined);
           setWhy(v?.why ?? null);
+          setAnswered(orders);
         },
         () => live && setNext(undefined),
       );
     return () => void (live = false);
-  }, [seed, query, tenth]);
+  }, [seed, query, tenth, orders]);
   const stale =
-    tenth === null || next === undefined || (next !== null && next <= tenth);
+    tenth === null || next === undefined || answered !== orders || (next !== null && next <= tenth);
   // Shown and landed in tenths, as the Year is: a stop within the tenth we're in lands on the next tenth.
   const to =
     stale || next === null
