@@ -1049,12 +1049,17 @@ function watcherLead(w: WatcherSeen): Lead {
     ? {
         temp: 5772,
         lum: 1,
-        // Earth's whole orbit in view, with room round it: framed on 1 AU it ran past the map's edges, and the
+        // Mars's whole orbit in view, with room round it: framed on 1 AU it ran past the map's edges, and the
         // watcher with it.
-        span: 2,
+        span: 3,
+        // The planets inside 2 AU drawn too, from their real orbits, so the scale reads at a glance. Playtest
+        // 2026-11-14: Earth and the watcher alone, with nothing else, raised "what is the Earth orbiting?".
         worlds: [
+          { name: "Mercury", a: 0.387, e: 0.2056, days: 87.97, mass: 0.0553, status: "confirmed" },
+          { name: "Venus", a: 0.723, e: 0.0068, days: 224.7, mass: 0.815, status: "confirmed" },
           { name: "Earth", a: 1, e: 0.0167, days: 365.25, mass: 1, status: "confirmed" },
-          { name: `the watcher, at ${L}`, a: 1, e: 0, days: 365.25, status: "confirmed", lead: true, with: { of: 0, deg: L === "L4" ? 60 : -60 } },
+          { name: "Mars", a: 1.524, e: 0.0934, days: 686.98, mass: 0.107, status: "confirmed" },
+          { name: `the watcher, at ${L}`, a: 1, e: 0, days: 365.25, status: "confirmed", lead: true, with: { of: 2, deg: L === "L4" ? 60 : -60 } },
         ],
       }
     : undefined;
