@@ -181,7 +181,7 @@ export function Item({
       line={
         row.fresh ? (
           <span className="text-ink">
-            <span className="mr-1.5 rounded-full bg-other px-1.5 py-px font-mono text-[9px] tracking-[.08em] text-paper">NEW</span>
+            <span className="mr-1.5 rounded-full bg-other px-1.5 py-px font-mono text-[9px] tracking-[.08em] text-paper log:rounded-[1px]">NEW</span>
             {row.note}
           </span>
         ) : (
@@ -193,10 +193,11 @@ export function Item({
     />
   );
   // The thread runs under the words, clear of the mark. A build's color stands in for our blue, so its mark, thread
-  // and done take it.
+  // and done take it. Under the Log skin, 2026-11-15, a row is an entry in the log: its name in the record's serif,
+  // its date or count in mono at the right, and a build's row, which keeps its own paper to be dragged, ruled too.
   if (build)
     return (
-      <li data-q="row" data-key={row.key} style={{ ...buildBlue(row.name), ...style }} className="relative border-t border-faint bg-panel">
+      <li data-q="row" data-key={row.key} style={{ ...buildBlue(row.name), ...style }} className="ledger relative border-t border-faint bg-panel">
         <Link to={`/play/build/${buildSlug(row.name)}`} className="block py-2.5" {...point}>
           {head}
           <div className="pl-7">

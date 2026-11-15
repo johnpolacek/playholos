@@ -487,9 +487,11 @@ export function EngageBar({ to, star }: { to: string; star: string }) {
 }
 
 /** The latest reading, in our blue: when and by what, what it found, how it moved our chances, and the Mind's word. */
+// Under the Log skin, 2026-11-15, a reading is a dated entry in the log: no box, only a rule over it in our blue, its
+// date line in mono, and the Mind's word on it in the margin's italic. The border stays, unseen, so nothing moves.
 export function ReadingCard({ read, chance, onListen }: { read: Reading; chance?: React.ReactNode; onListen?: () => void }) {
   return (
-    <section data-m className="mt-3 rounded-xl border border-you/60 bg-you/[.06] px-3 py-2.5">
+    <section data-m className="mt-3 rounded-xl border border-you/60 bg-you/[.06] px-3 py-2.5 log:rounded-none log:border-transparent log:border-t-you/60 log:bg-transparent">
       <span className="font-mono text-[10px] tracking-[.1em] text-you">
         READING · YEAR {yearText(read.at)} · {read.by.toUpperCase()}
       </span>
@@ -509,8 +511,8 @@ export function ReadingCard({ read, chance, onListen }: { read: Reading; chance?
           <WatcherClose {...read.close} />
         </div>
       )}
-      <p className="mt-2 text-[13.5px] leading-snug text-page-ink2">
-        <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-you">THE MIND</span>
+      <p className="mt-2 text-[13.5px] leading-snug text-page-ink2 log:italic">
+        <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-you not-italic">THE MIND</span>
         {read.mind}
       </p>
     </section>
