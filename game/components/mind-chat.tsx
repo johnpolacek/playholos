@@ -293,10 +293,10 @@ function Answer({ id, text, still, asked, last }: { id: string; text: string; st
   );
 }
 
-/** What we asked, as a bubble in ink on the right. The Mind answers in its notes. Under Schematic, 2026-11-15, the
- *  bubble is drawn in an ink line, not filled. Under Infrared, cold violet-black, its words chalk. */
+/** What we asked, as a bubble in ink on the right. The Mind answers in its notes. Under Infrared, 2026-11-15, it is
+ *  cold violet-black, its words chalk. */
 export function Ours({ children }: { children: React.ReactNode }) {
-  return <div className="max-w-[86%] self-end rounded-xl bg-button instrument:rounded-[5px] schematic:rounded-[2px] schematic:bg-transparent schematic:text-ink schematic:shadow-[inset_0_0_0_1px_var(--ink)] infrared:bg-(--cold) infrared:text-ink infrared:shadow-[inset_0_0_0_1px_var(--heat-0)] px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">{children}</div>;
+  return <div className="max-w-[86%] self-end rounded-xl bg-button instrument:rounded-[5px] infrared:bg-(--cold) infrared:text-ink infrared:shadow-[inset_0_0_0_1px_var(--heat-0)] px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">{children}</div>;
 }
 
 /** Messages as bubbles: ours in ink, the Mind's as its notes. Then whether it is thinking, or can't answer. */

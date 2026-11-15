@@ -21,25 +21,15 @@ import { getSkin, savedSkin, saveSkin, setSkin, SKINS, type Skin, useSkin } from
 // pages keep the skin they had.
 
 // Each skin's swatch, drawn as the skin is: chalk flat, Instrument a dark cap with a lamp, Log a square of ruled
-// paper, Schematic a crosshair drawn in a line on its blue-black, Infrared a hot point cooling to violet.
+// paper, Infrared a hot point cooling to violet.
 const DOT: Record<Skin, string> = {
   chalk: "rounded-full bg-button",
   instrument: "rounded-full bg-[radial-gradient(circle_at_50%_50%,var(--other)_1.5px,transparent_2px),linear-gradient(#2c2e32,#131416)] shadow-[inset_0_0_0_1px_#000]",
   log: "rounded-[2px] bg-[repeating-linear-gradient(#14130f_0_3px,#7d7566_3px_4px)] shadow-[inset_0_0_0_1px_#7d7566]",
-  schematic: "relative rounded-[1px] bg-[#06101b] shadow-[inset_0_0_0_1px_#4f8aa8]",
   infrared: "rounded-full bg-[radial-gradient(circle,#fff2cf_0,#f4a53c_25%,#e2533e_45%,#b9418f_65%,#2a1846_90%)]",
 };
 
-const Swatch = ({ id }: { id: Skin }) => (
-  <i aria-hidden className={`block size-3.5 shrink-0 ${DOT[id]}`}>
-    {id === "schematic" && (
-      <>
-        <i className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[#bfe6f7]" />
-        <i className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-[#bfe6f7]" />
-      </>
-    )}
-  </i>
-);
+const Swatch = ({ id }: { id: Skin }) => <i aria-hidden className={`block size-3.5 shrink-0 ${DOT[id]}`} />;
 
 // The picker, 2026-11-15. It was a row of bare dots, and with four skins a playtest couldn't tell what they were or
 // that there were more. Now it names the skin it is in, and opens a list of each, with its swatch and what it draws

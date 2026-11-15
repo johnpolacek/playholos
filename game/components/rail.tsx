@@ -87,9 +87,8 @@ export function RailTab({
       aria-label={aria}
       // The rail's own mark, so a skin can tell a tab from a key drawn on its own. 2026-11-15.
       data-rail
-      // A tab with calls waiting is tinted. Under Schematic, 2026-11-15, nothing is filled, so it is hatched, as
-      // anything queued is. Under Infrared, the tab we are on is the warm one: its line amber.
-      className={`flex items-center justify-center gap-1.5 text-[11px] hw-key-dark instrument:rounded-[7px] instrument:border instrument:font-mono instrument:tracking-[.08em] instrument:uppercase ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)] instrument:shadow-[inset_0_1px_3px_rgb(0_0_0/.7),inset_0_-2px_0_var(--ink)] instrument:bg-none instrument:bg-track infrared:shadow-[inset_0_2px_0_var(--heat-3)]" : "text-muted instrument:shadow-(--hw-key)"} ${calls ? "bg-other/10 schematic:bg-transparent schematic:bg-(image:--hatch)" : ""}`}
+      // A tab with calls waiting is tinted. Under Infrared, 2026-11-15, the tab we are on is the warm one: its line amber.
+      className={`flex items-center justify-center gap-1.5 text-[11px] hw-key-dark instrument:rounded-[7px] instrument:border instrument:font-mono instrument:tracking-[.08em] instrument:uppercase ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)] instrument:shadow-[inset_0_1px_3px_rgb(0_0_0/.7),inset_0_-2px_0_var(--ink)] instrument:bg-none instrument:bg-track infrared:shadow-[inset_0_2px_0_var(--heat-3)]" : "text-muted instrument:shadow-(--hw-key)"} ${calls ? "bg-other/10" : ""}`}
     >
       {label}
       {calls > 0 ? (

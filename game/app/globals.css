@@ -10,8 +10,6 @@
 @custom-variant instrument (&:where([data-skin="instrument"] *));
 /* And one for the Log skin, as log:rounded-none. 2026-11-15. */
 @custom-variant log (&:where([data-skin="log"] *));
-/* And for Schematic, as schematic:bg-transparent. 2026-11-15. */
-@custom-variant schematic (&:where([data-skin="schematic"] *));
 /* And for Infrared, as infrared:bg-none. 2026-11-15. */
 @custom-variant infrared (&:where([data-skin="infrared"] *));
 
@@ -352,118 +350,7 @@
   }
 }
 
-/* Schematic, the fourth skin, 2026-11-15: the game as a technical drawing. Thin cyan-white lines on a deep blue-black,
-   and no filled surface: a panel, a sheet and the page are one ground, set apart by their lines and a faint drafting
-   grid. A button is drawn, not filled, in its own line color, and each build keeps its color as its line. A control
-   pressed, chosen or queued is hatched, as a section is in a drawing. A meter or a slider is a dimension line with its
-   end ticks and its tenths, its reading hatched along it. Focus is a crosshair, components/kit/crosshair.tsx, over a
-   thin ring. The rings, threads and orbits are drawn as diagrams already, so the art stays as it is. Body text is 7.8:1
-   or more on the ground, and a control's edge, --line, 5:1. None of it applies to the other skins. */
-[data-skin="schematic"] {
-  --page: #06101b;
-  --paper: #06101b;
-  --panel: #06101b;
-  --frame: #1d3a50;
-  --faint: #1d3a50;
-  --rowline: #142a3b;
-  --track: #1d3a50;
-  --ink: #dcf2ff;
-  --page-ink2: #a3c6d9;
-  --muted: #86abc0;
-  --button: #dcf2ff;
-  --fill2: #bfe6f7;
-  /* The edge of anything we press. */
-  --line: #4f8aa8;
-  /* A section's hatching, in the color of what it hatches, light enough that words on it stay crisp. */
-  --hatch: repeating-linear-gradient(-45deg, color-mix(in srgb, currentColor 24%, transparent) 0 1px, transparent 1px 5px);
-  /* The drafting grid, every 16px, almost out of sight. */
-  --grid:
-    linear-gradient(rgb(120 200 240 / 0.05) 1px, transparent 1px) 0 0 / 16px 16px,
-    linear-gradient(90deg, rgb(120 200 240 / 0.05) 1px, transparent 1px) 0 0 / 16px 16px;
-}
-@layer base {
-  /* A thin ring of ink, and the crosshair over it. */
-  [data-skin="schematic"] :focus-visible {
-    outline: 1px solid var(--ink);
-    outline-offset: 3px;
-  }
-}
-@layer components {
-  /* A panel, a sheet or a tab's page is the ground with its grid on it. */
-  [data-skin="schematic"] :is(.hw-panel, .ledger) {
-    background: var(--grid);
-    background-color: var(--panel);
-    background-attachment: local;
-  }
-  [data-skin="schematic"] .engrave {
-    font-family: var(--font-plex-mono);
-  }
-}
-@layer utilities {
-  /* Every control is squared, as a drawn box is. */
-  [data-skin="schematic"] :is(.hw-key, .hw-key-dark, .hw-well, .stamp) {
-    border-radius: 1px;
-  }
-  [data-skin="schematic"] .hw-panel {
-    border-radius: 2px;
-  }
-  /* A filled control is drawn instead: its fill goes, and its color becomes its ink and its edge. */
-  [data-skin="schematic"]
-    :is(.hw-key, .stamp, [data-slot="segmented-control-item"], [data-slot="toggle"]):is(.bg-button, .bg-you, .bg-other, .bg-faint, .bg-\(--c\)) {
-    background-color: transparent;
-    box-shadow: inset 0 0 0 1px currentColor;
-  }
-  [data-skin="schematic"] :is(.hw-key, .stamp, [data-slot="segmented-control-item"]):is(.bg-button, .bg-faint) {
-    color: var(--ink);
-  }
-  [data-skin="schematic"] :is(.hw-key, .stamp):is(.bg-you) {
-    color: var(--you);
-  }
-  [data-skin="schematic"] :is(.hw-key, .stamp):is(.bg-other) {
-    color: var(--other);
-  }
-  [data-skin="schematic"] [data-slot="segmented-control-item"].bg-\(--c\) {
-    color: var(--c);
-  }
-  /* A quiet edge is lifted to a line that reads, until a hover or an open list lights it. */
-  [data-skin="schematic"] :is(.hw-key-dark, .hw-well):is(.border-faint, .border-frame):not(:hover, [data-open]) {
-    border-color: var(--line);
-  }
-  /* Pressed, chosen, or held down under a press: hatched. The change is at once, so nothing moves for reduced
-     motion to still. */
-  [data-skin="schematic"]
-    :is(
-      [data-slot="segmented-control-item"][data-checked]:is(.hw-key, .bg-button, .bg-\(--c\)),
-      [data-slot="toggle"][data-pressed]:is(.hw-key, .hw-key-dark)
-    ),
-  [data-skin="schematic"] :is(.hw-key, .hw-key-dark, .stamp):active:not(:disabled) {
-    background-image: var(--hatch);
-  }
-  /* A meter's track and a slider's line are dimension lines: a hairline across, a tick at each end, and the tenths
-     marked under it. The reading runs along it, hatched, and ends on its own tick. */
-  [data-skin="schematic"] :is([data-slot="meter-track"], [data-slot="slider-track"]) {
-    border-radius: 0;
-    background:
-      linear-gradient(var(--line), var(--line)) center / 100% 1px no-repeat,
-      linear-gradient(var(--line), var(--line)) left / 1px 100% no-repeat,
-      linear-gradient(var(--line), var(--line)) right / 1px 100% no-repeat,
-      repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 10%) bottom / 100% 2px no-repeat;
-    box-shadow: none;
-  }
-  [data-skin="schematic"] [data-slot="meter-indicator"] {
-    color: var(--fill2);
-    background: var(--hatch);
-    border-right: 1px solid currentColor;
-  }
-  [data-skin="schematic"] [data-slot="slider-indicator"] {
-    color: var(--tone);
-    border-radius: 0;
-    background: var(--hatch);
-    border-right: 1px solid currentColor;
-  }
-}
-
-/* Infrared, the fifth skin, 2026-11-15: the game as a thermal image, in an astronomer's false-color heat palette, from
+/* Infrared, the fourth skin, 2026-11-15: the game as a thermal image, in an astronomer's false-color heat palette, from
    violet-black through magenta and red to amber and white. The game is about warm glows and minds that run cold, so
    the ground is cold and only what we touch heats. Each of ui-sdk's states is a temperature, and a hotter state wins:
      idle                              --heat-0  cold violet

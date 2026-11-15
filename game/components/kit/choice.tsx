@@ -8,7 +8,6 @@ import { useSkin } from "@/lib/skin";
 // Under the Instrument skin, 2026-11-15, the track is a well and the chosen one a key standing in it. A switch build's
 // two sides are a real switch there, ui-sdk's Switch: a lever between its two names, thrown toward the one that holds.
 // Under the Log skin, 2026-11-15, each is squared, and a lens or a switch's side is a stamp, the chosen one inked.
-// Under Schematic, 2026-11-15, each is drawn in lines, the chosen one hatched, app/globals.css; a switch's track too.
 
 const LOOK = {
   /** Small type in a settings card: the Mind's model and effort. */
@@ -29,7 +28,7 @@ const LOOK = {
   },
   /** Two halves of one wide track: a switch build's sides. An option's `on` colors it when chosen. */
   switch: {
-    root: "grid grid-cols-2 gap-1 rounded-full bg-ink/[.06] p-1 log:rounded-[3px] schematic:rounded-[2px] schematic:bg-transparent schematic:shadow-[inset_0_0_0_1px_var(--line)]",
+    root: "grid grid-cols-2 gap-1 rounded-full bg-ink/[.06] p-1 log:rounded-[3px]",
     item: (on: boolean) => `h-9 rounded-full text-[13.5px] font-medium transition-colors log:rounded-[2px] ${on ? "stamp" : "text-page-ink2 hover:text-ink"}`,
   },
 } as const;

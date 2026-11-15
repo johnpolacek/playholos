@@ -138,11 +138,10 @@ export function Meter({
               render={<span />}
               className="absolute inset-y-0 bg-fill2 transition-[width] duration-500 motion-reduce:transition-none"
             />
-            {/* Under Schematic, 2026-11-15, the share still to come is queued, so it is hatched, as a section is. Under
-                Infrared its dashes are warm, as the heat still to come. */}
+            {/* Under Infrared, 2026-11-15, its dashes are warm, as the heat still to come. */}
             {to !== undefined && to > at && at < 1 && (
               <i
-                className="absolute inset-y-0 border-y border-dashed border-muted/70 schematic:border-y-0 schematic:bg-(image:--hatch) schematic:text-muted infrared:border-[color-mix(in_srgb,var(--heat-2)_75%,transparent)]"
+                className="absolute inset-y-0 border-y border-dashed border-muted/70 infrared:border-[color-mix(in_srgb,var(--heat-2)_75%,transparent)]"
                 style={{ left: `${at * 100}%`, width: `${(Math.min(1, to) - at) * 100}%` }}
               />
             )}
