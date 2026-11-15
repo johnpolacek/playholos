@@ -1,6 +1,6 @@
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
+import { Fold } from "@/components/kit/fold";
 import { type Beam, useBeams } from "@/components/beams";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
@@ -132,20 +132,9 @@ export function Messages() {
         Send a message of our own <span className="text-you">›</span>
       </Link>
       {past.length > 0 && (
-        <Collapsible open={pastOpen} onOpenChange={setPastOpen}>
-          <CollapsibleTrigger className="mt-5 flex w-full items-baseline justify-between pr-5 text-left font-mono text-[10px] tracking-[.1em] text-muted uppercase hover:text-ink">
-            <span>Past messages · {past.length}</span>
-            <span className={`transition-transform duration-300 ${pastOpen ? "rotate-90" : ""}`}>›</span>
-          </CollapsibleTrigger>
-          <CollapsiblePanel render={<ul />} className="mt-1">
-            {past.map(item)}
-          </CollapsiblePanel>
-          {!pastOpen && (
-            <p className="mt-1 border-t border-faint py-2.5 text-[13.5px] text-page-ink2">
-              All landed, or past their soonest reply. Nothing to watch for.
-            </p>
-          )}
-        </Collapsible>
+        <Fold label={`Past messages · ${past.length}`} open={pastOpen} onOpenChange={setPastOpen} shut="All landed, or past their soonest reply. Nothing to watch for.">
+          {past.map(item)}
+        </Fold>
       )}
     </section>
   );

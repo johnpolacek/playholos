@@ -1,4 +1,5 @@
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
+import { Fold } from "@/components/kit/fold";
 import { ChanceTag, chanceShift, mindFirst } from "@/components/chances";
 import { chancesOf } from "@/lib/game/chance";
 import { Link } from "react-router";
@@ -583,16 +584,9 @@ export function LeadList({
         )}
         {quiet > 0 && (
           <>
-            <Collapsible open={quietOpen} onOpenChange={setQuietOpen}>
-              <CollapsibleTrigger className="mt-5 flex w-full items-baseline justify-between pr-5 text-left font-mono text-[10px] tracking-[.1em] text-muted uppercase hover:text-ink">
-                <span>Quiet · {quiet}</span>
-                <span className={`transition-transform duration-300 ${quietOpen ? "rotate-90" : ""}`}>›</span>
-              </CollapsibleTrigger>
-              <CollapsiblePanel render={<ul />} className="mt-1 flex flex-col">
-                {rows("quiet")}
-              </CollapsiblePanel>
-              {!quietOpen && <p className="mt-1 border-t border-faint py-2.5 text-[13.5px] text-page-ink2">Nothing for us to do at these yet.</p>}
-            </Collapsible>
+            <Fold label={`Quiet · ${quiet}`} open={quietOpen} onOpenChange={setQuietOpen} shut="Nothing for us to do at these yet.">
+              {rows("quiet")}
+            </Fold>
           </>
         )}
       </>
