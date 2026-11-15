@@ -186,7 +186,7 @@ export function Catalog({ className = "" }: { className?: string }) {
               box.current?.scrollIntoView({ block: "center", behavior: "smooth" });
               box.current?.focus({ preventScroll: true });
             }}
-            className="pointer-events-auto h-9 rounded-full instrument:rounded-[7px] hw-key-dark border border-faint bg-panel px-4 text-[13px] text-ink shadow-lg hover:border-muted"
+            className="pointer-events-auto h-9 rounded-full instrument:rounded-[7px] hw-key-dark stamp border border-faint bg-panel px-4 text-[13px] text-ink shadow-lg hover:border-muted"
           >
             Find a build
           </Button>
@@ -220,7 +220,7 @@ function AllBuilt({ names, className }: { names: string[]; className: string }) 
       <p className="mt-3 text-[13.5px] leading-snug text-page-ink2">
         Every build open to us stands. What is left is what we do with them: where we send our craft, and whom we call.
       </p>
-      <Link to="/play/reach" className="mt-3 mb-5 inline-flex h-9 items-center self-start rounded-full instrument:rounded-[7px] hw-key-dark border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-button hover:text-paper">
+      <Link to="/play/reach" className="mt-3 mb-5 inline-flex h-9 items-center self-start rounded-full instrument:rounded-[7px] hw-key-dark stamp border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-button hover:text-paper">
         Go to Reach ›
       </Link>
     </>
@@ -247,7 +247,7 @@ export function useMindPick(on: boolean) {
 }
 
 /** The button on a row that queues its build: an outline that fills as it is pointed at. */
-export const ADD = "h-9 shrink-0 rounded-full instrument:rounded-[7px] hw-key-dark border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-button hover:text-paper";
+export const ADD = "h-9 shrink-0 rounded-full instrument:rounded-[7px] hw-key-dark stamp border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-button hover:text-paper";
 
 /** One build we could start, drawn: its mark, name and kind, what it does and when it would be done, what it costs our
  *  compute, what it opens, and the button that queues it. The Catalog feeds it the game, and /ui/build a fixed Earth.

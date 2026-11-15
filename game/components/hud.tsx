@@ -279,7 +279,7 @@ export function JumpPill({ why, onJump, rest = false }: { why: string | null; on
           onFocus={() => setHover(true)}
           onBlur={() => setHover(false)}
           // Filled, as the one move on a quiet screen: as a faint outline it read as a status. Playtest 2026-11-02.
-          className="relative -my-1 ml-2 inline-flex h-7 items-center rounded-full instrument:rounded-[7px] hw-key bg-you px-3 text-[12.5px] font-medium text-paper transition-[filter,opacity] hover:brightness-110 disabled:opacity-60"
+          className="relative -my-1 ml-2 inline-flex h-7 items-center rounded-full instrument:rounded-[7px] hw-key stamp bg-you px-3 text-[12.5px] font-medium text-paper transition-[filter,opacity] hover:brightness-110 disabled:opacity-60"
         >
           <Specks on={hover} tone="--paper" />
           {/* What comes next, never its Year, so a finding stays a surprise till it lands: "Jump to 579.5 · something new in
@@ -405,14 +405,14 @@ function Held({ idle }: { idle: boolean }) {
       {canAdd && (
         <Link
           to="/play/build"
-          className="-my-1 inline-flex h-7 items-center rounded-full instrument:rounded-[7px] hw-key-dark border border-you px-3 font-medium text-you hover:bg-you/10"
+          className="-my-1 inline-flex h-7 items-center rounded-full instrument:rounded-[7px] hw-key-dark stamp border border-you px-3 font-medium text-you hover:bg-you/10"
         >
           Add a build
         </Link>
       )}
       <Button
         onClick={playOn}
-        className="-my-1 inline-flex h-7 items-center rounded-full instrument:rounded-[7px] hw-key bg-you px-3 font-medium text-paper hover:brightness-110"
+        className="-my-1 inline-flex h-7 items-center rounded-full instrument:rounded-[7px] hw-key stamp bg-you px-3 font-medium text-paper hover:brightness-110"
       >
         Play on ›
       </Button>

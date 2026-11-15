@@ -197,7 +197,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
   const sent =
     (plan.flybys ?? []).filter((o) => o.name.startsWith(`${kind === "warm" ? "Warm" : "Cold"} glow `)).length +
     (plan.sentinels ?? []).filter((o) => o.name.startsWith(`${kind === "warm" ? "Warm" : "Cold"} glow `)).length;
-  const chip = (on: boolean) => `h-7 rounded-full instrument:rounded-[7px] hw-key-dark border px-2.5 text-[12.5px] ${on ? "border-ink text-ink" : "border-faint text-muted"}`;
+  const chip = (on: boolean) => `h-7 rounded-full instrument:rounded-[7px] hw-key-dark stamp border px-2.5 text-[12.5px] ${on ? "border-ink text-ink" : "border-faint text-muted"}`;
   const nearest = leads.filter((l) => l.slug.startsWith(`${kind}-glow-`)).reduce((m, l) => Math.min(m, l.ly), Infinity);
   // How far its word travels: the order's reach, or with no limit, the nearest glow we know of.
   const far = Number.isFinite(within) ? within : Number.isFinite(nearest) ? Math.round(nearest) : 100;

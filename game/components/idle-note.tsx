@@ -266,7 +266,7 @@ export function IdleNote() {
           {!watchNew && pick && orderAt !== null && (
             <Button
               onClick={start}
-              className="h-8 rounded-full instrument:rounded-[7px] hw-key bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+              className="h-8 rounded-full instrument:rounded-[7px] hw-key stamp bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
             >
               Start {pick.build.name}
             </Button>
@@ -280,7 +280,7 @@ export function IdleNote() {
             <>
               <Link
                 to={`/play/lead/${watchLead.slug}`}
-                className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+                className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key stamp bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
               >
                 Read it ›
               </Link>
@@ -293,7 +293,7 @@ export function IdleNote() {
             </>
           )}
           {!watchNew && glow && path !== `/play/lead/${glow.slug}` && (
-            <Link to={`/play/lead/${glow.slug}#close-reading`} className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110">
+            <Link to={`/play/lead/${glow.slug}#close-reading`} className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key stamp bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110">
               See {starName(glow.star)} ›
             </Link>
           )}
@@ -301,7 +301,7 @@ export function IdleNote() {
             <>
               <Link
                 to={`/play/reach/${heat.slug}`}
-                className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+                className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key stamp bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
               >
                 Engage {starName(heat.star)}
               </Link>
@@ -317,7 +317,7 @@ export function IdleNote() {
             <Link
               to={step.to}
               state={step.engage ? { engage: step.engage } : undefined}
-              className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+              className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key stamp bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
             >
               {step.label} ›
             </Link>
@@ -336,7 +336,7 @@ export function IdleNote() {
             <>
               <Link
                 to={`/play/mind?ask=${encodeURIComponent("Our builds are done. Where should we turn next?")}`}
-                className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+                className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key stamp bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
               >
                 Talk it over
               </Link>
@@ -348,7 +348,7 @@ export function IdleNote() {
           {(!idle || !pick) && ahead && (
             <Button
               onClick={ahead.go}
-              className={`h-8 rounded-full instrument:rounded-[7px] px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow || heat || openSky || flight || step ? "border border-you/60 text-you hw-key-dark" : "bg-you text-paper hw-key"}`}
+              className={`h-8 rounded-full instrument:rounded-[7px] px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow || heat || openSky || flight || step ? "border border-you/60 text-you hw-key-dark stamp" : "bg-you text-paper hw-key"}`}
             >
               Jump to {ahead.why ?? "what comes next"} ›
             </Button>
@@ -366,7 +366,7 @@ export function IdleNote() {
             <Button
               onClick={playOn}
               // Waiting on a reading, the clock is the one thing to move.
-              className={reading ? "h-8 rounded-full instrument:rounded-[7px] hw-key bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110" : "inline-flex min-h-6 items-center text-[12.5px] text-muted hover:text-ink"}
+              className={reading ? "h-8 rounded-full instrument:rounded-[7px] hw-key stamp bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110" : "inline-flex min-h-6 items-center text-[12.5px] text-muted hover:text-ink"}
             >
               Play on
             </Button>

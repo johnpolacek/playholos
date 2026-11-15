@@ -7,6 +7,7 @@ import { useSkin } from "@/lib/skin";
 // radio group. Four looks, as the game draws them. 2026-11-15.
 // Under the Instrument skin, 2026-11-15, the track is a well and the chosen one a key standing in it. A switch build's
 // two sides are a real switch there, ui-sdk's Switch: a lever between its two names, thrown toward the one that holds.
+// Under the Log skin, 2026-11-15, each is squared, and a lens or a switch's side is a stamp, the chosen one inked.
 
 const LOOK = {
   /** Small type in a settings card: the Mind's model and effort. */
@@ -23,12 +24,12 @@ const LOOK = {
   lens: {
     root: "flex gap-1.5",
     item: (on: boolean) =>
-      `h-7 rounded-full px-3 text-[12.5px] font-medium transition-colors instrument:rounded-[7px] ${on ? "bg-button text-paper hw-key" : "border border-faint text-page-ink2 hover:border-muted hw-key-dark"}`,
+      `h-7 rounded-full px-3 text-[12.5px] font-medium transition-colors instrument:rounded-[7px] ${on ? "bg-button text-paper hw-key stamp" : "border border-faint text-page-ink2 hover:border-muted hw-key-dark stamp"}`,
   },
   /** Two halves of one wide track: a switch build's sides. An option's `on` colors it when chosen. */
   switch: {
-    root: "grid grid-cols-2 gap-1 rounded-full bg-ink/[.06] p-1",
-    item: (on: boolean) => `h-9 rounded-full text-[13.5px] font-medium transition-colors ${on ? "" : "text-page-ink2 hover:text-ink"}`,
+    root: "grid grid-cols-2 gap-1 rounded-full bg-ink/[.06] p-1 log:rounded-[3px]",
+    item: (on: boolean) => `h-9 rounded-full text-[13.5px] font-medium transition-colors log:rounded-[2px] ${on ? "stamp" : "text-page-ink2 hover:text-ink"}`,
   },
 } as const;
 

@@ -84,7 +84,7 @@ export function OpeningActs({
 // A faint outline that brightens on hover, with a light sweeping across, and a small press. Reduced motion keeps the
 // brighter outline and drops the movement.
 const GHOST =
-  "group relative inline-flex h-[46px] items-center justify-center overflow-hidden rounded-full instrument:rounded-[7px] hw-key-dark border px-4 border-faint " +
+  "group relative inline-flex h-[46px] items-center justify-center overflow-hidden rounded-full instrument:rounded-[7px] hw-key-dark stamp border px-4 border-faint " +
   "transition-[border-color,color,transform] duration-300 ease-out hover:border-muted hover:text-ink " +
   "active:scale-[.97] motion-reduce:transition-none motion-reduce:active:scale-100";
 

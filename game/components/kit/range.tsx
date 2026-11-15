@@ -8,7 +8,8 @@ import { useSkin } from "@/lib/skin";
 // caller's own box.
 // Under the Instrument skin, 2026-11-15, the line is a slot with a fader's cap in it. With `knob`, it is a rotary knob
 // there instead, where a dial is one of a bank and its number is read beside it: /sim's dials and the research page's.
-// Everywhere else, and always in chalk, it stays a line.
+// Everywhere else, and always in chalk, it stays a line. Under Log, 2026-11-15, the thumb is an index mark, a
+// squared tick in the tone, and the line is squared at its ends.
 
 type Props = {
   value: number;
@@ -50,11 +51,11 @@ export function Range(props: Props) {
     >
       <SliderControl className="flex h-5 w-full cursor-pointer touch-none items-center">
         <SliderTrack className="hw-well relative h-1 w-full rounded-full bg-track instrument:h-1.5">
-          <SliderIndicator className="absolute inset-y-0 rounded-full bg-(--tone) instrument:inset-y-px instrument:opacity-80" />
+          <SliderIndicator className="absolute inset-y-0 rounded-full bg-(--tone) log:rounded-[1px] instrument:inset-y-px instrument:opacity-80" />
           {/* The fader's cap, under Instrument: the panel's paint, with one line across it in the dial's color. */}
           <SliderThumb
             aria-label={label}
-            className="absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--tone) shadow-[0_0_0_3px_var(--panel)] transition-shadow has-[:focus-visible]:shadow-[0_0_0_3px_var(--panel),0_0_0_5px_var(--tone)] instrument:h-5 instrument:w-3 instrument:rounded-[3px] instrument:bg-[linear-gradient(90deg,transparent_5px,var(--tone)_5px_7px,transparent_7px),linear-gradient(#3a3c41,#26282c)] instrument:shadow-(--hw-key) instrument:has-[:focus-visible]:shadow-[var(--hw-key),0_0_0_2px_var(--tone)]"
+            className="absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--tone) shadow-[0_0_0_3px_var(--panel)] transition-shadow has-[:focus-visible]:shadow-[0_0_0_3px_var(--panel),0_0_0_5px_var(--tone)] instrument:h-5 instrument:w-3 instrument:rounded-[3px] instrument:bg-[linear-gradient(90deg,transparent_5px,var(--tone)_5px_7px,transparent_7px),linear-gradient(#3a3c41,#26282c)] instrument:shadow-(--hw-key) instrument:has-[:focus-visible]:shadow-[var(--hw-key),0_0_0_2px_var(--tone)] log:w-[7px] log:rounded-[1px]"
           />
         </SliderTrack>
       </SliderControl>

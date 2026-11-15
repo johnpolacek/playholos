@@ -156,7 +156,7 @@ export default function Design() {
           <Btn size="page" fill="line">Ask the Mind about it</Btn>
           <div className="flex gap-2">
             <Btn>Feed It</Btn>
-            <Button className="h-8 rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3.5 text-[13px] font-medium text-muted">Sent, to hide</Button>
+            <Button className="h-8 rounded-full instrument:rounded-[7px] hw-key-dark stamp border border-faint px-3.5 text-[13px] font-medium text-muted">Sent, to hide</Button>
           </div>
         </div>
       </Part>

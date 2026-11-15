@@ -189,7 +189,7 @@ function FirstDark({ death, sure }: { death: Death; sure: number }) {
         onClick={() =>
           navigate(`/play/mind?ask=${encodeURIComponent(`A star died dark in ${death.host ?? "a galaxy " + far}. What does it tell us?`)}`)
         }
-        className="mt-3 h-[40px] w-full rounded-full instrument:rounded-[7px] hw-key-dark border border-other text-[14px] font-medium text-other"
+        className="mt-3 h-[40px] w-full rounded-full instrument:rounded-[7px] hw-key-dark stamp border border-other text-[14px] font-medium text-other"
       >
         Ask the Mind what it means
       </Button>

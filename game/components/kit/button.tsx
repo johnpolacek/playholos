@@ -5,6 +5,8 @@ import { Button } from "@ui-sdk/react/button";
 // Link or a trigger that must render as something else.
 // Under the Instrument skin, 2026-11-15, a button is a key: squared, standing off the panel, and down under a press.
 // The one move is a chalk key, ours and theirs keep their colors, and a second or quiet move is in the panel's paint.
+// Under the Log skin, 2026-11-15, a button is a stamped label: squared, with a second rule inside its edge, `stamp` in
+// app/globals.css. Every size here is tall enough to hold it.
 
 const SIZE = {
   /** The column's main buttons, full width under a page. */
@@ -33,7 +35,7 @@ const FILL = {
 export type BtnSize = keyof typeof SIZE;
 export type BtnFill = keyof typeof FILL;
 
-export const btn = (size: BtnSize = "row", fill: BtnFill = "solid") => `rounded-full instrument:rounded-[7px] ${SIZE[size]} ${FILL[fill]}`;
+export const btn = (size: BtnSize = "row", fill: BtnFill = "solid") => `stamp rounded-full instrument:rounded-[7px] ${SIZE[size]} ${FILL[fill]}`;
 
 export function Btn({
   size = "row",
@@ -45,7 +47,7 @@ export function Btn({
 }
 
 /** A small pill over the map, on its paper, with an icon before its words: Close View, Pull Back, Back to Earth. */
-export const PILL = "inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs hw-key hw-key-dark instrument:rounded-[7px]";
+export const PILL = "inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs hw-key stamp hw-key-dark instrument:rounded-[7px]";
 
 export function MapPill({ className = "", ...rest }: React.ComponentProps<typeof Button> & { className?: string }) {
   return <Button {...rest} className={`${PILL} ${className}`.trim()} />;

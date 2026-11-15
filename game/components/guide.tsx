@@ -672,7 +672,7 @@ export function Guide() {
                     : "Nothing queued yet"}
           </span>
           {full && next && (
-            <Link to={next.to} className="flex h-[34px] shrink-0 items-center rounded-full instrument:rounded-[7px] hw-key bg-button px-3.5 text-[13.5px] font-medium text-paper">
+            <Link to={next.to} className="flex h-[34px] shrink-0 items-center rounded-full instrument:rounded-[7px] hw-key stamp bg-button px-3.5 text-[13.5px] font-medium text-paper">
               Next: {next.short} ›
             </Link>
           )}

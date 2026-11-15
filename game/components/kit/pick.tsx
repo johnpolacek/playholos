@@ -2,7 +2,8 @@ import { Select, SelectContent, SelectItem, SelectItemIndicator, SelectLabel, Se
 
 // One of many, from a list that opens, on ui-sdk's Select: the arrow keys and typing find an item, and on a small touch
 // screen it opens as a sheet. Drawn as the native select it replaced was, a quiet outline, with our panel for its
-// list. 2026-11-15. Under the Instrument skin its trigger is a key and its list a panel.
+// list. 2026-11-15. Under the Instrument skin its trigger is a key and its list a panel. Under Log, 2026-11-15, its
+// trigger is squared and its list is ruled paper, the item under the pointer or the keys underlined as a pen would.
 
 export function Pick({
   label,
@@ -39,7 +40,7 @@ export function Pick({
           <SelectItem
             key={o.value}
             value={o.value}
-            className="flex cursor-pointer items-center justify-between gap-4 rounded px-2 py-1.5 outline-none data-highlighted:bg-ink/10"
+            className="flex cursor-pointer items-center justify-between gap-4 rounded px-2 py-1.5 outline-none data-highlighted:bg-ink/10 log:rounded-none log:decoration-muted log:underline-offset-4 log:data-highlighted:bg-ink/[.06] log:data-highlighted:underline"
           >
             {o.label}
             <SelectItemIndicator className="text-you">✓</SelectItemIndicator>

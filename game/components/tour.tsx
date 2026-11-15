@@ -179,7 +179,7 @@ function Strategy({ p, scale, at }: { p: Package; scale: number; at: number }) {
           className={
             mine
               ? "mt-1.5 h-5 self-start rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-1.5 text-[12px] leading-none text-muted transition-colors hover:border-muted hover:text-ink"
-              : "mt-3 h-11 rounded-full instrument:rounded-[7px] hw-key bg-button text-[15px] font-medium text-paper transition-colors"
+              : "mt-3 h-11 rounded-full instrument:rounded-[7px] hw-key stamp bg-button text-[15px] font-medium text-paper transition-colors"
           }
         >
           {mine ? "clear" : `Start with ${p.name}`}
@@ -326,7 +326,7 @@ export function Tour({ onClose }: { onClose(): void }) {
   // Once all our compute is in use, the next of the four leads, on a phone too, and the walk goes on beside it.
   const lead = open && full ? then : null;
   const onward = at === 0 ? "See each strategy" : at + 1 >= last ? "Next · Our order" : `Next · ${PACKAGES[at].name}`;
-  const outline = "h-11 rounded-full instrument:rounded-[7px] hw-key-dark border border-ink text-[15px] font-medium";
+  const outline = "h-11 rounded-full instrument:rounded-[7px] hw-key-dark stamp border border-ink text-[15px] font-medium";
 
   return (
     <div ref={root} className="flex grow flex-col">
@@ -435,7 +435,7 @@ export function Tour({ onClose }: { onClose(): void }) {
           onClick={() =>
             lead ? navigate(lead.to) : at === last ? (then ? navigate(then.to) : onClose()) : go(at + 1)
           }
-          className={`h-11 rounded-full instrument:rounded-[7px] hw-key bg-button text-[15px] font-medium text-paper ${!at && !lead ? "col-span-2" : ""}`}
+          className={`h-11 rounded-full instrument:rounded-[7px] hw-key stamp bg-button text-[15px] font-medium text-paper ${!at && !lead ? "col-span-2" : ""}`}
         >
           {lead ? lead.name : at === last ? (then?.name ?? "Back to Build") : onward}
         </Button>

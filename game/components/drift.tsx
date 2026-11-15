@@ -110,7 +110,7 @@ export function Drift({ onNext, dive = true }: { onBack?(): void; onSkip(): void
                 ref={(r) => void (reactors.current[i] = r)}
                 data-m="act"
                 onClick={() => begin(i)}
-                className={`h-[46px] w-[180px] rounded-full instrument:rounded-[7px] hw-key-dark border bg-paper text-[15px] font-medium transition-colors duration-300 hover:text-paper ${w.tone}`}
+                className={`h-[46px] w-[180px] rounded-full instrument:rounded-[7px] hw-key-dark stamp border bg-paper text-[15px] font-medium transition-colors duration-300 hover:text-paper ${w.tone}`}
               >
                 {w.label}
               </Reactor>

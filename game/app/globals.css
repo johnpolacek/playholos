@@ -322,6 +322,31 @@
     font-style: normal;
   }
 }
+@layer utilities {
+  /* A key is a stamped label: squared, and its edge strong enough to see. Above the parts' own rounding, which stays
+     chalk's. */
+  [data-skin="log"] :is(.hw-key, .hw-key-dark) {
+    border-radius: 2px;
+  }
+  /* A quiet edge, faint or frame, is lifted to the stamp's, until a hover or an open list lights it. An edge in a
+     color of its own keeps it. */
+  [data-skin="log"] :is(.hw-key-dark, .hw-well):is(.border-faint, .border-frame):not(:hover, [data-open]) {
+    border-color: var(--stamp-edge);
+  }
+  [data-skin="log"] .hw-well {
+    border-radius: 2px;
+  }
+  /* A stamp's second rule, three pixels inside its edge, in its own ink. Only on a stamp tall enough to hold it, 28px
+     and up: a small chip keeps one edge. It gives way to the focus ring. */
+  [data-skin="log"] .stamp:not(:focus-visible) {
+    outline: 1px solid color-mix(in srgb, currentColor 40%, transparent);
+    outline-offset: -4px;
+  }
+  /* Paper is squared too. */
+  [data-skin="log"] .hw-panel {
+    border-radius: 3px;
+  }
+}
 
 body {
   background: var(--page);

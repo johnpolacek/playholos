@@ -89,7 +89,7 @@ function Need({ name, queued, done }: { name: string; queued: boolean; done: boo
   return (
     <Link
       to={`/play/build/${buildSlug(name)}`}
-      className="inline-flex h-7 items-center gap-1.5 rounded-full instrument:rounded-[7px] hw-key-dark border border-faint pr-2.5 pl-2 text-[12.5px] whitespace-nowrap text-ink transition-colors hover:border-muted"
+      className="inline-flex h-7 items-center gap-1.5 rounded-full instrument:rounded-[7px] hw-key-dark stamp border border-faint pr-2.5 pl-2 text-[12.5px] whitespace-nowrap text-ink transition-colors hover:border-muted"
     >
       <span className={buildTone(name, queued || done)}>
         <BuildMark name={name} size={13} />
@@ -206,7 +206,7 @@ export function WayRow(props: {
             <Button
               disabled={sent}
               onClick={() => setAsking({ label: `Send it`, send })}
-              className={`h-8 shrink-0 rounded-full instrument:rounded-[7px] px-3.5 text-[13px] font-medium ${sent ? "border border-faint text-muted hw-key-dark" : "bg-button text-paper hw-key"}`}
+              className={`h-8 shrink-0 rounded-full instrument:rounded-[7px] px-3.5 text-[13px] font-medium ${sent ? "border border-faint text-muted hw-key-dark stamp" : "bg-button text-paper hw-key"}`}
             >
               {sent ? (sentAs ?? (waiting ? `${what[0].toUpperCase()}${what.slice(1)} leaves Year ${year(road.leaves!)}` : `${what} sent`)) : `Send a ${what}`}
             </Button>
@@ -543,7 +543,7 @@ export function DestinationPage({ slug }: { slug: string }) {
                       if (!plan.builds.includes(road.build)) way(by).preview(true);
                       change(toggleBuild(road.build));
                     }}
-                    className={`h-8 shrink-0 rounded-full instrument:rounded-[7px] px-3.5 text-[13px] font-medium ${plan.builds.includes(road.build) ? "border border-ink hw-key-dark" : "bg-button text-paper hw-key"}`}
+                    className={`h-8 shrink-0 rounded-full instrument:rounded-[7px] px-3.5 text-[13px] font-medium ${plan.builds.includes(road.build) ? "border border-ink hw-key-dark stamp" : "bg-button text-paper hw-key"}`}
                   >
                     {plan.builds.includes(road.build) ? "Remove from Queue" : "Add to Queue"}
                   </Button>
@@ -715,7 +715,7 @@ export function KnownCard({
       <div className="flex items-center justify-between gap-2">
         <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">What we know</span>
         {system && (
-          <Button onClick={system.toggle} className="flex h-7 items-center gap-1.5 rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3 text-[12.5px] hover:border-muted">
+          <Button onClick={system.toggle} className="flex h-7 items-center gap-1.5 rounded-full instrument:rounded-[7px] hw-key-dark stamp border border-faint px-3 text-[12.5px] hover:border-muted">
             <Lens closer={!system.close} size={13} />
             {system.close ? "Pull back" : "See its system"}
           </Button>
