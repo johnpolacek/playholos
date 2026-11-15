@@ -69,10 +69,13 @@ export function Meter({
   late?: boolean;
   /** Where its word under it leads, marked as a link. */
   go?: string;
-  /** What its word means, on hover. */
+  /** What its word means, as a hint. */
   tip?: string;
   hint?: boolean;
 }) {
+  const words = <span className={`truncate text-[11px] leading-tight tracking-normal ${late ? "text-other" : ""}`}>{sub}</span>;
+  // What the word means, as a hint on hover, focus or a tap. 2026-11-15.
+  const said = tip ? <Tip toggleable text={tip} trigger={<Button className="min-w-0 cursor-help text-left">{words}</Button>} /> : words;
   return (
     <span className="flex min-w-0 flex-col gap-[3px] text-[10px] tracking-[.08em] text-muted">
       {/* A preview says so: a blind first-timer read a pointed-at build's numbers as real, twice. 2026-11-07. */}
@@ -115,12 +118,7 @@ export function Meter({
           {sub} ›
         </Link>
       ) : (
-        <span
-          title={tip}
-          className={`truncate text-[11px] leading-tight tracking-normal ${late ? "text-other" : ""}`}
-        >
-          {sub}
-        </span>
+        said
       )}
     </span>
   );

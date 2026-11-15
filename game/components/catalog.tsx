@@ -2,6 +2,7 @@ import { Button } from "@ui-sdk/react/button";
 import { Input } from "@ui-sdk/react/input";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
+import { Tip } from "@/components/tip";
 import { CostLine, previews, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
 import { BuildMark, buildTone, KindTag, LockMark } from "@/components/marks";
@@ -205,9 +206,14 @@ function AllBuilt({ names, className }: { names: string[]; className: string }) 
       <ul className="mt-3 flex flex-wrap gap-x-3.5 gap-y-3">
         {names.map((n) => (
           <li key={n}>
-            <Link to={`/play/build/${buildSlug(n)}`} aria-label={n} title={n} className={`block transition-opacity hover:opacity-70 ${buildTone(n)}`}>
-              <BuildMark name={n} size={18} />
-            </Link>
+            <Tip
+              text={n}
+              trigger={
+                <Link to={`/play/build/${buildSlug(n)}`} className={`block transition-opacity hover:opacity-70 ${buildTone(n)}`}>
+                  <BuildMark name={n} size={18} />
+                </Link>
+              }
+            />
           </li>
         ))}
       </ul>
