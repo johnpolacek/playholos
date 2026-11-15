@@ -10,7 +10,7 @@ export default function KitLayout() {
   const { pathname } = useLocation();
   return (
     <div style={{ "--accent": "var(--you)" } as React.CSSProperties} className="min-h-dvh bg-page pt-2 text-ink">
-      <nav className="sticky top-2 z-10 mx-4 flex items-center justify-between gap-4 rounded-2xl border border-rowline bg-paper/90 px-4 py-2.5 backdrop-blur sm:mx-auto sm:max-w-5xl">
+      <nav className="sticky top-2 z-10 mx-4 flex items-center justify-between gap-4 rounded-2xl border border-rowline bg-paper/90 px-4 py-2.5 backdrop-blur sm:mx-auto sm:max-w-6xl">
         <Link to="/ui" className="font-mono text-[11px] tracking-[.08em] text-ink">
           HOLOS/UI
         </Link>
