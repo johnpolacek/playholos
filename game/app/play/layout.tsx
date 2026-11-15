@@ -15,6 +15,7 @@ import { Rail } from "@/components/rail";
 import { ScanProvider } from "@/components/scan";
 import { WorksProvider } from "@/components/works";
 import { Opening } from "@/components/wake";
+import { useLayout } from "@/lib/layout";
 
 // The whole screen at every size. Tall, as on a phone: the top bar, the map, the tab page and the rail, stacked.
 // Wide: the top bar across, the map fills the left, and the tab page and rail stand in a column on the right.
@@ -23,6 +24,8 @@ export default function PlayLayout() {
   // Read its light out of sight, five times in one blind playtest. 2026-11-07.
   const page = useRef<HTMLElement>(null);
   const { pathname, hash } = useLocation();
+  // The Light cone layout gives Reach's lanes room: wide, the tab page takes about half the screen. 2026-11-15.
+  const cone = useLayout() === "lightcone" && pathname === "/play/reach";
   useEffect(() => {
     // A link to a place on the page, as #close-reading, scrolls there itself. The Mind's talk opens at its latest
     // words, as it scrolls itself: this sent it back to the top, and a note sat cut off below. Blind playtest 2026-11-07.
@@ -40,7 +43,7 @@ export default function PlayLayout() {
                 <PreviewProvider>
                 {/* Our standing order to probe each warm glow as we find it. 2026-11-05. */}
                 <GlowOrders />
-                <div className="flex min-h-0 grow flex-col wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(340px,32vw,440px)] wide:grid-rows-[auto_minmax(0,1fr)_auto]">
+                <div className={`flex min-h-0 grow flex-col wide:grid ${cone ? "wide:grid-cols-[minmax(0,1fr)_clamp(340px,54vw,860px)]" : "wide:grid-cols-[minmax(0,1fr)_clamp(340px,32vw,440px)]"} wide:grid-rows-[auto_minmax(0,1fr)_auto]`}>
                 <Hud />
                 <MindNews />
                 <YearZero />

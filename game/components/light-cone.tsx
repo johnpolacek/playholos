@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Btn } from "@/components/kit/button";
 import { type Lane, Lanes, type Leg } from "@/components/kit/lanes";
 import type { Row } from "@/components/journey";
 import { BeamMark, BuildMark, buildColor } from "@/components/marks";
@@ -123,10 +124,18 @@ const KEY: [string, string][] = [
  *  starting from the Year it is given: the scrubber looks along the axis and changes nothing. A view on /ui feeds it
  *  fixed lanes, and the game its own. `lanes` takes now, so a lane's line can say where it stands then. */
 export function ConeLanes({ label, head, lanes, range, start, className = "" }: { label: string; head: string; lanes(now: number): Lane[]; range: [number, number]; start: number; className?: string }) {
-  const [now, setNow] = useState(start);
+  // Until the scrubber is moved, now follows the Year it is given, as the game's clock runs. Moved, it holds where it
+  // was put, with a way back.
+  const [at, setAt] = useState<number | null>(null);
+  const now = at ?? start;
   return (
     <div className={`@container ${className}`}>
-      <Lanes label={label} head={head} lanes={lanes(now)} range={range} now={now} onNow={setNow} format={coneYear} />
+      {at !== null && at !== start && (
+        <Btn size="small" fill="faint" onClick={() => setAt(null)} className="mb-2 text-page-ink2">
+          Back to {coneYear(start)}
+        </Btn>
+      )}
+      <Lanes label={label} head={head} lanes={lanes(now)} range={range} now={now} onNow={setAt} format={coneYear} />
       {/* The key is to the lanes: the fold draws no legs. */}
       <p className="mt-3 hidden flex-wrap items-center @xl:flex gap-x-4 gap-y-1.5 font-mono text-[10px] tracking-[.04em] text-muted">
         {KEY.map(([draw, name]) => (
