@@ -11,6 +11,7 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router/dom";
 import { animateTab } from "@/components/galactic-year";
 import { holdSentenceStarts } from "@/lib/breaks";
+import { startMusic } from "@/lib/music";
 import { askedSkin, setSkin } from "@/lib/skin";
 import { router } from "./routes";
 
@@ -20,6 +21,7 @@ if (asked) setSkin(asked);
 
 animateTab();
 holdSentenceStarts();
+startMusic();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

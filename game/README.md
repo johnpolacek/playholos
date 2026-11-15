@@ -43,6 +43,7 @@ pnpm dev                                 # http://localhost:5173
 
 - The game is always dark: the colors in `app/globals.css`, and `lib/ink.ts` for the memory screens' canvases. Screens before the shell open with `components/screen-bar.tsx`, by way of `Spread`: the real record on the left.
 - `lib/motion.ts`: the full motion treatment, from the animaxxing skills, whose sources are in `../skills-lock.json`. Every element enters from a blank screen, rests, and leaves. Mark an element `data-m` and give its screen a `useStage` intro. Reduced motion skips the travel.
+- `lib/music.ts`: `public/audio/background_music.mp3` on a loop at 15% volume, from the first tap or key. The menu turns it off, kept in this browser. It rests while the tab is hidden and while the watcher's voice plays.
 
 Everything else inside the shell is placeholder.
 

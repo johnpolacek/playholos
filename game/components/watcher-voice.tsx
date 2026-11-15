@@ -3,6 +3,7 @@ import { Dialog, DialogClose, DialogContent } from "@ui-sdk/react/dialog";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { WATCHER_VOICE } from "@/lib/game/watcher-voice";
+import { hushMusic } from "@/lib/music";
 
 // First contact, heard: the watcher's voice in our own languages, one after another, its waveform drawn live from the
 // sound as it plays. It was a line of text "in pictures" until a playtest, 2026-11-05: "we didn't make a big enough deal
@@ -42,9 +43,10 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
     return () => window.removeEventListener("keydown", esc, true);
   }, [onClose]);
 
-  // All sound stops when the screen closes.
+  // All sound stops when the screen closes, and the music comes back.
   useEffect(
     () => () => {
+      hushMusic(false);
       clearTimeout(gap.current);
       audio.current?.pause();
       void ctx.current?.close().catch(() => undefined);
@@ -85,6 +87,7 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
   };
 
   const listen = () => {
+    hushMusic(true);
     const el = new Audio();
     el.preload = "auto";
     el.onended = () => {
