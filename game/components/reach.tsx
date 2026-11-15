@@ -87,7 +87,7 @@ export const targetOf = (star: string, ly: number, system?: System, range?: [num
 });
 
 /** What we have sent so far: Voyager 1, silent by Year 0, 40,000 years from passing another star. */
-const SENT: Row = {
+export const SENT: Row = {
   key: "voyager-1",
   name: "Voyager 1",
   note: "Silent, 30 light-hours out. It carries the Golden Record, for whoever finds it.",
@@ -293,7 +293,7 @@ export function useTripLoop(
 
 /** Craft of one kind folded into one row: a line of where each is, from leaving to its word home, and opened, each.
  *  The probes and sails we sent past stars first, 2026-11-05, every kind of craft 2026-11-08. */
-function Fleet({ title, build, rows, now, children }: { title: string; build: string; rows: { id: string; leaves: number; home: number }[]; now: number; children: React.ReactNode }) {
+export function Fleet({ title, build, rows, now, children }: { title: string; build: string; rows: { id: string; leaves: number; home: number }[]; now: number; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   if (!rows.length) return null;
   const home = rows.filter((r) => r.home <= now).length;
@@ -1118,17 +1118,15 @@ export function Reach() {
   if (!save) return null;
 
   const place = ({ lead, soonest, reached, bound }: (typeof places)[number]) => (
-    <li key={lead.slug} className="border-t border-faint">
-      <Link to={`/play/reach/${lead.slug}`} className="block py-2.5">
-        <Face
-          mark={<LeadMark art={lead.art} />}
-          tone={lead.reply ? "text-other" : "text-you"}
-          name={<b className="font-semibold">{starName(lead.star)}</b>}
-          line={`${lead.what} · ${lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly${mindOf(lead)}`}
-          right={reached !== null ? `Reached, Year ${year(reached)}` : bound !== null ? `${clock === null ? "" : "On its way, "}Year ${year(bound)}` : soonest !== null ? `Year ${year(soonest)}` : "Not yet"}
-        />
-      </Link>
-    </li>
+    <PlaceRow
+      key={lead.slug}
+      to={`/play/reach/${lead.slug}`}
+      art={lead.art}
+      reply={!!lead.reply}
+      star={starName(lead.star)}
+      line={`${lead.what} · ${lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly${mindOf(lead)}`}
+      right={reached !== null ? `Reached, Year ${year(reached)}` : bound !== null ? `${clock === null ? "" : "On its way, "}Year ${year(bound)}` : soonest !== null ? `Year ${year(soonest)}` : "Not yet"}
+    />
   );
 
   return (
@@ -1230,3 +1228,14 @@ export function Reach() {
   );
 }
 
+/** A destination on Reach, drawn: its star as a link to every way there, what it is and how far, and the soonest Year
+ *  we could be there. Reach feeds it the game, and /ui/reach a fixed sky. 2026-11-15. */
+export function PlaceRow({ to, art, reply = false, star, line, right }: { to: string; art: Lead["art"]; reply?: boolean; star: string; line: string; right: string }) {
+  return (
+    <li className="border-t border-faint">
+      <Link to={to} className="block py-2.5">
+        <Face mark={<LeadMark art={art} />} tone={reply ? "text-other" : "text-you"} name={<b className="font-semibold">{star}</b>} line={line} right={right} />
+      </Link>
+    </li>
+  );
+}

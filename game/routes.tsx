@@ -65,6 +65,7 @@ export const router = createBrowserRouter([
           // The kit's views: the game's screens drawn by its own parts, fed a fixed Earth. 2026-11-15.
           { path: "ui/top-bar", lazy: later(() => import("@/app/views/top-bar")) },
           { path: "ui/scan", lazy: later(() => import("@/app/views/scan")) },
+          { path: "ui/reach", lazy: later(() => import("@/app/views/reach")) },
           { path: "ui/mind", lazy: later(() => import("@/app/views/mind")) },
           { path: "ui/send", lazy: later(() => import("@/app/views/send")) },
           { path: "ui/build", lazy: later(() => import("@/app/views/build")) },

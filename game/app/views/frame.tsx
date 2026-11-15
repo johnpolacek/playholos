@@ -6,6 +6,7 @@
 export const VIEWS = [
   { to: "/ui/top-bar", label: "Top bar" },
   { to: "/ui/scan", label: "Scan" },
+  { to: "/ui/reach", label: "Reach" },
   { to: "/ui/mind", label: "Mind" },
   { to: "/ui/send", label: "Send" },
   { to: "/ui/build", label: "Build" },
