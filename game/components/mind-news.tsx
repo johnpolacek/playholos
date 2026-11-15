@@ -257,37 +257,65 @@ export function YearZero() {
         initialFocus="content"
         className="fixed inset-0 flex h-dvh max-h-none w-full max-w-none flex-col items-center overflow-y-auto bg-paper/80 px-4 pt-[max(32px,calc(50dvh-330px))] pb-8 text-ink outline-none backdrop-blur-[3px]"
       >
-        {/* Anchored from the top, with room kept for the Mind's words, so nothing moves as they arrive. 2026-11-08. */}
-        <svg aria-hidden viewBox="-100 -100 200 200" className="w-[min(260px,60vw)] shrink-0">
-          {[92, 70, 48].map((r, i) => (
-            <circle key={r} data-z="ring" r={r} fill="none" stroke="var(--you)" strokeOpacity={0.15 + i * 0.15} strokeWidth={0.8} />
-          ))}
-          <circle data-z="core" r={14} fill="var(--you)" fillOpacity={0.25} />
-          <circle r={5} fill="var(--you)" />
-        </svg>
-        <p data-z="item" className="mt-4 font-mono text-[11px] tracking-[.14em] text-muted">
-          {YEAR_0}
-        </p>
-        <DialogTitle render={<h1 />} data-z="item" className="mt-1 text-[34px] leading-none font-medium tracking-tight">
-          Year 0
-        </DialogTitle>
-        <div data-z="item" className="mt-6 min-h-[168px] w-full max-w-[440px]">
-          <MindNote still={!busy} className="text-[15px] leading-[1.5]">
-            <span aria-live="polite">
-              {!open || failed
-                ? "The clock runs now, a Year every five minutes, even while we’re away, and it pauses when nothing is building. What we queued has started. We will tell you as it lands."
-                : ours && said(words)
-                  ? said(words)
-                  : null}
-            </span>
-            {open && !failed && !(ours && said(words)) && <Gathering />}
-          </MindNote>
-        </div>
-        <DialogClose data-z="item" className="mt-6 h-[46px] rounded-full bg-button px-8 text-[15px] font-medium text-paper">
-          Continue
-        </DialogClose>
+        <YearZeroFace
+          Title={DialogTitle}
+          Close={DialogClose}
+          still={!busy}
+          words={
+            !open || failed
+              ? "The clock runs now, a Year every five minutes, even while we’re away, and it pauses when nothing is building. What we queued has started. We will tell you as it lands."
+              : ours && said(words)
+                ? said(words)
+                : null
+          }
+          gathering={!!open && !failed && !(ours && said(words))}
+        />
       </DialogContent>
     </Dialog>
+  );
+}
+
+/** Year 0's moment, drawn: rings round our point, the date, Year 0, the Mind's first words or its gathering, and
+ *  Continue. YearZero opens it as a Dialog and passes its Title and Close; /ui/year-0 draws it in place. 2026-11-15. */
+export function YearZeroFace({
+  Title = "h1",
+  Close = Button,
+  words,
+  still = true,
+  gathering = false,
+}: {
+  Title?: React.ElementType;
+  Close?: React.ElementType;
+  words: React.ReactNode;
+  still?: boolean;
+  gathering?: boolean;
+}) {
+  return (
+    <>
+      {/* Anchored from the top, with room kept for the Mind's words, so nothing moves as they arrive. 2026-11-08. */}
+      <svg aria-hidden viewBox="-100 -100 200 200" className="w-[min(260px,60vw)] shrink-0">
+        {[92, 70, 48].map((r, i) => (
+          <circle key={r} data-z="ring" r={r} fill="none" stroke="var(--you)" strokeOpacity={0.15 + i * 0.15} strokeWidth={0.8} />
+        ))}
+        <circle data-z="core" r={14} fill="var(--you)" fillOpacity={0.25} />
+        <circle r={5} fill="var(--you)" />
+      </svg>
+      <p data-z="item" className="mt-4 font-mono text-[11px] tracking-[.14em] text-muted">
+        {YEAR_0}
+      </p>
+      <Title {...(Title === "h1" ? {} : { render: <h1 /> })} data-z="item" className="mt-1 text-[34px] leading-none font-medium tracking-tight">
+        Year 0
+      </Title>
+      <div data-z="item" className="mt-6 min-h-[168px] w-full max-w-[440px]">
+        <MindNote still={still} className="text-[15px] leading-[1.5]">
+          <span aria-live="polite">{words}</span>
+          {gathering && <Gathering />}
+        </MindNote>
+      </div>
+      <Close data-z="item" className="mt-6 h-[46px] rounded-full bg-button px-8 text-[15px] font-medium text-paper">
+        Continue
+      </Close>
+    </>
   );
 }
 

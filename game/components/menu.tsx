@@ -32,6 +32,9 @@ function Label({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** The menu's look: its paper, edge and room. /ui/menu draws it in place with it. */
+export const MENU_LOOK = "flex flex-col border-r border-faint bg-paper px-5 pt-3 pb-8 text-ink";
+
 const row = "flex min-h-11 items-center justify-between gap-3 border-b border-rowline text-[15px]";
 
 // A note to the game's maker, with the screen and Year sent beside it, so we know where the player was. Only on
@@ -39,13 +42,19 @@ const row = "flex min-h-11 items-center justify-between gap-3 border-b border-ro
 function Feedback() {
   const { pathname } = useLocation();
   const { year } = useGame();
+  if (!LIVE && !import.meta.env.DEV) return null;
+  return <FeedbackFace onSend={(text) => sendFeedback(text, pathname, year)} />;
+}
+
+/** The note to the game's maker, drawn: the box, a line on where it goes, and Send, which says how it went. Feedback
+ *  sends it from the game, and /ui/menu sends nothing. 2026-11-15. */
+export function FeedbackFace({ onSend }: { onSend(text: string): Promise<boolean> }) {
   const [text, setText] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "sent" | "failed">("idle");
-  if (!LIVE && !import.meta.env.DEV) return null;
   const send = async () => {
     if (!text.trim() || state === "sending") return;
     setState("sending");
-    const ok = await sendFeedback(text, pathname, year);
+    const ok = await onSend(text);
     setState(ok ? "sent" : "failed");
     if (ok) setText("");
   };
@@ -88,6 +97,11 @@ function Feedback() {
 function NewGame({ close }: { close: Sheet["close"] }) {
   const { newGame } = useGame();
   const leaveShell = useLeaveShell();
+  return <NewGameButton onErase={() => close(() => leaveShell(newGame))} />;
+}
+
+/** New game, drawn: it asks twice, and the second ask lapses. */
+export function NewGameButton({ onErase }: { onErase(): void }) {
   const [sure, setSure] = useState(false);
   useEffect(() => {
     if (!sure) return;
@@ -95,7 +109,7 @@ function NewGame({ close }: { close: Sheet["close"] }) {
     return () => clearTimeout(id);
   }, [sure]);
   return (
-    <Button onClick={() => (sure ? close(() => leaveShell(newGame)) : setSure(true))} className={`h-11 grow text-left ${sure ? "text-other" : ""}`}>
+    <Button onClick={() => (sure ? onErase() : setSure(true))} className={`h-11 grow text-left ${sure ? "text-other" : ""}`}>
       {sure ? "Tap again to erase this game" : "New game"}
     </Button>
   );
@@ -137,27 +151,15 @@ function Drawer({ sheet }: { sheet: Sheet }) {
       <DialogContent
         data-d="panel"
         render={<nav />}
-        className="fixed inset-y-0 right-auto left-0 m-0 flex h-dvh max-h-none w-[min(320px,86%)] flex-col overflow-y-auto border-r border-faint bg-paper px-5 pt-3 pb-8 text-ink outline-none"
+        className={`${MENU_LOOK} fixed inset-y-0 right-auto left-0 m-0 h-dvh max-h-none w-[min(320px,86%)] overflow-y-auto outline-none`}
       >
-        <div data-d="item" className="flex items-center justify-between">
-          <span className="flex items-center gap-2.5">
-            <GalacticYear size={34} />
-            <DialogTitle className="font-mono text-[10.5px] font-normal tracking-[.1em]">HOLOS</DialogTitle>
-          </span>
-          <DialogClose aria-label="Close" className="-mr-3 size-11 text-xl leading-none text-muted">
-            ×
-          </DialogClose>
-        </div>
-        <p data-d="item" className="mt-1 text-[13px] leading-[1.45] text-page-ink2">
-          Earth, around Sol. We circle the galaxy’s core once every 230 million years.
-        </p>
-
-        <Label>SETTINGS</Label>
-        <div data-d="item" className={row}>
-          <span className="flex flex-col py-2">
-            {open === null ? "The Mind" : "Anthropic key"}
-            <span className="text-xs text-muted">
-              {keyed === null
+        <MenuFace
+          Title={DialogTitle}
+          Close={DialogClose}
+          mind={{
+            name: open === null ? "The Mind" : "Anthropic key",
+            line:
+              keyed === null
                 ? "…"
                 : keyed
                   ? "In use. Each question is billed to it."
@@ -167,62 +169,26 @@ function Drawer({ sheet }: { sheet: Sheet }) {
                       : "Locked. A key opens it, or play on your Claude plan."
                     : open === "free"
                       ? "On us, with a daily limit. A key lifts it."
-                      : "None. The Mind tab takes one."}
-            </span>
-          </span>
-          {keyed ? (
-            <Button
-              onClick={forgetKey}
-              className="-mr-2 h-11 shrink-0 px-2 text-[13px] underline underline-offset-2"
-            >
-              Forget
-            </Button>
-          ) : keyed === false ? (
-            <Link to="/play/mind" onClick={() => close()} className="-mr-2 flex h-11 shrink-0 items-center px-2 text-[13px] underline underline-offset-2">
-              {open === null ? "Open" : "Add"}
-            </Link>
-          ) : null}
-        </div>
-        <div data-d="item" className={row}>
-          <NewGame close={close} />
-        </div>
-
-        {/* The drawer slides away, then the game plays out to the page. */}
-        {PAGES.map(([title, links]) => (
-          <Fragment key={title}>
-            <Label>{title}</Label>
-            {links.map(([href, label]) => (
-              <Link
-                key={href}
-                data-d="item"
-                to={href}
-                onClick={(e) => {
-                  if (!plainClick(e)) return;
-                  e.preventDefault();
-                  close(() => leaveFor(href));
-                }}
-                className={row}
-              >
-                {label}
-                <span className="text-muted">→</span>
+                      : "None. The Mind tab takes one.",
+            action: keyed ? (
+              <Button onClick={forgetKey} className="-mr-2 h-11 shrink-0 px-2 text-[13px] underline underline-offset-2">
+                Forget
+              </Button>
+            ) : keyed === false ? (
+              <Link to="/play/mind" onClick={() => close()} className="-mr-2 flex h-11 shrink-0 items-center px-2 text-[13px] underline underline-offset-2">
+                {open === null ? "Open" : "Add"}
               </Link>
-            ))}
-          </Fragment>
-        ))}
-
-        <Feedback />
-
-        <Label>ELSEWHERE</Label>
-        {ELSEWHERE.map(([href, label]) => (
-          <a key={href} data-d="item" href={href} target="_blank" rel="noopener noreferrer" className={row}>
-            {label}
-            <span className="text-muted">↗</span>
-          </a>
-        ))}
-        <RunLocal data-d="item" className={`${row} w-full text-left`}>
-          Run locally
-          <span className="text-muted">↓</span>
-        </RunLocal>
+            ) : null,
+          }}
+          newGame={<NewGame close={close} />}
+          // The drawer slides away, then the game plays out to the page.
+          onPage={(e, href) => {
+            if (!plainClick(e)) return;
+            e.preventDefault();
+            close(() => leaveFor(href));
+          }}
+          feedback={<Feedback />}
+        />
       </DialogContent>
     </div>
   );
@@ -238,5 +204,79 @@ export function Menu() {
       </DialogTrigger>
       <Drawer sheet={sheet} />
     </Dialog>
+  );
+}
+
+/** The menu, drawn: the galaxy and the name, the Mind's key, New game, the pages, a note to the game's maker, and the
+ *  ways elsewhere. The drawer feeds it the game, and /ui/menu a fixed one. A drawer passes its Dialog's own Title and
+ *  Close. 2026-11-15. */
+export function MenuFace({
+  Title = "h2",
+  Close = Button,
+  mind,
+  newGame,
+  onPage,
+  feedback,
+}: {
+  Title?: React.ElementType;
+  Close?: React.ElementType;
+  mind: { name: string; line: string; action: React.ReactNode };
+  newGame: React.ReactNode;
+  onPage?: (e: React.MouseEvent, href: string) => void;
+  feedback?: React.ReactNode;
+}) {
+  return (
+    <>
+      <div data-d="item" className="flex items-center justify-between">
+        <span className="flex items-center gap-2.5">
+          <GalacticYear size={34} />
+          <Title className="font-mono text-[10.5px] font-normal tracking-[.1em]">HOLOS</Title>
+        </span>
+        <Close aria-label="Close" className="-mr-3 size-11 text-xl leading-none text-muted">
+          ×
+        </Close>
+      </div>
+      <p data-d="item" className="mt-1 text-[13px] leading-[1.45] text-page-ink2">
+        Earth, around Sol. We circle the galaxy’s core once every 230 million years.
+      </p>
+
+      <Label>SETTINGS</Label>
+      <div data-d="item" className={row}>
+        <span className="flex flex-col py-2">
+          {mind.name}
+          <span className="text-xs text-muted">{mind.line}</span>
+        </span>
+        {mind.action}
+      </div>
+      <div data-d="item" className={row}>
+        {newGame}
+      </div>
+
+      {PAGES.map(([title, links]) => (
+        <Fragment key={title}>
+          <Label>{title}</Label>
+          {links.map(([href, label]) => (
+            <Link key={href} data-d="item" to={href} onClick={(e) => onPage?.(e, href)} className={row}>
+              {label}
+              <span className="text-muted">→</span>
+            </Link>
+          ))}
+        </Fragment>
+      ))}
+
+      {feedback}
+
+      <Label>ELSEWHERE</Label>
+      {ELSEWHERE.map(([href, label]) => (
+        <a key={href} data-d="item" href={href} target="_blank" rel="noopener noreferrer" className={row}>
+          {label}
+          <span className="text-muted">↗</span>
+        </a>
+      ))}
+      <RunLocal data-d="item" className={`${row} w-full text-left`}>
+        Run locally
+        <span className="text-muted">↓</span>
+      </RunLocal>
+    </>
   );
 }

@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
-import { SHEET, type Sheet, useSheet } from "@/components/sheet";
+import { SHEET, type Sheet, SheetHead, useSheet } from "@/components/sheet";
 import { Sparks } from "@/components/sparks";
 import { useCompute, useEarth } from "@/components/picks";
 import type { Save } from "@/lib/game/types";
@@ -158,6 +158,31 @@ const row = "flex w-full items-start gap-3 py-2 text-left";
 function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(): void }) {
   const { save } = useGame();
   const now = useNow();
+  if (!save) return null;
+  return (
+    <StepsList
+      steps={STEPS.map((s) => ({ name: s.name, line: s.line(save, now), to: s.to }))}
+      done={STEPS.map((s) => s.done(save, now))}
+      onLeave={() => onClose()}
+      onBegin={onBegin}
+    />
+  );
+}
+
+/** The steps to Begin, drawn: a thread down to Year 0, each step a link, the next one calling, the Mind's word, and the
+ *  way on. List feeds it the game, and /ui/begin a fixed count. 2026-11-15. */
+export function StepsList({
+  steps,
+  done,
+  onLeave,
+  onBegin,
+}: {
+  steps: { name: string; line: string; to: string }[];
+  done: boolean[];
+  /** Leaves the sheet, by a step's link or Not yet. */
+  onLeave(): void;
+  onBegin(): void;
+}) {
   const [sure, setSure] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const first = useRef(true);
@@ -171,16 +196,14 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
     { scope: root, dependencies: [sure] },
   );
 
-  if (!save) return null;
-  const done = STEPS.map((s) => s.done(save, now));
-  const next = STEPS.find((s) => !s.done(save, now));
+  const next = steps.find((_, i) => !done[i]);
 
   return (
     <div ref={root} className="flex flex-col">
       <ol className="relative mt-3">
         {/* The thread from the first step down to Year 0. */}
         <span data-b="thread" aria-hidden className="absolute top-4 bottom-5 left-[5px] w-px origin-top bg-track" />
-        {STEPS.map((step, i) => {
+        {steps.map((step, i) => {
           const body = (
             <>
               <span
@@ -193,7 +216,7 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
               </span>
               <span className="flex min-w-0 grow flex-col">
                 <span className="text-[14.5px] leading-snug">{step.name}</span>
-                <span className="text-[12.5px] leading-snug text-page-ink2">{step.line(save, now)}</span>
+                <span className="text-[12.5px] leading-snug text-page-ink2">{step.line}</span>
               </span>
               <span
                 className={`shrink-0 font-mono tracking-[.06em] ${done[i] || step === next ? "mt-[3px] text-[10.5px] text-you" : "text-[14px] text-muted"}`}
@@ -205,7 +228,7 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
           return (
             <li key={step.name} data-b="item">
               <span className="sr-only">{done[i] ? "Done: " : step === next ? "Next: " : "Not done: "}</span>
-              <Link to={step.to} onClick={() => onClose()} className={row}>
+              <Link to={step.to} onClick={onLeave} className={row}>
                 {body}
               </Link>
             </li>
@@ -245,7 +268,7 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
             </Btn>
             <Link
               to={next.to}
-              onClick={() => onClose()}
+              onClick={onLeave}
               className="flex h-[46px] items-center justify-center rounded-full bg-button px-3 text-center text-[15px] leading-tight font-medium text-paper"
             >
               {next.name}
@@ -253,7 +276,7 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
           </>
         ) : (
           <>
-            <Btn onClick={() => onClose()} size="page" fill="line">
+            <Btn onClick={onLeave} size="page" fill="line">
               Not yet
             </Btn>
             <Btn onClick={onBegin} size="page">
@@ -306,14 +329,8 @@ function Sheet({ count, sheet, onBegin }: { count: string; sheet: Sheet; onBegin
     <div ref={scope} className="contents">
       <DialogBackdrop data-b="back" className="fixed inset-0 bg-black/55" />
       <DialogContent data-b="panel" className={`${SHEET} wide:w-[420px]`}>
-        <div data-b="item" className="flex items-start justify-between">
-          <span className="flex flex-col gap-1">
-            <span className="font-mono text-[10.5px] tracking-[.1em] text-muted">YEAR 0 · {count}</span>
-            <DialogTitle className="text-[19px] leading-snug font-medium">Before we begin</DialogTitle>
-          </span>
-          <DialogClose aria-label="Close" className="-mt-2 -mr-3 size-11 text-xl leading-none text-muted">
-            ×
-          </DialogClose>
+        <div data-b="item">
+          <SheetHead kicker={`YEAR 0 · ${count}`} title="Before we begin" Title={DialogTitle} Close={DialogClose} />
         </div>
         <List onClose={close} onBegin={() => close(onBegin)} />
       </DialogContent>

@@ -13,6 +13,9 @@ export const VIEWS = [
   { to: "/ui/destination", label: "Destination" },
   { to: "/ui/mind", label: "Mind" },
   { to: "/ui/send", label: "Send" },
+  { to: "/ui/begin", label: "Begin" },
+  { to: "/ui/menu", label: "Menu" },
+  { to: "/ui/year-0", label: "Year 0" },
 ];
 
 export function View({

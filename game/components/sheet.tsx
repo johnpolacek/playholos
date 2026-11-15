@@ -1,3 +1,4 @@
+import { Button } from "@ui-sdk/react/button";
 import { useRef, useState } from "react";
 
 // A ui-sdk Dialog or Drawer that plays its own GSAP exit before it closes, so a sheet keeps the motion it had as a
@@ -39,10 +40,38 @@ export function useSheet() {
   return { open, setOpen, close, exits, onOpenChange };
 }
 
+/** A sheet's look: its paper, edge and room, wherever it sits. /ui's views draw a sheet in place with it. */
+export const SHEET_LOOK = "flex w-full flex-col rounded-t-2xl border border-b-0 border-faint bg-paper px-5 pt-4 pb-5 text-left text-ink";
+
 /** A sheet's panel: from the bottom when tall, a card in the middle when wide. Width on wide is the caller's. */
-export const SHEET =
-  "fixed inset-x-0 top-auto bottom-0 mx-auto flex max-h-dvh w-full max-w-xl flex-col overflow-y-auto rounded-t-2xl border border-b-0 border-faint bg-paper px-5 pt-4 pb-5 text-left text-ink outline-none wide:inset-0 wide:my-auto wide:h-fit wide:max-h-[calc(100dvh-48px)] wide:rounded-2xl wide:border-b";
+export const SHEET = `${SHEET_LOOK} fixed inset-x-0 top-auto bottom-0 mx-auto max-h-dvh max-w-xl overflow-y-auto outline-none wide:inset-0 wide:my-auto wide:h-fit wide:max-h-[calc(100dvh-48px)] wide:rounded-2xl wide:border-b`;
 
 /** Whether a page's own keys should stand aside: a sheet is open over it, or ui-sdk has already used the key, as on the
  *  Escape that closed one. */
 export const overlaid = (e: KeyboardEvent) => e.defaultPrevented || !!document.querySelector('[role="dialog"][aria-modal="true"]');
+
+/** A sheet's head, drawn: a mono line over its title, and its close. A sheet passes its Dialog's own Title and Close; a
+ *  view on /ui draws the same head with a plain heading and a Button. 2026-11-15. */
+export function SheetHead({
+  kicker,
+  title,
+  Title = "h2",
+  Close = Button,
+}: {
+  kicker: React.ReactNode;
+  title: React.ReactNode;
+  Title?: React.ElementType;
+  Close?: React.ElementType;
+}) {
+  return (
+    <div className="flex items-start justify-between">
+      <span className="flex flex-col gap-1">
+        <span className="font-mono text-[10.5px] tracking-[.1em] text-muted">{kicker}</span>
+        <Title className="text-[19px] leading-snug font-medium">{title}</Title>
+      </span>
+      <Close aria-label="Close" className="-mt-2 -mr-3 size-11 text-xl leading-none text-muted">
+        ×
+      </Close>
+    </div>
+  );
+}

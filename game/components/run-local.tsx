@@ -2,7 +2,7 @@ import { Button } from "@ui-sdk/react/button";
 import { Dialog, DialogBackdrop, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@ui-sdk/react/dialog";
 import { useRef, useState } from "react";
 import { Prompt } from "@/components/icons";
-import { SHEET, type Sheet, useSheet } from "@/components/sheet";
+import { SHEET, type Sheet, SheetHead, useSheet } from "@/components/sheet";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 /** The repo's steps for playing on a Claude login. */
@@ -100,14 +100,8 @@ function Sheet({ sheet }: { sheet: Sheet }) {
     <div ref={scope} className="contents">
       <DialogBackdrop data-r="back" className="fixed inset-0 bg-black/55" />
       <DialogContent data-r="panel" className={`${SHEET} font-sans tracking-normal normal-case wide:w-[440px]`}>
-        <div data-r="item" className="flex items-start justify-between">
-          <span className="flex flex-col gap-1">
-            <span className="font-mono text-[10.5px] tracking-[.1em] text-muted">ON YOUR OWN COMPUTER</span>
-            <DialogTitle className="text-[19px] leading-snug font-medium">Run Holos locally</DialogTitle>
-          </span>
-          <DialogClose aria-label="Close" className="-mt-2 -mr-3 size-11 text-xl leading-none text-muted">
-            ×
-          </DialogClose>
+        <div data-r="item">
+          <SheetHead kicker="ON YOUR OWN COMPUTER" title="Run Holos locally" Title={DialogTitle} Close={DialogClose} />
         </div>
         <p data-r="item" className="mt-2 text-[13px] leading-[1.5] text-page-ink2">
           The Mind answers through Claude Code or Codex on your own plan, so you need no API key.
