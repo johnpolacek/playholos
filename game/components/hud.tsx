@@ -1,4 +1,5 @@
 import { Button } from "@ui-sdk/react/button";
+import { Meter as UiMeter, MeterIndicator, MeterLabel, MeterTrack, MeterValue } from "@ui-sdk/react/meter";
 import {
   useEffect,
   useMemo,
@@ -76,40 +77,52 @@ export function Meter({
   const words = <span className={`truncate text-[11px] leading-tight tracking-normal ${late ? "text-other" : ""}`}>{sub}</span>;
   // What the word means, as a hint on hover, focus or a tap. 2026-11-15.
   const said = tip ? <Tip toggleable text={tip} trigger={<Button className="min-w-0 cursor-help text-left">{words}</Button>} /> : words;
+  // Its name, its bar and its number, by the look. With a share to show, they sit in ui-sdk's Meter below, which says
+  // the reading aloud. 2026-11-15.
+  const name = (
+    <>
+      {label}
+      {/* A preview says so: a blind first-timer read a pointed-at build's numbers as real, twice. 2026-11-07. */}
+      {hint && (
+        <span className="animate-fade text-you motion-reduce:animate-none">
+          {" "}
+          · IF ADDED
+        </span>
+      )}
+    </>
+  );
+  const NUMBER = `font-mono text-xs leading-tight font-semibold tracking-normal not-italic transition-colors duration-300 ${hint ? "text-you" : "text-ink"}`;
   return (
     <span className="flex min-w-0 flex-col gap-[3px] text-[10px] tracking-[.08em] text-muted">
-      {/* A preview says so: a blind first-timer read a pointed-at build's numbers as real, twice. 2026-11-07. */}
-      <span className="truncate">
-        {label}
-        {hint && (
-          <span className="animate-fade text-you motion-reduce:animate-none">
-            {" "}
-            · IF ADDED
-          </span>
-        )}
-      </span>
-      {/* A meter with no bar keeps its place, so its number lines up with the others. 2026-11-13. */}
-      {at === undefined && <b aria-hidden className="h-1" />}
-      {at !== undefined && (
-        <b className="relative h-1 bg-track">
-          <s
-            className="absolute inset-y-0 left-0 bg-fill2 transition-[width] duration-500 motion-reduce:transition-none"
-            style={{ width: `${Math.min(1, at) * 100}%` }}
-          />
-          {/* Held inside the track: a share past 100% once ran the bar across the other meters. 2026-11-13. */}
-          {to !== undefined && to > at && at < 1 && (
-            <i
-              className="absolute inset-y-0 border-y border-dashed border-muted/70"
-              style={{ left: `${at * 100}%`, width: `${(Math.min(1, to) - at) * 100}%` }}
+      {at === undefined ? (
+        <>
+          <span className="truncate">{name}</span>
+          {/* A meter with no bar keeps its place, so its number lines up with the others. 2026-11-13. */}
+          <b aria-hidden className="h-1" />
+          <em className={NUMBER}>{value}</em>
+        </>
+      ) : (
+        // On ui-sdk's Meter since 2026-11-15: a screen reader hears a meter, its name and its number as we write it.
+        // It draws no box of its own, and the word under it stays outside: a meter's insides are read as one value,
+        // so a link or a hint in there would be lost.
+        <UiMeter value={at} max={1} format={() => value} render={<span />} className="contents">
+          <MeterLabel className="truncate">{name}</MeterLabel>
+          <MeterTrack render={<span />} className="relative h-1 bg-track">
+            {/* Held inside the track: a share past 100% once ran the bar across the other meters. 2026-11-13. */}
+            <MeterIndicator
+              render={<span />}
+              className="absolute inset-y-0 bg-fill2 transition-[width] duration-500 motion-reduce:transition-none"
             />
-          )}
-        </b>
+            {to !== undefined && to > at && at < 1 && (
+              <i
+                className="absolute inset-y-0 border-y border-dashed border-muted/70"
+                style={{ left: `${at * 100}%`, width: `${(Math.min(1, to) - at) * 100}%` }}
+              />
+            )}
+          </MeterTrack>
+          <MeterValue className={NUMBER} />
+        </UiMeter>
       )}
-      <em
-        className={`font-mono text-xs leading-tight font-semibold tracking-normal not-italic transition-colors duration-300 ${hint ? "text-you" : "text-ink"}`}
-      >
-        {value}
-      </em>
       {go ? (
         <Link
           to={go}
