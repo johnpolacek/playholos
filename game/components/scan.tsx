@@ -93,6 +93,11 @@ const NOTHING: EarthView = { year: 0, felt: [], heard: [], visits: [] };
 /** A signal's id, to mark it new until opened. */
 export const heardId = (h: Signal) => `heard-${h.star}-${h.arrived}`;
 
+/** The server's last answer: the orders and Year we asked with, and the Year it could next change. Kept past the
+ *  provider's own life. */
+type Known = { seed: number; orders: string; asked: number; until: number; view: EarthView };
+let lastKnown: Known | undefined;
+
 export function ScanProvider({ children }: { children: React.ReactNode }) {
   const { save, year, setPlan } = useGame();
   const seed = save?.seed;
@@ -102,9 +107,18 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   // What the server needs from the save, shared with the skip. 2026-10-29.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const query = useMemo(() => knownQuery(save, tenth), [tenth, plan, save?.will]);
-  const [view, setView] = useState<EarthView>();
+  // What the server last said, kept until the Year it says this could change, while our orders stand. Asked every
+  // tenth of a Year, each ask cost the server about a second of work for the same answer. 2026-11-15.
+  const [ans, setAns] = useState<Known | undefined>(lastKnown?.seed === seed ? lastKnown : undefined);
+  const view = ans && ans.seed === seed ? ans.view : undefined;
+  const orders = useMemo(() => {
+    const q = new URLSearchParams(query);
+    q.delete("year");
+    return q.toString();
+  }, [query]);
+  const fresh = !!ans && ans.seed === seed && ans.orders === orders && tenth !== null && tenth >= ans.asked && tenth < ans.until;
   useEffect(() => {
-    if (seed === undefined) return;
+    if (seed === undefined || fresh) return;
     let live = true;
     let timer: ReturnType<typeof setTimeout> | undefined;
     // A failed answer is asked again, a little later each time: with the clock held it never moved on, so one failure
@@ -113,11 +127,15 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       fetch(`/api/known?seed=${seed}`, { method: "POST", body: new URLSearchParams(query) })
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`known ${r.status}`))))
         .then(
-          (v: EarthView) => live && setView(v),
+          (v: EarthView & { until?: number }) => {
+            if (!live) return;
+            lastKnown = { seed, orders, asked: v.year, until: v.until ?? v.year, view: v };
+            setAns(lastKnown);
+          },
           (e) => {
             if (!live) return;
             console.warn("[holos] what we know didn't load", e);
-            setView((was) => was ?? NOTHING);
+            setAns((was) => (was?.seed === seed ? was : { seed, orders: "", asked: 0, until: 0, view: NOTHING }));
             if (tries < 6) timer = setTimeout(() => ask(tries + 1), 1500 * 2 ** tries);
           },
         );
@@ -126,7 +144,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       live = false;
       clearTimeout(timer);
     };
-  }, [seed, query]);
+  }, [seed, query, orders, fresh]);
+  // The Year what we know is good for: now, while the kept answer holds.
+  const known = fresh && tenth !== null ? tenth : view?.year;
   const felt = view?.felt;
   // What our watches caught. Answers to what we sent went with the neighbors, 2026-10-29.
   const heard = useMemo(() => view?.heard ?? [], [view]);
@@ -264,8 +284,8 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
         return [l.slug, waiting ? "waiting" : "quiet"];
       }),
     );
-    return { known: view?.year, leads, ids, dials, readings, fresh, standing, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
-  }, [view?.year, leads, felt, fields, proximaField, proxima, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
+    return { known, leads, ids, dials, readings, fresh, standing, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
+  }, [known, leads, felt, fields, proximaField, proxima, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 

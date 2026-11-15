@@ -106,3 +106,32 @@ export function nextStopWhy(
   ].filter((x): x is { at: number; why: Why } => x !== null);
   return all.length ? all.reduce((a, b) => (b.at < a.at ? b : a)) : null;
 }
+
+/** Years what Earth knows is kept at most before the page asks again. */
+export const KEEP = 10;
+
+/** Numbers in what Earth knows that are never a Year: places, sizes and measures. Any other number is taken for one. */
+const NOT_WHEN = new Set(["a", "albedo", "au", "d", "dec", "hz", "km", "kms", "lum", "mass", "minMass", "periodDays", "ra", "range", "tilt", "watts"]);
+
+/** The Year what Earth knows could next change, after `year`: the soonest Year named in `later`, what Earth will know
+ *  KEEP Years on, or in `kit`, what we built and sent. Until then the page keeps the answer it has, and Scan asks the
+ *  server tens of times less. Every number not known to be a measure counts as a Year, so an early ask is the worst a
+ *  new field can cost. The kit counts because a build done can show a first word that a fuller one replaces: the
+ *  15 m Mirror's first look at Proxima b is dated the Year it was done, and its reading a few hours on. `late` is the
+ *  Will's light-time from Earth, whose news reaches it that much later and whose own place is seen that much sooner.
+ *  2026-11-15. */
+export function nextChange(later: EarthView, year: number, kit: unknown = null, late = 0): number {
+  let best = year + KEEP;
+  const walk = (x: unknown, key: string) => {
+    if (typeof x === "number") {
+      if (NOT_WHEN.has(key)) return;
+      // Years are told rounded, to a tenth at the coarsest, so one just behind us may still be to come: a glow imaged
+      // at Year 45.1004 is told as 45.1, and at Year 45.1 it isn't yet.
+      for (const t of late ? [x, x + late, x - late] : [x]) if (t > year - 0.051 && t < best) best = Math.max(t, year + 1e-6);
+    } else if (Array.isArray(x)) for (const v of x) walk(v, key);
+    else if (x && typeof x === "object") for (const [k, v] of Object.entries(x)) walk(v, k);
+  };
+  for (const [k, v] of Object.entries(later)) if (k !== "year") walk(v, k);
+  walk(kit, "");
+  return best;
+}

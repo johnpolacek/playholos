@@ -1111,3 +1111,30 @@ test("Chips at the Limit takes our thought about 4.9 steps further once done, so
   const sharp = at([{ y: 0, begin: "Chips at the limit" }, { y: 20, begin: "Fusion drive" }]);
   assert.ok(sharp < plain - 1, `the drive done at ${sharp}, against ${plain}`);
 });
+
+test("what Earth knows holds until the Year the server says it could change, so Scan can keep it", async () => {
+  const { KEEP, nextChange } = await import("./next.ts");
+  let kept = 0;
+  for (const seed of [10, 1, 22]) {
+    const world = await loadWorld(seed);
+    const f = world.finds[0];
+    const star = world.stars[f.star]?.shown ?? f.star;
+    const kit = {
+      allSky: 3, flash: 5, telescope: 8, mirror: 20, halo: 30, haloArray: 60, warmWatch: 35, mapper: 40, imager: 45, hyper: 80,
+      closeLook: 50, moonSearch: 55, closeReads: [{ name: "Warm glow 1", y: 90 }],
+      sentinels: [{ star, leaves: 10 }, { star: "Warm glow 1", leaves: 70 }],
+      flybys: [{ star, by: "probe" as const, passed: 100, home: 120 }],
+      lenses: [{ star, looks: 30, home: 30.5 }],
+    };
+    const told = (y: number) => JSON.stringify({ ...earthKnows(world, y, kit), year: 0 });
+    for (let tenth = 0; tenth < 6000; ) {
+      const year = tenth / 10;
+      const until = nextChange(earthKnows(world, year + KEEP, kit), year, kit);
+      assert.ok(until > year && until <= year + KEEP);
+      const was = told(year);
+      // Each tenth of a Year before then, as the page asks.
+      for (tenth++; tenth / 10 < until; tenth++, kept++) assert.equal(told(tenth / 10), was, `seed ${seed}, Year ${tenth / 10}, kept from ${year}`);
+    }
+  }
+  assert.ok(kept > 9000, `kept ${kept} tenths of 18,000`);
+});

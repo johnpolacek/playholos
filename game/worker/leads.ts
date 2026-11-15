@@ -3,7 +3,7 @@ import { schedule, fifthsOf } from "@/lib/game/plan";
 import { rockAt, rockOf } from "@/lib/game/rocks";
 import { iceFirsts, skyOf, stormFirsts } from "@/lib/game/natural";
 import { kitOf } from "@/lib/game/reach";
-import { nextStopWhy } from "@/lib/sim/next";
+import { KEEP, nextChange, nextStopWhy } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readSwitches } from "./orders";
@@ -72,7 +72,11 @@ export async function known(req: Request) {
   };
   // Once the Will lives at a hole, Earth's news reaches it a light-time late. 2026-10-26.
   const more = { knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")), calls: readCalls(q.get("calls")) };
-  return Response.json(willKnows(world, year, { ...kitOf(plan, Number(world.earth.compute) || 1), ...more }, readWill(one(q.get("will")))));
+  const kit = { ...kitOf(plan, Number(world.earth.compute) || 1), ...more };
+  const will = readWill(one(q.get("will")));
+  // And the Year this could next change, so the page keeps it till then. 2026-11-15.
+  const until = nextChange(willKnows(world, year + KEEP, kit, will), year, kit, will?.d);
+  return Response.json({ ...willKnows(world, year, kit, will), until: will && year < will.at ? Math.min(until, will.at) : until });
 }
 
 /** How far ahead a skip looks for what comes next, in Years. A skip with nothing in reach goes this far at most. */
