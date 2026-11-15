@@ -270,7 +270,8 @@ export default function Kit() {
         <h2 className="mt-10 mb-3 engrave font-mono text-[10.5px] tracking-[.14em] text-muted">THE MIND</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Card n={18} name="Mind note">
-            <MindNote className="text-[14.5px] leading-snug">
+            {/* Drawn as it is written, thinking: under Infrared it glows warm. 2026-11-15. */}
+            <MindNote thinking className="text-[14.5px] leading-snug">
               A flyby is past a world in minutes. To stay, a craft must slow, and that takes a fusion drive no one has flown yet.
             </MindNote>
           </Card>

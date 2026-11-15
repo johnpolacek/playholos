@@ -120,7 +120,7 @@ export function IdleNote() {
             setLeap(null);
           }}
         />
-        <MindNote still={!told.busy} edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
+        <MindNote still={!told.busy} thinking={told.busy} edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
           <Quiet key={leap.to} from={leap.from} to={leap.to}>
             {/* What reached us first, the Mind's words after: they stream in late, and above the list they pushed its rows
                 from under the cursor, in two blind playtests. 2026-11-07. */}

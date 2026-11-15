@@ -35,19 +35,24 @@ function MindMark({ still }: { still: boolean }) {
 // the corner and its line go: the paper's own edge sets the words off.
 // Under the Log skin, 2026-11-15, a note is an annotation in the margin, in a quieter hand: italic, in the paler ink,
 // hw-tape in app/globals.css, and the corner is a straight rule down the margin, with no line along its top.
+// While the Mind is still writing it, a note says so with data-thinking, 2026-11-15. Under the Infrared skin it glows
+// faintly warm then, behind its words, hw-tape in app/globals.css. No skin says it aloud: the words arriving do.
 export function MindNote({
   className = "",
   still = false,
   edge = true,
+  thinking = false,
   children,
 }: {
   className?: string;
   still?: boolean;
   edge?: boolean;
+  /** The Mind is still writing it. */
+  thinking?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <div className={`hw-tape relative pr-1 pb-3 pl-3 instrument:pt-2 instrument:pr-3 instrument:pb-4 instrument:pl-6 ${className}`}>
+    <div data-thinking={thinking || undefined} className={`hw-tape relative pr-1 pb-3 pl-3 instrument:pt-2 instrument:pr-3 instrument:pb-4 instrument:pl-6 ${className}`}>
       {edge && (
         <span
           aria-hidden

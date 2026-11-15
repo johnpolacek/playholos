@@ -273,7 +273,8 @@ function Answer({ id, text, still, asked, last }: { id: string; text: string; st
   const ask = textOf(asked);
   return (
     <>
-      <MindNote still={still} className="max-w-[86%] self-start text-[15px] leading-[1.5] whitespace-pre-wrap">
+      {/* The newest answer, still arriving, is the Mind thinking. 2026-11-15. */}
+      <MindNote still={still} thinking={!still && !last} className="max-w-[86%] self-start text-[15px] leading-[1.5] whitespace-pre-wrap">
         {properGlows(words) ? <LinkedWords words={properGlows(words)} done={still || last} /> : "…"}
       </MindNote>
       {draft && (
