@@ -66,6 +66,7 @@ export const router = createBrowserRouter([
           { path: "ui/top-bar", lazy: later(() => import("@/app/views/top-bar")) },
           { path: "ui/mind", lazy: later(() => import("@/app/views/mind")) },
           { path: "ui/send", lazy: later(() => import("@/app/views/send")) },
+          { path: "ui/build", lazy: later(() => import("@/app/views/build")) },
         ],
       },
       // Godview shows what the player can't see, so only the dev server has it.

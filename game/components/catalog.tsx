@@ -100,51 +100,48 @@ export function Catalog({ className = "" }: { className?: string }) {
         {shown.map((b) => {
           const lacking = lacks(plan, b.name);
           return (
-            <li key={b.name} className="border-t border-faint" {...point(b.name)}>
-              <Link to={`/play/build/${buildSlug(b.name)}`} className="block py-2.5">
-                <Face
-                  mark={<BuildMark name={b.name} />}
-                  tone={buildTone(b.name, false)}
-                  name={
-                    <>
-                      <b className="font-semibold">{b.name}</b>
-                      {/* Its kind, as a word. Where our strategy bears the same word, the one tag says both. */}
-                      <KindTag name={b.name} className={`ml-2 align-[2px] ${fits(strategy, b) && strategy === kindOf(b) ? "rounded-full border border-current/50 px-1.5 py-px" : ""}`} />
-                      {fits(strategy, b) && strategy !== kindOf(b) && (
-                        <span className="ml-2 rounded-full border border-other/50 px-1.5 py-px align-[2px] font-mono text-[9px] tracking-[.08em] text-other uppercase">
-                          {strategy}
-                        </span>
-                      )}
-                    </>
-                  }
-                  line={takenAt(plan, b.name) === null ? b.what : `${b.what} Paused at Year ${takenAt(plan, b.name)}, its work kept.`}
-                  right={by[b.name].at == null ? PAST : span(by[b.name].at! - at)}
-                />
-                <CostLine name={b.name} move={by[b.name]} at={at} />
-              </Link>
-              <OpensLine name={b.name} />
-              <div className="flex justify-end pb-2.5 pl-7">
-                {lacking.length ? (
-                  <span className="text-xs leading-snug text-muted">Needs {needs(lacking)} in our order first.</span>
-                ) : (
-                  order !== null && (
-                    // Only the button previews its build now: a row that scrolled under a resting pointer turned the top
-                    // bar into "IF ADDED" numbers, and a blind first-timer took them for what we had queued. 2026-11-08.
-                    <Button
-                      {...previews(b.name, preview)}
-                      onClick={() => {
-                        change(orderLater(b.name, order));
-                        // The map shows where it now goes up: on a tap, nothing had flown it from Earth. 2026-11-08.
-                        if (SITES[b.name]) pick(b.name);
-                      }}
-                      className="h-9 shrink-0 rounded-full border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-button hover:text-paper"
-                    >
-                      {takenAt(plan, b.name) === null ? "Add to Queue" : "Resume Build"}
-                    </Button>
-                  )
-                )}
-              </div>
-            </li>
+            <CatalogRow
+              key={b.name}
+              name={b.name}
+              point={point(b.name)}
+              tags={
+                <>
+                  {/* Its kind, as a word. Where our strategy bears the same word, the one tag says both. */}
+                  <KindTag name={b.name} className={`ml-2 align-[2px] ${fits(strategy, b) && strategy === kindOf(b) ? "rounded-full border border-current/50 px-1.5 py-px" : ""}`} />
+                  {fits(strategy, b) && strategy !== kindOf(b) && (
+                    <span className="ml-2 rounded-full border border-other/50 px-1.5 py-px align-[2px] font-mono text-[9px] tracking-[.08em] text-other uppercase">
+                      {strategy}
+                    </span>
+                  )}
+                </>
+              }
+              line={takenAt(plan, b.name) === null ? b.what : `${b.what} Paused at Year ${takenAt(plan, b.name)}, its work kept.`}
+              right={by[b.name].at == null ? PAST : span(by[b.name].at! - at)}
+              cost={<CostLine name={b.name} move={by[b.name]} at={at} />}
+              action={
+                <>
+                  {lacking.length ? (
+                    <span className="text-xs leading-snug text-muted">Needs {needs(lacking)} in our order first.</span>
+                  ) : (
+                    order !== null && (
+                      // Only the button previews its build now: a row that scrolled under a resting pointer turned the top
+                      // bar into "IF ADDED" numbers, and a blind first-timer took them for what we had queued. 2026-11-08.
+                      <Button
+                        {...previews(b.name, preview)}
+                        onClick={() => {
+                          change(orderLater(b.name, order));
+                          // The map shows where it now goes up: on a tap, nothing had flown it from Earth. 2026-11-08.
+                          if (SITES[b.name]) pick(b.name);
+                        }}
+                        className={ADD}
+                      >
+                        {takenAt(plan, b.name) === null ? "Add to Queue" : "Resume Build"}
+                      </Button>
+                    )
+                  )}
+                </>
+              }
+            />
           );
         })}
       </ul>
@@ -241,4 +238,50 @@ export function useMindPick(on: boolean) {
     const pick = ready.sort((p, q) => Number(fits(strategy, q)) - Number(fits(strategy, p)) || soon[p.name] - soon[q.name])[0];
     return pick ? { build: pick, fit: fits(strategy, pick), strategy } : null;
   }, [on, plan, done, at, scale, strategy, save?.snoozed]);
+}
+
+/** The button on a row that queues its build: an outline that fills as it is pointed at. */
+export const ADD = "h-9 shrink-0 rounded-full border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-button hover:text-paper";
+
+/** One build we could start, drawn: its mark, name and kind, what it does and when it would be done, what it costs our
+ *  compute, what it opens, and the button that queues it. The Catalog feeds it the game, and /ui/build a fixed Earth.
+ *  2026-11-15. */
+export function CatalogRow({
+  name,
+  tags,
+  line,
+  right,
+  cost,
+  action,
+  point,
+}: {
+  name: string;
+  tags?: React.ReactNode;
+  line: React.ReactNode;
+  right: React.ReactNode;
+  cost?: React.ReactNode;
+  action?: React.ReactNode;
+  point?: React.HTMLAttributes<HTMLLIElement>;
+}) {
+  return (
+    <li className="border-t border-faint" {...point}>
+      <Link to={`/play/build/${buildSlug(name)}`} className="block py-2.5">
+        <Face
+          mark={<BuildMark name={name} />}
+          tone={buildTone(name, false)}
+          name={
+            <>
+              <b className="font-semibold">{name}</b>
+              {tags}
+            </>
+          }
+          line={line}
+          right={right}
+        />
+        {cost}
+      </Link>
+      <OpensLine name={name} />
+      <div className="flex justify-end pb-2.5 pl-7">{action}</div>
+    </li>
+  );
 }
