@@ -297,6 +297,31 @@
     outline-offset: 2px;
   }
 }
+@layer components {
+  /* Ruled paper: a panel, a sheet, a tab's page. The lines scroll with what is written on them. */
+  [data-skin="log"] :is(.hw-panel, .ledger) {
+    background-image: var(--ruled);
+    background-attachment: local;
+  }
+  /* A label or a column head is data: mono. */
+  [data-skin="log"] .engrave {
+    font-family: var(--font-plex-mono);
+  }
+  /* A reading on a scale: a hairline, ticked at each tenth, where a bar was. A meter's fill runs over it. */
+  [data-skin="log"] .graduated {
+    background:
+      linear-gradient(var(--stamp-edge), var(--stamp-edge)) bottom / 100% 1px no-repeat,
+      repeating-linear-gradient(90deg, var(--stamp-edge) 0 1px, transparent 1px 10%);
+  }
+  /* The Mind's note, in the margin: italic, in the paler ink. Its own label and any number stay upright. */
+  [data-skin="log"] .hw-tape {
+    font-style: italic;
+    color: var(--page-ink2);
+  }
+  [data-skin="log"] .hw-tape :is(.font-mono, code) {
+    font-style: normal;
+  }
+}
 
 body {
   background: var(--page);

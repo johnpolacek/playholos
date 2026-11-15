@@ -130,7 +130,9 @@ export function Meter({
               })}
             </MeterTrack>
           ) : (
-          <MeterTrack render={<span />} className="relative h-1 bg-track">
+          // Under Log, 2026-11-15, the track is a graduated scale, a hairline ticked at each tenth, `graduated` in
+          // app/globals.css, and the bar its reading.
+          <MeterTrack render={<span />} className="graduated relative h-1 bg-track log:bg-transparent">
             {/* Held inside the track: a share past 100% once ran the bar across the other meters. 2026-11-13. */}
             <MeterIndicator
               render={<span />}
@@ -558,7 +560,7 @@ export function TopBar({ corner, year, status, meters, count }: { corner: React.
       className="hw-panel relative grid shrink-0 grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 border-b border-faint bg-paper px-4 pt-4 pb-3 wide:col-span-2 wide:grid-cols-[1fr_minmax(0,520px)_1fr] wide:gap-x-10 wide:px-6 wide:py-3"
     >
       <div className="row-span-2 self-center">{corner}</div>
-      <span data-year className="text-right text-[15px] font-medium instrument:font-mono instrument:text-[14px] instrument:tabular-nums wide:col-start-3">
+      <span data-year className="text-right text-[15px] font-medium instrument:font-mono instrument:text-[14px] instrument:tabular-nums log:font-mono log:text-[14px] log:tabular-nums wide:col-start-3">
         {year}
       </span>
       <span className="text-right text-xs text-muted wide:col-start-3">{status}</span>

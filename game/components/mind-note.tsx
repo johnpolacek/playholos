@@ -33,6 +33,8 @@ function MindMark({ still }: { still: boolean }) {
 // Inside a card that has its own rounded edge, the corner goes: two rounded corners read as a doubled line. 2026-11-02.
 // Under the Instrument skin, 2026-11-15, a note is a strip of a teleprinter's tape, hw-tape in app/globals.css, and
 // the corner and its line go: the paper's own edge sets the words off.
+// Under the Log skin, 2026-11-15, a note is an annotation in the margin, in a quieter hand: italic, in the paler ink,
+// hw-tape in app/globals.css, and the corner is a straight rule down the margin, with no line along its top.
 export function MindNote({
   className = "",
   still = false,
@@ -49,13 +51,13 @@ export function MindNote({
       {edge && (
         <span
           aria-hidden
-          className="absolute top-2 bottom-0 left-0 w-[9px] rounded-tl-xl instrument:hidden border-t border-l border-you/40 [mask-image:linear-gradient(black,transparent)]"
+          className="absolute top-2 bottom-0 left-0 w-[9px] rounded-tl-xl instrument:hidden border-t border-l border-you/40 [mask-image:linear-gradient(black,transparent)] log:top-1 log:rounded-none log:border-t-transparent log:[mask-image:linear-gradient(black_60%,transparent)]"
         />
       )}
       <div className="mb-1.5 flex h-4 items-center gap-[7px]">
         <MindMark still={still} />
         <span className="font-mono text-[9.5px] tracking-[.1em] whitespace-nowrap text-you">THE MIND</span>
-        <span aria-hidden className="mt-2 h-px flex-1 self-start instrument:hidden bg-linear-to-r from-you/40 to-transparent to-90%" />
+        <span aria-hidden className="mt-2 h-px flex-1 self-start instrument:hidden log:invisible bg-linear-to-r from-you/40 to-transparent to-90%" />
       </div>
       {children}
     </div>

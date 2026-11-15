@@ -40,7 +40,8 @@ export function useSheet() {
   return { open, setOpen, close, exits, onOpenChange };
 }
 
-/** A sheet's look: its paper, edge and room, wherever it sits. /ui's views draw a sheet in place with it. */
+/** A sheet's look: its paper, edge and room, wherever it sits. /ui's views draw a sheet in place with it. Under the
+ *  Log skin `hw-panel` is ruled paper, squared. 2026-11-15. */
 export const SHEET_LOOK = "hw-panel flex w-full flex-col rounded-t-2xl border border-b-0 border-faint bg-paper px-5 pt-4 pb-5 text-left text-ink";
 
 /** A sheet's panel: from the bottom when tall, a card in the middle when wide. Width on wide is the caller's. */
