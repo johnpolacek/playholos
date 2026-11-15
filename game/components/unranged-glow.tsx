@@ -11,6 +11,7 @@ import { yearText } from "@/lib/game/clock";
 import { buildSlug } from "@/lib/game/plan";
 import { RANGE_HOURS, rangedAt, type FlashSeen } from "@/lib/sim/minds";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
+import { Btn } from "@/components/kit/button";
 
 // A warm glow from first sight, before our Infrared Telescope ranges it. It had no page until then, so its row on the
 // jump card led to the Mind with nothing to do. Now it has one at the address its full page takes once ranged: where it
@@ -123,13 +124,13 @@ export function UnrangedGlow({ n, flash }: { n: number; flash: FlashSeen }) {
         ))}
       </dl>
 
-      <Button
+      <Btn
         data-m
         onClick={() => navigate(`/play/mind?ask=${encodeURIComponent(`What is ${name.toLowerCase()}, and what could we do while we range it?`)}`)}
-        className="mt-6 h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium"
+        size="page" fill="line" className="mt-6 shrink-0"
       >
         Ask the Mind about it
-      </Button>
+      </Btn>
     </div>
   );
 }

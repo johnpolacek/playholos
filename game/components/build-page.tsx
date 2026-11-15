@@ -1,7 +1,7 @@
 import { Button } from "@ui-sdk/react/button";
-import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Fragment, useEffect, useMemo, useRef } from "react";
+import { Choice } from "@/components/kit/choice";
 import { useGame } from "@/components/game-provider";
 import { Lens } from "@/components/icons";
 import { BuildMark, buildColor, buildTone, KindTag, LockMark } from "@/components/marks";
@@ -40,6 +40,7 @@ import { CATALOG } from "@/lib/sim/works";
 import { SITES } from "@/lib/game/sites";
 import { FOUND, harm, rockAt, rockOf } from "@/lib/game/rocks";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
+import { Btn } from "@/components/kit/button";
 
 // One build, opened from Build: what it gives us, when it would be done, the Mind's word on it, and its story. The map
 // flies to where it would stand while it is open, and home when we leave. Before Begin, its button adds it to the
@@ -130,12 +131,12 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
             ? `Ordered now, it would be done ${PAST}.`
             : `Ordered now, it would be done by Year ${yearText(again.at)}, in ${span(again.at - now)}.`}
         </p>
-        <Button
+        <Btn
           onClick={() => change(orderLater(name, now))}
-          className="mt-2.5 h-11 rounded-full bg-button text-[15px] font-medium text-paper"
+          size="step" className="mt-2.5"
         >
           Add to Queue
-        </Button>
+        </Btn>
       </div>
     );
   if (back !== null && again) {
@@ -154,21 +155,21 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
             ? "Resumed now, it would be done after Year 1,000."
             : `Resumed now, it would be done by Year ${yearText(again.at)}, in ${span(again.at - now)}.`}
         </p>
-        <Button
+        <Btn
           onClick={() => change(orderLater(name, now))}
-          className="mt-2.5 h-11 rounded-full bg-button text-[15px] font-medium text-paper"
+          size="step" className="mt-2.5"
         >
           Resume Build
-        </Button>
+        </Btn>
       </div>
     );
   }
   const at = done[name];
   if (!ordered(plan).includes(name) || (at != null && at <= now)) return null;
   return (
-    <Button onClick={() => change(takeBack(name, now))} className="mt-2.5 h-11 rounded-full border border-ink text-[15px] font-medium">
+    <Btn onClick={() => change(takeBack(name, now))} size="step" fill="line" className="mt-2.5">
       Pause Build
-    </Button>
+    </Btn>
   );
 }
 
@@ -266,9 +267,9 @@ export function Queueing({
       )}
       {/* Queued, and the Mind advised it elsewhere in line: the move it advised, as the main button. 2026-11-08. */}
       {open && queued && advised !== undefined && advised !== at && (
-        <Button onClick={() => change(putAt(advised))} className="mt-2 h-11 rounded-full bg-button text-[15px] font-medium text-paper">
+        <Btn onClick={() => change(putAt(advised))} size="step" className="mt-2">
           {advised === 0 ? "Move to the Front" : `Move to ${cap(ordinal(advised))} in Queue`}
-        </Button>
+        </Btn>
       )}
       {/* The first in line gets our compute first. The Mind advised moving one to the front, and its page offered only
           Remove. Blind playtest 2026-11-07. */}
@@ -353,12 +354,12 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
           Open since Year {yearText(by)}, {build.after === FOUND ? "when we found a rock coming" : build.after === WATCHED ? "when we found the watcher" : `after the ${build.after}`}.{" "}
           {when == null ? "Ordered now, it would be done after Year 1,000." : `Ordered now, it would be done by Year ${yearText(when)}, in ${span(when - now)}.`}
         </p>
-        <Button
+        <Btn
           onClick={() => change(orderLater(build.name, now))}
-          className="mt-2.5 h-11 rounded-full bg-button text-[15px] font-medium text-paper"
+          size="step" className="mt-2.5"
         >
           Add to Queue
-        </Button>
+        </Btn>
       </div>
     );
   // Only a rock found opens the deflector, and most games never see one.
@@ -444,22 +445,16 @@ function Switch({ name }: { name: string }) {
   const at = switchedAt(plan, name, now);
   return (
     <div className="mt-3 rounded-lg border border-rowline p-2.5" style={{ "--c": buildColor(name) } as React.CSSProperties}>
-      <SegmentedControl
-        aria-label={`How the ${name} stands`}
+      <Choice
+        look="switch"
+        label={`How the ${name} stands`}
         value={on ? "on" : "off"}
-        onValueChange={(v) => v && (v === "on") !== on && change(switchTo(name, now, v === "on"))}
-        className="grid grid-cols-2 gap-1 rounded-full bg-ink/[.06] p-1"
-      >
-        {[true, false].map((to) => (
-          <SegmentedControlItem
-            key={String(to)}
-            value={to ? "on" : "off"}
-            className={`h-9 rounded-full text-[13.5px] font-medium transition-colors ${on === to ? (to ? "bg-(--c) text-paper" : "bg-button text-paper") : "text-page-ink2 hover:text-ink"}`}
-          >
-            {to ? s.on : s.off}
-          </SegmentedControlItem>
-        ))}
-      </SegmentedControl>
+        onChange={(v) => (v === "on") !== on && change(switchTo(name, now, v === "on"))}
+        options={[
+          { value: "on", label: s.on, on: "bg-(--c) text-paper" },
+          { value: "off", label: s.off },
+        ]}
+      />
       <p className="mt-2 px-1 text-[13px] leading-snug text-page-ink2">
         {on ? s.whenOn : s.whenOff}
         {at !== null && year !== null ? ` Set at Year ${yearText(at)}.` : ""}
@@ -563,7 +558,7 @@ export function BuildPage({ slug }: { slug: string }) {
         <Opens name={build.name} />
       </div>
       {CLOSE[build.name] && (
-        <Button
+        <Btn
           data-m
           onClick={() => {
             // After the map's own Back to Earth nothing is picked, and the button did nothing. Picked again, it flies
@@ -571,11 +566,11 @@ export function BuildPage({ slug }: { slug: string }) {
             pick(build.name);
             setClose(!close);
           }}
-          className="mt-6 flex h-[46px] shrink-0 items-center justify-center gap-2 rounded-full border border-ink text-[15px] font-medium"
+          size="page" fill="line" className="mt-6 flex shrink-0 items-center justify-center gap-2"
         >
           <Lens closer={!close} size={17} />
           {close ? "Pull Back" : "Close View"}
-        </Button>
+        </Btn>
       )}
       <Button
         data-m

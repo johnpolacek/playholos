@@ -1,10 +1,10 @@
 import { Button } from "@ui-sdk/react/button";
 import { Input } from "@ui-sdk/react/input";
-import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { Chat, useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
+import { Choice } from "@/components/kit/choice";
 import { useGame } from "@/components/game-provider";
 import { BuildCard } from "@/components/build-card";
 import { readingStands } from "@/components/close-reading";
@@ -387,28 +387,20 @@ export function MindSettings({ keyed, free = false }: { keyed: boolean; free?: b
     savePick(p);
   };
   const shown = free && pick.model === "claude-opus-5-5" ? FREE_MODEL : pick.model;
-  const toggle = (on: boolean) =>
-    `rounded-full px-2 py-0.5 transition-colors ${on ? "bg-button text-paper" : "text-page-ink2 hover:text-ink"}`;
   return (
     <div className="mb-3 flex flex-col gap-2 rounded-lg border border-dashed border-muted p-3 font-mono text-[10.5px] tracking-[.06em] uppercase">
       <Row name="Model">
         {/* On us, Opus thinks as Sonnet, so it isn't offered. 2026-11-08. */}
-        <SegmentedControl aria-label="Model" value={shown} onValueChange={(m) => m && choose({ model: m as MindModel })} className="flex items-center gap-0.5">
-          {(Object.keys(MIND_MODELS) as MindModel[]).filter((m) => !free || m !== "claude-opus-5-5").map((m) => (
-            <SegmentedControlItem key={m} value={m} className={({ checked }) => toggle(checked)}>
-              {MIND_MODELS[m].name}
-            </SegmentedControlItem>
-          ))}
-        </SegmentedControl>
+        <Choice
+          look="dial"
+          label="Model"
+          value={shown}
+          onChange={(m) => choose({ model: m as MindModel })}
+          options={(Object.keys(MIND_MODELS) as MindModel[]).filter((m) => !free || m !== "claude-opus-5-5").map((m) => ({ value: m, label: MIND_MODELS[m].name }))}
+        />
       </Row>
       <Row name="Effort">
-        <SegmentedControl aria-label="Effort" value={pick.effort} onValueChange={(e) => e && choose({ effort: e as typeof pick.effort })} className="flex items-center gap-0.5">
-          {EFFORTS.map((e) => (
-            <SegmentedControlItem key={e} value={e} className={({ checked }) => toggle(checked)}>
-              {e}
-            </SegmentedControlItem>
-          ))}
-        </SegmentedControl>
+        <Choice look="dial" label="Effort" value={pick.effort} onChange={(e) => choose({ effort: e as typeof pick.effort })} options={EFFORTS.map((e) => ({ value: e, label: e }))} />
       </Row>
       <Row name="This talk">
         <span className="px-2 text-page-ink2 normal-case tabular-nums">{spent(messages)}</span>

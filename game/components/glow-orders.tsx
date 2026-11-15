@@ -19,6 +19,7 @@ import type { GlowOrder, Plan } from "@/lib/game/types";
 import type { MindsSeen } from "@/lib/sim/minds";
 import { CATALOG } from "@/lib/sim/works";
 import { flybyYears, SAIL_REACH, sailYears, sentinelYears, type Push } from "@/lib/sim/speeds";
+import { Btn } from "@/components/kit/button";
 
 type Kind = "warm" | "cold";
 type By = GlowOrder["by"];
@@ -246,9 +247,9 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
             {NAME[order.by].toLowerCase()}. {thrown(order.by) ? THROWN(push) : PRICE[order.by]}
           </p>
           {order.by !== "sails" && <p className="mt-1 text-[12.5px] leading-snug text-muted">{stockLine(plan, stock, from)}</p>}
-          <Button onClick={() => set(undefined)} className="mt-2 h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+          <Btn onClick={() => set(undefined)} fill="faint" className="mt-2">
             Stop sending to new ones
-          </Button>
+          </Btn>
         </>
       ) : (
         <>
@@ -295,24 +296,23 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
             ) : asking ? (
               <>
                 <span className="text-[12.5px] text-muted">A craft can be canceled until it leaves.</span>
-                <Button onClick={() => setAsking(false)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+                <Btn onClick={() => setAsking(false)} fill="faint">
                   Wait
-                </Button>
-                <Button
+                </Btn>
+                <Btn
                   onClick={() => {
                     set({ since: from, by, within });
                     setAsking(false);
                     showCraft(CRAFT[by]);
                   }}
-                  className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper"
                 >
                   Send them
-                </Button>
+                </Btn>
               </>
             ) : (
-              <Button onClick={() => setAsking(true)} className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">
+              <Btn onClick={() => setAsking(true)}>
                 Set this order
-              </Button>
+              </Btn>
             )}
           </div>
         </>

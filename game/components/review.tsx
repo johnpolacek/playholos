@@ -21,6 +21,7 @@ import {
   riseFrom,
   useGSAP,
 } from "@/lib/motion";
+import { Btn } from "@/components/kit/button";
 
 // Reviewing our scans, the first of the four things we would do before Begin. The Mind takes us through Earth's
 // leads one at a time, and the map turns to each star as we reach it. Settled 2026-10-18. Reaching the last lead
@@ -274,14 +275,14 @@ export function Review({ onClose }: { onClose(): void }) {
               </div>
             )}
             {lead.system && (
-              <Button
+              <Btn
                 data-r
                 onClick={() => setClose(!close)}
-                className="mt-4 flex h-[46px] shrink-0 items-center justify-center gap-2 rounded-full border border-ink text-[15px] font-medium"
+                size="page" fill="line" className="mt-4 flex shrink-0 items-center justify-center gap-2"
               >
                 <Lens closer={!close} size={17} />
                 {close ? "Pull Back" : "Close View"}
-              </Button>
+              </Btn>
             )}
           </>
         ) : (
@@ -310,23 +311,23 @@ export function Review({ onClose }: { onClose(): void }) {
       <div
         className={`sticky bottom-0 mt-auto grid-cols-[1fr_1.4fr] gap-2 bg-panel pt-3 pb-3 ${at === last ? "grid" : "hidden wide:grid"}`}
       >
-        <Button
+        <Btn
           onClick={() => (at ? go(at - 1) : onClose())}
-          className="h-11 rounded-full border border-ink text-[15px] font-medium"
+          size="step" fill="line"
         >
           {at ? "Back" : "Not now"}
-        </Button>
-        <Button
+        </Btn>
+        <Btn
           ref={next}
           onClick={() => (at === last ? (then ? navigate(then.to) : onClose()) : go(at + 1))}
-          className="h-11 rounded-full bg-button text-[15px] font-medium text-paper"
+          size="step"
         >
           {at === last
             ? (then?.name ?? "Back to Scan")
             : at
               ? `Next · ${starName(leads[order[at]].star)}`
               : `First · ${starName(leads[order[0]].star)}`}
-        </Button>
+        </Btn>
       </div>
     </div>
   );

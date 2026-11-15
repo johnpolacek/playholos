@@ -42,6 +42,7 @@ import {
 import { type System, worldName } from "@/lib/game/systems";
 import type { Plan } from "@/lib/game/types";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
+import { Btn } from "@/components/kit/button";
 
 // Reach at Year 0: how far we have gone, drawn on one line out from Earth where each step is ten times farther, and
 // the two roads to the nearest star on the Years they would take. The line is also the map's: as the tab opens the map
@@ -375,16 +376,16 @@ function Flybys({ rows, now, aimAt }: { rows: { id: string; slug?: string; name:
 function CancelCraft({ go }: { go(): void }) {
   return (
     <div className="mt-1.5 flex justify-end pl-7">
-      <Button
+      <Btn
         onClick={(e) => {
           e.stopPropagation();
           go();
         }}
         onKeyDown={(e) => e.stopPropagation()}
-        className="h-7 rounded-full border border-faint px-3 text-[12.5px] font-medium hover:border-ink"
+        size="small" fill="faint" className="hover:border-ink"
       >
         Cancel
-      </Button>
+      </Btn>
     </div>
   );
 }

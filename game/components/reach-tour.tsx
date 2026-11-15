@@ -20,6 +20,7 @@ import type { Plan } from "@/lib/game/types";
 import { NEAREST, PROBE_NEEDS, roads, sentinelRoad } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 import { SAIL_REACH } from "@/lib/sim/speeds";
+import { Btn } from "@/components/kit/button";
 
 // How we reach, the third of the four things we would do before Begin, 2026-10-23. Scan's review shows what is out
 // there, and this shows how we would get there: how far we have gone against the gap to the nearest star, the two roads
@@ -328,18 +329,18 @@ export function ReachTour({ onClose }: { onClose(): void }) {
       <div
         className={`sticky bottom-0 mt-auto grid-cols-[1fr_1.4fr] gap-2 bg-panel pt-3 pb-3 ${at === last ? "grid" : "hidden wide:grid"}`}
       >
-        <Button
+        <Btn
           onClick={() => (at ? go(at - 1) : onClose())}
-          className="h-11 rounded-full border border-ink text-[15px] font-medium"
+          size="step" fill="line"
         >
           {at ? "Back" : "Not now"}
-        </Button>
-        <Button
+        </Btn>
+        <Btn
           onClick={() => (at === last ? (then ? navigate(then.to) : onClose()) : go(at + 1))}
-          className="h-11 rounded-full bg-button text-[15px] font-medium text-paper"
+          size="step"
         >
           {at === last ? (then?.name ?? "Back to Reach") : `Next · ${STOPS[at + 1]}`}
-        </Button>
+        </Btn>
       </div>
     </div>
   );

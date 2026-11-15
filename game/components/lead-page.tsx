@@ -26,6 +26,7 @@ import { glowNamed } from "@/lib/game/glow-names";
 import { UnrangedGlow, WARM_WHAT } from "@/components/unranged-glow";
 import { overlaid } from "@/components/sheet";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
+import { Btn } from "@/components/kit/button";
 
 // One lead, as a report: drawn, then what we measured, what it could be with the Mind's word for each, and what would
 // tell us. Its latest reading, once one lands, comes first, and the words it moved show what they were. The map flies
@@ -482,15 +483,15 @@ export function LeadPage({ slug }: { slug: string }) {
           2026-11-13, and taking it whole 2026-11-14. */}
       {lead.slug === "small-dark-body" && minds?.watcher && <WatcherCards w={minds.watcher} />}
 
-      <Button
+      <Btn
         data-m
         // What it is, then what we could do: asked only what it was, the Mind restated a cold glow and a blind first-timer
         // was left with no next step. 2026-11-07.
         onClick={() => navigate(`/play/mind?ask=${encodeURIComponent(`${lead.ask} What could we do next?`)}`)}
-        className="mt-6 h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium"
+        size="page" fill="line" className="mt-6 shrink-0"
       >
         Ask the Mind about it
-      </Button>
+      </Btn>
     </div>
   );
 }

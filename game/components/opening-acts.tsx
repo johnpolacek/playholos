@@ -1,6 +1,7 @@
 import { Button } from "@ui-sdk/react/button";
 import { useEffect, useRef, type ReactNode } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
+import { Btn } from "@/components/kit/button";
 
 // The opening screens' buttons: back a screen, Skip, and the next screen's name. Skip says only Skip, with Lucide's
 // chevrons-right, and back is Lucide's chevron-left with no words. Both are faint outlines, sized to what they hold, and the next
@@ -163,14 +164,14 @@ function Sparking({
         aria-hidden
         className="pointer-events-none absolute inset-0 overflow-visible"
       />
-      <Button
+      <Btn
         onClick={onClick}
         onPointerEnter={start}
         onPointerLeave={stop}
-        className="relative h-[46px] rounded-full bg-button text-[15px] font-medium text-paper transition-[transform,box-shadow] duration-300 ease-out hover:shadow-[0_0_18px_-4px_var(--you)] active:scale-[.98] motion-reduce:transition-none"
+        size="page" className="relative transition-[transform,box-shadow] duration-300 ease-out hover:shadow-[0_0_18px_-4px_var(--you)] active:scale-[.98] motion-reduce:transition-none"
       >
         {children}
-      </Button>
+      </Btn>
     </div>
   );
 }

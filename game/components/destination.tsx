@@ -45,6 +45,7 @@ import {
 import { beamMiss, beamSeen, finishWeight, SAIL_REACH, sailArrives, worksAU } from "@/lib/sim/speeds";
 import { CATALOG } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
+import { Btn } from "@/components/kit/button";
 
 // One destination, opened from Reach: a lead's star, and every way we could go there. The two roads open at Year 0,
 // by sail and by probe, are drawn on the Years they would take, each with the build it needs and the button that queues
@@ -210,9 +211,9 @@ function Sent(props: {
         {can && !sent && !asking && choices && (
           <div className="mt-2 flex flex-wrap justify-end gap-1.5">
             {choices.map((c) => (
-              <Button key={c.label} onClick={() => setAsking(c)} className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper">
+              <Btn key={c.label} onClick={() => setAsking(c)}>
                 {c.label}
-              </Button>
+              </Btn>
             ))}
           </div>
         )}
@@ -225,29 +226,28 @@ function Sent(props: {
                 ? `Built by Year ${year(road.fuelWait.built)}. Leaves Year ${year(road.leaves!)}, once our ${road.fuelWait.fuel === "antimatter" ? "Antimatter" : "Deuterium"} Works has made its fuel.`
                 : `Leaves Year ${year(road.leaves!)}.`}
             </span>
-            <Button onClick={recall} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium hover:border-ink">
+            <Btn onClick={recall} fill="faint" className="hover:border-ink">
               Cancel
-            </Button>
+            </Btn>
           </div>
         )}
         {/* The ask sits on its own line: beside the needs it ran off the panel, playtest 2026-11-01. */}
         {can && !sent && asking && (
           <div className="mt-2 flex flex-wrap items-center justify-end gap-1.5">
             <span className="text-[12.5px] text-muted">{recall ? "We can cancel it until it leaves." : "Can’t be called back."}</span>
-            <Button onClick={() => setAsking(null)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+            <Btn onClick={() => setAsking(null)} fill="faint">
               Wait
-            </Button>
-            <Button
+            </Btn>
+            <Btn
               onClick={() => {
                 asking.send();
                 setAsking(null);
                 // Sent, it shows on the map at once, before Begin too. 2026-11-08.
                 preview(true);
               }}
-              className="h-8 rounded-full bg-button px-3.5 text-[13px] font-medium text-paper"
             >
               {asking.label}
-            </Button>
+            </Btn>
           </div>
         )}
       </div>
@@ -696,14 +696,14 @@ export function DestinationPage({ slug }: { slug: string }) {
         </MindNote>
       </div>
       {lead.system && (
-        <Button
+        <Btn
           data-m
           onClick={() => setClose(!close)}
-          className="mt-6 flex h-[46px] shrink-0 items-center justify-center gap-2 rounded-full border border-ink text-[15px] font-medium"
+          size="page" fill="line" className="mt-6 flex shrink-0 items-center justify-center gap-2"
         >
           <Lens closer={!close} size={17} />
           {close ? "Pull Back" : "Close View"}
-        </Button>
+        </Btn>
       )}
     </div>
   );

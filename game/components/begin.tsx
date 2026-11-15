@@ -12,6 +12,7 @@ import { useAccess } from "@/lib/key";
 import { base, charterFor, HISTORY } from "@/lib/game/charter";
 import { PACKAGES, packed } from "@/lib/game/plan";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
+import { Btn } from "@/components/kit/button";
 
 // Begin: Year 0 starts at the tap, and the clock runs from then, offline too. Settled 2026-10-10. Before it, the top
 // bar counts the four things we would do first and opens them as a thread down to Year 0, in the tabs' order: review
@@ -218,12 +219,12 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
       <div data-b="item" className="mt-3 grid grid-cols-[1fr_1.4fr] gap-2">
         {next ? (
           <>
-            <Button
+            <Btn
               onClick={() => (sure ? onBegin() : setSure(true))}
-              className="h-[46px] rounded-full border border-ink text-[15px] font-medium"
+              size="page" fill="line"
             >
               {sure ? "Yes, begin" : "Begin now"}
-            </Button>
+            </Btn>
             <Link
               to={next.to}
               onClick={() => onClose()}
@@ -234,12 +235,12 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
           </>
         ) : (
           <>
-            <Button onClick={() => onClose()} className="h-[46px] rounded-full border border-ink text-[15px] font-medium">
+            <Btn onClick={() => onClose()} size="page" fill="line">
               Not yet
-            </Button>
-            <Button onClick={onBegin} className="h-[46px] rounded-full bg-button text-[15px] font-medium text-paper">
+            </Btn>
+            <Btn onClick={onBegin} size="page">
               Begin · Year 0
-            </Button>
+            </Btn>
           </>
         )}
       </div>

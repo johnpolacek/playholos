@@ -1,6 +1,6 @@
-import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
+import { Choice } from "@/components/kit/choice";
 import { useGame } from "@/components/game-provider";
 import { openReadings, useOpenReadings } from "@/components/close-reading";
 import { Heard } from "@/components/heard";
@@ -386,22 +386,14 @@ export function Scan() {
     <>
       <Path />
       {heard.length > 0 && <Heard />}
-      <SegmentedControl
-        aria-label="What we look for"
+      <Choice
+        look="lens"
+        label="What we look for"
         value={lens}
-        onValueChange={(key) => key && setParams(key === "all" ? {} : { lens: key }, { replace: true })}
-        className="mt-4 flex gap-1.5"
-      >
-        {LENSES.map(({ key, label }) => (
-          <SegmentedControlItem
-            key={key}
-            value={key}
-            className={`h-7 rounded-full px-3 text-[12.5px] font-medium transition-colors ${lens === key ? "bg-button text-paper" : "border border-faint text-page-ink2 hover:border-muted"}`}
-          >
-            {label}
-          </SegmentedControlItem>
-        ))}
-      </SegmentedControl>
+        onChange={(key) => setParams(key === "all" ? {} : { lens: key }, { replace: true })}
+        options={LENSES.map(({ key, label }) => ({ value: key, label }))}
+        className="mt-4"
+      />
       {lens === "homes" && <HomesChart leads={homes} readings={readings} />}
       <LeadList
         leads={leads}
