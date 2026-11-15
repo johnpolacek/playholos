@@ -294,7 +294,7 @@ function Answer({ id, text, still, asked, last }: { id: string; text: string; st
 
 /** What we asked, as a bubble in ink on the right. The Mind answers in its notes. */
 export function Ours({ children }: { children: React.ReactNode }) {
-  return <div className="max-w-[86%] self-end rounded-xl bg-button px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">{children}</div>;
+  return <div className="max-w-[86%] self-end rounded-xl bg-button instrument:rounded-[5px] px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">{children}</div>;
 }
 
 /** Messages as bubbles: ours in ink, the Mind's as its notes. Then whether it is thinking, or can't answer. */

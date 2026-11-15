@@ -31,6 +31,8 @@ function MindMark({ still }: { still: boolean }) {
 // The Mind's words, set off by one corner. Its mark and name sit in the top edge, the top fades out to the right, and
 // the side fades down. Settled 2026-10-18, from explorations/mind-voice-edge.html. The caller sets the words' size.
 // Inside a card that has its own rounded edge, the corner goes: two rounded corners read as a doubled line. 2026-11-02.
+// Under the Instrument skin, 2026-11-15, a note is a strip of a teleprinter's tape, hw-tape in app/globals.css, and
+// the corner and its line go: the paper's own edge sets the words off.
 export function MindNote({
   className = "",
   still = false,
@@ -43,17 +45,17 @@ export function MindNote({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`relative pr-1 pb-3 pl-3 ${className}`}>
+    <div className={`hw-tape relative pr-1 pb-3 pl-3 instrument:pt-2 instrument:pr-3 instrument:pb-4 instrument:pl-6 ${className}`}>
       {edge && (
         <span
           aria-hidden
-          className="absolute top-2 bottom-0 left-0 w-[9px] rounded-tl-xl border-t border-l border-you/40 [mask-image:linear-gradient(black,transparent)]"
+          className="absolute top-2 bottom-0 left-0 w-[9px] rounded-tl-xl instrument:hidden border-t border-l border-you/40 [mask-image:linear-gradient(black,transparent)]"
         />
       )}
       <div className="mb-1.5 flex h-4 items-center gap-[7px]">
         <MindMark still={still} />
         <span className="font-mono text-[9.5px] tracking-[.1em] whitespace-nowrap text-you">THE MIND</span>
-        <span aria-hidden className="mt-2 h-px flex-1 self-start bg-linear-to-r from-you/40 to-transparent to-90%" />
+        <span aria-hidden className="mt-2 h-px flex-1 self-start instrument:hidden bg-linear-to-r from-you/40 to-transparent to-90%" />
       </div>
       {children}
     </div>

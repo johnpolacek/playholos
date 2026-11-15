@@ -227,6 +227,17 @@
     background: var(--hw-face);
     border-color: #060607;
   }
+  /* The Mind's words on a teleprinter's tape: a strip of paper a shade lighter than the panel, its feed holes down
+     the left edge, typed in mono, and torn off at the foot. The paper stays slate, so the words stay chalk. */
+  [data-skin="instrument"] .hw-tape {
+    font-family: var(--font-plex-mono);
+    font-size: 0.9em;
+    background:
+      radial-gradient(circle at 9px 9px, var(--page) 2.2px, transparent 2.7px) 0 0 / 18px 18px repeat-y,
+      color-mix(in srgb, var(--ink) 13%, var(--paper));
+    -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 9px 100%;
+    mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 9px 100%;
+  }
   /* A screen behind glass: the picture sits back from its bezel, and the pane catches a little light across its top
      corner. The pane lets every press through. */
   [data-skin="instrument"] .hw-glass {
