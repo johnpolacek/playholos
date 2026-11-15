@@ -164,24 +164,34 @@ function Skip() {
     q.delete("year");
     return q.toString();
   }, [query]);
+  // Asked again when the server can't answer, sooner than the next tenth, and the last good answer is kept: one
+  // failed ask hid the jump for up to 30 seconds, and a run of them hid it for good. 2026-11-15.
   useEffect(() => {
     if (seed === undefined || tenth === null) return;
     let live = true;
-    fetch(`/api/next?seed=${seed}`, {
-      method: "POST",
-      body: new URLSearchParams(query),
-    })
-      .then((r) => (r.ok ? r.json() : null))
-      .then(
-        (v: { next: number | null; why?: string | null } | null) => {
-          if (!live) return;
-          setNext(v ? v.next : undefined);
-          setWhy(v?.why ?? null);
-          setAnswered(orders);
-        },
-        () => live && setNext(undefined),
-      );
-    return () => void (live = false);
+    let again: ReturnType<typeof setTimeout> | undefined;
+    const ask = (tries: number) =>
+      fetch(`/api/next?seed=${seed}`, {
+        method: "POST",
+        body: new URLSearchParams(query),
+      })
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+        .then(
+          (v: { next: number | null; why?: string | null }) => {
+            if (!live) return;
+            setNext(v.next);
+            setWhy(v.why ?? null);
+            setAnswered(orders);
+          },
+          () => {
+            if (live) again = setTimeout(() => ask(tries + 1), Math.min(15_000, 2000 * 2 ** tries));
+          },
+        );
+    ask(0);
+    return () => {
+      live = false;
+      clearTimeout(again);
+    };
   }, [seed, query, tenth, orders]);
   const stale =
     tenth === null || next === undefined || answered !== orders || (next !== null && next <= tenth);
@@ -211,8 +221,9 @@ function Skip() {
     setAhead(to === null ? null : { to, why, go: () => go.current() });
     return () => setAhead(null);
   }, [to, why]);
-  // A stop behind us is stale, while the server answers for the Year we skipped to.
-  if (stale) return null;
+  // A stop behind us is stale, while the server answers for the Year we skipped to. Said, not blank: with nothing
+  // there, a slow answer read as the jump gone missing. 2026-11-15.
+  if (stale) return tenth === null ? null : <span className="ml-2 text-[12.5px] text-muted">Looking ahead…</span>;
   // The link vanished with no word until 2026-10-30, and players thought it broke.
   if (next === null)
     return (
