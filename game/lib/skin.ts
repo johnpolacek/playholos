@@ -51,3 +51,11 @@ export function saveSkin(to: Skin) {
     // Nowhere to keep it: the pick holds for this visit.
   }
 }
+
+/** The skin an address asks for, as ?skin=instrument, or null. For playtests: main.tsx reads it once as the game
+ *  loads, and it holds from page to page until the next full load. It is never kept, so the game opens in chalk
+ *  again without it. 2026-11-15. */
+export function askedSkin(search: string): Skin | null {
+  const s = new URLSearchParams(search).get("skin");
+  return SKINS.some((k) => k.id === s) ? (s as Skin) : null;
+}

@@ -8,7 +8,12 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router/dom";
 import { animateTab } from "@/components/galactic-year";
 import { holdSentenceStarts } from "@/lib/breaks";
+import { askedSkin, setSkin } from "@/lib/skin";
 import { router } from "./routes";
+
+// A playtest's skin, from ?skin= on any address. Before the first paint, so the game never flashes chalk first.
+const asked = askedSkin(window.location.search);
+if (asked) setSkin(asked);
 
 animateTab();
 holdSentenceStarts();
