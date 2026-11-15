@@ -31,7 +31,7 @@ export function Rail() {
   // The Mind told us something unasked that we haven't read. 2026-10-31.
   const said = useMindUnread() && path !== "/play/mind";
   return (
-    <nav data-shell="rail" aria-label="Main" className="grid h-16 shrink-0 grid-cols-4 border-t border-faint bg-paper wide:col-start-2 wide:row-start-3 wide:border-l">
+    <RailNav>
       {TABS.map(({ label, href }) => {
         // A lead's page is part of Scan, and a build's of Build.
         const on =
@@ -48,6 +48,16 @@ export function Rail() {
           />
         );
       })}
+    </RailNav>
+  );
+}
+
+/** The rail, drawn: four tabs in a band along the foot of the screen. Rail feeds it the game's tabs, and /ui's views
+ *  fixed ones. 2026-11-15. */
+export function RailNav({ children }: { children: React.ReactNode }) {
+  return (
+    <nav data-shell="rail" aria-label="Main" className="grid h-16 shrink-0 grid-cols-4 border-t border-faint bg-paper wide:col-start-2 wide:row-start-3 wide:border-l">
+      {children}
     </nav>
   );
 }

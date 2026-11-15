@@ -64,6 +64,7 @@ export const router = createBrowserRouter([
           { path: "ui", lazy: later(() => import("@/app/ui")) },
           // The kit's views: the game's screens drawn by its own parts, fed a fixed Earth. 2026-11-15.
           { path: "ui/top-bar", lazy: later(() => import("@/app/views/top-bar")) },
+          { path: "ui/mind", lazy: later(() => import("@/app/views/mind")) },
         ],
       },
       // Godview shows what the player can't see, so only the dev server has it.

@@ -7,6 +7,10 @@ import type { Source } from "@/lib/game/sources";
 
 /** A tab's name, and on the right its state, or the ⓘ that opens the real record behind it, with a walk through the
  *  tab beside it, open at any time. */
+/** A tab's page under the map: the panel the tab head, its lists and the Mind's talk sit on. The play screen's own,
+ *  and /ui's views. 2026-11-15. */
+export const TAB_PAGE = "flex grow flex-col overflow-y-auto bg-panel px-4 pt-3";
+
 export function TabHead({
   title,
   right,

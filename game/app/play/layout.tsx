@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router";
+import { TAB_PAGE } from "@/components/tab-head";
 import { BeamsProvider } from "@/components/beams";
 import { Fate } from "@/components/fate";
 import { Crossing } from "@/components/crossing";
@@ -47,7 +48,7 @@ export default function PlayLayout() {
                 <main
                   ref={page}
                   data-shell="page"
-                  className="flex grow flex-col overflow-y-auto bg-panel px-4 pt-3 wide:col-start-2 wide:row-start-2 wide:border-l wide:border-faint"
+                  className={`${TAB_PAGE} wide:col-start-2 wide:row-start-2 wide:border-l wide:border-faint`}
                 >
                   <Outlet />
                 </main>

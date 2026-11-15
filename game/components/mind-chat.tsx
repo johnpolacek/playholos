@@ -292,6 +292,11 @@ function Answer({ id, text, still, asked, last }: { id: string; text: string; st
   );
 }
 
+/** What we asked, as a bubble in ink on the right. The Mind answers in its notes. */
+export function Ours({ children }: { children: React.ReactNode }) {
+  return <div className="max-w-[86%] self-end rounded-xl bg-button px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">{children}</div>;
+}
+
 /** Messages as bubbles: ours in ink, the Mind's as its notes. Then whether it is thinking, or can't answer. */
 function Talk({ messages, lastAnswer, status, error }: Pick<ReturnType<typeof useMind>, "messages" | "lastAnswer" | "status" | "error">) {
   const thinking = useThinking(status === "submitted");
@@ -312,9 +317,7 @@ function Talk({ messages, lastAnswer, status, error }: Pick<ReturnType<typeof us
             </p>
           );
         return message.role === "user" ? (
-          <div key={message.id} className="max-w-[86%] self-end rounded-xl bg-button px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">
-            {properGlows(text)}
-          </div>
+          <Ours key={message.id}>{properGlows(text)}</Ours>
         ) : (
           // Only the newest answer's mark moves, so a long talk isn't a column of spinning marks. An answer that offers
           // to send ends with a line the card is drawn from, under the Mind's words.
@@ -346,14 +349,14 @@ function Row({ name, children }: { name: string; children: React.ReactNode }) {
 }
 
 /** The player's key: set, with an x to clear it, which asks once more before it does. */
-function KeyRow() {
+export function KeyRow({ onClear = forgetKey }: { onClear?: () => unknown }) {
   const [sure, setSure] = useState(false);
   return (
     <Row name="Key">
       {sure ? (
         <>
           <span className="px-2 text-other">Clear it?</span>
-          <Button type="button" onClick={forgetKey} className="rounded-full bg-other px-2 py-0.5 text-paper">
+          <Button type="button" onClick={onClear} className="rounded-full bg-other px-2 py-0.5 text-paper">
             Clear
           </Button>
           <Button type="button" onClick={() => setSure(false)} className="px-2 py-0.5 text-page-ink2 hover:text-ink">
@@ -388,31 +391,57 @@ export function MindSettings({ keyed, free = false }: { keyed: boolean; free?: b
   };
   const shown = free && pick.model === "claude-opus-5-5" ? FREE_MODEL : pick.model;
   return (
+    <SettingsCard
+      // On us, Opus thinks as Sonnet, so it isn't offered. 2026-11-08.
+      models={(Object.keys(MIND_MODELS) as MindModel[]).filter((m) => !free || m !== "claude-opus-5-5").map((m) => ({ value: m, label: MIND_MODELS[m].name }))}
+      model={shown}
+      onModel={(m) => choose({ model: m as MindModel })}
+      effort={pick.effort}
+      onEffort={(e) => choose({ effort: e as typeof pick.effort })}
+      spent={spent(messages)}
+      keyRow={keyed && <KeyRow />}
+    />
+  );
+}
+
+/** The Mind's settings, drawn: a dashed card of rows, each a name and what it holds. MindSettings feeds it the
+ *  player's pick, and /ui/mind a fixed one. */
+export function SettingsCard({
+  models,
+  model,
+  onModel,
+  effort,
+  onEffort,
+  spent,
+  keyRow,
+}: {
+  models: { value: string; label: string }[];
+  model: string;
+  onModel(model: string): void;
+  effort: string;
+  onEffort(effort: string): void;
+  spent: string;
+  keyRow?: React.ReactNode;
+}) {
+  return (
     <div className="mb-3 flex flex-col gap-2 rounded-lg border border-dashed border-muted p-3 font-mono text-[10.5px] tracking-[.06em] uppercase">
       <Row name="Model">
-        {/* On us, Opus thinks as Sonnet, so it isn't offered. 2026-11-08. */}
-        <Choice
-          look="dial"
-          label="Model"
-          value={shown}
-          onChange={(m) => choose({ model: m as MindModel })}
-          options={(Object.keys(MIND_MODELS) as MindModel[]).filter((m) => !free || m !== "claude-opus-5-5").map((m) => ({ value: m, label: MIND_MODELS[m].name }))}
-        />
+        <Choice look="dial" label="Model" value={model} onChange={onModel} options={models} />
       </Row>
       <Row name="Effort">
-        <Choice look="dial" label="Effort" value={pick.effort} onChange={(e) => choose({ effort: e as typeof pick.effort })} options={EFFORTS.map((e) => ({ value: e, label: e }))} />
+        <Choice look="dial" label="Effort" value={effort} onChange={onEffort} options={EFFORTS.map((e) => ({ value: e, label: e }))} />
       </Row>
       <Row name="This talk">
-        <span className="px-2 text-page-ink2 normal-case tabular-nums">{spent(messages)}</span>
+        <span className="px-2 text-page-ink2 normal-case tabular-nums">{spent}</span>
       </Row>
-      {keyed && <KeyRow />}
+      {keyRow}
     </div>
   );
 }
 
 /** Where we type to the Mind. A question sent while it answers waits, said so, and goes once it is done: it was
  *  silently dropped until 2026-10-30. */
-function AskBox({ busy, onAsk, className = "", focus = false }: { busy: boolean; onAsk(text: string): void; className?: string; focus?: boolean }) {
+export function AskBox({ busy, onAsk, className = "", focus = false }: { busy: boolean; onAsk(text: string): void; className?: string; focus?: boolean }) {
   const [input, setInput] = useState("");
   const waiting = useRef<string | null>(null);
   const [queued, setQueued] = useState<string | null>(null);
@@ -465,7 +494,7 @@ function AskBox({ busy, onAsk, className = "", focus = false }: { busy: boolean;
 const STARTERS = ["What should we build next and why?", "Are we alone?", "Should we call out, or stay quiet?"];
 
 /** Before our first question: the Mind says what it is, and offers a few ways in. */
-function Hello({ onAsk }: { onAsk(text: string): void }) {
+export function Hello({ onAsk }: { onAsk(text: string): void }) {
   return (
     <div className="flex flex-col gap-3">
       <MindNote className="max-w-[86%] self-start text-[15px] leading-[1.5]">
