@@ -1,6 +1,9 @@
 import "@fontsource-variable/suse";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/600.css";
+// The Log skin's serif, upright and italic. A face loads only once a page uses it, so chalk never fetches it. 2026-11-15.
+import "@fontsource-variable/newsreader/opsz.css";
+import "@fontsource-variable/newsreader/opsz-italic.css";
 import "./fonts.css";
 import "./app/globals.css";
 import { StrictMode } from "react";

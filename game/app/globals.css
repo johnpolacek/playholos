@@ -8,6 +8,8 @@
 
 /* A class for the Instrument skin only, as instrument:rounded-md. The root carries the skin, lib/skin.ts. 2026-11-15. */
 @custom-variant instrument (&:where([data-skin="instrument"] *));
+/* And one for the Log skin, as log:rounded-none. 2026-11-15. */
+@custom-variant log (&:where([data-skin="log"] *));
 
 /* Colors from explorations/v2-mocks/base.css: chalk on slate. The game is always dark. */
 :root {
@@ -255,6 +257,44 @@
     pointer-events: none;
     background: linear-gradient(162deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.02) 30%, transparent 44%);
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.8), inset 0 2px 6px rgb(0 0 0 / 0.65), inset 0 0 26px 4px rgb(0 0 0 / 0.4);
+  }
+}
+
+/* Log, the third skin, 2026-11-15: the game as an observatory's logbook. The record is set in a serif, Newsreader,
+   and the data stays in IBM Plex Mono, both at the game's own sizes. Newsreader is held at its 16pt optical size: at
+   its own small sizes it runs a tenth wider than SUSE and wrapped a button that fits in chalk, and at 16 it runs a
+   little narrower, so no line breaks where chalk's doesn't. Panels are dark ruled paper with faint ledger
+   lines; a reading is a dated entry; the Mind writes in the margin, in italic and a quieter ink; a button is a stamped
+   label, squared, with a second rule inside its edge. Calm, and no ornament: nothing moves that chalk keeps still.
+   The paper is a warm black, the ink a pale cream. Every build keeps its color. Body text is at least 6:1 on any
+   paper here, and a control's edge, --stamp-edge, at least 3.8:1. The parts wear the same names Instrument styles,
+   so a part says what it is once, and each skin draws it its own way. None of it applies to chalk. */
+[data-skin="log"] {
+  --font-suse: "Newsreader Variable", Georgia, serif;
+  font-variation-settings: "opsz" 16;
+  --page: #0d0c0a;
+  --paper: #14130f;
+  --panel: #1a1813;
+  --frame: #2f2c25;
+  --faint: #3a362d;
+  --rowline: #2a2721;
+  --track: #2f2c25;
+  --ink: #e9e2cf;
+  --page-ink2: #b3aa96;
+  --muted: #a39a86;
+  --button: #d4c9ae;
+  --fill2: #d4c9ae;
+  /* A ledger line: a hair of the ink, every 24px down the paper. */
+  --ledger: rgb(233 226 207 / 0.045);
+  --ruled: repeating-linear-gradient(to bottom, transparent 0 23px, var(--ledger) 23px 24px);
+  /* The edge of anything we press, and the rule inside a stamp. */
+  --stamp-edge: #7d7566;
+}
+@layer base {
+  /* Focus is a ring of ink outside the edge, apart from a stamp's own rule inside it. */
+  [data-skin="log"] :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
   }
 }
 

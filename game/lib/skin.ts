@@ -4,10 +4,14 @@ import { useSyncExternalStore } from "react";
 // app/globals.css, and each kit part draws its own look for it. "chalk" is the game as it has been, and the default.
 // "instrument" draws the game as a console: matte panels, engraved labels, lamps, knobs and switches. It is a design
 // exploration, seen on /ui, and never the default. 2026-11-15.
+// "log" draws the game as an observatory's logbook: dark ruled paper, a serif for the record and mono for the data,
+// readings as dated entries, the Mind's notes in the margin, and buttons as stamped labels. Also an exploration, never
+// the default. 2026-11-15.
 
 export const SKINS = [
   { id: "chalk", name: "Chalk" },
   { id: "instrument", name: "Instrument" },
+  { id: "log", name: "Log" },
 ] as const;
 
 export type Skin = (typeof SKINS)[number]["id"];
@@ -24,7 +28,7 @@ export function setSkin(to: Skin) {
   heed.forEach((f) => f());
 }
 
-/** The skin, for a part whose markup differs by it. A part that only changes its classes uses `instrument:`. */
+/** The skin, for a part whose markup differs by it. A part that only changes its classes uses `instrument:` or `log:`. */
 export const useSkin = () =>
   useSyncExternalStore(
     (f) => (heed.add(f), () => void heed.delete(f)),
@@ -52,7 +56,7 @@ export function saveSkin(to: Skin) {
   }
 }
 
-/** The skin an address asks for, as ?skin=instrument, or null. For playtests: main.tsx reads it once as the game
+/** The skin an address asks for, as ?skin=instrument or ?skin=log, or null. For playtests: main.tsx reads it once as the game
  *  loads, and it holds from page to page until the next full load. It is never kept, so the game opens in chalk
  *  again without it. 2026-11-15. */
 export function askedSkin(search: string): Skin | null {
