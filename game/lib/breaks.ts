@@ -14,6 +14,9 @@ function hold(text: string) {
     !!words[i] &&
     !!words[i + 1] &&
     !END.test(words[i]) &&
+    // Already held: a second pass over the same words once held the pair to the next word, and so on along the
+    // sentence, until "We have heard nothing we" was one run that no narrow line could fit. 2026-11-15.
+    !words[i].includes("\u00A0") &&
     words[i].length + words[i + 1].length < LONGEST;
   return words.reduce((all, word, i) => all + (held(i - 1) ? "\u00A0" : " ") + word);
 }
