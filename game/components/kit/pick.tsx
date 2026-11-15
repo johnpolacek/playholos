@@ -24,7 +24,7 @@ export function Pick({
     <Select items={options} value={value} onValueChange={(v) => v && onChange(v as string)} presentation="auto">
       <span className={`flex items-center gap-3 ${className}`}>
         <SelectLabel className={labelClass}>{label}</SelectLabel>
-        <SelectTrigger className="inline-flex items-center gap-2 rounded border border-faint px-2 py-1 text-[14px] transition-colors hover:border-muted data-open:border-muted">
+        <SelectTrigger className="inline-flex items-center gap-2 rounded border whitespace-nowrap border-faint px-2 py-1 text-[14px] transition-colors hover:border-muted data-open:border-muted">
           <SelectValue />
           <span aria-hidden className="text-[10px] text-muted">
             ▾
