@@ -163,10 +163,12 @@ export function Lanes({
           <WaterfallHeaderRow className={`${GRID} items-end border-b border-faint pb-1 font-mono text-[10px] tracking-[.1em] text-muted uppercase`}>
             <WaterfallColumnHeader className="engrave text-left font-normal">{head}</WaterfallColumnHeader>
             <WaterfallColumnHeader aria-label="Years" className="relative h-4 font-normal">
-              <WaterfallAxis maxTicks={7} className="absolute inset-0">
+              <WaterfallAxis maxTicks={5} className="absolute inset-0">
                 {({ ticks }) =>
                   ticks.map((t) => (
-                    <WaterfallTick key={t.time} time={t.time} className="absolute left-(--waterfall-tick) -translate-x-1/2 tracking-normal whitespace-nowrap normal-case first:translate-x-0 last:-translate-x-full">
+                    <WaterfallTick key={t.time} time={t.time} // A tick at either end stays inside the axis.
+                      className={`absolute left-(--waterfall-tick) tracking-normal whitespace-nowrap normal-case ${t.position < 4 ? "" : t.position > 96 ? "-translate-x-full" : "-translate-x-1/2"}`}
+                    >
                       {t.label}
                     </WaterfallTick>
                   ))
