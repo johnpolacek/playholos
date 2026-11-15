@@ -13,6 +13,7 @@ import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
 import { usePlan, useSchedule } from "@/components/picks";
 import { Tip } from "@/components/tip";
+import { useSkin } from "@/lib/skin";
 import { Link } from "react-router";
 import {
   announceJump,
@@ -48,6 +49,9 @@ import { knownQuery } from "@/lib/game/known-query";
 // builds can use, at work or idle, and never says spare, 2026-10-22. A build pointed at on Build shows here as if queued,
 // in our blue, 2026-10-22.
 
+/** The lamps in a meter's row, under the Instrument skin. */
+const LAMPS = 16;
+
 const pct = (x: number) => `${Math.round(x * 100)}%`;
 
 export function Meter({
@@ -77,6 +81,7 @@ export function Meter({
   const words = <span className={`truncate text-[11px] leading-tight tracking-normal ${late ? "text-other" : ""}`}>{sub}</span>;
   // What the word means, as a hint on hover, focus or a tap. 2026-11-15.
   const said = tip ? <Tip toggleable text={tip} trigger={<Button className="min-w-0 cursor-help text-left">{words}</Button>} /> : words;
+  const skin = useSkin();
   // Its name, its bar and its number, by the look. With a share to show, they sit in ui-sdk's Meter below, which says
   // the reading aloud. 2026-11-15.
   const name = (
@@ -96,9 +101,9 @@ export function Meter({
     <span className="flex min-w-0 flex-col gap-[3px] text-[10px] tracking-[.08em] text-muted">
       {at === undefined ? (
         <>
-          <span className="truncate">{name}</span>
+          <span className="engrave truncate">{name}</span>
           {/* A meter with no bar keeps its place, so its number lines up with the others. 2026-11-13. */}
-          <b aria-hidden className="h-1" />
+          <b aria-hidden className="h-1 instrument:h-[7px]" />
           <em className={NUMBER}>{value}</em>
         </>
       ) : (
@@ -106,7 +111,25 @@ export function Meter({
         // It draws no box of its own, and the word under it stays outside: a meter's insides are read as one value,
         // so a link or a hint in there would be lost.
         <UiMeter value={at} max={1} format={() => value} render={<span />} className="contents">
-          <MeterLabel className="truncate">{name}</MeterLabel>
+          <MeterLabel className="engrave truncate">{name}</MeterLabel>
+          {skin === "instrument" ? (
+            // Under Instrument the bar is a row of lamps in a well, lit to the share. Where it is headed glows dim
+            // past that, in place of the dashes. A preview lights in our blue, and a late one in the others' orange.
+            // A lamp fades on in a third of a second, or changes at once under reduced motion. 2026-11-15.
+            <MeterTrack render={<span />} style={{ "--lamp": hint ? "var(--you)" : late ? "var(--other)" : "var(--fill2)" } as React.CSSProperties} className="hw-well flex h-[7px] gap-px rounded-[2px] p-px">
+              {Array.from({ length: LAMPS }, (_, i) => {
+                // Any share at all lights the first lamp, and only a full one the last.
+                const lit = i < (at >= 1 ? LAMPS : at > 0 ? Math.max(1, Math.floor(at * LAMPS)) : 0);
+                const due = !lit && to !== undefined && to > at && i < Math.round(Math.min(1, to) * LAMPS);
+                return (
+                  <i
+                    key={i}
+                    className={`flex-1 rounded-[1px] transition-[background-color,box-shadow,opacity] duration-300 motion-reduce:transition-none ${lit ? "bg-(--lamp) shadow-[0_0_4px_color-mix(in_srgb,var(--lamp)_55%,transparent)]" : due ? "bg-(--lamp) opacity-30" : "bg-(--lamp-off)"}`}
+                  />
+                );
+              })}
+            </MeterTrack>
+          ) : (
           <MeterTrack render={<span />} className="relative h-1 bg-track">
             {/* Held inside the track: a share past 100% once ran the bar across the other meters. 2026-11-13. */}
             <MeterIndicator
@@ -120,6 +143,7 @@ export function Meter({
               />
             )}
           </MeterTrack>
+          )}
           <MeterValue className={NUMBER} />
         </UiMeter>
       )}
