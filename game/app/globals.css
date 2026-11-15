@@ -232,6 +232,8 @@
   [data-skin="instrument"] .hw-tape {
     font-family: var(--font-plex-mono);
     font-size: 0.9em;
+    /* Mono runs wider than the game's own face: a long word breaks sooner than run off the paper. */
+    overflow-wrap: anywhere;
     background:
       radial-gradient(circle at 9px 9px, var(--page) 2.2px, transparent 2.7px) 0 0 / 18px 18px repeat-y,
       color-mix(in srgb, var(--ink) 13%, var(--paper));

@@ -387,7 +387,7 @@ export function Dials() {
                       </span>
                       {d.label}
                     </span>
-                    <span className="font-mono text-[14px] tabular-nums">
+                    <span className="font-mono text-[14px] tabular-nums instrument:whitespace-nowrap">
                       {odds(v)}
                     </span>
                   </div>
