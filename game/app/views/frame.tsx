@@ -35,8 +35,8 @@ export function View({
 }) {
   return (
     <main className="mx-auto px-4 pt-12 pb-24">
-      <section className={`mx-auto rounded-[28px] border border-rowline bg-panel p-4 shadow-[0_30px_60px_-30px_rgb(0_0_0/.8)] ${wide ? "max-w-[1320px]" : "max-w-[440px]"}`}>
-        <header className="mb-3 flex items-center gap-2 px-1 font-mono text-[10px] tracking-[.1em] uppercase">
+      <section className={`hw-panel mx-auto rounded-[28px] border border-rowline bg-panel p-4 shadow-[0_30px_60px_-30px_rgb(0_0_0/.8)] ${wide ? "max-w-[1320px]" : "max-w-[440px]"}`}>
+        <header className="engrave mb-3 flex items-center gap-2 px-1 font-mono text-[10px] tracking-[.1em] uppercase">
           <i className="size-1.5 rounded-full bg-[var(--accent)]" />
           <span className="text-ink">{code}</span>
           <span className="text-muted">{name}</span>
@@ -44,7 +44,7 @@ export function View({
         {/* The screen: the game's paper, with its edge. */}
         <div className="overflow-hidden rounded-2xl border border-faint bg-paper">{children}</div>
       </section>
-      <p className="mx-auto mt-5 max-w-[60ch] text-center font-mono text-[10.5px] leading-relaxed tracking-[.06em] text-muted uppercase">
+      <p className="engrave mx-auto mt-5 max-w-[60ch] text-center font-mono text-[10.5px] leading-relaxed tracking-[.06em] text-muted uppercase">
         Built from {parts.join(" · ")}
       </p>
     </main>

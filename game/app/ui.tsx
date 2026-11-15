@@ -92,8 +92,8 @@ const CALL: Draft = {
  *  2026-11-15, each as wide as a phone's column, so a part shows at the width the game draws it. */
 function Card({ n, name, children }: { n: number; name: string; children: React.ReactNode }) {
   return (
-    <section className="flex min-h-[156px] flex-col rounded-2xl border border-rowline bg-panel p-3.5">
-      <header className="flex items-center gap-2 font-mono text-[10px] tracking-[.1em] uppercase">
+    <section className="hw-panel flex min-h-[156px] flex-col rounded-2xl border border-rowline bg-panel p-3.5 instrument:rounded-lg">
+      <header className="engrave flex items-center gap-2 font-mono text-[10px] tracking-[.1em] uppercase">
         <span className="text-[var(--accent)]">{String(n).padStart(2, "0")}</span>
         <span className="text-muted">{name}</span>
         <span className="h-px flex-1 bg-rowline" />
@@ -124,7 +124,7 @@ export default function Kit() {
           The game’s kit. Every part here is drawn live from the game’s own code. Start a screen from these, not a copy of them.
         </p>
 
-        <h2 className="mt-10 mb-3 font-mono text-[10.5px] tracking-[.14em] text-muted">CONTROLS</h2>
+        <h2 className="mt-10 mb-3 engrave font-mono text-[10.5px] tracking-[.14em] text-muted">CONTROLS</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Card n={1} name="Button">
             <div className="flex w-full max-w-72 flex-col gap-2.5">
@@ -197,7 +197,7 @@ export default function Kit() {
             />
           </Card>
         </div>
-        <h2 className="mt-10 mb-3 font-mono text-[10.5px] tracking-[.14em] text-muted">SHEETS</h2>
+        <h2 className="mt-10 mb-3 engrave font-mono text-[10.5px] tracking-[.14em] text-muted">SHEETS</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Card n={10} name="Dialog">
             <div className="flex items-center gap-2 font-mono text-[10.5px] tracking-[.08em] text-muted uppercase">
@@ -212,7 +212,7 @@ export default function Kit() {
             </RunLocal>
           </Card>
         </div>
-        <h2 className="mt-10 mb-3 font-mono text-[10.5px] tracking-[.14em] text-muted">ROWS AND HEADS</h2>
+        <h2 className="mt-10 mb-3 engrave font-mono text-[10.5px] tracking-[.14em] text-muted">ROWS AND HEADS</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Card n={12} name="Back bar">
             <div className="flex w-full flex-col gap-3">
@@ -260,7 +260,7 @@ export default function Kit() {
             </ul>
           </Card>
         </div>
-        <h2 className="mt-10 mb-3 font-mono text-[10.5px] tracking-[.14em] text-muted">THE MIND</h2>
+        <h2 className="mt-10 mb-3 engrave font-mono text-[10.5px] tracking-[.14em] text-muted">THE MIND</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Card n={17} name="Mind note">
             <MindNote className="text-[14.5px] leading-snug">
@@ -304,7 +304,7 @@ export default function Kit() {
             </div>
           </Card>
         </div>
-        <h2 className="mt-10 mb-3 font-mono text-[10.5px] tracking-[.14em] text-muted">THE TOP BAR</h2>
+        <h2 className="mt-10 mb-3 engrave font-mono text-[10.5px] tracking-[.14em] text-muted">THE TOP BAR</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Card n={23} name="Meter">
             {/* The top bar at Year 0: our thinking draws about a hundredth of Earth's grid, and nothing is yet in orbit. */}
@@ -337,7 +337,7 @@ export default function Kit() {
             </div>
           </Card>
         </div>
-        <h2 className="mt-10 mb-3 font-mono text-[10.5px] tracking-[.14em] text-muted">MARKS</h2>
+        <h2 className="mt-10 mb-3 engrave font-mono text-[10.5px] tracking-[.14em] text-muted">MARKS</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Card n={28} name="Icons">
             <div className="flex flex-wrap justify-center gap-5 text-ink">
