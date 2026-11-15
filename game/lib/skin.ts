@@ -11,6 +11,10 @@ import { useSyncExternalStore } from "react";
 // control that is pressed, chosen or queued is hatched, a meter or a slider is a dimension line with its ticks, and
 // focus is a crosshair. The art already reads as a diagram, so only the controls change. Never the default.
 // 2026-11-15.
+// "infrared" draws the game as a thermal image, in an astronomer's false-color heat palette: idle controls are cold
+// violet-black, and hover, an open list, a choice and a press heat a control toward amber and white. Meters are heat
+// bars, focus is a heat bloom, and the Mind's note glows warm while it thinks. Text stays chalk. Never the default.
+// 2026-11-15.
 
 /** Each skin, with its name and what it draws the game as, in a few words for the /ui bar's picker. */
 export const SKINS = [
@@ -18,6 +22,7 @@ export const SKINS = [
   { id: "instrument", name: "Instrument", as: "A console" },
   { id: "log", name: "Log", as: "An observatory's logbook" },
   { id: "schematic", name: "Schematic", as: "A technical drawing" },
+  { id: "infrared", name: "Infrared", as: "A thermal image" },
 ] as const;
 
 export type Skin = (typeof SKINS)[number]["id"];
@@ -34,7 +39,8 @@ export function setSkin(to: Skin) {
   heed.forEach((f) => f());
 }
 
-/** The skin, for a part whose markup differs by it. A part that only changes its classes uses `instrument:`, `log:` or `schematic:`. */
+/** The skin, for a part whose markup differs by it. A part that only changes its classes uses `instrument:`, `log:`, `schematic:` or
+ *  `infrared:`. */
 export const useSkin = () =>
   useSyncExternalStore(
     (f) => (heed.add(f), () => void heed.delete(f)),
@@ -62,7 +68,7 @@ export function saveSkin(to: Skin) {
   }
 }
 
-/** The skin an address asks for, as ?skin=instrument, ?skin=log or ?skin=schematic, or null. For playtests: main.tsx reads it once as the game
+/** The skin an address asks for, as ?skin=instrument, ?skin=log, ?skin=schematic or ?skin=infrared, or null. For playtests: main.tsx reads it once as the game
  *  loads, and it holds from page to page until the next full load. It is never kept, so the game opens in chalk
  *  again without it. 2026-11-15. */
 export function askedSkin(search: string): Skin | null {

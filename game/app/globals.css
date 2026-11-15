@@ -12,6 +12,8 @@
 @custom-variant log (&:where([data-skin="log"] *));
 /* And for Schematic, as schematic:bg-transparent. 2026-11-15. */
 @custom-variant schematic (&:where([data-skin="schematic"] *));
+/* And for Infrared, as infrared:bg-none. 2026-11-15. */
+@custom-variant infrared (&:where([data-skin="infrared"] *));
 
 /* Colors from explorations/v2-mocks/base.css: chalk on slate. The game is always dark. */
 :root {
@@ -458,6 +460,57 @@
     border-radius: 0;
     background: var(--hatch);
     border-right: 1px solid currentColor;
+  }
+}
+
+/* Infrared, the fifth skin, 2026-11-15: the game as a thermal image, in an astronomer's false-color heat palette, from
+   violet-black through magenta and red to amber and white. The game is about warm glows and minds that run cold, so
+   the ground is cold and only what we touch heats. Each of ui-sdk's states is a temperature, and a hotter state wins:
+     idle                              --heat-0  cold violet
+     :hover                            --heat-1  magenta
+     data-open, data-highlighted       --heat-2  red
+     data-checked, data-pressed        --heat-3  amber
+     :active, held down                --heat-4  white
+   Each heats a control's edge and its surface together, the surface staying dark enough for its words. Focus is a
+   bloom of heat round the control, not a ring. Meters and sliders are heat bars, and the Mind's note glows warm while
+   it thinks. Text stays chalk: the inks are chalk's own. Body text is 6.7:1 or more on the ground and 10.5:1 on any
+   heated surface but a held-down one, and the coldest edge 3.9:1. */
+[data-skin="infrared"] {
+  --page: #08050d;
+  --paper: #0d0716;
+  --panel: #110a1c;
+  --frame: #2a1a40;
+  --faint: #2e1c46;
+  --rowline: #1d1130;
+  --track: #1d1130;
+  --heat-0: #7b62b0;
+  --heat-1: #b9418f;
+  --heat-2: #e2533e;
+  --heat-3: #f4a53c;
+  --heat-4: #fff2cf;
+  /* The surface under each: dark, so chalk reads on it. */
+  --cold: #160c26;
+  --warm-1: #2a0f2e;
+  --warm-2: #3a1220;
+  --warm-3: #4a2410;
+  --warm-4: #55330f;
+  /* The whole scale, cold to hot, for a heat bar. */
+  --heat-scale: linear-gradient(90deg, #3b1a6b, #8a2d7a 25%, #e2533e 55%, #f4a53c 80%, #fff2cf);
+  /* A bloom of heat: a hot edge, and the warmth it throws. */
+  --bloom: 0 0 0 1px var(--heat-3), 0 0 6px 1px color-mix(in srgb, var(--heat-3) 55%, transparent),
+    0 0 18px 5px color-mix(in srgb, var(--heat-2) 40%, transparent);
+}
+@layer base {
+  /* Focus anywhere: a bloom, in place of the ring. */
+  [data-skin="infrared"] :focus-visible {
+    outline: none;
+    box-shadow: var(--bloom);
+  }
+}
+@layer components {
+  /* A panel is cold ground, its edge a cold violet. */
+  [data-skin="infrared"] .hw-panel {
+    border-color: var(--frame);
   }
 }
 
