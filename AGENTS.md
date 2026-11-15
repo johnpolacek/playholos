@@ -36,4 +36,4 @@ If you change what the Mind is told or how it answers, also run `pnpm check:mind
 
 ## Deploying
 
-Nothing deploys on push. `pnpm run deploy` in `game/` builds the client and the Worker and publishes both to playholos.com.
+Nothing deploys on push. `pnpm run deploy` in `game/` builds the client and the Worker and publishes both to playholos.com. From a cloud session, start the `deploy` workflow on GitHub instead: it runs the same checks and the same deploy.

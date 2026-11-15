@@ -1,0 +1,44 @@
+name: deploy
+
+# Nothing deploys on push. This runs only when started by hand, from the Actions tab or the API, and does what
+# `pnpm run deploy` in game/ does: build the client and the Worker, send the worlds to R2, and publish to playholos.com.
+# It needs the CLOUDFLARE_API_TOKEN repository secret. 2026-11-15.
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: 712b6921d7579b8ab047b7303a5afd62
+    steps:
+      - uses: actions/checkout@v7
+      # The version comes from packageManager in package.json.
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            game/pnpm-lock.yaml
+      # The atlas's packages, which the game draws its sky from, then the game's.
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
+        working-directory: game
+      # The same checks as before a pull request, so a broken game never ships.
+      - run: pnpm test
+        working-directory: game
+      - run: pnpm lint
+        working-directory: game
+      - run: pnpm exec tsc --noEmit
+        working-directory: game
+      # A runner starts with no record of what the bucket holds, so every world is sent again.
+      - run: pnpm run deploy
+        working-directory: game
