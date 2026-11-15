@@ -12,6 +12,7 @@ import {
   round,
   type Result,
 } from "@/lib/about/dials";
+import { Range } from "@/components/kit/range";
 import { gauss, stream } from "@/lib/about/random";
 import { BehaveDials } from "./behave";
 import { PeerWindow } from "./peers";
@@ -378,34 +379,24 @@ export function Dials() {
               return (
                 <li key={d.key}>
                   <div className="flex items-baseline justify-between gap-4">
-                    <label
-                      htmlFor={`dial-${d.key}`}
-                      className="text-[15px] font-semibold"
-                    >
+                    <span className="text-[15px] font-semibold">
                       <span className="mr-2 font-mono text-[10.5px] text-muted">
                         {i + 1}
                       </span>
                       {d.label}
-                    </label>
+                    </span>
                     <span className="font-mono text-[14px] tabular-nums">
                       {odds(v)}
                     </span>
                   </div>
                   <div className="relative mt-2">
-                    <input
-                      id={`dial-${d.key}`}
-                      type="range"
-                      min={0}
+                    <Range
+                      label={d.label}
                       max={STEPS}
                       value={toSlider(v, d.lo, d.hi)}
-                      aria-valuetext={odds(v)}
-                      onChange={(e) =>
-                        setValues({
-                          ...values,
-                          [d.key]: fromSlider(+e.target.value, d.lo, d.hi),
-                        })
-                      }
-                      className="relative z-10 w-full accent-[var(--you)]"
+                      valueText={(x) => odds(fromSlider(x, d.lo, d.hi))}
+                      onChange={(x) => setValues({ ...values, [d.key]: fromSlider(x, d.lo, d.hi) })}
+                      className="z-10 w-full"
                     />
                     <span
                       aria-hidden

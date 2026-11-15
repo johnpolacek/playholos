@@ -8,6 +8,7 @@ import {
   seen,
   type Behave,
 } from "@/lib/about/behave";
+import { Range } from "@/components/kit/range";
 import { round } from "@/lib/about/dials";
 
 // How minds behave, on The Dials: power, temperature and sleep, shared with the quiet sky's heat chart, and a verdict
@@ -90,28 +91,20 @@ export function BehaveDials() {
         {(Object.keys(RANGES) as (keyof Behave)[]).map((k) => (
           <li key={k}>
             <div className="flex items-baseline justify-between gap-4">
-              <label
-                htmlFor={`behave-${k}`}
-                className="text-[15px] font-semibold"
-              >
-                {LABEL[k]}
-              </label>
+              <span className="text-[15px] font-semibold">{LABEL[k]}</span>
               <span className="font-mono text-[14px] tabular-nums">
                 {SHOW[k](b[k])}
               </span>
             </div>
             <div className="relative mt-2">
-              <input
-                id={`behave-${k}`}
-                type="range"
-                min={0}
+              <Range
+                label={LABEL[k]}
+                tone="var(--other)"
                 max={STEPS}
                 value={toSlider(k, b[k])}
-                aria-valuetext={SHOW[k](b[k])}
-                onChange={(e) =>
-                  behave.set({ [k]: fromSlider(k, +e.target.value) })
-                }
-                className="relative z-10 w-full accent-[var(--other)]"
+                valueText={(v) => SHOW[k](fromSlider(k, v))}
+                onChange={(v) => behave.set({ [k]: fromSlider(k, v) })}
+                className="z-10 w-full"
               />
               <span
                 aria-hidden

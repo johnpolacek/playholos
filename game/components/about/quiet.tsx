@@ -1,3 +1,4 @@
+import { Range } from "@/components/kit/range";
 import { round } from "@/lib/about/dials";
 import { NEARBY_STARS, ruledAbove, STARS_PER_MIND } from "@/lib/about/haystack";
 import { COLD, peak, SOURCES, WARM } from "@/lib/about/quiet";
@@ -90,16 +91,15 @@ export function Quiet() {
               {round(T)} K
             </span>
           </div>
-          <input
-            type="range"
-            min={0}
+          <Range
+            label="How cold it runs"
+            tone="var(--other)"
+            reverse
             max={STEPS}
             value={toSlider(T)}
-            aria-label="How cold it runs"
-            aria-valuetext={`${round(T)} K`}
-            onChange={(e) => setT(fromSlider(+e.target.value))}
-            className="mt-2 w-full accent-[var(--other)]"
-            style={{ direction: "rtl" }}
+            valueText={(x) => `${round(fromSlider(x))} K`}
+            onChange={(x) => setT(fromSlider(x))}
+            className="mt-2 w-full"
           />
           <div className="mt-1 flex justify-between font-mono text-[10.5px] tracking-[.05em] text-muted">
             <span>AS WARM AS OUR COMPUTERS</span>

@@ -1,5 +1,6 @@
 import { Button } from "@ui-sdk/react/button";
 import { useEffect, useRef, useState } from "react";
+import { Range } from "@/components/kit/range";
 import { Choice } from "@/components/kit/choice";
 import { useBeams } from "@/components/beams";
 import { starName } from "@/lib/game/leads";
@@ -276,13 +277,13 @@ export function CallCard({
         />
       )}
       {!sent && !galaxy && (
-        <label className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1.5">
           <span className="flex justify-between">
             <span className={`${lab} text-muted`}>Readable to</span>
             <b className="font-mono text-[12px]">{dial} ly</b>
           </span>
-          <input type="range" min={5} max={50} value={dial} onChange={(e) => setDial(Number(e.target.value))} className="w-full accent-you" />
-        </label>
+          <Range label="Readable to" min={5} max={50} value={dial} onChange={setDial} valueText={(v) => `${v} light-years`} />
+        </div>
       )}
       {galaxy ? <GalaxyReach first={reach} later={(sent ? sent.repeat : repeat) ? 27000 : null} /> : <Rings reach={reach} notice={notice} />}
       {galaxy && draft.size !== "page" && (

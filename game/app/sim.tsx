@@ -2,6 +2,7 @@ import { Button } from "@ui-sdk/react/button";
 import { Tabs as TabsRoot, TabsList, TabsPanel, TabsTab } from "@ui-sdk/react/tabs";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
+import { Range } from "@/components/kit/range";
 import { Play } from "@/components/icons";
 import { placeLabel } from "@/components/place-label";
 import { Sky, SkyArt, useSky } from "@/components/sky";
@@ -728,7 +729,7 @@ function Dial({
 }) {
   const over = limit !== undefined && value > limit;
   return (
-    <label className="mt-4 block">
+    <div className="mt-4 block">
       <span className="flex items-baseline justify-between gap-2 text-[13px]">
         <span>{label}</span>
         <span className="font-mono text-[12px]" style={{ color: over ? ROSE : undefined }}>
@@ -746,17 +747,10 @@ function Dial({
             style={{ left: `${(limit / STEPS) * 100}%`, background: ROSE }}
           />
         )}
-        <input
-          type="range"
-          min={0}
-          max={STEPS}
-          value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
-          className="absolute inset-0 w-full accent-[#5bb8d6]"
-        />
+        <Range label={label} max={STEPS} value={value} onChange={onChange} valueText={() => shows} className="absolute inset-0" />
       </span>
       <span className="mt-0.5 block font-mono text-[10px] text-muted">{basis}</span>
-    </label>
+    </div>
   );
 }
 
@@ -787,16 +781,7 @@ function Time({
         >
           {playing ? "Pause" : "Play"}
         </Button>
-        <input
-          type="range"
-          min={0}
-          max={AHEAD}
-          step={10}
-          value={years}
-          aria-label="Years from now"
-          onChange={(e) => onYears(Number(e.target.value))}
-          className="w-full accent-[#5bb8d6]"
-        />
+        <Range label="Years from now" max={AHEAD} step={10} value={years} onChange={onYears} valueText={(y) => `${y.toLocaleString("en-US")} years from now`} className="w-full" />
       </div>
       <p className="mt-1.5 font-mono text-[11px] text-muted">
         <span className="text-ink">{Math.round(years).toLocaleString("en-US")}</span> years from now ·{" "}

@@ -19,6 +19,7 @@ import { MIND_SOURCES } from "@/lib/game/sources";
 import { CATALOG } from "@/lib/sim/works";
 import { Btn } from "@/components/kit/button";
 import { Choice } from "@/components/kit/choice";
+import { Range } from "@/components/kit/range";
 
 // The game's kit, laid out as SPEC-01/HARDWARE lays out its own (spec-01.vercel.app): a bar of accents and sections
 // over a grid of numbered cards, each one part drawn live. A first pass, 2026-11-14, from the parts /design already
@@ -72,6 +73,8 @@ export default function Kit() {
   const [lens, setLens] = useState("all");
   const [far, setFar] = useState("near");
   const [stand, setStand] = useState("on");
+  const [dial, setDial] = useState(20);
+  const [cold, setCold] = useState(30);
   return (
     <>
       <main className="mx-auto max-w-[52rem] px-4 pt-14 pb-24">
@@ -115,24 +118,36 @@ export default function Kit() {
             </div>
           </Card>
 
-          <Card n={5} name="Back bar" span={2}>
+          <Card n={5} name="Range" span={2}>
+            <div className="flex w-full max-w-80 flex-col gap-4">
+              <label className="flex flex-col gap-1.5">
+                <span className="flex justify-between font-mono text-[10px] tracking-[.1em] text-muted">
+                  READABLE TO <b className="text-[12px] font-normal text-ink">{dial} ly</b>
+                </span>
+                <Range label="Readable to" min={5} max={50} value={dial} onChange={setDial} valueText={(v) => `${v} light-years`} />
+              </label>
+              <Range label="How cold it runs" tone="var(--other)" reverse value={cold} onChange={setCold} />
+            </div>
+          </Card>
+
+          <Card n={6} name="Back bar" span={2}>
             <div className="flex w-full flex-col gap-3">
               <BackBar to="/ui" label="All builds" />
               <BackBar to="/ui" label="More roads" stops={{ n: 5, at: 4 }} />
             </div>
           </Card>
-          <Card n={6} name="Thread" span={2}>
+          <Card n={7} name="Thread" span={2}>
             <div className="w-full">
               <Thread stops={STOPS} at={at} go={setAt} />
             </div>
           </Card>
 
-          <Card n={7} name="Tab head" span={2}>
+          <Card n={8} name="Tab head" span={2}>
             <div className="w-full">
               <TabHead title="BUILD" walk={{ to: "/ui", label: "Explore" }} />
             </div>
           </Card>
-          <Card n={8} name="List row" span={2}>
+          <Card n={9} name="List row" span={2}>
             <div className="w-full">
               <ListHead left="Ways to engage · 2" right="Passes" />
               <ul className="mt-1">
@@ -151,12 +166,12 @@ export default function Kit() {
             </div>
           </Card>
 
-          <Card n={9} name="Mind note" span={2}>
+          <Card n={10} name="Mind note" span={2}>
             <MindNote className="text-[14.5px] leading-snug">
               A flyby is past a world in minutes. To stay, a craft must slow, and that takes a fusion drive no one has flown yet.
             </MindNote>
           </Card>
-          <Card n={10} name="Icons" span={2}>
+          <Card n={11} name="Icons" span={2}>
             <div className="flex flex-wrap justify-center gap-5 text-ink">
               <Lens closer />
               <Lens closer={false} />
@@ -169,7 +184,7 @@ export default function Kit() {
             </div>
           </Card>
 
-          <Card n={11} name="Build marks" span={2}>
+          <Card n={12} name="Build marks" span={2}>
             <div className="flex flex-wrap justify-center gap-4">
               {BUILDS.map((b) => (
                 <span key={b.name} title={b.name} className={buildTone(b.name)}>
@@ -178,7 +193,7 @@ export default function Kit() {
               ))}
             </div>
           </Card>
-          <Card n={12} name="Lead marks" span={2}>
+          <Card n={13} name="Lead marks" span={2}>
             <div className="flex flex-wrap justify-center gap-4">
               {LEADS.map((art, i) => (
                 <span key={i} className={art.kind === "reply" ? "text-other" : "text-you"}>
@@ -191,14 +206,14 @@ export default function Kit() {
             </div>
           </Card>
 
-          <Card n={13} name="Visit art" span={2}>
+          <Card n={14} name="Visit art" span={2}>
             <div className="flex flex-wrap justify-center gap-3">
               {SIGHTS.map((s) => (
                 <VisitArt key={s} sight={s} size={64} />
               ))}
             </div>
           </Card>
-          <Card n={14} name="Meter" span={2}>
+          <Card n={15} name="Meter" span={2}>
             {/* The top bar at Year 0: our thinking draws about a hundredth of Earth's grid, and nothing is yet in orbit. */}
             <div className="grid w-full grid-cols-3 gap-2.5">
               <Meter label="ENERGY" at={0.01} value="1%" sub="of the grid" />
@@ -206,34 +221,34 @@ export default function Kit() {
               <Meter label="DEUTERIUM" at={0} value="0 kt" sub="Works not done" late />
             </div>
           </Card>
-          <Card n={15} name="Readout">
+          <Card n={16} name="Readout">
             <div className="flex flex-col items-end gap-1">
               <span className="text-[15px] font-medium">Year 0.00</span>
               <span className="font-mono text-[11px] text-muted tabular-nums">+{Math.round(CATALOG.deuterium.perYear)} kt a Year</span>
             </div>
           </Card>
-          <Card n={16} name="Dialog">
+          <Card n={17} name="Dialog">
             <div className="flex items-center gap-2 font-mono text-[10.5px] tracking-[.08em] text-muted uppercase">
               The real record
               <Sources sources={MIND_SOURCES} />
             </div>
           </Card>
 
-          <Card n={17} name="Sheet">
+          <Card n={18} name="Sheet">
             <RunLocal className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper px-3.5 text-[13px]">
               Run locally
               <span className="text-muted">↓</span>
             </RunLocal>
           </Card>
 
-          <Card n={18} name="Tooltip">
+          <Card n={19} name="Tooltip">
             <Tip
               toggleable
               text="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on."
               trigger={<Button type="button" className="text-[13px] text-muted">Nothing ahead</Button>}
             />
           </Card>
-          <Card n={19} name="Field" span={2}>
+          <Card n={20} name="Field" span={2}>
             <div className="flex h-11 w-full items-center gap-2 rounded-full border border-ink bg-paper pr-1.5 pl-3.5">
               <Input placeholder="Ask the Mind…" aria-label="Ask the Mind" className="min-w-0 grow bg-transparent text-base outline-none placeholder:text-muted" />
               <Button type="button" aria-label="Send" className="size-8 shrink-0 rounded-full bg-button text-paper">
@@ -242,7 +257,7 @@ export default function Kit() {
             </div>
           </Card>
 
-          <Card n={20} name="Tabs" span={2}>
+          <Card n={21} name="Tabs" span={2}>
             <nav aria-label="Tabs" className="grid h-16 w-full grid-cols-4 rounded-xl border border-faint bg-paper">
               <RailTab to="/ui" label="Scan" on={false} calls={2} />
               <RailTab to="/ui" label="Build" on />
