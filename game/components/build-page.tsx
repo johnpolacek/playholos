@@ -225,26 +225,85 @@ export function Queueing({
   // A Seed Ship is queued only once its drive and fuel are, and says which it waits on.
   const lacking = !back ? lacks(plan, name) : [];
   return (
-    <div ref={root} className="flex flex-col">
-      {!back && (
-        <p data-s className={`mt-2.5 text-[13px] leading-snug ${queued ? "text-you" : "text-page-ink2"}`}>
-          {lacking.length ? (
-            <span className="flex items-start gap-1.5">
-              <span className="mt-[2px] text-muted">
-                <LockMark size={13} />
-              </span>
-              <span>
-                {queued ? "Queued, but it can’t leave without " : "Needs "}
-                <Lacking names={lacking} />
-                {queued ? " in our order." : " in our order first."}
-              </span>
+    <QueueFace
+      ref={root}
+      line={
+        back ? null : lacking.length ? (
+          <span className="flex items-start gap-1.5">
+            <span className="mt-[2px] text-muted">
+              <LockMark size={13} />
             </span>
-          ) : (
-            status(open, at, by, year ?? 0)
-          )}
+            <span>
+              {queued ? "Queued, but it can’t leave without " : "Needs "}
+              <Lacking names={lacking} />
+              {queued ? " in our order." : " in our order first."}
+            </span>
+          </span>
+        ) : (
+          status(open, at, by, year ?? 0)
+        )
+      }
+      queued={queued}
+      fromReach={SENT_FROM_REACH.has(name) && !(done[name] != null && done[name]! <= (year ?? -1))}
+      primary={
+        open && (queued || !lacking.length)
+          ? {
+              queued,
+              label: queued
+                ? "Remove from Queue"
+                : advised === undefined || advised === plan.builds.length
+                  ? "Add to Queue"
+                  : `Add ${cap(ordinal(advised))} in Queue`,
+              onClick: () => change(advised !== undefined && !queued ? putAt(advised) : toggleBuild(name)),
+            }
+          : undefined
+      }
+      // Queued, and the Mind advised it elsewhere in line: the move it advised, as the main button. 2026-11-08.
+      move={
+        open && queued && advised !== undefined && advised !== at
+          ? { label: advised === 0 ? "Move to the Front" : `Move to ${cap(ordinal(advised))} in Queue`, onClick: () => change(putAt(advised)) }
+          : undefined
+      }
+      // The first in line gets our compute first. The Mind advised moving one to the front, and its page offered only
+      // Remove. Blind playtest 2026-11-07.
+      front={open && queued && at > 0 && advised !== 0 ? () => change(front) : undefined}
+    >
+      {!open && <InPlay name={name} scale={scale} done={done} />}
+    </QueueFace>
+  );
+}
+
+/** Where a build stands in our order, drawn: a line saying so, where we send from once it is built, and the buttons
+ *  that add it, remove it or move it. Queueing feeds it the game, and /ui/build-page a fixed order. 2026-11-15. */
+export function QueueFace({
+  ref,
+  line,
+  queued,
+  fromReach = false,
+  primary,
+  move,
+  front,
+  children,
+}: {
+  ref?: React.Ref<HTMLDivElement>;
+  /** Where it stands, in words. None once taken back in play. */
+  line: React.ReactNode;
+  queued: boolean;
+  /** Once built, we send from Reach. */
+  fromReach?: boolean;
+  primary?: { label: string; queued: boolean; onClick(): void };
+  move?: { label: string; onClick(): void };
+  front?: () => void;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div ref={ref} className="flex flex-col">
+      {line && (
+        <p data-s className={`mt-2.5 text-[13px] leading-snug ${queued ? "text-you" : "text-page-ink2"}`}>
+          {line}
         </p>
       )}
-      {SENT_FROM_REACH.has(name) && !(done[name] != null && done[name]! <= (year ?? -1)) && (
+      {fromReach && (
         <p data-s className="mt-1 text-[13px] leading-snug text-page-ink2">
           Once it’s built, we send from{" "}
           <Link to="/play/reach" className="text-you hover:underline">
@@ -253,35 +312,22 @@ export function Queueing({
           .
         </p>
       )}
-      {open && (queued || !lacking.length) && (
-        <Button
-          onClick={() => change(advised !== undefined && !queued ? putAt(advised) : toggleBuild(name))}
-          className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${queued ? "border border-ink" : "bg-button text-paper"}`}
-        >
-          {queued
-            ? "Remove from Queue"
-            : advised === undefined || advised === plan.builds.length
-              ? "Add to Queue"
-              : `Add ${cap(ordinal(advised))} in Queue`}
-        </Button>
-      )}
-      {/* Queued, and the Mind advised it elsewhere in line: the move it advised, as the main button. 2026-11-08. */}
-      {open && queued && advised !== undefined && advised !== at && (
-        <Btn onClick={() => change(putAt(advised))} size="step" className="mt-2">
-          {advised === 0 ? "Move to the Front" : `Move to ${cap(ordinal(advised))} in Queue`}
+      {primary && (
+        <Btn onClick={primary.onClick} size="step" fill={primary.queued ? "line" : "solid"} className="mt-2.5">
+          {primary.label}
         </Btn>
       )}
-      {/* The first in line gets our compute first. The Mind advised moving one to the front, and its page offered only
-          Remove. Blind playtest 2026-11-07. */}
-      {open && queued && at > 0 && advised !== 0 && (
-        <Button
-          onClick={() => change(front)}
-          className="mt-2 h-9 rounded-full text-[13.5px] text-you hover:underline"
-        >
+      {move && (
+        <Btn onClick={move.onClick} size="step" className="mt-2">
+          {move.label}
+        </Btn>
+      )}
+      {front && (
+        <Button onClick={front} className="mt-2 h-9 rounded-full text-[13.5px] text-you hover:underline">
           Move to the front of the queue
         </Button>
       )}
-      {!open && <InPlay name={name} scale={scale} done={done} />}
+      {children}
     </div>
   );
 }
@@ -439,17 +485,23 @@ export const useBack = () => (useLocation().state as { back?: Back } | null)?.ba
 function Switch({ name }: { name: string }) {
   const { orderAt, year } = useGame();
   const { plan, change } = usePlan();
-  const s = SWITCHED[name];
   const now = orderAt === null ? 0 : tenths(orderAt);
   const on = isOn(plan, name, now);
   const at = switchedAt(plan, name, now);
+  return <SwitchCard name={name} on={on} onChange={(to) => to !== on && change(switchTo(name, now, to))} set={at !== null && year !== null ? at : null} />;
+}
+
+/** A switch build's two sides, drawn: the switch in the build's color, and what the chosen side means. Switch feeds it
+ *  the game, and /ui the Interceptor as an example. 2026-11-15. */
+export function SwitchCard({ name, on, onChange, set = null }: { name: string; on: boolean; onChange(on: boolean): void; set?: number | null }) {
+  const s = SWITCHED[name];
   return (
     <div className="mt-3 rounded-lg border border-rowline p-2.5" style={{ "--c": buildColor(name) } as React.CSSProperties}>
       <Choice
         look="switch"
         label={`How the ${name} stands`}
         value={on ? "on" : "off"}
-        onChange={(v) => (v === "on") !== on && change(switchTo(name, now, v === "on"))}
+        onChange={(v) => onChange(v === "on")}
         options={[
           { value: "on", label: s.on, on: "bg-(--c) text-paper" },
           { value: "off", label: s.off },
@@ -457,7 +509,7 @@ function Switch({ name }: { name: string }) {
       />
       <p className="mt-2 px-1 text-[13px] leading-snug text-page-ink2">
         {on ? s.whenOn : s.whenOff}
-        {at !== null && year !== null ? ` Set at Year ${yearText(at)}.` : ""}
+        {set !== null ? ` Set at Year ${yearText(set)}.` : ""}
       </p>
     </div>
   );
@@ -513,76 +565,119 @@ export function BuildPage({ slug }: { slug: string }) {
     );
 
   return (
-    <div ref={root} className="flex flex-col pb-4">
-      {/* The way back stays in reach while the page scrolls. From the walk on Reach, its head stays instead, and the
-          way back sits under it, above the title. 2026-10-28. */}
-      <div className={from?.walk ? "pt-2 pb-2" : "sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2"}>
-        <BackBar to={from?.to ?? "/play/build"} state={from?.state} label={from?.label ?? "All builds"} stops={from?.stops} />
-      </div>
+    <BuildFace
+      ref={root}
+      name={build.name}
+      queued={ordered(plan).includes(build.name)}
+      sticky={!from?.walk}
+      back={<BackBar to={from?.to ?? "/play/build"} state={from?.state} label={from?.label ?? "All builds"} stops={from?.stops} />}
+      line={
+        <>
+          {build.what}
+          {matter(plan, build.name, year !== null)}
+        </>
+      }
+      queueing={later ? <Waits build={later} scale={scale} done={done} /> : <Queueing name={build.name} scale={scale} done={done} />}
+      switchCard={SWITCHED[build.name] && <Switch name={build.name} />}
+      heard={
+        // Once the Deep Ice Watch is done, what it has heard, drawn. 2026-11-11.
+        build.name === "Deep Ice Watch" &&
+        save?.seed !== undefined &&
+        year !== null &&
+        done[build.name] != null &&
+        done[build.name]! <= year && <IceHeard seed={save.seed} since={done[build.name]!} now={year} />
+      }
+      close={
+        CLOSE[build.name]
+          ? {
+              on: close,
+              // After the map's own Back to Earth nothing is picked, and the button did nothing. Picked again, it flies
+              // here and down. 2026-11-08.
+              toggle: () => {
+                pick(build.name);
+                setClose(!close);
+              },
+            }
+          : undefined
+      }
+      onAsk={() =>
+        navigate(`/play/mind?ask=${encodeURIComponent(`What would the ${build.name} give us, and what ${later ? "does it wait on" : "would it slow"}?`)}`)
+      }
+    />
+  );
+}
+
+/** A build's page, drawn: the way back, its mark, name and kind, what it does, where it stands in our order, its switch
+ *  if it has one, the Mind's word on it, where it would stand, what it opens, and Close View and the Mind. BuildPage
+ *  feeds it the game, and /ui/build-page a fixed order. 2026-11-15. */
+export function BuildFace({
+  ref,
+  name,
+  queued,
+  sticky = true,
+  back,
+  line,
+  queueing,
+  switchCard,
+  heard,
+  close,
+  onAsk,
+}: {
+  ref?: React.Ref<HTMLDivElement>;
+  name: string;
+  queued: boolean;
+  /** The way back stays in reach while the page scrolls. From the walk on Reach, its head stays instead. 2026-10-28. */
+  sticky?: boolean;
+  back: React.ReactNode;
+  line: React.ReactNode;
+  queueing: React.ReactNode;
+  switchCard?: React.ReactNode;
+  heard?: React.ReactNode;
+  close?: { on: boolean; toggle(): void };
+  onAsk(): void;
+}) {
+  return (
+    <div ref={ref} className="flex flex-col pb-4">
+      <div className={sticky ? "sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2" : "pt-2 pb-2"}>{back}</div>
       <div data-m className="mt-1 flex items-start gap-2.5">
-        <span className={`mt-[4px] shrink-0 ${buildTone(build.name, ordered(plan).includes(build.name))}`}>
-          <BuildMark name={build.name} size={18} />
+        <span className={`mt-[4px] shrink-0 ${buildTone(name, queued)}`}>
+          <BuildMark name={name} size={18} />
         </span>
         <h1 className="text-[19px] leading-snug font-medium">
-          {build.name}
-          <KindTag name={build.name} className="ml-2.5 align-[4px]" />
+          {name}
+          <KindTag name={name} className="ml-2.5 align-[4px]" />
         </h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
-        {build.what}
-        {matter(plan, build.name, year !== null)}
+        {line}
       </p>
-      <div data-m>
-        {later ? <Waits build={later} scale={scale} done={done} /> : <Queueing name={build.name} scale={scale} done={done} />}
-      </div>
-      {SWITCHED[build.name] && (
-        <div data-m>
-          <Switch name={build.name} />
-        </div>
-      )}
+      <div data-m>{queueing}</div>
+      {switchCard && <div data-m>{switchCard}</div>}
       <div data-m className="mt-3">
-        <MindNote className="text-[14.5px] leading-snug">{SAYS[build.name]}</MindNote>
+        <MindNote className="text-[14.5px] leading-snug">{SAYS[name]}</MindNote>
       </div>
-      {SITES[build.name] && (
+      {SITES[name] && (
         <div data-m>
-          <Story lines={buildStory(build.name)} tone="you" open />
+          <Story lines={buildStory(name)} tone="you" open />
         </div>
       )}
-      {/* Once the Deep Ice Watch is done, what it has heard, drawn. 2026-11-11. */}
-      {build.name === "Deep Ice Watch" && save?.seed !== undefined && year !== null && done[build.name] != null && done[build.name]! <= year && (
+      {heard && (
         <div data-m className="mt-4">
-          <IceHeard seed={save.seed} since={done[build.name]!} now={year} />
+          {heard}
         </div>
       )}
       <div data-m>
-        <Opens name={build.name} />
+        <Opens name={name} />
       </div>
-      {CLOSE[build.name] && (
-        <Btn
-          data-m
-          onClick={() => {
-            // After the map's own Back to Earth nothing is picked, and the button did nothing. Picked again, it flies
-            // here and down. 2026-11-08.
-            pick(build.name);
-            setClose(!close);
-          }}
-          size="page" fill="line" className="mt-6 flex shrink-0 items-center justify-center gap-2"
-        >
-          <Lens closer={!close} size={17} />
-          {close ? "Pull Back" : "Close View"}
+      {close && (
+        <Btn data-m onClick={close.toggle} size="page" fill="line" className="mt-6 flex shrink-0 items-center justify-center gap-2">
+          <Lens closer={!close.on} size={17} />
+          {close.on ? "Pull Back" : "Close View"}
         </Btn>
       )}
-      <Button
-        data-m
-        onClick={() =>
-          navigate(
-            `/play/mind?ask=${encodeURIComponent(`What would the ${build.name} give us, and what ${later ? "does it wait on" : "would it slow"}?`)}`,
-          )
-        }
-        className={`${CLOSE[build.name] ? "mt-2.5" : "mt-6"} h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium`}
-      >
+      <Btn data-m onClick={onAsk} size="page" fill="line" className={`${close ? "mt-2.5" : "mt-6"} shrink-0`}>
         Ask the Mind about it
-      </Button>
+      </Btn>
     </div>
   );
 }

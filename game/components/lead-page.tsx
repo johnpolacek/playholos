@@ -15,7 +15,7 @@ import { LeadMark } from "@/components/marks";
 import { useLeads } from "@/components/scan";
 import { span, lyOf, yearText } from "@/lib/game/clock";
 import { chancesOf } from "@/lib/game/chance";
-import { ODDS, type Odds, type Reading, starName } from "@/lib/game/leads";
+import { type Lead, ODDS, type Odds, type Reading, starName } from "@/lib/game/leads";
 import { dates } from "@/lib/game/sends";
 import { VisitArt } from "@/components/visit-art";
 import { WatcherVoice } from "@/components/watcher-voice";
@@ -276,27 +276,25 @@ export function LeadPage({ slug }: { slug: string }) {
       <div className="sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2">
         <BackBar to="/play" label="All leads" />
       </div>
-      <div data-m className="mt-1 flex items-start gap-2.5">
-        <span className={`mt-[4px] shrink-0 ${lead.reply || lead.art.kind === "warm" ? "text-other" : "text-you"}`}>
-          <LeadMark art={lead.art} size={18} />
-        </span>
-        <h1 className={`text-[19px] leading-snug font-medium ${lead.art.kind === "warm" ? "text-other" : ""}`}>{starName(lead.star)}
-          {/* A glow that earned a name says which it was: a blind first-timer worked out Prometheus was Warm Glow 1 only from
-              its distance. 2026-11-07. */}
-          {glowNamed(lead.star) && <span className="ml-2 font-mono text-[10.5px] font-normal tracking-[.06em] text-muted">ONCE {lead.star.toUpperCase()}</span>}
-        </h1>
-      </div>
-      <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
-        {lead.art.kind === "near" ? (
-          // Here at home: no light-years, and no road to it on Reach. 2026-10-30.
-          <>{lead.what}</>
-        ) : (
-          <>
-            {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · reached in{" "}
-            <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span>
-          </>
-        )}
-      </p>
+      <LeadHead
+        art={lead.art}
+        reply={!!lead.reply}
+        star={starName(lead.star)}
+        // A glow that earned a name says which it was: a blind first-timer worked out Prometheus was Warm Glow 1 only from
+        // its distance. 2026-11-07.
+        once={glowNamed(lead.star) ? lead.star : undefined}
+        line={
+          lead.art.kind === "near" ? (
+            // Here at home: no light-years, and no road to it on Reach. 2026-10-30.
+            lead.what
+          ) : (
+            <>
+              {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · reached in{" "}
+              <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span>
+            </>
+          )
+        }
+      />
       {/* The answer first: our chance of life and of a mind, and what the latest reading means for them, said in a line.
           They sat below two readings, near the fold, and a playtest found the page's point buried. 2026-11-07. */}
       {lead.art.kind !== "warm" && (verdict || hasChances) && (
@@ -329,15 +327,7 @@ export function LeadPage({ slug }: { slug: string }) {
           bar of its own, so what scrolls under it hides whole rather than showing half under the button. Screen critic,
           2026-11-09. */}
       {lead.art.kind !== "near" && !probeRoad && !stayRoad && !(lead.art.kind === "warm" && flash?.read?.saw === "dust") && (
-        <div data-m className="sticky bottom-0 z-10 -mx-4 mt-1.5 bg-panel px-4 pt-1 pb-3">
-          <Link
-            to={`/play/reach/${lead.slug}`}
-            state={{ engage: true }}
-            className="inline-flex h-8 items-center rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
-          >
-            Engage {starName(lead.star)}: send a craft or a message ›
-          </Link>
-        </div>
+        <EngageBar to={`/play/reach/${lead.slug}`} star={starName(lead.star)} />
       )}
 
       {/* What we can do comes first, above what we know. It sat two screens down until a playtest, 2026-11-04. */}
@@ -348,33 +338,7 @@ export function LeadPage({ slug }: { slug: string }) {
         </div>
       )}
 
-      {read && (
-        <section data-m className="mt-3 rounded-xl border border-you/60 bg-you/[.06] px-3 py-2.5">
-          <span className="font-mono text-[10px] tracking-[.1em] text-you">
-            READING · YEAR {yearText(read.at)} · {read.by.toUpperCase()}
-          </span>
-          <h2 className={`mt-1 text-[16px] leading-snug font-semibold ${read.contact ? "text-other" : ""}`}>{read.title}</h2>
-          <p className="mt-0.5 text-[13.5px] leading-snug">{read.line}</p>
-          <ChanceTag shift={movedBy(lead, all, read)} className="mt-1 block" />
-          {VOICED.has(read.id) && <ListenButton onClick={() => setVoice(true)} />}
-          {read.air && <AirBands air={read.air} />}
-          {read.sight && (
-            <div className="mt-2.5 flex justify-center">
-              <VisitArt sight={read.sight} />
-            </div>
-          )}
-          {/* The watcher up close, drawn: its mirror held on one point of the sky. 2026-11-07. */}
-          {read.close && (
-            <div className="mt-2.5 rounded-lg border border-faint bg-paper px-2 py-1">
-              <WatcherClose {...read.close} />
-            </div>
-          )}
-          <p className="mt-2 text-[13.5px] leading-snug text-page-ink2">
-            <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-you">THE MIND</span>
-            {read.mind}
-          </p>
-        </section>
-      )}
+      {read && <ReadingCard read={read} chance={<ChanceTag shift={movedBy(lead, all, read)} className="mt-1 block" />} onListen={() => setVoice(true)} />}
 
       {earlier.length > 0 && (
         <section data-m className="mt-2 flex flex-col">
@@ -439,15 +403,7 @@ export function LeadPage({ slug }: { slug: string }) {
           </p>
         </>
       )}
-      <h2 data-m className={`mt-5 ${HEAD}`}>What we measured</h2>
-      <dl data-m className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[13.5px] leading-snug">
-        {[...lead.facts, ...ours].map(([label, value]) => (
-          <div key={label} className="contents">
-            <dt className="text-muted">{label}</dt>
-            <dd>{value}</dd>
-          </div>
-        ))}
-      </dl>
+      <Measured facts={[...lead.facts, ...ours]} />
 
       {lead.system && lead.art.kind !== "orbit" && lead.art.kind !== "near" && (
         <>
@@ -459,25 +415,9 @@ export function LeadPage({ slug }: { slug: string }) {
       )}
 
       {/* A rock coming has nothing to weigh: these headings show only over something. 2026-10-30. */}
-      {lead.could.length > 0 && <h2 data-m className={`mt-5 ${HEAD}`}>What it could be</h2>}
-      <ul className="mt-1 flex flex-col">
-        {lead.could.map((c, k) => (
-          <li key={c.what} data-m className="border-t border-faint py-2.5 first:border-t-0">
-            <div className={`flex gap-x-3 gap-y-1 ${read ? "flex-col items-start" : "items-center justify-between"}`}>
-              <span className="text-[15px] leading-snug font-semibold">{c.what}</span>
-              <Scale odds={read?.now[k] ?? c.odds} was={read && c.odds} />
-            </div>
-            <p className="mt-0.5 text-[13.5px] leading-snug text-page-ink2">{c.why}</p>
-          </li>
-        ))}
-      </ul>
+      <CouldBe could={lead.could} now={read?.now} />
 
-      {(read?.tells ?? lead.tells).length > 0 && <h2 data-m className={`mt-4 ${HEAD}`}>What would tell us</h2>}
-      {(read?.tells ?? lead.tells).map((t) => (
-        <p key={t} data-m className="mt-1.5 text-[13.5px] leading-snug">
-          {t}
-        </p>
-      ))}
+      <Tells tells={read?.tells ?? lead.tells} />
 
       {/* What we can do to the watcher found where a craft can reach it: bring it home, or wreck it, our one weapon.
           2026-11-13, and taking it whole 2026-11-14. */}
@@ -493,5 +433,138 @@ export function LeadPage({ slug }: { slug: string }) {
         Ask the Mind about it
       </Btn>
     </div>
+  );
+}
+
+// A lead's page, in parts, so /ui/lead draws it with the game's own. Split 2026-11-15.
+
+/** Its mark, its star's name, and what it is and how far, under it. Gold for a warm glow or one that speaks to us. */
+export function LeadHead({
+  art,
+  reply = false,
+  star,
+  once,
+  line,
+  plain = false,
+}: {
+  art: Lead["art"];
+  reply?: boolean;
+  star: string;
+  once?: string;
+  line: React.ReactNode;
+  /** No warm glow's gold, as a destination's page draws it. */
+  plain?: boolean;
+}) {
+  const warm = art.kind === "warm" && !plain;
+  return (
+    <>
+      <div data-m className="mt-1 flex items-start gap-2.5">
+        <span className={`mt-[4px] shrink-0 ${reply || warm ? "text-other" : "text-you"}`}>
+          <LeadMark art={art} size={18} />
+        </span>
+        <h1 className={`text-[19px] leading-snug font-medium ${warm ? "text-other" : ""}`}>
+          {star}
+          {once && <span className="ml-2 font-mono text-[10.5px] font-normal tracking-[.06em] text-muted">ONCE {once.toUpperCase()}</span>}
+        </h1>
+      </div>
+      <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
+        {line}
+      </p>
+    </>
+  );
+}
+
+/** Engage holds at the panel's foot while the page under it scrolls: on a phone the tab bar cut it in half. On a bar of
+ *  its own, so what scrolls under it hides whole rather than showing half under the button. Screen critic, 2026-11-09. */
+export function EngageBar({ to, star }: { to: string; star: string }) {
+  return (
+    <div data-m className="sticky bottom-0 z-10 -mx-4 mt-1.5 bg-panel px-4 pt-1 pb-3">
+      <Link to={to} state={{ engage: true }} className="inline-flex h-8 items-center rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110">
+        Engage {star}: send a craft or a message ›
+      </Link>
+    </div>
+  );
+}
+
+/** The latest reading, in our blue: when and by what, what it found, how it moved our chances, and the Mind's word. */
+export function ReadingCard({ read, chance, onListen }: { read: Reading; chance?: React.ReactNode; onListen?: () => void }) {
+  return (
+    <section data-m className="mt-3 rounded-xl border border-you/60 bg-you/[.06] px-3 py-2.5">
+      <span className="font-mono text-[10px] tracking-[.1em] text-you">
+        READING · YEAR {yearText(read.at)} · {read.by.toUpperCase()}
+      </span>
+      <h2 className={`mt-1 text-[16px] leading-snug font-semibold ${read.contact ? "text-other" : ""}`}>{read.title}</h2>
+      <p className="mt-0.5 text-[13.5px] leading-snug">{read.line}</p>
+      {chance}
+      {VOICED.has(read.id) && onListen && <ListenButton onClick={onListen} />}
+      {read.air && <AirBands air={read.air} />}
+      {read.sight && (
+        <div className="mt-2.5 flex justify-center">
+          <VisitArt sight={read.sight} />
+        </div>
+      )}
+      {/* The watcher up close, drawn: its mirror held on one point of the sky. 2026-11-07. */}
+      {read.close && (
+        <div className="mt-2.5 rounded-lg border border-faint bg-paper px-2 py-1">
+          <WatcherClose {...read.close} />
+        </div>
+      )}
+      <p className="mt-2 text-[13.5px] leading-snug text-page-ink2">
+        <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-you">THE MIND</span>
+        {read.mind}
+      </p>
+    </section>
+  );
+}
+
+/** What we measured, as terms and their values. */
+export function Measured({ facts }: { facts: [string, React.ReactNode][] }) {
+  return (
+    <>
+      <h2 data-m className={`mt-5 ${HEAD}`}>What we measured</h2>
+      <dl data-m className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[13.5px] leading-snug">
+        {facts.map(([label, value]) => (
+          <div key={label} className="contents">
+            <dt className="text-muted">{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </>
+  );
+}
+
+/** What it could be, each with its odds on a scale, moved by a reading if one has come. A rock coming has nothing to
+ *  weigh: the heading shows only over something. 2026-10-30. */
+export function CouldBe({ could, now }: { could: Lead["could"]; now?: Odds[] }) {
+  return (
+    <>
+      {could.length > 0 && <h2 data-m className={`mt-5 ${HEAD}`}>What it could be</h2>}
+      <ul className="mt-1 flex flex-col">
+        {could.map((c, k) => (
+          <li key={c.what} data-m className="border-t border-faint py-2.5 first:border-t-0">
+            <div className={`flex gap-x-3 gap-y-1 ${now ? "flex-col items-start" : "items-center justify-between"}`}>
+              <span className="text-[15px] leading-snug font-semibold">{c.what}</span>
+              <Scale odds={now?.[k] ?? c.odds} was={now && c.odds} />
+            </div>
+            <p className="mt-0.5 text-[13.5px] leading-snug text-page-ink2">{c.why}</p>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+/** What would tell us, a line each. */
+export function Tells({ tells }: { tells: string[] }) {
+  return (
+    <>
+      {tells.length > 0 && <h2 data-m className={`mt-4 ${HEAD}`}>What would tell us</h2>}
+      {tells.map((t) => (
+        <p key={t} data-m className="mt-1.5 text-[13.5px] leading-snug">
+          {t}
+        </p>
+      ))}
+    </>
   );
 }

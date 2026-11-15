@@ -2,9 +2,10 @@ import { Button } from "@ui-sdk/react/button";
 import { Toggle } from "@ui-sdk/react/toggle";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { LeadHead } from "@/components/lead-page";
 import { BackBar } from "@/components/back-bar";
 import { useGame } from "@/components/game-provider";
-import { BuildMark, buildBlue, buildTone, KindTag, LeadMark, LockMark } from "@/components/marks";
+import { BuildMark, buildBlue, buildTone, KindTag, LockMark } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { toggleBuild, usePlan, useSchedule, WASH } from "@/components/picks";
 import { Lens } from "@/components/icons";
@@ -124,7 +125,12 @@ const WHAT: Record<string, string> = {
 
 /** A way that sends one craft to this star, a lens or a sentinel: drawn on its Years like the two roads, with what it
  *  needs, and once we can, the button that sends it. One a star, and never taken back. 2026-10-26. */
-function Sent(props: {
+/** One way to reach a star, drawn: its head, which plays its road on the map, what it brings home, its thread of Years,
+ *  what it needs, and the buttons that send it, cancel it or ask first. DestinationPage feeds it the game, and
+ *  /ui/destination a fixed road. Exported 2026-11-15. */
+export function WayRow(props: {
+  /** The Year now: before Begin, 0. */
+  now: number;
   road: Road;
   i: number;
   to: number;
@@ -149,11 +155,10 @@ function Sent(props: {
   previewing: boolean;
   preview(on: boolean): void;
 }) {
-  const { road, i, to, name, line, needs, have, can, send, what, choices, sentAs, right, extra, recall, previewing, preview } = props;
+  const { now, road, i, to, name, line, needs, have, can, send, what, choices, sentAs, right, extra, recall, previewing, preview } = props;
   const sent = road.n !== null;
   // Ordered but not yet gone says when it goes: "Sail sent" read as flying while the Laser Sail Array was only queued.
   // Blind playtest 2026-11-07.
-  const now = useGame().year ?? 0;
   const waiting = sent && road.leaves !== null && now < road.leaves;
   // A send is never taken back once it leaves, so it asks once before it goes. Playtest 2026-11-01: a seed probe went
   // in one tap.
@@ -447,19 +452,21 @@ export function DestinationPage({ slug }: { slug: string }) {
       <div className="sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2">
         <BackBar to="/play/reach" label="All destinations" />
       </div>
-      <div data-m className="mt-1 flex items-start gap-2.5">
-        <span className={`mt-[4px] shrink-0 ${lead.reply ? "text-other" : "text-you"}`}>
-          <LeadMark art={lead.art} size={18} />
-        </span>
-        <h1 className="text-[19px] leading-snug font-medium">{starName(lead.star)}</h1>
-      </div>
-      <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
-        {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · a message takes{" "}
-        <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span> ·{" "}
-        <Link to={`/play/lead/${lead.slug}`} className="whitespace-nowrap text-you">
-          Its lead ›
-        </Link>
-      </p>
+      <LeadHead
+        plain
+        art={lead.art}
+        reply={!!lead.reply}
+        star={starName(lead.star)}
+        line={
+          <>
+            {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · a message takes{" "}
+            <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span> ·{" "}
+            <Link to={`/play/lead/${lead.slug}`} className="whitespace-nowrap text-you">
+              Its lead ›
+            </Link>
+          </>
+        }
+      />
 
       {visits
         .filter((v) => v.star === lead.star)
@@ -482,45 +489,18 @@ export function DestinationPage({ slug }: { slug: string }) {
       {/* What we know of it, where we choose how to go: "is it habitable? what is the system like?" had to be asked,
           playtest 2026-11-05. Its latest word, its system or its art, what we measured, and its chances. */}
       {lead.art.kind !== "near" && (
-        <section data-m className="mt-4 rounded-xl border border-faint bg-paper px-3 py-2.5">
-          <div className="flex items-center justify-between gap-2">
-            <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">What we know</span>
-            {lead.system && (
-              <Button onClick={() => setClose(!close)} className="flex h-7 items-center gap-1.5 rounded-full border border-faint px-3 text-[12.5px] hover:border-muted">
-                <Lens closer={!close} size={13} />
-                {close ? "Pull back" : "See its system"}
-              </Button>
-            )}
-          </div>
-          <p className="mt-1 text-[14px] leading-snug">{(readings[lead.slug] ?? []).at(-1)?.title ?? lead.line}</p>
-          <div className="mt-2 rounded-lg border border-faint px-2 py-1">
-            {lead.system && lead.art.kind === "orbit" ? <SystemArt system={lead.system} /> : <LeadArt art={lead.art} />}
-          </div>
-          <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13px] leading-snug">
-            {lead.facts.slice(0, 5).map(([label, value]) => (
-              <div key={label} className="contents">
-                <dt className="text-muted">{label}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
-          <Chances lead={lead} readings={readings[lead.slug] ?? []} className="mt-2.5" />
-        </section>
+        <KnownCard
+          line={(readings[lead.slug] ?? []).at(-1)?.title ?? lead.line}
+          art={lead.system && lead.art.kind === "orbit" ? <SystemArt system={lead.system} /> : <LeadArt art={lead.art} />}
+          facts={lead.facts.slice(0, 5)}
+          chances={<Chances lead={lead} readings={readings[lead.slug] ?? []} className="mt-2.5" />}
+          system={lead.system ? { close, toggle: () => setClose(!close) } : undefined}
+        />
       )}
 
       {/* A message is a way to engage too, and the fastest, so it leads: a blind first-timer looked down this list for
           one, found only craft, and had to guess to ask the Mind. At its foot, a second missed it. 2026-11-07. */}
-      <Link
-        ref={send}
-        data-m
-        to={`/play/mind?ask=${encodeURIComponent(`We want to send a message to ${lead.star}. What should it say, and what does it risk?`)}`}
-        className="mt-5 block rounded-lg border border-you/40 px-3 py-2.5 text-[13.5px] leading-snug"
-      >
-        <b className="font-semibold">Send a message</b>
-        <span className="block text-page-ink2">
-          It goes at the speed of light, sooner than any craft. The Mind drafts it, and we send it. Or send a craft, below. <span className="text-you">Ask the Mind to draft it ›</span>
-        </span>
-      </Link>
+      <MessageCard ref={send} to={`/play/mind?ask=${encodeURIComponent(`We want to send a message to ${lead.star}. What should it say, and what does it risk?`)}`} />
       {/* A glow gone dark says so before we send: a blind first-timer sent a probe to one that had already faded, with no
           word of it here. 2026-11-07. */}
       {lead?.facts.find(([k]) => k === "Faded") && (
@@ -538,7 +518,8 @@ export function DestinationPage({ slug }: { slug: string }) {
           // Past a sail's reach, dust wears it away before it passes. 2026-11-13.
           const worn = !k && !sailArrives(ly);
           return (
-            <Sent
+            <WayRow
+              now={clock ?? 0}
               key={road.name}
               road={road}
               i={k}
@@ -572,7 +553,8 @@ export function DestinationPage({ slug }: { slug: string }) {
           );
         })}
         {lens && (
-          <Sent
+          <WayRow
+            now={clock ?? 0}
             road={lens}
             i={ways.length}
             to={to}
@@ -589,7 +571,8 @@ export function DestinationPage({ slug }: { slug: string }) {
           />
         )}
         {mind && (
-          <Sent
+          <WayRow
+            now={clock ?? 0}
             road={mind}
             i={ways.length + 2}
             to={to}
@@ -610,7 +593,8 @@ export function DestinationPage({ slug }: { slug: string }) {
           />
         )}
         {will && (
-          <Sent
+          <WayRow
+            now={clock ?? 0}
             road={will}
             i={ways.length + 3}
             to={to}
@@ -628,7 +612,8 @@ export function DestinationPage({ slug }: { slug: string }) {
           />
         )}
         {stay && (
-          <Sent
+          <WayRow
+            now={clock ?? 0}
             road={stay}
             i={ways.length + 1}
             to={to}
@@ -645,7 +630,8 @@ export function DestinationPage({ slug }: { slug: string }) {
           />
         )}
         {seed && (
-          <Sent
+          <WayRow
+            now={clock ?? 0}
             road={seed}
             i={ways.length + 4}
             to={to}
@@ -706,5 +692,60 @@ export function DestinationPage({ slug }: { slug: string }) {
         </Btn>
       )}
     </div>
+  );
+}
+
+/** What we know of a destination, where we choose how to go: its latest word, its system or its art, what we measured,
+ *  and its chances, with a way to see its system on the map. 2026-11-15. */
+export function KnownCard({
+  line,
+  art,
+  facts,
+  chances,
+  system,
+}: {
+  line: React.ReactNode;
+  art: React.ReactNode;
+  facts: [string, React.ReactNode][];
+  chances?: React.ReactNode;
+  system?: { close: boolean; toggle(): void };
+}) {
+  return (
+    <section data-m className="mt-4 rounded-xl border border-faint bg-paper px-3 py-2.5">
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">What we know</span>
+        {system && (
+          <Button onClick={system.toggle} className="flex h-7 items-center gap-1.5 rounded-full border border-faint px-3 text-[12.5px] hover:border-muted">
+            <Lens closer={!system.close} size={13} />
+            {system.close ? "Pull back" : "See its system"}
+          </Button>
+        )}
+      </div>
+      <p className="mt-1 text-[14px] leading-snug">{line}</p>
+      <div className="mt-2 rounded-lg border border-faint px-2 py-1">{art}</div>
+      <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13px] leading-snug">
+        {facts.map(([label, value]) => (
+          <div key={label} className="contents">
+            <dt className="text-muted">{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+      {chances}
+    </section>
+  );
+}
+
+/** A message is a way to engage too, and the fastest, so it leads: a blind first-timer looked down this list for one,
+ *  found only craft, and had to guess to ask the Mind. At its foot, a second missed it. 2026-11-07. */
+export function MessageCard({ ref, to }: { ref?: React.Ref<HTMLAnchorElement>; to: string }) {
+  return (
+    <Link ref={ref} data-m to={to} className="mt-5 block rounded-lg border border-you/40 px-3 py-2.5 text-[13.5px] leading-snug">
+      <b className="font-semibold">Send a message</b>
+      <span className="block text-page-ink2">
+        It goes at the speed of light, sooner than any craft. The Mind drafts it, and we send it. Or send a craft, below.{" "}
+        <span className="text-you">Ask the Mind to draft it ›</span>
+      </span>
+    </Link>
   );
 }

@@ -6,10 +6,13 @@
 export const VIEWS = [
   { to: "/ui/top-bar", label: "Top bar" },
   { to: "/ui/scan", label: "Scan" },
+  { to: "/ui/lead", label: "Lead" },
+  { to: "/ui/build", label: "Build" },
+  { to: "/ui/build-page", label: "Build page" },
   { to: "/ui/reach", label: "Reach" },
+  { to: "/ui/destination", label: "Destination" },
   { to: "/ui/mind", label: "Mind" },
   { to: "/ui/send", label: "Send" },
-  { to: "/ui/build", label: "Build" },
 ];
 
 export function View({
