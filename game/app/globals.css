@@ -622,6 +622,18 @@
     outline: none;
     box-shadow: inset 0 0 0 calc(var(--px) + 1px) var(--surface), inset 0 0 0 calc(var(--px) + 2px) currentColor;
   }
+  /* A meter or a slider is a row of bits, 4px each with a 2px gap: those still clear dithered, those set solid, so it
+     fills bit by bit. */
+  [data-skin="arecibo"] :is([data-slot="meter-track"], [data-slot="slider-track"]) {
+    border-radius: 0;
+    box-shadow: none;
+    background: repeating-linear-gradient(90deg, transparent 0 4px, var(--page) 4px 6px), var(--dither);
+  }
+  [data-skin="arecibo"] :is([data-slot="meter-indicator"], [data-slot="slider-indicator"]) {
+    border-radius: 0;
+    box-shadow: none;
+    background: repeating-linear-gradient(90deg, var(--bit) 0 4px, var(--page) 4px 6px);
+  }
 }
 
 body {

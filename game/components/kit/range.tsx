@@ -10,7 +10,8 @@ import { useSkin } from "@/lib/skin";
 // there instead, where a dial is one of a bank and its number is read beside it: /sim's dials and the research page's.
 // Everywhere else, and always in chalk, it stays a line. Under Log, 2026-11-15, the thumb is an index mark, a
 // squared tick in the tone, and the line is squared at its ends. Under Infrared,
-// 2026-11-15, the line is a heat bar and the thumb its hottest point, white, blooming when focused.
+// 2026-11-15, the line is a heat bar and the thumb its hottest point, white, blooming when focused. Under Arecibo,
+// 2026-11-15, the line is a row of bits, app/globals.css, and the thumb one tall bit, ringed in bits when focused.
 
 type Props = {
   value: number;
@@ -56,7 +57,7 @@ export function Range(props: Props) {
           {/* The fader's cap, under Instrument: the panel's paint, with one line across it in the dial's color. */}
           <SliderThumb
             aria-label={label}
-            className="absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--tone) shadow-[0_0_0_3px_var(--panel)] transition-shadow has-[:focus-visible]:shadow-[0_0_0_3px_var(--panel),0_0_0_5px_var(--tone)] instrument:h-5 instrument:w-3 instrument:rounded-[3px] instrument:bg-[linear-gradient(90deg,transparent_5px,var(--tone)_5px_7px,transparent_7px),linear-gradient(#3a3c41,#26282c)] instrument:shadow-(--hw-key) instrument:has-[:focus-visible]:shadow-[var(--hw-key),0_0_0_2px_var(--tone)] log:w-[7px] log:rounded-[1px] infrared:bg-[#fff2cf] infrared:shadow-[0_0_0_3px_var(--panel),0_0_8px_3px_color-mix(in_srgb,var(--heat-3)_55%,transparent)] infrared:has-[:focus-visible]:shadow-[0_0_0_3px_var(--panel),var(--bloom)]"
+            className="absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--tone) shadow-[0_0_0_3px_var(--panel)] transition-shadow has-[:focus-visible]:shadow-[0_0_0_3px_var(--panel),0_0_0_5px_var(--tone)] instrument:h-5 instrument:w-3 instrument:rounded-[3px] instrument:bg-[linear-gradient(90deg,transparent_5px,var(--tone)_5px_7px,transparent_7px),linear-gradient(#3a3c41,#26282c)] instrument:shadow-(--hw-key) instrument:has-[:focus-visible]:shadow-[var(--hw-key),0_0_0_2px_var(--tone)] log:w-[7px] log:rounded-[1px] infrared:bg-[#fff2cf] infrared:shadow-[0_0_0_3px_var(--panel),0_0_8px_3px_color-mix(in_srgb,var(--heat-3)_55%,transparent)] infrared:has-[:focus-visible]:shadow-[0_0_0_3px_var(--panel),var(--bloom)] arecibo:w-1.5 arecibo:rounded-none arecibo:bg-(--bit) arecibo:shadow-[0_0_0_2px_var(--page)] arecibo:has-[:focus-visible]:shadow-[0_0_0_2px_var(--page),0_0_0_4px_var(--bit)]"
           />
         </SliderTrack>
       </SliderControl>
