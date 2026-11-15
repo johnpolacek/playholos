@@ -1,7 +1,8 @@
 import { Toggle, ToggleGroup } from "@ui-sdk/react/toggle";
 
 // A row of small chips under a mono head, one of them lit, on ui-sdk's ToggleGroup: the arrow keys move between them and
-// a press lights one. The ideas the Mind has explained on Build, to read again. 2026-11-15.
+// a press lights one. The ideas the Mind has explained on Build, to read again. 2026-11-15. Under the Instrument skin
+// each chip is a small key, and the lit one is held down.
 
 export function Chips({
   head,
@@ -22,14 +23,14 @@ export function Chips({
 }) {
   return (
     <div className={`flex flex-wrap items-center gap-[5px] font-mono text-[9.5px] tracking-[.08em] text-muted ${className}`}>
-      <span className="mr-0.5">{head}</span>
+      <span className="engrave mr-0.5">{head}</span>
       <ToggleGroup aria-label={label} value={[value]} onValueChange={(v) => v[0] && onChange(v[0])} deselectable={false} className="contents">
         {options.map((o) => (
           <Toggle
             key={o.value}
             value={o.value}
             className={({ pressed }) =>
-              `rounded-full border px-2 py-[3px] text-[10.5px] tracking-normal ${pressed ? "border-you/70 text-you" : "border-faint text-page-ink2 hover:border-muted"}`
+              `rounded-full border px-2 py-[3px] text-[10.5px] tracking-normal hw-key-dark instrument:rounded-[4px] ${pressed ? "border-you/70 text-you instrument:shadow-(--hw-key-down)" : "border-faint text-page-ink2 hover:border-muted instrument:shadow-(--hw-key)"}`
             }
           >
             {o.label}

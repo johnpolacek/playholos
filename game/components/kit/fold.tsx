@@ -24,7 +24,7 @@ export function Fold({
   return (
     <Collapsible open={open} onOpenChange={onOpenChange}>
       <CollapsibleTrigger
-        className={`flex w-full items-baseline justify-between pr-5 text-left font-mono text-[10px] tracking-[.1em] text-muted uppercase hover:text-ink ${className}`}
+        className={`engrave flex w-full items-baseline justify-between pr-5 text-left font-mono text-[10px] tracking-[.1em] text-muted uppercase hover:text-ink ${className}`}
       >
         <span>{label}</span>
         <span className={`transition-transform duration-300 ${open ? "rotate-90" : ""}`}>›</span>

@@ -41,7 +41,7 @@ export function useSheet() {
 }
 
 /** A sheet's look: its paper, edge and room, wherever it sits. /ui's views draw a sheet in place with it. */
-export const SHEET_LOOK = "flex w-full flex-col rounded-t-2xl border border-b-0 border-faint bg-paper px-5 pt-4 pb-5 text-left text-ink";
+export const SHEET_LOOK = "hw-panel flex w-full flex-col rounded-t-2xl border border-b-0 border-faint bg-paper px-5 pt-4 pb-5 text-left text-ink";
 
 /** A sheet's panel: from the bottom when tall, a card in the middle when wide. Width on wide is the caller's. */
 export const SHEET = `${SHEET_LOOK} fixed inset-x-0 top-auto bottom-0 mx-auto max-h-dvh max-w-xl overflow-y-auto outline-none wide:inset-0 wide:my-auto wide:h-fit wide:max-h-[calc(100dvh-48px)] wide:rounded-2xl wide:border-b`;

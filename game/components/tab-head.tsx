@@ -27,7 +27,7 @@ export function TabHead({
 }) {
   return (
     <div className="flex items-center justify-between pt-1 pb-1.5 text-[11px] tracking-[.08em] text-muted">
-      <span>{title}</span>
+      <span className="engrave">{title}</span>
       {right && <span className="font-mono">{right}</span>}
       {tool && <span className="-my-2.5 -mr-2.5 flex items-center">{tool}</span>}
       {(sources || walk) && (
@@ -58,7 +58,7 @@ export function ListHead({
   return (
     <div
       {...rest}
-      className={`flex justify-between pr-5 font-mono text-[10px] tracking-[.1em] text-muted uppercase ${className}`}
+      className={`engrave flex justify-between pr-5 font-mono text-[10px] tracking-[.1em] text-muted uppercase ${className}`}
     >
       <span>{left}</span>
       {/* The tracking trails the last letter, so it hangs out by as much. */}

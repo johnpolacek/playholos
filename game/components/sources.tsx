@@ -26,7 +26,7 @@ export function Sources({ sources }: { sources: Source[] }) {
       <DrawerContent
         container={phone}
         initialFocus="content"
-        className="mx-auto flex max-h-[78dvh] w-full max-w-[560px] flex-col rounded-t-[22px] border-t border-faint bg-paper font-sans tracking-normal text-ink normal-case outline-none sm:border-x"
+        className="hw-panel mx-auto flex max-h-[78dvh] w-full max-w-[560px] flex-col rounded-t-[22px] border-t border-faint bg-paper font-sans tracking-normal text-ink normal-case outline-none sm:border-x"
       >
         <div aria-hidden className="mx-auto mt-2 h-1 w-9 rounded-full bg-faint" />
         <div className="flex items-center justify-between px-5 pt-2 pb-2">

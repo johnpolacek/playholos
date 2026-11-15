@@ -11,7 +11,7 @@ export function Tip({ text, trigger, toggleable }: { text: string; trigger: Reac
       <TooltipContent
         sideOffset={6}
         collisionPadding={8}
-        className="max-w-[240px] rounded-md border border-faint bg-panel px-2.5 py-1.5 text-[12px] leading-snug text-ink normal-case tracking-normal shadow-lg shadow-black/40 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none"
+        className="hw-panel max-w-[240px] rounded-md border border-faint bg-panel instrument:rounded-[4px] px-2.5 py-1.5 text-[12px] leading-snug text-ink normal-case tracking-normal shadow-lg shadow-black/40 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none"
       >
         {text}
       </TooltipContent>

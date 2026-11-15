@@ -2,7 +2,7 @@ import { Select, SelectContent, SelectItem, SelectItemIndicator, SelectLabel, Se
 
 // One of many, from a list that opens, on ui-sdk's Select: the arrow keys and typing find an item, and on a small touch
 // screen it opens as a sheet. Drawn as the native select it replaced was, a quiet outline, with our panel for its
-// list. 2026-11-15.
+// list. 2026-11-15. Under the Instrument skin its trigger is a key and its list a panel.
 
 export function Pick({
   label,
@@ -24,7 +24,7 @@ export function Pick({
     <Select items={options} value={value} onValueChange={(v) => v && onChange(v as string)} presentation="auto">
       <span className={`flex items-center gap-3 ${className}`}>
         <SelectLabel className={labelClass}>{label}</SelectLabel>
-        <SelectTrigger className="inline-flex items-center gap-2 rounded border whitespace-nowrap border-faint px-2 py-1 text-[14px] transition-colors hover:border-muted data-open:border-muted">
+        <SelectTrigger className="hw-key hw-key-dark inline-flex items-center gap-2 rounded border whitespace-nowrap border-faint px-2 py-1 text-[14px] transition-colors hover:border-muted data-open:border-muted">
           <SelectValue />
           <span aria-hidden className="text-[10px] text-muted">
             ▾
@@ -33,7 +33,7 @@ export function Pick({
       </span>
       <SelectContent
         sideOffset={4}
-        className="max-h-[min(60dvh,var(--available-height))] min-w-(--anchor-width) overflow-y-auto rounded-lg border border-faint bg-panel p-1 text-[14px] text-ink shadow-lg shadow-black/40 outline-none data-[presentation=sheet]:rounded-b-none data-[presentation=sheet]:pb-6"
+        className="max-h-[min(60dvh,var(--available-height))] min-w-(--anchor-width) hw-panel overflow-y-auto rounded-lg border border-faint bg-panel p-1 text-[14px] text-ink shadow-lg shadow-black/40 outline-none data-[presentation=sheet]:rounded-b-none data-[presentation=sheet]:pb-6"
       >
         {options.map((o) => (
           <SelectItem
