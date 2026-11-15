@@ -69,7 +69,6 @@ export const router = createBrowserRouter([
           { path: "ui/mind", lazy: later(() => import("@/app/views/mind")) },
           { path: "ui/send", lazy: later(() => import("@/app/views/send")) },
           { path: "ui/build", lazy: later(() => import("@/app/views/build")) },
-          { path: "ui/build-page", lazy: later(() => import("@/app/views/build-page")) },
           { path: "ui/lead", lazy: later(() => import("@/app/views/lead")) },
           { path: "ui/destination", lazy: later(() => import("@/app/views/destination")) },
           { path: "ui/begin", lazy: later(() => import("@/app/views/begin")) },
