@@ -1,5 +1,3 @@
-import { ConeLanes, coneEnd, laneOfRoad } from "@/components/light-cone";
-import { useLayout } from "@/lib/layout";
 import { Button } from "@ui-sdk/react/button";
 import { Slider, SliderControl, SliderThumb, SliderTrack } from "@ui-sdk/react/slider";
 import { Toggle } from "@ui-sdk/react/toggle";
@@ -944,7 +942,6 @@ export function Reach() {
   const { leads, visits, readings } = useLeads();
   const { plan, change } = usePlan();
   const { scale } = useSchedule();
-  const layout = useLayout();
   // A craft row, picked, shows it on the map: its star, where it is on its road, and the craft up close. One at a time,
   // and picked again, the map goes back to what it shows by itself. Voyager 1 takes the map out to it. 2026-11-08.
   const [picked, setPicked] = useState<string | null>(null);
@@ -1120,10 +1117,6 @@ export function Reach() {
   };
   if (!save) return null;
 
-  // The Light cone layout, for playtests behind ?layout=lightcone: our craft as lanes on one axis of Years, in place of
-  // the list, each from its own Road and picked for the map by the same aim as its row. 2026-11-15.
-  const cone = layout === "lightcone" ? [...flying.map((r) => ({ id: r.key, name: r.name, road: r.road, ordered: undefined as number | undefined })), ...stays.map((r) => ({ id: r.id, name: r.name, road: r.road, ordered: r.y }))] : [];
-
   const place = ({ lead, soonest, reached, bound }: (typeof places)[number]) => (
     <PlaceRow
       key={lead.slug}
@@ -1142,18 +1135,8 @@ export function Reach() {
 
       {/* "Sent" read as our messages too, and a blind first-timer missed theirs here twice. 2026-11-07. */}
       {/* "Craft sent · 2" counted a sentinel still Years from leaving. 2026-11-10. */}
-      {cone.length > 0 && (
-        <ConeLanes
-          className="mt-4"
-          label="Our craft, on their Years"
-          head={`Craft · ${cone.length}`}
-          range={[0, coneEnd(Math.max(clock ?? 0, ...cone.map((c) => c.road.home ?? 0)))]}
-          start={clock ?? 0}
-          lanes={(now) => cone.flatMap((c) => laneOfRoad(c.id, c.name, c.road, { ordered: c.ordered, aim: aimAt(c.id), now }) ?? [])}
-        />
-      )}
-      <ListHead left={`Craft · ${(gone ? 0 : 1) + flying.length + stays.length}`} right="Word home" className={cone.length ? "hidden" : "mt-4"} />
-      <ul className={cone.length ? "hidden" : "mt-1"}>
+      <ListHead left={`Craft · ${(gone ? 0 : 1) + flying.length + stays.length}`} right="Word home" className="mt-4" />
+      <ul className="mt-1">
         {flying.map((r) => (
           <Item key={r.key} row={r} now={clock ?? 0} began={clock !== null} aim={aimAt(r.key)} />
         ))}
