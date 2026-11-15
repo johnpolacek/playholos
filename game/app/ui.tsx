@@ -17,7 +17,7 @@ import { type Art, WINDOWS } from "@/lib/game/leads";
 import { BUILDS, SWITCHED } from "@/lib/game/plan";
 import { MIND_SOURCES } from "@/lib/game/sources";
 import { CATALOG } from "@/lib/sim/works";
-import { Btn } from "@/components/kit/button";
+import { Btn, MapPill } from "@/components/kit/button";
 import { Choice } from "@/components/kit/choice";
 import { Range } from "@/components/kit/range";
 
@@ -99,13 +99,10 @@ export default function Kit() {
             </div>
           </Card>
           <Card n={3} name="Map pill">
-            <Button
-              onClick={() => setCloser(!closer)}
-              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs"
-            >
+<MapPill onClick={() => setCloser(!closer)}>
               <Lens closer={closer} />
               {closer ? "Close View" : "Pull Back"}
-            </Button>
+            </MapPill>
           </Card>
 
           <Card n={4} name="Choice" span={2}>

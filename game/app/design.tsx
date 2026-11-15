@@ -10,7 +10,7 @@ import { Face, ListHead, TabHead } from "@/components/tab-head";
 import { VisitArt } from "@/components/visit-art";
 import { type Art, WINDOWS } from "@/lib/game/leads";
 import { BUILDS, LATER } from "@/lib/game/plan";
-import { Btn } from "@/components/kit/button";
+import { Btn, MapPill } from "@/components/kit/button";
 
 // The game's parts, in one place: its colors, its type, and each shared piece drawn live, with the file it lives in
 // and when to reach for it. Built 2026-10-28, so a new screen starts from what we have, not a copy of it. When a part
@@ -162,14 +162,14 @@ export default function Design() {
       </Part>
       <Part name="Map pill" file="components/map-strip.tsx" use="On the map, over the sky: a small pill on paper, with an icon. Close View, Pull Back, Back to Earth.">
         <div className="flex gap-1.5">
-          <Button onClick={() => setCloser(!closer)} className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs">
+          <MapPill onClick={() => setCloser(!closer)}>
             <Lens closer={closer} />
             {closer ? "Close View" : "Pull Back"}
-          </Button>
-          <Button className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs">
+          </MapPill>
+          <MapPill>
             <Globe />
             Back to Earth
-          </Button>
+          </MapPill>
         </div>
       </Part>
 

@@ -1,6 +1,7 @@
-import { Button } from "@ui-sdk/react/button";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
+import { Tip } from "@/components/tip";
+import { MapPill } from "@/components/kit/button";
 import { Lens } from "@/components/icons";
 import { useLeads } from "@/components/scan";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -25,13 +26,14 @@ export function WideLeads() {
   useEffect(() => () => void Object.assign(dials, { wide: 0 }), [dials]);
   if (!any || close || prefersReducedMotion()) return null;
   return (
-    <Button
-      onClick={() => setWide(!wide)}
-      title={wide ? "Back to the stars around us" : "See our warm glows across the Milky Way"}
-      className="absolute right-2.5 bottom-3 inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs"
-    >
-      <Lens closer={wide} />
-      {wide ? "Nearby Stars" : `Milky Way · ${count} warm glow${count > 1 ? "s" : ""}`}
-    </Button>
+    <Tip
+      text={wide ? "Back to the stars around us" : "See our warm glows across the Milky Way"}
+      trigger={
+        <MapPill onClick={() => setWide(!wide)} className="absolute right-2.5 bottom-3">
+          <Lens closer={wide} />
+          {wide ? "Nearby Stars" : `Milky Way · ${count} warm glow${count > 1 ? "s" : ""}`}
+        </MapPill>
+      }
+    />
   );
 }

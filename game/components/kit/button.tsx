@@ -41,3 +41,10 @@ export function Btn({
 }: React.ComponentProps<typeof Button> & { size?: BtnSize; fill?: BtnFill; className?: string }) {
   return <Button {...rest} className={`${btn(size, fill)} ${className}`.trim()} />;
 }
+
+/** A small pill over the map, on its paper, with an icon before its words: Close View, Pull Back, Back to Earth. */
+export const PILL = "inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs";
+
+export function MapPill({ className = "", ...rest }: React.ComponentProps<typeof Button> & { className?: string }) {
+  return <Button {...rest} className={`${PILL} ${className}`.trim()} />;
+}

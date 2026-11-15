@@ -1,3 +1,5 @@
+import { Button } from "@ui-sdk/react/button";
+import { MapPill } from "@/components/kit/button";
 import { useGame } from "@/components/game-provider";
 import { useLocation } from "react-router";
 import { Arrival } from "@/components/arrival";
@@ -36,8 +38,8 @@ const STAGES: { id: Stop; name: string; next: string }[] = [
 
 const LABEL =
   "pointer-events-none absolute top-2 left-2.5 rounded-[9px] border border-faint bg-paper px-[7px] py-0.5 font-mono text-[9.5px] tracking-[.06em]";
-const PILL = "inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs";
-const BUTTON = `absolute right-2.5 bottom-3 ${PILL}`;
+/** Where a pill sits on its own at the strip's foot. */
+const FOOT = "absolute right-2.5 bottom-3";
 
 // The board: a strip of the map under the top bar, a window onto the game's one sky, which flies here from the
 // charter. On Scan and a lead's page it shows Earth's leads, and a lead open whose system we know has a Close View into
@@ -111,10 +113,10 @@ export function MapStrip() {
         <>
           <BeamsMap className="absolute inset-0" />
           <span className={LABEL}>MESSAGES</span>
-          <button onClick={() => beams.pick(beams.list, null)} className={BUTTON}>
+          <MapPill onClick={() => beams.pick(beams.list, null)} className={FOOT}>
             <Globe />
             Back to Earth
-          </button>
+          </MapPill>
         </>
       ) : jumped && !scan && !onePage ? (
         <>
@@ -125,10 +127,10 @@ export function MapStrip() {
             {leads.close && " · CLOSE VIEW"}
           </span>
           {leads.look?.system && (
-            <button onClick={() => leads.setClose(!leads.close)} className={`absolute top-2 right-2.5 ${PILL}`}>
+            <MapPill onClick={() => leads.setClose(!leads.close)} className="absolute top-2 right-2.5">
               <Lens closer={!leads.close} />
               {leads.close ? "Pull Back" : "Close View"}
-            </button>
+            </MapPill>
           )}
         </>
       ) : talkedBuild ? (
@@ -142,15 +144,15 @@ export function MapStrip() {
           </span>
           <div className="absolute right-2.5 bottom-3 flex gap-1.5">
             {CLOSE[talkedBuild] && (
-              <button onClick={() => works.setClose(!works.close)} className={PILL}>
+              <MapPill onClick={() => works.setClose(!works.close)}>
                 <Lens closer={!works.close} />
                 {works.close ? "Pull Back" : "Close View"}
-              </button>
+              </MapPill>
             )}
-            <button onClick={() => setSentHome(subject!.from)} className={PILL}>
+            <MapPill onClick={() => setSentHome(subject!.from)}>
               <Globe />
               Back to Earth
-            </button>
+            </MapPill>
           </div>
         </>
       ) : talked ? (
@@ -162,32 +164,32 @@ export function MapStrip() {
             {leads.close && " · CLOSE VIEW"}
           </span>
           {leads.look?.system && (
-            <button onClick={() => leads.setClose(!leads.close)} className={`absolute top-2 right-2.5 ${PILL}`}>
+            <MapPill onClick={() => leads.setClose(!leads.close)} className="absolute top-2 right-2.5">
               <Lens closer={!leads.close} />
               {leads.close ? "Pull Back" : "Close View"}
-            </button>
+            </MapPill>
           )}
-          <button onClick={() => setSentHome(subject!.from)} className={BUTTON}>
+          <MapPill onClick={() => setSentHome(subject!.from)} className={FOOT}>
             <Globe />
             Back to Earth
-          </button>
+          </MapPill>
         </>
       ) : talkedPlaces ? (
         <>
           <TalkPlaces key={talkedPlaces.map((p) => p.name).join("|")} places={talkedPlaces} />
           <span className={LABEL}>{talkedPlaces.map((p) => p.name.toUpperCase()).join(" · ")}</span>
-          <button onClick={() => setSentHome(subject!.from)} className={BUTTON}>
+          <MapPill onClick={() => setSentHome(subject!.from)} className={FOOT}>
             <Globe />
             Back to Earth
-          </button>
+          </MapPill>
         </>
       ) : talkedStop ? (
         <>
           <Stops key={`talk-${talkedStop}`} from={talkedStop} />
-          <button onClick={() => setSentHome(subject!.from)} className={`absolute top-2 right-2.5 ${PILL}`}>
+          <MapPill onClick={() => setSentHome(subject!.from)} className="absolute top-2 right-2.5">
             <Globe />
             Back to Earth
-          </button>
+          </MapPill>
         </>
       ) : scan ? (
         <>
@@ -198,10 +200,10 @@ export function MapStrip() {
           </span>
           {/* A lead's Close View flies into its system, as a destination's does on Reach, and Pull Back out again. */}
           {leads.look?.system && (
-            <button onClick={() => leads.setClose(!leads.close)} className={`absolute top-2 right-2.5 ${PILL}`}>
+            <MapPill onClick={() => leads.setClose(!leads.close)} className="absolute top-2 right-2.5">
               <Lens closer={!leads.close} />
               {leads.close ? "Pull Back" : "Close View"}
-            </button>
+            </MapPill>
           )}
           {!leads.close && <MapKey className={`absolute right-2.5 ${leads.look?.system ? "top-12" : "top-2"}`} />}
           <WideLeads />
@@ -216,15 +218,15 @@ export function MapStrip() {
           </span>
           <div className="absolute right-2.5 bottom-3 flex gap-1.5">
             {CLOSE[works.picked!] && (
-              <button onClick={() => works.setClose(!works.close)} className={PILL}>
+              <MapPill onClick={() => works.setClose(!works.close)}>
                 <Lens closer={!works.close} />
                 {works.close ? "Pull Back" : "Close View"}
-              </button>
+              </MapPill>
             )}
-            <button onClick={() => works.pick(null)} className={PILL}>
+            <MapPill onClick={() => works.pick(null)}>
               <Globe />
               Back to Earth
-            </button>
+            </MapPill>
           </div>
         </>
       ) : reaching ? (
@@ -247,22 +249,22 @@ export function MapStrip() {
           <div className="absolute top-2 right-2.5 flex gap-1.5">
             {/* A destination's Close View flies into its system, and Pull Back out again. */}
             {reach.target.system && (
-              <button onClick={() => reach.setClose(!reach.close)} className={PILL}>
+              <MapPill onClick={() => reach.setClose(!reach.close)}>
                 <Lens closer={!reach.close} />
                 {reach.close ? "Pull Back" : "Close View"}
-              </button>
+              </MapPill>
             )}
             {reach.craft && !reach.close && (
-              <button onClick={() => reach.showCraft(reach.craft!.kind)} className={PILL}>
+              <MapPill onClick={() => reach.showCraft(reach.craft!.kind)}>
                 <Lens closer />
                 See It Close
-              </button>
+              </MapPill>
             )}
             {!reach.close && !reach.craft && (
-              <button onClick={() => reach.tour()} className={PILL}>
+              <MapPill onClick={() => reach.tour()}>
                 <Lens closer={false} />
                 Fly Out Again
-              </button>
+              </MapPill>
             )}
           </div>
         </>
@@ -273,14 +275,14 @@ export function MapStrip() {
       <BeginOnMap className={reaching ? "top-2" : "bottom-[9%]"} />
       <IdleNote />
       <Through />
-      <button
+      <Button
         onClick={() => setTall(!tall)}
         aria-label={tall ? "Show less of the map" : "Show more of the map"}
         aria-expanded={tall}
         className="absolute bottom-0 left-1/2 flex h-5 w-16 -translate-x-1/2 items-end justify-center pb-[5px] wide:hidden"
       >
         <span className="h-1 w-9 rounded-sm bg-faint" />
-      </button>
+      </Button>
       <Arrival />
     </div>
   );
@@ -469,10 +471,10 @@ function Stops({ from }: { from?: Stop } = {}) {
       </SkyArt>
       <Turn />
       <span className={LABEL}>{STAGES[stage].name}</span>
-      <button onClick={travel} className={BUTTON}>
+      <MapPill onClick={travel} className={FOOT}>
         {stage === STAGES.length - 1 ? <Globe /> : <Lens closer={false} />}
         {STAGES[stage].next}
-      </button>
+      </MapPill>
     </>
   );
 }
