@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Crosshair } from "@/components/kit/crosshair";
 import { createBrowserRouter, Outlet, redirect, ScrollRestoration, useLocation } from "react-router";
 import { track } from "@/lib/track";
 import { loadLayout, PAGES } from "@/app/about/load";
@@ -93,6 +94,8 @@ function Root() {
     <>
       <ScrollRestoration getKey={(location) => (location.key === "default" ? location.pathname : location.key)} />
       <Outlet />
+      {/* Focus as a crosshair, under the Schematic skin only. 2026-11-15. */}
+      <Crosshair />
     </>
   );
 }

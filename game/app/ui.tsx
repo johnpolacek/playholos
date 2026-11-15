@@ -386,6 +386,15 @@ export default function Kit() {
               ))}
             </div>
           </Card>
+          {/* Focus, drawn: under Schematic, a crosshair on the control the keys reach. 2026-11-15. */}
+          <Card n={33} name="Crosshair">
+            <div className="flex flex-col items-center gap-3">
+              <Btn size="row" fill="line">
+                Tab to me
+              </Btn>
+              <span className="font-mono text-[10px] tracking-[.08em] text-muted">FOCUS · SCHEMATIC</span>
+            </div>
+          </Card>
         </div>
       </main>
     </>
