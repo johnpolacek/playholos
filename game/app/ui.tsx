@@ -178,8 +178,8 @@ export default function Kit() {
           <Card n={7} name="Knob">
             {/* Range as a knob, where a dial is one of a bank. A knob under Instrument, and a line in chalk. */}
             <div className="flex w-full max-w-80 items-center gap-4 instrument:w-auto">
-              <Range knob label="Readable to" min={5} max={50} value={dial} onChange={setDial} valueText={(v) => `${v} light-years`} marks={[{ at: 20 }]} className="w-full instrument:w-14" />
-              <Range knob label="How cold it runs" tone="var(--other)" reverse value={cold} onChange={setCold} className="w-full instrument:w-14" />
+              <Range knob label="Readable to" min={5} max={50} value={dial} onChange={setDial} valueText={(v) => `${v} light-years`} marks={[{ at: 20 }]} className="w-full" />
+              <Range knob label="How cold it runs" tone="var(--other)" reverse value={cold} onChange={setCold} className="w-full" />
             </div>
           </Card>
           <Card n={8} name="Select">

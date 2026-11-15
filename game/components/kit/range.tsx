@@ -28,6 +28,7 @@ type Props = {
   knob?: boolean;
   /** Values marked on the knob's ring, as Holos' own setting. A line's marks stay the caller's. */
   marks?: { at: number; tone?: string }[];
+  /** The line's box. A knob keeps its own size, and the caller lays it out beside its words with `instrument:`. */
   className?: string;
 };
 
@@ -71,7 +72,7 @@ const THROW = 180;
  *  the right turns it up. The keys and a screen reader work ui-sdk's Slider, which sits out of sight beside it, as it
  *  does behind Reach's ruler: its arrow keys step, Page Up and Down leap, Home and End go to the ends. Nothing here
  *  moves by itself, so reduced motion has nothing to still. */
-function Knob({ value, onChange, min = 0, max = 100, step = 1, label, valueText, tone = "var(--you)", reverse = false, marks = [], className = "" }: Props) {
+function Knob({ value, onChange, min = 0, max = 100, step = 1, label, valueText, tone = "var(--you)", reverse = false, marks = [] }: Props) {
   const box = useRef<HTMLSpanElement>(null);
   const from = useRef<{ x: number; y: number; value: number } | null>(null);
   const frac = (v: number) => {
@@ -82,7 +83,7 @@ function Knob({ value, onChange, min = 0, max = 100, step = 1, label, valueText,
   const turn = (f: number) => (f - 0.5) * SWEEP;
   const lit = Math.round(at * TICKS);
   return (
-    <span ref={box} style={{ "--tone": tone } as React.CSSProperties} className={`group relative inline-block size-14 shrink-0 ${className}`}>
+    <span ref={box} style={{ "--tone": tone } as React.CSSProperties} className="group relative inline-block size-14 shrink-0">
       <Slider value={value} onValueChange={(v) => onChange(v as number)} min={min} max={max} step={step} format={valueText} dir={reverse ? "rtl" : undefined} className="sr-only">
         <SliderControl>
           <SliderTrack>

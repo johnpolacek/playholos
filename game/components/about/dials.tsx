@@ -377,8 +377,10 @@ export function Dials() {
             {DIALS.map((d, i) => {
               const v = values[d.key] ?? d.holos;
               return (
-                <li key={d.key}>
-                  <div className="flex items-baseline justify-between gap-4">
+                // Under the Instrument skin, 2026-11-15, each dial is a knob on the left of its words, with Holos'
+                // own setting marked on its ring.
+                <li key={d.key} className="instrument:grid instrument:grid-cols-[auto_1fr] instrument:items-center instrument:gap-x-4">
+                  <div className="flex items-baseline justify-between gap-4 instrument:col-start-2">
                     <span className="text-[15px] font-semibold">
                       <span className="mr-2 font-mono text-[10.5px] text-muted">
                         {i + 1}
@@ -389,8 +391,10 @@ export function Dials() {
                       {odds(v)}
                     </span>
                   </div>
-                  <div className="relative mt-2">
+                  <div className="relative mt-2 instrument:col-start-1 instrument:row-span-3 instrument:row-start-1 instrument:mt-0">
                     <Range
+                      knob
+                      marks={[{ at: toSlider(d.holos, d.lo, d.hi) }]}
                       label={d.label}
                       max={STEPS}
                       value={toSlider(v, d.lo, d.hi)}
@@ -401,13 +405,13 @@ export function Dials() {
                     <span
                       aria-hidden
                       title="Holos"
-                      className="absolute top-full mt-0.5 h-1.5 w-px bg-muted"
+                      className="absolute top-full mt-0.5 h-1.5 w-px bg-muted instrument:hidden"
                       style={{
                         left: `calc(${toSlider(d.holos, d.lo, d.hi) / 10}% - 0px)`,
                       }}
                     />
                   </div>
-                  <div className="mt-2 flex justify-between font-mono text-[10.5px] tracking-[.05em] text-muted">
+                  <div className="mt-2 flex justify-between font-mono text-[10.5px] tracking-[.05em] text-muted instrument:col-start-2">
                     <span>{odds(d.lo)}</span>
                     <span>{d.basis.toUpperCase()}</span>
                     <span>{odds(d.hi)}</span>

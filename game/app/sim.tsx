@@ -728,28 +728,39 @@ function Dial({
   onChange(n: number): void;
 }) {
   const over = limit !== undefined && value > limit;
+  // Under the Instrument skin, 2026-11-15, each dial is a knob with its name and number beside it, and the marks on
+  // the line move to the knob's ring: the starting odds in chalk, and the sky's limit in rose.
   return (
-    <div className="mt-4 block">
-      <span className="flex items-baseline justify-between gap-2 text-[13px]">
+    <div className="mt-4 block instrument:grid instrument:grid-cols-[auto_1fr] instrument:items-center instrument:gap-x-3">
+      <span className="flex items-baseline justify-between gap-2 text-[13px] instrument:col-start-2 instrument:self-end">
         <span>{label}</span>
         <span className="font-mono text-[12px]" style={{ color: over ? ROSE : undefined }}>
           {shows}
         </span>
       </span>
-      <span className="relative mt-1.5 block h-5">
+      <span className="relative mt-1.5 block h-5 instrument:col-start-1 instrument:row-span-2 instrument:row-start-1 instrument:mt-0 instrument:size-14">
         <span
-          className="absolute top-1/2 h-3 w-px -translate-y-1/2 bg-fill2"
+          className="absolute top-1/2 h-3 w-px -translate-y-1/2 bg-fill2 instrument:hidden"
           style={{ left: `${(mark / STEPS) * 100}%` }}
         />
         {limit !== undefined && (
           <span
-            className="absolute top-1/2 h-4 w-0.5 -translate-y-1/2"
+            className="absolute top-1/2 h-4 w-0.5 -translate-y-1/2 instrument:hidden"
             style={{ left: `${(limit / STEPS) * 100}%`, background: ROSE }}
           />
         )}
-        <Range label={label} max={STEPS} value={value} onChange={onChange} valueText={() => shows} className="absolute inset-0" />
+        <Range
+          knob
+          marks={[{ at: mark, tone: "var(--fill2)" }, ...(limit !== undefined ? [{ at: limit, tone: ROSE }] : [])]}
+          label={label}
+          max={STEPS}
+          value={value}
+          onChange={onChange}
+          valueText={() => shows}
+          className="absolute inset-0"
+        />
       </span>
-      <span className="mt-0.5 block font-mono text-[10px] text-muted">{basis}</span>
+      <span className="mt-0.5 block font-mono text-[10px] text-muted instrument:col-start-2 instrument:self-start">{basis}</span>
     </div>
   );
 }
