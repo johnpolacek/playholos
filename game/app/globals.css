@@ -12,6 +12,8 @@
 @custom-variant log (&:where([data-skin="log"] *));
 /* And for Infrared, as infrared:bg-none. 2026-11-15. */
 @custom-variant infrared (&:where([data-skin="infrared"] *));
+/* And for Arecibo, as arecibo:rounded-none. 2026-11-15. */
+@custom-variant arecibo (&:where([data-skin="arecibo"] *));
 
 /* Colors from explorations/v2-mocks/base.css: chalk on slate. The game is always dark. */
 :root {
@@ -506,6 +508,64 @@
   /* High on the left, a reversed slider's heat runs the other way. */
   [data-skin="infrared"] [data-slot="slider-indicator"]:dir(rtl) {
     background: linear-gradient(270deg, #3b1a6b, #8a2d7a 25%, #e2533e 55%, #f4a53c 80%, #fff2cf) 100% 0 / 100cqw 100% no-repeat;
+  }
+}
+
+/* Arecibo, 2026-11-15: the game as a 1-bit world, after the message sent from Arecibo in 1974, 73 rows by 23 columns
+   of pixels. One ink, --bit, on black, and nothing between. A fill is dithered where no words sit on it, and solid
+   where they do, so a dither never costs a word its edge. A control's edge is drawn in 2px bits with its corners
+   stepped, and a panel's in dotted 1px bits, so a list or a hint opening inside it is never clipped. Pixelify Sans, a
+   bitmap face, sets headings and labels, and narrower than the faces it stands in for, it breaks no line they don't;
+   body text stays SUSE. A choice is a bit, set or clear: on is solid ink with black words, off is an edge. A press
+   flips a control's pixels. A meter and a slider are a row of bits, set bit by bit over dithered ones. Nothing moves:
+   a bit flips at once, so reduced motion has nothing to still. Words stay chalk on black, 6.7:1 or more, and an edge
+   is the ink itself. */
+[data-skin="arecibo"] {
+  --page: #000;
+  --paper: #000;
+  --panel: #000;
+  --frame: #2a2a2a;
+  --faint: #2a2a2a;
+  --rowline: #2a2a2a;
+  --track: #000;
+  --bit: #e6e3db;
+  --button: #e6e3db;
+  --fill2: #e6e3db;
+  /* A quarter of the bits set: an off bit, or a fill under no words. */
+  --dither: conic-gradient(var(--bit) 25%, transparent 0) 0 0 / 2px 2px;
+}
+@layer base {
+  /* Focus on anything that isn't a control drawn in bits: a 2px ring of ink, a pixel off its edge. */
+  [data-skin="arecibo"] :focus-visible {
+    outline: 2px solid var(--bit);
+    outline-offset: 2px;
+  }
+}
+@layer utilities {
+  /* A heading or a label is set in bits. Above the font-mono utility it stands in for. */
+  [data-skin="arecibo"] :is(h1, h2, h3, .engrave, .font-mono) {
+    font-family: "Pixelify Sans Variable", var(--font-plex-mono);
+  }
+  /* A panel: black, its edge dotted bits a pixel in from each side, its corners stepped. */
+  [data-skin="arecibo"] .hw-panel {
+    border-radius: 0;
+    border-color: transparent;
+    box-shadow: none;
+    background-image:
+      repeating-linear-gradient(90deg, var(--bit) 0 1px, transparent 1px 2px),
+      repeating-linear-gradient(90deg, var(--bit) 0 1px, transparent 1px 2px),
+      repeating-linear-gradient(var(--bit) 0 1px, transparent 1px 2px),
+      repeating-linear-gradient(var(--bit) 0 1px, transparent 1px 2px);
+    background-position: 2px 0, 2px 100%, 0 2px, 100% 2px;
+    background-size: calc(100% - 4px) 1px, calc(100% - 4px) 1px, 1px calc(100% - 4px), 1px calc(100% - 4px);
+    background-repeat: no-repeat;
+    background-origin: border-box;
+  }
+  /* A row's rule, a list's head and a card's edge: a dotted line of bits, squared. */
+  [data-skin="arecibo"] :is(.border-faint, .border-rowline, .border-frame):not([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp) {
+    border-style: dotted;
+    border-color: var(--bit);
+    border-radius: 0;
   }
 }
 

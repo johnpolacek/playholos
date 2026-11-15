@@ -4,6 +4,8 @@ import "@fontsource/ibm-plex-mono/600.css";
 // The Log skin's serif, upright and italic. A face loads only once a page uses it, so chalk never fetches it. 2026-11-15.
 import "@fontsource-variable/newsreader/opsz.css";
 import "@fontsource-variable/newsreader/opsz-italic.css";
+// The Arecibo skin's bitmap face, for its headings and labels. Fetched only once a page uses it. 2026-11-15.
+import "@fontsource-variable/pixelify-sans/wght.css";
 import "./fonts.css";
 import "./app/globals.css";
 import { StrictMode } from "react";

@@ -7,6 +7,9 @@ import { useSyncExternalStore } from "react";
 // "log" draws the game as an observatory's logbook: dark ruled paper, a serif for the record and mono for the data,
 // readings as dated entries, the Mind's notes in the margin, and buttons as stamped labels. Also an exploration, never
 // the default. 2026-11-15.
+// "arecibo" draws the game as a 1-bit world, after the message sent from Arecibo in 1974, 73 rows by 23 columns of
+// pixels: one ink on black, fills dithered, edges stepped, a bitmap face for headings and labels. A press flips a
+// control's pixels, a meter fills bit by bit, and a choice reads as on and off bits. Never the default. 2026-11-15.
 // "infrared" draws the game as a thermal image, in an astronomer's false-color heat palette: idle controls are cold
 // violet-black, and hover, an open list, a choice and a press heat a control toward amber and white. Meters are heat
 // bars, focus is a heat bloom, and the Mind's note glows warm while it thinks. Text stays chalk. Never the default.
@@ -18,6 +21,7 @@ export const SKINS = [
   { id: "instrument", name: "Instrument", as: "A console" },
   { id: "log", name: "Log", as: "An observatory's logbook" },
   { id: "infrared", name: "Infrared", as: "A thermal image" },
+  { id: "arecibo", name: "Arecibo", as: "A 1-bit message" },
 ] as const;
 
 export type Skin = (typeof SKINS)[number]["id"];
@@ -34,7 +38,8 @@ export function setSkin(to: Skin) {
   heed.forEach((f) => f());
 }
 
-/** The skin, for a part whose markup differs by it. A part that only changes its classes uses `instrument:`, `log:` or `infrared:`. */
+/** The skin, for a part whose markup differs by it. A part that only changes its classes uses `instrument:`, `log:`, `infrared:` or
+ *  `arecibo:`. */
 export const useSkin = () =>
   useSyncExternalStore(
     (f) => (heed.add(f), () => void heed.delete(f)),
@@ -62,7 +67,7 @@ export function saveSkin(to: Skin) {
   }
 }
 
-/** The skin an address asks for, as ?skin=instrument, ?skin=log or ?skin=infrared, or null. For playtests: main.tsx reads it once as the game
+/** The skin an address asks for, as ?skin=instrument, ?skin=log, ?skin=infrared or ?skin=arecibo, or null. For playtests: main.tsx reads it once as the game
  *  loads, and it holds from page to page until the next full load. It is never kept, so the game opens in chalk
  *  again without it. 2026-11-15. */
 export function askedSkin(search: string): Skin | null {

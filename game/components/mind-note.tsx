@@ -37,6 +37,7 @@ function MindMark({ still }: { still: boolean }) {
 // hw-tape in app/globals.css, and the corner is a straight rule down the margin, with no line along its top.
 // While the Mind is still writing it, a note says so with data-thinking, 2026-11-15. Under the Infrared skin it glows
 // faintly warm then, behind its words, hw-tape in app/globals.css. No skin says it aloud: the words arriving do.
+// Under the Arecibo skin, 2026-11-15, the corner and its line are dotted bits, squared.
 export function MindNote({
   className = "",
   still = false,
@@ -56,13 +57,13 @@ export function MindNote({
       {edge && (
         <span
           aria-hidden
-          className="absolute top-2 bottom-0 left-0 w-[9px] rounded-tl-xl instrument:hidden border-t border-l border-you/40 [mask-image:linear-gradient(black,transparent)] log:top-1 log:rounded-none log:border-t-transparent log:[mask-image:linear-gradient(black_60%,transparent)]"
+          className="absolute top-2 bottom-0 left-0 w-[9px] rounded-tl-xl instrument:hidden border-t border-l border-you/40 [mask-image:linear-gradient(black,transparent)] log:top-1 log:rounded-none log:border-t-transparent log:[mask-image:linear-gradient(black_60%,transparent)] arecibo:rounded-none arecibo:border-dotted arecibo:border-(--bit)"
         />
       )}
       <div className="mb-1.5 flex h-4 items-center gap-[7px]">
         <MindMark still={still} />
         <span className="font-mono text-[9.5px] tracking-[.1em] whitespace-nowrap text-you">THE MIND</span>
-        <span aria-hidden className="mt-2 h-px flex-1 self-start instrument:hidden log:invisible bg-linear-to-r from-you/40 to-transparent to-90%" />
+        <span aria-hidden className="mt-2 h-px flex-1 self-start instrument:hidden log:invisible arecibo:bg-[repeating-linear-gradient(90deg,var(--bit)_0_1px,transparent_1px_2px)] bg-linear-to-r from-you/40 to-transparent to-90%" />
       </div>
       {children}
     </div>
