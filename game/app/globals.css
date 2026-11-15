@@ -567,6 +567,61 @@
     border-color: var(--bit);
     border-radius: 0;
   }
+  /* A control: drawn in bits of --px, its edge four bars stopping short of its corners and a bit set inside each, so
+     each corner steps; its fill, --surface, inside the edge. Each part is a layer of its background, so a list or a
+     hint inside it is never clipped. */
+  [data-skin="arecibo"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp) {
+    --px: 2px;
+    --edge: var(--bit);
+    --surface: transparent;
+    border-radius: 0;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--ink);
+    transition: none;
+    background:
+      linear-gradient(var(--edge), var(--edge)) calc(var(--px) * 2) 0 / calc(100% - var(--px) * 4) var(--px) no-repeat,
+      linear-gradient(var(--edge), var(--edge)) calc(var(--px) * 2) 100% / calc(100% - var(--px) * 4) var(--px) no-repeat,
+      linear-gradient(var(--edge), var(--edge)) 0 calc(var(--px) * 2) / var(--px) calc(100% - var(--px) * 4) no-repeat,
+      linear-gradient(var(--edge), var(--edge)) 100% calc(var(--px) * 2) / var(--px) calc(100% - var(--px) * 4) no-repeat,
+      linear-gradient(var(--edge), var(--edge)) left var(--px) top var(--px) / var(--px) var(--px) no-repeat,
+      linear-gradient(var(--edge), var(--edge)) right var(--px) top var(--px) / var(--px) var(--px) no-repeat,
+      linear-gradient(var(--edge), var(--edge)) left var(--px) bottom var(--px) / var(--px) var(--px) no-repeat,
+      linear-gradient(var(--edge), var(--edge)) right var(--px) bottom var(--px) / var(--px) var(--px) no-repeat,
+      linear-gradient(var(--surface), var(--surface)) var(--px) var(--px) / calc(100% - var(--px) * 2) calc(100% - var(--px) * 2) no-repeat;
+    background-origin: border-box;
+  }
+  /* A list's item draws no edge until it is reached. */
+  [data-skin="arecibo"] [data-slot="select-item"]:not([data-highlighted]) {
+    --edge: transparent;
+  }
+  /* Set bits: the one move, ours, theirs, a choice made, a toggle on, an item reached, a list open. Solid ink,
+     black words. */
+  [data-skin="arecibo"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):is(.bg-button, .bg-you, .bg-other, .bg-faint, .bg-\(--c\), [data-checked], [data-pressed], [data-highlighted], [data-open]) {
+    --surface: var(--bit);
+    color: var(--page);
+  }
+  /* Under the pointer, an edge a bit wider. */
+  [data-skin="arecibo"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):hover:where(:not(:disabled, [data-disabled])) {
+    --px: 3px;
+  }
+  /* A press flips every pixel: a clear control fills, a set one clears. */
+  [data-skin="arecibo"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):active:where(:not(:disabled, [data-disabled])) {
+    --surface: var(--bit);
+    color: var(--page);
+  }
+  [data-skin="arecibo"]
+    :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):is(.bg-button, .bg-you, .bg-other, .bg-faint, .bg-\(--c\), [data-checked], [data-pressed]):active:where(
+      :not(:disabled, [data-disabled])
+    ) {
+    --surface: transparent;
+    color: var(--ink);
+  }
+  /* Focus on a control: a ring of bits inside its edge, in its words' ink, with a bit of its fill between. */
+  [data-skin="arecibo"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 calc(var(--px) + 1px) var(--surface), inset 0 0 0 calc(var(--px) + 2px) currentColor;
+  }
 }
 
 body {
