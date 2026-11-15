@@ -9,6 +9,7 @@ import { tenths, yearText, YEAR_0 } from "@/lib/game/clock";
 import { dates, type Draft, farText, sendTime, target, WATCHER, watcherAway } from "@/lib/game/sends";
 import sky from "@/lib/game/sky.json";
 import { useSchedule } from "@/components/picks";
+import type { Sent } from "@/lib/game/types";
 import { CALL, callPasses, callReach, GRID_2040, noticeReach, powerFor, readReach, SIZES } from "@/lib/sim/messages";
 
 // The card the Mind offers when the Will asks to send. Aimed at a star, the ledger: where it goes, what travels, when
@@ -207,10 +208,35 @@ function GalaxyReach({ first, later }: { first: number; later: number | null }) 
  *  the stars near us or the Galaxy's plane: the array sends nothing unless we send it here. 2026-11-11. */
 function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: string }) {
   const { orderAt: year, save, send, stopSending } = useGame();
-  const sent = save?.sent?.find((s) => s.id === id);
   const { done } = useSchedule();
   const array = done["Galaxy Broadcast Array"];
-  const canCall = array != null && array <= (year ?? 0);
+  return (
+    <CallCard
+      draft={draft}
+      canCall={array != null && array <= (year ?? 0)}
+      sent={save?.sent?.find((s) => s.id === id)}
+      onSend={(how) => send({ ...draft, id, y: year ?? 0, asked, ...how })}
+      onStop={(sent) => stopSending(id, year ?? sent.y)}
+    />
+  );
+}
+
+/** A call to everyone, drawn: what travels, how far, the rings or the Galaxy, what it takes, and repeat or once. It holds
+ *  its own dial until sent. Everywhere feeds it the game, and /ui/send a fixed Earth. 2026-11-15. */
+export function CallCard({
+  draft,
+  canCall,
+  sent,
+  onSend,
+  onStop,
+}: {
+  draft: Draft;
+  /** Our Galaxy Broadcast Array stands, so the Galaxy is ours to call. */
+  canCall: boolean;
+  sent?: Sent;
+  onSend(how: Partial<Pick<Sent, "reach" | "repeat" | "galaxy">>): void;
+  onStop(sent: Sent): void;
+}) {
   const [dial, setDial] = useState(20);
   const [repeat, setRepeat] = useState(true);
   const [far, setFar] = useState(false);
@@ -275,7 +301,7 @@ function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: str
           {sent.repeat && sent.stopped === undefined ? (
             <>
               Calling since Year {yearText(sent.y)} ·{" "}
-              <Button type="button" onClick={() => stopSending(id, year ?? sent.y)} className="underline">
+              <Button type="button" onClick={() => onStop(sent)} className="underline">
                 Stop
               </Button>
             </>
@@ -293,7 +319,7 @@ function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: str
             ]}
           />
           {over && <p className="text-[12.5px] text-other">More power than Earth makes. Send less, or not as far.</p>}
-          <Buttons label={repeat ? "Start calling" : "Send once"} off={over} onSend={() => send({ ...draft, id, y: year ?? 0, asked, reach: galaxy ? reach : dial, repeat, ...(galaxy ? { galaxy: true } : {}) })} />
+          <Buttons label={repeat ? "Start calling" : "Send once"} off={over} onSend={() => onSend({ reach: galaxy ? reach : dial, repeat, ...(galaxy ? { galaxy: true } : {}) })} />
         </>
       )}
     </div>

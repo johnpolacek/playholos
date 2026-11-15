@@ -15,7 +15,7 @@ export default function MindView() {
   const [model, setModel] = useState<string>("claude-sonnet-5-5");
   const [effort, setEffort] = useState("medium");
   return (
-    <View code="MD-1" name="Mind" parts={["Tab head", "Collapsible", "Choice", "Mind note", "Ask", "Rail tabs"]}>
+    <View code="MD-1" name="Mind" parts={["Tab head", "Collapsible", "Choice", "Our bubble", "Mind note", "Field", "Tabs"]}>
       <div className="flex h-[640px] flex-col">
         <div className={TAB_PAGE}>
           <MindTab

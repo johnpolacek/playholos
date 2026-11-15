@@ -6,6 +6,7 @@
 export const VIEWS = [
   { to: "/ui/top-bar", label: "Top bar" },
   { to: "/ui/mind", label: "Mind" },
+  { to: "/ui/send", label: "Send" },
 ];
 
 export function View({
