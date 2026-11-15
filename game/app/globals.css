@@ -213,6 +213,20 @@
     font-family: var(--font-plex-mono);
     text-shadow: var(--hw-cut);
   }
+  /* A key: it stands off the panel, and goes down under a press. The move is one pixel and at once, so there is
+     nothing for reduced motion to still. */
+  [data-skin="instrument"] .hw-key {
+    box-shadow: var(--hw-key);
+  }
+  [data-skin="instrument"] .hw-key:active:not(:disabled) {
+    box-shadow: var(--hw-key-down);
+    translate: 0 1px;
+  }
+  /* A key in the panel's own paint, for a second or a quiet move. */
+  [data-skin="instrument"] .hw-key-dark {
+    background: var(--hw-face);
+    border-color: #060607;
+  }
   /* A screen behind glass: the picture sits back from its bezel, and the pane catches a little light across its top
      corner. The pane lets every press through. */
   [data-skin="instrument"] .hw-glass {
