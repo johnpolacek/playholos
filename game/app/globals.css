@@ -437,6 +437,28 @@
   [data-skin="schematic"] :is(.hw-key, .hw-key-dark, .stamp):active:not(:disabled) {
     background-image: var(--hatch);
   }
+  /* A meter's track and a slider's line are dimension lines: a hairline across, a tick at each end, and the tenths
+     marked under it. The reading runs along it, hatched, and ends on its own tick. */
+  [data-skin="schematic"] :is([data-slot="meter-track"], [data-slot="slider-track"]) {
+    border-radius: 0;
+    background:
+      linear-gradient(var(--line), var(--line)) center / 100% 1px no-repeat,
+      linear-gradient(var(--line), var(--line)) left / 1px 100% no-repeat,
+      linear-gradient(var(--line), var(--line)) right / 1px 100% no-repeat,
+      repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 10%) bottom / 100% 2px no-repeat;
+    box-shadow: none;
+  }
+  [data-skin="schematic"] [data-slot="meter-indicator"] {
+    color: var(--fill2);
+    background: var(--hatch);
+    border-right: 1px solid currentColor;
+  }
+  [data-skin="schematic"] [data-slot="slider-indicator"] {
+    color: var(--tone);
+    border-radius: 0;
+    background: var(--hatch);
+    border-right: 1px solid currentColor;
+  }
 }
 
 body {
