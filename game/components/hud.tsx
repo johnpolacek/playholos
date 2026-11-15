@@ -555,10 +555,10 @@ export function TopBar({ corner, year, status, meters, count }: { corner: React.
   return (
     <header
       data-shell="top"
-      className="relative grid shrink-0 grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 border-b border-faint bg-paper px-4 pt-4 pb-3 wide:col-span-2 wide:grid-cols-[1fr_minmax(0,520px)_1fr] wide:gap-x-10 wide:px-6 wide:py-3"
+      className="hw-panel relative grid shrink-0 grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 border-b border-faint bg-paper px-4 pt-4 pb-3 wide:col-span-2 wide:grid-cols-[1fr_minmax(0,520px)_1fr] wide:gap-x-10 wide:px-6 wide:py-3"
     >
       <div className="row-span-2 self-center">{corner}</div>
-      <span data-year className="text-right text-[15px] font-medium wide:col-start-3">
+      <span data-year className="text-right text-[15px] font-medium instrument:font-mono instrument:text-[14px] instrument:tabular-nums wide:col-start-3">
         {year}
       </span>
       <span className="text-right text-xs text-muted wide:col-start-3">{status}</span>

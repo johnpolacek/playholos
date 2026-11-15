@@ -56,14 +56,15 @@ export function Rail() {
  *  fixed ones. 2026-11-15. */
 export function RailNav({ children }: { children: React.ReactNode }) {
   return (
-    <nav data-shell="rail" aria-label="Main" className="grid h-16 shrink-0 grid-cols-4 border-t border-faint bg-paper wide:col-start-2 wide:row-start-3 wide:border-l">
+    <nav data-shell="rail" aria-label="Main" className="hw-panel grid h-16 shrink-0 grid-cols-4 border-t border-faint bg-paper instrument:gap-1.5 instrument:p-2 wide:col-start-2 wide:row-start-3 wide:border-l">
       {children}
     </nav>
   );
 }
 
 /** One tab on the rail: its name, lit when we are on it, with a count of signals heard in their color, or a dot for
- *  news. Shared with /ui. 2026-11-14. */
+ *  news. Shared with /ui. 2026-11-14. Under the Instrument skin, 2026-11-15, each tab is a key on the panel, and the
+ *  one we are on is held down, with a lamp line lit over its name in place of the line across its top. */
 export function RailTab({
   to,
   label,
@@ -84,7 +85,7 @@ export function RailTab({
       to={to}
       aria-current={on ? "page" : undefined}
       aria-label={aria}
-      className={`flex items-center justify-center gap-1.5 text-[11px] ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)]" : "text-muted"} ${calls ? "bg-other/10" : ""}`}
+      className={`flex items-center justify-center gap-1.5 text-[11px] hw-key-dark instrument:rounded-[7px] instrument:border instrument:font-mono instrument:tracking-[.08em] instrument:uppercase ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)] instrument:shadow-[inset_0_1px_3px_rgb(0_0_0/.7),inset_0_-2px_0_var(--ink)] instrument:bg-none instrument:bg-track" : "text-muted instrument:shadow-(--hw-key)"} ${calls ? "bg-other/10" : ""}`}
     >
       {label}
       {calls > 0 ? (
