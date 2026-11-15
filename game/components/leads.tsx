@@ -359,14 +359,13 @@ export function LeadList({
     const warm = l.art.kind === "warm";
     const faded = warm && l.facts.some(([k, v]) => k === "Faded" || (k === "Its light" && v.startsWith("Dust")));
     return (
-      <Face
-        mark={<LeadMark art={l.art} />}
-        tone={faded ? "text-other/60" : warm || l.reply ? "text-other" : "text-you"}
-        name={
-          <>
-            <b className={`font-semibold ${faded ? "text-other/70" : warm ? "text-other" : ""}`}>{starName(l.star)}</b> · {l.what}
-          </>
-        }
+      <LeadFace
+        art={l.art}
+        star={starName(l.star)}
+        what={l.what}
+        warm={warm}
+        faded={faded}
+        reply={!!l.reply}
         line={
           <>
             {read ? (
@@ -439,29 +438,14 @@ export function LeadList({
     const link = (l: Lead, i: number) => {
       const move = next(l);
       return (
-        <>
-          <Link to={`/play/lead/${l.slug}`} {...peek(i)} className={`block text-left ${move || bound(l) ? "pt-2.5 pb-1" : "py-2.5"}`}>
-            {row(l, !!move)}
-          </Link>
-          {bound(l) && (
-            <span className="-mt-0.5 mb-1.5 ml-7 block text-[12.5px] text-you">{bound(l)} of ours is on its way.</span>
-          )}
-          {move && (
-            <Link
-              to={move.to}
-              state={move.engage ? { engage: move.engage } : undefined}
-              {...peek(i)}
-              className="mb-2.5 ml-7 inline-flex h-7 items-center rounded-full border border-you/50 px-3 text-[12.5px] font-medium text-you transition-colors hover:border-you hover:bg-you/10"
-            >
-              {move.label} ›
-            </Link>
-          )}
-          {move?.more && (
-            <Link to={`/play/reach/${l.slug}`} state={{ engage: true }} className="mb-2.5 ml-2 inline-flex h-7 items-center text-[12.5px] text-muted hover:text-you">
-              Compare ways ›
-            </Link>
-          )}
-        </>
+        <LeadEntry
+          to={`/play/lead/${l.slug}`}
+          face={row(l, !!move)}
+          bound={bound(l)}
+          move={move ? { to: move.to, label: move.label, state: move.engage ? { engage: move.engage } : undefined } : null}
+          compare={move?.more ? `/play/reach/${l.slug}` : undefined}
+          peek={peek(i)}
+        />
       );
     };
     // Cold glows our craft hasn't seen up close gather in one row, where the first stood. The Halo Survey finds
@@ -638,5 +622,86 @@ export function LeadList({
         );
       })}
     </ul>
+  );
+}
+
+/** A lead's row, drawn: its mark, its star and what it is, a line under, and how soon we could reach it. Gold for a warm
+ *  glow, dimmer once it fades, and gold for one that speaks to us. LeadList feeds it the game, and /ui/scan a fixed sky.
+ *  2026-11-15. */
+export function LeadFace({
+  art,
+  star,
+  what,
+  warm = false,
+  faded = false,
+  reply = false,
+  line,
+  right,
+}: {
+  art: Lead["art"];
+  star: string;
+  what: React.ReactNode;
+  warm?: boolean;
+  faded?: boolean;
+  reply?: boolean;
+  line: React.ReactNode;
+  right: React.ReactNode;
+}) {
+  return (
+    <Face
+      mark={<LeadMark art={art} />}
+      tone={faded ? "text-other/60" : warm || reply ? "text-other" : "text-you"}
+      name={
+        <>
+          <b className={`font-semibold ${faded ? "text-other/70" : warm ? "text-other" : ""}`}>{star}</b> · {what}
+        </>
+      }
+      line={line}
+      right={right}
+    />
+  );
+}
+
+/** A lead on Scan's list, drawn: its row as a link to its page, a craft of ours on its way, and its next move as a link
+ *  of its own under it, with a way to compare. 2026-11-15. */
+export function LeadEntry({
+  to,
+  face,
+  bound,
+  move,
+  compare,
+  peek,
+}: {
+  to: string;
+  face: React.ReactNode;
+  /** A craft of ours bound for it, as "A sentinel". */
+  bound?: string | null;
+  move?: { to: string; label: string; state?: unknown } | null;
+  /** Where to compare the ways to it. */
+  compare?: string;
+  peek?: React.HTMLAttributes<HTMLElement>;
+}) {
+  return (
+    <>
+      <Link to={to} {...peek} className={`block text-left ${move || bound ? "pt-2.5 pb-1" : "py-2.5"}`}>
+        {face}
+      </Link>
+      {bound && <span className="-mt-0.5 mb-1.5 ml-7 block text-[12.5px] text-you">{bound} of ours is on its way.</span>}
+      {move && (
+        <Link
+          to={move.to}
+          state={move.state}
+          {...peek}
+          className="mb-2.5 ml-7 inline-flex h-7 items-center rounded-full border border-you/50 px-3 text-[12.5px] font-medium text-you transition-colors hover:border-you hover:bg-you/10"
+        >
+          {move.label} ›
+        </Link>
+      )}
+      {compare && (
+        <Link to={compare} state={{ engage: true }} className="mb-2.5 ml-2 inline-flex h-7 items-center text-[12.5px] text-muted hover:text-you">
+          Compare ways ›
+        </Link>
+      )}
+    </>
   );
 }

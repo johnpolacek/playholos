@@ -12,7 +12,7 @@ import { inOrder } from "@/lib/game/reach";
 // and a way to take it. At Year 4,200 a player had built everything they knew of, asked "what should I be doing?",
 // and didn't know the Seed Ship could carry us to a star. Playtest 2026-11-05.
 
-type Step = {
+export type Step = {
   label: string;
   /** Done, under way, or not yet. */
   at: "done" | "going" | "todo";
@@ -24,7 +24,7 @@ type Step = {
   /** The way to land on when it opens a star on Reach, as a Scan row's next move does. */
   engage?: boolean | string;
 };
-type Stage = { name: string; steps: Step[] };
+export type Stage = { name: string; steps: Step[] };
 
 export function usePath(): { stages: Stage[]; next: Step | null } {
   const { save, year } = useGame();
@@ -157,6 +157,12 @@ function Trail({ stage, next, open, toggle }: { stage: Stage; next: Step | null;
 /** Our path, on Scan: the three stages, and the next step to take. */
 export function Path() {
   const { stages, next } = usePath();
+  return <PathCard stages={stages} next={next} />;
+}
+
+/** Our path, drawn: the three stages as trails, one open at a time, and the next step as a link. Path feeds it the
+ *  game, and /ui/scan a fixed Earth. 2026-11-15. */
+export function PathCard({ stages, next }: { stages: Stage[]; next: Step | null }) {
   const [open, setOpen] = useState<string | null>(null);
   return (
     <section className="mt-1 mb-3 rounded-xl border border-faint px-3 py-2.5">

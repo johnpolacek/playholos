@@ -5,6 +5,7 @@
 /** The /ui pages: the kit's cards, then each view. The bar over them reads this. */
 export const VIEWS = [
   { to: "/ui/top-bar", label: "Top bar" },
+  { to: "/ui/scan", label: "Scan" },
   { to: "/ui/mind", label: "Mind" },
   { to: "/ui/send", label: "Send" },
   { to: "/ui/build", label: "Build" },
