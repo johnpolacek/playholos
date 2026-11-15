@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { plainClick } from "@/lib/leave";
 import { VisitArt } from "@/components/visit-art";
 import { chancesOf } from "@/lib/game/chance";
 import { type Lead, type Reading, starName } from "@/lib/game/leads";
@@ -73,15 +74,21 @@ export function HomesChart({ leads, readings }: { leads: Lead[]; readings: Recor
           const hot = over === l.slug;
           const g = face ? 18 : 3;
           return (
-            <g
+            // A real link, in the drawing: Tab reaches it, Enter follows it, and a screen reader names it. It was a group
+            // with a link's role and its own keys until 2026-11-15.
+            <a
               key={l.slug}
-              role="link"
-              tabIndex={0}
+              href={`/play/lead/${l.slug}`}
               aria-label={`${starName(l.star)}, ${lyOf(d)} light-years`}
-              onClick={() => navigate(`/play/lead/${l.slug}`)}
-              onKeyDown={(e) => e.key === "Enter" && navigate(`/play/lead/${l.slug}`)}
+              onClick={(e) => {
+                if (!plainClick(e)) return;
+                e.preventDefault();
+                navigate(`/play/lead/${l.slug}`);
+              }}
               onPointerEnter={() => setOver(l.slug)}
               onPointerLeave={() => setOver(null)}
+              onFocus={() => setOver(l.slug)}
+              onBlur={() => setOver(null)}
               className="cursor-pointer outline-none"
             >
               <line x1={MID} y1={MID} x2={x} y2={y} stroke="var(--you)" strokeOpacity={hot ? 0.6 : 0.12} strokeWidth=".6" />
@@ -100,7 +107,7 @@ export function HomesChart({ leads, readings }: { leads: Lead[]; readings: Recor
                   {starName(l.star)}
                 </text>
               )}
-            </g>
+            </a>
           );
         })}
       </svg>
