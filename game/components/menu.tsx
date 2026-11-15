@@ -82,7 +82,8 @@ export function FeedbackFace({ onSend }: { onSend(text: string): Promise<boolean
                 type="button"
                 onClick={() => void send()}
                 disabled={!text.trim() || state === "sending"}
-                className="h-9 shrink-0 rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-50"
+                // Under Schematic, 2026-11-15, drawn in an ink line, not filled.
+                className="h-9 shrink-0 rounded-md bg-button px-3.5 text-[13px] text-paper disabled:opacity-50 schematic:rounded-[1px] schematic:bg-transparent schematic:text-ink schematic:shadow-[inset_0_0_0_1px_currentColor]"
               >
                 {state === "sending" ? "Sending…" : "Send"}
               </Button>

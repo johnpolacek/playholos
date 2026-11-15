@@ -492,9 +492,10 @@ export function EngageBar({ to, star }: { to: string; star: string }) {
 /** The latest reading, in our blue: when and by what, what it found, how it moved our chances, and the Mind's word. */
 // Under the Log skin, 2026-11-15, a reading is a dated entry in the log: no box, only a rule over it in our blue, its
 // date line in mono, and the Mind's word on it in the margin's italic. The border stays, unseen, so nothing moves.
+// Under Schematic, 2026-11-15, it is drawn, not filled: its blue edge on the ground, squared.
 export function ReadingCard({ read, chance, onListen }: { read: Reading; chance?: React.ReactNode; onListen?: () => void }) {
   return (
-    <section data-m className="mt-3 rounded-xl border border-you/60 bg-you/[.06] px-3 py-2.5 log:rounded-none log:border-transparent log:border-t-you/60 log:bg-transparent">
+    <section data-m className="mt-3 rounded-xl border border-you/60 bg-you/[.06] px-3 py-2.5 log:rounded-none log:border-transparent log:border-t-you/60 log:bg-transparent schematic:rounded-[2px] schematic:bg-transparent">
       <span className="font-mono text-[10px] tracking-[.1em] text-you">
         READING · YEAR {yearText(read.at)} · {read.by.toUpperCase()}
       </span>

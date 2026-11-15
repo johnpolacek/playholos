@@ -85,7 +85,9 @@ export function RailTab({
       to={to}
       aria-current={on ? "page" : undefined}
       aria-label={aria}
-      className={`flex items-center justify-center gap-1.5 text-[11px] hw-key-dark instrument:rounded-[7px] instrument:border instrument:font-mono instrument:tracking-[.08em] instrument:uppercase ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)] instrument:shadow-[inset_0_1px_3px_rgb(0_0_0/.7),inset_0_-2px_0_var(--ink)] instrument:bg-none instrument:bg-track" : "text-muted instrument:shadow-(--hw-key)"} ${calls ? "bg-other/10" : ""}`}
+      // A tab with calls waiting is tinted. Under Schematic, 2026-11-15, nothing is filled, so it is hatched, as
+      // anything queued is.
+      className={`flex items-center justify-center gap-1.5 text-[11px] hw-key-dark instrument:rounded-[7px] instrument:border instrument:font-mono instrument:tracking-[.08em] instrument:uppercase ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)] instrument:shadow-[inset_0_1px_3px_rgb(0_0_0/.7),inset_0_-2px_0_var(--ink)] instrument:bg-none instrument:bg-track" : "text-muted instrument:shadow-(--hw-key)"} ${calls ? "bg-other/10 schematic:bg-transparent schematic:bg-(image:--hatch)" : ""}`}
     >
       {label}
       {calls > 0 ? (

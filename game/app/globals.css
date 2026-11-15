@@ -397,6 +397,47 @@
     font-family: var(--font-plex-mono);
   }
 }
+@layer utilities {
+  /* Every control is squared, as a drawn box is. */
+  [data-skin="schematic"] :is(.hw-key, .hw-key-dark, .hw-well, .stamp) {
+    border-radius: 1px;
+  }
+  [data-skin="schematic"] .hw-panel {
+    border-radius: 2px;
+  }
+  /* A filled control is drawn instead: its fill goes, and its color becomes its ink and its edge. */
+  [data-skin="schematic"]
+    :is(.hw-key, .stamp, [data-slot="segmented-control-item"], [data-slot="toggle"]):is(.bg-button, .bg-you, .bg-other, .bg-faint, .bg-\(--c\)) {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1px currentColor;
+  }
+  [data-skin="schematic"] :is(.hw-key, .stamp, [data-slot="segmented-control-item"]):is(.bg-button, .bg-faint) {
+    color: var(--ink);
+  }
+  [data-skin="schematic"] :is(.hw-key, .stamp):is(.bg-you) {
+    color: var(--you);
+  }
+  [data-skin="schematic"] :is(.hw-key, .stamp):is(.bg-other) {
+    color: var(--other);
+  }
+  [data-skin="schematic"] [data-slot="segmented-control-item"].bg-\(--c\) {
+    color: var(--c);
+  }
+  /* A quiet edge is lifted to a line that reads, until a hover or an open list lights it. */
+  [data-skin="schematic"] :is(.hw-key-dark, .hw-well):is(.border-faint, .border-frame):not(:hover, [data-open]) {
+    border-color: var(--line);
+  }
+  /* Pressed, chosen, or held down under a press: hatched. The change is at once, so nothing moves for reduced
+     motion to still. */
+  [data-skin="schematic"]
+    :is(
+      [data-slot="segmented-control-item"][data-checked]:is(.hw-key, .bg-button, .bg-\(--c\)),
+      [data-slot="toggle"][data-pressed]:is(.hw-key, .hw-key-dark)
+    ),
+  [data-skin="schematic"] :is(.hw-key, .hw-key-dark, .stamp):active:not(:disabled) {
+    background-image: var(--hatch);
+  }
+}
 
 body {
   background: var(--page);
