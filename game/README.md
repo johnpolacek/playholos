@@ -48,7 +48,7 @@ Everything else inside the shell is placeholder.
 
 ## Shared UI
 
-Every piece two screens or more share. Use these before writing a new one, and add a part here and to `/design` when a second screen needs it. `/design` draws them all live, with the colors and type, from `app/design.tsx`. `/ui` draws each on its own numbered card, laid out as SPEC-01/HARDWARE lays out its own, from `app/ui.tsx`. The two share one bar, `app/kit-layout.tsx`.
+Every piece two screens or more share. The kit's own parts on ui-sdk sit in `components/kit/`. Use these before writing a new one, and add a part here and to `/design` when a second screen needs it. `/design` draws them all live, with the colors and type, from `app/design.tsx`. `/ui` draws each on its own numbered card, laid out as SPEC-01/HARDWARE lays out its own, from `app/ui.tsx`. The two share one bar, `app/kit-layout.tsx`. `/ui`'s views, in `app/views/` and laid out as SPEC-01's own (`View` in `app/views/frame.tsx`), are the game's screens drawn by the same parts the game draws them with, fed a fixed Earth: a screen splits into a part that draws it and the game's part that feeds it, as `TopBar` and `Hud` do. Add a view to `VIEWS` and to `routes.tsx`.
 
 - `BackBar` (`components/back-bar.tsx`): every way back from a page to where it was opened. Never a pill. From a walk, its stops sit at the end.
 - `TabHead`, `ListHead`, `Face` (`components/tab-head.tsx`): a tab's top line, a list's head, and a list row.

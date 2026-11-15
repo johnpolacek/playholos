@@ -153,7 +153,6 @@ function Skip() {
   // The orders that answer was for. A build ordered and a tap on the jump before the server's new answer flew a
   // playtest 883 Years past Relay Search done, on the stop the plan had before it. 2026-11-14.
   const [answered, setAnswered] = useState<string | null>(null);
-  const [hover, setHover] = useState(false);
   const seed = save?.seed;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const query = useMemo(
@@ -224,14 +223,19 @@ function Skip() {
       />
     );
   if (to === null) return null;
+  return <JumpPill why={why} onJump={jump} rest={rest} />;
+}
+
+/** The jump to what comes next, drawn: a pill with faint specks of light, named for what it does, with its hint. "Next"
+ *  read as unclear in play. 2026-11-01. */
+export function JumpPill({ why, onJump, rest = false }: { why: string | null; onJump(): void; rest?: boolean }) {
+  const [hover, setHover] = useState(false);
   return (
-    <>
-      {/* A pill with faint specks of light, named for what it does: "Next" read as unclear in play. 2026-11-01. */}
-      <Tip
-        text="Jump ahead to when something new happens"
-        trigger={
+    <Tip
+      text="Jump ahead to when something new happens"
+      trigger={
         <Button
-          onClick={jump}
+          onClick={onJump}
           disabled={rest}
           onPointerEnter={() => setHover(true)}
           onPointerLeave={() => setHover(false)}
@@ -246,9 +250,8 @@ function Skip() {
           Jump to {why ?? "what comes next"}
           <span className="ml-1">›</span>
         </Button>
-        }
-      />
-    </>
+      }
+    />
   );
 }
 
@@ -412,106 +415,120 @@ export function Hud() {
   const searched = useMemo(() => searchOf(plan, scale), [plan, scale]);
   const searching = y !== null && combedAt(searched, now) < now - 0.05;
   // Tall: the menu's galaxy and the Year, then the meters below. Wide: one band, the meters between the galaxy and the Year.
-  // Equal side columns pin the meters to the center: an auto Year column made them jump as its line changed during a jump. 2026-11-07.
+  return (
+    <TopBar
+      corner={
+        <>
+          <Menu />
+          <Warp />
+        </>
+      }
+      // To hundredths, so the Year visibly ticks, a hundredth every 3 seconds, and the pace needs no words. 2026-11-01.
+      year={!save ? "" : `Year ${Math.max(0, shown ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+      status={
+        <>
+          {/* Before Begin, the count of what we would do first, which opens Begin. The calendar year and the pace read
+              as noise beside the Year, removed 2026-11-01. */}
+          {save && y !== null && (held ? <Held idle={idle} /> : <Skip />)}
+          <Begin />
+        </>
+      }
+      meters={
+        <>
+          <Meter
+            label="ENERGY"
+            hint={hint}
+            at={energy}
+            to={full !== undefined && now < full ? most : undefined}
+            value={pct(energy)}
+            sub={
+              full === undefined
+                ? "of the grid"
+                : now < full
+                  ? `${pct(most)} by Year ${Math.round(full)}`
+                  : "grid full"
+            }
+          />
+          <Meter
+            label="MATTER"
+            hint={hint}
+            value={kt(matter)}
+            sub={
+              short > 0 ? `${Math.round(short * 10) / 10} kt short` : "in orbit"
+            }
+            late={short > 0}
+          />
+          {fuel && (
+            <Meter
+              label="DEUTERIUM"
+              hint={hint}
+              at={fuel.d ? fuel.d.fill : 0}
+              value={kt(fuel.d?.stock ?? 0)}
+              sub={
+                !fuel.d || works === null
+                  ? "Works not done"
+                  : works > now
+                    ? `from Year ${Math.round(works)}`
+                    : fuel.d.until !== null
+                      ? `spoken for to Year ${yearText(fuel.d.until)}`
+                      : `+${Math.round(CATALOG.deuterium.perYear)} kt a Year`
+              }
+              late={fuel.d?.until != null && !hint}
+              tip={`The Deuterium Works makes ${Math.round(CATALOG.deuterium.perYear)} kt a Year. Each flyby probe draws ${CATALOG.probe.fuel} kt and each sentinel ${CATALOG.sentinel.fuel} kt, in the order sent. A probe our Ship Beam throws draws none.`}
+              go={fuel.d?.until != null && !hint ? "/play/reach" : undefined}
+            />
+          )}
+          <Meter
+            label="COMPUTE"
+            hint={hint}
+            at={compute}
+            value={
+              over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`
+            }
+            // Says what short means: a blind first-timer queued past our compute and never learned it slowed everything. 2026-11-07.
+            sub={
+              over
+                ? `${pct(share.short)} short, builds slow`
+                : idle && !hint
+                  ? "nothing building"
+                  : compute < 0.995
+                    ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}`
+                    : "none idle"
+            }
+            // A preview's shortfall stays in the preview's blue: orange read as an alarm. Blind playtest 2026-11-07.
+            late={over && !hint}
+            // "Searching" said nothing on its own: a blind first-timer asked the Mind what it meant. 2026-11-07.
+            tip={
+              searching && !over && compute < 0.995
+                ? "Compute our builds can’t use combs old recordings for signals no one caught."
+                : undefined
+            }
+            go={idle && !over && !hint ? "/play/build" : undefined}
+          />
+        </>
+      }
+      count={fuel ? 4 : 3}
+    />
+  );
+}
+
+/** The top bar, drawn: the menu's corner, the Year and what is next under it, and the meters. The game feeds it in
+ *  `Hud`, and /ui/top-bar feeds it a fixed Earth. Split 2026-11-15. */
+export function TopBar({ corner, year, status, meters, count }: { corner: React.ReactNode; year: string; status: React.ReactNode; meters: React.ReactNode; count: 3 | 4 }) {
+  // Equal side columns pin the meters to the center: an auto Year column made them jump as its line changed during a
+  // jump. 2026-11-07.
   return (
     <header
       data-shell="top"
       className="relative grid shrink-0 grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 border-b border-faint bg-paper px-4 pt-4 pb-3 wide:col-span-2 wide:grid-cols-[1fr_minmax(0,520px)_1fr] wide:gap-x-10 wide:px-6 wide:py-3"
     >
-      <div className="row-span-2 self-center">
-        <Menu />
-        <Warp />
-      </div>
-      <span
-        data-year
-        className="text-right text-[15px] font-medium wide:col-start-3"
-      >
-        {/* To hundredths, so the Year visibly ticks, a hundredth every 3 seconds, and the pace needs no words. 2026-11-01. */}
-        {!save
-          ? ""
-          : `Year ${Math.max(0, shown ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+      <div className="row-span-2 self-center">{corner}</div>
+      <span data-year className="text-right text-[15px] font-medium wide:col-start-3">
+        {year}
       </span>
-      <span className="text-right text-xs text-muted wide:col-start-3">
-        {/* Before Begin, the count of what we would do first, which opens Begin. */}
-        {save && y !== null && (
-          <>
-            {/* The calendar year and the pace read as noise beside the Year. Removed 2026-11-01. */}
-            {held ? <Held idle={idle} /> : <Skip />}
-          </>
-        )}
-        <Begin />
-      </span>
-      <div className={`col-span-2 mt-1 grid ${fuel ? "grid-cols-4" : "grid-cols-3"} gap-2.5 wide:col-span-1 wide:col-start-2 wide:row-span-2 wide:row-start-1 wide:mt-0 wide:w-full wide:self-center`}>
-        <Meter
-          label="ENERGY"
-          hint={hint}
-          at={energy}
-          to={full !== undefined && now < full ? most : undefined}
-          value={pct(energy)}
-          sub={
-            full === undefined
-              ? "of the grid"
-              : now < full
-                ? `${pct(most)} by Year ${Math.round(full)}`
-                : "grid full"
-          }
-        />
-        <Meter
-          label="MATTER"
-          hint={hint}
-          value={kt(matter)}
-          sub={
-            short > 0 ? `${Math.round(short * 10) / 10} kt short` : "in orbit"
-          }
-          late={short > 0}
-        />
-        {fuel && (
-          <Meter
-            label="DEUTERIUM"
-            hint={hint}
-            at={fuel.d ? fuel.d.fill : 0}
-            value={kt(fuel.d?.stock ?? 0)}
-            sub={
-              !fuel.d || works === null
-                ? "Works not done"
-                : works > now
-                  ? `from Year ${Math.round(works)}`
-                  : fuel.d.until !== null
-                    ? `spoken for to Year ${yearText(fuel.d.until)}`
-                    : `+${Math.round(CATALOG.deuterium.perYear)} kt a Year`
-            }
-            late={fuel.d?.until != null && !hint}
-            tip={`The Deuterium Works makes ${Math.round(CATALOG.deuterium.perYear)} kt a Year. Each flyby probe draws ${CATALOG.probe.fuel} kt and each sentinel ${CATALOG.sentinel.fuel} kt, in the order sent. A probe our Ship Beam throws draws none.`}
-            go={fuel.d?.until != null && !hint ? "/play/reach" : undefined}
-          />
-        )}
-        <Meter
-          label="COMPUTE"
-          hint={hint}
-          at={compute}
-          value={
-            over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`
-          }
-          // Says what short means: a blind first-timer queued past our compute and never learned it slowed everything. 2026-11-07.
-          sub={
-            over
-              ? `${pct(share.short)} short, builds slow`
-              : idle && !hint
-                ? "nothing building"
-                : compute < 0.995
-                  ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}`
-                  : "none idle"
-          }
-          // A preview's shortfall stays in the preview's blue: orange read as an alarm. Blind playtest 2026-11-07.
-          late={over && !hint}
-          // "Searching" said nothing on its own: a blind first-timer asked the Mind what it meant. 2026-11-07.
-          tip={
-            searching && !over && compute < 0.995
-              ? "Compute our builds can’t use combs old recordings for signals no one caught."
-              : undefined
-          }
-          go={idle && !over && !hint ? "/play/build" : undefined}
-        />
+      <span className="text-right text-xs text-muted wide:col-start-3">{status}</span>
+      <div className={`col-span-2 mt-1 grid ${count === 4 ? "grid-cols-4" : "grid-cols-3"} gap-2.5 wide:col-span-1 wide:col-start-2 wide:row-span-2 wide:row-start-1 wide:mt-0 wide:w-full wide:self-center`}>
+        {meters}
       </div>
     </header>
   );

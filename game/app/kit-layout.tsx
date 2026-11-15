@@ -1,12 +1,10 @@
 import { Link, Outlet, useLocation } from "react-router";
+import { VIEWS } from "@/app/views/frame";
 
 // The bar over the kit's pages, /ui and /design, as SPEC-01/HARDWARE's sits over its own: the kit's name on the left,
 // the pages on the right. The page below takes our blue as --accent. The accent picker left 2026-11-14.
 
-const PAGES = [
-  { label: "Components", to: "/ui" },
-  { label: "Design", to: "/design" },
-];
+const PAGES = [{ label: "Components", to: "/ui" }, ...VIEWS, { label: "Design", to: "/design" }];
 
 export default function KitLayout() {
   const { pathname } = useLocation();
@@ -16,7 +14,7 @@ export default function KitLayout() {
         <Link to="/ui" className="font-mono text-[11px] tracking-[.08em] text-ink">
           HOLOS/UI
         </Link>
-        <div className="flex gap-4 font-mono text-[10px] tracking-[.08em] uppercase">
+        <div className="flex flex-wrap justify-end gap-x-4 gap-y-1 font-mono text-[10px] tracking-[.08em] uppercase">
           {PAGES.map((p) => {
             const on = pathname === p.to;
             return (

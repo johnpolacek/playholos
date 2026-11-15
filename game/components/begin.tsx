@@ -114,6 +114,24 @@ export function useNext(but?: string) {
   return (save && STEPS.find((s) => s.to !== but && !s.done(save, now))) || null;
 }
 
+/** The top bar's way to Begin: the count of steps while some are open, and Begin once all are done. */
+export const COUNT =
+  "-my-1 -mr-1 inline-flex h-6 items-center gap-1.5 rounded-full border border-you/50 pr-2.5 pl-1.5 text-xs text-ink transition-colors hover:bg-you/10";
+export const BEGIN =
+  "relative -my-1.5 -mr-1 inline-flex h-8 items-center rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110";
+
+/** What the count says: its arcs, how many are done, and the next step's short name. */
+export function StepsTo({ done, next }: { done: boolean[]; next: string }) {
+  return (
+    <>
+      <Count done={done} />
+      {`${done.filter(Boolean).length} of ${done.length} steps to Begin`}
+      <span className="text-muted">·</span>
+      <b className="font-medium text-you">{next}</b>
+    </>
+  );
+}
+
 /** The count, drawn: an arc around a point for each step, lit as each is done. */
 function Count({ done }: { done: boolean[] }) {
   const arc = 100 / done.length;
@@ -347,19 +365,10 @@ export function Begin() {
           }}
           onPointerEnter={() => setHover(true)}
           onPointerLeave={() => setHover(false)}
-          className={
-            next
-              ? "-my-1 -mr-1 inline-flex h-6 items-center gap-1.5 rounded-full border border-you/50 pr-2.5 pl-1.5 text-xs text-ink transition-colors hover:bg-you/10"
-              : "relative -my-1.5 -mr-1 inline-flex h-8 items-center rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
-          }
+          className={next ? COUNT : BEGIN}
         >
           {next ? (
-            <>
-              <Count done={done} />
-              {`${n} of ${STEPS.length} steps to Begin`}
-              <span className="text-muted">·</span>
-              <b className="font-medium text-you">{next.short}</b>
-            </>
+            <StepsTo done={done} next={next.short} />
           ) : (
             <>
               <Sparks on={hover} />
