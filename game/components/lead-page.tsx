@@ -479,7 +479,10 @@ export function LeadHead({
 export function EngageBar({ to, star }: { to: string; star: string }) {
   return (
     <div data-m className="sticky bottom-0 z-10 -mx-4 mt-1.5 bg-panel px-4 pt-1 pb-3">
-      <Link to={to} state={{ engage: true }} className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110">
+      {/* A long star name wraps the words onto a second line on a phone, and a fixed 32px spilled them out of the
+          button. It grows with them now, and its 16px corners are a pill's on one line and stay round on two.
+          2026-11-15. */}
+      <Link to={to} state={{ engage: true }} className="inline-flex min-h-8 items-center rounded-2xl instrument:rounded-[7px] hw-key stamp bg-you px-4 py-1.5 text-[13px] leading-tight font-medium text-paper transition-[filter] hover:brightness-110">
         Engage {star}: send a craft or a message ›
       </Link>
     </div>
