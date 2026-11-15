@@ -513,6 +513,71 @@
     border-color: var(--frame);
   }
 }
+@layer utilities {
+  /* A control at rest: cold, its words chalk. Its edge and surface come from --edge and --surface, which each state
+     below sets, and they warm in a fifth of a second, or at once under reduced motion. */
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp) {
+    --edge: var(--heat-0);
+    --surface: var(--cold);
+    background-color: var(--surface);
+    background-image: radial-gradient(120% 140% at 50% 130%, color-mix(in srgb, var(--edge) 22%, transparent), transparent 70%);
+    border-color: var(--edge);
+    box-shadow: inset 0 0 0 1px var(--edge);
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp) {
+      transition: none;
+    }
+  }
+  /* A tab on the rail is no control drawn on its own: it keeps its place on the bar, and the one we are on its warm
+     line, in components/rail.tsx. */
+  /* A list's item has no edge of its own until it is reached. */
+  [data-skin="infrared"] [data-slot="select-item"]:not([data-highlighted]) {
+    --edge: transparent;
+    --surface: transparent;
+  }
+  /* A filled control's words were dark on its fill; the fill is gone, so they are chalk. The one move keeps a brighter
+     cold edge, and ours and theirs their own colors, so each still reads apart at rest. */
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):is(.text-paper, .text-page) {
+    color: var(--ink);
+  }
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp).bg-button {
+    --edge: #a58fd6;
+  }
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp).bg-you {
+    --edge: var(--you);
+  }
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp).bg-other {
+    --edge: var(--other);
+  }
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp).bg-\(--c\) {
+    --edge: var(--c);
+  }
+  /* The temperatures, coldest first, so a hotter state wins where two hold: each rule weighs the same, so the later
+     one holds. */
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):hover:where(:not(:disabled, [data-disabled])) {
+    --edge: var(--heat-1);
+    --surface: var(--warm-1);
+  }
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):is([data-open], [data-highlighted]) {
+    --edge: var(--heat-2);
+    --surface: var(--warm-2);
+  }
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):is([data-checked], [data-pressed]) {
+    --edge: var(--heat-3);
+    --surface: var(--warm-3);
+  }
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):active:where(:not(:disabled, [data-disabled])) {
+    --edge: var(--heat-4);
+    --surface: var(--warm-4);
+  }
+  /* Focus on a control: its own edge, and the bloom round it. */
+  [data-skin="infrared"] :is([data-slot="select-trigger"], [data-slot="select-item"], [data-slot="segmented-control-item"], [data-slot="toggle"]:not(li), .hw-key, .hw-key-dark:not([data-rail]), .stamp):focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 1px var(--edge), var(--bloom);
+  }
+}
 
 body {
   background: var(--page);
