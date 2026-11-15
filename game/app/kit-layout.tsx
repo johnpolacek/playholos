@@ -8,7 +8,6 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-  SelectValueIcon,
 } from "@ui-sdk/react/select";
 import { useLayoutEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router";
@@ -62,7 +61,10 @@ function SkinPicker() {
       <span className="flex shrink-0 items-center gap-2">
         <SelectLabel className="engrave font-mono text-[10px] tracking-[.08em] text-muted uppercase max-sm:sr-only">Skin</SelectLabel>
         <SelectTrigger className="hw-key hw-key-dark inline-flex h-7 items-center gap-2 rounded-full border border-faint pr-2.5 pl-2 font-mono text-[10.5px] tracking-[.08em] text-ink uppercase transition-colors instrument:rounded-[7px] hover:border-muted data-open:border-muted">
-          <SelectValueIcon />
+          {/* The swatch is drawn from the skin, not ui-sdk's SelectValueIcon: that copies the chosen item's icon only
+              once the list has opened, so the trigger grew by a swatch on the first open and the bar shifted.
+              2026-11-15. */}
+          <Swatch id={skin} />
           <SelectValue />
           <span aria-hidden className="text-[9px] text-muted">
             ▾
