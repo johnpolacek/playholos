@@ -1,7 +1,7 @@
-import { Toggle, ToggleGroup } from "@ui-sdk/react/toggle";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ui-sdk/react/collapsible";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
+import { Chips } from "@/components/kit/chips";
 import { useNext } from "@/components/begin";
 import { Ceilings, useShown } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
@@ -47,7 +47,7 @@ type Read = ReturnType<typeof readOf>;
 type Change = NonNullable<Talk["last"]>;
 type Idea = Talk["ideas"][string];
 
-const IDEAS = {
+export const IDEAS = {
   intro: "our compute",
   more: "more is sooner",
   idle: "idle",
@@ -649,28 +649,14 @@ export function Guide() {
           </MindNote>
         )}
         {talk && talk.seen.length > 1 && (
-          <div className="mt-1 flex flex-wrap items-center gap-[5px] font-mono text-[9.5px] tracking-[.08em] text-muted">
-            <span className="mr-0.5">
-              IDEAS MET · {talk.seen.length} OF {Object.keys(IDEAS).length}
-            </span>
-            <ToggleGroup
-              aria-label="Ideas met"
-              value={[talk.now]}
-              onValueChange={(v) => v[0] && reread(v[0] as Key)}
-              deselectable={false}
-              className="contents"
-            >
-              {talk.seen.filter((k): k is Key => k in IDEAS).map((k) => (
-                <Toggle
-                  key={k}
-                  value={k}
-                  className={`rounded-full border px-2 py-[3px] text-[10.5px] tracking-normal ${k === talk.now ? "border-you/70 text-you" : "border-faint text-page-ink2 hover:border-muted"}`}
-                >
-                  {IDEAS[k]}
-                </Toggle>
-              ))}
-            </ToggleGroup>
-          </div>
+          <Chips
+            head={`IDEAS MET · ${talk.seen.length} OF ${Object.keys(IDEAS).length}`}
+            label="Ideas met"
+            value={talk.now ?? ""}
+            onChange={(k) => reread(k as Key)}
+            options={talk.seen.filter((k): k is Key => k in IDEAS).map((k) => ({ value: k, label: IDEAS[k] }))}
+            className="mt-1"
+          />
         )}
         <div className="mt-3 flex min-h-[34px] items-center justify-between gap-2.5">
           <span className={`inline-flex items-center gap-[7px] text-[13px] ${full ? "text-ink" : over ? "text-other" : "text-muted"}`}>
