@@ -12,11 +12,12 @@ import { useSyncExternalStore } from "react";
 // focus is a crosshair. The art already reads as a diagram, so only the controls change. Never the default.
 // 2026-11-15.
 
+/** Each skin, with its name and what it draws the game as, in a few words for the /ui bar's picker. */
 export const SKINS = [
-  { id: "chalk", name: "Chalk" },
-  { id: "instrument", name: "Instrument" },
-  { id: "log", name: "Log" },
-  { id: "schematic", name: "Schematic" },
+  { id: "chalk", name: "Chalk", as: "The game as it is" },
+  { id: "instrument", name: "Instrument", as: "A console" },
+  { id: "log", name: "Log", as: "An observatory's logbook" },
+  { id: "schematic", name: "Schematic", as: "A technical drawing" },
 ] as const;
 
 export type Skin = (typeof SKINS)[number]["id"];

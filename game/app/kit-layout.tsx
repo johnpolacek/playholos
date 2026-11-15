@@ -1,4 +1,15 @@
-import { SegmentedControl, SegmentedControlItem } from "@ui-sdk/react/segmented-control";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectItemIcon,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+  SelectValueIcon,
+} from "@ui-sdk/react/select";
 import { useLayoutEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import { VIEWS } from "@/app/views/frame";
@@ -6,44 +17,80 @@ import { getSkin, savedSkin, saveSkin, setSkin, SKINS, type Skin, useSkin } from
 
 // The bar over the kit's pages, /ui and /design, as SPEC-01/HARDWARE's sits over its own: the kit's name on the left,
 // the pages on the right. The page below takes our blue as --accent. The accent picker left 2026-11-14.
-// Since 2026-11-15 the bar picks the skin, as SPEC-01's dots pick its accent: every card and view below changes at
+// Since 2026-11-15 the bar picks the skin: every card and view below changes at
 // once, so the two can be compared. The pick is kept per viewer, and leaves with the kit's pages: the game's own
 // pages keep the skin they had.
 
-// Each skin's dot, drawn as the skin is: chalk flat, Instrument a dark cap with a lamp, Log a square of ruled paper, Schematic a
-// crosshair drawn in a line.
+// Each skin's swatch, drawn as the skin is: chalk flat, Instrument a dark cap with a lamp, Log a square of ruled
+// paper, Schematic a crosshair drawn in a line on its blue-black.
 const DOT: Record<Skin, string> = {
-  chalk: "bg-button",
-  instrument: "bg-[radial-gradient(circle_at_50%_50%,var(--other)_1.5px,transparent_2px),linear-gradient(#2c2e32,#131416)] shadow-[inset_0_0_0_1px_#000]",
-  schematic: "rounded-none! bg-[linear-gradient(#bfe6f7,#bfe6f7)_center/100%_1px_no-repeat,linear-gradient(#bfe6f7,#bfe6f7)_center/1px_100%_no-repeat]",
-  log: "rounded-[2px]! bg-[repeating-linear-gradient(#14130f_0_3px,#7d7566_3px_4px)] shadow-[inset_0_0_0_1px_#7d7566]",
+  chalk: "rounded-full bg-button",
+  instrument: "rounded-full bg-[radial-gradient(circle_at_50%_50%,var(--other)_1.5px,transparent_2px),linear-gradient(#2c2e32,#131416)] shadow-[inset_0_0_0_1px_#000]",
+  log: "rounded-[2px] bg-[repeating-linear-gradient(#14130f_0_3px,#7d7566_3px_4px)] shadow-[inset_0_0_0_1px_#7d7566]",
+  schematic: "relative rounded-[1px] bg-[#06101b] shadow-[inset_0_0_0_1px_#4f8aa8]",
 };
 
+const Swatch = ({ id }: { id: Skin }) => (
+  <i aria-hidden className={`block size-3.5 shrink-0 ${DOT[id]}`}>
+    {id === "schematic" && (
+      <>
+        <i className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[#bfe6f7]" />
+        <i className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-[#bfe6f7]" />
+      </>
+    )}
+  </i>
+);
+
+// The picker, 2026-11-15. It was a row of bare dots, and with four skins a playtest couldn't tell what they were or
+// that there were more. Now it names the skin it is in, and opens a list of each, with its swatch and what it draws
+// the game as, on ui-sdk's Select: the arrow keys and typing find one, and on a small touch screen it opens as a
+// sheet. A screen reader hears "Skin" and the skin's name; the swatches are aria-hidden. The list fades in, or shows
+// at once under reduced motion.
 function SkinPicker() {
   const skin = useSkin();
   return (
-    <SegmentedControl
-      aria-label="Skin"
+    <Select
+      items={SKINS.map((k) => ({ value: k.id, label: k.name }))}
       value={skin}
       onValueChange={(v) => {
         if (!v) return;
         setSkin(v as Skin);
         saveSkin(v as Skin);
       }}
-      className="flex shrink-0 items-center gap-2"
+      presentation="auto"
     >
-      {SKINS.map((k) => (
-        <SegmentedControlItem
-          key={k.id}
-          value={k.id}
-          aria-label={k.name}
-          title={k.name}
-          className={({ checked }) =>
-            `size-3.5 rounded-full outline-offset-4 ${DOT[k.id]} ${checked ? "ring-1 ring-ink ring-offset-2 ring-offset-paper" : "opacity-70 hover:opacity-100"}`
-          }
-        />
-      ))}
-    </SegmentedControl>
+      <span className="flex shrink-0 items-center gap-2">
+        <SelectLabel className="engrave font-mono text-[10px] tracking-[.08em] text-muted uppercase max-sm:sr-only">Skin</SelectLabel>
+        <SelectTrigger className="hw-key hw-key-dark inline-flex h-7 items-center gap-2 rounded-full border border-faint pr-2.5 pl-2 font-mono text-[10.5px] tracking-[.08em] text-ink uppercase transition-colors instrument:rounded-[7px] hover:border-muted data-open:border-muted">
+          <SelectValueIcon />
+          <SelectValue />
+          <span aria-hidden className="text-[9px] text-muted">
+            ▾
+          </span>
+        </SelectTrigger>
+      </span>
+      <SelectContent
+        sideOffset={6}
+        className="hw-panel min-w-[240px] rounded-lg border border-faint bg-panel p-1 text-ink shadow-lg shadow-black/40 outline-none transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 data-[presentation=sheet]:rounded-b-none data-[presentation=sheet]:pb-6 motion-reduce:transition-none"
+      >
+        {SKINS.map((k) => (
+          <SelectItem
+            key={k.id}
+            value={k.id}
+            className="flex cursor-pointer items-center gap-3 rounded px-2.5 py-2 outline-none data-highlighted:bg-ink/10"
+          >
+            <SelectItemIcon>
+              <Swatch id={k.id} />
+            </SelectItemIcon>
+            <span className="flex min-w-0 grow flex-col">
+              <SelectItemText className="text-[14px] leading-snug">{k.name}</SelectItemText>
+              <span className="text-[12px] leading-snug text-page-ink2">{k.as}</span>
+            </span>
+            <SelectItemIndicator className="text-you">✓</SelectItemIndicator>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
 
