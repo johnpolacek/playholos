@@ -10,6 +10,8 @@
 @custom-variant instrument (&:where([data-skin="instrument"] *));
 /* And one for the Log skin, as log:rounded-none. 2026-11-15. */
 @custom-variant log (&:where([data-skin="log"] *));
+/* And for Schematic, as schematic:bg-transparent. 2026-11-15. */
+@custom-variant schematic (&:where([data-skin="schematic"] *));
 
 /* Colors from explorations/v2-mocks/base.css: chalk on slate. The game is always dark. */
 :root {
@@ -345,6 +347,54 @@
   /* Paper is squared too. */
   [data-skin="log"] .hw-panel {
     border-radius: 3px;
+  }
+}
+
+/* Schematic, the fourth skin, 2026-11-15: the game as a technical drawing. Thin cyan-white lines on a deep blue-black,
+   and no filled surface: a panel, a sheet and the page are one ground, set apart by their lines and a faint drafting
+   grid. A button is drawn, not filled, in its own line color, and each build keeps its color as its line. A control
+   pressed, chosen or queued is hatched, as a section is in a drawing. A meter or a slider is a dimension line with its
+   end ticks and its tenths, its reading hatched along it. Focus is a crosshair, components/kit/crosshair.tsx, over a
+   thin ring. The rings, threads and orbits are drawn as diagrams already, so the art stays as it is. Body text is 7.8:1
+   or more on the ground, and a control's edge, --line, 5:1. None of it applies to the other skins. */
+[data-skin="schematic"] {
+  --page: #06101b;
+  --paper: #06101b;
+  --panel: #06101b;
+  --frame: #1d3a50;
+  --faint: #1d3a50;
+  --rowline: #142a3b;
+  --track: #1d3a50;
+  --ink: #dcf2ff;
+  --page-ink2: #a3c6d9;
+  --muted: #86abc0;
+  --button: #dcf2ff;
+  --fill2: #bfe6f7;
+  /* The edge of anything we press. */
+  --line: #4f8aa8;
+  /* A section's hatching, in the color of what it hatches, light enough that words on it stay crisp. */
+  --hatch: repeating-linear-gradient(-45deg, color-mix(in srgb, currentColor 24%, transparent) 0 1px, transparent 1px 5px);
+  /* The drafting grid, every 16px, almost out of sight. */
+  --grid:
+    linear-gradient(rgb(120 200 240 / 0.05) 1px, transparent 1px) 0 0 / 16px 16px,
+    linear-gradient(90deg, rgb(120 200 240 / 0.05) 1px, transparent 1px) 0 0 / 16px 16px;
+}
+@layer base {
+  /* A thin ring of ink, and the crosshair over it. */
+  [data-skin="schematic"] :focus-visible {
+    outline: 1px solid var(--ink);
+    outline-offset: 3px;
+  }
+}
+@layer components {
+  /* A panel, a sheet or a tab's page is the ground with its grid on it. */
+  [data-skin="schematic"] :is(.hw-panel, .ledger) {
+    background: var(--grid);
+    background-color: var(--panel);
+    background-attachment: local;
+  }
+  [data-skin="schematic"] .engrave {
+    font-family: var(--font-plex-mono);
   }
 }
 

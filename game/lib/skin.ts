@@ -7,11 +7,16 @@ import { useSyncExternalStore } from "react";
 // "log" draws the game as an observatory's logbook: dark ruled paper, a serif for the record and mono for the data,
 // readings as dated entries, the Mind's notes in the margin, and buttons as stamped labels. Also an exploration, never
 // the default. 2026-11-15.
+// "schematic" draws the game as a technical drawing: thin cyan-white lines on a deep blue-black, nothing filled. A
+// control that is pressed, chosen or queued is hatched, a meter or a slider is a dimension line with its ticks, and
+// focus is a crosshair. The art already reads as a diagram, so only the controls change. Never the default.
+// 2026-11-15.
 
 export const SKINS = [
   { id: "chalk", name: "Chalk" },
   { id: "instrument", name: "Instrument" },
   { id: "log", name: "Log" },
+  { id: "schematic", name: "Schematic" },
 ] as const;
 
 export type Skin = (typeof SKINS)[number]["id"];
@@ -28,7 +33,7 @@ export function setSkin(to: Skin) {
   heed.forEach((f) => f());
 }
 
-/** The skin, for a part whose markup differs by it. A part that only changes its classes uses `instrument:` or `log:`. */
+/** The skin, for a part whose markup differs by it. A part that only changes its classes uses `instrument:`, `log:` or `schematic:`. */
 export const useSkin = () =>
   useSyncExternalStore(
     (f) => (heed.add(f), () => void heed.delete(f)),
@@ -56,7 +61,7 @@ export function saveSkin(to: Skin) {
   }
 }
 
-/** The skin an address asks for, as ?skin=instrument or ?skin=log, or null. For playtests: main.tsx reads it once as the game
+/** The skin an address asks for, as ?skin=instrument, ?skin=log or ?skin=schematic, or null. For playtests: main.tsx reads it once as the game
  *  loads, and it holds from page to page until the next full load. It is never kept, so the game opens in chalk
  *  again without it. 2026-11-15. */
 export function askedSkin(search: string): Skin | null {

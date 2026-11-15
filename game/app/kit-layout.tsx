@@ -10,10 +10,12 @@ import { getSkin, savedSkin, saveSkin, setSkin, SKINS, type Skin, useSkin } from
 // once, so the two can be compared. The pick is kept per viewer, and leaves with the kit's pages: the game's own
 // pages keep the skin they had.
 
-// Each skin's dot, drawn as the skin is: chalk flat, Instrument a dark cap with a lamp, Log a square of ruled paper.
+// Each skin's dot, drawn as the skin is: chalk flat, Instrument a dark cap with a lamp, Log a square of ruled paper, Schematic a
+// crosshair drawn in a line.
 const DOT: Record<Skin, string> = {
   chalk: "bg-button",
   instrument: "bg-[radial-gradient(circle_at_50%_50%,var(--other)_1.5px,transparent_2px),linear-gradient(#2c2e32,#131416)] shadow-[inset_0_0_0_1px_#000]",
+  schematic: "rounded-none! bg-[linear-gradient(#bfe6f7,#bfe6f7)_center/100%_1px_no-repeat,linear-gradient(#bfe6f7,#bfe6f7)_center/1px_100%_no-repeat]",
   log: "rounded-[2px]! bg-[repeating-linear-gradient(#14130f_0_3px,#7d7566_3px_4px)] shadow-[inset_0_0_0_1px_#7d7566]",
 };
 
