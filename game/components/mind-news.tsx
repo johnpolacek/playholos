@@ -312,7 +312,7 @@ export function YearZeroFace({
           {gathering && <Gathering />}
         </MindNote>
       </div>
-      <Close data-z="item" className="mt-6 h-[46px] rounded-full bg-button px-8 text-[15px] font-medium text-paper">
+      <Close data-z="item" className="mt-6 h-[46px] rounded-full instrument:rounded-[7px] hw-key bg-button px-8 text-[15px] font-medium text-paper">
         Continue
       </Close>
     </>

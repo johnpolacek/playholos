@@ -85,7 +85,7 @@ function Banner({ h, more, onHide }: { h: Heard; more: number; onHide(): void })
       </div>
       <Link
         to={`/play?heard=${encodeURIComponent(heardId(h))}`}
-        className="flex h-9 shrink-0 items-center rounded-full bg-other px-4 text-[13px] font-semibold text-page"
+        className="flex h-9 shrink-0 items-center rounded-full instrument:rounded-[7px] hw-key bg-other px-4 text-[13px] font-semibold text-page"
       >
         Open on Scan
       </Link>

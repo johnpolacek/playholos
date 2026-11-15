@@ -213,7 +213,7 @@ export default function Kit() {
             </div>
           </Card>
           <Card n={12} name="Sheet">
-            <RunLocal className="inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper px-3.5 text-[13px]">
+            <RunLocal className="inline-flex h-8 items-center gap-1.5 rounded-full instrument:rounded-[7px] hw-key-dark border border-faint bg-paper px-3.5 text-[13px]">
               Run locally
               <span className="text-muted">↓</span>
             </RunLocal>

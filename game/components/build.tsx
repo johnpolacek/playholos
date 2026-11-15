@@ -66,7 +66,7 @@ export function Build() {
         </>
       )}
       <div className="mt-auto flex shrink-0 flex-col gap-2 pt-4 pb-4">
-        <Button onClick={() => leaveShell(newGame)} className="h-9 rounded-full border border-ink text-sm">
+        <Button onClick={() => leaveShell(newGame)} className="h-9 rounded-full instrument:rounded-[7px] hw-key-dark border border-ink text-sm">
           New game
         </Button>
       </div>

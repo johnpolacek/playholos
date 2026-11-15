@@ -81,7 +81,7 @@ export function BehaveDials() {
           <Button
             type="button"
             onClick={() => behave.set(HOLOS)}
-            className="rounded-full border border-faint px-3 py-1 font-mono text-[10.5px] tracking-[.1em] text-muted hover:text-ink"
+            className="rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3 py-1 font-mono text-[10.5px] tracking-[.1em] text-muted hover:text-ink"
           >
             HOLOS
           </Button>

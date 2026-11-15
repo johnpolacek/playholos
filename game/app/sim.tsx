@@ -547,14 +547,14 @@ export default function Sim() {
                   </p>
                   <div className="flex gap-1.5">
                     <Button
-                      className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
+                      className="rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={at <= 0}
                       onClick={() => setAt((a) => Math.max(0, a - 1))}
                     >
                       Back
                     </Button>
                     <Button
-                      className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px]"
+                      className="rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3 py-0.5 font-mono text-[11px]"
                       onClick={() => (at >= split - 1 ? goTab("stars") : (setOpening(false), setAt((a) => a + 1)))}
                     >
                       Next
@@ -578,21 +578,21 @@ export default function Sim() {
                   </p>
                   <div className="flex gap-1.5">
                     <Button
-                      className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
+                      className="rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={place <= 0}
                       onClick={() => go(place - 1)}
                     >
                       Back
                     </Button>
                     <Button
-                      className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
+                      className="rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={place >= places.length - 1}
                       onClick={() => go(place + 1)}
                     >
                       Next
                     </Button>
                     <Button
-                      className="w-16 rounded-full border border-faint px-2 py-0.5 font-mono text-[11px] text-muted hover:text-ink"
+                      className="w-16 rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-2 py-0.5 font-mono text-[11px] text-muted hover:text-ink"
                       onClick={() => setAuto((a) => !a)}
                     >
                       {auto ? "Hold" : "Drift"}
@@ -684,13 +684,13 @@ export default function Sim() {
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
                 <Button
-                  className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] hover:text-ink"
+                  className="rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3 py-1 font-mono text-[11px] hover:text-ink"
                   onClick={() => setSeed((s) => s + 1)}
                 >
                   Roll again
                 </Button>
                 <Button
-                  className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] text-muted hover:text-ink"
+                  className="rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3 py-1 font-mono text-[11px] text-muted hover:text-ink"
                   onClick={() => {
                     setValues({});
                     setSpread(HOLOS_ODDS.spreadTop);
@@ -787,7 +787,7 @@ function Time({
     <div className="mt-3">
       <div className="flex items-center gap-2">
         <Button
-          className="w-14 shrink-0 rounded-full border border-faint px-2 py-0.5 font-mono text-[11px]"
+          className="w-14 shrink-0 rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-2 py-0.5 font-mono text-[11px]"
           onClick={onPlay}
         >
           {playing ? "Pause" : "Play"}

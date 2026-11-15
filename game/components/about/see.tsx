@@ -295,7 +295,7 @@ export function See() {
                   held.current = true;
                   setRung(i);
                 }}
-                className={`rounded-full border px-3 py-1 font-mono text-[10.5px] tracking-[.1em] transition-colors ${i === rung ? "border-other text-other" : "border-faint text-muted hover:text-ink"}`}
+                className={`rounded-full instrument:rounded-[7px] hw-key-dark border px-3 py-1 font-mono text-[10.5px] tracking-[.1em] transition-colors ${i === rung ? "border-other text-other" : "border-faint text-muted hover:text-ink"}`}
               >
                 <span className="mr-1.5 opacity-60">{i + 1}</span>
                 {r.name.toUpperCase()}

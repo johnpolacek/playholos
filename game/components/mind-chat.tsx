@@ -237,7 +237,7 @@ export function useTalkSubject(): TalkSubject | null {
   return null;
 }
 
-const STEP = "rounded-full border border-faint bg-paper px-3 py-1 text-[13.5px] text-page-ink2 transition-colors hover:border-muted hover:text-ink";
+const STEP = "rounded-full instrument:rounded-[7px] hw-key-dark border border-faint bg-paper px-3 py-1 text-[13.5px] text-page-ink2 transition-colors hover:border-muted hover:text-ink";
 
 /** Under the last answer, the way to each lead it names, up to three, straight to a warm glow's Close Reading. An answer
  *  that speaks of a Close Reading and names no glow goes to our latest. 2026-11-04. */
@@ -356,7 +356,7 @@ export function KeyRow({ onClear = forgetKey }: { onClear?: () => unknown }) {
       {sure ? (
         <>
           <span className="px-2 text-other">Clear it?</span>
-          <Button type="button" onClick={onClear} className="rounded-full bg-other px-2 py-0.5 text-paper">
+          <Button type="button" onClick={onClear} className="rounded-full instrument:rounded-[7px] hw-key bg-other px-2 py-0.5 text-paper">
             Clear
           </Button>
           <Button type="button" onClick={() => setSure(false)} className="px-2 py-0.5 text-page-ink2 hover:text-ink">
@@ -473,7 +473,7 @@ export function AskBox({ busy, onAsk, className = "", focus = false }: { busy: b
       }}
     >
       {queued && <p className="mb-1.5 px-1 text-[13.5px] leading-snug text-muted">Next, once we finish: “{queued}”</p>}
-      <div className="flex h-11 items-center gap-2 rounded-full border border-ink bg-paper pr-1.5 pl-3.5">
+      <div className="flex h-11 items-center gap-2 rounded-full instrument:rounded-[7px] border border-ink bg-paper pr-1.5 pl-3.5">
         <Input
           ref={box}
           value={input}
@@ -482,7 +482,7 @@ export function AskBox({ busy, onAsk, className = "", focus = false }: { busy: b
           aria-label="Ask the Mind"
           className="min-w-0 grow bg-transparent text-base outline-none placeholder:text-muted"
         />
-        <Button type="submit" disabled={!input.trim()} aria-label="Send" className="size-8 shrink-0 rounded-full bg-button text-paper disabled:opacity-35">
+        <Button type="submit" disabled={!input.trim()} aria-label="Send" className="size-8 shrink-0 rounded-full instrument:rounded-[7px] hw-key bg-button text-paper disabled:opacity-35">
           ↑
         </Button>
       </div>
@@ -507,7 +507,7 @@ export function Hello({ onAsk }: { onAsk(text: string): void }) {
             key={q}
             type="button"
             onClick={() => onAsk(q)}
-            className="rounded-full border border-faint px-3 py-1 text-[14px] text-page-ink2 transition-colors hover:border-muted hover:text-ink"
+            className="rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3 py-1 text-[14px] text-page-ink2 transition-colors hover:border-muted hover:text-ink"
           >
             {q}
           </Button>

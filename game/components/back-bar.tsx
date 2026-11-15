@@ -9,7 +9,7 @@ export function BackBar({ to, state, label, stops }: { to: string; state?: unkno
       to={to}
       state={state}
       data-m
-      className="group relative flex h-12 w-full items-center gap-2 overflow-hidden rounded-full border border-faint bg-[#1d1e21] pr-[18px] pl-3.5 text-[14.5px] font-medium text-ink transition-colors hover:border-[#4a4c51]"
+      className="group relative flex h-12 w-full items-center gap-2 overflow-hidden rounded-full instrument:rounded-[7px] hw-key-dark border border-faint bg-[#1d1e21] pr-[18px] pl-3.5 text-[14.5px] font-medium text-ink transition-colors hover:border-[#4a4c51]"
     >
       <span aria-hidden className="starfield absolute inset-0" />
       <span aria-hidden className="relative text-[20px] leading-none transition-transform group-hover:-translate-x-0.5">

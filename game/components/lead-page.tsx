@@ -132,7 +132,7 @@ function ListenButton({ onClick }: { onClick(): void }) {
   return (
     <Button
       onClick={onClick}
-      className="mt-2 inline-flex h-8 items-center gap-2 self-start rounded-full border border-other/70 px-3.5 text-[13px] text-other transition-colors hover:bg-other/10"
+      className="mt-2 inline-flex h-8 items-center gap-2 self-start rounded-full instrument:rounded-[7px] hw-key-dark border border-other/70 px-3.5 text-[13px] text-other transition-colors hover:bg-other/10"
     >
       <svg viewBox="0 0 16 10" className="h-2.5 w-4" aria-hidden>
         <path d="M0 5h2l1-3 2 6 2-8 2 10 2-7 1 4 1-2h3" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
@@ -379,7 +379,7 @@ export function LeadPage({ slug }: { slug: string }) {
         <Button
           data-m
           onClick={() => setClose(!close)}
-          className="mt-2 flex h-9 w-full items-center justify-center gap-2 rounded-full border border-faint text-[13.5px] font-medium hover:border-muted"
+          className="mt-2 flex h-9 w-full items-center justify-center gap-2 rounded-full instrument:rounded-[7px] hw-key-dark border border-faint text-[13.5px] font-medium hover:border-muted"
         >
           <Lens closer={!close} size={15} />
           {close ? "Pull Back" : "See where it sits"}
@@ -479,7 +479,7 @@ export function LeadHead({
 export function EngageBar({ to, star }: { to: string; star: string }) {
   return (
     <div data-m className="sticky bottom-0 z-10 -mx-4 mt-1.5 bg-panel px-4 pt-1 pb-3">
-      <Link to={to} state={{ engage: true }} className="inline-flex h-8 items-center rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110">
+      <Link to={to} state={{ engage: true }} className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110">
         Engage {star}: send a craft or a message ›
       </Link>
     </div>

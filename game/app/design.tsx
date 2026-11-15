@@ -101,7 +101,7 @@ export default function Design() {
       </p>
       <nav className="mt-5 flex flex-wrap gap-2 font-mono text-[11px] tracking-[.06em]">
         {["Colors", "Type", "Buttons", "Navigation", "Lists", "The Mind", "Marks", "Art"].map((s) => (
-          <a key={s} href={`#${s.toLowerCase().replace(" ", "-")}`} className="rounded-full border border-faint px-3 py-1 text-muted hover:text-ink">
+          <a key={s} href={`#${s.toLowerCase().replace(" ", "-")}`} className="rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3 py-1 text-muted hover:text-ink">
             {s.toUpperCase()}
           </a>
         ))}
@@ -156,7 +156,7 @@ export default function Design() {
           <Btn size="page" fill="line">Ask the Mind about it</Btn>
           <div className="flex gap-2">
             <Btn>Feed It</Btn>
-            <Button className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium text-muted">Sent, to hide</Button>
+            <Button className="h-8 rounded-full instrument:rounded-[7px] hw-key-dark border border-faint px-3.5 text-[13px] font-medium text-muted">Sent, to hide</Button>
           </div>
         </div>
       </Part>

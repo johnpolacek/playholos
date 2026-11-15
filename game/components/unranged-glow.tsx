@@ -82,7 +82,7 @@ export function UnrangedGlow({ n, flash }: { n: number; flash: FlashSeen }) {
         {!gone && at === null && (
           <Link
             to={`/play/build/${buildSlug("Infrared Telescope")}`}
-            className="mt-2.5 inline-flex h-8 items-center rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+            className="mt-2.5 inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
           >
             Build our Infrared Telescope ›
           </Link>
@@ -90,7 +90,7 @@ export function UnrangedGlow({ n, flash }: { n: number; flash: FlashSeen }) {
         {!gone && to !== null && (
           <Button
             onClick={jump}
-            className="mt-2.5 inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+            className="mt-2.5 inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
           >
             Jump to its ranging ›
           </Button>

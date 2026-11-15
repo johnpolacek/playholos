@@ -150,7 +150,7 @@ export function CloseReading({ lead }: { lead: Lead }) {
             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
               <Link
                 to={`/play/reach/${lead.slug}`}
-                className="inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+                className="inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
               >
                 Engage {starName(lead.star)}
               </Link>
@@ -198,7 +198,7 @@ export function CloseReading({ lead }: { lead: Lead }) {
           ) : (
             <Button
               onClick={() => change((p) => ({ ...p, closeReads: [...(p.closeReads ?? []), { name: lead.star, y: now }] }))}
-              className="mt-2 h-8 rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+              className="mt-2 h-8 rounded-full instrument:rounded-[7px] hw-key bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
             >
               Read its light
             </Button>

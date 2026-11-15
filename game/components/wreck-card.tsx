@@ -35,12 +35,12 @@ function Order({ label, sure: yes, tone, give, note }: { label: string; sure: st
           give();
           setSure(false);
         }}
-        className={`h-9 rounded-full px-4 text-[14px] font-medium text-paper ${tone}`}
+        className={`h-9 rounded-full instrument:rounded-[7px] hw-key px-4 text-[14px] font-medium text-paper ${tone}`}
       >
         {sure ? yes : label}
       </Button>
       {sure && (
-        <Button onClick={() => setSure(false)} className="h-9 rounded-full border border-ink px-4 text-[14px]">
+        <Button onClick={() => setSure(false)} className="h-9 rounded-full instrument:rounded-[7px] hw-key-dark border border-ink px-4 text-[14px]">
           Not now
         </Button>
       )}

@@ -116,9 +116,9 @@ export function useNext(but?: string) {
 
 /** The top bar's way to Begin: the count of steps while some are open, and Begin once all are done. */
 export const COUNT =
-  "-my-1 -mr-1 inline-flex h-6 items-center gap-1.5 rounded-full border border-you/50 pr-2.5 pl-1.5 text-xs text-ink transition-colors hover:bg-you/10";
+  "-my-1 -mr-1 inline-flex h-6 items-center gap-1.5 rounded-full instrument:rounded-[7px] hw-key-dark border border-you/50 pr-2.5 pl-1.5 text-xs text-ink transition-colors hover:bg-you/10";
 export const BEGIN =
-  "relative -my-1.5 -mr-1 inline-flex h-8 items-center rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110";
+  "relative -my-1.5 -mr-1 inline-flex h-8 items-center rounded-full instrument:rounded-[7px] hw-key bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110";
 
 /** What the count says: its arcs, how many are done, and the next step's short name. */
 export function StepsTo({ done, next }: { done: boolean[]; next: string }) {
@@ -269,7 +269,7 @@ export function StepsList({
             <Link
               to={next.to}
               onClick={onLeave}
-              className="flex h-[46px] items-center justify-center rounded-full bg-button px-3 text-center text-[15px] leading-tight font-medium text-paper"
+              className="flex h-[46px] items-center justify-center rounded-full instrument:rounded-[7px] hw-key bg-button px-3 text-center text-[15px] leading-tight font-medium text-paper"
             >
               {next.name}
             </Link>
@@ -413,7 +413,7 @@ export function BeginOnMap({ className = "" }: { className?: string }) {
       onPointerLeave={() => setHover(false)}
       onFocus={() => setHover(true)}
       onBlur={() => setHover(false)}
-      className={`absolute left-1/2 inline-flex h-12 -translate-x-1/2 items-center rounded-full bg-you px-8 text-lg font-medium text-paper transition-[filter] hover:brightness-110 ${className}`}
+      className={`absolute left-1/2 inline-flex h-12 -translate-x-1/2 items-center rounded-full instrument:rounded-[7px] hw-key bg-you px-8 text-lg font-medium text-paper transition-[filter] hover:brightness-110 ${className}`}
     >
       {/* Begin is the one thing left, so it calls the way the next step's node does. */}
       <span aria-hidden className="absolute inset-0 rounded-full border border-you motion-safe:animate-ping" />

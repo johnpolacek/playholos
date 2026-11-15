@@ -164,7 +164,7 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
         initialFocus="content"
         className="fixed inset-0 flex h-dvh max-h-none w-full max-w-none flex-col items-center justify-center bg-black/95 px-4 text-ink outline-none"
       >
-        <DialogClose aria-label="Close" className="absolute top-4 right-4 inline-flex h-9 items-center rounded-full border border-ink/40 px-4 font-mono text-[12px] tracking-[.12em] text-ink uppercase transition-colors hover:border-ink hover:bg-ink hover:text-black">
+        <DialogClose aria-label="Close" className="absolute top-4 right-4 inline-flex h-9 items-center rounded-full instrument:rounded-[7px] hw-key-dark border border-ink/40 px-4 font-mono text-[12px] tracking-[.12em] text-ink uppercase transition-colors hover:border-ink hover:bg-ink hover:text-black">
           Close ✕
         </DialogClose>
         <span className="font-mono text-[10.5px] tracking-[.16em] text-other uppercase">A voice from beyond our system</span>
@@ -175,7 +175,7 @@ export function WatcherVoice({ onClose }: { onClose(): void }) {
               <p className="text-[15px] leading-snug text-page-ink2">It speaks in our own languages, learned from our broadcasts.</p>
               <Button
                 onClick={listen}
-                className="mt-5 inline-flex h-10 items-center rounded-full bg-other px-6 text-[14px] font-medium text-black transition-[filter] hover:brightness-110"
+                className="mt-5 inline-flex h-10 items-center rounded-full instrument:rounded-[7px] hw-key bg-other px-6 text-[14px] font-medium text-black transition-[filter] hover:brightness-110"
               >
                 Listen ›
               </Button>

@@ -692,7 +692,7 @@ export function LeadEntry({
           to={move.to}
           state={move.state}
           {...peek}
-          className="mb-2.5 ml-7 inline-flex h-7 items-center rounded-full border border-you/50 px-3 text-[12.5px] font-medium text-you transition-colors hover:border-you hover:bg-you/10"
+          className="mb-2.5 ml-7 inline-flex h-7 items-center rounded-full instrument:rounded-[7px] hw-key-dark border border-you/50 px-3 text-[12.5px] font-medium text-you transition-colors hover:border-you hover:bg-you/10"
         >
           {move.label} ›
         </Link>

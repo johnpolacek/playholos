@@ -50,7 +50,7 @@ export function Through() {
   return (
     <Button
       onClick={go}
-      className="absolute top-2 right-2.5 z-10 inline-flex h-8 items-center gap-1.5 rounded-full border border-other/70 bg-paper/90 pr-2 pl-3 text-xs text-other backdrop-blur-sm transition-colors hover:bg-other/10"
+      className="absolute top-2 right-2.5 z-10 inline-flex h-8 items-center gap-1.5 rounded-full instrument:rounded-[7px] hw-key-dark border border-other/70 bg-paper/90 pr-2 pl-3 text-xs text-other backdrop-blur-sm transition-colors hover:bg-other/10"
     >
       {!page ? `View ${next}` : next ? `Next · ${next}` : `Back to ${on.name}`}
       {next && (

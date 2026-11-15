@@ -135,7 +135,7 @@ export function Reach() {
               key={x.key}
               type="button"
               onClick={() => setPick(x.key)}
-              className={`rounded-full border px-3 py-1 font-mono text-[10.5px] tracking-[.1em] transition-colors ${x.key === pick ? "border-other text-other" : "border-faint text-muted hover:text-ink"}`}
+              className={`rounded-full instrument:rounded-[7px] hw-key-dark border px-3 py-1 font-mono text-[10.5px] tracking-[.1em] transition-colors ${x.key === pick ? "border-other text-other" : "border-faint text-muted hover:text-ink"}`}
             >
               {x.name.toUpperCase()}
             </Button>

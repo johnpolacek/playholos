@@ -79,7 +79,7 @@ function Answer({ shown, setShown }: { shown: boolean; setShown: (v: boolean) =>
           <div className="absolute inset-0 flex items-center justify-center">
             <Button
               onClick={() => setShown(true)}
-              className="h-10 rounded-full bg-button px-5 text-[14px] font-medium text-paper"
+              className="h-10 rounded-full instrument:rounded-[7px] hw-key bg-button px-5 text-[14px] font-medium text-paper"
             >
               Reveal our answer
             </Button>

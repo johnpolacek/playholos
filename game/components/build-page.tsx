@@ -114,7 +114,7 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
           {!full && (
             <Button
               onClick={() => change(growing ? takeBack(name, now) : orderLater(name, now))}
-              className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${growing ? "border border-ink" : "bg-button text-paper"}`}
+              className={`mt-2.5 h-11 rounded-full instrument:rounded-[7px] text-[15px] font-medium ${growing ? "border border-ink hw-key-dark" : "bg-button text-paper hw-key"}`}
             >
               {growing ? "Hold Its Size" : "Let It Grow"}
             </Button>

@@ -46,10 +46,10 @@ function Buttons({ label, onSend, off }: { label: string; onSend(): void; off?: 
   if (shut) return <p className="font-mono text-[11px] text-muted">Not sent. Tell us what to change.</p>;
   return (
     <div className="flex items-center gap-2">
-      <Button type="button" disabled={off} onClick={onSend} className="rounded-full bg-you px-4 py-2 text-[13px] font-semibold text-paper disabled:opacity-35">
+      <Button type="button" disabled={off} onClick={onSend} className="rounded-full instrument:rounded-[7px] hw-key bg-you px-4 py-2 text-[13px] font-semibold text-paper disabled:opacity-35">
         {label}
       </Button>
-      <Button type="button" onClick={() => setShut(true)} className="rounded-full border border-frame px-3.5 py-[7px] text-[13px] text-muted transition-colors hover:text-ink">
+      <Button type="button" onClick={() => setShut(true)} className="rounded-full instrument:rounded-[7px] hw-key-dark border border-frame px-3.5 py-[7px] text-[13px] text-muted transition-colors hover:text-ink">
         Change it
       </Button>
     </div>
