@@ -74,6 +74,10 @@ export const router = createBrowserRouter([
           { path: "ui/begin", lazy: later(() => import("@/app/views/begin")) },
           { path: "ui/menu", lazy: later(() => import("@/app/views/menu")) },
           { path: "ui/year-0", lazy: later(() => import("@/app/views/year-0")) },
+          // The Light cone layout's views: lanes on one axis of Years. 2026-11-15.
+          { path: "ui/cone-reach", lazy: later(() => import("@/app/views/cone-reach")) },
+          { path: "ui/cone-messages", lazy: later(() => import("@/app/views/cone-messages")) },
+          { path: "ui/cone-build", lazy: later(() => import("@/app/views/cone-build")) },
         ],
       },
       // Godview shows what the player can't see, so only the dev server has it.

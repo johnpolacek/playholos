@@ -15,6 +15,10 @@ export const VIEWS = [
   { to: "/ui/begin", label: "Begin" },
   { to: "/ui/menu", label: "Menu" },
   { to: "/ui/year-0", label: "Year 0" },
+  // The Light cone layout: the game laid out on time. 2026-11-15.
+  { to: "/ui/cone-reach", label: "Cone · Reach" },
+  { to: "/ui/cone-messages", label: "Cone · Messages" },
+  { to: "/ui/cone-build", label: "Cone · Build" },
 ];
 
 export function View({

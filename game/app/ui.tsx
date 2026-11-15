@@ -31,6 +31,11 @@ import { CallCard } from "@/components/send-card";
 import { KindTag } from "@/components/marks";
 import { MIND_MODELS, type MindModel } from "@/lib/access";
 import type { Draft } from "@/lib/game/sends";
+import { Events } from "@/components/kit/events";
+import { Lanes } from "@/components/kit/lanes";
+import { Scrub } from "@/components/kit/scrub";
+import { coneYear, laneOfBuild, laneOfRoad, useConePick } from "@/components/light-cone";
+import { sailYears } from "@/lib/sim/speeds";
 
 // The game's kit, laid out as SPEC-01/HARDWARE lays out its own (spec-01.vercel.app): a bar of accents and sections
 // over a grid of numbered cards, each one part drawn live. A first pass, 2026-11-14. Since 2026-11-15, every card draws
@@ -88,11 +93,21 @@ const CALL: Draft = {
   size: "page",
 };
 
+// The Light cone cards' example: sails to Proxima Centauri, 4.24 light-years, and the build that throws them. The
+// flight's Years are lib/sim/speeds.ts's, and the Years ordered and built a fixed example.
+const SAIL_LEAVES = 13.6;
+const SAIL_ROAD = { name: "Send a sail", n: null, build: "Laser Sail Array", craft: "Sails", speed: 0, done: SAIL_LEAVES, leaves: SAIL_LEAVES, arrives: SAIL_LEAVES + sailYears(4.24), home: SAIL_LEAVES + sailYears(4.24) + 4.24 };
+const CONE_NEWS = [
+  { key: "a", at: 6.2, title: "A warm glow ranged", line: "Its light left there before Year 0.", tone: "var(--see)" },
+  { key: "b", at: 34.8, title: "Our sails pass Proxima Centauri", line: "We hear of it 4.2 Years on.", tone: "var(--reach)" },
+  { key: "c", at: 39, title: "Word home", line: "At light’s speed: nothing brings it sooner.", tone: "var(--reach)" },
+];
+
 /** One part: its number and name on a ruled line, and it drawn below. Three to a row on a wide screen, since
  *  2026-11-15, each as wide as a phone's column, so a part shows at the width the game draws it. */
-function Card({ n, name, children }: { n: number; name: string; children: React.ReactNode }) {
+function Card({ n, name, wide = false, children }: { n: number; name: string; /** Across the whole row, for a part that needs the room. */ wide?: boolean; children: React.ReactNode }) {
   return (
-    <section className="hw-panel flex min-h-[156px] flex-col rounded-2xl border border-rowline bg-panel p-3.5 instrument:rounded-lg">
+    <section className={`${wide ? "sm:col-span-2 lg:col-span-3" : ""} hw-panel flex min-h-[156px] flex-col rounded-2xl border border-rowline bg-panel p-3.5 instrument:rounded-lg`}>
       <header className="engrave flex items-center gap-2 font-mono text-[10px] tracking-[.1em] uppercase">
         <span className="text-[var(--accent)]">{String(n).padStart(2, "0")}</span>
         <span className="text-muted">{name}</span>
@@ -116,6 +131,8 @@ export default function Kit() {
   const [quiet, setQuiet] = useState(false);
   const [model, setModel] = useState<string>("claude-sonnet-5-5");
   const [effort, setEffort] = useState("medium");
+  const [year, setYear] = useState(20);
+  const conePick = useConePick();
   return (
     <>
       <main className="mx-auto max-w-6xl px-4 pt-14 pb-24">
@@ -344,9 +361,44 @@ export default function Kit() {
             </div>
           </Card>
         </div>
+        <h2 className="mt-10 mb-3 engrave font-mono text-[10.5px] tracking-[.14em] text-muted">LIGHT CONE</h2>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <Card n={29} name="Scrub">
+            <div className="w-full pt-4">
+              <Scrub value={year} onChange={setYear} range={[0, 50]} format={coneYear} />
+            </div>
+          </Card>
+          <Card n={30} name="Events">
+            <div className="w-full">
+              <Events label="Readings and news" events={CONE_NEWS} now={year} format={coneYear} />
+            </div>
+          </Card>
+          <Card n={31} name="Lanes, folded">
+            {/* In a narrow box, the same lanes as one line of events. */}
+            <div className="w-full">
+              <Lanes label="Our sails, folded" head="Craft" lanes={[laneOfRoad("sail-fold", "Sails, Proxima Centauri", SAIL_ROAD, { ordered: 2, now: year })!]} range={[0, 50]} now={year} format={coneYear} />
+            </div>
+          </Card>
+          <Card n={32} name="Lanes" wide>
+            <div className="w-full">
+              <Lanes
+                label="A build and its craft, on their Years"
+                head="Ours · 2"
+                lanes={[
+                  laneOfBuild({ key: "Laser Sail Array", name: "Laser Sail Array", note: "", from: 2, at: SAIL_LEAVES, kind: "build" }, 50, conePick("build")),
+                  laneOfRoad("sail", "Sails, Proxima Centauri", SAIL_ROAD, { aim: conePick("sail"), now: year })!,
+                ]}
+                range={[0, 50]}
+                now={year}
+                onNow={setYear}
+                format={coneYear}
+              />
+            </div>
+          </Card>
+        </div>
         <h2 className="mt-10 mb-3 engrave font-mono text-[10.5px] tracking-[.14em] text-muted">MARKS</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <Card n={29} name="Icons">
+          <Card n={33} name="Icons">
             <div className="flex flex-wrap justify-center gap-5 text-ink">
               <Lens closer />
               <Lens closer={false} />
@@ -358,7 +410,7 @@ export default function Kit() {
               <Prompt />
             </div>
           </Card>
-          <Card n={30} name="Build marks">
+          <Card n={34} name="Build marks">
             <div className="flex flex-wrap justify-center gap-4">
               {BUILDS.map((b) => (
                 <span key={b.name} title={b.name} className={buildTone(b.name)}>
@@ -367,7 +419,7 @@ export default function Kit() {
               ))}
             </div>
           </Card>
-          <Card n={31} name="Lead marks">
+          <Card n={35} name="Lead marks">
             <div className="flex flex-wrap justify-center gap-4">
               {LEADS.map((art, i) => (
                 <span key={i} className={art.kind === "reply" ? "text-other" : "text-you"}>
@@ -379,7 +431,7 @@ export default function Kit() {
               </span>
             </div>
           </Card>
-          <Card n={32} name="Visit art">
+          <Card n={36} name="Visit art">
             <div className="flex flex-wrap justify-center gap-3">
               {SIGHTS.map((s) => (
                 <VisitArt key={s} sight={s} size={64} />
