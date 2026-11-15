@@ -141,18 +141,22 @@ export const useAhead = () =>
     () => null,
   );
 
+/** The server's answer to what comes next: the Year we asked at, the orders we asked with, the stop and its words, and
+ *  the Year a reading begins that could stop us sooner. Kept past the bar's own life, so a page change asks nothing. */
+type Answer = { seed: number; orders: string; asked: number; next: number | null; why: string | null; until: number | null };
+let kept: Answer | null = null;
+/** Years an answer is kept at most. */
+const KEEP = 10;
+
 /** The skip: the next Year something new happens, from the server, which says when, never what. A tap jumps there.
  *  The clock still runs at 5 minutes a Year without it. 2026-10-29. */
 function Skip() {
   const { save, year, skipTo } = useGame();
   const snapshot = useSnap();
-  const [why, setWhy] = useState<string | null>(null);
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
-  // Undefined while we ask, null once the server says nothing comes. 2026-10-30.
-  const [next, setNext] = useState<number | null | undefined>(undefined);
-  // The orders that answer was for. A build ordered and a tap on the jump before the server's new answer flew a
-  // playtest 883 Years past Relay Search done, on the stop the plan had before it. 2026-11-14.
-  const [answered, setAnswered] = useState<string | null>(null);
+  // The server's last answer and the orders it was for. A build ordered and a tap on the jump before the server's new
+  // answer flew a playtest 883 Years past Relay Search done, on the stop the plan had before it. 2026-11-14.
+  const [ans, setAns] = useState<Answer | null>(kept);
   const seed = save?.seed;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const query = useMemo(
@@ -164,10 +168,23 @@ function Skip() {
     q.delete("year");
     return q.toString();
   }, [query]);
+  const mine = ans !== null && ans.seed === seed && ans.orders === orders ? ans : null;
+  const next = mine?.next;
+  const why = mine?.why ?? null;
+  // The answer holds while our orders stand, until its stop, the Year a reading begins that could stop us sooner, or
+  // 10 Years on, as it looks only so far ahead. Asked every tenth of a Year, each ask cost the server about a second
+  // of work for the same answer. 2026-11-15.
+  const fresh =
+    mine !== null &&
+    tenth !== null &&
+    tenth >= mine.asked &&
+    tenth < mine.asked + KEEP &&
+    (mine.until === null || tenth < mine.until) &&
+    (mine.next === null || mine.next > tenth);
   // Asked again when the server can't answer, sooner than the next tenth, and the last good answer is kept: one
   // failed ask hid the jump for up to 30 seconds, and a run of them hid it for good. 2026-11-15.
   useEffect(() => {
-    if (seed === undefined || tenth === null) return;
+    if (seed === undefined || tenth === null || fresh) return;
     let live = true;
     let again: ReturnType<typeof setTimeout> | undefined;
     const ask = (tries: number) =>
@@ -177,11 +194,10 @@ function Skip() {
       })
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
         .then(
-          (v: { next: number | null; why?: string | null }) => {
+          (v: { next: number | null; why?: string | null; until?: number | null }) => {
             if (!live) return;
-            setNext(v.next);
-            setWhy(v.why ?? null);
-            setAnswered(orders);
+            kept = { seed, orders, asked: tenth, next: v.next, why: v.why ?? null, until: v.until ?? null };
+            setAns(kept);
           },
           () => {
             if (live) again = setTimeout(() => ask(tries + 1), Math.min(15_000, 2000 * 2 ** tries));
@@ -192,9 +208,8 @@ function Skip() {
       live = false;
       clearTimeout(again);
     };
-  }, [seed, query, tenth, orders]);
-  const stale =
-    tenth === null || next === undefined || answered !== orders || (next !== null && next <= tenth);
+  }, [seed, query, tenth, orders, fresh]);
+  const stale = tenth === null || next === undefined || (next !== null && next <= tenth);
   // Shown and landed in tenths, as the Year is: a stop within the tenth we're in lands on the next tenth.
   const to =
     stale || next === null

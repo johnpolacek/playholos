@@ -136,5 +136,8 @@ export async function next(req: Request) {
     // Our Far-Side Array's first star storm, and the Year its count settles whether storms follow flares. 2026-11-12.
     ...Object.values(stormFirsts(fifthsOf(plan, scale)) ?? {}).map((at) => ({ at, why: "our next finding" })),
   ]);
-  return Response.json({ next: stop?.at ?? null, why: stop?.why ?? null, ahead: AHEAD });
+  // The Year this answer could change with no new order: a reading not yet begun, which would stop us once it has.
+  // The page asks again then, and not before. 2026-11-15.
+  const begins = (ahead.minds?.flashes ?? []).flatMap((f) => (f.read && f.read.from > year && (!stop || f.read.from < stop.at) ? [f.read.from] : []));
+  return Response.json({ next: stop?.at ?? null, why: stop?.why ?? null, until: begins.length ? Math.min(...begins) : null, ahead: AHEAD });
 }
