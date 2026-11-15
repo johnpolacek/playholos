@@ -1,5 +1,6 @@
 import { Button } from "@ui-sdk/react/button";
 import { useRef, useState } from "react";
+import { Pick } from "@/components/kit/pick";
 import { record, STARS, verdict, type Star } from "@/lib/about/checked";
 import { starsWithin } from "@/lib/about/dials";
 import { STARS_PER_MIND } from "@/lib/about/haystack";
@@ -214,24 +215,14 @@ export function CheckedStars() {
           At one mind per {STARS_PER_MIND.toLocaleString("en-US")} stars, there
           is about a 1 in {odds} chance that any mind lies this close.
         </p>
-        <label className="mt-4 flex items-center gap-3">
-          <span className={KICK}>OR CHOOSE</span>
-          <select
-            value={pick.name}
-            onChange={(e) =>
-              setPick(STARS.find((s) => s.name === e.target.value)!)
-            }
-            className="rounded border border-faint bg-transparent px-2 py-1 text-[14px]"
-          >
-            {[...STARS]
-              .sort((a, b) => a.d - b.d)
-              .map((s) => (
-                <option key={s.name} value={s.name}>
-                  {s.name}, {s.d} ly
-                </option>
-              ))}
-          </select>
-        </label>
+        <Pick
+          label="OR CHOOSE"
+          labelClass={KICK}
+          value={pick.name}
+          onChange={(name) => setPick(STARS.find((s) => s.name === name)!)}
+          options={[...STARS].sort((a, b) => a.d - b.d).map((s) => ({ value: s.name, label: `${s.name}, ${s.d} ly` }))}
+          className="mt-4"
+        />
       </div>
       <div aria-live="polite">
         <div className={KICK}>{pick.d} LIGHT-YEARS</div>
