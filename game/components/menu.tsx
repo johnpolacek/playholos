@@ -135,7 +135,7 @@ function Music() {
 }
 
 // The UI's sounds, on or off, kept in this browser: every key, latch and dial speaking as it is touched, lib/sound.ts.
-// On by default under the Hardware skin, and off in the others until turned on here. 2026-11-16.
+// On by default in every skin, until turned off here. 2026-11-16.
 function Sounds() {
   const on = useSound();
   return (

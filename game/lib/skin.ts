@@ -26,7 +26,7 @@ export const SKINS = [
   { id: "log", name: "Log", as: "An observatory's logbook" },
   { id: "infrared", name: "Infrared", as: "A thermal image" },
   { id: "arecibo", name: "Arecibo", as: "A 1-bit message" },
-  { id: "hardware", name: "Hardware", as: "A bench instrument, with sound" },
+  { id: "hardware", name: "Hardware", as: "A bench instrument" },
 ] as const;
 
 export type Skin = (typeof SKINS)[number]["id"];
@@ -41,12 +41,6 @@ export function setSkin(to: Skin) {
   skin = to;
   if (typeof document !== "undefined") document.documentElement.dataset.skin = to;
   heed.forEach((f) => f());
-}
-
-/** Calls back each time the skin changes. */
-export function onSkin(f: () => void) {
-  heed.add(f);
-  return () => void heed.delete(f);
 }
 
 /** The skin, for a part whose markup differs by it. A part that only changes its classes uses `instrument:`, `log:`, `infrared:`,

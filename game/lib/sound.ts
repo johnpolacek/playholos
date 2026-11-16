@@ -1,5 +1,4 @@
 import { useSyncExternalStore } from "react";
-import { getSkin, onSkin } from "@/lib/skin";
 
 // The UI's sounds, 2026-11-16, in the manner of SPEC-01/HARDWARE (spec-01.vercel.app): every control speaks as it is
 // touched, as a key, a latch or a dial would. Nothing is recorded. Each voice is made as it plays, in Web Audio, from
@@ -10,8 +9,8 @@ import { getSkin, onSkin } from "@/lib/skin";
 // line in them: a button goes down and comes up, a toggle or a choice latches, a slider ticks, a list's item blips as
 // it is reached, a popup opens, and a field types. A control we draw ourselves joins by being a ui-sdk part.
 //
-// Sounds are the Hardware skin's own, on by default there and off in the others. The menu and the /ui bar turn them
-// on or off in any skin, and that choice is kept in this browser. Browsers let a page sound only after a tap or a
+// Sounds are on by default in every skin since 2026-11-16; they were the Hardware skin's alone at first. The menu and
+// the /ui bar turn them off or on, and that choice is kept in this browser. Browsers let a page sound only after a tap or a
 // key, so nothing plays before one. The game's music, lib/music.ts, is its own.
 
 const KEY = "holos-sounds";
@@ -30,8 +29,8 @@ function read(): boolean | null {
   }
 }
 
-/** Whether the UI makes sounds: the choice made, or else the skin's own. */
-export const soundOn = () => chosen ?? getSkin() === "hardware";
+/** Whether the UI makes sounds: the choice made, or else on. */
+export const soundOn = () => chosen ?? true;
 
 /** Turns the sounds on or off, and keeps the choice. */
 export function setSound(next: boolean) {
@@ -49,11 +48,7 @@ export function useSound() {
   return useSyncExternalStore(
     (f) => {
       subs.add(f);
-      const off = onSkin(f);
-      return () => {
-        subs.delete(f);
-        off();
-      };
+      return () => void subs.delete(f);
     },
     soundOn,
     () => false,
