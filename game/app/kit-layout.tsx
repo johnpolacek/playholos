@@ -24,12 +24,12 @@ import { getSkin, savedSkin, saveSkin, setSkin, SKINS, type Skin, useSkin } from
 
 // Each skin's swatch, drawn as the skin is: chalk flat, Instrument a dark cap with a lamp, Log a square of ruled
 // paper, Infrared a hot point cooling to violet, Arecibo a
-// square of dithered bits, Hardware a charcoal key with its red lamp.
+// square of dithered bits, Hardware a charcoal key with its indigo lamp.
 const DOT: Record<Skin, string> = {
   chalk: "rounded-full bg-button",
   instrument: "rounded-full bg-[radial-gradient(circle_at_50%_50%,var(--other)_1.5px,transparent_2px),linear-gradient(#2c2e32,#131416)] shadow-[inset_0_0_0_1px_#000]",
   log: "rounded-[2px] bg-[repeating-linear-gradient(#14130f_0_3px,#7d7566_3px_4px)] shadow-[inset_0_0_0_1px_#7d7566]",
-  hardware: "rounded-full bg-[radial-gradient(circle,#ff3b1f_0_2px,transparent_2.5px),linear-gradient(#36363a,#222224)] shadow-[0_1px_0_#000,inset_0_0_0_1px_#646468]",
+  hardware: "rounded-full bg-[radial-gradient(circle,#818cf8_0_2px,transparent_2.5px),linear-gradient(#36363a,#222224)] shadow-[0_1px_0_#000,inset_0_0_0_1px_#646468]",
   arecibo: "bg-[conic-gradient(#e6e3db_25%,#000_0_50%,#e6e3db_0_75%,#000_0)] bg-[length:4px_4px] shadow-[0_0_0_1px_#e6e3db]",
   infrared: "rounded-full bg-[radial-gradient(circle,#fff2cf_0,#f4a53c_25%,#e2533e_45%,#b9418f_65%,#2a1846_90%)]",
 };

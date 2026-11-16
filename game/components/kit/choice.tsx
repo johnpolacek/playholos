@@ -7,7 +7,7 @@ import { useSkin } from "@/lib/skin";
 // radio group. Four looks, as the game draws them. 2026-11-15.
 // Under the Instrument skin, 2026-11-15, the track is a well and the chosen one a key standing in it. A switch build's
 // two sides are a real switch there, ui-sdk's Switch: a lever between its two names, thrown toward the one that holds.
-// Under Hardware, 2026-11-16, the same switch is SPEC-01's: a pill, red while its first side holds, and a white knob.
+// Under Hardware, 2026-11-16, the same switch is SPEC-01's: a pill, indigo while its first side holds, and a pale knob.
 // Under the Log skin, 2026-11-15, each is squared, and a lens or a switch's side is a stamp, the chosen one inked.
 
 const LOOK = {

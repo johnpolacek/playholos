@@ -112,7 +112,7 @@ export function Meter({
         // so a link or a hint in there would be lost.
         <UiMeter value={at} max={1} format={() => value} render={<span />} className="contents">
           <MeterLabel className="engrave truncate">{name}</MeterLabel>
-          {/* Under Hardware, 2026-11-16, the same lamps, round and red, in a well sunk into the bench. */}
+          {/* Under Hardware, 2026-11-16, the same lamps, round and indigo, in a well sunk into the bench. */}
           {skin === "instrument" || skin === "hardware" ? (
             // Under Instrument the bar is a row of lamps in a well, lit to the share. Where it is headed glows dim
             // past that, in place of the dashes. A preview lights in our blue, and a late one in the others' orange.

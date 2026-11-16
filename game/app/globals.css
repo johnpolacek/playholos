@@ -640,11 +640,11 @@
 
 /* Hardware, 2026-11-16: the game as SPEC-01/HARDWARE (spec-01.vercel.app) draws its own kit, on a dark bench, as
    its black key color does. Panels of charcoal plastic that stand off the bench with a soft shadow; keys that stand
-   off the panel, lit a little along their top edge, and go down under a press; one hot red key for the one move; a red
-   lamp where a key is latched on; black wells, as LCDs, where something is drawn or typed. Every touch has its sound,
-   lib/sound.ts. It was light at first, the day it was made, and turned dark at the player's word: the inks and every
+   off the panel, lit a little along their top edge, and go down under a press; one indigo key for the one move; an
+   indigo lamp where a key is latched on; black wells, as LCDs, where something is drawn or typed. Every touch has its sound,
+   lib/sound.ts. It was light at first, the day it was made, and turned dark at the player's word, and its red went indigo: the inks and every
    build's color are chalk's own again. Body text is 13.8:1 on a panel and 10.9:1 on a key, the muted 6.2:1 and 4.8:1,
-   the red key's words 5.1:1, a key's rim 3:1, and focus, a red ring, 5:1. */
+   the indigo key's words 6.2:1, a key's rim 3:1, and focus, an indigo ring, 6.1:1. */
 [data-skin="hardware"] {
   --page: #0e0e0f;
   --paper: #18181a;
@@ -653,9 +653,11 @@
   --faint: #333336;
   --rowline: #252527;
   --track: #232325;
-  --fill2: #ff3b1f;
+  --fill2: #818cf8;
   --lamp-off: #333336;
-  --hw-red: #d02e16;
+  /* The one move's indigo, and a lit lamp's, brighter, to glow on the dark. */
+  --hw-accent: #6366f1;
+  --hw-lamp: #818cf8;
   --hw-rim: #646468;
   /* A key of charcoal plastic: a lit top edge, a rim, a dark lip under it, and its shadow on the panel. */
   --hw-plastic: linear-gradient(#323235, #252527);
@@ -670,9 +672,9 @@
   --panel: #17181a;
 }
 @layer base {
-  /* Focus: a ring in the red lamp's color, a little off the edge. */
+  /* Focus: a ring in the lamp's indigo, a little off the edge. */
   [data-skin="hardware"] :focus-visible {
-    outline: 2px solid #ff3b1f;
+    outline: 2px solid var(--hw-lamp);
     outline-offset: 2px;
   }
 }
@@ -691,14 +693,14 @@
   }
 }
 @layer utilities {
-  /* A well holds its art on black, with its edge sunk into the panel; a field is one too, its caret red. Above the
+  /* A well holds its art on black, with its edge sunk into the panel; a field is one too, its caret indigo. Above the
      paper a part names. */
   [data-skin="hardware"] .lcd,
   [data-skin="hardware"] :is([data-slot="input"], [data-slot="textarea"]) {
     background-color: #070708;
     border-color: #070708;
     box-shadow: inset 0 1px 4px rgb(0 0 0 / 0.9), 0 1px 0 rgb(255 255 255 / 0.05);
-    caret-color: #ff3b1f;
+    caret-color: var(--hw-lamp);
   }
   [data-skin="hardware"] .lcd :is([data-slot="input"], [data-slot="textarea"]) {
     box-shadow: none;
@@ -708,9 +710,9 @@
     background-color: transparent;
     box-shadow: none;
   }
-  /* A switch, SPEC-01's: the pill goes red while its first side holds. */
+  /* A switch, SPEC-01's: the pill goes indigo while its first side holds. */
   [data-skin="hardware"] [data-slot="switch"][data-checked] .hw-well {
-    background-color: var(--hw-red);
+    background-color: var(--hw-accent);
   }
   /* A key: charcoal plastic, standing off the panel, its words chalk. It goes down a pixel under a press, at once, so
      there is nothing for reduced motion to still. */
@@ -725,12 +727,12 @@
     box-shadow: var(--hw-key-in);
     translate: 0 1px;
   }
-  /* The one move is the red key, its words white, glowing a little. */
+  /* The one move is the indigo key, its words white, glowing a little. */
   [data-skin="hardware"] :is(.hw-key, .stamp).bg-button:not([data-slot="segmented-control-item"], [data-slot="toggle"]) {
-    background-image: linear-gradient(#e2391e, #c42812);
+    background-image: linear-gradient(#5b52ea, #4338ca);
     color: #fff;
-    border-color: #a6210d;
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), 0 2px 0 #9b1f0c, 0 6px 14px -4px rgb(230 50 20 / 0.55);
+    border-color: #3730a3;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), 0 2px 0 #2e2785, 0 6px 14px -4px rgb(99 102 241 / 0.55);
   }
   /* Ours and theirs stay in their colors, as keys, their words dark as in chalk. */
   [data-skin="hardware"] :is(.hw-key, .stamp):is(.bg-you, .bg-other) {
@@ -743,12 +745,12 @@
   [data-skin="hardware"] :is(.hw-key, .stamp).bg-other {
     background-color: var(--other);
   }
-  /* A latch on: the key held down, its red lamp lit at its top right. Off, the lamp is dark. */
+  /* A latch on: the key held down, its indigo lamp lit at its top right. Off, the lamp is dark. */
   [data-skin="hardware"] :is([data-slot="segmented-control-item"], [data-slot="toggle"]):is(.hw-key, .hw-key-dark, .stamp) {
     background-image: radial-gradient(circle at calc(100% - 7px) 7px, var(--lamp-off) 0 2px, transparent 2.5px), var(--hw-plastic);
   }
   [data-skin="hardware"] :is([data-slot="segmented-control-item"][data-checked], [data-slot="toggle"][data-pressed]):is(.hw-key, .hw-key-dark, .stamp) {
-    background-image: radial-gradient(circle at calc(100% - 7px) 7px, #ff3b1f 0 2px, rgb(255 59 31 / 0.4) 3px, transparent 5px), linear-gradient(#202022, #1b1b1d);
+    background-image: radial-gradient(circle at calc(100% - 7px) 7px, var(--hw-lamp) 0 2px, rgb(129 140 248 / 0.45) 3px, transparent 5px), linear-gradient(#202022, #1b1b1d);
     background-color: #1d1d1f;
     color: var(--ink);
     box-shadow: var(--hw-key-in);
@@ -759,9 +761,9 @@
     border-color: transparent;
     box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.85), inset 0 0 0 1px rgb(0 0 0 / 0.6), 0 1px 0 rgb(255 255 255 / 0.05);
   }
-  /* A switch's knob is pale, as the slider's is, against its red pill. */
-  [data-skin="hardware"] [data-slot="switch-thumb"] {
-    background-image: linear-gradient(#f4f4f2, #d6d6d2);
+  /* A switch's knob is pale, as the slider's is, against its indigo pill. It outweighs the key it also is. */
+  [data-skin="hardware"] [data-slot="switch"] [data-slot="switch-thumb"] {
+    background: linear-gradient(#f4f4f2, #d6d6d2);
     box-shadow: 0 1px 2px rgb(0 0 0 / 0.6);
   }
   /* A slider: a black track, the run to the thumb in its tone, and a pale knob that stands off it. */
