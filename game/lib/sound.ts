@@ -6,8 +6,11 @@ import { useSyncExternalStore } from "react";
 // so a run of taps never sounds like one sample looped.
 //
 // It listens once, at the document, for ui-sdk's parts by their data-slot, so every screen's controls speak without a
-// line in them: a button goes down and comes up, a toggle or a choice latches, a slider ticks, a list's item blips as
-// it is reached, a popup opens, and a field types. A control we draw ourselves joins by being a ui-sdk part.
+// line in them. A control we draw ourselves joins by being a ui-sdk part.
+//
+// Since 2026-11-16 only the special ones speak, and softly: a sound on every tap wore on players. The one move, a key
+// in the solid fill, goes down and comes up, and a toggle or a choice latches. Plain keys, links, lists, sliders,
+// popups and typing are quiet.
 //
 // Sounds are on by default in every skin since 2026-11-16; they were the Hardware skin's alone at first. The menu and
 // the /ui bar turn them off or on, and that choice is kept in this browser. Browsers let a page sound only after a tap or a
@@ -15,7 +18,7 @@ import { useSyncExternalStore } from "react";
 
 const KEY = "holos-sounds";
 
-type Voice = "down" | "down-primary" | "up" | "latch-down" | "latch-up" | "tick" | "blip" | "open" | "type" | "type-space" | "type-big";
+type Voice = "down-primary" | "up" | "latch-down" | "latch-up";
 
 let chosen = read();
 const subs = new Set<() => void>();
@@ -67,7 +70,7 @@ function engine() {
     if (!AC) return null;
     ctx = new AC({ latencyHint: "interactive" });
     out = ctx.createGain();
-    out.gain.value = 0.42;
+    out.gain.value = 0.18;
     out.connect(ctx.destination);
     noise = ctx.createBuffer(1, ctx.sampleRate / 2, ctx.sampleRate);
     const d = noise.getChannelData(0);
@@ -118,21 +121,12 @@ function tone(t: number, o: { freq: number; to?: number; level: number; decay: n
 
 // Our voices, tuned by ear for Holos: a little lower and softer than a bench's, as a console far from home would be.
 const VOICES: Record<Voice, (t: number) => void> = {
-  down: (t) => (click(t, { freq: 2400, q: 0.9, level: 0.3, decay: 0.022 }), tone(t, { freq: 190, to: 120, level: 0.36, decay: 0.05 })),
   "down-primary": (t) => (click(t, { freq: 1900, q: 0.8, level: 0.34, decay: 0.028 }), tone(t, { freq: 150, to: 92, level: 0.5, decay: 0.075 })),
   up: (t) => (click(t, { freq: 3600, q: 1.2, level: 0.14, decay: 0.012 }), tone(t, { freq: 280, to: 230, level: 0.08, decay: 0.018 })),
   "latch-down": (t) => (
     click(t, { freq: 1900, q: 0.8, level: 0.18, decay: 0.02 }), tone(t, { freq: 150, to: 104, level: 0.2, decay: 0.045 }), click(t + 0.004, { freq: 1100, q: 13, level: 0.035, decay: 0.05 })
   ),
   "latch-up": (t) => (click(t, { freq: 3000, q: 1, level: 0.11, decay: 0.012 }), click(t + 0.003, { freq: 1500, q: 12, level: 0.03, decay: 0.04 })),
-  tick: (t) => (click(t, { type: "highpass", freq: 3000, q: 0.7, level: 0.18, decay: 0.006 }), tone(t, { freq: 4100, level: 0.03, decay: 0.01 })),
-  blip: (t) => tone(t, { type: "square", freq: 2200, level: 0.03, decay: 0.045, attack: 0.002 }),
-  open: (t) => (click(t, { freq: 2500, q: 1, level: 0.09, decay: 0.012 }), tone(t, { freq: 480, to: 780, level: 0.04, decay: 0.06, attack: 0.003 })),
-  type: (t) => (click(t, { freq: 3100, q: 1.1, level: 0.2, decay: 0.014 }), tone(t, { freq: 240, to: 180, level: 0.15, decay: 0.03 })),
-  "type-space": (t) => (
-    click(t, { freq: 2100, q: 0.8, level: 0.24, decay: 0.022 }), tone(t, { freq: 160, to: 116, level: 0.24, decay: 0.05 }), click(t + 0.006, { freq: 860, q: 6, level: 0.05, decay: 0.03 })
-  ),
-  "type-big": (t) => (click(t, { freq: 2400, q: 0.9, level: 0.24, decay: 0.018 }), tone(t, { freq: 185, to: 130, level: 0.26, decay: 0.045 })),
 };
 
 let last = 0;
@@ -149,21 +143,17 @@ export function play(v: Voice) {
   VOICES[v](c.currentTime + 0.002);
 }
 
-// What speaks, by ui-sdk's data-slot. A key goes down and comes up; a latch speaks as its state changes, so the keys
-// and a tap sound the same; a field types.
-const KEYS = '[data-slot="button"], [data-slot="select-trigger"], [data-slot="collapsible-trigger"], [data-slot="dialog-trigger"], [data-slot="drawer-trigger"], [data-slot="dialog-close"], [data-slot="drawer-close"], [data-slot="tabs-tab"], a[href], button';
+// What speaks, by ui-sdk's data-slot: the one move, a key in the solid fill, ours or theirs, goes down and comes up;
+// a latch speaks as its state changes, so its keys and a tap sound the same.
+const KEYS = '[data-slot="button"], [data-slot="dialog-trigger"], [data-slot="drawer-trigger"], button';
 const LATCHES = '[data-slot="toggle"], [data-slot="segmented-control-item"], [data-slot="switch"], [data-slot="checkbox"], [data-slot="radio"]';
-const FIELDS = 'input:not([type="range"], [type="checkbox"], [type="radio"]), textarea, [contenteditable="true"]';
-const POPUPS = /-(content|popup|positioner)$/;
-const QUIET_POPUPS = /^(tooltip|hover-card)-/;
-// The one move: a key in the solid fill, or ours or theirs.
 const PRIMARY = ".bg-button, .bg-you, .bg-other";
 
 const keyOf = (t: EventTarget | null) => {
   const el = t instanceof Element ? t : null;
   if (!el || el.closest(LATCHES)) return null;
   const k = el.closest(KEYS);
-  if (!k || k.matches(":disabled, [data-disabled], [aria-disabled='true']")) return null;
+  if (!k || !k.matches(PRIMARY) || k.matches(":disabled, [data-disabled], [aria-disabled='true']")) return null;
   return k;
 };
 
@@ -179,7 +169,7 @@ export function startSounds() {
       const k = keyOf(e.target);
       if (!k) return;
       down = k;
-      play(k.matches(PRIMARY) ? "down-primary" : "down");
+      play("down-primary");
     },
     true,
   );
@@ -197,70 +187,32 @@ export function startSounds() {
     "keydown",
     (e) => {
       if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
-      const t = e.target instanceof Element ? e.target : null;
-      if (t?.matches(FIELDS)) {
-        if (e.key === " ") play("type-space");
-        else if (e.key === "Enter" || e.key === "Backspace" || e.key === "Delete") play("type-big");
-        else if (e.key.length === 1) play("type");
-        return;
-      }
-      if (e.key === "Enter" || e.key === " ") {
-        const k = keyOf(t);
-        if (k) play(k.matches(PRIMARY) ? "down-primary" : "down");
-      }
+      if ((e.key === "Enter" || e.key === " ") && keyOf(e.target)) play("down-primary");
     },
     true,
   );
   document.addEventListener(
     "keyup",
     (e) => {
-      const t = e.target instanceof Element ? e.target : null;
-      if (t?.matches(FIELDS)) return;
-      if ((e.key === "Enter" || e.key === " ") && keyOf(t)) play("up");
+      if ((e.key === "Enter" || e.key === " ") && keyOf(e.target)) play("up");
     },
     true,
   );
 
-  // States, as they change: a latch set or let go, a slider's value, a list's item reached, a popup opened.
-  let lastTick = 0;
-  const seen = new WeakSet<Element>();
+  // A latch, as it is set or let go.
   new MutationObserver((records) => {
     let sound: Voice | null = null;
-    const rank: Voice[] = ["blip", "tick", "latch-up", "open", "latch-down"];
-    const say = (v: Voice) => {
-      if (!sound || rank.indexOf(v) > rank.indexOf(sound)) sound = v;
-    };
     for (const r of records) {
-      if (r.type !== "attributes" || !(r.target instanceof Element)) continue;
+      if (r.type !== "attributes" || !(r.target instanceof Element) || !r.attributeName) continue;
       const el = r.target;
-      const slot = el.getAttribute("data-slot") ?? "";
-      const now = r.attributeName ? el.hasAttribute(r.attributeName) : false;
-      if ((r.attributeName === "data-pressed" || r.attributeName === "data-checked") && el.matches(LATCHES)) {
-        if (now) say("latch-down");
-        else if (el.matches('[data-slot="toggle"], [data-slot="switch"], [data-slot="checkbox"]')) say("latch-up");
-      } else if (r.attributeName === "data-highlighted" && now && slot.endsWith("-item")) {
-        say("blip");
-      } else if (r.attributeName === "value" && slot === "slider-thumb-input") {
-        // A slider's value, as its hidden range takes it: from a drag, a tap on its track, or its keys.
-        say("tick");
-      } else if (r.attributeName === "data-open") {
-        if (now && POPUPS.test(slot) && !QUIET_POPUPS.test(slot) && !seen.has(el)) {
-          seen.add(el);
-          say("open");
-        } else if (!now) seen.delete(el);
-      }
+      if (!el.matches(LATCHES)) continue;
+      if (el.hasAttribute(r.attributeName)) sound = "latch-down";
+      else if (!sound && el.matches('[data-slot="toggle"], [data-slot="switch"], [data-slot="checkbox"]')) sound = "latch-up";
     }
-    if (!sound) return;
-    const t = performance.now();
-    // A slider's ticks are kept apart, so a fast drag is a run of ticks, not a buzz. An open right after a press is
-    // the press's own.
-    if (sound === "tick" && t - lastTick < 35) return;
-    if (sound === "open" && t - last < 150) return;
-    if (sound === "tick") lastTick = t;
-    play(sound);
+    if (sound) play(sound);
   }).observe(document.body, {
     subtree: true,
     attributes: true,
-    attributeFilter: ["data-pressed", "data-checked", "data-highlighted", "data-open", "value"],
+    attributeFilter: ["data-pressed", "data-checked"],
   });
 }
