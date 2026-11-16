@@ -7,10 +7,9 @@ import { useSyncExternalStore } from "react";
 // "log" draws the game as an observatory's logbook: dark ruled paper, a serif for the record and mono for the data,
 // readings as dated entries, the Mind's notes in the margin, and buttons as stamped labels. Also an exploration, never
 // the default. 2026-11-15.
-// "hardware" draws the game as SPEC-01/HARDWARE draws its own kit: a light bench, soft white keys that stand off it
+// "hardware" draws the game as SPEC-01/HARDWARE draws its own kit, on a dark bench: charcoal keys that stand off it
 // and go down under a press, one hot red key, red lamps, black wells for what is drawn or typed, and a sound for every
-// touch, lib/sound.ts. Light, where every other skin is dark, so each build's color has a darker partner here.
-// Never the default. 2026-11-16.
+// touch, lib/sound.ts. Never the default. 2026-11-16.
 // "arecibo" draws the game as a 1-bit world, after the message sent from Arecibo in 1974, 73 rows by 23 columns of
 // pixels: one ink on black, fills dithered, edges stepped, a bitmap face for headings and labels. A press flips a
 // control's pixels, a meter fills bit by bit, and a choice reads as on and off bits. Never the default. 2026-11-15.

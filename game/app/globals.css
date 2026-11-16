@@ -638,79 +638,41 @@
   }
 }
 
-/* Hardware, 2026-11-16: the game as SPEC-01/HARDWARE (spec-01.vercel.app) draws its own kit. A light bench of warm
-   off-white; panels that stand off it with a soft shadow; keys of white plastic that stand off the panel and go down
-   under a press; one hot red key for the one move; a red lamp where a key is latched on; black wells, as LCDs, where
-   something is drawn or typed. Every touch has its sound, lib/sound.ts.
-   It is the one light skin. The inks go dark, and every build's color has a darker partner here, found in OKLab at the
-   same hue until it reads at 4.6:1 on the bench: our blue #5bb8d6 is #007299 here. Body text is 7.7:1 or more, the
-   muted 5.7:1, the red key's words 4.75:1, and a key's edge, --hw-edge, 3:1. The map is a screen of its own and stays
-   dark, and a well, .lcd, takes chalk's dark inks back, so art drawn for the dark reads as it always has. */
+/* Hardware, 2026-11-16: the game as SPEC-01/HARDWARE (spec-01.vercel.app) draws its own kit, on a dark bench, as
+   its black key color does. Panels of charcoal plastic that stand off the bench with a soft shadow; keys that stand
+   off the panel, lit a little along their top edge, and go down under a press; one hot red key for the one move; a red
+   lamp where a key is latched on; black wells, as LCDs, where something is drawn or typed. Every touch has its sound,
+   lib/sound.ts. It was light at first, the day it was made, and turned dark at the player's word: the inks and every
+   build's color are chalk's own again. Body text is 13.8:1 on a panel and 10.9:1 on a key, the muted 6.2:1 and 4.8:1,
+   the red key's words 5.1:1, a key's rim 3:1, and focus, a red ring, 5:1. */
 [data-skin="hardware"] {
-  color-scheme: light;
-  --page: #e4e4e0;
-  --page-ink2: #4a4945;
-  --frame: #d5d5d0;
-  --paper: #f6f6f4;
-  --ink: #1b1b1a;
-  --muted: #5d5c57;
-  --button: #d02e16;
-  --faint: #cfcfca;
-  --panel: #eeeeec;
-  --track: #d6d6d1;
-  --fill2: #d02e16;
-  --rowline: #dcdcd7;
-  --you: #007299;
-  --other: #a55500;
-  --wait: #3f7080;
-  --think: #7755c1;
-  --see: #007a4c;
-  --lift: #5e7100;
-  --reach: #ae4085;
-  --keep: #5f6c79;
-  --attack: #c1382e;
-  --ok: #007a4c;
-  --shadow: rgba(0, 0, 0, 0.16);
-  --lamp-off: #cfcfca;
-  --hw-edge: #8a8983;
+  --page: #0e0e0f;
+  --paper: #18181a;
+  --panel: #151516;
+  --frame: #2a2a2d;
+  --faint: #333336;
+  --rowline: #252527;
+  --track: #232325;
+  --fill2: #ff3b1f;
+  --lamp-off: #333336;
   --hw-red: #d02e16;
-  /* A key of white plastic: a lit top edge, a darker lip under it, and its shadow on the panel. */
-  --hw-white: linear-gradient(#fdfdfc, #ececea);
-  --hw-key-up: inset 0 1px 0 #fff, 0 1px 0 #c6c6c1, 0 2px 0 #d3d3ce, 0 5px 10px -3px rgb(0 0 0 / 0.2);
-  --hw-key-in: inset 0 1px 2px rgb(0 0 0 / 0.14), 0 1px 0 #d3d3ce;
+  --hw-rim: #646468;
+  /* A key of charcoal plastic: a lit top edge, a rim, a dark lip under it, and its shadow on the panel. */
+  --hw-plastic: linear-gradient(#323235, #252527);
+  --hw-key-up: inset 0 1px 0 rgb(255 255 255 / 0.09), inset 0 0 0 1px var(--hw-rim), 0 2px 0 #050505, 0 6px 12px -4px rgb(0 0 0 / 0.75);
+  --hw-key-in: inset 0 1px 3px rgb(0 0 0 / 0.6), inset 0 0 0 1px var(--hw-rim), 0 1px 0 #050505;
 }
-/* A well: chalk's dark inks, on black, as an LCD. Art drawn for the dark, and what we type, sit in one. */
+/* A well: black, as an LCD. Art drawn for the dark, and what we type, sit in one. */
 [data-skin="hardware"] .lcd,
 [data-skin="hardware"] :is([data-slot="input"], [data-slot="textarea"]) {
-  color-scheme: dark;
   --page: #0b0c0d;
-  --page-ink2: #a9a59c;
-  --frame: #2a2b2e;
   --paper: #121314;
-  --ink: #e6e3db;
-  --muted: #9c988f;
-  --button: #bdb9af;
-  --faint: #34363a;
   --panel: #17181a;
-  --track: #2a2b2e;
-  --fill2: #bdb9af;
-  --rowline: #26282b;
-  --you: #5bb8d6;
-  --other: #e0a24a;
-  --wait: #9fc4d1;
-  --think: #b39ef2;
-  --see: #70d1a9;
-  --lift: #c2d766;
-  --reach: #e48ebf;
-  --keep: #c1ccd7;
-  --attack: #f58c7e;
-  --ok: #70d1a9;
-  color: var(--ink);
 }
 @layer base {
-  /* Focus: a ring in the red key's color, a little off the edge. */
+  /* Focus: a ring in the red lamp's color, a little off the edge. */
   [data-skin="hardware"] :focus-visible {
-    outline: 2px solid var(--hw-red);
+    outline: 2px solid #ff3b1f;
     outline-offset: 2px;
   }
 }
@@ -718,11 +680,11 @@
   [data-skin="hardware"] :is([data-slot="input"], [data-slot="textarea"])::placeholder {
     color: #8d8a83;
   }
-  /* A panel: white plastic standing off the bench, its edge catching the light. */
+  /* A panel: charcoal plastic standing off the bench, its top edge catching the light. */
   [data-skin="hardware"] .hw-panel {
-    background-image: linear-gradient(#fafaf8, #f0f0ee);
-    border-color: #fff;
-    box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgb(0 0 0 / 0.07), 0 12px 26px -14px rgb(0 0 0 / 0.3);
+    background-image: linear-gradient(#1c1c1e, #161618);
+    border-color: #2a2a2d;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 1px 0 #000, 0 14px 28px -14px rgb(0 0 0 / 0.8);
   }
   [data-skin="hardware"] .engrave {
     font-family: var(--font-plex-mono);
@@ -730,36 +692,32 @@
 }
 @layer utilities {
   /* A well holds its art on black, with its edge sunk into the panel; a field is one too, its caret red. Above the
-     paper a part names, which stays chalk's light paper only outside the skin. */
+     paper a part names. */
   [data-skin="hardware"] .lcd,
   [data-skin="hardware"] :is([data-slot="input"], [data-slot="textarea"]) {
-    background-color: #0f1011;
-    border-color: #0f1011;
-    box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.6), 0 1px 0 #fff;
+    background-color: #070708;
+    border-color: #070708;
+    box-shadow: inset 0 1px 4px rgb(0 0 0 / 0.9), 0 1px 0 rgb(255 255 255 / 0.05);
     caret-color: #ff3b1f;
   }
   [data-skin="hardware"] .lcd :is([data-slot="input"], [data-slot="textarea"]) {
     box-shadow: none;
   }
-  /* The map is a window onto the sky drawn behind the game, so its well keeps chalk's inks but no fill of its own,
-     and the ground the sky is drawn on stays night. */
+  /* The map is a window onto the sky drawn behind the game, so its well has no fill of its own. */
   [data-skin="hardware"] .hw-glass.lcd {
     background-color: transparent;
     box-shadow: none;
-  }
-  [data-skin="hardware"] #phone {
-    background-color: #0b0c0d;
   }
   /* A switch, SPEC-01's: the pill goes red while its first side holds. */
   [data-skin="hardware"] [data-slot="switch"][data-checked] .hw-well {
     background-color: var(--hw-red);
   }
-  /* A key: white plastic, standing off the panel, its words ink. It goes down a pixel under a press, at once, so there
-     is nothing for reduced motion to still. */
+  /* A key: charcoal plastic, standing off the panel, its words chalk. It goes down a pixel under a press, at once, so
+     there is nothing for reduced motion to still. */
   [data-skin="hardware"] :is(.hw-key, .hw-key-dark:not([data-rail]), .stamp) {
-    background-image: var(--hw-white);
-    background-color: #f4f4f2;
-    border-color: #d2d2cd;
+    background-image: var(--hw-plastic);
+    background-color: #2a2a2c;
+    border-color: var(--hw-rim);
     box-shadow: var(--hw-key-up);
     color: var(--ink);
   }
@@ -774,40 +732,42 @@
     border-color: #a6210d;
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), 0 2px 0 #9b1f0c, 0 6px 14px -4px rgb(230 50 20 / 0.55);
   }
-  /* Ours and theirs stay in their colors, as keys. */
+  /* Ours and theirs stay in their colors, as keys, their words dark as in chalk. */
   [data-skin="hardware"] :is(.hw-key, .stamp):is(.bg-you, .bg-other) {
-    background-image: linear-gradient(rgb(255 255 255 / 0.14), rgb(0 0 0 / 0.06));
+    background-image: linear-gradient(rgb(255 255 255 / 0.16), rgb(0 0 0 / 0.08));
     background-color: var(--you);
-    color: #fff;
+    color: var(--paper);
     border-color: transparent;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.3), 0 2px 0 #050505, 0 6px 12px -4px rgb(0 0 0 / 0.75);
   }
   [data-skin="hardware"] :is(.hw-key, .stamp).bg-other {
     background-color: var(--other);
   }
   /* A latch on: the key held down, its red lamp lit at its top right. Off, the lamp is dark. */
   [data-skin="hardware"] :is([data-slot="segmented-control-item"], [data-slot="toggle"]):is(.hw-key, .hw-key-dark, .stamp) {
-    background-image: radial-gradient(circle at calc(100% - 7px) 7px, var(--lamp-off) 0 2px, transparent 2.5px), var(--hw-white);
+    background-image: radial-gradient(circle at calc(100% - 7px) 7px, var(--lamp-off) 0 2px, transparent 2.5px), var(--hw-plastic);
   }
   [data-skin="hardware"] :is([data-slot="segmented-control-item"][data-checked], [data-slot="toggle"][data-pressed]):is(.hw-key, .hw-key-dark, .stamp) {
-    background-image: radial-gradient(circle at calc(100% - 7px) 7px, #ff3b1f 0 2px, rgb(255 59 31 / 0.35) 3px, transparent 5px), linear-gradient(#f1f1ef, #e7e7e4);
-    background-color: #ececea;
+    background-image: radial-gradient(circle at calc(100% - 7px) 7px, #ff3b1f 0 2px, rgb(255 59 31 / 0.4) 3px, transparent 5px), linear-gradient(#202022, #1b1b1d);
+    background-color: #1d1d1f;
     color: var(--ink);
     box-shadow: var(--hw-key-in);
   }
   /* A track a key sits in: sunk into the panel. */
   [data-skin="hardware"] .hw-well {
-    background-color: #e3e3df;
+    background-color: #0b0b0c;
     border-color: transparent;
-    box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.18), inset 0 0 0 1px rgb(0 0 0 / 0.05), 0 1px 0 #fff;
+    box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.85), inset 0 0 0 1px rgb(0 0 0 / 0.6), 0 1px 0 rgb(255 255 255 / 0.05);
   }
-  /* A quiet edge reads as an edge: 3:1. */
-  [data-skin="hardware"] :is(.hw-key-dark:not([data-rail]), .stamp):is(.border-faint, .border-frame):not(:hover, [data-open]) {
-    border-color: #c4c4bf;
+  /* A switch's knob is pale, as the slider's is, against its red pill. */
+  [data-skin="hardware"] [data-slot="switch-thumb"] {
+    background-image: linear-gradient(#f4f4f2, #d6d6d2);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.6);
   }
-  /* A slider: a black track, the run to the thumb in its tone, and a white knob that stands off it. */
+  /* A slider: a black track, the run to the thumb in its tone, and a pale knob that stands off it. */
   [data-skin="hardware"] [data-slot="slider-track"] {
-    background-color: #1b1b1a;
-    box-shadow: inset 0 1px 1px rgb(0 0 0 / 0.5), 0 1px 0 #fff;
+    background-color: #050505;
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.9), 0 1px 0 rgb(255 255 255 / 0.05);
   }
 }
 
