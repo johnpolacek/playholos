@@ -469,6 +469,19 @@ export function LeadList({
         line: (latest: Lead) => `Each shone a few centuries, then dimmed. The latest, ${starName(latest.star)}.`,
         test: (l: Lead) => l.slug.startsWith("warm-glow-") && has(l, "Faded") && !messaged.has(l.star) && unread(l),
       },
+      {
+        // Warm glows whose light or shape says dust gather too, under Waiting as under Quiet: two dozen rows each read
+        // "mind ruled out" and a sentinel on its way, and hid the few that needed us. Playtest 2026-11-16.
+        key: "ruled-out-glows",
+        title: "Warm glows, ruled out",
+        tone: "text-other/60",
+        parts: ["watching", "waiting", "quiet"] as Standing[],
+        line: (latest: Lead, all: Lead[]) => {
+          const going = all.filter((c) => bound(c)).length;
+          return `Their light or their shape says dust, not a mind.${going ? ` Our craft are on the way to ${n(going)} of them.` : ""} The latest, ${starName(latest.star)}.`;
+        },
+        test: (l: Lead) => l.slug.startsWith("warm-glow-") && !!chancesOf(l, readings[l.slug] ?? [])?.ruledOut && !messaged.has(l.star) && unread(l),
+      },
     ];
     // Quiet leads whose latest reading says the same gather too: six worlds read "Too close to its star to split" in
     // a row. Playtest 2026-11-02.
@@ -485,8 +498,28 @@ export function LeadList({
     );
     const stand = (l: Lead) => standing?.[l.slug] ?? "quiet";
     const list = only ?? leads;
-    const groups = [...glows, ...said].map((g) => ({ ...g, members: list.filter((l) => stand(l) === "quiet" && g.test(l)) }));
-    const groupOf = (l: Lead) => (stand(l) === "quiet" ? groups.find((g) => g.members.length > 1 && g.test(l)) : undefined);
+    // Each group gathers within one part of the list, Quiet unless it names others. Sorted once, as hundreds of glows
+    // can come.
+    type Group = (typeof glows)[number] | (typeof said)[number];
+    const partsOf = (g: Group) => ("parts" in g && g.parts) || ["quiet"];
+    const buckets = new Map<string, { g: Group; id: string; members: Lead[] }>();
+    const matched = new Map<Lead, string[]>();
+    for (const l of list) {
+      const part = stand(l);
+      for (const g of [...glows, ...said]) {
+        if (!partsOf(g).includes(part) || !g.test(l)) continue;
+        const id = `${g.key}:${part}`;
+        if (!buckets.has(id)) buckets.set(id, { g, id, members: [] });
+        buckets.get(id)!.members.push(l);
+        matched.set(l, [...(matched.get(l) ?? []), id]);
+      }
+    }
+    const groupOf = (l: Lead) => {
+      const id = matched.get(l)?.find((k) => buckets.get(k)!.members.length > 1);
+      if (!id) return undefined;
+      const { g, members } = buckets.get(id)!;
+      return { ...g, id, members };
+    };
     const rows = (part: Standing) =>
       list.map((l) => {
         const i = leads.indexOf(l);
@@ -499,13 +532,13 @@ export function LeadList({
             </li>
           );
         if (l !== g.members[0]) return null;
-        const open = openGroup === g.key;
+        const open = openGroup === g.id;
         return (
-          <Collapsible key={g.key} render={<li />} open={open} onOpenChange={(o) => setOpenGroup(o ? g.key : null)} className="border-t border-faint">
+          <Collapsible key={g.id} render={<li />} open={open} onOpenChange={(o) => setOpenGroup(o ? g.id : null)} className="border-t border-faint">
             <CollapsibleTrigger className="block w-full py-2.5 text-left">
               <Face
                 mark={<LeadMark art={l.art} />}
-                tone="text-you"
+                tone={("tone" in g && g.tone) || "text-you"}
                 name={
                   <>
                     <b className="font-semibold">{g.title}</b> · {n(g.members.length)}
