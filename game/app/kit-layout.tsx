@@ -11,7 +11,9 @@ import {
 } from "@ui-sdk/react/select";
 import { useLayoutEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router";
+import { Toggle } from "@ui-sdk/react/toggle";
 import { VIEWS } from "@/app/views/frame";
+import { setSound, useSound } from "@/lib/sound";
 import { getSkin, savedSkin, saveSkin, setSkin, SKINS, type Skin, useSkin } from "@/lib/skin";
 
 // The bar over the kit's pages, /ui and /design, as SPEC-01/HARDWARE's sits over its own: the kit's name on the left,
@@ -53,13 +55,14 @@ function SkinPicker() {
       presentation="auto"
     >
       <span className="flex shrink-0 items-center gap-2">
-        <SelectLabel className="engrave font-mono text-[10px] tracking-[.08em] text-muted uppercase max-sm:sr-only">Skin</SelectLabel>
+        <SelectLabel className="engrave font-mono text-[10px] tracking-[.08em] text-muted uppercase max-2xl:sr-only">Skin</SelectLabel>
         <SelectTrigger className="hw-key hw-key-dark inline-flex h-7 items-center gap-2 rounded-full border border-faint pr-2.5 pl-2 font-mono text-[10.5px] tracking-[.08em] text-ink uppercase transition-colors instrument:rounded-[7px] hover:border-muted data-open:border-muted">
           {/* The swatch is drawn from the skin, not ui-sdk's SelectValueIcon: that copies the chosen item's icon only
               once the list has opened, so the trigger grew by a swatch on the first open and the bar shifted.
               2026-11-15. */}
           <Swatch id={skin} />
-          <SelectValue />
+          {/* On a phone the bar shows the swatch alone, so the sound key beside it fits; the name is still read. */}
+          <SelectValue className="max-sm:sr-only" />
           <span aria-hidden className="text-[9px] text-muted">
             ▾
           </span>
@@ -90,6 +93,25 @@ function SkinPicker() {
   );
 }
 
+// The sound key, as SPEC-01's bar has: on, every control here clicks as it is touched, lib/sound.ts. A Toggle, so a
+// screen reader hears "Sound" and whether it is pressed. 2026-11-16.
+function SoundKey() {
+  const on = useSound();
+  return (
+    <Toggle
+      aria-label="Sound"
+      pressed={on}
+      onPressedChange={setSound}
+      className="hw-key hw-key-dark inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-faint text-muted transition-colors hover:text-ink data-pressed:text-ink"
+    >
+      <svg aria-hidden width={14} height={14} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2.5 6h2.2L8 3.2v9.6L4.7 10H2.5z" />
+        {on ? <path d="M10.5 5.6a3.4 3.4 0 0 1 0 4.8M12.4 3.8a6 6 0 0 1 0 8.4" /> : <path d="M10.6 6.2l3.4 3.6M14 6.2l-3.4 3.6" />}
+      </svg>
+    </Toggle>
+  );
+}
+
 const PAGES = [{ label: "Components", to: "/ui" }, ...VIEWS, { label: "Design", to: "/design" }];
 
 export default function KitLayout() {
@@ -108,6 +130,7 @@ export default function KitLayout() {
             HOLOS/UI
           </Link>
           <SkinPicker />
+          <SoundKey />
         </span>
         <div className="engrave flex flex-wrap justify-end gap-x-4 gap-y-1 font-mono text-[10px] tracking-[.08em] uppercase">
           {PAGES.map((p) => {

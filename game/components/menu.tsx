@@ -11,6 +11,7 @@ import { useLeaveShell } from "@/components/wake";
 import { forgetKey, useAccess, useAllowance } from "@/lib/key";
 import { plainClick, useLeaveFor } from "@/lib/leave";
 import { setMusic, useMusic } from "@/lib/music";
+import { setSound, useSound } from "@/lib/sound";
 import { LIVE, sendFeedback } from "@/lib/track";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
@@ -133,6 +134,23 @@ function Music() {
   );
 }
 
+// The UI's sounds, on or off, kept in this browser: every key, latch and dial speaking as it is touched, lib/sound.ts.
+// On by default under the Hardware skin, and off in the others until turned on here. 2026-11-16.
+function Sounds() {
+  const on = useSound();
+  return (
+    <>
+      <span className="flex flex-col py-2">
+        Sounds
+        <span className="text-xs text-muted">{on ? "Every control clicks as it is touched." : "Off."}</span>
+      </span>
+      <Button onClick={() => setSound(!on)} className="-mr-2 h-11 shrink-0 px-2 text-[13px] underline underline-offset-2">
+        {on ? "Turn off" : "Turn on"}
+      </Button>
+    </>
+  );
+}
+
 // The drawer slides in from the left over the whole screen. On ui-sdk's Dialog since 2026-11-14, so focus stays
 // inside it, the game behind can't be reached, Escape or a press outside closes it, and focus goes back to the galaxy.
 function Drawer({ sheet }: { sheet: Sheet }) {
@@ -199,6 +217,7 @@ function Drawer({ sheet }: { sheet: Sheet }) {
             ) : null,
           }}
           music={<Music />}
+          sounds={<Sounds />}
           newGame={<NewGame close={close} />}
           // The drawer slides away, then the game plays out to the page.
           onPage={(e, href) => {
@@ -234,6 +253,7 @@ export function MenuFace({
   Close = Button,
   mind,
   music,
+  sounds,
   newGame,
   onPage,
   feedback,
@@ -242,6 +262,8 @@ export function MenuFace({
   Close?: React.ElementType;
   mind: { name: string; line: string; action: React.ReactNode };
   music?: React.ReactNode;
+  /** The UI's sounds, on or off. */
+  sounds?: React.ReactNode;
   newGame: React.ReactNode;
   onPage?: (e: React.MouseEvent, href: string) => void;
   feedback?: React.ReactNode;
@@ -272,6 +294,11 @@ export function MenuFace({
       {music && (
         <div data-d="item" className={row}>
           {music}
+        </div>
+      )}
+      {sounds && (
+        <div data-d="item" className={row}>
+          {sounds}
         </div>
       )}
       <div data-d="item" className={row}>

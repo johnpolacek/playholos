@@ -14,6 +14,7 @@ import { RouterProvider } from "react-router/dom";
 import { animateTab } from "@/components/galactic-year";
 import { holdSentenceStarts } from "@/lib/breaks";
 import { startMusic } from "@/lib/music";
+import { startSounds } from "@/lib/sound";
 import { askedSkin, setSkin } from "@/lib/skin";
 import { router } from "./routes";
 
@@ -24,6 +25,8 @@ if (asked) setSkin(asked);
 animateTab();
 holdSentenceStarts();
 startMusic();
+// Every control's sound, on under the Hardware skin or when chosen. 2026-11-16.
+startSounds();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
