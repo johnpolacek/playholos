@@ -13,6 +13,7 @@ import { useLayoutEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import { Toggle } from "@ui-sdk/react/toggle";
 import { VIEWS } from "@/app/views/frame";
+import { awayMusic } from "@/lib/music";
 import { setSound, useSound } from "@/lib/sound";
 import { getSkin, savedSkin, saveSkin, setSkin, SKINS, type Skin, useSkin } from "@/lib/skin";
 
@@ -121,6 +122,11 @@ export default function KitLayout() {
     const was = getSkin();
     setSkin(savedSkin());
     return () => setSkin(was);
+  }, []);
+  // The music is the game's. It rests on the kit's pages, and comes back when the game does.
+  useLayoutEffect(() => {
+    awayMusic(true);
+    return () => awayMusic(false);
   }, []);
   return (
     <div style={{ "--accent": "var(--you)" } as React.CSSProperties} className="min-h-dvh bg-page pt-2 text-ink">

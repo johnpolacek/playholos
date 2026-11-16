@@ -2,7 +2,8 @@ import { useSyncExternalStore } from "react";
 
 // The game's music: one quiet track on a loop, under every screen. Browsers play sound only after a tap or a key, so
 // it starts on the first one. The menu turns it off, and the choice is kept in this browser. It rests while the tab
-// is hidden, and while the watcher's voice speaks. 2026-11-15.
+// is hidden, and while the watcher's voice speaks. 2026-11-15. It is the game's alone: the kit's pages, /ui and /design,
+// keep it off. 2026-11-16.
 
 const SRC = "/audio/background_music.mp3";
 const KEY = "holos-music";
@@ -12,6 +13,7 @@ const FADE = 2500;
 let el: HTMLAudioElement | null = null;
 let on = read();
 let hushed = false;
+let away = false;
 let fading = 0;
 const subs = new Set<() => void>();
 
@@ -40,7 +42,7 @@ function fade(to: number, ms: number, done?: () => void) {
 }
 
 function sync() {
-  const play = on && !hushed && document.visibilityState === "visible";
+  const play = on && !hushed && !away && document.visibilityState === "visible";
   if (play) {
     if (!el) {
       el = new Audio(SRC);
@@ -84,6 +86,12 @@ export function setMusic(next: boolean) {
 /** Rests the music while another sound plays, and brings it back after. */
 export function hushMusic(hush: boolean) {
   hushed = hush;
+  if (el) sync();
+}
+
+/** Keeps the music off on pages that are not the game, and lets it back on when the game returns. */
+export function awayMusic(off: boolean) {
+  away = off;
   if (el) sync();
 }
 
