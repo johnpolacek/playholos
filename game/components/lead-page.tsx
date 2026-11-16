@@ -357,7 +357,7 @@ export function LeadPage({ slug }: { slug: string }) {
                 </div>
               )}
               {r.close && (
-                <div className="mt-2 rounded-lg border border-faint bg-paper px-2 py-1">
+                <div className="lcd mt-2 rounded-lg border border-faint bg-paper px-2 py-1">
                   <WatcherClose {...r.close} />
                 </div>
               )}
@@ -366,7 +366,8 @@ export function LeadPage({ slug }: { slug: string }) {
         </section>
       )}
 
-      <div data-m className="mt-3 rounded-xl border border-faint bg-paper px-2 py-1">
+      {/* Art drawn for the dark: under the light Hardware skin it sits in a black well, lcd. 2026-11-16. */}
+      <div data-m className="lcd mt-3 rounded-xl border border-faint bg-paper px-2 py-1">
         {lead.system && lead.art.kind === "orbit" ? (
           <SystemArt system={lead.system} />
         ) : (
@@ -408,7 +409,7 @@ export function LeadPage({ slug }: { slug: string }) {
       {lead.system && lead.art.kind !== "orbit" && lead.art.kind !== "near" && (
         <>
           <h2 data-m className={`mt-5 ${HEAD}`}>Its system</h2>
-          <div data-m className="mt-1.5 rounded-xl border border-faint bg-paper px-2 py-1">
+          <div data-m className="lcd mt-1.5 rounded-xl border border-faint bg-paper px-2 py-1">
             <SystemArt system={lead.system} />
           </div>
         </>
@@ -511,7 +512,7 @@ export function ReadingCard({ read, chance, onListen }: { read: Reading; chance?
       )}
       {/* The watcher up close, drawn: its mirror held on one point of the sky. 2026-11-07. */}
       {read.close && (
-        <div className="mt-2.5 rounded-lg border border-faint bg-paper px-2 py-1">
+        <div className="lcd mt-2.5 rounded-lg border border-faint bg-paper px-2 py-1">
           <WatcherClose {...read.close} />
         </div>
       )}

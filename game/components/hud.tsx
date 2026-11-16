@@ -103,7 +103,7 @@ export function Meter({
         <>
           <span className="engrave truncate">{name}</span>
           {/* A meter with no bar keeps its place, so its number lines up with the others. 2026-11-13. */}
-          <b aria-hidden className="h-1 instrument:h-[7px]" />
+          <b aria-hidden className="h-1 instrument:h-[7px] hardware:h-[7px]" />
           <em className={NUMBER}>{value}</em>
         </>
       ) : (
@@ -112,11 +112,12 @@ export function Meter({
         // so a link or a hint in there would be lost.
         <UiMeter value={at} max={1} format={() => value} render={<span />} className="contents">
           <MeterLabel className="engrave truncate">{name}</MeterLabel>
-          {skin === "instrument" ? (
+          {/* Under Hardware, 2026-11-16, the same lamps, round and red, in a well sunk into the bench. */}
+          {skin === "instrument" || skin === "hardware" ? (
             // Under Instrument the bar is a row of lamps in a well, lit to the share. Where it is headed glows dim
             // past that, in place of the dashes. A preview lights in our blue, and a late one in the others' orange.
             // A lamp fades on in a third of a second, or changes at once under reduced motion. 2026-11-15.
-            <MeterTrack render={<span />} style={{ "--lamp": hint ? "var(--you)" : late ? "var(--other)" : "var(--fill2)" } as React.CSSProperties} className="hw-well flex h-[7px] gap-px rounded-[2px] p-px">
+            <MeterTrack render={<span />} style={{ "--lamp": hint ? "var(--you)" : late ? "var(--other)" : "var(--fill2)" } as React.CSSProperties} className="hw-well flex h-[7px] gap-px rounded-[2px] p-px hardware:gap-[2px] hardware:rounded-full hardware:px-[2px]">
               {Array.from({ length: LAMPS }, (_, i) => {
                 // Any share at all lights the first lamp, and only a full one the last.
                 const lit = i < (at >= 1 ? LAMPS : at > 0 ? Math.max(1, Math.floor(at * LAMPS)) : 0);
@@ -124,7 +125,7 @@ export function Meter({
                 return (
                   <i
                     key={i}
-                    className={`flex-1 rounded-[1px] transition-[background-color,box-shadow,opacity] duration-300 motion-reduce:transition-none ${lit ? "bg-(--lamp) shadow-[0_0_4px_color-mix(in_srgb,var(--lamp)_55%,transparent)]" : due ? "bg-(--lamp) opacity-30" : "bg-(--lamp-off)"}`}
+                    className={`flex-1 rounded-[1px] hardware:rounded-full transition-[background-color,box-shadow,opacity] duration-300 motion-reduce:transition-none ${lit ? "bg-(--lamp) shadow-[0_0_4px_color-mix(in_srgb,var(--lamp)_55%,transparent)]" : due ? "bg-(--lamp) opacity-30" : "bg-(--lamp-off)"}`}
                   />
                 );
               })}

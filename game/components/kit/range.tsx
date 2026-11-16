@@ -12,6 +12,7 @@ import { useSkin } from "@/lib/skin";
 // squared tick in the tone, and the line is squared at its ends. Under Infrared,
 // 2026-11-15, the line is a heat bar and the thumb its hottest point, white, blooming when focused. Under Arecibo,
 // 2026-11-15, the line is a row of bits, app/globals.css, and the thumb one tall bit, ringed in bits when focused.
+// Under Hardware, 2026-11-16, the line is a black track and the thumb a white knob standing off it, as SPEC-01's.
 
 type Props = {
   value: number;
@@ -52,12 +53,12 @@ export function Range(props: Props) {
       className={`relative ${className}`}
     >
       <SliderControl className="flex h-5 w-full cursor-pointer touch-none items-center">
-        <SliderTrack className="hw-well relative h-1 w-full rounded-full bg-track instrument:h-1.5">
+        <SliderTrack className="hw-well relative h-1 w-full rounded-full bg-track instrument:h-1.5 hardware:h-1.5">
           <SliderIndicator className="absolute inset-y-0 rounded-full bg-(--tone) log:rounded-[1px] instrument:inset-y-px instrument:opacity-80" />
           {/* The fader's cap, under Instrument: the panel's paint, with one line across it in the dial's color. */}
           <SliderThumb
             aria-label={label}
-            className="absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--tone) shadow-[0_0_0_3px_var(--panel)] transition-shadow has-[:focus-visible]:shadow-[0_0_0_3px_var(--panel),0_0_0_5px_var(--tone)] instrument:h-5 instrument:w-3 instrument:rounded-[3px] instrument:bg-[linear-gradient(90deg,transparent_5px,var(--tone)_5px_7px,transparent_7px),linear-gradient(#3a3c41,#26282c)] instrument:shadow-(--hw-key) instrument:has-[:focus-visible]:shadow-[var(--hw-key),0_0_0_2px_var(--tone)] log:w-[7px] log:rounded-[1px] infrared:bg-[#fff2cf] infrared:shadow-[0_0_0_3px_var(--panel),0_0_8px_3px_color-mix(in_srgb,var(--heat-3)_55%,transparent)] infrared:has-[:focus-visible]:shadow-[0_0_0_3px_var(--panel),var(--bloom)] arecibo:w-1.5 arecibo:rounded-none arecibo:bg-(--bit) arecibo:shadow-[0_0_0_2px_var(--page)] arecibo:has-[:focus-visible]:shadow-[0_0_0_2px_var(--page),0_0_0_4px_var(--bit)]"
+            className="absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--tone) shadow-[0_0_0_3px_var(--panel)] transition-shadow has-[:focus-visible]:shadow-[0_0_0_3px_var(--panel),0_0_0_5px_var(--tone)] instrument:h-5 instrument:w-3 instrument:rounded-[3px] instrument:bg-[linear-gradient(90deg,transparent_5px,var(--tone)_5px_7px,transparent_7px),linear-gradient(#3a3c41,#26282c)] instrument:shadow-(--hw-key) instrument:has-[:focus-visible]:shadow-[var(--hw-key),0_0_0_2px_var(--tone)] log:w-[7px] log:rounded-[1px] infrared:bg-[#fff2cf] infrared:shadow-[0_0_0_3px_var(--panel),0_0_8px_3px_color-mix(in_srgb,var(--heat-3)_55%,transparent)] infrared:has-[:focus-visible]:shadow-[0_0_0_3px_var(--panel),var(--bloom)] arecibo:w-1.5 arecibo:rounded-none arecibo:bg-(--bit) arecibo:shadow-[0_0_0_2px_var(--page)] arecibo:has-[:focus-visible]:shadow-[0_0_0_2px_var(--page),0_0_0_4px_var(--bit)] hardware:size-[18px] hardware:bg-[radial-gradient(circle_at_50%_35%,#fff,#e4e4e0_70%)] hardware:shadow-[inset_0_0_0_1px_#c9c9c4,0_2px_4px_rgb(0_0_0/.3)] hardware:has-[:focus-visible]:shadow-[inset_0_0_0_1px_#c9c9c4,0_2px_4px_rgb(0_0_0/.3),0_0_0_3px_var(--panel),0_0_0_5px_var(--hw-red)]"
           />
         </SliderTrack>
       </SliderControl>

@@ -722,7 +722,7 @@ export function KnownCard({
         )}
       </div>
       <p className="mt-1 text-[14px] leading-snug">{line}</p>
-      <div className="mt-2 rounded-lg border border-faint px-2 py-1">{art}</div>
+      <div className="lcd mt-2 rounded-lg border border-faint px-2 py-1">{art}</div>
       <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13px] leading-snug">
         {facts.map(([label, value]) => (
           <div key={label} className="contents">

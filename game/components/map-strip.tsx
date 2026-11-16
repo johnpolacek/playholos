@@ -104,12 +104,13 @@ export function MapStrip() {
 
   // Tall, the strip opens wider at its handle, and gives a walkthrough more room. Wide, the map fills the left of the
   // screen, and needs no handle.
+  // Under the Hardware skin, 2026-11-16, the map is a dark screen in the light bench, lcd, with chalk's inks.
   // Under the Instrument skin the map sits behind glass, hw-glass in app/globals.css, as an instrument's screen: the
   // pane lets every press through. 2026-11-15.
   return (
     <div
       data-shell="map"
-      className={`hw-glass relative shrink-0 overflow-hidden border-b border-faint transition-[height] duration-300 wide:col-start-1 wide:row-span-2 wide:row-start-2 wide:h-auto wide:border-b-0 ${tall ? "h-[72%]" : guided ? "h-[34%]" : "h-[45%]"}`}
+      className={`hw-glass lcd relative shrink-0 overflow-hidden border-b border-faint transition-[height] duration-300 wide:col-start-1 wide:row-span-2 wide:row-start-2 wide:h-auto wide:border-b-0 ${tall ? "h-[72%]" : guided ? "h-[34%]" : "h-[45%]"}`}
     >
       {aimed ? (
         <>

@@ -50,7 +50,7 @@ export default function LeadView() {
           />
           <EngageBar to="/ui/lead" star="Proxima Centauri" />
           <ReadingCard read={READ} />
-          <div className="mt-3 rounded-xl border border-faint bg-paper px-2 py-1">
+          <div className="lcd mt-3 rounded-xl border border-faint bg-paper px-2 py-1">
             <LeadArt art={ART} />
           </div>
           <Measured

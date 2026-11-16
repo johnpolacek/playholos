@@ -135,7 +135,7 @@ function Rings({ reach, notice }: { reach: number; notice: number }) {
   const r = (ly: number) => Math.min(ly, 52) * 2;
   const at = (ra: number, ly: number) => [Math.cos((ra / 24) * 2 * Math.PI) * r(ly), -Math.sin((ra / 24) * 2 * Math.PI) * r(ly)];
   return (
-    <svg viewBox="-110 -108 220 216" className="h-[210px] w-full" role="img" aria-label={`Readable to ${reach} light-years, noticed to ${Math.round(notice)}`}>
+    <svg viewBox="-110 -108 220 216" className="lcd h-[210px] w-full rounded-xl" role="img" aria-label={`Readable to ${reach} light-years, noticed to ${Math.round(notice)}`}>
       <circle r={r(50)} fill="none" className="stroke-rowline" />
       <circle r={r(25)} fill="none" className="stroke-rowline" />
       <circle r={Math.min(r(notice), 104)} className="fill-muted/5 stroke-muted/40" strokeDasharray="2 3" />
@@ -171,7 +171,7 @@ function GalaxyReach({ first, later }: { first: number; later: number | null }) 
   const sun = -r(27000);
   const n = (ly: number) => Math.round(ly).toLocaleString("en-US");
   return (
-    <svg viewBox="-110 -108 220 216" className="h-[210px] w-full" role="img" aria-label={`Read on the first pass to ${n(first)} light-years`}>
+    <svg viewBox="-110 -108 220 216" className="lcd h-[210px] w-full rounded-xl" role="img" aria-label={`Read on the first pass to ${n(first)} light-years`}>
       <defs>
         <clipPath id="disk">
           <circle r={r(50000)} />

@@ -294,9 +294,10 @@ function Answer({ id, text, still, asked, last }: { id: string; text: string; st
 }
 
 /** What we asked, as a bubble in ink on the right. The Mind answers in its notes. Under Infrared, 2026-11-15, it is
- *  cold violet-black, its words chalk. Under Arecibo, a block of set bits, squared. */
+ *  cold violet-black, its words chalk. Under Arecibo, a block of set bits, squared. Under Hardware, 2026-11-16, a white
+ *  key's plastic, not the red key's: the one move is the Mind's to take. */
 export function Ours({ children }: { children: React.ReactNode }) {
-  return <div className="max-w-[86%] self-end rounded-xl bg-button instrument:rounded-[5px] infrared:bg-(--cold) infrared:text-ink infrared:shadow-[inset_0_0_0_1px_var(--heat-0)] arecibo:rounded-none px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">{children}</div>;
+  return <div className="max-w-[86%] self-end rounded-xl bg-button instrument:rounded-[5px] infrared:bg-(--cold) infrared:text-ink infrared:shadow-[inset_0_0_0_1px_var(--heat-0)] arecibo:rounded-none hardware:bg-[#fdfdfc] hardware:text-ink hardware:shadow-(--hw-key-up) px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">{children}</div>;
 }
 
 /** Messages as bubbles: ours in ink, the Mind's as its notes. Then whether it is thinking, or can't answer. */
@@ -475,7 +476,7 @@ export function AskBox({ busy, onAsk, className = "", focus = false }: { busy: b
       }}
     >
       {queued && <p className="mb-1.5 px-1 text-[13.5px] leading-snug text-muted">Next, once we finish: “{queued}”</p>}
-      <div className="flex h-11 items-center gap-2 rounded-full instrument:rounded-[7px] border border-ink bg-paper pr-1.5 pl-3.5">
+      <div className="lcd flex h-11 items-center gap-2 rounded-full instrument:rounded-[7px] border border-ink bg-paper pr-1.5 pl-3.5 hardware:border-transparent">
         <Input
           ref={box}
           value={input}

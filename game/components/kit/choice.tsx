@@ -7,6 +7,7 @@ import { useSkin } from "@/lib/skin";
 // radio group. Four looks, as the game draws them. 2026-11-15.
 // Under the Instrument skin, 2026-11-15, the track is a well and the chosen one a key standing in it. A switch build's
 // two sides are a real switch there, ui-sdk's Switch: a lever between its two names, thrown toward the one that holds.
+// Under Hardware, 2026-11-16, the same switch is SPEC-01's: a pill, red while its first side holds, and a white knob.
 // Under the Log skin, 2026-11-15, each is squared, and a lens or a switch's side is a stamp, the chosen one inked.
 
 const LOOK = {
@@ -56,7 +57,7 @@ export function Choice({
   const skin = useSkin();
   const id = useId();
   // A real switch, for two sides under Instrument. The first option is its on side.
-  if (look === "switch" && skin === "instrument" && options.length === 2) {
+  if (look === "switch" && (skin === "instrument" || skin === "hardware") && options.length === 2) {
     const [a, b] = options;
     const on = value === a.value;
     return (
@@ -74,8 +75,8 @@ export function Choice({
         </span>
         {/* The slot and its lever, with three ridges for a thumb. It slides in a sixth of a second, or at once under
             reduced motion. */}
-        <span aria-hidden className="hw-well relative h-[26px] w-[52px] rounded-[7px]">
-          <SwitchThumb className="hw-key absolute top-[3px] left-[25px] h-5 w-6 rounded-[5px] bg-[repeating-linear-gradient(90deg,transparent_0_2px,rgb(0_0_0/.45)_2px_3px,transparent_3px_5px),linear-gradient(#3a3c41,#26282c)] bg-[position:center] bg-[size:13px_10px,auto] bg-no-repeat transition-[left] duration-150 ease-out data-checked:left-[3px] motion-reduce:transition-none" />
+        <span aria-hidden className="hw-well relative h-[26px] w-[52px] rounded-[7px] hardware:rounded-full">
+          <SwitchThumb className="hw-key absolute top-[3px] left-[25px] h-5 w-6 rounded-[5px] hardware:left-[29px] hardware:w-5 hardware:rounded-full hardware:bg-[linear-gradient(#fff,#e6e6e3)] hardware:data-checked:left-[3px] bg-[repeating-linear-gradient(90deg,transparent_0_2px,rgb(0_0_0/.45)_2px_3px,transparent_3px_5px),linear-gradient(#3a3c41,#26282c)] bg-[position:center] bg-[size:13px_10px,auto] bg-no-repeat transition-[left] duration-150 ease-out data-checked:left-[3px] motion-reduce:transition-none" />
         </span>
         <span id={`${id}-b`} className="text-left text-ink transition-colors group-data-checked:text-muted motion-reduce:transition-none">
           {b.label}

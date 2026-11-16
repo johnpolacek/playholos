@@ -97,7 +97,7 @@ export function UnrangedGlow({ n, flash }: { n: number; flash: FlashSeen }) {
         )}
       </section>
 
-      <div data-m className="mt-3 rounded-xl border border-faint bg-paper px-2 py-1">
+      <div data-m className="lcd mt-3 rounded-xl border border-faint bg-paper px-2 py-1">
         <RangingArt seen={flash.seen} at={at} now={now} faded={flash.faded} />
       </div>
 
