@@ -4,7 +4,7 @@ import { ChanceTag, chanceShift, mindFirst } from "@/components/chances";
 import { chancesOf } from "@/lib/game/chance";
 import { Link } from "react-router";
 import { useSchedule } from "@/components/picks";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
 import { LeadMark } from "@/components/marks";
@@ -334,6 +334,15 @@ export function LeadList({
   const [peeked, setPeeked] = useState<number | null>(null);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [quietOpen, setQuietOpen] = useState(false);
+  // Each lead's soonest craft, kept until the plan, our compute or the tenth of a Year changes. Worked out anew on each
+  // second's tick, it paced the whole plan and the antimatter queue for every row, and held the frame for seconds late
+  // in a game. Profiled 2026-11-16.
+  const from = Math.floor((year ?? 0) * 10) / 10;
+  const plan = save?.plan;
+  const soonest = useMemo(() => {
+    let base: ReturnType<typeof roads> | undefined;
+    return { base: () => (base ??= roads(plan ?? EMPTY, scale, from)), best: new Map<string, unknown>() };
+  }, [plan, scale, from]);
   const shown = peeked ?? picked;
   // The focus held before a row was pointed at, put back when the pointer leaves: leaving set it to none, and wiped the
   // lead a jump's card had turned the map to. 2026-11-08.
@@ -400,9 +409,13 @@ export function LeadList({
     // to do. Playtest 2026-11-13.
     // The craft whose word would reach us first, of those we could send now: sails, a flyby probe or a sentinel. For a
     // world, the first that reads its air.
-    const from = Math.floor((year ?? 0) * 10) / 10;
-    const base = roads(save?.plan ?? EMPTY, scale, from);
+    const base = soonest.base();
     const best = (l: Lead) => {
+      const key = `${l.star}|${l.ly}|${l.art.kind}`;
+      if (!soonest.best.has(key)) soonest.best.set(key, bestNow(l));
+      return soonest.best.get(key) as ReturnType<typeof bestNow>;
+    };
+    const bestNow = (l: Lead) => {
       if (!["orbit", "glow", "dark", "pair"].includes(l.art.kind)) return null;
       const p = save?.plan ?? EMPTY;
       const ways = [

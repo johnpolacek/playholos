@@ -438,7 +438,10 @@ export function Hud() {
   const short = shortAt(plan, done, now);
   // Our deuterium, once the Works is ordered: free stock, or the Year all we have sent for is in. 2026-11-07.
   const works = done["Deuterium Works"] ?? null;
-  const fuel = inOrder(plan, "Deuterium Works") ? { d: deuteriumAt(plan, amFuel(plan, scale, (n) => done[n]), now) } : null;
+  // What our craft by antimatter take from the Works, kept until the plan changes: it ran the antimatter queue each
+  // second's tick. Profiled 2026-11-16.
+  const amDraw = useMemo(() => amFuel(plan, scale, (n) => done[n]), [plan, scale, done]);
+  const fuel = inOrder(plan, "Deuterium Works") ? { d: deuteriumAt(plan, amDraw, now) } : null;
   const { energy, compute } = useMemo(
     () => drawAt(plan, scale, now),
     [plan, scale, now],
