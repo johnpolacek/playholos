@@ -592,6 +592,32 @@ void main() {
   gl_FragColor = vec4(uColor * (1.0 + 2.2 * pulse), uOpacity * fog * (1.0 + 2.5 * pulse));
 }`;
 
+// Scan's lines, all in one draw: each lead's thread, its legs down to the plane, and what we sent. As THREAD_FRAG, but
+// each segment's color, opacity, running light and fog ride on its vertices, so a hundred lines cost one draw call
+// instead of a hundred and fifty. 2026-11-16.
+const STRANDS_VERT = /* glsl */ `
+attribute float aT, aPhase, aPulse, aAlpha, aFog;
+attribute vec3 aColor;
+varying float vT, vPhase, vPulse, vAlpha, vFog, vDepth;
+varying vec3 vColor;
+void main() {
+  vT = aT; vPhase = aPhase; vPulse = aPulse; vAlpha = aAlpha; vFog = aFog; vColor = aColor;
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  vDepth = -mv.z;
+  gl_Position = projectionMatrix * mv;
+}`;
+const STRANDS_FRAG = /* glsl */ `
+uniform float uTime, uFog, uFogRef;
+varying float vT, vPhase, vPulse, vAlpha, vFog, vDepth;
+varying vec3 vColor;
+void main() {
+  if (vAlpha <= 0.0) discard;
+  float d = vT - fract(uTime * 0.12 + vPhase);
+  float pulse = exp(-abs(d) * 14.0) * step(d, 0.0) * vPulse;
+  float fog = uFog > 0.0 && vFog > 0.5 ? min(1.0, exp(-uFog * (vDepth - uFogRef))) : 1.0;
+  gl_FragColor = vec4(vColor * (1.0 + 2.2 * pulse), vAlpha * fog * (1.0 + 2.5 * pulse));
+}`;
+
 // The Galaxy's plane under the leads: a disc light falls on, brightest at Sol, each ten light-years a shade lighter
 // toward its ring, and faint spokes every 30°. Added to the sky, so the stars behind still show. 2026-11-09.
 const PLANE_VERT = /* glsl */ `
@@ -3070,23 +3096,13 @@ void main() {
     // A warm glow in amber, as the simulation draws a peer. 2026-11-03.
     const warmOf = leads.map(({ id }) => WARM_GLOW.test(id));
     const inkOf = (id: string): Kind => (id === "Luyten's Star" ? "wait" : WARM_GLOW.test(id) ? "lamp" : "mind");
-    const threads = leads.map(({ id, at }) => {
+    for (const { id, at } of leads) {
       const kind = K[inkOf(id)];
       core.add(at.x, at.y, at.z, 6.5, 1, kind);
       halo.add(at.x, at.y, at.z, 26, 0, kind);
       feet.add(at.x, 0, at.z, 2.5, 0.7, K.ink);
       stalk.push(at.x, at.y, at.z, at.x, 0, at.z);
-      const mat = thread(inkOf(id), (ids.indexOf(id) * 0.37) % 1);
-      const l = new THREE.Line(
-        new THREE.BufferGeometry()
-          .setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3))
-          .setAttribute("aT", new THREE.Float32BufferAttribute([0, 1], 1)),
-        mat,
-      );
-      l.frustumCulled = false;
-      group.add(l);
-      return { l, mat };
-    });
+    }
     core.add(0, 0, 0, 8, 1, K.sun);
     // Sol from far out, pure white, so we can always find ourselves, as in the simulation.
     const solFar = new Cloud();
@@ -3122,17 +3138,7 @@ void main() {
         v.copy(at).multiplyScalar(y / ly);
         beads.add(v.x, v.y, v.z, 4.5, 0, K[inkOf(id)]);
       }
-      const mat = line("ink", 0);
-      const legs = new THREE.LineSegments(
-        new THREE.BufferGeometry().setAttribute(
-          "position",
-          new THREE.Float32BufferAttribute([0, 0, 0, at.x, 0, at.z, at.x, 0, at.z, at.x, at.y, at.z], 3),
-        ),
-        mat,
-      );
-      legs.frustumCulled = false;
-      group.add(legs);
-      return { from, to: beads.size.length, mat };
+      return { from, to: beads.size.length };
     });
     const beadGlow = glow({ fixed: true });
     const beadPts = beads.points(beadGlow);
@@ -3165,16 +3171,49 @@ void main() {
     // bright until it lands, and its star marked. Each call a ring in the Galaxy's plane, the edge of its light, and
     // once stopped a second ring behind it, where the last of it has got to. Pools, filled each frame. 2026-10-26.
     const MAX_SENT = 24, MAX_CALLS = 8;
-    const ours = Array.from({ length: MAX_SENT }, () => {
-      const mat = line("mind", 0);
-      const l = new THREE.Line(
-        new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3)),
-        mat,
-      );
-      l.frustumCulled = false;
-      group.add(l);
-      return { l, mat, to: new THREE.Vector3() };
+    const ours = Array.from({ length: MAX_SENT }, () => ({ to: new THREE.Vector3() }));
+    // Every line above in one: three segments a lead, its thread and its two legs, then one for each message we sent.
+    const L = leads.length;
+    const SEGS = 3 * L + MAX_SENT;
+    const sAttr = (size: number) => new THREE.BufferAttribute(new Float32Array(2 * SEGS * size), size);
+    const strandGeo = new THREE.BufferGeometry()
+      .setAttribute("position", sAttr(3))
+      .setAttribute("aT", sAttr(1))
+      .setAttribute("aPhase", sAttr(1))
+      .setAttribute("aPulse", sAttr(1))
+      .setAttribute("aAlpha", sAttr(1))
+      .setAttribute("aFog", sAttr(1))
+      .setAttribute("aColor", sAttr(3));
+    const sA = (name: string) => strandGeo.attributes[name] as THREE.BufferAttribute;
+    const [sPos, sT, sPhase, sPulse, sAlpha, sFog, sColor] = ["position", "aT", "aPhase", "aPulse", "aAlpha", "aFog", "aColor"].map(sA);
+    /** Sets both ends of a segment: one value, or a pair, one each end. */
+    const both = (a: THREE.BufferAttribute, seg: number, x: number, y = x) => (a.setX(2 * seg, x), a.setX(2 * seg + 1, y));
+    leads.forEach(({ id, at }, i) => {
+      both(sT, 3 * i, 0, 1);
+      both(sPhase, 3 * i, (ids.indexOf(id) * 0.37) % 1);
+      for (const k of [0, 1, 2]) both(sFog, 3 * i + k, 1);
+      // The legs: from Sol along the plane to under the star, then up to it.
+      sPos.setXYZ(2 * (3 * i + 1) + 1, at.x, 0, at.z);
+      sPos.setXYZ(2 * (3 * i + 2), at.x, 0, at.z);
+      sPos.setXYZ(2 * (3 * i + 2) + 1, at.x, at.y, at.z);
     });
+    const strandMat = new THREE.ShaderMaterial({
+      uniforms: { uTime: { value: 0 }, uFog: { value: 0 }, uFogRef: { value: 0 } },
+      vertexShader: STRANDS_VERT,
+      fragmentShader: STRANDS_FRAG,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+    });
+    const strands = new THREE.LineSegments(strandGeo, strandMat);
+    strands.frustumCulled = false;
+    group.add(strands);
+    /** A segment's color, from the palette, which a skin can repaint. */
+    const tint = (seg: number, kind: Kind) => {
+      const c = pal[K[kind]];
+      sColor.setXYZ(2 * seg, c.r, c.g, c.b);
+      sColor.setXYZ(2 * seg + 1, c.r, c.g, c.b);
+    };
     const oursHead = new Cloud();
     for (let i = 0; i < MAX_SENT; i++) {
       oursHead.add(0, 0, 0, 7, 0, K.mind);
@@ -3256,7 +3295,7 @@ void main() {
       // The far side fades: what lies past Sol's distance goes into the dark, and nothing nearer brightens.
       const fogRef = stars.camera.position.length();
       const fogAt = (at: THREE.Vector3) => Math.min(1, Math.exp(-FOG * (stars.camera.position.distanceTo(at) - fogRef)));
-      for (const m of [coreGlow, haloGlow, feetGlow, beadGlow, ringMat, stalkMat, planeMat, ...(dim ? [dim] : []), ...threads.map((t) => t.mat), ...paths.map((q) => q.mat)]) {
+      for (const m of [coreGlow, haloGlow, feetGlow, beadGlow, ringMat, stalkMat, planeMat, ...(dim ? [dim] : []), strandMat]) {
         m.uniforms.uFog.value = FOG * (1 - farOut);
         m.uniforms.uFogRef.value = fogRef;
       }
@@ -3324,10 +3363,11 @@ void main() {
         const k = shown[i];
         const reach = easeInOut(Math.min(1, k / 0.6));
         const lit = ramp(k, 0.5, 1);
-        const pos = threads[i].l.geometry.attributes.position as THREE.BufferAttribute;
         v.copy(at).multiplyScalar(reach);
-        pos.setXYZ(1, v.x, v.y, v.z);
-        pos.needsUpdate = true;
+        sPos.setXYZ(2 * (3 * i) + 1, v.x, v.y, v.z);
+        tint(3 * i, inkOf(leads[i].id));
+        tint(3 * i + 1, "ink");
+        tint(3 * i + 2, "ink");
         const faded = warmOf[i] && !!d?.faded?.has(leads[i].id);
         const hushed = calm * (spec.hush?.[leads[i].n] ?? 0);
         // Over the Milky Way, a warm glow still shining is as good as looked at, and all but the warm glows step aside.
@@ -3339,12 +3379,13 @@ void main() {
         // A quiet lead steps back to a dot once all are lit: its thread fades, and its halo dims. Pointing at it
         // brings it back.
         const stepped = hushed * (1 - seen);
-        threads[i].mat.uniforms.uOpacity.value =
-          (warmOf[i] ? 0.12 + 0.13 * seen : 0.3 + 0.4 * seen - 0.15 * any * (1 - seen)) * p * Math.min(1, shown[i] * 4) * (1 - stepped) * (1 - aside) * (charting && i === focus ? 0 : 1);
+        both(sAlpha, 3 * i,
+          (warmOf[i] ? 0.12 + 0.13 * seen : 0.3 + 0.4 * seen - 0.15 * any * (1 - seen)) * p * Math.min(1, shown[i] * 4) * (1 - stepped) * (1 - aside) * (charting && i === focus ? 0 : 1));
         // Light runs along each thread once it is lit, and rests while the sky holds still.
-        threads[i].mat.uniforms.uTime.value = clock;
-        threads[i].mat.uniforms.uPulse.value = still ? 0 : lit * (1 - stepped);
-        paths[i].mat.uniforms.uOpacity.value = 0.3 * looked[i] * lit * p * (charting ? 0 : 1);
+        both(sPulse, 3 * i, still ? 0 : lit * (1 - stepped));
+        const legs = 0.3 * looked[i] * lit * p * (charting ? 0 : 1);
+        both(sAlpha, 3 * i + 1, legs);
+        both(sAlpha, 3 * i + 2, legs);
         for (let b = paths[i].from; b < paths[i].to; b++) beadB.setX(b, charting && i === focus ? 0 : 0.9 * seen * lit);
         coreB.setX(i, lit * (1 - aside) * (faded ? 0.5 : 1));
         const flare = 4 * lit * (1 - lit);
@@ -3384,16 +3425,16 @@ void main() {
       const sent = spec.mode === "leads" ? (spec.sent ?? []).slice(0, MAX_SENT) : [];
       const headPos = oursPts.geometry.attributes.position as THREE.BufferAttribute;
       const headB = oursPts.geometry.attributes.aBright as THREE.BufferAttribute;
-      ours.forEach(({ l, mat, to }, i) => {
+      ours.forEach(({ to }, i) => {
         const m = sent[i];
         if (m) to.copy(skyBasis(m.ra * 15, m.dec).radial).multiplyScalar(m.ly);
         const gone = m ? Math.max(0, Math.min(1, (year - m.sent) / m.ly)) : 0;
         const going = !!m && gone > 0 && gone < 1;
         v.copy(to).multiplyScalar(gone);
-        const pos = l.geometry.attributes.position as THREE.BufferAttribute;
-        pos.setXYZ(1, v.x, v.y, v.z);
-        pos.needsUpdate = true;
-        mat.uniforms.uOpacity.value = m && gone > 0 ? (going ? 0.55 : 0.28) * p : 0;
+        const seg = 3 * L + i;
+        sPos.setXYZ(2 * seg + 1, v.x, v.y, v.z);
+        tint(seg, "mind");
+        both(sAlpha, seg, m && gone > 0 ? (going ? 0.55 : 0.28) * p : 0);
         headPos.setXYZ(3 * i, v.x, v.y, v.z);
         headPos.setXYZ(3 * i + 1, v.x, v.y, v.z);
         headPos.setXYZ(3 * i + 2, to.x, to.y, to.z);
@@ -3403,6 +3444,8 @@ void main() {
       });
       headPos.needsUpdate = headB.needsUpdate = true;
       oursGlow.uniforms.uOpacity.value = p;
+      strandMat.uniforms.uTime.value = clock;
+      for (const a of [sPos, sAlpha, sPulse, sColor]) a.needsUpdate = true;
       const calls = spec.mode === "leads" ? (spec.calls ?? []).slice(0, MAX_CALLS) : [];
       callRings.forEach(({ ring, mat }, j) => {
         const c = calls[j >> 1];
