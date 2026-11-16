@@ -156,8 +156,9 @@ export function LeadsMap({
         const clear = placeLabel(n, x, y, ring ? (id.startsWith("call:") ? 16 : 4) : null, taken);
         // A lead's name stays, faint, where it can't be clear. Any other gives way whole: a star we sent to sat over
         // Proxima Centauri's name until 2026-10-30.
-        // A quiet lead's name goes as the map calms, unless it is the one in view.
-        const back = id !== focus && !(wide && warmName(id)) && hush[ids.indexOf(id)] ? (dials.calm ?? 0) : 0;
+        // A quiet lead's name goes as the map calms, unless it is the one in view. Over the Milky Way too, a quiet warm
+        // glow's, as its thread does. 2026-11-16.
+        const back = id !== focus && hush[ids.indexOf(id)] ? (dials.calm ?? 0) : 0;
         n.style.opacity = String(a * (1 - back) * (id === "Sol" && wide ? Math.max(clear, 0.9) : lead || id === "Sol" ? clear : clear === 1 ? 1 : 0) * (focus && ids.includes(id) && id !== focus ? 0.45 : 1) * (wide && warmName(id) && !shining(id) ? 0.6 : 1));
       }
     },

@@ -3329,13 +3329,16 @@ void main() {
         pos.setXYZ(1, v.x, v.y, v.z);
         pos.needsUpdate = true;
         const faded = warmOf[i] && !!d?.faded?.has(leads[i].id);
+        const hushed = calm * (spec.hush?.[leads[i].n] ?? 0);
         // Over the Milky Way, a warm glow still shining is as good as looked at, and all but the warm glows step aside.
-        const seen = Math.max(looked[i], warmOf[i] && !faded ? wideK : 0);
+        // Only one that needs us, though: forty threads out from Sol hid the few that did, and cost the frame rate.
+        // The rest step back to a dot, as a quiet lead does. Playtest 2026-11-16.
+        const seen = Math.max(looked[i], warmOf[i] && !faded ? wideK * (1 - hushed) : 0);
         // And looking far out at any lead: the nearby ones would pile up over Sol.
         const aside = warmOf[i] ? 0 : Math.max(wideK, any * farOut) * (1 - looked[i]);
         // A quiet lead steps back to a dot once all are lit: its thread fades, and its halo dims. Pointing at it
         // brings it back.
-        const stepped = calm * (spec.hush?.[leads[i].n] ?? 0) * (1 - seen);
+        const stepped = hushed * (1 - seen);
         threads[i].mat.uniforms.uOpacity.value =
           (warmOf[i] ? 0.12 + 0.13 * seen : 0.3 + 0.4 * seen - 0.15 * any * (1 - seen)) * p * Math.min(1, shown[i] * 4) * (1 - stepped) * (1 - aside) * (charting && i === focus ? 0 : 1);
         // Light runs along each thread once it is lit, and rests while the sky holds still.
