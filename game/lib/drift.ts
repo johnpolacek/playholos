@@ -3092,7 +3092,6 @@ void main() {
     const core = new Cloud();
     const halo = new Cloud();
     const feet = new Cloud();
-    const stalk: number[] = [];
     // A warm glow in amber, as the simulation draws a peer. 2026-11-03.
     const warmOf = leads.map(({ id }) => WARM_GLOW.test(id));
     const inkOf = (id: string): Kind => (id === "Luyten's Star" ? "wait" : WARM_GLOW.test(id) ? "lamp" : "mind");
@@ -3101,7 +3100,6 @@ void main() {
       core.add(at.x, at.y, at.z, 6.5, 1, kind);
       halo.add(at.x, at.y, at.z, 26, 0, kind);
       feet.add(at.x, 0, at.z, 2.5, 0.7, K.ink);
-      stalk.push(at.x, at.y, at.z, at.x, 0, at.z);
     }
     core.add(0, 0, 0, 8, 1, K.sun);
     // Sol from far out, pure white, so we can always find ourselves, as in the simulation.
@@ -3118,14 +3116,8 @@ void main() {
     solGlow.uniforms.uGain.value = 1.8;
     const corePts = core.points(coreGlow);
     const haloPts = halo.points(haloGlow);
-    group.add(haloPts, corePts, feet.points(feetGlow));
-    const stalkMat = line("ink", 0);
-    const stalks = new THREE.LineSegments(
-      new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(stalk, 3)),
-      stalkMat,
-    );
-    stalks.frustumCulled = false;
-    group.add(stalks);
+    const feetPts = feet.points(feetGlow);
+    group.add(haloPts, corePts, feetPts);
     // The lead the Will looks at, in depth: its shadow on the plane and its stalk, square to each other, and a bead at
     // each light-year along its thread. Past the region, a bead each hundred, so they stay apart. 2026-10-27.
     const beads = new Cloud();
@@ -3172,9 +3164,11 @@ void main() {
     // once stopped a second ring behind it, where the last of it has got to. Pools, filled each frame. 2026-10-26.
     const MAX_SENT = 24, MAX_CALLS = 8;
     const ours = Array.from({ length: MAX_SENT }, () => ({ to: new THREE.Vector3() }));
-    // Every line above in one: three segments a lead, its thread and its two legs, then one for each message we sent.
+    // Every line above in one: four segments a lead, its thread, its two legs and its stalk, then one for each message
+    // we sent. The stalks were one line of their own that never stepped back: far glows' stalks, thousands of
+    // light-years tall, met over Sol in a starburst. Playtest 2026-11-16.
     const L = leads.length;
-    const SEGS = 3 * L + MAX_SENT;
+    const SEGS = 4 * L + MAX_SENT;
     const sAttr = (size: number) => new THREE.BufferAttribute(new Float32Array(2 * SEGS * size), size);
     const strandGeo = new THREE.BufferGeometry()
       .setAttribute("position", sAttr(3))
@@ -3189,13 +3183,16 @@ void main() {
     /** Sets both ends of a segment: one value, or a pair, one each end. */
     const both = (a: THREE.BufferAttribute, seg: number, x: number, y = x) => (a.setX(2 * seg, x), a.setX(2 * seg + 1, y));
     leads.forEach(({ id, at }, i) => {
-      both(sT, 3 * i, 0, 1);
-      both(sPhase, 3 * i, (ids.indexOf(id) * 0.37) % 1);
-      for (const k of [0, 1, 2]) both(sFog, 3 * i + k, 1);
+      both(sT, 4 * i, 0, 1);
+      both(sPhase, 4 * i, (ids.indexOf(id) * 0.37) % 1);
+      for (const k of [0, 1, 2, 3]) both(sFog, 4 * i + k, 1);
       // The legs: from Sol along the plane to under the star, then up to it.
-      sPos.setXYZ(2 * (3 * i + 1) + 1, at.x, 0, at.z);
-      sPos.setXYZ(2 * (3 * i + 2), at.x, 0, at.z);
-      sPos.setXYZ(2 * (3 * i + 2) + 1, at.x, at.y, at.z);
+      sPos.setXYZ(2 * (4 * i + 1) + 1, at.x, 0, at.z);
+      sPos.setXYZ(2 * (4 * i + 2), at.x, 0, at.z);
+      sPos.setXYZ(2 * (4 * i + 2) + 1, at.x, at.y, at.z);
+      // The stalk: from the star down to the plane.
+      sPos.setXYZ(2 * (4 * i + 3), at.x, at.y, at.z);
+      sPos.setXYZ(2 * (4 * i + 3) + 1, at.x, 0, at.z);
     });
     const strandMat = new THREE.ShaderMaterial({
       uniforms: { uTime: { value: 0 }, uFog: { value: 0 }, uFogRef: { value: 0 } },
@@ -3295,7 +3292,7 @@ void main() {
       // The far side fades: what lies past Sol's distance goes into the dark, and nothing nearer brightens.
       const fogRef = stars.camera.position.length();
       const fogAt = (at: THREE.Vector3) => Math.min(1, Math.exp(-FOG * (stars.camera.position.distanceTo(at) - fogRef)));
-      for (const m of [coreGlow, haloGlow, feetGlow, beadGlow, ringMat, stalkMat, planeMat, ...(dim ? [dim] : []), strandMat]) {
+      for (const m of [coreGlow, haloGlow, feetGlow, beadGlow, ringMat, planeMat, ...(dim ? [dim] : []), strandMat]) {
         m.uniforms.uFog.value = FOG * (1 - farOut);
         m.uniforms.uFogRef.value = fogRef;
       }
@@ -3307,10 +3304,11 @@ void main() {
       feetGlow.uniforms.uOpacity.value = p * (1 - farOut);
       beadGlow.uniforms.uOpacity.value = p;
       pulseGlow.uniforms.uOpacity.value = p;
-      stalkMat.uniforms.uOpacity.value = 0.22 * p * (1 - farOut) * (1 - chartIn);
+      const stalkK = 0.22 * p * (1 - farOut) * (1 - chartIn);
       // Lit in turn: the thread runs out from Sol, then the star comes on with a flare, then breathes.
       const shown = leads.map((_, i) => Math.min(1, Math.max(0, found - i)));
       const coreB = corePts.geometry.attributes.aBright as THREE.BufferAttribute;
+      const feetB = feetPts.geometry.attributes.aBright as THREE.BufferAttribute;
       const haloB = haloPts.geometry.attributes.aBright as THREE.BufferAttribute;
       const beadB = beadPts.geometry.attributes.aBright as THREE.BufferAttribute;
       // The pulse starts out from Sol each time the Will looks at another lead.
@@ -3364,10 +3362,9 @@ void main() {
         const reach = easeInOut(Math.min(1, k / 0.6));
         const lit = ramp(k, 0.5, 1);
         v.copy(at).multiplyScalar(reach);
-        sPos.setXYZ(2 * (3 * i) + 1, v.x, v.y, v.z);
-        tint(3 * i, inkOf(leads[i].id));
-        tint(3 * i + 1, "ink");
-        tint(3 * i + 2, "ink");
+        sPos.setXYZ(2 * (4 * i) + 1, v.x, v.y, v.z);
+        tint(4 * i, inkOf(leads[i].id));
+        for (const k of [1, 2, 3]) tint(4 * i + k, "ink");
         const faded = warmOf[i] && !!d?.faded?.has(leads[i].id);
         const hushed = calm * (spec.hush?.[leads[i].n] ?? 0);
         // Over the Milky Way, a warm glow still shining is as good as looked at, and all but the warm glows step aside.
@@ -3379,13 +3376,16 @@ void main() {
         // A quiet lead steps back to a dot once all are lit: its thread fades, and its halo dims. Pointing at it
         // brings it back.
         const stepped = hushed * (1 - seen);
-        both(sAlpha, 3 * i,
+        both(sAlpha, 4 * i,
           (warmOf[i] ? 0.12 + 0.13 * seen : 0.3 + 0.4 * seen - 0.15 * any * (1 - seen)) * p * Math.min(1, shown[i] * 4) * (1 - stepped) * (1 - aside) * (charting && i === focus ? 0 : 1));
         // Light runs along each thread once it is lit, and rests while the sky holds still.
-        both(sPulse, 3 * i, still ? 0 : lit * (1 - stepped));
+        both(sPulse, 4 * i, still ? 0 : lit * (1 - stepped));
         const legs = 0.3 * looked[i] * lit * p * (charting ? 0 : 1);
-        both(sAlpha, 3 * i + 1, legs);
-        both(sAlpha, 3 * i + 2, legs);
+        both(sAlpha, 4 * i + 1, legs);
+        both(sAlpha, 4 * i + 2, legs);
+        // A quiet lead's stalk and foot step back with its thread.
+        both(sAlpha, 4 * i + 3, stalkK * (1 - stepped) * (1 - aside));
+        feetB.setX(i, 0.7 * (1 - stepped) * (1 - aside));
         for (let b = paths[i].from; b < paths[i].to; b++) beadB.setX(b, charting && i === focus ? 0 : 0.9 * seen * lit);
         coreB.setX(i, lit * (1 - aside) * (faded ? 0.5 : 1));
         const flare = 4 * lit * (1 - lit);
@@ -3399,6 +3399,7 @@ void main() {
         haloB.setX(i, (lit * (breathe + (0.9 - breathe) * seen) * gain * (1 - 0.6 * stepped) + flare + (i === focus ? 0.8 * arrive : 0)) * (1 - aside));
       });
       coreB.needsUpdate = true;
+      feetB.needsUpdate = true;
       haloB.needsUpdate = true;
       haloSize.needsUpdate = true;
       beadB.needsUpdate = true;
@@ -3431,7 +3432,7 @@ void main() {
         const gone = m ? Math.max(0, Math.min(1, (year - m.sent) / m.ly)) : 0;
         const going = !!m && gone > 0 && gone < 1;
         v.copy(to).multiplyScalar(gone);
-        const seg = 3 * L + i;
+        const seg = 4 * L + i;
         sPos.setXYZ(2 * seg + 1, v.x, v.y, v.z);
         tint(seg, "mind");
         both(sAlpha, seg, m && gone > 0 ? (going ? 0.55 : 0.28) * p : 0);
