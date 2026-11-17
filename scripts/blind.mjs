@@ -33,7 +33,7 @@ if (cmd === "start") {
   const chrome = chromePath(pw);
   const child = spawn(
     chrome,
-    ["--headless=new", "--no-sandbox", `--remote-debugging-port=${PORT}`, `--user-data-dir=${join(dir, "profile")}`, `--window-size=${W},${H}`, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "about:blank"],
+    ["--headless=new", "--no-sandbox", `--remote-debugging-port=${PORT}`, `--user-data-dir=${join(dir, "profile")}`, `--window-size=${W},${H}`, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--blink-settings=prefersReducedMotion=true", "about:blank"],
     { detached: true, stdio: "ignore" },
   );
   child.unref();
@@ -63,6 +63,9 @@ const browser = await pw.chromium.connectOverCDP(`http://127.0.0.1:${PORT}`);
 const context = browser.contexts()[0];
 const page = context.pages()[0] ?? (await context.newPage());
 await page.setViewportSize({ width: W, height: H });
+// Reduced motion, 2026-11-17. Headless Chrome draws in software, near 1 frame a second, and the opening's animations
+// run with the frame rate: onboarding alone took 25 minutes. Playwright sets its own while joined, the flag holds between.
+await page.emulateMedia({ reducedMotion: "reduce" });
 const errors = [];
 page.on("console", (m) => m.type() === "error" && errors.push(m.text().slice(0, 300)));
 page.on("pageerror", (e) => errors.push(String(e).slice(0, 300)));

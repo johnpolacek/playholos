@@ -16,6 +16,7 @@ Do this part as an engineer, then stop being one.
 
 You see and act only through `scripts/blind.mjs`. Set `BLIND_DIR=playtests/<run>/blind` and run `node scripts/blind.mjs start`. Then use `click X Y`, `type TEXT`, `key KEY`, `scroll X Y DY`, `wait SECONDS` and `look`. Each prints a screenshot. Read it, then decide.
 
+- `scripts/blind.mjs` plays with reduced motion on. Its Chrome draws in software, at about 1 frame a second, and the opening's animations run with the frame rate. Without it, onboarding alone can take 25 minutes. So this run can't judge how the animations pace. Set 2026-11-17.
 - Read nothing in `game/`, `lib/`, `scripts/` or the docs, and never `playtests/regime.html`. It holds the answers.
 - Don't read page text, element lists or addresses any other way. If you can't tell from the screen, that is the finding.
 - Ask the Mind whenever you would as a player. That is fair.
