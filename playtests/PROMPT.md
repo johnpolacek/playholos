@@ -11,6 +11,7 @@ You are a fresh-eyes playtester for Holos. Play one scenario as a brand new play
 - The Mind must answer through the `claude` CLI, wired in `game/mind-cli.ts`. Don't use an API key or a stubbed Mind.
 - If the CLI Mind fails, stop and work out why. Report the exact error text and what would make it work.
 - There is no display. Play in headless Playwright Chromium and take screenshots.
+- Turn reduced motion on before the game first loads: `reducedMotion: "reduce"` on the browser context. Headless Chromium draws in software, at about 1 frame a second, and the opening's animations run with the frame rate. Without it, onboarding alone can take 25 minutes. Set 2026-11-17.
 
 ## Pick a scenario
 
