@@ -13,6 +13,7 @@ import { useLayoutEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import { Toggle } from "@ui-sdk/react/toggle";
 import { VIEWS } from "@/app/views/frame";
+import { musicAway } from "@/lib/music";
 import { setSound, useSound } from "@/lib/sound";
 import { getSkin, savedSkin, saveSkin, setSkin, SKINS, type Skin, useSkin } from "@/lib/skin";
 
@@ -20,7 +21,8 @@ import { getSkin, savedSkin, saveSkin, setSkin, SKINS, type Skin, useSkin } from
 // the pages on the right. The page below takes our blue as --accent. The accent picker left 2026-11-14.
 // Since 2026-11-15 the bar picks the skin: every card and view below changes at
 // once, so the two can be compared. The pick is kept per viewer, and leaves with the kit's pages: the game's own
-// pages keep the skin they had.
+// pages keep the skin they had. The game's music stays off here, so the sound key is the only sound: it was the
+// controls' clicks alone, and the music went on under it. 2026-11-21.
 
 // Each skin's swatch, drawn as the skin is: chalk flat, Instrument a dark cap with a lamp, Log a square of ruled
 // paper, Infrared a hot point cooling to violet, Arecibo a
@@ -121,6 +123,10 @@ export default function KitLayout() {
     const was = getSkin();
     setSkin(savedSkin());
     return () => setSkin(was);
+  }, []);
+  useLayoutEffect(() => {
+    musicAway(true);
+    return () => musicAway(false);
   }, []);
   return (
     <div style={{ "--accent": "var(--you)" } as React.CSSProperties} className="min-h-dvh bg-page pt-2 text-ink">

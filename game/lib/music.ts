@@ -12,6 +12,7 @@ const FADE = 2500;
 let el: HTMLAudioElement | null = null;
 let on = read();
 let hushed = false;
+let away = false;
 let fading = 0;
 const subs = new Set<() => void>();
 
@@ -40,7 +41,7 @@ function fade(to: number, ms: number, done?: () => void) {
 }
 
 function sync() {
-  const play = on && !hushed && document.visibilityState === "visible";
+  const play = on && !hushed && !away && document.visibilityState === "visible";
   if (play) {
     if (!el) {
       el = new Audio(SRC);
@@ -79,6 +80,12 @@ export function setMusic(next: boolean) {
   }
   sync();
   subs.forEach((f) => f());
+}
+
+/** Keeps the music off while a page that is not the game is open, the kit's /ui and /design. 2026-11-21. */
+export function musicAway(off: boolean) {
+  away = off;
+  if (el) sync();
 }
 
 /** Rests the music while another sound plays, and brings it back after. */
